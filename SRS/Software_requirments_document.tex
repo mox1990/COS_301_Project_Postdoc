@@ -116,19 +116,40 @@
 		
 		\subsection{Integration requirements} %Alfred
 		\vspace{0.2in}
-		
+		The system has to integrate with the following systems:
+		\begin{itemize}
+			\item A MySQL database.
+			\item A mobile (android) application used to record minutes of the meetings by the stakeholders. 
+			\item An emailing service? %I need to recitfy this a bit.
+			\item Adobe API used when generating reports.
+			\item We should define a protocol which will be used to handle communication within the network!!!
+		\end{itemize}
 		\vspace{0.2in}
 		
 		\subsection{Architecture constraints} %Alfred
 		\vspace{0.2in}
-		
+		\begin{itemize}
+			\item Architecture: Agile approach
+			\item Database technology: MySQL
+			\item Platform: Java EE
+			\item Web server: Apache Tomcat and GlassFish 
+			\item It must run using HTTP requests and response events to connect to the
+database.
+			\item Client interface platforms 
+				\begin{itemize}
+					\item Web browser
+					\item Android
+					\item Mobile web browser
+				\end{itemize}
+			\item Text encoding: UTF-8
+		\end{itemize}
 		\vspace{0.5in}
 	
 	\newpage	
 	\section{Functional requirements}
 		\subsection{Introduction} %Alfred
 		\vspace{0.2in}
-		
+		This project aims to digitize the completely paper based application process which is currently being used to solicite post gradutate fellows and researchers to the University of Pretoria. Such transformation will allow for the centralization of all the required documents in a logically one point. Avoiding the cases where documents were lost while being transferred from stake holder to stake holder.
 		\vspace{0.2in}
 		
 		\subsection{Scope and Limitations/Exclusions} %Mathys
