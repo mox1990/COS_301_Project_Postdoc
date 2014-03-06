@@ -122,34 +122,29 @@
 			\item A mobile (android) application used to record minutes of the meetings by the stakeholders. 
 			\item An emailing service? %I need to recitfy this a bit.
 			\item Adobe API used when generating reports.
-			\item We should define a protocol which will be used to handle communication within the network!!!
+			\item Must be able to access and utilize the NRF researcher ratings.
 		\end{itemize}
 		\vspace{0.2in}
 		
 		\subsection{Architecture constraints} %Alfred
 		\vspace{0.2in}
-		\begin{itemize}
-			\item Architecture: Agile approach
+		The following architecture constraints have been selected as being suitable for the system.
+		\begin{enumerate}
 			\item Database technology: MySQL
-			\item Platform: Java EE
-			\item Web server: Apache Tomcat and GlassFish 
-			\item It must run using HTTP requests and response events to connect to the
+			\item Development technology: Java EE
+			\item Web server: Apache Tomcat.
+			\item Application server: GlassFish 
+			\item It must run using HTTPS requests and response events to connect to the
 database.
-			\item Client interface platforms 
-				\begin{itemize}
-					\item Web browser
-					\item Android
-					\item Mobile web browser
-				\end{itemize}
-			\item Text encoding: UTF-8
-		\end{itemize}
+		\end{enumerate}
 		\vspace{0.5in}
 	
 	\newpage	
 	\section{Functional requirements}
 		\subsection{Introduction} %Alfred
 		\vspace{0.2in}
-		This project aims to digitize the completely paper based application process which is currently being used to solicite post gradutate fellows and researchers to the University of Pretoria. Such transformation will allow for the centralization of all the required documents in a logically one point. Avoiding the cases where documents were lost while being transferred from stake holder to stake holder.
+		This section discusses the functional requirements for the University of Pretoria's Post Graduate application system. Highlighting the scope and limitations that are faced by the system. \linebreak \linebreak
+		The required functionality, domain objects and use cases related to the functional requirement will be discussed. 
 		\vspace{0.2in}
 		
 		\subsection{Scope and Limitations/Exclusions} %Mathys
@@ -165,7 +160,31 @@ database.
 		
 		\subsection{Required functionality} %Alfred
 		\vspace{0.2in}
-		
+		The following sections will discuss the required functionality of all the major processors handled by the system. Namely:
+		\begin{itemize}
+			\item Application process,
+			\item Selection process,
+			\item Notification process and
+			\item Report process.
+		\end{itemize}
+		\subsubsection{Application process}
+		An application to be research fellow will go through these steps:
+		\begin{enumerate}
+			\item A potential research helper will need to have/create an account on the system which they will use through their whole application process. 
+			\item The account will have a unique username and secured by a user specified password.
+			\item Once an applicant is logged on they will then proceed to upload their CV's, academic record and profile. All the information the applicant will provided shall be related to the applicants account. 
+			\item The applicant will have to give the names and contact details of at least 2 of his referees, which will than be sent a link via email to fill out a referral form. 
+			\item The applicant has to provided information about the supervisor they will be working under throughout their stay as research fellow. The supervisor will be notified via email and either accept or decline the applicant. If the applicant is declined the can try to provide a supervisor again for a maximum of 3 attempts till either accepted or declined by the system.
+		\end{enumerate}
+		Once the steps are completed the applicants application is now under consideration. The applicant will also be able to see the status of the the applications current state through the whole consideration phase.
+		\subsubsection{Selection process}
+		The application will now go through a chain of various stakeholders, namely... , who will either approve or decline the application. If the application is declined, reason to why it was declined can be provided to allow the applicant to rectify the issue and continue with the application. If an application is approved, it will then be forward on to the next stakeholder in the system.
+		\subsubsection{Notification process}
+		Every participant is due to receive notifications regarding their actions every now and then.
+		\subsection{Report process}
+		The report use cases provides the uses for report generation such as the generation of an applications current status, the 
+		\subsubsection{Meeting minutes} % Can't seem to think of a better name to describe the council meetings.
+		The post-doctoral committee will on occasion hold meetings and the minutes of those meetings will be centerilizd in this system.
 		\vspace{0.2in}
 		
 		\subsection{Use case prioritization} %Alfred
@@ -185,8 +204,29 @@ database.
 		
 		\subsection{Domain Objects} %Alfred
 		\vspace{0.2in}
-		
+		\subsubsection{Overview}
+		\begin{description}
+			\item[Stakeholder] the full participants who administer the application process. Namely: 
+				\begin{itemize}
+					\item DRIS
+					\item Dean's office
+					\item Grant holder
+					\item HOD
+					\item Post-doctoral committee
+					\item Prospective fellow
+					\item Referee
+				\end{itemize}
+			\item[Application] which will be created by prospective fellow. Viewed and supplemented by other stakeholders who will either approve or deny the application.
+			\item[Post-doctoral committee meetings] held to discuss issues relating to the postdoctoral system such as ranking and evaluating applicants.
+		\end{description}
 		\vspace{0.5in}
+		\subsubsection{Stakeholder}
+		All stakeholders, except referees, will have accounts which they use to log on to the system with a unique username and a predefined or user specified password.\linebreak 
+		Grant holder are possibly rated researchers by the NRF and the system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers are very long.
+		\subsubsection{Application}
+		Applications will contain the required info of a prospective fellow, e.g. CV and academic record, and who their researcher leader (grant holder) is. The status of the application will be accessible in reports for all stakeholders. The status will either be under consideration, denied or accepted.
+		\subsubsection{Post-doctoral committee meetings}
+		The post-doctoral committee will be assessing the applications and will evaluate and give an application a ranking.
 		
 	\newpage	
 	\section{Open Issues:} %Everyone
@@ -195,6 +235,10 @@ database.
 	\begin{itemize}
 		\item Theft or loss of mobile devices
 		\item User errors like typing errors
+		\item How will an applicant be allocated a student number?
+		\item Should the system treat a prospective fellow in a unique class or a should all stakeholders be of the same class and be allocated different roles, as someone could work as a stakeholder but still want to apply?
+		\item Automating a check for the rating of researchers.
+		\item The CVs of A and B rated researchers was not added to save paper. Should we still not add it to keep it more convineint for the researchers?
 	\end{itemize}
 	
 	
@@ -216,7 +260,7 @@ database.
 		
 		\item \textbf{CV} - Curriculum Vita
 		\item \textbf{PDF} - Portable Document Format file
-		\item    
+		\item \textbf{NRF} - National Research Foundation. 
 	\end{itemize}	
 		
 	
