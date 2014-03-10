@@ -26,7 +26,8 @@
 
 \newcommand{\Title}{Software requirement specification} % Assignment title
 \newcommand{\Class}{Cos\ 301} % Course/class
-
+\newcommand{\pd}{Post-Doctoral}
+\newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
 \begin{document}
 
 	\vspace{4em}
@@ -39,7 +40,7 @@
 	 	\end{figure}
 		\LARGE \bf \Title \\
 		{\bf Version 0.5}\\[4em]
-	  	\LARGE {\bf SoftServe Group }\\[1em]
+	  	\LARGE {\bf \ssr  Group }\\[1em]
 	  	\LARGE {\bf Members:}\\[2em]
 	  	\large
 	     Kgothatso Phatedi Alfred Ngako	(12236731) \\[1em]
@@ -84,12 +85,12 @@
 		\listoffigures
 	\newpage
 	\section{Introduction} %Carlo
-	Post-Doctoral fellow a person who conducts research after they have completed their doctoral studies, with the aim of deepening their knowledge in a specific field. The University of Pretoria has a number of post doctoral fellows who conduct their research under the supervision of somebody in the University, and a large portion of this research is funded by the university. 
+	A Post-Doctoral fellow is a person who conducts research after they have completed their PhD, with the aim of deepening their knowledge in a specific field. The University of Pretoria supports such research opportunities in order to the increase research output of the University. Post-Doctoral fellows who conduct their research at the University of Pretoria do so under the supervision of a staff member of the University and their research may be privately or internally funded. This is a growing field in Universities around South Africa. Thus a lack in the IT services for the application management of Post-Doctoral fellow has been spotted by SoftServe.  
 	\vspace{0.2in}
 
 		\subsection{Purpose:}
 		\vspace{0.2in}
-		 In short, the purpose of this SRS document is to provide a detailed overview of our Post Doctoral Application System, its parameters and goals. This document describes the project's target audience and its user interface, hardware and software requirements. It defines how our different stakeholders see the product and its functionality.
+		This Software Specifications Requirements document serves the purpose of providing a detailed overview of the non-functional and functional requirements as well the goals that SoftServe's Post-Doctoral application management system wishes to satisfy. Further it defines the abstract interaction of stakeholders with the system. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria.
 	
 		\vspace{0.2in}
 	
@@ -105,24 +106,25 @@
 	
 		\subsection{Project Scope:}
 		\vspace{0.2in}		
-		The scope of the project is to design a Post Doctoral Application System where Post Doctoral fellows can apply for funding from the University of Pretoria. The system will replace the current paper based system currently in place. The system will integrate with the UP system, but it will have it's own independent business logic and security features.
+		The scope of the project is to design a Post-Doctoral application management system where prospective or current Post-Doctoral fellows can apply for or renew fellowships at the University of Pretoria. The system will then further allow the management of such applications/renewals till the end of the application process. The end is defined as: DIRS have approved the application and have notified the CSC and Finance department. The system will replace the current paper based system currently in place. The system will be designed so to allow for future integration with the current student and personnel management system, PeopleSoft, employed by the University of Pretoria. Though the scope of this SRS document will be to make the system and have it independent of any other system.
 		\vspace{0.2in}
 	
 		\subsection{References:}
 		\vspace{0.1in}
-			
+		\begin{itemize}
+			\item Dr.Phol, K., 2010, \textit{Requirements Engineering: Fundamentals, Principles, and Techniques}, Springer, Heidelberg.
+		\end{itemize}			
 	
 	\vspace{0.5in}
 	
-	\newpage
 	\section{Vision} %Carlo	
 	\vspace{0.2in}
-	The client simply needs a system which can make the application process of Post Doctoral fellows run smoother. The system will include an easy to use web interface for the applicants and an application for all the stakeholders involved in the rest of the application process. As soon as a step is concluded the system will forward the documentation to the next stakeholder in the process. By introducing a system that is not paper based, the client hopes that the application process will be easier to track on the side of the applicant. The system will also provide better reporting, tracking, audit-ability and accountability with regards to all the other stakeholders involved in the application process. The system needs to be centralised to ensure access to documents and/or information for the different stakeholders
+	The client needs a system which can make the management of the application and renewal processes of Post-Doctoral fellowships more effective, reliable, secure and audit-able. Together the client and SoftServe have envisioned a system that will make use of a centralised user friendly web interface that will be used by the prospective fellows and all the stakeholders involved in the application and renewal processes. The system will have various sections that handle the different stages in the process. The system will need to automate the transitions between phases by forwarding the required information to the next stakeholder in the process and notifying them via a email notification. The system will also need to provide reporting facilities for the information stored by the system. As well as progress tracking with regards to any application or renewal. The system data needs to be centralised to ensure that any information used by system is cohesive and valid for any stakeholder who accesses it. By introducing a digital system that is not paper based, the client hopes that the application and renewal processes will be easier to track and manage.
 	\vspace{0.5in}
 	
 	\section{Background} %Carlo
 	\vspace{0.2in}
-	The current Post-Doctoral application process is paper based and with this a number of problems have been experienced. There is no audit trail when it comes to the different departments involved in approving or declining the applications, minutes of meetings are often misplaced or typed in an inconsistent manner making it hard to recall what has been discussed in the meetings that take place during the application process. Access to documents is a problem since their are a number of different stakeholders, the process of getting hold of the documents is long and often tedious.The reporting of the number of fellows, renewals, communication with fellows and the number of fellows in each department is also a problem, because the current process is not centralised and gathering all the information required to generate reports is a problem.
+	The current Post-Doctoral application and renewal processes are paper based thus there are a number of drawbacks, mainly due to human error. One such drawback is that there is no audit trail when it comes to the different stakeholders input involved in approving or declining the applications. Another involves the minutes of Post-Doctoral committee meetings which are often misplaced or typed in an inconsistent manner making it hard to recall what has been discussed in the meetings that evaluate prospective applications and renewals. Access to documents is also a problem since they are usually hard copies that change hands constantly thus the process of getting hold of the documents is long and often tedious if not made impossible if they are lost. Reporting on the information of fellows, renewals and even communication with already approved fellows is also problematic, because the current system is not centralised. Therefore gathering all the information required to generate the reports is difficult or even impossible. This is where the client Mrs Cathy Sandis saw a potential area that could be optimised by the implementation of digitalised system. This is where the SoftServe group was brought into the picture. 
 	\vspace{0.5in}
 	
 	\newpage
@@ -147,15 +149,31 @@
 	
 	\vspace{0.5in}
 	
+	
+	\newpage
+		\section{Stakeholders} %Mathys
+		\vspace{0.2in}
+		
+		The stakeholders that will engage or be engaged by the system are listed below:
+		
+		\begin{itemize}
+			\item \textbf{Prospective fellow} - A person who wishes to renew or apply for a research position/fellowship.
+			\item \textbf{Grant holder} - The person who is a fellow's supervisor and a member of staff at the University of Pretoria. This is person is known also the applicant.
+			\item \textbf{HOD} - The head of the department of which a Grant holder is a member.
+			\item \textbf{Dean's office} - The dean and deputy dean of the faculty under which the department which the Grant Holder is a member of.
+			\item \textbf{DRIS} - The department of Research and Innovation Support at the University of Pretoria. This stakeholder oversees the application and renewal processes.
+			\item \textbf{Post-doctoral committee} - The committee who evaluates any post-doctoral fellowship applications and renewals.
+			\item \textbf{CSC} - The client service centre of the University of Pretoria.
+			\item \textbf{Finance} - The department of finance at the University of Pretoria.		
+		\end{itemize}	
+		
+		\vspace{0.5in}
+	
 	\newpage
 	\section{Architecture requirements}
 		\subsection{Access channel requirements} %Carlo
 		\vspace{0.2in}
-		\begin{itemize}
-		\item Post-Doctoral Applicants: Will access the system through a web browser client which will be compatible with the web browsers found in modern phones. 
-		\item Other Stakeholders: Will access the system through a Java application found on the computers used by them in their offices.
-	
-		\end{itemize}
+		All stakeholders: Will access the system through a HTML 5 web browser client that is locally installed on a user's computer system or mobile platform. Support for HTML 4.0.1 will also be implemented. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts.   
 
 		\vspace{0.2in}
 		
@@ -176,10 +194,11 @@
 		
 		\begin{flushleft}
 		
-		The system will need to be fully secured since the system deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide a stable audible application process flow the system may not be vulnerable to data tampering or any tampering whatsoever. \\
+		The system will need to be fully secured since the system deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever. \\
 		\vspace{0.1in}
 		  
-		The system will have to provide different security roles to the registered users on the system. In essence a stakeholder may only have access to their section of the application process. The system administrator should be able to view all the sections in the system and should be able to modify them except where they may not.
+		The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a administrator with the correct role to allow for flexibility. 
+		But in essence a stakeholder may only have access to their section of the application process. The system administrator should be able to view all the sections in the system and should be able to modify them except where they may not.
 		
 		\end{flushleft}
 		
@@ -399,7 +418,7 @@ database.
 		\vspace{0.2in}
 		\subsubsection{Exclusions}
 		\vspace{0.2in}
-		
+		Everything not included in this document in terms of scope is considered not in the scope of the project.
 		\vspace{0.2in}
 		
 		\subsection{Required functionality} %Alfred
@@ -492,18 +511,13 @@ database.
 	\vspace{0.2in}
 	
 	\begin{itemize}
-		\item \textbf{Prospective fellow} - A person who wishes to apply for a research position
-		\item \textbf{Grant holder} - The person who is a fellow's supervisor and a member of staff at the University of Pretoria
-		\item \textbf{HOD} - The head of the department under which a Grant holder falls
-		\item \textbf{Dean's office} - The dean and deputy dean of the faculty under which the department of the Grant Holder falls
-		\item \textbf{DRIS} - The department of Research and Innovation Support at the University of Pretoria
-		\item \textbf{Post-doctoral committee} - The committee who evaluates the post-doctoral fellowship applications and renewals
-		\item \textbf{CSC} - Client service centre of the University of Pretoria
-		\item \textbf{Finance} - The department of finance at the University of Pretoria
+		
 		
 		\item \textbf{CV} - Curriculum Vita
 		\item \textbf{PDF} - Portable Document Format file
-		\item \textbf{NRF} - National Research Foundation. 
+		\item \textbf{NRF} - National Research Foundation 
+		\item \textbf{HTML} - Hyper Text Mark-up Language
+		 
 	\end{itemize}	
 		
 	
