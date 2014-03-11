@@ -131,8 +131,8 @@
 	\section{Methodology} %Mathys
 	\vspace{0.2in}
 	
-	This document was created using the requirement elicitation techniques and requirement definitions specified in Klaus Pohl’s book Requirements engineering (See references).
-	The requirements were elicitated from the following sources:
+	This document was created using the requirement elicitation techniques and requirement definitions specified in Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
+	The requirements were elicited from the following sources:
 	\begin{itemize}
 		\item Numerous interviews with the client
 		\item Collecting and analysing various documents such as:
@@ -156,17 +156,31 @@
 		
 		The stakeholders that will engage or be engaged by the system are listed below:
 		
-		\begin{itemize}
-			\item \textbf{Prospective fellow} - A person who wishes to renew or apply for a research position/fellowship.
-			\item \textbf{Grant holder} - The person who is a fellow's supervisor and a member of staff at the University of Pretoria. This is person is known also the applicant.
-			\item \textbf{HOD} - The head of the department of which a Grant holder is a member.
-			\item \textbf{Dean's office} - The dean and deputy dean of the faculty under which the department which the Grant Holder is a member of.
-			\item \textbf{DRIS} - The department of Research and Innovation Support at the University of Pretoria. This stakeholder oversees the application and renewal processes.
-			\item \textbf{Post-doctoral committee} - The committee who evaluates any post-doctoral fellowship applications and renewals.
-			\item \textbf{CSC} - The client service centre of the University of Pretoria.
-			\item \textbf{Finance} - The department of finance at the University of Pretoria.		
-		\end{itemize}	
-		
+		There are three categories under which stockholders can fall:
+		\begin{itemize}					
+			\item External:
+			These are stakeholders that do not have a PeopleSoft account or are fellows.
+			\begin{itemize}		
+				\item \textbf{Prospective fellow} - A person who wishes to renew or apply for a research position/fellowship.
+				\item \textbf{Referee} - A person who is identified by a Prospective fellow as a referral.
+			\end{itemize}
+			
+			\item Internal individuals:
+			These are stakeholders that do have a PeopleSoft account and are individual members of staff.
+			\begin{itemize}	
+				\item \textbf{Grant holder} - The person who is a fellow's supervisor and a member of staff at the University of Pretoria. This is person is known also the applicant.
+				\item \textbf{HOD} - The head of the department of which a Grant holder is a member.					
+			\end{itemize}
+			\item Internal groups:
+			These are stakeholders that do have a PeopleSoft account and are a group of staff members.
+			\begin{itemize}	
+				\item \textbf{Dean's office} - The dean and deputy dean of the faculty under which the department which the Grant Holder is a member of.
+				\item \textbf{DRIS} - The department of Research and Innovation Support at the University of Pretoria. This stakeholder oversees the application and renewal processes.
+				\item \textbf{Post-doctoral committee} - The committee who evaluates any post-doctoral fellowship applications and renewals.
+				\item \textbf{CSC} - The client service centre of the University of Pretoria.
+				\item \textbf{Finance} - The department of finance at the University of Pretoria.	
+			\end{itemize}
+		\end{itemize}
 		\vspace{0.5in}
 	
 	\newpage
@@ -301,10 +315,9 @@
 		\vspace{0.2in}
 		The system has to integrate with the following systems:
 		\begin{itemize}
-			\item A MySQL database.
-			\item A mobile (android) application used to record minutes of the meetings by the stakeholders. 
-			\item An emailing service? %I need to recitfy this a bit.
-			\item Adobe API used when generating reports.
+			\item Must be able to create exportable data packages containing the information of approved fellowships that can easily be loaded into the CSC PeopleSoft system. 
+			\item Must be able to query CSC PeopleSoft system to retrieve the account information of internal individuals/group Stakeholders to create a uniform login experience.
+			\item Must assign Prospective fellows with a id number in such a way that is integrable with UP Emplid. SoftServe suggests: "f" + 8 digit code. 
 			\item Must be able to access and utilize the NRF researcher ratings.
 		\end{itemize}
 		\vspace{0.2in}
@@ -315,18 +328,17 @@
 		\begin{enumerate}
 			\item Database technology: MySQL
 			\item Development technology: Java EE
-			\item Web server: Apache Tomcat.
+			\item Web server: Apache Tomcat
 			\item Application server: GlassFish 
-			\item It must run using HTTPS requests and response events to connect to the
-database.
+			\item Web interface protocol: HTTPS
 		\end{enumerate}
 		\vspace{0.5in}
 	
-	\newpage	
+		
 	\section{Functional requirements}
 		\subsection{Introduction} %Alfred
 		\vspace{0.2in}
-		This section discusses the functional requirements for the University of Pretoria's Post Graduate application system. Highlighting the scope and limitations that are faced by the system. \linebreak \linebreak
+		This section discusses the functional requirements for the University of Pretoria's Post-Doctoral application management system. Highlighting the scope and limitations that are faced by the system. \linebreak \linebreak
 		The required functionality, domain objects and use cases related to the functional requirement will be discussed. 
 		\vspace{0.2in}
 		
@@ -423,40 +435,63 @@ database.
 		
 		\subsection{Required functionality} %Alfred
 		\vspace{0.2in}
-		The following sections will discuss the required functionality of all the major processors handled by the system. Namely:
+		The following sections will discuss the required functionality of all the major services handled by the system. Namely:
 		\begin{itemize}
-			\item Application process,
-			\item Selection process,
-			\item Notification process and
-			\item Report process.
+			\item Application service
+			\item Report services
+			\item Notification services
+			\item User account management services			
 		\end{itemize}
-		\subsubsection{Application process}
-		An application to be research fellow will go through these steps:
-		\begin{enumerate}
-			\item A potential research helper will need to have/create an account on the system which they will use through their whole application process. 
-			\item The account will have a unique username and secured by a user specified password.
-			\item Once an applicant is logged on they will then proceed to upload their CV's, academic record and profile. All the information the applicant will provided shall be related to the applicants account. 
-			\item The applicant will have to give the names and contact details of at least 2 of his referees, which will than be sent a link via email to fill out a referral form. 
-			\item The applicant has to provided information about the supervisor they will be working under throughout their stay as research fellow. The supervisor will be notified via email and either accept or decline the applicant. If the applicant is declined the can try to provide a supervisor again for a maximum of 3 attempts till either accepted or declined by the system.
-		\end{enumerate}
-		Once the steps are completed the applicants application is now under consideration. The applicant will also be able to see the status of the the applications current state through the whole consideration phase.
-		\subsubsection{Selection process}
-		The application will now go through a chain of various stakeholders, namely... , who will either approve or decline the application. If the application is declined, reason to why it was declined can be provided to allow the applicant to rectify the issue and continue with the application. If an application is approved, it will then be forward on to the next stakeholder in the system.
-		\subsubsection{Notification process}
-		Every participant is due to receive notifications regarding their actions every now and then.
-		\subsection{Report process}
-		The report use cases provides the uses for report generation such as the generation of an applications current status, the 
-		\subsubsection{Meeting minutes} % Can't seem to think of a better name to describe the council meetings.
-		The post-doctoral committee will on occasion hold meetings and the minutes of those meetings will be centerilizd in this system.
-		\vspace{0.2in}
 		
+		%Use the use case diagrams to complete the requirements of each of the services in the format I provided
+		\subsubsection{Application services}
+		Th main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services:
+		
+		\begin{itemize}
+			\item New fellowship application service API:		
+			\begin{enumerate}
+				\item Account creation for new prospective fellows, referees and grant holders.
+				\item All internal stakeholders should be able to log in with their PeopleSoft account details.				
+				\item A prospective fellow should be able to open a new application. 
+				\item A prospective fellow should be able to add their CV in the required format. 
+				\item A prospective fellow should be able to specify their indented grant holder.
+				%Please complete this in the same format				
+			\end{enumerate}
+			
+			\item Fellowship renewal service API:
+			\item Application progress viewer service API:
+		\end{itemize}
+		
+		Once the steps are completed the applicants application is now under consideration. The applicant will also be able to see the status of the the applications current state through the whole application process.
+		\subsubsection{Report services}
+		The report use cases provides the uses for report generation such as the generation of an applications current status, the			
+		\subsubsection{User account management services}
+		The application will now go through a chain of various stakeholders, namely... , who will either approve or decline the application. If the application is declined, reason to why it was declined can be provided to allow the applicant to rectify the issue and continue with the application. If an application is approved, it will then be forward on to the next stakeholder in the system.
+		\subsubsection{Notification services}
+		Every participant is due to receive notifications regarding their actions every now and then.
+		
+		\vspace{0.2in}
 		\subsection{Use case prioritization} %Alfred
 		\vspace{0.2in}
+		
+		%Just prioritize each use case
 		
 		\vspace{0.2in}
 		
 		\subsection{Use case/Services contracts} %Mathys
 		\vspace{0.2in}
+		
+		\begin{itemize}
+		
+		\item Preconditions:
+			\begin{itemize}
+				\item New fellowship application service [Fig 2.]: Can only be accessed if new applications are open. 
+				\item Fellow ship renewal service [Fig 2.]: Can only be accessed if renewals are open.
+				\item Application progress viewer service [Fig 2.]: Can only be accessed if user logged in with correct security permissions.
+				\item View application progress [Fig 6.]: Can only be used if there are any applications made by the user.
+			\end{itemize}
+		\item Postconditions:
+		\end{itemize}
 		
 		\vspace{0.2in}
 		
@@ -479,7 +514,7 @@ database.
 					\item Referee
 				\end{itemize}
 			\item[Application] which will be created by prospective fellow. Viewed and supplemented by other stakeholders who will either approve or deny the application.
-			\item[Post-doctoral committee meetings] held to discuss issues relating to the postdoctoral system such as ranking and evaluating applicants.
+			\item[Post-doctoral committee meetings] held to discuss issues relating to the Post-Doctoral system such as ranking and evaluating applicants.
 		\end{description}
 		\vspace{0.5in}
 		\subsubsection{Stakeholder}
