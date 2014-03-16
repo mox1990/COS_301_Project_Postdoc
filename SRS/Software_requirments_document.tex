@@ -52,8 +52,6 @@ Mathys Ellis (12019837) \\[8em]
 %\newpage
 %{\LARGE \bf Change log}\\[2em]
 
-%\begin{tabbing}
-%\hspace*{2.5cm}\=\hspace*{2.5cm}\=\hspace*{8cm}\=\hspace*{3cm} \kill
 \begin{center}
 \begin{tabular}{|l|p{1.4cm}|p{8cm}|p{2.8cm}|}
 \hline
@@ -76,6 +74,8 @@ Mathys Ellis (12019837) \\[8em]
 08/03/2014 & v 0.6 & Added some wrapping to the change log which is now a table & Alfred Ngako \\
 \hline
 11/03/2014 & v 0.7 & Added more functional requirements which relate more to the use case diagrams & Alfred Ngako \\
+\hline
+16/03/2014 & v 0.8 & Added domain objects data relation diagrams & Alfred Ngako \\
 \hline
 %\end{tabbing}
 \end{tabular}
@@ -354,7 +354,6 @@ The required functionality, domain objects and use cases related to the function
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Post-doctral fellowship management system.jpg}}
 \caption{Use case diagram of Post-doctoral fellowship management system}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
@@ -368,14 +367,12 @@ Priority: Critical
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Report service.jpg}}
 \caption{Use case diagram of Report service}
-Priority: Important
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Notification services.jpg}}
 \caption{Use case diagram of Notification services}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
@@ -389,35 +386,30 @@ Priority: Critical
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/Application progress viewer service.jpg}}
 \caption{Use case diagram of Application progress viewer service}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/New fellowship application service.jpg}}
 \caption{Use case diagram of New fellowship application service}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/Fellowship renewal service.jpg}}
 \caption{Use case diagram of Fellowship renewal service}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/Referees' report service.jpg}}
 \caption{Use case diagram of Referees' report service}
-Priority: Important
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/HOD Approval service.jpg}}
 \caption{Use case diagram of HOD Approval service}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
@@ -430,14 +422,12 @@ Priority: Critical
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/DRIS approval service.jpg}}
 \caption{Use case diagram of DRIS approval service}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application/Meeting management service.jpg}}
 \caption{Use case diagram of Meeting management service}
-Priority: Nice To Have
 \end{figure}
 
 \vspace{0.2in}
@@ -469,6 +459,7 @@ The following sections will discuss the required functionality of all the major 
 				\item A prospective fellow should be able to add their CV in the required format. 
 				\item A specified grant holder should be able to add their CV in the required format.
 				\item A prospective fellow should be able to specify their intended grant holder.	
+				\item A prospective fellow should be able to specify their intended referees.
 				\item A specified grant holder should be able to complete prospective fellows application.
 				\item A application should be made available for stakeholders such as the DRIS, HOD and Dean to endorse and approve it.		
 			\end{enumerate}
@@ -585,6 +576,14 @@ Priority: Nice To Have
 
 \subsection{Domain Objects} %Alfred
 \subsubsection{Overview}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.45]{./Pictures/Diagrams/DomainObjects/DomainObjects.jpg}}
+\caption{Overview of the data structures and relationships for the core domain objects of the
+system.}
+\end{figure}
+
 \begin{description}
 \item[Stakeholder] the full participants who administer the application process. Namely:
 \begin{itemize}
@@ -604,7 +603,7 @@ Priority: Nice To Have
 All stakeholders, except referees, will have accounts which they use to log on to the system with a unique username and a predefined or user specified password.\linebreak \linebreak
 Grant holder are possibly rated researchers by the NRF and the system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers are very long.
 \subsubsection{Application}
-Applications will contain the required info of a prospective fellow, e.g. CV and academic record, and who their researcher leader (grant holder) is. The status of the application will be accessible in reports for all stakeholders. The status will either be under consideration, denied or accepted.
+Applications will contain the required info of a prospective fellow, e.g. CV and academic record, and who their researcher leader (grant holder) is. The status of the application will be accessible in reports for all stakeholders. The status will either be draft, pending (under consideration), denied or accepted. The status will contain details regarding to why it is in the current state.
 \subsubsection{Post-doctoral committee meetings}
 The post-doctoral committee will be assessing the applications and will evaluate and give an application a ranking.
 
