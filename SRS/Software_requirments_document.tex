@@ -511,44 +511,16 @@ Every participant is due to receive notifications regarding their actions every 
 \vspace{0.2in}
 \subsection{Use case prioritization} %Alfred
 \vspace{0.2in}
+\begin{itemize}
+\item Fig 1.
+	\begin{itemize}
+		\item Application services: Critical
+		\item Report services: Important
+		\item Notification services: Critical
+		\item User account management services: Critical
+	\end{itemize}
+\end{itemize}
 
-\subsubsection*{Use case diagram of Post-doctoral fellowship management system}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Application service}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Report service}
-Priority: Important
-
-\subsubsection*{Use case diagram of Notification services}
-Priority: Critical
-
-\subsubsection*{Use case diagram of User account management services}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Application progress viewer service}
-Priority: Critical
-
-\subsubsection*{Use case diagram of New fellowship application service}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Fellowship renewal service}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Referees' report service}
-Priority: Important
-
-\subsubsection*{Use case diagram of HOD Approval service}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Dean endorsement service}
-
-\subsubsection*{Use case diagram of DRIS approval service}
-Priority: Critical
-
-\subsubsection*{Use case diagram of Meeting management service}
-Priority: Nice To Have
 
 \vspace{0.2in}
 
@@ -559,10 +531,63 @@ Priority: Nice To Have
 
 \item Preconditions:
 \begin{itemize}
-\item New fellowship application service [Fig 2.]: Can only be accessed if new applications are open.
-\item Fellow ship renewal service [Fig 2.]: Can only be accessed if renewals are open.
-\item Application progress viewer service [Fig 2.]: Can only be accessed if user logged in with correct security permissions.
-\item View application progress [Fig 6.]: Can only be used if there are any applications made by the user.
+	\item Fig 2.
+	\begin{itemize}
+		\item New fellowship application service: Can only be accessed if new applications are open.
+		\item Fellow ship renewal service: Can only be accessed if renewals are open.
+		\item Application progress viewer service: Can only be accessed if user logged in with correct security permissions.	
+	\end{itemize}
+	
+	\item Fig 3.
+		\begin{itemize}
+			\item Log in: If a user with the associated credentials has appropriate security role.
+			\item Create report: If user is logged in.
+			\item Open new report: If no report is currently open.
+			\item Select report data: If report is open and data is available for report.
+			\item Generate report: If data has been selected.
+			\item View report: If a report has been generated.
+			\item Export report: If user wants to export report.
+			\item To spreadsheet: If user wants to export report to a spreadsheet.
+			\item To pdf: If user wants to export report to a pdf.	
+		\end{itemize}
+	
+	\item Fig 4.
+			\begin{itemize}
+				\item Create notification: If requesting user is the system.
+				\item Specify recipient user account: If a notification is in its setup stage.				
+				\item Specify message: If a notification is in its setup stage.
+				\item Send user account notification: If notification is ready to be sent.
+				\item Send email: If notification is ready to be sent.	
+			\end{itemize}
+	
+	\item Fig 5.
+			\begin{itemize}
+				\item Create new account: If requesting user has the appropriate security role.
+				\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
+				\item Remove account: If requesting user has the appropriate security role.						
+			\end{itemize}
+	
+	\item Fig 6.
+		\begin{itemize}
+			\item View application progress: Can only be used if there are any applications made by the user.
+		\end{itemize}
+		
+	\item Fig 7.
+		\begin{itemize}
+			\item Create prospective fellow account: If prospective fellow does not have an account.
+			\item Submit information: If all the application information is complete.				
+			\item Create grant holder account: If grant holder does not have an account.
+			\item Create grant holder cv: If the grant holder does not have an NRF rating or does have never created a CV on the system before.
+			\item Submit application: If all the required information has been entered.									
+		\end{itemize}
+	
+	\item Fig 8.
+			\begin{itemize}
+				\item Open new renewal application: If prospective fellow has a fellowship that is renewable.
+				\item Submit report: If progress report is completed.				
+				\item Submit renewal application: If all the required information for the renewal has been entered.									
+			\end{itemize}
+
 \end{itemize}
 \item Postconditions:
 \end{itemize}
