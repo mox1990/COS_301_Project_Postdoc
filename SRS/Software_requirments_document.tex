@@ -77,6 +77,10 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 16/03/2014 & v 0.8 & Added domain objects data relation diagrams & Alfred Ngako \\
 \hline
+16/03/2014 & v 0.8 & Added some preconditions and did some formatting & Mathys Ellis \\
+\hline
+17/03/2014 & v 0.8 & Added rest of preconditions and all the postconditions. Also added to the glossary & Mathys Ellis \\
+\hline
 %\end{tabbing}
 \end{tabular}
 \end{center}
@@ -511,6 +515,7 @@ Every participant is due to receive notifications regarding their actions every 
 \vspace{0.2in}
 \subsection{Use case prioritization} %Alfred
 \vspace{0.2in}
+This section states the ranking in terms of priority of the each use case per use case diagram figure. The priorities are: Critical, Important and Nice to have.\\ 
 \begin{itemize}
 \item Fig 1.
 	\begin{itemize}
@@ -527,9 +532,10 @@ Every participant is due to receive notifications regarding their actions every 
 \subsection{Use case/Services contracts} %Mathys
 \vspace{0.2in}
 
-\begin{itemize}
+This section states the preconditions and postconditions of the each use case per use case diagram figure. \\
 
-\item \textbf{Preconditions}:
+\subsubsection{Preconditions}
+These are conditions that must be met by the system or user before they are allowed to use the use case.\\
 \begin{itemize}
 	\item Fig 2.
 	\begin{itemize}
@@ -597,14 +603,14 @@ Every participant is due to receive notifications regarding their actions every 
 		
 	\item Fig 10.
 		\begin{itemize}
-			\item Application approval: If any application is available for approval and the grant holder of the application falls under department the HOD is in charge of.
+			\item Application approval: If any finalised application is available for approval and the grant holder of the application falls under department the HOD is in charge of.
 			\item Create recommendation report: If the application has been approved.				
 			\item Submit approved application's information: If the recommendation report has been completed.									
 		\end{itemize}
 		
 	\item Fig 11.
 		\begin{itemize}
-			\item Endorse application: If any application is available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of.
+			\item Endorse application: If any approved application is available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of.
 			\item Rank application: If the application has been endorsed.	
 			\item Create comment: If the application has been ranked.			
 			\item Submit endorsed application: If the required endorsement information has been completed.									
@@ -612,7 +618,7 @@ Every participant is due to receive notifications regarding their actions every 
 	
 	\item Fig 12.
 		\begin{itemize}
-			\item Check eligibility: If any application is available for checking its eligibility.
+			\item Check eligibility: If any endorsed application is available for its eligibility check.
 			\item Deny: If the prospective fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
 			\item Accept: If the prospective fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years. 
 			\item Finalise funding decision: If the meeting regarding the application has been concluded.	
@@ -627,11 +633,10 @@ Every participant is due to receive notifications regarding their actions every 
 			\item Add endorsed renewals: If any renewal applications that are eligible are available.
 			\item Record minutes of meeting: If the selected meeting has been setup.							
 		\end{itemize}
+	\end{itemize}
 
-\end{itemize}
-
-\item \textbf{Postconditions}:
-
+\subsubsection{Postconditions}
+These are conditions that must be met by the system and the data after the use case has been used.\\
 \begin{itemize}
 		
 	\item Fig 3.
@@ -647,82 +652,101 @@ Every participant is due to receive notifications regarding their actions every 
 			\begin{itemize}
 				\item Create notification: A possible notification is open for receiving its contents.
 				\item Specify recipient user account: The notification has a a recipient.				
-				\item Specify message: The notification has message.
+				\item Specify message: The notification has a message.
 				\item Send user account notification: The message is sent to the user.
-				\item Send email: If notification is ready to be sent.	
+				\item Send email: The message is sent the email associated with recipients user account.	
 			\end{itemize}
 	
 	\item Fig 5.
 			\begin{itemize}
-				\item Create new account: If requesting user has the appropriate security role.
-				\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
-				\item Remove account: If requesting user has the appropriate security role.						
+				\item Create new account: A new user account is added to the system.
+				\item Modify account: The specified user account is updated.				
+				\item Remove account: The specified user account is removed from the system.						
 			\end{itemize}
 	
 	\item Fig 6.
 		\begin{itemize}
-			\item View application progress: Can only be used if there are any applications made by the user.
+			\item View application progress: The application progress of the specified user application is visible.
 		\end{itemize}
 		
 	\item Fig 7.
 		\begin{itemize}
-			\item Create prospective fellow account: If prospective fellow does not have an account.
-			\item Submit information: If all the application information is complete.				
-			\item Create grant holder account: If grant holder does not have an account.
-			\item Create grant holder cv: If the grant holder does not have an NRF rating or does have never created a CV on the system before.
-			\item Submit application: If all the required information has been entered.									
+			\item Create prospective fellow account: If prospective fellow has an account.
+			\item Create prospective fellow cv: The CV is created and associated with the prospective fellow and the application.
+			\item Specify grant holder: The grant holder's contact information is associated with the application.
+			\item Specify referees: The referees' contact information is associated with the application.
+			\item Submit information: The initial application data is complete. Referees are notified.				
+			\item Create grant holder account: The grant holder has an account.
+			\item Create grant holder cv: The grant holder's CV is associated with the application.
+			\item Complete application form: The application data is complete and the application is ready to be finalised.
+			\item Submit application: The application is now a finalised application and the HOD of the relative department is notified. 									
 		\end{itemize}
 	
 	\item Fig 8.
 		\begin{itemize}
-			\item Open new renewal application: If prospective fellow has a fellowship that is renewable.
-			\item Submit report: If progress report is completed.				
-			\item Submit renewal application: If all the required information for the renewal has been entered.									
+			\item Open new renewal application: A new renewal is for a fellowship is open.
+			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Complete progress report: The progress report associated with	the renewal.		
+			\item Submit report: The initial renewal information is complete. Grant holder is notified.
+			\item Complete renewal form: The renewal data complete and the renewal is ready to be finalised.			
+			\item Submit renewal application: The renewal application is finalised and the HOD of the relative department is notified.									
 		\end{itemize}
 	
 	\item Fig 9.
 		\begin{itemize}
-			\item Create referee account: If the referee does not have an account.
-			\item Create report: If requesting user has the appropriate security role.				
-			\item Submit referral report: If the referral report has been completed.									
+			\item Create referee account: Referee has a user account.
+			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Create report: The report is complete and ready to be submitted.				
+			\item Submit referral report: The referral report has been finalised and associated with the application and the Grant Holder of the application is notified.									
 		\end{itemize}
 		
 	\item Fig 10.
 		\begin{itemize}
-			\item Application approval: If any application is available for approval and the grant holder of the application falls under department the HOD is in charge of.
-			\item Create recommendation report: If the application has been approved.				
-			\item Submit approved application's information: If the recommendation report has been completed.									
+			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Deny: Application has status changed to denied.
+			\item Amend: Application is reopened and status changed to amend.
+			\item Notify grant holder: A notification is sent to the Grant holder of the application.  
+			\item Approve:  The application recommendation report becomes available for completion.
+			\item Create recommendation report: The recommendation report is associated with the application and the Approval is ready to be finalised.				
+			\item Submit approved application's information: The application approval is finalised and the application is now a approved application and the Dean's Office of the relevant faculty is notified.									
 		\end{itemize}
 		
 	\item Fig 11.
 		\begin{itemize}
-			\item Endorse application: If any application is available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of.
-			\item Rank application: If the application has been endorsed.	
-			\item Create comment: If the application has been ranked.			
-			\item Submit endorsed application: If the required endorsement information has been completed.									
+			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Deny: The application's status is changed to denied. 
+			\item Notify grant holder: A notification is sent to the Grant holder of the application.
+			\item Endorse: The application's endorsement information becomes available for completion.
+			\item Rank application: The application has a rank associated with it.	
+			\item Create comment: The application has a endorsement comment associated with it.			
+			\item Submit endorsed application: The application endorsement is finalised and the application is now an endorsed application and the DRIS is notified.									
 		\end{itemize}
 	
 	\item Fig 12.
 		\begin{itemize}
-			\item Check eligibility: If any application is available for checking its eligibility.
-			\item Deny: If the prospective fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
-			\item Accept: If the prospective fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years. 
-			\item Finalise funding decision: If the meeting regarding the application has been concluded.	
-			\item Deny: If the application's funding was denied.			
-			\item Approve funding: If the application's funding was denied.									
+			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Deny: The application's status is changed to denied. 
+			\item Notify grant holder: A notification is sent to the Grant holder of the application.
+			\item Accept: The application is ready for discussion and is now an eligible application.			
+			\item Deny: The application's status is changed to denied.			
+			\item Approve funding: The application is now a complete application.
+			\item Notify grant holder: A notification is sent to the Grant holder of the application.
+			\item Notify CSC: A notification is sent to the CSC.
+			\item Notify Finance: A notification is sent to the Finance department.									
 		\end{itemize}
 	
 	\item Fig 13.
 		\begin{itemize}
-			\item Create meeting: If any eligible applications are available.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item Record minutes of meeting: If the selected meeting has been setup.							
+			\item Create meeting: A new meeting is open for modification.
+			\item Add endorsed applications: An endorsed new application has been added to the agenda of the meeting.
+			\item Add endorsed renewals: An renewal application has been added to the agenda of the meeting.
+			\item Create pre-meeting documentation: Documentation complete and associated with meeting and the meeting is closed for modification.
+			\item Notify committee members: A notification is sent to all the committee members.
+			\item Record minutes of meeting: The meeting is finalised and it's minutes stored.							
 		\end{itemize}
 
 \end{itemize}
 
-\end{itemize}
 
 \vspace{0.2in}
 
@@ -774,7 +798,7 @@ The post-doctoral committee will be assessing the applications and will evaluate
 \item How will an applicant be allocated a student number?
 \item Should the system treat a prospective fellow in a unique class or a should all stakeholders be of the same class and be allocated different roles, as someone could work as a stakeholder but still want to apply?
 \item Automating a check for the rating of researchers.
-\item The CVs of A and B rated researchers was not added to save paper. Should we still not add it to keep it more convineint for the researchers?
+\item The CVs of A and B rated researchers was not added to save paper. Should we still not add it to keep it more convenient for the researchers?
 \end{itemize}
 
 
@@ -790,7 +814,14 @@ The post-doctoral committee will be assessing the applications and will evaluate
 \item \textbf{CV} - Curriculum Vita
 \item \textbf{PDF} - Portable Document Format file
 \item \textbf{NRF} - National Research Foundation
+\item \textbf{API} - Application Programming Interface
+\item \textbf{Spreadsheet} - A special type of computer document that is used to represent data in rows and columns. 
 \item \textbf{HTML} - Hyper Text Mark-up Language
+\item \textbf{Java EE} - Java Enterprise Edition
+\item \textbf{Use case} - A visual depiction of a service or group of services.
+\item \textbf{Application} - Both a renewal and new fellowship are seen as applications.
+\item \textbf{PhD} - A doctoral degree in a particular field of study. 
+
 
 \end{itemize}	
 
