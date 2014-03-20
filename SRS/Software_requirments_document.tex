@@ -81,6 +81,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 17/03/2014 & v 0.8 & Added rest of preconditions and all the postconditions. Also added to the glossary & Mathys Ellis \\
 \hline
+20/03/2014 & v 0.9 & Updated the domain objects diagram  & Mathys Ellis \\
+\hline
 %\end{tabbing}
 \end{tabular}
 \end{center}
@@ -750,41 +752,31 @@ These are conditions that must be met by the system and the data after the use c
 
 \vspace{0.2in}
 
-\subsection{Process specifications} %Alfred
-\vspace{0.2in}
+%\subsection{Process specifications} %Alfred
+%\vspace{0.2in}
 
-\vspace{0.2in}
+%\vspace{0.2in}
 
 \subsection{Domain Objects} %Alfred
 \subsubsection{Overview}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.45]{./Pictures/Diagrams/DomainObjects/DomainObjects.jpg}}
+\framebox{\includegraphics[scale=0.55]{./Pictures/Diagrams/DomainObjects/DomainObjects.png}}
 \caption{Overview of the data structures and relationships for the core domain objects of the
 system.}
 \end{figure}
 
-\begin{description}
-\item[Stakeholder] the full participants who administer the application process. Namely:
-\begin{itemize}
-\item DRIS
-\item Dean's office
-\item Grant holder
-\item HOD
-\item Post-doctoral committee
-\item Prospective fellow
-\item Referee
-\end{itemize}
-\item[Application] which will be created by prospective fellow. Viewed and supplemented by other stakeholders who will either approve or deny the application.
-\item[Post-doctoral committee meetings] held to discuss issues relating to the Post-Doctoral system such as ranking and evaluating applicants.
-\end{description}
-\vspace{0.5in}
-\subsubsection{Stakeholder}
-All stakeholders, except referees, will have accounts which they use to log on to the system with a unique username and a predefined or user specified password.\linebreak \linebreak
-Grant holder are possibly rated researchers by the NRF and the system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers are very long.
+\newpage
+\subsubsection{Persons}
+This object represents the stakeholders that will make use of the system. All stakeholders will have accounts which they use to log on to the system with a unique user id and a predefined or user specified password. The unique user id can ethier be a Peoplesoft Emplid number or a email address.\\
+
+\subsubsection{Grant holder}
+Grant holders are possibly rated researchers by the NRF and the system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers are very long.
+
 \subsubsection{Application}
 Applications will contain the required info of a prospective fellow, e.g. CV and academic record, and who their researcher leader (grant holder) is. The status of the application will be accessible in reports for all stakeholders. The status will either be draft, pending (under consideration), denied or accepted. The status will contain details regarding to why it is in the current state.
+
 \subsubsection{Post-doctoral committee meetings}
 The post-doctoral committee will be assessing the applications and will evaluate and give an application a ranking.
 
