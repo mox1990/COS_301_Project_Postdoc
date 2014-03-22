@@ -85,6 +85,9 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 20/03/2014 & v 0.9 & Updated the domain objects plus diagram  & Alfred Ngako \\
 \hline
+20/03/2014 & v 0.9 & Updated the use case prioritizaion  & Alfred Ngako \\
+\hline
+
 %\end{tabbing}
 \end{tabular}
 \end{center}
@@ -368,7 +371,6 @@ The required functionality, domain objects and use cases related to the function
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/Application service.jpg}}
 \caption{Use case diagram of Application service}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
@@ -387,7 +389,6 @@ Priority: Critical
 \centering	
 \framebox{\includegraphics[scale=0.6]{./Pictures/Diagrams/User account management services.jpg}}
 \caption{Use case diagram of User account management services}
-Priority: Critical
 \end{figure}
 
 \begin{figure}[H]
@@ -521,13 +522,23 @@ Every participant is due to receive notifications regarding their actions every 
 \vspace{0.2in}
 This section states the ranking in terms of priority of the each use case per use case diagram figure. The priorities are: Critical, Important and Nice to have.\\ 
 \begin{itemize}
-\item Fig 1.
+	\item Application services: Critical
 	\begin{itemize}
-		\item Application services: Critical
-		\item Report services: Important
-		\item Notification services: Critical
-		\item User account management services: Critical
+		\item New Application: Critical
+		\item Renewal Application: Critical
+		\item Application progress viewer service: Important
+		\item Meeting management service: Nice To Have
 	\end{itemize}
+	\item Report services: Important
+	\item Notification services: Critical
+	\item User account management services: Critical
+	\begin{itemize}
+		\item Create new account: Critical
+		\item Modify account: Critical
+		\item Remove account: Critical
+		\item Login: Ciritical
+	\end{itemize}
+	\item 
 \end{itemize}
 
 
