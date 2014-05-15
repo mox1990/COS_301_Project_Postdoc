@@ -1,0 +1,306 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{pdfpages}
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{color}
+\usepackage{grffile}
+\usepackage{float}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+\fboxsep=0mm%padding thickness
+\fboxrule=2pt%border thickness
+
+\linespread{1.1} % Line spacing
+
+\newcommand{\Title}{Software requirement specification} % Assignment title
+\newcommand{\Class}{Cos\ 301} % Course/class
+\newcommand{\pd}{Post-Doctoral}
+\newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
+\begin{document}
+
+\vspace{4em}
+
+\begin{center}%
+
+\begin{figure}[ht!]
+\centering
+\includegraphics{./Pictures/logo.png}
+\end{figure}
+\LARGE \bf \Title \\
+{\bf Version 0.9}\\[4em]
+\LARGE {\bf \ssr Group }\\[1em]
+\LARGE {\bf Members:}\\[2em]
+\large
+Kgothatso Phatedi Alfred Ngako (12236731) \\[1em]
+Tokologo “Carlo” Machaba (12078027) \\[1em]
+Mathys Ellis (12019837) \\[8em]
+
+\end{center}%
+
+%\newpage
+%{\LARGE \bf Change log}\\[2em]
+
+\begin{center}
+\begin{tabular}{|l|p{1.4cm}|p{8cm}|p{2.8cm}|}
+\hline
+\multicolumn{4}{|c|}{\bf Change log} \\
+\hline
+ Date & Version & Description &  Person \\
+\hline
+12/05/2014 & v 0.0 & Document created & Mathys Ellis \\
+\hline
+13/05/2014 & v 0.1 & Added Quality Requirements, Access Channel requirements & Carlo Machaba \\
+\hline
+14/05/2014 & v 0.2 & Added Integration requirements & Carlo \\
+\hline
+15/05/2014 & v 0.3 & Added to Glossary & Carlo Machaba \\
+\hline
+15/05/2014 & v 0.4 & Added Document description, purpose, methodology, conventions and references & Carlo Machaba \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+\newpage
+\tableofcontents
+
+\listoffigures
+\newpage
+\section{Document description:}
+
+\subsection{Document purpose:}
+\vspace{0.2in}
+The Architecture Requirements Specification provides a set of quantitative statements that outline what the Post-Doctoral Application must do in order to comply with the architecture required by the client. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project functional requirements.
+
+\vspace{0.2in}
+
+\subsection{Documentation methodology}
+\vspace{0.2in}
+\begin{flushleft}
+The documentation and software development methodology used by the project adhere to the guidelines set out by the agile method. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
+
+This document was created using the requirement elicitation techniques and requirement definitions as specified by Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
+The requirements, vision and scope were elicited from the following sources:
+\begin{itemize}
+	\item Numerous interviews with the client.
+	\item On-line research into UP Post doctoral applications.
+	\item Correspondence with the UP IT department.
+	\item Collecting and analysing various documents such as:
+		\begin{itemize}
+			\item The initial project request document
+			\item Application forms
+			\item Renewal forms
+			\item CV templates
+			\item Approval and recommendation forms
+		\end{itemize}
+\end{itemize}
+\end{flushleft}	
+
+\vspace{0.5in}
+
+\subsection{Document conventions:}
+\vspace{0.1in}
+\begin{itemize}
+\item Documentation formulation tool: LaTeX
+\item ERD Crow-Foot notation
+\item UML 2.0
+\end{itemize}
+
+\vspace{0.2in}
+
+\subsection{References:}
+\vspace{0.1in}
+\begin{itemize}
+\item Dr.Phol, K., 2010, \textit{Requirements Engineering: Fundamentals, Principles, and Techniques}, Springer, Heidelberg.
+\end{itemize}	
+
+\vspace{0.5in}
+
+\newpage
+\section{Architecture requirements}
+\subsection{Access channel requirements} %Carlo
+\vspace{0.2in}
+All stakeholders: Will access the system through a HTML 5 web browser client that is locally installed on a user's computer system or mobile platform. Support for HTML 4.0.1 will also be implemented. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts.
+
+\vspace{0.2in}
+
+\subsection{Quality requirements} %Mathys
+\vspace{0.2in}
+
+\subsubsection{Availability:}
+
+\begin{flushleft}
+
+The system's availability on designated networks will depend on the availability of the University of Pretoria's servers that host the system. If the University of Pretoria's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. The designated networks are defined as the internet and the campus network of the University of Pretoria.
+
+\end{flushleft}
+
+\vspace{0.1in}
+
+\subsubsection{Security requirements}
+
+\begin{flushleft}
+
+The system will need to be fully secured since the system deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever. \\
+\vspace{0.1in}
+
+The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a administrator with the correct role to allow for flexibility.
+But in essence a stakeholder may only have access to their section of the application process. The system administrator should be able to view all the sections in the system and should be able to modify them except where they may not.
+
+\end{flushleft}
+
+\vspace{0.1in}
+
+\subsubsection{Scalability requirements}
+
+\begin{flushleft}
+
+The current aim is to create a scalable system that can support 500 to 1000 applicants per year with possible growth. This is in line with the figures given by the client and the growth in the research sector of the university.\\
+\vspace{0.05in}
+
+The system needs to be scalable in regard to the following factors:
+\begin{itemize}
+
+
+\item\textbf{Performance:} This is regarded as the speed and responsiveness of the system.
+The system needs to be handle report queries in less than 10 seconds. It should be able to handle any application section processing in less than 3 seconds.\\
+
+\item\textbf{Storage:} This is regarded as the growth and shrinking of the data that is stored.
+The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the requirement that the system will support archival functionality and archived data will store the data for long periods of time.\\
+
+\item\textbf{Concurrency:} This regarded as the amount of active users on the system at the same time.
+The system will need to support at least 100+/- concurrent users efficient and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
+
+\end{itemize}
+\end{flushleft}
+\vspace{0.1in}
+
+\subsubsection{Testability:}
+
+\begin{flushleft}
+
+The system must be testable. This will be done using unit testing and following the test plan that will be laid out in the testing document of this project.\\
+
+\vspace{0.1in}
+
+Unit testing will test each unit in regard to:
+\begin{itemize}
+
+\item\textbf{Preconditions}
+\item\textbf{Post conditions}
+
+\end{itemize}
+
+The project will also have two phases of testing:
+
+\begin{itemize}
+
+\item\textbf{Offline:} This is the initial phase of testing and debugging which will be done with pseudo data.
+\item\textbf{Online:} This is the final phase of testing and debugging which will be done with active real time data.
+
+\end{itemize}
+
+\end{flushleft}
+
+\vspace{0.1in}
+
+\subsubsection{Auditability:}
+
+\begin{flushleft}
+
+The system needs to provide an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action and any operation by a user that leads to a change in application data of a particular prospective fellow.\\
+
+\vspace{0.1in}
+
+The Audit trail will be in the form of a read-only table stored in the database. It can only be viewed by a user with the correct security role. The system is the only entity that can modify the audit trail where this modification can only be the addition of entries.
+
+\end{flushleft}
+\vspace{0.1in}	
+
+\subsubsection{Usability requirements}
+
+\begin{flushleft}
+
+The primary language of the system will be South African English. Any other language support is not considered part of the requirements but the system will be designed to allow for such development in the future.\\
+
+\vspace{0.1in}
+
+The system's UI will only consider 2 types of user categories with regard to usability:
+
+\begin{itemize}
+
+\item\textbf{Trained user:}
+
+This type of user will have to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. This user will be regarded as a system administrator. The stakeholders who fall under this category is the DRIS staff members overseeing the application process.
+
+\item\textbf{Normal user:}
+
+This type of user will have no training. Their computer skills will be assumed to be none or minimal. Therefore the UI that they will have access to will be simplistic and will be as user friendly as possible. The stakeholders that fall under this category will be Prospective fellows, Grant holders, HODs, Deans and Post-doctoral committee members.
+
+\end{itemize}
+
+\end{flushleft}
+
+\vspace{0.2in}	
+
+
+\subsection{Integration requirements} %Alfred
+\vspace{0.2in}
+The system has to integrate with the following systems:
+\begin{itemize}
+\item Must be able to create exportable data packages containing the information of approved fellowships that can easily be loaded into the CSC PeopleSoft system.
+\item Must be able to query CSC PeopleSoft system to retrieve the account information of internal individuals/group Stakeholders to create a uniform login experience.
+\item Must assign Prospective fellows with a id number in such a way that is integrable with UP Emplid. SoftServe suggests: "f" + 8 digit code.
+\item Must be able to access and utilize the NRF researcher ratings.
+\end{itemize}
+\vspace{0.2in}
+
+\subsection{Architecture constraints} %Alfred
+\vspace{0.2in}
+The following architecture constraints have been selected as being suitable for the system.
+\begin{enumerate}
+\item Database technology: MySQL
+\item Development technology: Java EE
+\item Web server: Apache Tomcat
+\item Application server: GlassFish
+\item Web interface protocol: HTTPS
+\end{enumerate}
+\vspace{0.5in}
+
+\newpage
+\section{Glossary:} %Mathys
+\vspace{0.2in}
+
+\begin{itemize}
+
+
+\item \textbf{CV} - Curriculum Vita
+\item \textbf{PDF} - Portable Document Format file
+\item \textbf{NRF} - National Research Foundation
+\item \textbf{API} - Application Programming Interface
+\item \textbf{Spreadsheet} - A special type of computer document that is used to represent data in rows and columns. 
+\item \textbf{HTML} - Hyper Text Mark-up Language
+\item \textbf{Java EE} - Java Enterprise Edition
+\item \textbf{Use case} - A visual depiction of a service or group of services.
+\item \textbf{Application} - Both a renewal and new fellowship are seen as applications.
+\item \textbf{PhD} - A doctoral degree in a particular field of study. 
+
+
+\end{itemize}	
+
+
+\vspace{0.5in}
+
+
+\end{document}
