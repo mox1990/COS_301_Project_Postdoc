@@ -1,0 +1,113 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{pdfpages}
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{color}
+\usepackage{grffile}
+\usepackage{float}
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+\fboxsep=0mm%padding thickness
+\fboxrule=2pt%border thickness
+
+\linespread{1.1} % Line spacing
+
+\newcommand{\Title}{Vision and scope document} % Assignment title
+\newcommand{\Class}{Cos\ 301} % Course/class
+\newcommand{\pd}{Post-Doctoral}
+\newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
+\newcommand{\version}{0.0}
+\newcommand{\iteration}{1}
+\newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
+\newcommand{\project}{Post-Doctoral Application Management System}
+
+\begin{document}
+
+
+\vspace{4em}
+
+\begin{center}%
+
+\begin{figure}[ht!]
+\centering
+\includegraphics{./Pictures/logo.png}
+\end{figure}
+\LARGE \bf \project \\[1em]
+\LARGE \bf \Title \\[0.25em]
+\large \bf \today\\
+\bf Version \version\\
+\bf Iteration \iteration\\[0.5em]
+\Large \bf Prepared for \client\\
+\Large \bf by
+\Large {\bf \ssr Group }\\[0.5em]
+\LARGE {\bf Group members}\\[0.25em]
+\large
+Kgothatso Phatedi Alfred Ngako (12236731) \\[0.5em]
+Tokologo “Carlo” Machaba (12078027) \\[0.5em]
+Mathys Ellis (12019837) \\[8em]
+
+\end{center}%
+
+%\newpage
+%{\LARGE \bf Change log}\\[2em]
+
+\begin{center}
+\begin{tabular}{|l|p{1.4cm}|p{8cm}|p{2.8cm}|}
+\hline
+\multicolumn{4}{|c|}{\bf Change log} \\
+\hline
+ Date & Version & Description &  Person \\
+\hline
+10/02/2014 & v 0.0 & Document created & Mathys Ellis \\
+\hline
+02/03/2014 & v 0.1 & Added to glossary & Mathys Ellis \\
+\hline
+04/03/2014 & v 0.2 & Added Integration requirements, Architecture constraints, Functional requirements introduction & Alfred Ngako \\
+\hline
+05/03/2014 & v 0.3 & Added Introduction, Vision, Background, Access Channel requirements & Carlo Machaba \\
+\hline
+06/03/2014 & v 0.4 & Added domain objects, open issues. Modified some sections & Alfred Ngako \\
+\hline
+06/03/2014 & v 0.5 & Added quality requirements, methodology, scope and limitations & Mathys Ellis \\
+\hline
+08/03/2014 & v 0.6 & Added some wrapping to the change log which is now a table & Alfred Ngako \\
+\hline
+11/03/2014 & v 0.7 & Added more functional requirements which relate more to the use case diagrams & Alfred Ngako \\
+\hline
+16/03/2014 & v 0.8 & Added domain objects data relation diagrams & Alfred Ngako \\
+\hline
+16/03/2014 & v 0.8 & Added some preconditions and did some formatting & Mathys Ellis \\
+\hline
+17/03/2014 & v 0.8 & Added rest of preconditions and all the postconditions. Also added to the glossary & Mathys Ellis \\
+\hline
+20/03/2014 & v 0.9 & Updated the domain objects diagram  & Mathys Ellis \\
+\hline
+20/03/2014 & v 0.9 & Updated the domain objects plus diagram  & Alfred Ngako \\
+\hline
+20/03/2014 & v 0.9 & Updated the use case prioritizaion  & Alfred Ngako \\
+\hline
+
+%\end{tabbing}
+\end{tabular}
+\end{center}
+\newpage
+\tableofcontents
+
+\listoffigures
+\newpage
+
+\end{document}
