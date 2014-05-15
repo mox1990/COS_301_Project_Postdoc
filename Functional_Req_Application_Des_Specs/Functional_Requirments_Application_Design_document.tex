@@ -171,12 +171,21 @@ The required functionality, domain objects, process specification and use cases 
 \vspace{0.2in}
 The following sections will discuss the required functionality of all the major services handled by the system. Namely:
 \begin{itemize}
+\item User gateway
 \item Application service
 \item Report services
 \item Notification services
 \item User account management services
 \item Audit-Trail services
 \item Archival services
+\end{itemize}
+
+\subsubsection{User gateway}
+The user gateway provides the access control services of the system and is a centralised gateway which all users have to use in order to gain access to the system and its services. 
+\begin{itemize}
+	\item The gateway must provide a user login facility which allows the users to authenticate themselves using their account user name or email address and their account password.
+	\item The gateway must insure that the correct user privileges are loaded before allowing the system to proceed.
+	\item The gateway must insure that the user is allocated a session so that the system can identify the user. 
 \end{itemize}
 
 %Use the use case diagrams to complete the requirements of each of the services in the format I provided
@@ -203,7 +212,7 @@ The following sections will discuss the required functionality of all the major 
 				\item A HOD of a department must be able to create a recommendation report for applications they approve.
 				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.
 				\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
-				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to create the prepare the document their of.
+				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to prepare the pre-documentation their of.
 				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.
 				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 		
 			\end{enumerate}
@@ -241,13 +250,12 @@ The report services provides the reporting generation service for the DRIS in or
 		\item Generate report.
 		\item View report.
 	\end{enumerate}
-	\item The DRIS member viewing the report must be allowed to be exported the report to either a pdf or a spreadsheet format.
-	
+	\item The DRIS member viewing the report must be allowed to be exported the report to either a pdf or a spreadsheet format.	
 \end{itemize}
+
 \subsubsection{User account management services} %Couldn't see who the actor is on the use case diagram
 The user account management services provide each user who has an account on the system with the facilities to manage their account and also a facility for the system administrator to manage the accounts on the system.
 \begin{itemize}
-	\item Allow users to login.
 	\item A prospective fellow will be create a new account if they don't have one.
 	\item Any identified grant holder or referee that is not already on the system should be allowed to create a new account.
 	\item If integrated with peoplesoft the system should be able to pull all the account information of personnel but until such time the system administrator will have to be allowed create the accounts of all DRIS members, Dean's office members, HODs and post-doctoral committee members.	
@@ -711,6 +719,7 @@ This object represents a \textbf{AuditLog} entry which records the action, who c
 \item \textbf{NRF} - National Research Foundation
 \item \textbf{PhD} - A doctoral degree in a particular field of study.
 \item \textbf{PDF} - Portable Document Format file
+\item \textbf{Peoplesoft} - A management system designed by oracle. 
 \item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
 \item \textbf{Use case} - A visual depiction of a service or group of services.
 \item \textbf{UML} - Unified modelling language. A commonly used model standard to provide technology neutral models of different aspects of software.
