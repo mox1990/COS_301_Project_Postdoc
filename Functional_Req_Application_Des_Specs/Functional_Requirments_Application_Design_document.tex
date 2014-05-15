@@ -164,7 +164,7 @@ The requirements, vision and scope were elicited from the following sources:
 \subsection{Introduction} %Alfred
 \vspace{0.2in}
 This section discusses the functional requirements for SoftServe's Post-Doctoral application management system.
-The required functionality, domain objects and use cases related to the functional requirement will be discussed.
+The required functionality, domain objects, process specification and use cases related to the functional requirements of the project will be discussed.
 \vspace{0.2in}
 
 \subsection{Required functionality} %Alfred
@@ -175,69 +175,106 @@ The following sections will discuss the required functionality of all the major 
 \item Report services
 \item Notification services
 \item User account management services
+\item Audit-Trail services
+\item Archival services
 \end{itemize}
 
 %Use the use case diagrams to complete the requirements of each of the services in the format I provided
 \subsubsection{Application services}
-		Th main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services:
+		The application services encompasses the the entirety of the of the application process undergone by prospective fellows namely new and renewal applications.
+		The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage will be focused in this set of services only.
 		
 		\begin{itemize}
 			\item New fellowship application service API:		
 			\begin{enumerate}
 				\item Account creation for new prospective fellows, referees and grant holders.
-				\item All internal stakeholders should be able to log in with their PeopleSoft account details.				
-				\item A prospective fellow should be able to open a new application. 
-				\item A prospective fellow should be able to add their CV in the required format. 
+				\item All internal stakeholders should be able to log in with their PeopleSoft account details when the system is integrated but until such time they will be provided with account creation options.				
+				\item A prospective fellow should be able to open a new application.
+				\item A prospective fellow should be able to add their CV in the required format.
 				\item A specified grant holder should be able to add their CV in the required format.
+				\item A owner of a CV should be able to add various qualifications and work experience to their CV.
+				\item A owner of a CV should be able to update their CV if it has been created. 
 				\item A prospective fellow should be able to specify their intended grant holder.	
 				\item A prospective fellow should be able to specify their intended referees.
-				\item A specified grant holder should be able to complete prospective fellows application.
-				\item A application should be made available for stakeholders such as the DRIS, HOD and Dean to endorse and approve it.		
+				\item A specified grant holder should be able to complete the prospective fellows application.
+				\item A application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process.
+				\item A referee should be able to login and create a referral report for the prospective fellow that identified him/her.
+				\item A HOD of a department should be able to login and approve, decline or ask for amendment of any pending applications.
+				\item A HOD of a department must be able to create a recommendation report for applications they approve.
+				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.
+				\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
+				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to create the prepare the document their of.
+				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.
+				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 		
 			\end{enumerate}
 			
 			\item Fellowship renewal service API:
 			\begin{enumerate}		
-				\item All internal stakeholders should be able to log in with their PeopleSoft account details.	
-				\item A fellow should be able to open a new renewal application. 
-				\item A fellow should be able to add their progress report on all the work they have been working on. 
-				\item A fellows' grant holder should be able to finalise the renewal application.
-				\item The renewal application should be made available to the DRIS, HOD and dean for endorsement and approval.				
+				\item All internal stakeholders should be able to log in with their PeopleSoft account details once the system is integrated but until such time they should login with the credentials specified at the time of account creation.	
+				\item A prospective fellow should be able to open a new renewal application. 
+				\item A prospective fellow should be able to add their progress report on all the work they have been working on. 
+				\item A prospective fellow's grant holder should be able to finalise the renewal application.
+				\item The renewal application should be made available to the DRIS, HOD and dean to deny or approve it at the correct stage in the process.
+				\item A HOD of a department should be able to login and approve, decline or ask for amendment of any pending applications.
+				\item A HOD of a department must be able to create a recommendation report for applications they approve.
+				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.
+				\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
+				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to create the prepare the document their of.
+				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.
+				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 					
 			\end{enumerate}
 			\item Application progress viewer service API:
 			\begin{enumerate}
-				\item A prospective fellow should be able to login with their user specified account details.
-				\item A prospective fellows application status should be made available for their consideration.			
+				\item A prospective fellow should be able to login with their user account details.
+				\item A prospective fellow's application status should be made available for their review if they have an application in the system.			
 			\end{enumerate}
 		\end{itemize}
 
-Once the steps are completed the applicants application is now under consideration. The applicant will also be able to see the status of the the applications current state through the whole application process.
 \subsubsection{Report services}
-The report use cases provides the uses for report generation such as the generation of an applications current status, or for use required by the DRIS.
-\begin{enumerate}
-	\item DRIS stakeholder must be logged into the system.
-	\item The DRIS must be able to create a report which effectively allows them to:
-	\begin{itemize}
+The report services provides the reporting generation service for the DRIS in order to extract valuable information and allow them to provide electronic and hard copy data for review or archiving. The DRIS is the only stakeholder that will make use of this system. Note a reports are temporal objects and do not get saved by the system.
+\begin{itemize}
+	\item A DRIS member must be able to into the system and get access to the reporting module.
+	\item The DRIS member must be able to access a report generation tool which effectively allows them to:
+	\begin{enumerate}
 		\item Open new report.
-		\item Select report data.
+		\item Select report data from the database.
 		\item Generate report.
 		\item View report.
-	\end{itemize}
-	\item The viewing of a report must allow the report to be exported to either a pdf or a spreadsheet.
-\end{enumerate}
+	\end{enumerate}
+	\item The DRIS member viewing the report must be allowed to be exported the report to either a pdf or a spreadsheet format.
+	
+\end{itemize}
 \subsubsection{User account management services} %Couldn't see who the actor is on the use case diagram
+The user account management services provide each user who has an account on the system with the facilities to manage their account and also a facility for the system administrator to manage the accounts on the system.
 \begin{itemize}
 	\item Allow users to login.
-	\item The service must be able to create new account.
-	\item Modify account details.
-	\item Remove and account.
+	\item A prospective fellow will be create a new account if they don't have one.
+	\item Any identified grant holder or referee that is not already on the system should be allowed to create a new account.
+	\item If integrated with peoplesoft the system should be able to pull all the account information of personnel but until such time the system administrator will have to be allowed create the accounts of all DRIS members, Dean's office members, HODs and post-doctoral committee members.	
+	\item A user should be able to modify their account details.
+	\item A administrator should be able to modify any user account details.
+	\item A administrator should be able to remove any user account.
 \end{itemize}
 \subsubsection{Notification services}
-Every participant is due to receive notifications regarding their actions every now and then. This service is to follow these steps:
+The system will need to generate automated notifications that are sent internally and to the corresponding email of the recipient. This service should also be provided to users with in the system with the correct privileges.
 \begin{itemize}
 	\item Stakeholders must be able to create a new notification.
-	\item Notification must have recipient.
-	\item Notification must have a non-empty message.
-	\item Notification can  be sent as email or to a user account.
+	\item A notification must have recipient.
+	\item A notification must have a non-empty message.
+	\item A notification must be sent to both the user account and recipient's email address.
+\end{itemize}
+
+\subsubsection{Audit-Trail services}
+The Audit-Trail services provide a means for the system administrator or DRIS members to view all the actions that were performed by a user of the system. It is important to note that the audit entries is read-only and can only be updated by the system itself. The monitored actions are hard wired into the system so to prevent any tampering.
+\begin{itemize}
+	\item An authorised user must be able to generate a report via the reporting services for the audit log.
+	\item The system should be able to insert audit log entries when the monitored actions occur.
+\end{itemize}
+\subsubsection{Archival services}
+The archival services of the system will be able to back up the current state of the database to a specified location. Further it should be able to remove old records from the working database that are no longer in use and store then in a location so that they can be retrieved on a on-demand basis.
+\begin{itemize}
+	\item The system administrator needs to be able to perform a automatic archival of old data.
+	\item The system should be able to notify the system administrator of any possible archival data.
 \end{itemize}
 \vspace{0.2in}
 
