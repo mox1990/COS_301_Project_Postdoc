@@ -100,6 +100,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 15/05/2014 & v 0.92 & Added and redefined domain objects. & Mathys Ellis \\
 \hline
+15/05/2014 & v 0.93 & Added and redefined use case diagrams and preconditions. & Mathys Ellis \\
+\hline
 
 %\end{tabbing}
 \end{tabular}
@@ -185,16 +187,17 @@ The user gateway provides the access control services of the system and is a cen
 \begin{itemize}
 	\item The gateway must provide a user login facility which allows the users to authenticate themselves using their account user name or email address and their account password.
 	\item The gateway must insure that the correct user privileges are loaded before allowing the system to proceed.
-	\item The gateway must insure that the user is allocated a session so that the system can identify the user. 
+	\item The gateway must insure that the user is allocated a session so that the system can identify the user.
+	\item All internal stakeholders should be able to log in with their PeopleSoft account details once the system is integrated but until such time they should login with the credentials specified at the time of account creation. 
 \end{itemize}
 
 %Use the use case diagrams to complete the requirements of each of the services in the format I provided
 \subsubsection{Application services}
 		The application services encompasses the the entirety of the of the application process undergone by prospective fellows namely new and renewal applications.
-		The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage will be focused in this set of services only.
+		The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage will be focused in this set of services only. Further the application process is broken up in stages that run concurrently until they reach the stage where the post-doctoral committee meeting is to take place after which all eligible applications are batch processed. In order to manage this after each stage is complete the applications will be automatically forwarded to the next. Only the system administrator will have the power to move applications back through the stages.
 		
 		\begin{itemize}
-			\item New fellowship application service API:		
+			\item New fellowship application service:		
 			\begin{enumerate}
 				\item Account creation for new prospective fellows, referees and grant holders.
 				\item All internal stakeholders should be able to log in with their PeopleSoft account details when the system is integrated but until such time they will be provided with account creation options.				
@@ -204,35 +207,41 @@ The user gateway provides the access control services of the system and is a cen
 				\item A owner of a CV should be able to add various qualifications and work experience to their CV.
 				\item A owner of a CV should be able to update their CV if it has been created. 
 				\item A prospective fellow should be able to specify their intended grant holder.	
-				\item A prospective fellow should be able to specify their intended referees.
-				\item A specified grant holder should be able to complete the prospective fellows application.
+				\item A prospective fellow should be able to specify their intended referees.				
 				\item A application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process.
-				\item A referee should be able to login and create a referral report for the prospective fellow that identified him/her.
+				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 		
+			\end{enumerate}			
+			\item Application renewal service:
+			\begin{enumerate}					
+				\item A research fellow should be able to open a new renewal application. 
+				\item A research fellow should be able to add their progress report on all the work they have been working on.	
+				\item A renewal application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process.							 					
+			\end{enumerate}
+			\item Application Referees' report service:
+			\begin{enumerate}		
+				\item A referee should be able to login and create a referral report for the prospective fellow that has identified him/her.				 					
+			\end{enumerate}
+			\item Grant holder application finalisation service:
+			\begin{enumerate}		
+				\item A research fellow's grant holder should be able to finalise the renewal application of that research fellow.
+				\item A prospective fellow's grant holder should be able to finalise the prospective fellows application who he supervises.				 					
+			\end{enumerate}
+			\item HOD approval service:
+			\begin{enumerate}		
 				\item A HOD of a department should be able to login and approve, decline or ask for amendment of any pending applications.
-				\item A HOD of a department must be able to create a recommendation report for applications they approve.
-				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.
+				\item A HOD of a department must be able to create a recommendation report for applications they approve.				 					
+			\end{enumerate}
+			\item Dean endorsement service:
+			\begin{enumerate}		
+				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.				 					
+			\end{enumerate}
+			\item DRIS approval service:
+			\begin{enumerate}		
 				\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
 				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to prepare the pre-documentation their of.
-				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.
-				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 		
+				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.				 					
 			\end{enumerate}
-			
-			\item Fellowship renewal service API:
-			\begin{enumerate}		
-				\item All internal stakeholders should be able to log in with their PeopleSoft account details once the system is integrated but until such time they should login with the credentials specified at the time of account creation.	
-				\item A prospective fellow should be able to open a new renewal application. 
-				\item A prospective fellow should be able to add their progress report on all the work they have been working on. 
-				\item A prospective fellow's grant holder should be able to finalise the renewal application.
-				\item The renewal application should be made available to the DRIS, HOD and dean to deny or approve it at the correct stage in the process.
-				\item A HOD of a department should be able to login and approve, decline or ask for amendment of any pending applications.
-				\item A HOD of a department must be able to create a recommendation report for applications they approve.
-				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.
-				\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
-				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to create the prepare the document their of.
-				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.
-				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 					
-			\end{enumerate}
-			\item Application progress viewer service API:
+			\item Application progress viewer service:
 			\begin{enumerate}
 				\item A prospective fellow should be able to login with their user account details.
 				\item A prospective fellow's application status should be made available for their review if they have an application in the system.			
@@ -295,13 +304,13 @@ The archival services of the system will be able to back up the current state of
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application service.jpg}}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application services.jpg}}
 \caption{Use case diagram of Application service}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Report service.jpg}}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Report services.jpg}}
 \caption{Use case diagram of Report service}
 \end{figure}
 
@@ -319,6 +328,24 @@ The archival services of the system will be able to back up the current state of
 
 \begin{figure}[H]
 \centering	
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/User gateway.jpg}}
+\caption{Use case diagram of User gateway}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Audit-Trail services.jpg}}
+\caption{Use case diagram of Audit-Trail services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Archival services.jpg}}
+\caption{Use case diagram of Archival services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
 \framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Application progress viewer service.jpg}}
 \caption{Use case diagram of Application progress viewer service}
 \end{figure}
@@ -331,14 +358,20 @@ The archival services of the system will be able to back up the current state of
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Fellowship renewal service.jpg}}
-\caption{Use case diagram of Fellowship renewal service}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Application renewal service.jpg}}
+\caption{Use case diagram of Application renewal service}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Referees' report service.jpg}}
 \caption{Use case diagram of Referees' report service}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Grant holder application finalisation service.jpg}}
+\caption{Use case diagram of Grant holder application finalisation service}
 \end{figure}
 
 \begin{figure}[H]
@@ -364,7 +397,6 @@ The archival services of the system will be able to back up the current state of
 \framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Meeting management service.jpg}}
 \caption{Use case diagram of Meeting management service}
 \end{figure}
-
 
 \subsection{Use case prioritization} %Alfred
 \vspace{0.2in}
@@ -403,26 +435,32 @@ These are conditions that must be met by the system or user before they are allo
 	\item Fig 2.
 	\begin{itemize}
 		\item New fellowship application service: Can only be accessed if new applications are open.
-		\item Fellowship renewal service: Can only be accessed if renewals are open.
-		\item Application progress viewer service: Can only be accessed if user logged in with correct security permissions.	
+		\item Application renewal service: Can only be accessed if renewals are open and if the user is a research fellow that is still in possession of a fellowship.
+		\item Referees' report service:  Can only be accessed if user is a referee.
+		\item Grant holder application finalisation service:  Can only be accessed if user is a grant holder.
+		\item HOD Approval service:  Can only be accessed if user is a HOD.
+		\item Dean endorsement service:  Can only be accessed if user is a member of the dean's office.
+		\item DRIS Approval service:  Can only be accessed if user is a member of the DRIS.
+		\item Meeting management service:  Can only be accessed if user is a member of the DRIS or post-doctoral committee member.
+		\item Application progress viewer service: Can only be accessed if user logged as a prospective fellow, research fellow or grant holder. Also the user needs to have at least one application on the system.	
 	\end{itemize}
 	
 	\item Fig 3.
 		\begin{itemize}
-			\item Log in: If a user with the associated credentials has appropriate security role.
-			\item Create report: If user is logged in.
+			\item Authenticate DRIS privileges: User needs to be logged in.
+			\item Create report: If a user with the associated credentials has been authenticated.
 			\item Open new report: If no report is currently open.
 			\item Select report data: If report is open and data is available for report.
 			\item Generate report: If data has been selected.
 			\item View report: If a report has been generated.
-			\item Export report: If user wants to export report.
+			\item Export report: If user wants to export report and the user is busy viewing the report.
 			\item To spreadsheet: If user wants to export report to a spreadsheet.
 			\item To pdf: If user wants to export report to a pdf.	
 		\end{itemize}
 	
 	\item Fig 4.
 			\begin{itemize}
-				\item Create notification: If requesting user is the system.
+				\item Create notification: If requesting user is the system or an authorised user.
 				\item Specify recipient user account: If a notification is in its setup stage.				
 				\item Specify message: If a notification is in its setup stage.
 				\item Send user account notification: If notification is ready to be sent.
@@ -433,55 +471,82 @@ These are conditions that must be met by the system or user before they are allo
 			\begin{itemize}
 				\item Create new account: If requesting user has the appropriate security role.
 				\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
-				\item Remove account: If requesting user has the appropriate security role.						
+				\item Remove account: If requesting user has the appropriate security role.	
+				\item View all accounts: If requesting user is a system administrator.					
 			\end{itemize}
 	
 	\item Fig 6.
+			\begin{itemize}
+				\item Login user: If requesting user is a user of the system.
+				\item User account retrieval: If requesting user has forgotten their user credentials.				
+				\item Create prospective fellow account: If a new prospective fellow wishes to create an account.	
+				\item Create on-demand user account: If a user has been identified by an applicant and has a security token.
+				\item Authenticate user: if user is logged in.						
+			\end{itemize}
+	
+	\item Fig 7.
+			\begin{itemize}
+				\item Log action: If requesting user is the system.
+				\item Query audit table: If has the correct security privileges.										
+			\end{itemize}
+	\item Fig 8.
+			\begin{itemize}
+				\item Retrieve archived information: If requesting user is a system administrator or the system.
+				\item Archive old information: If requesting user is a system administrator or the system.						
+			\end{itemize}		
+	\item Fig 9.
 		\begin{itemize}
 			\item View application progress: Can only be used if there are any applications made by the user.
 		\end{itemize}
 		
-	\item Fig 7.
+	\item Fig 10.
 		\begin{itemize}
-			\item Create prospective fellow account: If prospective fellow does not have an account.
-			\item Submit information: If all the application information is complete.				
-			\item Create grant holder account: If grant holder does not have an account.
-			\item Create grant holder cv: If the grant holder does not have an NRF rating or does have never created a CV on the system before.
-			\item Submit application: If all the required information has been entered.									
+			\item Submit information: If all the application information is complete.		
+											
 		\end{itemize}
 	
-	\item Fig 8.
+	\item Fig 11.
 		\begin{itemize}
-			\item Open new renewal application: If prospective fellow has a fellowship that is renewable.
-			\item Submit report: If progress report is completed.				
+			\item Open new renewal application: If research fellow has a fellowship that is renewable.
+			\item Submit report: If the progress report has been completed.				
 			\item Submit renewal application: If all the required information for the renewal has been entered.									
 		\end{itemize}
 	
-	\item Fig 9.
+	\item Fig 12.
 		\begin{itemize}
-			\item Create referee account: If the referee does not have an account.
-			\item Create report: If requesting user has the appropriate security role.				
+			\item Load pending applications: If there are any pending applications for the referee.
+			\item Create report: If if a application is selected from the list of pending applications.				
 			\item Submit referral report: If the referral report has been completed.									
 		\end{itemize}
 		
-	\item Fig 10.
+	\item Fig 13.
 		\begin{itemize}
-			\item Application approval: If any finalised application is available for approval and the grant holder of the application falls under department the HOD is in charge of.
+			\item Load pending applications: If there are any pending applications for the grant holder.
+			\item Create Grant holder CV: If grant holder does not have a CV.
+			\item Complete application form: If grant holder has selected any application that is still pending.
+			\item Submit application: If all the required information has been entered									
+		\end{itemize}
+		.	
+	\item Fig 14.
+		\begin{itemize}
+			\item Load pending applications: If there are any finalised application available for approval and the grant holder of the application falls under department the HOD is in charge of.
+			\item Application approval: If HOD has selected a application from the application list. 
 			\item Create recommendation report: If the application has been approved.				
 			\item Submit approved application's information: If the recommendation report has been completed.									
 		\end{itemize}
 		
-	\item Fig 11.
+	\item Fig 15.
 		\begin{itemize}
-			\item Endorse application: If any approved application is available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of.
+			\item Load pending applications: If there are any approved application available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of.
+			\item Endorse application: If a application is selected from the pending list. 
 			\item Rank application: If the application has been endorsed.	
 			\item Create comment: If the application has been ranked.			
 			\item Submit endorsed application: If the required endorsement information has been completed.									
 		\end{itemize}
 	
-	\item Fig 12.
+	\item Fig 16.
 		\begin{itemize}
-			\item Check eligibility: If any endorsed application is available for its eligibility check.
+			\item Check eligibility: If there are any endorsed application available for its eligibility check.
 			\item Deny: If the prospective fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
 			\item Accept: If the prospective fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years. 
 			\item Finalise funding decision: If the meeting regarding the application has been concluded.	
@@ -489,12 +554,14 @@ These are conditions that must be met by the system or user before they are allo
 			\item Approve funding: If the application's funding was denied.									
 		\end{itemize}
 	
-	\item Fig 13.
+	\item Fig 17.
 		\begin{itemize}
-			\item Create meeting: If any eligible applications are available.
+			\item List options: If user is a authenticated DRIS member.
+			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
 			\item Add endorsed applications: If any new applications that are eligible are available.
 			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item Record minutes of meeting: If the selected meeting has been setup.							
+			\item List active meetings: If user is a authenticated post doctoral committee member.
+			\item Record minutes of meeting: If the selected meeting has been listed.							
 		\end{itemize}
 	\end{itemize}
 
