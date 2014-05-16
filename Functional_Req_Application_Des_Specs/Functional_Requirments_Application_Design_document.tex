@@ -400,17 +400,30 @@ The archival services of the system will be able to back up the current state of
 \caption{Use case diagram of Meeting management service}
 \end{figure}
 
-\subsection{Use case prioritization} %Alfred
+\newpage
+\subsection{Use case prioritization}
 \vspace{0.2in}
 This section states the ranking in terms of priority of the service use case per use case diagram figure. The priorities are: Critical, Important and Nice to have.\\ 
 \begin{itemize}
-	\item User gate
+	\item User gateway: Critical
+	\begin{itemize}
+		\item Login user: Critical
+		\item User account retrieval: Important
+		\item Create prospective fellow user account: Critical
+		\item Create on-demand user account: Critical
+		\item Authenticate user: Critical
+	\end{itemize}
 	\item Application services: Critical
 	\begin{itemize}
-		\item New Application: Critical
-		\item Renewal Application: Critical
+		\item New fellowship application service: Critical
+		\item Application renewal service: Critical
+		\item Referees' report service: Critical
+		\item Grant holder application finalisation service: Critical
+		\item HOD Approval service: Critical
+		\item Dean endorsement service: Critical
+		\item DRIS approval service: Critical		
+		\item Meeting management service: Important
 		\item Application progress viewer service: Important
-		\item Meeting management service: Nice To Have
 	\end{itemize}
 	\item Report services: Important
 	\item Notification services: Critical
@@ -418,10 +431,19 @@ This section states the ranking in terms of priority of the service use case per
 	\begin{itemize}
 		\item Create new account: Critical
 		\item Modify account: Critical
-		\item Remove account: Critical
-		\item Login: Critical
+		\item Remove account: Important
+		\item View all accounts: Important
 	\end{itemize}
-	\item 
+	\item Audit-Trail services: Critical
+	\begin{itemize}
+		\item Log action: critical
+		\item Query audit table: Important
+	\end{itemize}
+	\item Archival services: Nice to have
+	\begin{itemize}
+		\item Retrieve archived information: Nice to have
+		\item Archive old information: Nice to have
+	\end{itemize}
 \end{itemize}
 
 
@@ -711,6 +733,8 @@ These are conditions that must be met by the system and the data after the use c
 
 \end{itemize}
 
+\subsubsection{Request and result data structures}
+The system will be following a object oriented approach due it being the paradigm of the Java programming language. Therefore the input and output structure will mainly be in the form of objects. Also the objects that will be produced and used inside the system will adhere to the domain objects.
 
 \vspace{0.2in}
 
@@ -810,10 +834,6 @@ This object represents a audit log that stores all the actions of all users with
 \subsubsection{LogEntry}
 This object represents a \textbf{AuditLog} entry which records the action, who committed the action as well as at what time the action was committed.
 
-
-
-\newpage	
-
 \newpage
 \section{Glossary:}
 \vspace{0.2in}
@@ -821,8 +841,10 @@ This object represents a \textbf{AuditLog} entry which records the action, who c
 \begin{itemize}
 
 \item \textbf{API} - Application Programming Interface
+\item \textbf{Audit log} - A log that keeps track of user actions.
 \item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
 \item \textbf{CV} - Curriculum Vita
+\item \textbf{Domain objects} - Are the objects that are present in the system being modelled.
 \item \textbf{HTML} - Hyper Text Mark-up Language
 \item \textbf{Java EE} - Java Enterprise Edition
 \item \textbf{NRF} - National Research Foundation
