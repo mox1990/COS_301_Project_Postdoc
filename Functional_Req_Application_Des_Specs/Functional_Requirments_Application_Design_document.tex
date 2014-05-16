@@ -102,6 +102,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 15/05/2014 & v 0.93 & Added and redefined use case diagrams and preconditions. & Mathys Ellis \\
 \hline
+16/05/2014 & v 0.95 & Added and redefined use case diagrams and preconditions and postconditions. Also updated domain objects. & Mathys Ellis \\
+\hline
 
 %\end{tabbing}
 \end{tabular}
@@ -400,8 +402,9 @@ The archival services of the system will be able to back up the current state of
 
 \subsection{Use case prioritization} %Alfred
 \vspace{0.2in}
-This section states the ranking in terms of priority of the each use case per use case diagram figure. The priorities are: Critical, Important and Nice to have.\\ 
+This section states the ranking in terms of priority of the service use case per use case diagram figure. The priorities are: Critical, Important and Nice to have.\\ 
 \begin{itemize}
+	\item User gate
 	\item Application services: Critical
 	\begin{itemize}
 		\item New Application: Critical
@@ -433,22 +436,21 @@ This section states the preconditions and postconditions of the each use case pe
 These are conditions that must be met by the system or user before they are allowed to use the use case.\\
 \begin{itemize}
 	\item Fig 2.
-	\begin{itemize}
-		\item New fellowship application service: Can only be accessed if new applications are open.
-		\item Application renewal service: Can only be accessed if renewals are open and if the user is a research fellow that is still in possession of a fellowship.
-		\item Referees' report service:  Can only be accessed if user is a referee.
-		\item Grant holder application finalisation service:  Can only be accessed if user is a grant holder.
-		\item HOD Approval service:  Can only be accessed if user is a HOD.
-		\item Dean endorsement service:  Can only be accessed if user is a member of the dean's office.
-		\item DRIS Approval service:  Can only be accessed if user is a member of the DRIS.
-		\item Meeting management service:  Can only be accessed if user is a member of the DRIS or post-doctoral committee member.
-		\item Application progress viewer service: Can only be accessed if user logged as a prospective fellow, research fellow or grant holder. Also the user needs to have at least one application on the system.	
-	\end{itemize}
+		\begin{itemize}
+			\item New fellowship application service: Can only be accessed if new applications are open.
+			\item Application renewal service: Can only be accessed if renewals are open and if the user is a research fellow that is still in possession of a fellowship.
+			\item Referees' report service:  Can only be accessed if user is a referee.
+			\item Grant holder application finalisation service:  Can only be accessed if user is a grant holder.
+			\item HOD Approval service:  Can only be accessed if user is a HOD.
+			\item Dean endorsement service:  Can only be accessed if user is a member of the dean's office.
+			\item DRIS Approval service:  Can only be accessed if user is a member of the DRIS.
+			\item Meeting management service:  Can only be accessed if user is a member of the DRIS or post-doctoral committee member.
+			\item Application progress viewer service: Can only be accessed if user logged as a prospective fellow, research fellow or grant holder. Also the user needs to have at least one application on the system.	
+		\end{itemize}
 	
 	\item Fig 3.
 		\begin{itemize}
-			\item Authenticate DRIS privileges: User needs to be logged in.
-			\item Create report: If a user with the associated credentials has been authenticated.
+			\item Create report: If a user with the associated credentials has been authenticated as a member of the DRIS or with the correct security role.
 			\item Open new report: If no report is currently open.
 			\item Select report data: If report is open and data is available for report.
 			\item Generate report: If data has been selected.
@@ -459,41 +461,41 @@ These are conditions that must be met by the system or user before they are allo
 		\end{itemize}
 	
 	\item Fig 4.
-			\begin{itemize}
-				\item Create notification: If requesting user is the system or an authorised user.
-				\item Specify recipient user account: If a notification is in its setup stage.				
-				\item Specify message: If a notification is in its setup stage.
-				\item Send user account notification: If notification is ready to be sent.
-				\item Send email: If notification is ready to be sent.	
-			\end{itemize}
+		\begin{itemize}
+			\item Create notification: If requesting user is the system or an authorised user.
+			\item Specify recipient user account: If a notification is in its setup stage.				
+			\item Specify message: If a notification is in its setup stage.
+			\item Send user account notification: If notification is ready to be sent.
+			\item Send email: If notification is ready to be sent.	
+		\end{itemize}
 	
 	\item Fig 5.
-			\begin{itemize}
-				\item Create new account: If requesting user has the appropriate security role.
-				\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
-				\item Remove account: If requesting user has the appropriate security role.	
-				\item View all accounts: If requesting user is a system administrator.					
-			\end{itemize}
+		\begin{itemize}
+			\item Create new account: If requesting user has the appropriate security role.
+			\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
+			\item Remove account: If requesting user has the appropriate security role.	
+			\item View all accounts: If requesting user is a system administrator.					
+		\end{itemize}
 	
 	\item Fig 6.
-			\begin{itemize}
-				\item Login user: If requesting user is a user of the system.
-				\item User account retrieval: If requesting user has forgotten their user credentials.				
-				\item Create prospective fellow account: If a new prospective fellow wishes to create an account.	
-				\item Create on-demand user account: If a user has been identified by an applicant and has a security token.
-				\item Authenticate user: if user is logged in.						
-			\end{itemize}
+		\begin{itemize}
+			\item Login user: If requesting user is a user of the system.
+			\item User account retrieval: If requesting user has forgotten their user credentials.				
+			\item Create prospective fellow account: If a new prospective fellow wishes to create an account.	
+			\item Create on-demand user account: If a user has been identified by an applicant and has a security token.
+			\item Authenticate user: if user is logged in.						
+		\end{itemize}
 	
 	\item Fig 7.
-			\begin{itemize}
-				\item Log action: If requesting user is the system.
-				\item Query audit table: If has the correct security privileges.										
-			\end{itemize}
+		\begin{itemize}
+			\item Log action: If requesting user is the system.
+			\item Query audit table: If the user has the correct security role.										
+		\end{itemize}
 	\item Fig 8.
-			\begin{itemize}
-				\item Retrieve archived information: If requesting user is a system administrator or the system.
-				\item Archive old information: If requesting user is a system administrator or the system.						
-			\end{itemize}		
+		\begin{itemize}
+			\item Retrieve archived information: If requesting user is a system administrator or the system.
+			\item Archive old information: If requesting user is a system administrator or the system.						
+		\end{itemize}		
 	\item Fig 9.
 		\begin{itemize}
 			\item View application progress: Can only be used if there are any applications made by the user.
@@ -501,8 +503,7 @@ These are conditions that must be met by the system or user before they are allo
 		
 	\item Fig 10.
 		\begin{itemize}
-			\item Submit information: If all the application information is complete.		
-											
+			\item Submit information: If all the application information is complete.
 		\end{itemize}
 	
 	\item Fig 11.
@@ -514,14 +515,14 @@ These are conditions that must be met by the system or user before they are allo
 	
 	\item Fig 12.
 		\begin{itemize}
-			\item Load pending applications: If there are any pending applications for the referee.
+			\item Load pending applications: If there are any pending applications for the referee and if the user was authenticated as the referee.
 			\item Create report: If if a application is selected from the list of pending applications.				
 			\item Submit referral report: If the referral report has been completed.									
 		\end{itemize}
 		
 	\item Fig 13.
 		\begin{itemize}
-			\item Load pending applications: If there are any pending applications for the grant holder.
+			\item Load pending applications: If there are any pending applications for the grant holder and if the user was authenticated as the grant holder.
 			\item Create Grant holder CV: If grant holder does not have a CV.
 			\item Complete application form: If grant holder has selected any application that is still pending.
 			\item Submit application: If all the required information has been entered									
@@ -529,7 +530,7 @@ These are conditions that must be met by the system or user before they are allo
 		.	
 	\item Fig 14.
 		\begin{itemize}
-			\item Load pending applications: If there are any finalised application available for approval and the grant holder of the application falls under department the HOD is in charge of.
+			\item Load pending applications: If there are any finalised application available for approval and the grant holder of the application falls under department the HOD is in charge of and if user has been authenticated as the HOD.
 			\item Application approval: If HOD has selected a application from the application list. 
 			\item Create recommendation report: If the application has been approved.				
 			\item Submit approved application's information: If the recommendation report has been completed.									
@@ -537,7 +538,7 @@ These are conditions that must be met by the system or user before they are allo
 		
 	\item Fig 15.
 		\begin{itemize}
-			\item Load pending applications: If there are any approved application available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of.
+			\item Load pending applications: If there are any approved application available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of and the user has been authenticated as a member of the dean's office.
 			\item Endorse application: If a application is selected from the pending list. 
 			\item Rank application: If the application has been endorsed.	
 			\item Create comment: If the application has been ranked.			
@@ -546,9 +547,11 @@ These are conditions that must be met by the system or user before they are allo
 	
 	\item Fig 16.
 		\begin{itemize}
+			\item Load pending applications: If the user is authenticated as a member of the DRIS and if there are any endorsed application available for eligibility checking or applications available for finalising their funding decisions.
 			\item Check eligibility: If there are any endorsed application available for its eligibility check.
 			\item Deny: If the prospective fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
-			\item Accept: If the prospective fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years. 
+			\item Accept: If the prospective fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years.
+			\item Meeting management service: If a meeting is to be created or updated. 
 			\item Finalise funding decision: If the meeting regarding the application has been concluded.	
 			\item Deny: If the application's funding was denied.			
 			\item Approve funding: If the application's funding was denied.									
@@ -571,7 +574,7 @@ These are conditions that must be met by the system and the data after the use c
 		
 	\item Fig 3.
 		\begin{itemize}
-			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Authenticate user: The user has been authenticated as a DRIS member or has the appropriate security role.
 			\item Open new report: A new report is active.
 			\item Select report data: The data for the active report is selected.
 			\item Generate report: The report is available for viewing.
@@ -579,99 +582,130 @@ These are conditions that must be met by the system and the data after the use c
 		\end{itemize}
 	
 	\item Fig 4.
-			\begin{itemize}
-				\item Create notification: A possible notification is open for receiving its contents.
-				\item Specify recipient user account: The notification has a a recipient.				
-				\item Specify message: The notification has a message.
-				\item Send user account notification: The message is sent to the user.
-				\item Send email: The message is sent the email associated with recipients user account.	
-			\end{itemize}
+		\begin{itemize}
+			\item Authenticate user: The user was authenticated as the system or a user with the appropriate security role.
+			\item Create notification: A possible notification is open for receiving its contents.
+			\item Specify recipient user account: The notification has a a recipient.				
+			\item Specify message: The notification has a message.
+			\item Send user account notification: The message is sent to the user.
+			\item Send email: The message is sent the email associated with recipients user account.	
+		\end{itemize}
 	
 	\item Fig 5.
-			\begin{itemize}
-				\item Create new account: A new user account is added to the system.
-				\item Modify account: The specified user account is updated.				
-				\item Remove account: The specified user account is removed from the system.						
-			\end{itemize}
+		\begin{itemize}
+			\item Create new account: A new user account is added to the system.
+			\item Modify account: The specified user account is updated.				
+			\item Remove account: The specified user account is removed from the system.
+			\item View all accounts: All user accounts are listed.						
+		\end{itemize}
 	
 	\item Fig 6.
 		\begin{itemize}
-			\item View application progress: The application progress of the specified user application is visible.
+			\item Login user: User is verified and logged in.
+			\item User account retrieval: An recovery email is sent to the user account that has been queried for recovery.				
+			\item Create prospective fellow user account: A prospective fellows user account was created.
+			\item Create on-demand user account: A user account identified by the account token was created.
+			\item Authenticate user: The user is confirmed to be logged in and has the security role expected by the system.						
 		\end{itemize}
 		
 	\item Fig 7.
 		\begin{itemize}
-			\item Create prospective fellow account: If prospective fellow has an account.
-			\item Create prospective fellow cv: The CV is created and associated with the prospective fellow and the application.
-			\item Specify grant holder: The grant holder's contact information is associated with the application.
-			\item Specify referees: The referees' contact information is associated with the application.
-			\item Submit information: The initial application data is complete. Referees are notified.				
-			\item Create grant holder account: The grant holder has an account.
-			\item Create grant holder cv: The grant holder's CV is associated with the application.
-			\item Complete application form: The application data is complete and the application is ready to be finalised.
-			\item Submit application: The application is now a finalised application and the HOD of the relative department is notified. 									
+			\item Log action: A user action was recorded in the audit table and cannot be changed by user nor by the system.
+			\item Query audit table: An valid response to the query was returned.									
 		\end{itemize}
-	
 	\item Fig 8.
 		\begin{itemize}
-			\item Open new renewal application: A new renewal is for a fellowship is open.
-			\item Log in: The user has been authenticated and has the appropriate security role.
-			\item Complete progress report: The progress report associated with	the renewal.		
-			\item Submit report: The initial renewal information is complete. Grant holder is notified.
-			\item Complete renewal form: The renewal data complete and the renewal is ready to be finalised.			
-			\item Submit renewal application: The renewal application is finalised and the HOD of the relative department is notified.									
+			\item Retrieve archived information: The current working database has been repopulated with the selected archive database data.
+			\item Archive old information: Any old information in the current working database is moved to the archived data base.									
 		\end{itemize}
-	
 	\item Fig 9.
 		\begin{itemize}
-			\item Create referee account: Referee has a user account.
-			\item Log in: The user has been authenticated and has the appropriate security role.
-			\item Create report: The report is complete and ready to be submitted.				
-			\item Submit referral report: The referral report has been finalised and associated with the application and the Grant Holder of the application is notified.									
-		\end{itemize}
+			\item Authenticate user: The current user was authenticated as a grant holder or research fellow or a prospective fellow.
+			\item View application progress: The application progress of the specified user application is visible.									
+		\end{itemize}				
 		
 	\item Fig 10.
 		\begin{itemize}
-			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Authenticate user: The current user was authenticated as a prospective fellow.
+			\item Create prospective fellow cv: The CV is created and associated with the prospective fellow.
+			\item Specify grant holder: The grant holder's contact information is associated with the application.
+			\item Specify referees: The referees' contact information is associated with the application.
+			\item Submit information: The initial application data is complete. Referees are notified. And the prospective fellow is a associated with the application.				
+		\end{itemize}
+	
+	\item Fig 11.
+		\begin{itemize}
+			\item Authenticate user: The current user was authenticated as a research fellow.
+			\item Open new renewal application: A new renewal is for a fellowship is open.
+			\item Complete progress report: The progress report associated with	the renewal is completed.		
+			\item Submit report: The initial renewal information is complete. Grant holder is notified.											
+		\end{itemize}
+	
+	\item Fig 12.
+		\begin{itemize}
+			\item Authenticate user: The current user was authenticated as a referee.
+			\item Load pending applications: Any applications that need a referral report from the specified referee must be listed.
+			\item Create report for prospective fellow: The report is complete and ready to be submitted.				
+			\item Submit referral report: The referral report has been finalised and associated with the application and the Grant Holder of the application is notified.									
+		\end{itemize}
+	\item Fig 13.
+		\begin{itemize}
+			\item Authenticate user: The current user was authenticated as a grant holder.
+			\item Load pending applications: Any applications that need to be finalised from the specified grant holder must be listed.
+			\item Create report for prospective fellow: The report is complete and ready to be submitted.				
+			\item Submit referral report: The referral report has been finalised and associated with the application and the Grant Holder of the application is notified.
+			\item Create grant holder cv: The grant holder's CV is associated with the grant holder.
+			\item Complete application form: The application data is complete and the application is ready to be finalised.
+			\item Submit application: The application is now a finalised application and the grant holder is associated with the application. The HOD of the relative department is notified. 									
+		\end{itemize}	
+	\item Fig 14.
+		\begin{itemize}
+			\item Authenticate user: The current user was authenticated as a HOD.
+			\item Load pending applications: Any applications that need to be approved by the specified HOD must be listed.
 			\item Deny: Application has status changed to denied.
 			\item Amend: Application is reopened and status changed to amend.
-			\item Notify grant holder: A notification is sent to the Grant holder of the application.  
-			\item Approve:  The application recommendation report becomes available for completion.
+			\item Notify grant holder: A denied or amend notification is sent to the Grant holder of the application appropriately.  
+			\item Approve: The application recommendation report becomes available for completion.
 			\item Create recommendation report: The recommendation report is associated with the application and the Approval is ready to be finalised.				
 			\item Submit approved application's information: The application approval is finalised and the application is now a approved application and the Dean's Office of the relevant faculty is notified.									
 		\end{itemize}
 		
-	\item Fig 11.
+	\item Fig 15.
 		\begin{itemize}
-			\item Log in: The user has been authenticated and has the appropriate security role.
+			\item Authenticate user: The current user was authenticated as a member of a dean's office.
+			\item Load pending applications: Any applications that need to be approved by the specified dean's office must be listed.
 			\item Deny: The application's status is changed to denied. 
-			\item Notify grant holder: A notification is sent to the Grant holder of the application.
+			\item Notify grant holder: A denied notification is sent to the Grant holder of the application.
 			\item Endorse: The application's endorsement information becomes available for completion.
 			\item Rank application: The application has a rank associated with it.	
 			\item Create comment: The application has a endorsement comment associated with it.			
 			\item Submit endorsed application: The application endorsement is finalised and the application is now an endorsed application and the DRIS is notified.									
 		\end{itemize}
 	
-	\item Fig 12.
+	\item Fig 16.
 		\begin{itemize}
-			\item Log in: The user has been authenticated and has the appropriate security role.
-			\item Deny: The application's status is changed to denied. 
-			\item Notify grant holder: A notification is sent to the Grant holder of the application.
+			\item Authenticate user: The current user was authenticated as a member of the DRIS.
+			\item Load pending applications: Any applications that need to be checked for eligibility or have their final funding decision made by the DRIS must be listed.
+			\item Deny: The application's status is changed to denied if it is not eligible. 
+			\item Notify grant holder: A denied notification is sent to the Grant holder of the application.
 			\item Accept: The application is ready for discussion and is now an eligible application.			
-			\item Deny: The application's status is changed to denied.			
+			\item Deny: The application's status is changed to denied if its funding is not approved.			
 			\item Approve funding: The application is now a complete application.
-			\item Notify grant holder: A notification is sent to the Grant holder of the application.
-			\item Notify CSC: A notification is sent to the CSC.
-			\item Notify Finance: A notification is sent to the Finance department.									
+			\item Notify grant holder: A notification is sent to the Grant holder of the application that it is successful.
+			\item Notify CSC: A customizable notification is sent to the CSC.
+			\item Notify Finance: A customizable notification is sent to the Finance department.									
 		\end{itemize}
 	
-	\item Fig 13.
+	\item Fig 17.
 		\begin{itemize}
+			\item Authenticate user: The current user was authenticated as a member of the DRIS or the Post doctoral committee.
+			\item List options: The option to update or create meeting are listed.
 			\item Create meeting: A new meeting is open for modification.
 			\item Add endorsed applications: An endorsed new application has been added to the agenda of the meeting.
 			\item Add endorsed renewals: An renewal application has been added to the agenda of the meeting.
 			\item Create pre-meeting documentation: Documentation complete and associated with meeting and the meeting is closed for modification.
 			\item Notify committee members: A notification is sent to all the committee members.
+			\item List active meetings: All active meetings at the time are listed.
 			\item Record minutes of meeting: The meeting is finalised and it's minutes stored.							
 		\end{itemize}
 
@@ -685,7 +719,7 @@ These are conditions that must be met by the system and the data after the use c
 
 %\vspace{0.2in}
 
-\subsection{Domain Objects} %Alfred
+\subsection{Domain Objects}
 \subsubsection{Overview}
 
 \begin{figure}[H]
@@ -696,23 +730,31 @@ system.}
 \end{figure}
 
 \newpage
-\subsubsection{Persons}
-This object represents the stakeholders that will make use of the system. All stakeholders will have accounts which they will use to log on to the system. Using a unique user id and a predefined or user specified password. The unique user id can either be a Peoplesoft Emplid number or a email address.
+\subsubsection{Person}
+This object represents the stakeholders that will make use of the system. All stakeholders will have accounts which they will use to log on to the system. Using a unique user id and a predefined or user specified password. The unique user id can either be a Peoplesoft Emplid number or a email address. The person has an associated \textbf{Location} and \textbf{SecurityRole}(s)
 
+\subsubsection{Location}
+This object represents the location of a \textbf{Person} in the institution if they are a member of the University of Pretoria. This object will no longer be needed if the system is integrated with peoplesoft as it would cause redundancy.
+
+\subsubsection{SecurityRole}
+This object represents a particular security role of a \textbf{Person}. A \textbf{Person} may have many different security roles.
 \subsubsection{DRIS}
 This object represents members of Department of Research and Innovation Support who administers the process.
 
 \subsubsection{ProspectiveFellow}
-This object represents a prospective fellow who is a holder of a PhD obtained in the last five years (or nearing completion of a PhD) or is 40 years or younger and has a PhD.
+This inherited object represents a prospective fellow who is a holder of a PhD obtained in the last five years (or nearing completion of a PhD) or is 40 years or younger and has a PhD. The prospective fellow can open a \textbf{NewApplication}.
+
+\subsubsection{ResearchFellow}
+This inherited object represents a research fellow who is a currently a researcher at the University of Pretoria. This object was initial a \textbf{ProspectiveFellow}. The research fellow can apply for a \textbf{RenewalApplication}.
 
 \subsubsection{GrantHolder}
-This object represents a grant holder who can be a rated researcher by the NRF or not. The system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers can be easily obtained from the NRF and tend to be very long. A grant holder is the supervisor for a or many \textbf{ProspectiveFellow}(s) and owns the \textbf{Application} of the \textbf{ProspectiveFellow}(s).
+This inherited object represents a grant holder who can be a rated researcher by the NRF or not. The system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers can be easily obtained from the NRF and tend to be very long. A grant holder is the supervisor for a or many \textbf{ProspectiveFellow}(s) and owns the \textbf{Application} of the \textbf{ProspectiveFellow}(s).
 
 \subsubsection{HOD}
-This object represents a HOD of a particular department. The HOD creates the recommendation reports for \textbf{Application}(s) they consider to meet their requirements.\\
+This inherited object represents a HOD of a particular department. The HOD creates the recommendation reports for \textbf{Application}(s) they consider to meet their requirements.\\
 
 \subsubsection{HODRecommandationReport}
-This object represents a recommendation report highlighting the reasons to why the \textbf{Application} of a \textbf{ProspectiveFellow} is needed by the department.
+This inherited object represents a recommendation report highlighting the reasons to why the \textbf{Application} of a \textbf{ProspectiveFellow} is needed by the department.
 
 \subsubsection{Deans Office}
 The Dean's office object represents the relevant faculty's Dean and Deputy Dean. The Dean's Office creates the \textbf{Endorsement} for any the \textbf{Application} that is approved by them.
@@ -721,13 +763,13 @@ The Dean's office object represents the relevant faculty's Dean and Deputy Dean.
 This object represents the endorsement of an \textbf{Application} of a \textbf{ProspectiveFellow} and contains the rank in comparison to other pending \textbf{Application}(s).
 
 \subsubsection{Referee}
-This object represents the referees of any \textbf{ProspectiveFellow} and is responsible for creating \textbf{RefereeReport} regarding the \textbf{ProspectiveFellow}.
+This inherited object represents the referees of any \textbf{ProspectiveFellow} and is responsible for creating \textbf{RefereeReport} regarding the \textbf{ProspectiveFellow}.
 
 \subsubsection{RefereeReport}
 This object represents the referral report from an identified referee of a \textbf{ProspectiveFellow}.
 
 \subsubsection{PostDocCommittee}
-This object represents the individual members of the post-doctoral committee who approves all available \textbf{Applications} during committee meetings and records the \textbf{Minutes} of the meeting.
+This inherited object represents the individual members of the post-doctoral committee who approves all available \textbf{Applications} during committee meetings and records the \textbf{Minutes} of the meeting.
 
 \subsubsection{CommitteeMeeting}
 This object represents a meeting of the \textbf{PostDocCommittee} convened by the \textbf{DRIS} that will be review the \textbf{Applications} and will evaluate each. This object contains the attendance list, date and time convened and the \textbf{Minutes} of the meeting.

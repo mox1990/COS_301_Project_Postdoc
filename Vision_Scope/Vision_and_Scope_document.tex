@@ -72,25 +72,26 @@ Mathys Ellis (12019837) \\[8em]
 \hline
  Date & Version & Description &  Person \\
 \hline
-10/02/2014 & v 0.0 & Original SRS document created & Mathys Ellis \\
+10/02/2014 & v 0.0 & Original SRS document created. & Mathys Ellis \\
 \hline
-02/03/2014 & v 0.1 & Added to glossary & Mathys Ellis \\
+02/03/2014 & v 0.1 & Added to glossary. & Mathys Ellis \\
 \hline
-05/03/2014 & v 0.3 & Added Introduction, Vision, Background & Carlo Machaba \\
+05/03/2014 & v 0.3 & Added Introduction, Vision, Background. & Carlo Machaba \\
 \hline
-06/03/2014 & v 0.4 & Added open issues. Modified some sections & Alfred Ngako \\
+06/03/2014 & v 0.4 & Added open issues. Modified some sections. & Alfred Ngako \\
 \hline
-06/03/2014 & v 0.5 & Added methodology, scope and limitations & Mathys Ellis \\
+06/03/2014 & v 0.5 & Added methodology, scope and limitations. & Mathys Ellis \\
 \hline
-08/03/2014 & v 0.6 & Added some wrapping to the change log which is now a table & Alfred Ngako \\
+08/03/2014 & v 0.6 & Added some wrapping to the change log which is now a table. & Alfred Ngako \\
 \hline
-16/03/2014 & v 0.8 & Did some restructuring and document formatting & Mathys Ellis \\
+16/03/2014 & v 0.8 & Did some restructuring and document formatting. & Mathys Ellis \\
 \hline
-17/03/2014 & v 0.8 & Also added to the glossary & Mathys Ellis \\
+17/03/2014 & v 0.8 & Also added to the glossary. & Mathys Ellis \\
 \hline
-12/05/2014 & v 0.9 & Created new vision and scope document. Transferred necessary content from old SRS document. Performed editing and restructuring of document. Added exclusions & Mathys Ellis \\
+12/05/2014 & v 0.9 & Created new vision and scope document. Transferred necessary content from old SRS document. Performed editing and restructuring of document. Added exclusions. & Mathys Ellis \\
 \hline
-
+16/05/2014 & v 0.95 & Updated use case diagrams and stakeholders. & Mathys Ellis \\
+\hline
 %\end{tabbing}
 \end{tabular}
 \end{center}
@@ -172,8 +173,15 @@ The client needs a system which can make the management of the application and r
 
 The stakeholders that will engage or be engaged by the system are listed below:
 
-There are three categories under which stockholders can fall:
+There are four categories under which stockholders can fall:
 \begin{itemize}	
+\item System or abstract:
+These are stakeholders that represent the system itself and users with customised security roles:
+\begin{itemize}
+\item \textbf{System} - The actual Post-Doctoral application management system.
+\item \textbf{System administrator} - The super user of the Post-Doctoral application management system. This user has universal access.
+\item \textbf{Authorised user} - A user that has the necessary security roles to perform the operation.
+\end{itemize}
 \item External:
 These are stakeholders that do not have a PeopleSoft account or are fellows.
 \begin{itemize}	
@@ -184,6 +192,7 @@ These are stakeholders that do not have a PeopleSoft account or are fellows.
 \item Internal individuals:
 These are stakeholders that do have a PeopleSoft account and are individual members of staff.
 \begin{itemize}	
+\item \textbf{Research fellow} - A person who is currently in possession of a fellowship.
 \item \textbf{Grant holder} - The person who is a fellow's supervisor and a member of staff at the University of Pretoria. This is person is known also the applicant.
 \item \textbf{HOD} - The head of the department of which a Grant holder is a member.
 \end{itemize}
@@ -216,13 +225,13 @@ The scope of the project is to design an electronic Post-Doctoral application ma
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application service.jpg}}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application services.jpg}}
 \caption{Use case diagram of Application service}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Report service.jpg}}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Report services.jpg}}
 \caption{Use case diagram of Report service}
 \end{figure}
 
@@ -240,50 +249,20 @@ The scope of the project is to design an electronic Post-Doctoral application ma
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Application progress viewer service.jpg}}
-\caption{Use case diagram of Application progress viewer service}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/User gateway.jpg}}
+\caption{Use case diagram of User gateway}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/New fellowship application service.jpg}}
-\caption{Use case diagram of New fellowship application service}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Audit-Trail services.jpg}}
+\caption{Use case diagram of Audit-Trail services}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Fellowship renewal service.jpg}}
-\caption{Use case diagram of Fellowship renewal service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Referees' report service.jpg}}
-\caption{Use case diagram of Referees' report service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/HOD Approval service.jpg}}
-\caption{Use case diagram of HOD Approval service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Dean endorsement service.jpg}}
-\caption{Use case diagram of Dean endorsement service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/DRIS approval service.jpg}}
-\caption{Use case diagram of DRIS approval service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Application/Meeting management service.jpg}}
-\caption{Use case diagram of Meeting management service}
+\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Archival services.jpg}}
+\caption{Use case diagram of Archival services}
 \end{figure}
 
 \vspace{0.2in}
