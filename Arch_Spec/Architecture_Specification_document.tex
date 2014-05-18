@@ -152,7 +152,7 @@ All the above mentioned topics are put in place to address the non-functional re
 \subsection{Architectural Scope}
 The scope that the architecture needs to cover include:
 \begin{itemize}
-\item A persistence infrastructure (Database) to facilitate domain objects (e.g CVs, DRIS information, and Applications). This will also allow the implementation of the Audit trail required by \client and the centralised point for all the required documentation shared among participants.
+\item A persistence infrastructure (Database) to facilitate domain objects (e.g CVs, DRIS information, and Applications). This will also allow the implementation of the Audit trail required by \client  and the centralised point for all the required documentation shared among stakeholders.
 \item A session oriented infrastructure to assist in realizing the security requirements of authenticating participants and their actions.
 \item A web access channel which will provide the client, and other stakeholders, with an interface to the underlying system.
 \item An infrastructure for the generation of reports.
@@ -162,6 +162,7 @@ The scope that the architecture needs to cover include:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Quality Requirements} 
 \vspace{0.2in}
+The following are the requirements around the quality attributes of the systems and the services it provides:
 
 \subsubsection{Availability:}
 
@@ -299,27 +300,30 @@ Upon completion the system must be integratable with the University of Pretorias
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Patterns and Styles} % skipped till further notice.
-The system will maintain a MVC architectural pattern specific to how Java EE is structured. Which is a layered structure automatically decouples the client from the server. The following diagram provides the abstracted archetecral structure which will be followed:
+The system will maintain a MVC architectural pattern specific to how Java EE is structured. Which is a layered structure that automatically decouples the client from the server.\\
+\\
+The Java EE structure is designed to satisfy the need for distributed, transactional, and portable applications that leverage the speed, security, and reliability of server-side technology. Which is reason to why it suits its use in the development of the system. The following diagram provides the abstracted architectural structure which will be followed:
 \begin{figure}
 \includegraphics[scale=0.2]{../Images_Docs/Diagrams/Architecture/MVC.jpg}
 \caption{Model View Controller of Architecture}
 \end{figure}
 
-Note: Diagram is for illustration purposes only and follows no formal standard.
-
 \subsection*{View}
-This component provides an interface to the under system to the user. This client is the web browser. It also incorporates a component which is in the Web container(controller), such as the Java Sever Faces. 
+This component provides an interface to the under laying system to the user. This client is the web browser. It also incorporates components which are in the Web container(controller), such as Java Sever Faces. 
 \subsection*{Controller}
 This component is made up of two containers, the web container and the Enterprise container.
 % More bullshit goes here.
 \subsection*{Model}
-This component is the actual database on which the system runs on.
+This component is the actual database on which the system runs on. Which will be used as the centralised point of access with regards to applications being processed by the system as required by \client .
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Tactics and Strategies} % skipped till further notice.
-This section describes techniques which will be used to satisfy the quality requirements. 
+This section describes techniques which will be used to satisfy the quality requirements. It the time of printing this document no architectural tactics/strategies have been identified as the architectural patterns and styles should be sufficient to satisfy the requirements.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Use of Reference Architecture and Framework}
+Java EE provides an API and runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. It also provides an architecture for implementing services as
+multitier applications that deliver the scalability, accessibility, and manageability needed by the system. This is reason to why it is ideal to use it in the development of the project.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Access and Integration channels}
@@ -334,23 +338,22 @@ The system will be accessible by humans through the recent versions of the follo
 \item Apple Safari, and
 \item Opera
 \end{enumerate}
-The mobile counterparts of the above mentioned browsers will also be catered for and so no other access channel (such as Android/Apple apps) is to be considered.\\
-\\
-The interaction with all these 
+The mobile counterparts of the above mentioned browsers will also be catered for and so no other access channel (such as Android/Apple apps) is to be considered.
 \subsection{Integration Channels}
-Upon successful complementation the system must be integratedable with the University of Pretorias PeopleSoft system. Therefore it is sensible to implement the system in Java EE as it is one of the many components that form part of the multiple tiers that build up  PeopleSoft. \\
+Upon successful complementation the system must be integratedable with the University of Pretoria's PeopleSoft system. Therefore it is sensible to implement the system in Java EE as it is one of the many components that form part of the multiple tiers that build up  PeopleSoft. \\
 \\
-The use of build tools such as Maven will provide a central piece of information with regards to the projects build, reporting and documentation. This central point of information will assist in the integration phase since it is implemented through a standardised build approach which the University of Pretoria can work on at a later time through the use of Enterprise Application Integration.\\
+The use of build tools such as Maven will provide a central piece of information with regards to the projects build, reporting and documentation. This central point of information will assist in the integration phase since it is implemented through a standardised build approach which can come into play at a later time through the use of EAI.\\
 \\
-The EAI will be achieved via  the logical integration architecture of Direct point-to-point integration. This means one application (our application management system) will make direct JDBC (Java Database Connection) calls to the universities databases tables (which needed to be setup to cater for our system at that point). The Integration method will be pushed-based data-level integration (or if all else fails UI-Level integration).
+The EAI will be achieved via  the logical integration architecture of Direct point-to-point integration. This means that the application management system will make direct JDBC calls to the universities databases tables (which needed to be setup to cater for our system at that point). The Integration method will be pushed-based data-level integration (or if all else fails UI-Level integration).
 % http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html
 
 \section{Technologies}
 The System will use the following technologies:
 \begin{itemize}
-\item Java Enterprise Edition 7, which provides 
+\item Java Enterprise Edition 7
 \item MySQL database
 \item Netbeans 8.0
+\item Glassfish server
 \end{itemize}
 
 \subsection*{Integrated Development Environment}
@@ -359,6 +362,14 @@ The system should be buildable independent of an IDE but it will be developed on
 \subsection*{API}
 \begin{itemize}
 \item JavaMail
+\item JavaBeans Activation Framework
+% The JavaBeans Activation Framework (JAF) is used by the JavaMail API. JAF provides standard services to determine the type of an arbitrary piece of data, encapsulate access to it, discover the operations available on it, and create the appropriate JavaBeans component to perform those operations.
+\item Java Database Connectivity
+%The Java Database Connectivity (JDBC) API lets you invoke SQL commands from Java programming language methods. You use the JDBC API in an enterprise bean when you have a session bean access the database. You can also use the JDBC API from a servlet or a JSP page to access the database directly without going through an enterprise bean.
+\item Java Naming and Directory Interface
+\item Java API for XML Web Services
+\item SOAP with Attachments API for Java
+\item Java Authentication and Authorization Service
 \end{itemize}
 
 \subsection*{Build Tools}
@@ -367,10 +378,10 @@ The system should be buildable independent of an IDE but it will be developed on
 \end{itemize}
 
 \subsection*{Operating System}
-The system will be exexutable on:
+The system will be deployable on:
 \begin{itemize}
 \item Windows 7 and 8.
-\item Linux based operating systems (speifically Kububuntu 13).
+\item Linux based operating systems (specifically Kububuntu 13).
 \end{itemize}
 \newpage
 
@@ -382,8 +393,12 @@ The system will be exexutable on:
 \item \textbf{API} - Application Programming Interface
 \item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
 \item \textbf{CV} - Curriculum Vita
+\item \textbf{EAI} - Enterprise Application Integration
 \item \textbf{HTML} - Hyper Text Mark-up Language
 \item \textbf{Java EE} - Java Enterprise Edition
+\item \textbf{JDBC} - Java Database Connection
+\item \textbf{MVC} - Model View Controller
+\item \textbf{UI} - User Interface
 \item \textbf{UP} - University of Pretoria
  
 \end{itemize}	
