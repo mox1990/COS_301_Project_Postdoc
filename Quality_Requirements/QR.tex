@@ -1,0 +1,115 @@
+\subsubsection{Availability:}
+
+\begin{flushleft}
+
+The system's availability on designated networks will depend on the availability of the University of Pretoria's servers that host the system. If the University of Pretoria's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. The designated networks are defined as the internet and the campus network of the University of Pretoria.
+
+\end{flushleft}
+
+\vspace{0.1in}
+
+\subsubsection{Security requirements}
+
+\begin{flushleft}
+
+The system will need to be fully secured since the system deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever. \\
+\vspace{0.1in}
+
+The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a administrator with the correct role to allow for flexibility.
+But in essence a stakeholder may only have access to their section of the application process. The system administrator should be able to view all the sections in the system and should be able to modify them except where they may not.
+
+\end{flushleft}
+
+\vspace{0.1in}
+
+\subsubsection{Scalability requirements}
+
+\begin{flushleft}
+
+The current aim is to create a scalable system that can support 500 to 1000 applicants per year with possible growth. This is in line with the figures given by the client and the growth in the research sector of the university.\\
+\vspace{0.05in}
+
+The system needs to be scalable in regard to the following factors:
+\begin{itemize}
+
+
+\item\textbf{Performance:} This is regarded as the speed and responsiveness of the system.
+The system needs to be handle report queries in less than 10 seconds. It should be able to handle any application section processing in less than 3 seconds.\\
+
+\item\textbf{Storage:} This is regarded as the growth and shrinking of the data that is stored.
+The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the requirement that the system will support archival functionality and archived data will store the data for long periods of time.\\
+
+\item\textbf{Concurrency:} This regarded as the amount of active users on the system at the same time.
+The system will need to support at least 100+/- concurrent users efficient and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
+
+\end{itemize}
+\end{flushleft}
+\vspace{0.1in}
+
+\subsubsection{Testability:}
+
+\begin{flushleft}
+
+The system must be testable. This will be done using unit testing and following the test plan that will be laid out in the testing document of this project.\\
+
+\vspace{0.1in}
+
+Unit testing will test each unit in regard to:
+\begin{itemize}
+
+\item\textbf{Preconditions}
+\item\textbf{Post conditions}
+
+\end{itemize}
+
+The project will also have two phases of testing:
+
+\begin{itemize}
+
+\item\textbf{Offline:} This is the initial phase of testing and debugging which will be done with pseudo data.
+\item\textbf{Online:} This is the final phase of testing and debugging which will be done with active real time data.
+
+\end{itemize}
+
+\end{flushleft}
+
+\vspace{0.1in}
+
+\subsubsection{Auditability:}
+
+\begin{flushleft}
+
+The system needs to provide an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action and any operation by a user that leads to a change in application data of a particular prospective fellow.\\
+
+\vspace{0.1in}
+
+The Audit trail will be in the form of a read-only table stored in the database. It can only be viewed by a user with the correct security role. The system is the only entity that can modify the audit trail where this modification can only be the addition of entries.
+
+\end{flushleft}
+\vspace{0.1in}	
+
+\subsubsection{Usability requirements}
+
+\begin{flushleft}
+
+The primary language of the system will be South African English. Any other language support is not considered part of the requirements but the system will be designed to allow for such development in the future.\\
+
+\vspace{0.1in}
+
+The system's UI will only consider 2 types of user categories with regard to usability:
+
+\begin{itemize}
+
+\item\textbf{Trained user:}
+
+This type of user will have to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. This user will be regarded as a system administrator. The stakeholders who fall under this category is the DRIS staff members overseeing the application process.
+
+\item\textbf{Normal user:}
+
+This type of user will have no training. Their computer skills will be assumed to be none or minimal. Therefore the UI that they will have access to will be simplistic and will be as user friendly as possible. The stakeholders that fall under this category will be Prospective fellows, Grant holders, HODs, Deans and Post-doctoral committee members.
+
+\end{itemize}
+
+\end{flushleft}
+
+\vspace{0.2in}	
