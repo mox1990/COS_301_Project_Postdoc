@@ -34,6 +34,7 @@
 \newcommand{\iteration}{1}
 \newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
 \newcommand{\project}{Post-Doctoral Application Management System}
+\newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 
 \begin{document}
 
@@ -104,6 +105,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 16/05/2014 & v 0.95 & Added and redefined use case diagrams and preconditions and postconditions. Also updated domain objects. & Mathys Ellis \\
 \hline
+19/05/2014 & v 0.97 & Added process specifications and added approval levels of applications. & Mathys Ellis \\
+\hline
 
 %\end{tabbing}
 \end{tabular}
@@ -112,6 +115,9 @@ Mathys Ellis (12019837) \\[8em]
 \tableofcontents
 
 \listoffigures
+\newpage
+\section{Project Repository}
+\textbf{\repo}
 \newpage
 \section{Document description:}
 
@@ -195,11 +201,23 @@ The user gateway provides the access control services of the system and is a cen
 
 %Use the use case diagrams to complete the requirements of each of the services in the format I provided
 \subsubsection{Application services}
-		The application services encompasses the the entirety of the of the application process undergone by prospective fellows namely new and renewal applications.
+		The application services encompasses the the entirety of the of the application process undergone by prospective fellows namely new and renewal applications.\\
 		The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage will be focused in this set of services only. Further the application process is broken up in stages that run concurrently until they reach the stage where the post-doctoral committee meeting is to take place after which all eligible applications are batch processed. In order to manage this after each stage is complete the applications will be automatically forwarded to the next. Only the system administrator will have the power to move applications back through the stages.
 		
+		
 		\begin{itemize}
-			\item New fellowship application service:		
+			\item\textbf{Application approval levels:} There are various stages that an application goes through. Each stage requires a different type of approval or check. Thus the approval level of each stage in order of first to last, is highlighted below. Note * indicates this stage is only for new applications: 
+			\begin{enumerate}
+				\item \textbf{Open application} - This application is a newly created application.
+				\item \textbf{*Refereed application} - This application has a completed list of referral reports from the specified referees.
+				\item \textbf{Finalised application} - This application has been finalised by the respective grant holder.
+				\item \textbf{Recommended application} - This application has been recommended by the respective HOD.
+				\item \textbf{Endorsed application} - This application has been endorsed by the respective Dean's office.
+				\item \textbf{Eligible application} - This application has been checked eligibility by the DRIS.
+				\item \textbf{Fund-able application} - This application has been approved for funding and is complete.
+			\end{enumerate}
+			
+			\item\textbf{ New fellowship application service:}		
 			\begin{enumerate}
 				\item Account creation for new prospective fellows, referees and grant holders.
 				\item All internal stakeholders should be able to log in with their PeopleSoft account details when the system is integrated but until such time they will be provided with account creation options.				
@@ -213,37 +231,37 @@ The user gateway provides the access control services of the system and is a cen
 				\item A application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process.
 				\item A member of the Post-Doctoral committee must be able to create minutes for a active meeting. 		
 			\end{enumerate}			
-			\item Application renewal service:
+			\item\textbf{ Application renewal service:}
 			\begin{enumerate}					
 				\item A research fellow should be able to open a new renewal application. 
 				\item A research fellow should be able to add their progress report on all the work they have been working on.	
 				\item A renewal application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process.							 					
 			\end{enumerate}
-			\item Application Referees' report service:
+			\item \textbf{Application Referees' report service:}
 			\begin{enumerate}		
 				\item A referee should be able to login and create a referral report for the prospective fellow that has identified him/her.				 					
 			\end{enumerate}
-			\item Grant holder application finalisation service:
+			\item \textbf{Grant holder application finalisation service:}
 			\begin{enumerate}		
 				\item A research fellow's grant holder should be able to finalise the renewal application of that research fellow.
 				\item A prospective fellow's grant holder should be able to finalise the prospective fellows application who he supervises.				 					
 			\end{enumerate}
-			\item HOD approval service:
+			\item \textbf{HOD approval service:}
 			\begin{enumerate}		
 				\item A HOD of a department should be able to login and approve, decline or ask for amendment of any pending applications.
 				\item A HOD of a department must be able to create a recommendation report for applications they approve.				 					
 			\end{enumerate}
-			\item Dean endorsement service:
+			\item \textbf{Dean endorsement service:}
 			\begin{enumerate}		
 				\item A member of the dean's office should be able to login and endorse the applications that they approve with a motivation and be able to rank them.				 					
 			\end{enumerate}
-			\item DRIS approval service:
+			\item \textbf{DRIS approval service:}
 			\begin{enumerate}		
 				\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
 				\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to prepare the pre-documentation their of.
 				\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation thereof.				 					
 			\end{enumerate}
-			\item Application progress viewer service:
+			\item\textbf{ Application progress viewer service:}
 			\begin{enumerate}
 				\item A prospective fellow should be able to login with their user account details.
 				\item A prospective fellow's application status should be made available for their review if they have an application in the system.			
@@ -737,11 +755,43 @@ These are conditions that must be met by the system and the data after the use c
 The system will be following a object oriented approach due it being the paradigm of the Java programming language. Therefore the input and output structure will mainly be in the form of objects. Also the objects that will be produced and used inside the system will adhere to the domain objects.
 
 \vspace{0.2in}
+\newpage
+\subsection{Process specifications}
+\vspace{0.2in}
 
-%\subsection{Process specifications} %Alfred
-%\vspace{0.2in}
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/Process specs/Login user.jpg}}
+\caption{Activity diagram of the Login user use case.}
+\end{figure}
 
-%\vspace{0.2in}
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/Process specs/Create user on-demand account.jpg}}
+\caption{Activity diagram of the Create user on-demand account use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Process specs/Authenticate user.jpg}}
+\caption{Activity diagram of the Authenticate user use case.}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Process specs/User account retrieval.jpg}}
+\caption{Activity diagram of the User account retrieval use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Process specs/Load pending applications.jpg}}
+\caption{Activity diagram of the Load pending applications use case.}
+\end{figure}
+
+\vspace{0.2in}
 
 \subsection{Domain Objects}
 \subsubsection{Overview}
@@ -839,7 +889,7 @@ This object represents a \textbf{AuditLog} entry which records the action, who c
 \vspace{0.2in}
 
 \begin{itemize}
-
+\item \textbf{Activity diagram} - A UML diagram that depicts the flow of actions or activities in the process.
 \item \textbf{API} - Application Programming Interface
 \item \textbf{Audit log} - A log that keeps track of user actions.
 \item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
@@ -852,7 +902,7 @@ This object represents a \textbf{AuditLog} entry which records the action, who c
 \item \textbf{PDF} - Portable Document Format file
 \item \textbf{Peoplesoft} - A management system designed by oracle. 
 \item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
-\item \textbf{Use case} - A visual depiction of a service or group of services.
+\item \textbf{Use case diagram} - A UML diagram that gives a visual depiction of a service or group of services.
 \item \textbf{UML} - Unified modelling language. A commonly used model standard to provide technology neutral models of different aspects of software.
 \item \textbf{UP} - University of Pretoria
  
