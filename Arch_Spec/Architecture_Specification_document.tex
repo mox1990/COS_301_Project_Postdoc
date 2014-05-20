@@ -74,6 +74,10 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 18/05/2014 & v 0.0 & Document created. & Alfred Ngako \\
 \hline
+19/05/2014 & v 0.0 & Added more detail to information in subsections. & Alfred Ngako \\
+\hline
+20/05/2014 & v 0.0 & Added references and citations. & Alfred Ngako \\
+\hline
 %\end{tabbing}
 \end{tabular}
 \end{center}
@@ -130,7 +134,8 @@ The requirements, vision and scope were elicited from the following sources:
 \vspace{0.1in}
 \begin{itemize}
 \item Dr.Phol, K., 2010, \textit{Requirements Engineering: Fundamentals, Principles, and Techniques}, Springer, Heidelberg.
-\item Abraham Kang. Aug 9, 2002. Enterprise application integration using J2EE. Available from: http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html . [17 May 2014]
+\item Abraham Kang. Aug 9, 2002, \textit{Enterprise application integration using J2EE}, Available from: http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html , [17 May 2014]
+\item Jendrock E, Cervera-Navarro R, Evans I, Haase K, Markito W, \textit{The Java EE 7 Tutorial}, Available from: http://docs.oracle.com/javaee/7/tutorial/doc/home.htm , [20 May 2014]
 \end{itemize}	
 
 \vspace{0.5in}
@@ -157,8 +162,8 @@ The scope that the architecture needs to cover include:
 \item A web access channel which will provide the client, and other stakeholders, with an interface to the underlying system.
 \item An infrastructure for the generation of reports.
 \item A mailing competent infrastructure.
-\item Data export... (completed applications to be sent to)
-\item Pipe line infrastructure??????
+%\item Data export... (completed applications to be sent to) % What to say here
+%\item Pipe line infrastructure?????? % What about this as well?
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,6 +194,9 @@ Upon completion the system must be integratable with the University of Pretorias
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Patterns and Styles} % skipped till further notice.
+
+% Mention of how Java EE actually doesn't require use of GoF design patterns >> http://www.theserverside.com/tip/With-Java-EE-7-your-Design-Patterns-are-dead-And-your-EAR-is-ugly-too <<
+
 The system will maintain a MVC architectural pattern specific to how Java EE is structured. Which is a layered structure that automatically decouples the client from the server.\\
 \\
 The Java EE structure is designed to satisfy the need for distributed, transactional, and portable applications that leverage the speed, security, and reliability of server-side technology. Which is reason to why it suits its use in the development of the system. The following diagram provides the abstracted architectural structure which will be followed:
@@ -213,7 +221,7 @@ This section describes techniques which will be used to satisfy the quality requ
 \subsection{Concurrency}
 The Java Platform has always offered support for concurrent programming, which is the basis for implementing many of the services offered by Java EE containers. This is realized through the two main concepts of having a multiple threads execute under a single process, in the case of Java EE mulitple beans execute under the JVM. The number of threads that can execute under the JVM can go well beyond thousands depending on factors such as the machine the JVM is running on and how it has been configured.\\
 
-Even though the concurrent programs will give us better performance in the system they may lead to issues such as:
+Even though the concurrent threads will mean better performance and a scalable implementation for the system they may lead to issues that effect the reliability and integrity of the system such as:
 \begin{itemize}
 \item Deadlocks,
 \item Thread Starvation,
@@ -233,14 +241,14 @@ To deal with these issues Java EE provides concurrent utilities that access conc
 A managed executor service is used by applications to execute submitted tasks asynchronously. Tasks are executed on threads that are
 started and managed by the container. The context of the container is propagated to the thread executing the task.
 
-For example, by using an ManagedExecutorService.submit() call, a task, such as the GenerateReportTask, could be submitted to execute at a later time and then, by using the Future object callback, retrieve the result when it becomes available.
+For example, by using an ManagedExecutorService.submit() call, a task, such as the GenerateReportTask, could be submitted to execute at a later time and then, by using the Future object callback, retrieve the result when it becomes available ().
 
 \subsubsection{Managed Scheduled Executor Service}
 A managed scheduled executor service is used by applications to execute submitted tasks asynchronously at specific times. Tasks are executed on threads that are started and managed by the container. The context of the container is propagated to the thread executing the task. The API
 provides the scheduling functionality that allows users to set a specific date/time for the Task execution programmatically in the application.
 
 \subsubsection{Managed Thread Factory}
-A managed thread factory is used by applications to create managed threads. The threads are started and managed by the container. The context of the container is propagated to the thread executing the task. This object can also be used to provide custom factories for specific use cases (with custom Threads) and, for example, set specific/proprietary properties to these objects.
+A managed thread factory is used by applications to create managed threads. The threads are started and managed by the container. The context of the container is propagated to the thread executing the task. This object can also be used to provide custom factories for specific use cases (with custom Threads) and, for example, set specific/proprietary properties to these objects (Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -249,7 +257,7 @@ Java EE provides an API and runtime environment for developing and running large
 
 It allows easy development of thin-client multi tiried applications without the many lines of complicated code that handles transactions or state management. Business logic is organized into reuseable components and provides underlying services as containers for all component types.
 
-The features in the JavaServer Faces technology provided HTML5 friendly markup.
+The features in the JavaServer Faces technology provided HTML5 friendly markup which will assist in the implementation of the user friendly UI.
 
 \subsection{Java Persistence}
 Java EE is in itself implemented as a object oriented model, yet it is expected to function with mainly relational databases. To bridge the gap between an object-oriented model and a relational database an object/relational mapping approach will be used to achieve Persistence. Java Persistence consists of the following areas:
@@ -259,7 +267,12 @@ Java EE is in itself implemented as a object oriented model, yet it is expected 
 \item Object/relational mapping metadata
 \end{itemize}
 
-\subsection{RESTful webservices}
+\subsection{RESTful web services}
+RESTful web services are loosely coupled, lightweight web services that are particularly well suited for creating APIs for clients spread out across the internet. Representational State Transfer (REST) is an architectural style of client-server application centered around the transfer of representations of resources through requests and responses. In the REST architectural style, data and functionality are considered resources and are accessed using Uniform Resource Identifiers (URIs), typically links on the Web. The resources are represented by documents and are acted upon by using a set of simple, well-defined operations.
+
+In Java EE 7, JAX-RS provides the functionality for Representational State Transfer (RESTful) web services. JAX-RS is a Java programming language API designed to make it easy to develop applications that use the REST architecture.
+
+The JAX-RS API uses Java programming language annotations to simplify the development of RESTful web services. Developers decorate Java programming language class files with JAX-RS annotations to define resources and the actions that can be performed on those resources. JAX-RS annotations are runtime annotations; therefore, runtime reflection will generate the helper classes and artifacts for the resource. A Java EE application archive containing JAX-RS resource classes will have the resources configured, the helper classes and artifacts generated, and the resource exposed to clients by deploying the archive to a Java EE server (Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Access and Integration channels}
