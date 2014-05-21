@@ -24,10 +24,15 @@
 
 \linespread{1.1} % Line spacing
 
-\newcommand{\Title}{Architecture requirement specification} % Assignment title
+\newcommand{\Title}{Architecture requirements specification} % Assignment title
 \newcommand{\Class}{Cos\ 301} % Course/class
 \newcommand{\pd}{Post-Doctoral}
 \newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
+\newcommand{\version}{1.0}
+\newcommand{\iteration}{1}
+\newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
+\newcommand{\project}{Post-Doctoral Application Management System}
+\newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 \begin{document}
 
 \vspace{4em}
@@ -38,13 +43,18 @@
 \centering
 \includegraphics{../Images_Docs/logo.png}
 \end{figure}
-\LARGE \bf \Title \\
-{\bf Version 0.9}\\[4em]
-\LARGE {\bf \ssr Group }\\[1em]
-\LARGE {\bf Members:}\\[2em]
+\LARGE \bf \project \\[1em]
+\LARGE \bf \Title \\[0.25em]
+\large \bf \today\\
+\bf Version \version\\
+\bf Iteration \iteration\\[0.5em]
+\Large \bf Prepared for \client\\
+\Large \bf by
+\Large {\bf \ssr Group }\\[0.5em]
+\LARGE {\bf Group members}\\[0.25em]
 \large
-Kgothatso Phatedi Alfred Ngako (12236731) \\[1em]
-Tokologo “Carlo” Machaba (12078027) \\[1em]
+Kgothatso Phatedi Alfred Ngako (12236731) \\[0.5em]
+Tokologo “Carlo” Machaba (12078027) \\[0.5em]
 Mathys Ellis (12019837) \\[8em]
 
 \end{center}%
@@ -59,9 +69,11 @@ Mathys Ellis (12019837) \\[8em]
 \hline
  Date & Version & Description &  Person \\
 \hline
+06/03/2014 & v 0.0 & Added quality requirements in old SRS document & Mathys Ellis \\
+\hline
 12/05/2014 & v 0.0 & Document created & Mathys Ellis \\
 \hline
-13/05/2014 & v 0.1 & Added Quality Requirements, Access Channel requirements & Carlo Machaba \\
+13/05/2014 & v 0.1 & Transferred quality Requirements, Access Channel requirements to document & Carlo Machaba \\
 \hline
 14/05/2014 & v 0.2 & Added Integration requirements & Carlo Machaba\\
 \hline
@@ -81,20 +93,23 @@ Mathys Ellis (12019837) \\[8em]
 
 \listoffigures
 \newpage
+\section{Project Repository}
+\textbf{\repo}
+\newpage
 \section{Document description:}
 This document provides the documenting for the software architecture requirements which the application functionality is deployed and executed.
 
 
 \subsection{Document purpose:}
 \vspace{0.2in}
-The Architecture Requirements Specification provides a set of quantitative statements that outline what the Post-Doctoral Application must do in order to comply with the architecture required by the client. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project functional requirements.
+The Architecture Requirements Specification provides the architectural requirements that the project will need to follow as well as a set of quality requirements that must be met by the system. The quality requirements have been quantified in order to provide the SoftServe group and the client with a means to test the system for non-functional compliance. This allows the SoftServe group to set up tests in the non-functional testing document that verify that the system complies with the architecture and quality requirements specified by this document. Architecture in this document's context refer to the technological basis and software development styles of the project. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of what technologies the project should incorporate as-well as what quality the system should be of once the project is complete.
 
 \vspace{0.2in}
 
 \subsection{Documentation methodology}
 \vspace{0.2in}
 \begin{flushleft}
-The documentation and software development methodology used by the project adhere to the guidelines set out by the agile method. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
+The documentation and software development methodology used by the project adhere to the guidelines set out by the scum agile methodology. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
 
 This document was created using the requirement elicitation techniques and requirement definitions as specified by Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
 The requirements, vision and scope were elicited from the following sources:
@@ -136,14 +151,15 @@ The requirements, vision and scope were elicited from the following sources:
 \section{Architecture requirements}
 \subsection{Access channel requirements} %Carlo
 \vspace{0.2in}
+The only two access channel requirements specified by the client are as follows:
 \begin{itemize}
 
-\item\textbf{All stakeholders:}
-Will access the system through a HTML 5 web browser client that is locally installed on a user's computer system or mobile platform. Support for HTML 4.0.1 will also be implemented. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts.
+
+\item \textbf{All stakeholders:}
+Users of the system will access the system through a HTML 5 web browser client that is locally installed on a user's computer system or mobile platform. Support for HTML 4.0.1 will also be implemented due to the clients request for compatibility of the system with a older internet enabled systems. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts. 
 
 \item\textbf{System Administrator:}
-
-Will access have access to the MySQL database.
+The system administrator will require the same as the above but will need to be able to conduct any administration duties through some form of web portal. Above this the system administrator will need to have access to the MySQL database employed by the system. This is mainly for maintenance reasons but also as an alternative if certain unexpected system failures or system generated errors occur.
 
 \end{itemize}
 \vspace{0.2in}
@@ -154,41 +170,58 @@ Will access have access to the MySQL database.
 \input{../Quality_Requirements/QR.tex}
 
 \vspace{0.1in}
-
-
+\newpage
 \subsection{Integration requirements} %Alfred
 \vspace{0.2in}
-The system has to integrate with the following systems:
+The client's primary integration requirement is with regards to the import and export of data that can be used by the PeopleSoft management system of UP as well as other parties. The client's secondary integration requirement is with regards to the complete integration of the system with UP's PeopleSoft management system. With the regards the vision and scope document it should be noted that the knowledge the SoftServe group has of the Peoplesoft system is very limited due to UP's IT department's prerequisite for the project. Above that their are a few other integration requirements that SoftServe in conjunction with the client have purposed. The system has to integrate with the following systems as follows:
 \begin{itemize}
-\item Must be able to create exportable data packages containing the information of approved fellowships that can easily be loaded into the CSC PeopleSoft system.
-\item Must be able to query CSC PeopleSoft system to retrieve the account information of internal individuals/group Stakeholders to create a uniform login experience.
-\item Must assign Prospective fellows with a id number in such a way that is integrable with UP Emplid. SoftServe suggests: "f" + 8 digit code.
-\item Must be able to access and utilize the NRF researcher ratings.
+	\item Must be able to create exportable data packages containing the information of prospective and current research fellows that can easily be loaded into the PeopleSoft system or used by other parties. The technology interchange format purposed is CSV. This is to meet the primary requirement of the client. In terms of quality requirements:
+	\begin{enumerate}
+		\item \textbf{Performance:} The system should be able to handle the export and importing of application information at a reasonable rate of about at least 10 full application data packages in a second. The system should be able to import and generate on-demand user accounts at a rate of 50 per second. For exporting it should be able to do so at 60 accounts per second.
+		\item \textbf{Scalability:} The system should be able to export or import as much data as specified by the user as long as it does not exceed the size of the database or the size of users secondary storage. 
+		\item \textbf{Audibility:} Any export and import should be recorded by the system.
+	\end{enumerate}  
+	\item Must be able to query PeopleSoft system to retrieve the account information of internal individual or group Stakeholders to create a uniform login experience. As specified by the vision and scope document this will not be possible at the time of writing. Therefore no API can be giving. But the system will most likely make use of the above in point to achieve this requirement. 
+	\item Must assign Prospective fellows with a id number in such a way that is integrable with UP Emplid. SoftServe suggests: "f" + 8 digit code.
+	\item Stakeholders that have a Peoplesoft account must use their UP emplid id as a user name. The password may vary.
+	\item Must be able to provide access to the NRF researcher ratings list but not utilize it as the client has stipulated human error is possible in maintaining of those ratings.
 \end{itemize}
+
+The above integration requirements except for the second requirement does need to make use of any protocols or another system's API.
+
 \vspace{0.2in}
 
-\subsection{Architecture constraints} %Alfred
+\subsection{Architecture constraints}
 \vspace{0.2in}
-The following architecture constraints have been selected as being suitable for the system.
+
+The following architecture constraints have been selected by SoftServe group as being suitable for the system. Please note due to the client's inexperience with software development and the technologies that exist she has allowed the SoftServe group to use their expertises, to decide on the appropriate set of constrains that can meet the above requirements.
 \begin{enumerate}
 \item Database technology: MySQL
-\item Development technology: Java EE
-\item Application server: GlassFish
+\item Programming paradigm: Object-Oriented
+\item Programming language: Java
+\item Architectural pattern: MVC (Model View Controller)
+\item Architectural framework: JSF(Java Server Faces)
+\item Development technology: Java EE, JSP (Java Server Pages)
+\item Web server software: GlassFish 4.0 server
 \item Web interface protocol: HTTPS
 \end{enumerate}
 \vspace{0.5in}
 
 \newpage
-\section{Glossary:} %Mathys
+\section{Glossary:}
 \vspace{0.2in}
 
 \begin{itemize}
 
 
 \item \textbf{NRF} - National Research Foundation
-\item \textbf{Spreadsheet} - A special type of computer document that is used to represent data in rows and columns. 
+\item \textbf{Spreadsheet} - A special type of computer document that is used to represent data in rows and columns.
+\item \textbf{GlassFish} - GlassFish is a web server software package that is very flexible and compatible with Java EE applications. 
 \item \textbf{HTML} - Hyper Text Mark-up Language
+\item \textbf{HTTPS} - Hyper Text Transfer Protocol Secure is a higher level network oriented communication rule set that is highly secure and is used by all web browsers. 
 \item \textbf{Java EE} - Java Enterprise Edition
+\item \textbf{MySQL} - Is a relational persistence database package that provides all the necessary management tools to run and manage a database server.
+\item \textbf{Object-Oriented} - A programming language style that encapsulates everything as an object instance of a particular class of attributes and methods.
 \item \textbf{Application} - Both a renewal and new fellowship are seen as applications.
 
 \end{itemize}	
