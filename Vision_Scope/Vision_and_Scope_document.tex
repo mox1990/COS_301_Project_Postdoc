@@ -93,7 +93,7 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 16/05/2014 & v 0.95 & Updated use case diagrams and stakeholders. & Mathys Ellis \\
 \hline
-21/05/2014 & v 1.0 & Added import and export services. Finalised document for first iteration. & Mathys Ellis \\
+21/05/2014 & v 1.0 & Added import and export services and application process. Finalised document for first iteration. & Mathys Ellis \\
 \hline
 
 \end{tabular}
@@ -220,6 +220,40 @@ These are stakeholders that do have a PeopleSoft account and are a group of staf
 The scope of the project is to design an Post-Doctoral application management system in the form of a software package where prospective fellows can apply for fellowships and current Post-Doctoral research fellows can renew their fellowships at the University of Pretoria. The system will further allow the management of such applications or renewals till the end of the application process. The end is defined as follows: When the DIRS have approved the application and have notified the CSC and Finance department or when the application has been denied and the prospective fellow does not restart the process. The system will replace the current paper based system currently in place. The system will be designed so to allow for future integration with the current student and personnel management system, PeopleSoft, employed by the University of Pretoria. Though the scope of this project will be to construct the proposed system independently of any other system and allow it to run as a stand-alone system.
 \vspace{0.2in}
 
+\subsection{Application process}
+This section discuss and gives an abstract overview of the post-doctoral new and renewal application processes. Each of the processes are broken up in stages. Each stages need to be passed for the application to proceed. It should be noted that the client has pointed out that sometimes a stage or several stages have not been completed by the application though at the discretion of the DRIS the application may be pushed forward to the required stage. The stages are numbered in accordance to the order in which they occur. It should be noted that both processes only differ at the second stage and slightly at other stages.
+
+\begin{itemize}
+	\item New application
+		\begin{enumerate}
+			\item A prospective fellow opens a application for a post-doctoral fellowship.
+			\item The referees specified by the prospective fellow, each have to complete a referral report.
+			\item The identified grant holder has to communicate with the prospective fellow in order to verify and finalise the application once all the reports are acquired.
+			\item The finalised application is then given to HOD of the specified department for approval. On approval the application is supplemented with a recommendation report. The HOD can ask for amendment if he/she feels the need or even deny the application.
+			\item The application is then given to the appropriate member of the dean's office who then needs to approve it. On approval the application needs to be endorsed by a motivational letter and rank order relative to other endorsed applications. The dean's office may deny the application.
+			\item The endorsed application is given to the appropriate member of the DRIS for eligibility checking. If found eligible the application is stored. Else it is denied.
+			\item The DRIS member has to arrange and convene a post-doctoral meeting after the application deadline and prepare the pre-documentation of the eligible applications. This documentation is the collection of all the related application data that has been added to each of the initial applications.
+			\item The post-doctoral meeting is then convened where the members of the post-doctoral committee evaluate and deliver their insights into the potential applications. This is documented in the form of minute meetings. 
+			\item The appropriate member(s) of the DRIS then need to make the final funding decision of all the applications based on the minute meetings and record this data.
+			\item The data is then summarised accordingly and sent to the finance department as well as the CSC. The grant holder is also notified of this.   
+		\end{enumerate}
+	\item Renewal application
+		\begin{enumerate}
+			\item A research fellow opens a renewal application for a post-doctoral fellowship.
+			\item The research fellow then needs to complete a progress report.
+			\item The identified grant holder has to communicate with the prospective fellow in order to verify and finalise the renewal application once the report is done.
+			\item The finalised application is then given to HOD of the specified department for approval. On approval the application is supplemented with a recommendation report. The HOD can ask for amendment if he/she feels the need or even deny the application.
+			\item The application is then given to the appropriate member of the dean's office who then needs to approve it. On approval the application needs to be endorsed by a motivational letter and rank order relative to other endorsed applications. The dean's office may deny the application.
+			\item The endorsed application is given to the appropriate member of the DRIS for eligibility checking. If found eligible the application is stored. Else it is denied.
+			\item The DRIS member has to arrange and convene a post-doctoral meeting after the application deadline and prepare the pre-documentation of the eligible applications. This documentation is the collection of all the related application data that has been added to each of the initial applications.
+			\item The post-doctoral meeting is then convened where the members of the post-doctoral committee evaluate and deliver their insights into the potential applications. This is documented in the form of minute meetings. 
+			\item The appropriate member(s) of the DRIS then need to make the final funding decision of all the applications based on the minute meetings and record this data.
+			\item The data is then summarised accordingly and sent to the finance department as well as the CSC. The grant holder is also notified of this.   
+		\end{enumerate}
+
+	
+\end{itemize}
+\newpage
 \subsection{Use cases:}
 
 \begin{figure}[H]
@@ -236,13 +270,13 @@ The scope of the project is to design an Post-Doctoral application management sy
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Report services.jpg}}
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Report services.jpg}}
 \caption{Use case diagram of Report service}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Notification services.jpg}}
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Notification services.jpg}}
 \caption{Use case diagram of Notification services}
 \end{figure}
 
