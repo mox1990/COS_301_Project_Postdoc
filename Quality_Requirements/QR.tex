@@ -44,7 +44,7 @@ Any form of account retrieval token or on-demand user account creation tokens mu
 
 \vspace{0.1in}
 
-\subsubsection{Auditability:}
+\subsubsection{Audit-ability:}
 
 \begin{flushleft}
 
@@ -98,6 +98,20 @@ The system's availability on designated networks will depend on the availability
 In order to quantify this it should be seen as follows: If the hosting service's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. Where the designated networks are defined as the internet and/or the local network where in the server of the hosting service is located.
 
 \end{flushleft}
+\newpage
+\subsubsection{Robustness:}
+
+\begin{flushleft}
+
+This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in in terms of its data validation routines, data storage routines, security routines, and system integrity checks. 
+
+These four aspects of robustness are quantified as follow:
+\begin{itemize}
+\item \textbf{Data validation}: This aspects refer to the high level data validation that occurs at a user interface level. All data that is manually imputed by a user, such as text, numbers, emails, passwords, etc. Must be checked to see if they meet constraints imposed on them through the use of data type checking and regular expression analysis. Any section in the system that requires certain data to completed by the user before performing a action must be checked for completeness before allowing the user to perform the action. Where completeness means the data is not empty and validate according to constraints imposed on it. Data is only sent to lower levels of the system after the data has been validated.
+\item \textbf{Data storage}: When the data is actually stored the data needs to be validated against a set of low-level storage rules and constraints. Many DBMS packages allow this type of validation through data typing and allowing the database administrator to a specify constraints. Note that this is validation is independent from the validation that occurs at the user interface level.
+\item \textbf{Security}: As mentioned above in the security requirements, the re-authentication of users is seen as a robustness check. Another robustness check for security is that a particular user may only have one of either a account retrieval token or on-demand user account creation token active at a time else it is regarded as fault.
+\item \textbf{System Integrity}: If any malfunctioning modules are detected within the system any user action will not be completed and the user will be notified immediately with the appropriate error message. So prevent any data corruption due to system faults.
+\end{itemize}
 
 \vspace{0.1in}
 
@@ -105,90 +119,100 @@ In order to quantify this it should be seen as follows: If the hosting service's
 
 \begin{flushleft}
 
-The system must be testable. This will be done using unit testing and following the test plan that will be laid out in the testing document of this project.\\
+The system must be testable in order to show that the system is meets the clients expectations. This will be done using user acceptance testing, integration testing and unit testing. The test plan will be laid out in the Non-Functional and Functional testing documents of this project. Each of which will provide a set of tests to be performed in order to verify the systems compliance. Therefore each non-functional and functional requirement needs to be quantified in a manner that allows the SoftServe group to test for it in the system. Below are the suggested methods quantifying the tests for each type of test:\\
 
 \vspace{0.1in}
 
-Unit testing will test each unit in regard to:
+Unit testing will test each module and its unit in regard to:
 \begin{itemize}
 
-\item\textbf{Preconditions}
-\item\textbf{Post conditions}
+\item\textbf{Pre-conditions} of each unit contained in a module.
+\item\textbf{Post-conditions} of each unit contained in a module.
+\item\textbf{Result and request objects} of each unit contained in a module.
 
 \end{itemize}
 
-The project will also have two phases of testing:
+The integration tests will test the system with regard to:
 
 \begin{itemize}
 
-\item\textbf{Offline:} This is the initial phase of testing and debugging which will be done with pseudo data.
-\item\textbf{Online:} This is the final phase of testing and debugging which will be done with active real time data.
+\item \textbf{Module communication} between units and if their interfaces match the expected interfaces. 
+\item \textbf{Functionality} of the system in contrast to the required functionality.
+%\item\textbf{Offline:} This is the initial phase of testing and debugging which will be done with pseudo data.
+%\item\textbf{Online:} This is the final phase of testing and debugging which will be done with active real time data.
+
+\end{itemize}
+
+User acceptance testing will test the whole system in regard to:
+\begin{itemize}
+
+\item\textbf{Non-functional requirements}: If the system meets the non functional requirements as stipulated by the architectural requirements documents.
+\item\textbf{Functional requirements}: If each of the expected system functional requirements are met as stipulated in the functional requirement and application design document.
+\item\textbf{Client acceptance}: If the system is at a level that client accepts the system and wishes to deploy it.
 
 \end{itemize}
 
 \end{flushleft}
 
-\vspace{0.1in}
-
-
-
-
-
-\vspace{0.1in}	
-
-
-
-\vspace{0.2in}
-
-\subsubsection{Robustness:}
-
-\begin{flushleft}
-
-This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in in terms of its data storage routines, security routines and data validation, system integrity. 
-
-These four aspects of robustness are quantified as follow:
-\begin{itemize}
-\item \textbf{Data storage}: When data is stored the data needs to be validated against a set of storage rules and constraints. Many DBMS packages allow this type of validation through data typing and allowing the database administrator to a specify constraints.
-\item \textbf{Security}: As mentioned above in the security requirements the re-authentication of users is required and any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period and that as only one token may be active at a time.
-\item \textbf{Data validation}: All data that is manually imputed by a user, such as text, numbers, emails, passwords, etc. Must be checked to see if they meet constraints imposed on them through the use of data type checking and regular expression analysis. Any section in the system that requires certain data to completed before performing a action must be checked for completeness before allowing the user to perform the action. Where completeness means the data is not empty and validate according to constraints imposed on it.
-\item \textbf{System Integrity}: If there are any defects with any other components with in the system and a task cannot be completed the user will also be notified immediately with the appropriate message sent to them.
-\end{itemize}
 
 
 \end{flushleft}
 
-\vspace{0.1in}
-
-\vspace{0.2in}
 
 \subsubsection{Flexibility:}
 
 \begin{flushleft}
 
-The system is designed in such a way that adding new features can be done without extensive code restructuring. The process of adding new features will require the programmer to create a new module for the new functionality.
+The system should be designed in such a way that adding new features can be done without extensive code restructuring or reverse engineering. The process of adding new features should require the programmer working on the system to easily create a new module for the new functionality. For this to be realised the system will should use appropriate design patterns that allow this. For example the strategy, dependency injection and command design patterns. 
+
+\end{flushleft}
+
+
+\subsubsection{Re-usability:}
+
+\begin{flushleft}
+
+The system's components should be designed in such away that they can be reused in different sections in the system or even in external systems. For example the user access control module should be portable to other systems that can be developed.
 
 \end{flushleft}
 
 \vspace{0.1in}
 
 \vspace{0.2in}
-
-\subsubsection{Reusability:}
-
-\begin{flushleft}
-
-The System's components will be used again where applicable. The Login credentials is an example of areas where the system will be reused.
-
-\end{flushleft}
-
-\vspace{0.1in}
-
-\vspace{0.2in}
-
-\subsubsection{Maintability:}
+\newpage
+\subsubsection{Maintainability:}
 
 \begin{flushleft}
-The system administrator will have the responsibility of adding updates that a programmer may wish to add to the system. 
+The system should be maintainable in regards to 2 aspects: 
+\begin{itemize}
+\item \textbf{System housekeeping}: This aspect revolves around the actually administration of the system once it is deployed. The system should prevent the system administrator from unnecessary worrying about automated tasks. But the system should allow the system administrator to be able to manage user data, perform backups manually, archival routines and system configuration manually. 
+\item \textbf{System development}: This aspect revolves around the developers of the software. The system must be developed in such a way that the source code is easy to maintain and highly readable such that debugging and patching difficulty can be reduced. Also this ensures that the code can easily given to a third party if need be. The coding documentation standard that must be adhered is that stipulated by the JavaDoc standard. The coding style convention must be defined in such away that the code is easy to read and structured in a logical manner. The identifiers used must be named appropriately and must follow the camelCase standard except where the identifiers are constants in which case the entire name will be in capital letters. The style suggested is a variant of the Allman style:
+\begin{lstlisting}
+public void run()
+{
+	/*This is a multi line commment*/
+	//This is a single line comment
+	
+	for (int i = 0; i < x; i++)
+	{
+		int x = 0;
+		int y = 0;
+		while (x == y)
+		{
+			if (x == y)
+			{
+			    something();			    
+			}
+			else
+			{
+				somethingElse();
+			}
+		}
+	}
+}
+\end{lstlisting}
+\end{itemize}
+
 
 \end{flushleft}
 
