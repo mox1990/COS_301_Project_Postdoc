@@ -1,24 +1,101 @@
 These are the quality requirements as specified by the client and are also in the order of precedence. Where the first takes the highest precedence.
 
+\subsubsection{Usability requirements}
+
+\begin{flushleft}
+
+This is first and foremost quality requirement stipulated by the client. The primary language of the system will be South African English. Any other language support is not considered part of the requirements but the system will be designed to allow for such development in the future.\\
+
+\vspace{0.1in}
+
+The system's UI will only consider 2 types of user categories with regard to usability:
+
+\begin{itemize}
+
+\item\textbf{Trained user:}
+
+This type of user will have to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. These user will be regarded as system administrators or specialised users of the system. The stakeholders who fall under this category is the DRIS staff members overseeing the application process and any technical or maintenance support users.
+
+\item\textbf{Normal user:}
+
+This type of user will have no training with regard to the system. Their computer skills will be assumed to be none or minimal. Therefore the UI that they will have access to will be simplistic and will be as user friendly as possible. The stakeholders that fall under this category will be Prospective fellows, Research fellows, Referees, Grant holders, HODs, Dean's office members and Post-doctoral committee members.
+
+\end{itemize}
+
+In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. 
+
+\end{flushleft}
+
 \subsubsection{Security requirements}
 
 \begin{flushleft}
 
-The system will need to be fully secured since the system deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever. \\
+The system will need to be fully secured since it deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever. It should be noted that this requirement conflicts with the Usability requirement above as it is known that the more secure a system becomes the less user friendly it becomes. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated.\\
 \vspace{0.1in}
 
-The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a administrator with the correct role to allow for flexibility.
-But in essence a stakeholder may only have access to their section of the application process. The system administrator should be able to view all the sections in the system and should be able to modify them except where they may not.
+The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a system administrator to allow for flexibility.\\
+There will also need to be predefined roles so to allow a stakeholder from list of stakeholders in the vision and scope document, to only have the ability and access to perform the actions as defined by the vision and scope document.\\
+The system administrator should be able to access all the sections in the system and should be able to modify them except where only the system itself has that right.\\
+Another security requirement is that the audit trail must not be allowed to be modified by any human user and only allow the system to be able to insert data into the audit log. Further the audit table should only allow be query-able by a user with the correct security role.\\
+To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. \\
+Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days.
 
 \end{flushleft}
 
+\vspace{0.1in}
+
+\subsubsection{Auditability:}
+
+\begin{flushleft}
+
+This is seen as the third most important requirement according to the client. The system needs to provide some form of an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action as well as any operation by a user that leads to a change in the data stored by the system. The Audit trail will be in the form of a read-only table stored in the database as stipulated in the security requirements above.\\
+
+To quantify this requirement, the system will need to have an active audit log that can capture all the actions, that meet the list of critical actions, of each user that uses the system. With regards to usability, the feature needs to run in the background and not be noticeable by any user while they are using the system except if it is deliberately queried.
+
+\vspace{0.1in}
+
+\end{flushleft}
+
+\subsubsection{Scalability requirements}
+
+\begin{flushleft}
+
+As research is still viewed as small field that is slowly growing by the client this is only the fourth most important requirement for the system. The current aim is to create a scalable system that can support 50 to 500 applicants per year with possible growth to a 1000 or more. This is in line with the figures given by the client and the growth, over the next ten to twenty years, in the research sector of the University of Pretoria.\\
+\vspace{0.05in}
+
+The system needs to be scalable in regard to the following factors:
+\begin{itemize}
+
+\item\textbf{Performance:} This aspect of the system regards the speed and responsiveness of the system.
+The system needs to be handle large report queries in less than 10 seconds. It should be able to handle any application approval service processing in less than 3 seconds. It should be able to send emails instantly from the system side. Note this may be difficult to measure due internet bandwidth and receiving mail server constraints. Login, logout and user authentication should be handled in less then a second by the system this does not  considering the transfer of data to and from the server which is depended on the network connection speed.\\
+
+\item\textbf{Storage:} This aspect of the system regards the growth and shrinking of the data that is stored by the system.
+The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the fact that the system will need to store a large amount of active data over a period of about 3 to 8 years before it can be archived.
+\\Another requirement of the system is that it will need to support archival functionality and archived data that will eventual store all the old data from the active database for as long as time period as possible. Since the archival database should only grow it will need to be about 15 times larger than the active database. Due these reasons the calculation of how much space should be required will only be possible once the system is implemented and practically tested.\\The suggested linear formula to the above analysis is as follows: 
+\begin{equation}
+A \times ( (Xna \times Nna) + (Xra \times Nra) ) = B
+\end{equation}
+
+A = Number of years for which archival or active support is intended\\
+B = Number of bytes needed on average for A years\\
+Xna = Average number of bytes per new application\\
+Xra = Average number of bytes per renewal application\\
+Nna = Number of new applications a year\\
+Nra = Number of renewal applications a year\\
+
+\item\textbf{Concurrency:} This regarded as the amount of active users on the system at the same time.
+The system will need to support at least 100+/- concurrent users efficient and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
+
+\end{itemize}
+\end{flushleft}
 \vspace{0.1in}
 
 \subsubsection{Availability:}
 
 \begin{flushleft}
 
-The system's availability on designated networks will depend on the availability of the University of Pretoria's servers that host the system. If the University of Pretoria's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. The designated networks are defined as the internet and the campus network of the University of Pretoria.
+The system's availability on designated networks will depend on the availability of the University of Pretoria's servers or whatever hosting service that will used to host the system. It should be noted that the former will only be possible if the project is considered acceptable by the UP's IT department.\\
+In order to quantify this it should be seen as follows: If the hosting service's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. Where the designated networks are defined as the internet and/or the local network where in the server of the hosting service is located.
 
 \end{flushleft}
 
@@ -53,67 +130,13 @@ The project will also have two phases of testing:
 
 \vspace{0.1in}
 
-\subsubsection{Scalability requirements}
-
-\begin{flushleft}
-
-The current aim is to create a scalable system that can support 500 to 1000 applicants per year with possible growth. This is in line with the figures given by the client and the growth in the research sector of the university.\\
-\vspace{0.05in}
-
-The system needs to be scalable in regard to the following factors:
-\begin{itemize}
 
 
-\item\textbf{Performance:} This is regarded as the speed and responsiveness of the system.
-The system needs to be handle report queries in less than 10 seconds. It should be able to handle any application section processing in less than 3 seconds.\\
-
-\item\textbf{Storage:} This is regarded as the growth and shrinking of the data that is stored.
-The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the requirement that the system will support archival functionality and archived data will store the data for long periods of time.\\
-
-\item\textbf{Concurrency:} This regarded as the amount of active users on the system at the same time.
-The system will need to support at least 100+/- concurrent users efficient and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
-
-\end{itemize}
-\end{flushleft}
-\vspace{0.1in}
 
 
-\subsubsection{Auditability:}
-
-\begin{flushleft}
-
-The system needs to provide an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action and any operation by a user that leads to a change in application data of a particular prospective fellow.\\
-
-\vspace{0.1in}
-
-The Audit trail will be in the form of a read-only table stored in the database. It can only be viewed by a user with the correct security role. The system is the only entity that can modify the audit trail where this modification can only be the addition of entries.
-
-\end{flushleft}
 \vspace{0.1in}	
 
-\subsubsection{Usability requirements}
 
-\begin{flushleft}
-
-The primary language of the system will be South African English. Any other language support is not considered part of the requirements but the system will be designed to allow for such development in the future.\\
-
-\vspace{0.1in}
-
-The system's UI will only consider 2 types of user categories with regard to usability:
-
-\begin{itemize}
-
-\item\textbf{Trained user:}
-
-This type of user will have to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. This user will be regarded as a system administrator. The stakeholders who fall under this category is the DRIS staff members overseeing the application process.
-
-\item\textbf{Normal user:}
-
-This type of user will have no training. Their computer skills will be assumed to be none or minimal. Therefore the UI that they will have access to will be simplistic and will be as user friendly as possible. The stakeholders that fall under this category will be Prospective fellows, Grant holders, HODs, Deans and Post-doctoral committee members.
-
-\end{itemize}
-
-\end{flushleft}
 
 \vspace{0.2in}
 
@@ -121,7 +144,17 @@ This type of user will have no training. Their computer skills will be assumed t
 
 \begin{flushleft}
 
-The system needs to be robust, with the following areas of focus. It will have the ability to detect if the incorrect input has been entered into the system, the user will be notified immediately and not allowed to continue. If there are any defects with any other components with in the system and a task cannot be completed the user will also be notified immediately with the appropriate message sent to them. Users will also re-authenticate using a session object. Emails will be used for this authentication.
+This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in in terms of its data storage routines, security routines and data validation, system integrity. 
+
+These four aspects of robustness are quantified as follow:
+\begin{itemize}
+\item \textbf{Data storage}: When data is stored the data needs to be validated against a set of storage rules and constraints. Many DBMS packages allow this type of validation through data typing and allowing the database administrator to a specify constraints.
+\item \textbf{Security}: As mentioned above in the security requirements the re-authentication of users is required and any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period and that as only one token may be active at a time.
+\item \textbf{Data validation}: All data that is manually imputed by a user, such as text, numbers, emails, passwords, etc. Must be checked to see if they meet constraints imposed on them through the use of data type checking and regular expression analysis. Any section in the system that requires certain data to completed before performing a action must be checked for completeness before allowing the user to perform the action. Where completeness means the data is not empty and validate according to constraints imposed on it.
+\item \textbf{System Integrity}: If there are any defects with any other components with in the system and a task cannot be completed the user will also be notified immediately with the appropriate message sent to them.
+\end{itemize}
+
+
 \end{flushleft}
 
 \vspace{0.1in}
