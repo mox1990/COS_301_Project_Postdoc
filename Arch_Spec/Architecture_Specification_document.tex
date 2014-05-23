@@ -258,10 +258,10 @@ The JAX-RS API provides a way for the Java-EE application to provide web service
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Access and Integration channels}
-This section discusses the requirements for the channels through which the system can be accessed by humans and other systems. Also making mention about the integration channels which need to be followed. 
+This section discusses the requirements for the access channels through which the system can be accessed by humans and other systems. Also it discusses the integration channels which need to be used by the system. 
 
 \subsection{Access Channels}
-The system will be accessible by humans through the recent versions of the following browsers:
+To provide a system that is as accessible as possible the system provide its services through this essentially makes the system OS independent and accessible over firewalls since it will make use of the HTTPS protocol that is usually not blocked by firewalls. This also improves the usability the system as most computer user or mobile users are aware of how to use web browsers. The system will support the following versions of modern web browsers for both their computer and mobile counterparts:
 \begin{enumerate}
 \item Mozilla Firefox 20+
 \item Google Chrome 30+
@@ -269,37 +269,34 @@ The system will be accessible by humans through the recent versions of the follo
 \item Apple Safari
 \item Opera
 \end{enumerate}
-The mobile counterparts of the above mentioned browsers will also be catered for and so no other access channel (such as Android/Apple apps) is to be considered.
+
 \subsection{Integration Channels}
-Upon successful complementation the system must be integratedable with the University of Pretoria's PeopleSoft system. Therefore it is sensible to implement the system in Java EE as it is one of the many components that form part of the multiple tiers that build up  PeopleSoft. \\
-\\
-The use of build tools such as Maven will provide a central piece of information with regards to the projects build, reporting and documentation. This central point of information will assist in the integration phase since it is implemented through a standardised build approach which can come into play at a later time through the use of EAI.\\
-\\
-The EAI will be achieved via  the logical integration architecture of Direct point-to-point integration (Kang, 2002). This means that the application management system will make direct JDBC calls to the universities databases tables (which needed to be setup to cater for our system at that point). The Integration method will be pushed-based data-level integration (or if all else fails UI-Level integration).
+As mentioned in the architecture requirements specification document the IT department of the University of Pretoria will only be willing to provide the SoftServe group with the knowledge of the Peoplesoft system in order to integrate it. Thus the SoftServe group will attempt to accommodate the PeopleSoft system as much as possible by conforming to same user name styling, export of data to formats that are used by the Peoplesoft system to import data. Also the since Peoplesoft is an Oracle enterprise system it would have been developed using Java-EE and the Java programming language. This is therefore a strong motivation for Java-EE to be used by the SoftServe group as a development platform for the system. So to allow integration at a more technical level. Though if the integration was to be done this would be done via the EIS teir using the Java EE Connector Architecture API and the JAX-WS API.  
+
+
+%Upon successful complementation the system must be integrated able with the University of Pretoria's PeopleSoft system. Therefore it is sensible to implement the system in Java EE as it is one of the many components that form part of the multiple tiers that build up  PeopleSoft. \\
+
+%The use of build tools such as Maven will provide a central piece of information with regards to the projects build, reporting and documentation. This central point of information will assist in the integration phase since it is implemented through a standardised build approach which can come into play at a later time through the use of EAI.\\
+
+%The EAI will be achieved via  the logical integration architecture of Direct point-to-point integration (Kang, 2002). This means that the application management system will make direct JDBC calls to the universities databases tables (which needed to be setup to cater for our system at that point). The Integration method will be pushed-based data-level integration (or if all else fails UI-Level integration).
 % http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html
 
 \section{Technologies}
-The System will use the following technologies:
-\begin{itemize}
-\item Java Enterprise Edition 7, 
-\item MySQL database, open-source relational database management system
-\item Netbeans 8.0
-\item Glassfish server
-\end{itemize}
+This section discusses and elaborates on the technologies that the system will use and should also be seen as an extension of the architectural constraints, specified in the Architecture requirements specification document, in terms of elaboration.
 
-\subsection*{Integrated Development Environment}
+\subsection{Integrated Development Environment}
 The system should be buildable independent of an IDE but it will be developed on Netbeans 8.0 to allow for uniformity amongst the development team, with regards to coding style, and provide easy integration with the tools that will be used such as Javadoc, to generate  API documentation in HTML format.
 
 \subsection{Development technologies}
-\subsection{Java Servlet Technology}
+\subsubsection{Java Servlet Technology}
 A Java servlet is used to extend the Java-EE application server to support HTTP or HTTPS request and respond commands to the business Tier of the application. This is used by the JSF framework to communicate with the business Tier in order to receive and send data.
-\subsection{JavaServer Pages (JSP)}
+\subsubsection{JavaServer Pages (JSP)}
 JSP is a technology that is used by the Java-EE platform to provide a native language approach to creating web pages by using HTML or XML to specify static content on a web page and Expression language to provide dynamic content. Thought this will not be used directly but rather by the JSF framework.
  
-\subsection{Expression Language (EL)}
+\subsubsection{Expression Language (EL)}
 Is a language used by JSP pages and JSF facelets to write servlet code snippets which allow the usage of the data available to the servlet to do calculations or get or set data.
 
-\subsection{JavaMail API}
+\subsubsection{JavaMail API}
 The JavaMail API provides a email communication infrastructure for Java-EE applications. Thus this will be employed by the system in order to create and provide the email notification infrastructure.
 
 \subsubsection{JavaBeans Activation Framework (JAF)}
@@ -314,7 +311,6 @@ The Java Transaction API provides the Java-EE Application with the means to hand
 \subsubsection{Enterprise JavaBeans (EJB)}
 The Enterprise JavaBeans is a component used by all Java-EE applications to encapsulate the various business logic modules of the application. Thus it contains the attributes and methods associated with the business logic module and hence can be treated as an stand alone unit that can be reused. The two primary EJBs are Session beans that represent a clients session and the data associated with it and a Message-driven bean that can a allow the component to receive messages asynchronously via event listeners. The session bean will be used by the system to support the Session-Oriented infrastructure.  
 
-
 \subsubsection{Java Naming and Directory Interface (JNDI)}
 The Java Naming and Directory Interface provides Java-EE applications to search for data across LDAP, DNS, etc, directory services. Above this it also allows the application to search for objects that exist within the application and provides access to them so that they can be used by the application. This is used by Java-EE applications usually to locate EJB objects for usage therefore the system will make use of this API.
 
@@ -323,14 +319,24 @@ The Java Authentication and Authorization Service provides Java-EE applications 
 
 \subsection*{Build Tools}
 \begin{itemize}
-\item \textbf{Apache Maven} - This build tool was chosen due to the flexibility of it and the fact that Netbeans supports 
+\item \textbf{Apache Maven} - This build tool was chosen due to the flexibility of in terms of configurations, its ability to automate tests and the fact that Netbeans IDE provides support for it. 
 \end{itemize}
 
 \subsection*{Operating System}
-The system will be deployable on:
+
+The system will be deployed on a single OS but will have clients that will use a variety of OSs. This is one of the main reasons the why the application's UI must be web browser based so to allow OS independent support. Thus the only prerequisite of the client's OS is that it needs to support a HTML 4 or 5 web browser and be internet accessible.
 \begin{itemize}
-\item Windows 7 and 8.
-\item Linux based operating systems (specifically Kububuntu 13).
+\item \textbf{Server OS:}
+	\begin{enumerate}
+		\item Linux: Kubuntu 13.10
+	\end{enumerate}
+\item \textbf{Client OSs}
+	\begin{enumerate}
+		\item Windows: All
+		\item Linux: All
+		\item iOS: All
+		\item Android: All
+	\end{enumerate}
 \end{itemize}
 \newpage
 
