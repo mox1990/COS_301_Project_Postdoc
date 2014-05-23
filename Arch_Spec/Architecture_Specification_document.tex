@@ -199,7 +199,7 @@ The EIS tier provides mainly the support for database systems that is used by th
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Tactics and Strategies} % skipped till further notice.
-This section describes techniques which will be used to satisfy the quality requirements. 
+This section describes the architectural techniques which will be used in order for the system to satisfy the quality requirements. 
 
 % This section needs a lot of paraphrasing...
 \subsection{Concurrency}
@@ -237,13 +237,20 @@ A managed thread factory is used by applications to create managed threads. The 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Use of Reference Architecture and Framework}
-Java EE provides an API and runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. It also provides an architecture for implementing services as multitier applications that deliver the scalability, accessibility, and manageability needed by the system. This is reason to why it is ideal to use it in the development of the project.
+The Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks and APIs, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Thus this makes it ideal for the development of the project.
 
 It allows easy development of thin-client multi tiried applications without the many lines of complicated code that handles transactions or state management. Business logic is organized into reuseable components and provides underlying services as containers for all component types.
 
 The features in the JavaServer Faces technology provided HTML5 friendly markup which will assist in the implementation of the user friendly UI.
-
-\subsection{Java Persistence}
+\subsection{JavaServer Faces (JSF)}
+JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.
+\subsection{JavaServer Pages (JSP)}
+JSP is a technology that is used by the Java-EE platform to provide a native language approach to creating web pages by using HTML or XML to specify static content on a web page and Expression language to provide dynamic content. Thought this will not be used directly but rather by the JSF framework. 
+\subsection{Expression Language (EL)}
+Is a language used by JSP pages and JSF facelets to access servlet code snippets which allow the usage of the data available to the servlet to do calculations or get or set data.
+\subsection{Java API for RESTful Web Services}
+\subsection{JavaMail API}
+\subsection{Java Persistence API}
 Java EE is in itself implemented as a object oriented model, yet it is expected to function with mainly relational databases. To bridge the gap between an object-oriented model and a relational database an object/relational mapping approach will be used to achieve Persistence. Java Persistence consists of the following areas:
 \begin{itemize}
 \item The Java Persistence API,
