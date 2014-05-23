@@ -220,7 +220,7 @@ To deal with these issues Java EE provides concurrent utilities that access conc
 \item managed thread factory, and 
 \item context service.
 \end{itemize}
-
+\subsubsection{Concurrency Utilities for Java EE}
 \subsubsection{Managed Executor Service}
 A managed executor service is used by applications to execute submitted tasks asynchronously. Tasks are executed on threads that are
 started and managed by the container. The context of the container is propagated to the thread executing the task.
@@ -253,11 +253,7 @@ Java EE is based on Java which is an object-oriented language. Whereas most mode
 \subsection{Java API for RESTful Web Services (JAX-RS)}
 The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. This will allow the system to easily be accesses by mobile and computer platforms alike and also be accessible over most companies firewalls as it will make use of the HTTPS protocol. Further this will allow for future expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
 
-
-
-
-
-
+%\subsubsection{Java EE Connector Architecture}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -304,39 +300,30 @@ JSP is a technology that is used by the Java-EE platform to provide a native lan
 Is a language used by JSP pages and JSF facelets to write servlet code snippets which allow the usage of the data available to the servlet to do calculations or get or set data.
 
 \subsection{JavaMail API}
-The JavaMail API provides a email communication infrastructure for Java-EE applications. Thus this will be employed by the system in order to create and provide the email notification infrastructure. 
+The JavaMail API provides a email communication infrastructure for Java-EE applications. Thus this will be employed by the system in order to create and provide the email notification infrastructure.
 
-\subsubsection{(JDBC)}
+\subsubsection{JavaBeans Activation Framework (JAF)}
+The JavaBeans Activation Framework allows the Java-EE application to determine the data type of some section of data and thus allow the application to provide access to it by encapsulating it and determining the operations that the application may perform on it. This is mainly used by the JavaMail API thus it will need to be included in the system. 
 
-\subsubsection{(JTA)}
+\subsubsection{Java Database Connectivity API (JDBC)}
+The Java Database Connectivity API provides the a Java-EE application with the means to execute SQL statements on the database server via programming language commands. This will be used by the system to query the database in order to retrieve and store data on the database via the MySQL DBMS.
 
-\subsubsection{(EJB)}
+\subsubsection{Java Transaction API (JTA)}
+The Java Transaction API provides the Java-EE Application with the means to handle data transactions to the database. The API makes use of an auto commit feature by default that allows any client to see any writing of data to the database automatically. This will be used in the system to improve the data centralisation and data accuracy.
 
-\subsubsection{(JAF)}
-
-\subsubsection{(JNDI)}
-
-\subsubsection{(JAAS)}
-
-\subsubsection{Java EE Connector Architecture}
+\subsubsection{Enterprise JavaBeans (EJB)}
+The Enterprise JavaBeans is a component used by all Java-EE applications to encapsulate the various business logic modules of the application. Thus it contains the attributes and methods associated with the business logic module and hence can be treated as an stand alone unit that can be reused. The two primary EJBs are Session beans that represent a clients session and the data associated with it and a Message-driven bean that can a allow the component to receive messages asynchronously via event listeners. The session bean will be used by the system to support the Session-Oriented infrastructure.  
 
 
-\subsubsection{Concurrency Utilities for Java EE}
-\subsection*{API}
-\begin{itemize}
+\subsubsection{Java Naming and Directory Interface (JNDI)}
+The Java Naming and Directory Interface provides Java-EE applications to search for data across LDAP, DNS, etc, directory services. Above this it also allows the application to search for objects that exist within the application and provides access to them so that they can be used by the application. This is used by Java-EE applications usually to locate EJB objects for usage therefore the system will make use of this API.
 
-\item JavaMail. API used to send email notifications.
-\item JavaBeans Activation Framework. The JavaBeans Activation Framework (JAF) is used by the JavaMail API. JAF provides standard services to determine the type of an arbitrary piece of data, encapsulate access to it, discover the operations available on it, and create the appropriate JavaBeans component to perform those operations.
-\item Java Database Connectivity. The Java Database Connectivity (JDBC) API lets you invoke SQL commands from Java programming language methods. You use the JDBC API in an enterprise bean when you have a session bean access the database. You can also use the JDBC API from a servlet or a JSP page to access the database directly without going through an enterprise bean.
-\item Java Naming and Directory Interface. The Java Naming and Directory Interface (JNDI) API provides naming and directory functionality, enabling applications to access multiple naming and directory services, such as LDAP, DNS, and NIS. The JNDI API provides applications with methods for performing standard directory operations, such as associating attributes with objects and searching for objects using their attributes. Using JNDI, a Java EE application can store and retrieve any type of named Java object, allowing Java EE applications to coexist with many legacy applications and systems.
-\item Java API for XML Web Services. The Java API for XML Web Services (JAX-WS) specification provides support for web services that use the JAXB API for binding XML data to Java objects. The JAX-WS specification defines client APIs for accessing web services as well as techniques for implementing web service endpoints. The Implementing Enterprise Web Services specification describes the deployment of JAX-WS-based services and clients. The EJB and Java Servlet specifications also describe aspects of such deployment. JAX-WS-based applications can be deployed using any of these deployment models.
-\item SOAP with Attachments API for Java. The SOAP with Attachments API for Java (SAAJ) is a low-level API on which JAX-WS depends. SAAJ enables the production and consumption of messages that conform to the SOAP 1.1 and 1.2 specifications and the SOAP with Attachments note.
-\item Java Authentication and Authorization Service. The Java Authentication and Authorization Service (JAAS) provides a way for a Java EE application to authenticate and authorize a specific user or group of users to run it.
-\end{itemize}
+\subsubsection{Java Authentication and Authorization Service (JAAS)}
+The Java Authentication and Authorization Service provides Java-EE applications with a means to provide user access control. The API allows the application to authorize users with regards to specific user accounts or user groups. Thus this will be used by the system to support the security infrastructure needed by the system.
 
 \subsection*{Build Tools}
 \begin{itemize}
-\item Apache Maven (for reasons explained in the integration channels section).
+\item \textbf{Apache Maven} - This build tool was chosen due to the flexibility of it and the fact that Netbeans supports 
 \end{itemize}
 
 \subsection*{Operating System}
