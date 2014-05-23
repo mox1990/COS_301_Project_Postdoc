@@ -109,7 +109,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 21/05/2014 & v 0.98 & Added all details for imports and exports service use case diagram and process specification for generate on-demand user account. & Mathys Ellis \\
 \hline
-
+23/05/2014 & v 0.99 & Added user acceptance test. & Alfred Ngako \\
+\hline
 
 %\end{tabbing}
 \end{tabular}
@@ -961,6 +962,185 @@ This object represents a audit log that stores all the actions of all users with
 This object represents a \textbf{AuditLog} entry which records the action, who committed the action as well as at what time the action was committed.
 
 \newpage
+
+\section{User acceptance tests}
+This user acceptance document, as specified in the "V" model for testing, is a quality assurance activity through by which we will be enabled to ensure that the new system does actually meet the essential user requirements. It acts as a means to gain quality assurance as it allows to detect deviations between the implementation of the system and the specified requirements. Since test cases are essentially derived from the quality and functional requirements provided by the requirement engineering process. Quality assurance, in turn, requests requirements engineering to resolve  requirements defects detected during quality assurance activities and if necessary, to clarify requirements to enable the specification of adequate test artefacts (Pohl 2010).
+
+This section test items and identifiers with regards to the systems behaviour. All the steps entailed below are added to the audit log.
+
+\subsection{User Accounts}
+
+\subsubsection{Creating prospective fellow user account}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user enters the required information such as names and email address to the system.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+2 & Once all the fields are checked as valid by the system the user can now submit their account. & The system will now create the users account in the system database. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection{Creating stakeholder user account}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The administrator enters the required information such as names, security level required by the user account and email address to the system.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+2 & Once all the fields are checked as valid by the system the user can now submit their account. & The system will now create the users account in the system database. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The administrator is logged on to the system.
+
+\subsubsection*{Postconditions}
+The user account is now created in the system identified as a prospective fellow.
+
+\subsubsection{Modifying user account}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user alters all the fields they want to change such as email and names. & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue. \\
+\hline
+2 & Once all the fields are checked as valid by the system the user can now submit their account. & The system will now create the users account in the system database. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The administrator is logged on to the system.
+
+\subsubsection*{Postconditions}
+The user account is now created in the system identified as a prospective fellow.
+
+\subsection{New Application}
+
+\subsubsection{Prospective Fellow Creates new application}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user enters their relevant details in CV form.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+1 & The user specifies their intended supervisor.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+2 & The user enters the details/documents of their referees.  & The system will store the documents or check the validity of the referes details binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+\hline
+3 & The user enters their previous academic experience(s), attaching the supporting documents.  & The system will store the documents binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+\hline
+4 & The user enters their previous work experience(s), attaching the supporting documents.  & The system will store the documents binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+5 & Once the user has completed all the above steps they will be allowed to submit the application.  & The system will now process the application to the specified supervisor and let the user know that the application is under way. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The user is on the website through a supported web client and logged on to the system.
+
+\subsubsection*{Postconditions}
+The user is on the website through a supported web client and logged on to the system.
+
+\subsubsection{Referees submit Motivation}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user enters their relevant details in CV form.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+1 & The user specifies their intended supervisor.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+2 & The user enters the details/documents of their referees.  & The system will store the documents or check the validity of the referes details binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+\hline
+3 & The user enters their previous academic experience(s), attaching the supporting documents.  & The system will store the documents binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+\hline
+4 & The user enters their previous work experience(s), attaching the supporting documents.  & The system will store the documents binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+5 & Once the user has completed all the above steps they will be allowed to submit the application.  & The system will now process the application to the specified supervisor and let the user know that the application is under way. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The user is on the website through a supported web client and logged on to the system.
+
+\subsubsection*{Postconditions}
+The user is on the website through a supported web client and logged on to the system.
+
+\subsubsection{Grant holder validation of application}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & Grant holder verifies and finalizes the application. & The systems accepts the verifications \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be processed. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The grant holder is logged on to the system. The application has instantiated by the prospective fellow.
+
+\subsubsection*{Postconditions}
+The application is now available to the stakeholders.
+
+\subsubsection{Application approval by stakeholder}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & Stakeholder verifies and finalizes the application or leaves suggestion for the application. & The systems accepts the verifications. \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be processed. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The stakeholder is logged on to the system. The application has been approved and finalized by the grant holder.
+
+\subsubsection*{Postconditions}
+The application is now available to the DRIS consideration.
+
 \section{Glossary:}
 \vspace{0.2in}
 
