@@ -237,33 +237,28 @@ A managed thread factory is used by applications to create managed threads. The 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Use of Reference Architecture and Framework}
-The Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks and APIs, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Thus this makes it ideal for the development of the project.
+The core design philosophy of the Java-EE platform is to provide a Java-EE application developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of the project.
 
-It allows easy development of thin-client multi tiried applications without the many lines of complicated code that handles transactions or state management. Business logic is organized into reuseable components and provides underlying services as containers for all component types.
-
-The features in the JavaServer Faces technology provided HTML5 friendly markup which will assist in the implementation of the user friendly UI.
 \subsection{JavaServer Faces (JSF)}
 JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.
-\subsection{JavaServer Pages (JSP)}
-JSP is a technology that is used by the Java-EE platform to provide a native language approach to creating web pages by using HTML or XML to specify static content on a web page and Expression language to provide dynamic content. Thought this will not be used directly but rather by the JSF framework. 
-\subsection{Expression Language (EL)}
-Is a language used by JSP pages and JSF facelets to access servlet code snippets which allow the usage of the data available to the servlet to do calculations or get or set data.
-\subsection{Java API for RESTful Web Services}
-\subsection{JavaMail API}
+
 \subsection{Java Persistence API}
-Java EE is in itself implemented as a object oriented model, yet it is expected to function with mainly relational databases. To bridge the gap between an object-oriented model and a relational database an object/relational mapping approach will be used to achieve Persistence. Java Persistence consists of the following areas:
+Java EE is based on Java which is an object-oriented language. Whereas most modern day database management systems, DBMSs, provide relation databases. Thus to bridge this gap the Java Persistence API is used. It provides a Object Relational Mapping solution which allows the relation database to be viewed as a object-oriented database. Thus this critical for the system SoftServe wishes to develop as the system will make use of MySQL which is a relation database management system. The Java persistence API contains the following components:  
 \begin{itemize}
-\item The Java Persistence API,
-\item The query language, and
-\item Object/relational mapping metadata
+\item Persistence API
+\item The query language
+\item ORM
 \end{itemize}
 
-\subsection{RESTful web services}
-RESTful web services are loosely coupled, lightweight web services that are particularly well suited for creating APIs for clients spread out across the internet. Representational State Transfer (REST) is an architectural style of client-server application centered around the transfer of representations of resources through requests and responses. In the REST architectural style, data and functionality are considered resources and are accessed using Uniform Resource Identifiers (URIs), typically links on the Web. The resources are represented by documents and are acted upon by using a set of simple, well-defined operations.
+\subsection{Java API for RESTful Web Services (JAX-RS)}
+The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. This will allow the system to easily be accesses by mobile and computer platforms alike and also be accessible over most companies firewalls as it will make use of the HTTPS protocol. Further this will allow for future expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
 
-In Java EE 7, JAX-RS provides the functionality for Representational State Transfer (RESTful) web services. JAX-RS is a Java programming language API designed to make it easy to develop applications that use the REST architecture.
 
-The JAX-RS API uses Java programming language annotations to simplify the development of RESTful web services. Developers decorate Java programming language class files with JAX-RS annotations to define resources and the actions that can be performed on those resources. JAX-RS annotations are runtime annotations; therefore, runtime reflection will generate the helper classes and artifacts for the resource. A Java EE application archive containing JAX-RS resource classes will have the resources configured, the helper classes and artifacts generated, and the resource exposed to clients by deploying the archive to a Java EE server (Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Access and Integration channels}
@@ -299,9 +294,37 @@ The System will use the following technologies:
 \subsection*{Integrated Development Environment}
 The system should be buildable independent of an IDE but it will be developed on Netbeans 8.0 to allow for uniformity amongst the development team, with regards to coding style, and provide easy integration with the tools that will be used such as Javadoc, to generate  API documentation in HTML format.
 
+\subsection{Development technologies}
+\subsection{Java Servlet Technology}
+A Java servlet is used to extend the Java-EE application server to support HTTP or HTTPS request and respond commands to the business Tier of the application. This is used by the JSF framework to communicate with the business Tier in order to receive and send data.
+\subsection{JavaServer Pages (JSP)}
+JSP is a technology that is used by the Java-EE platform to provide a native language approach to creating web pages by using HTML or XML to specify static content on a web page and Expression language to provide dynamic content. Thought this will not be used directly but rather by the JSF framework.
+ 
+\subsection{Expression Language (EL)}
+Is a language used by JSP pages and JSF facelets to write servlet code snippets which allow the usage of the data available to the servlet to do calculations or get or set data.
+
+\subsection{JavaMail API}
+The JavaMail API provides a email communication infrastructure for Java-EE applications. Thus this will be employed by the system in order to create and provide the email notification infrastructure. 
+
+\subsubsection{(JDBC)}
+
+\subsubsection{(JTA)}
+
+\subsubsection{(EJB)}
+
+\subsubsection{(JAF)}
+
+\subsubsection{(JNDI)}
+
+\subsubsection{(JAAS)}
+
+\subsubsection{Java EE Connector Architecture}
+
+
+\subsubsection{Concurrency Utilities for Java EE}
 \subsection*{API}
 \begin{itemize}
-\item Java Persistence API. The Java Persistence API (JPA) is a Java standards–based solution for persistence.
+
 \item JavaMail. API used to send email notifications.
 \item JavaBeans Activation Framework. The JavaBeans Activation Framework (JAF) is used by the JavaMail API. JAF provides standard services to determine the type of an arbitrary piece of data, encapsulate access to it, discover the operations available on it, and create the appropriate JavaBeans component to perform those operations.
 \item Java Database Connectivity. The Java Database Connectivity (JDBC) API lets you invoke SQL commands from Java programming language methods. You use the JDBC API in an enterprise bean when you have a session bean access the database. You can also use the JDBC API from a servlet or a JSP page to access the database directly without going through an enterprise bean.
