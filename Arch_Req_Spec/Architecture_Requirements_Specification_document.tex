@@ -88,6 +88,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 22/05/2014 & v 0.7 & Added and improved Quality Requirements & Mathys Ellis \\
 \hline
+22/05/2014 & v 0.8 & Transferred architectural scope to this document & Mathys Ellis \\
+\hline
 22/05/2014 & v 1.0 & Edited, formatted and added some details. Finalised document for first iteration & Mathys Ellis \\
 \hline
 %\end{tabbing}
@@ -106,7 +108,7 @@ This document provides the documenting for the software architecture requirement
 
 \subsection{Document purpose:}
 \vspace{0.2in}
-The Architecture Requirements Specification provides the architectural requirements that the project will need to follow as well as a set of quality requirements that must be met by the system. The quality requirements have been quantified in order to provide the SoftServe group and the client with a means to test the system for non-functional compliance. This allows the SoftServe group to set up tests in the non-functional testing document that can be used at the end of the development cycle to verify that the system complies with the architecture and quality requirements specified by this document. Architecture in this document's context refer to the technological basis and software development styles of the project. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of what technologies the project should incorporate as-well as what quality the system should be of once the project is complete.
+The Architecture Requirements Specification provides the architectural requirements that the project will need to follow as well as a set of quality requirements that must be met by the system. The quality requirements have been quantified in order to provide the SoftServe group and the client with a means to test the system for non-functional compliance. This allows the SoftServe group to set up tests in the non-functional testing document that can be used at the end of the development cycle to verify that the system complies with the architecture and quality requirements specified by this document. Architecture in this document's context refer to the technological basis and software development infrastructure and styles of the project. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of what technologies the project should incorporate as-well as what quality the system should be of once the project is complete.
 
 \vspace{0.2in}
 
@@ -116,7 +118,7 @@ The Architecture Requirements Specification provides the architectural requireme
 The documentation and software development methodology used by the project adhere to the guidelines set out by the scum agile methodology. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
 
 This document was created using the requirement elicitation techniques and requirement definitions as specified by Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
-The requirements, vision and scope were elicited from the following sources:
+The quality requirements and aspects of the architectural requirements, were elicited from the following sources:
 \begin{itemize}
 	\item Numerous interviews with the client.
 	\item On-line research into UP Post doctoral applications.
@@ -153,6 +155,20 @@ The requirements, vision and scope were elicited from the following sources:
 
 \newpage
 \section{Architecture requirements}
+
+\subsection{Architectural Scope}
+This section discusses the scope that the software architecture of the system needs to cover:
+\begin{itemize}
+\item A persistence infrastructure using a DBMS to facilitate the storage of the various domain objects (e.g CVs, DRIS information, and Applications). So to allow the system to store and centralise the various data that the system will be handling.
+\item A multi-user session infrastructure to assist in realizing the security requirements of authenticating users and their actions.
+\item A pipeline infrastructure for processing applications. 
+\item A RESTful web service infrastructure, so to allow lightweight data communication between the users and the server and support for mobile platforms.
+\item A report generation infrastructure in order to support the data retrieval requirements of the client.
+\item An email infrastructure for the system to use in order to provide notification support.
+\item A action logging infrastructure to track user activity on the system, in order to provide audit-ability.
+
+\end{itemize}
+
 \subsection{Access channel requirements}
 \vspace{0.2in}
 The only two access channel requirements specified by the client are as follows:
@@ -203,11 +219,13 @@ The following architecture constraints have been selected by SoftServe group as 
 \item Database technology: MySQL
 \item Programming paradigm: Object-Oriented
 \item Programming language: Java
-\item Architectural pattern: MVC (Model View Controller)
-\item Architectural framework: JSF(Java Server Faces)
-\item Development technology: Java EE, JSP (Java Server Pages)
+\item System architecture: Java-EE
+\item Architectural framework: JSF, PAM
+\item Architectural pattern: MVC, Layered
+\item Development technologies: EJB, JSP, Expression Language, JDBC, Java Persistence API, JTA, Java EE Connector Architecture, JAX-RS, JAF, JavaMail, JNDI, JAAS, Concurrency Utilities for Java EE
 \item Web server software: GlassFish 4.0 server
 \item Web interface protocol: HTTPS
+\item Client device operating systems: Windows, iOS, Android, Linux. 
 \end{enumerate}
 \vspace{0.5in}
 

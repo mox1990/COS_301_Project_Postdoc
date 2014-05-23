@@ -75,9 +75,13 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 18/05/2014 & v 0.0 & Document created. & Alfred Ngako \\
 \hline
-19/05/2014 & v 0.0 & Added more detail to information in subsections. & Alfred Ngako \\
+19/05/2014 & v 0.1 & Added more detail to information in subsections. & Alfred Ngako \\
 \hline
-20/05/2014 & v 0.0 & Added references and citations. & Alfred Ngako \\
+20/05/2014 & v 0.2 & Added references and citations. & Alfred Ngako \\
+\hline
+22/05/2014 & v 0.3 & Transferred architectural scope to architectural requirements specification document. Began editing. & Mathys Ellis \\
+\hline
+23/05/2014 & v 0.3 & Added references and citations. & Alfred Ngako \\
 \hline
 %\end{tabbing}
 \end{tabular}
@@ -96,14 +100,14 @@ Mathys Ellis (12019837) \\[8em]
 
 \subsection{Document purpose}
 \vspace{0.2in}
-This document provides the documenting for the software architecture infrastructure which the application functionality is deployed and executed.
 
+This document follows on the Architecture requirements specification document. The Architecture specification document provides the architectural descriptions of various architectural factors that the project will need to follow when developing the system.  Architecture in this document's context refer to the technological basis and software development styles of the project. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of what technologies the project should incorporate as-well the software development infrastructure that the system will be based on.
 \vspace{0.2in}
 
 \subsection{Documentation methodology}
 \vspace{0.2in}
 \begin{flushleft}
-The documentation and software development methodology used by the project adhere to the guidelines set out by the agile method. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
+The documentation and software development methodology used by the project adhere to the guidelines set out by the scum agile methodology. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
 
 The document was compiled using a software architecture specification document template provided by Dr Fritz Solms as an alternative to the Kruchten 4 + 1 approach to documenting software.
 
@@ -138,8 +142,10 @@ The requirements, vision and scope were elicited from the following sources:
 \vspace{0.1in}
 \begin{itemize}
 \item Dr.Phol, K., 2010, \textit{Requirements Engineering: Fundamentals, Principles, and Techniques}, Springer, Heidelberg.
-\item Abraham Kang. Aug 9, 2002, \textit{Enterprise application integration using J2EE}, Available from: http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html , [17 May 2014]
-\item Jendrock E, Cervera-Navarro R, Evans I, Haase K, Markito W, \textit{The Java EE 7 Tutorial}, Available from: http://docs.oracle.com/javaee/7/tutorial/doc/home.htm , [20 May 2014]
+\item Ali Babar, M., \textit{Architectural Patterns and Frameworks, Week 3, Lecture 3},Available from: https://blog.itu.dk/MSAR-E2013/files/2013/09/wk3\_lect3\_patternsframeworktactics.pdf, [Accessed on: 21 May 2014]
+\item Oracle. April 2014, \textit{The Java EE 7 Tutorial}, Available from: http://docs.oracle.com/javaee/7/tutorial/doc/overview.htm , [Accessed on: 20 May 2014]
+\item Abraham Kang. August 9, 2002, \textit{Enterprise application integration using J2EE}, Available from: http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html , [Accessed on: 17 May 2014]
+\item Jendrock E, Cervera-Navarro R, Evans I, Haase K, Markito W, \textit{The Java EE 7 Tutorial}, Available from: http://docs.oracle.com/javaee/7/tutorial/doc/home.htm , [Accessed on: 20 May 2014]
 \end{itemize}	
 
 \vspace{0.5in}
@@ -148,65 +154,29 @@ The requirements, vision and scope were elicited from the following sources:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architecture Requirements} 
-This section discusses the software architectural requirements from the software requirements such as:
+This section can be found in the architecture requirements specification document in which it discusses the following:
 \begin{itemize}
-\item Architectural Scope,
-\item Quality Requirements,
-\item Integration and Access Channel Requirements, and
-\item Architectural Constraints.
-\end{itemize}
-All the above mentioned topics are put in place to address the non-functional requirements that were illicited from \client .
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Architectural Scope}
-The scope that the architecture needs to cover include:
-\begin{itemize}
-\item A persistence infrastructure (Database) to facilitate domain objects (e.g CVs, DRIS information, and Applications). This will also allow the implementation of the Audit trail required by the client and the centralised point for all the required documentation shared among stakeholders.
-\item A session oriented infrastructure to assist in realizing the security requirements of authenticating participants and their actions.
-\item A web access channel which will provide the client, and other stakeholders, with an interface to the underlying system.
-\item An infrastructure for the generation of reports.
-\item A mailing competent infrastructure.
-%\item Data export... (completed applications to be sent to) % What to say here
-%\item Pipe line infrastructure?????? % What about this as well?
+\item Architectural scope
+\item Access channel requirements
+\item Quality Requirements
+\item Integration requirements
+\item Architectural Constraints
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Quality Requirements} 
-\vspace{0.2in}
-The following are the requirements around the quality attributes of the systems and the services it provides:
-\input{../Quality_Requirements/QR.tex}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Integration and Access Channel Requirements}
-This section discusses 
-\begin{enumerate}
-\item the requirements for the different channels through which the system can be accessed by humans and other system, and
-\item the integration channels which must be supported by this system.
-\end{enumerate}
-
-\subsubsection{Access Channels}
-The system must be reachable securely through a web browser. 
-
-\subsubsection{Integration Channels}
-Upon completion the system must be integratable with the University of Pretorias PeopleSoft system.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Architectural Constraints}
-\client did not specify any Architectural constraints other then the fact that the system must be integratable with the University of Pretoria, packaged software solution, PeopleSoft System. 
-
-% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Patterns and Styles} % skipped till further notice.
 
 % Mention of how Java EE actually doesn't require use of GoF design patterns >> http://www.theserverside.com/tip/With-Java-EE-7-your-Design-Patterns-are-dead-And-your-EAR-is-ugly-too <<
 
-The system will maintain a MVC architectural pattern specific to how Java EE is structured. Which is a layered structure that automatically decouples the client from the server.\\
+The system will employ the Model-View-Controller, MVC, architectural pattern combined with a multi-tier/layered architectural pattern due to the Java EE system architecture. This will allow the client(s) to be decoupled from the server. Further this allows the view, the controller and the model each to have its own set of layers. Both of these patterns provide various benefits and are widely used. Some benefits include modularity, encapsulation, re-usability of components, decoupling and system maintainability [Ali Babar, M.] [Oracle, 2014]\\
 \\
-The Java EE structure is designed to satisfy the need for distributed, transactional, and portable applications that leverage the speed, security, and reliability of server-side technology. Which is reason to why it suits its use in the development of the system. The following diagram provides the abstracted architectural structure which will be followed:
-\begin{figure}
-\includegraphics[scale=0.2]{../Images_Docs/Diagrams/Architecture/MVC.jpg}
-\caption{Model View Controller of Architecture}
+The Java EE system architecture is designed to support highly scalable, distributed, transactional, and portable applications that use the speed, security, and reliability of a Java EE server to provide powerful enterprise applications. [Oracle, 2014] For this reason SoftServe believes this system architecture is well suited for the development of the Post-Doctoral application management system as it will satisfy the requirements in terms of quality and functional as stipulated by the client. The following diagram provides the system architectural that will be employed by the system:
+
+\begin{figure}[ht!]
+\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Architecture/Java EE system architecture.jpg}
+\caption{Java EE system architecture}
 \end{figure}
 
 \subsection*{View}
