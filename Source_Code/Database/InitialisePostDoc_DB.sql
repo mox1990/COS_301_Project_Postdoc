@@ -1,0 +1,70 @@
+
+DROP DATABASE IF EXISTS PostDoc_DB;
+CREATE DATABASE PostDoc_DB;
+
+USE PostDoc_DB;
+
+CREATE TABLE ADDRESS (
+	_addressID BIGINT NOT NULL,
+	_country VARCHAR(50),
+	_province VARCHAR(50),
+	_town_city VARCHAR(50),
+	_street VARCHAR(50),
+	_streeNumber INT,
+	_zip_postalCode CHAR(6),
+	PRIMARY KEY (_addressID)
+);
+
+CREATE TABLE LOCATION (
+	_locationID BIGINT NOT NULL AUTO_INCREMENT,
+	_institution VARCHAR(250) NOT NULL,
+	_faculty VARCHAR(250) NOT NULL,
+	_department VARCHAR(250) NOT NULL,
+	PRIMARY KEY (_locationID)
+);
+
+CREATE TABLE PERSON (
+	_systemID CHAR(9) NOT NULL,
+	_password VARCHAR(50) NOT NULL,
+	_name VARCHAR(250) NOT NULL,
+	_surname VARCHAR(250) NOT NULL,
+	_email VARCHAR(50) NOT NULL,
+	_telephoneNumber CHAR(20),
+	_workNumber CHAR(20),
+	_faxNumber CHAR(20),
+	_cellphoneNumber CHAR(20),
+	_location BIGINT,
+	_addressLine1 BIGINT NOT NULL,
+	
+	PRIMARY KEY (_systemID),
+	FOREIGN KEY (_location) REFERENCES LOCATION(_locationID),
+	FOREIGN KEY (_addressLine1) REFERENCES ADDRESS(_addressID)
+);
+
+CREATE TABLE SECURITY_ROLE (
+	_roleID BIGINT NOT NULL AUTO_INCREMENT,
+	_name VARCHAR(150) NOT NULL,
+	_roleValue BIGINT NOT NULL,
+	PRIMARY KEY (_roleID)
+);
+
+CREATE TABLE PERSON_SECURITY_ROLE (
+	_linkID BIGINT NOT NULL AUTO_INCREMENT,
+	_systemID CHAR(9) NOT NULL,
+	_roleID BIGINT NOT NULL,
+	PRIMARY KEY (_linkID),
+	FOREIGN KEY (_systemID) REFERENCES PERSON(_systemID),
+	FOREIGN KEY (_roleID) REFERENCES SECURITY_ROLE(_roleID)
+);
+
+CREATE TABLE NOTIFICATION (
+	_notificationID BIGINT NOT NULL AUTO_INCREMENT,
+	_message VARCHAR(3000),
+	_timestamp DATETIME NOT NULL,
+	_senderID CHAR(9) NOT NULL,
+	_recieverID	CHAR(9) NOT NULL,
+	PRIMARY KEY (_notificationID),
+	FOREIGN KEY (_senderID) REFERENCES PERSON(_systemID),
+	FOREIGN KEY (_recieverID) REFERENCES PERSON(_systemID)
+);
+
