@@ -11,6 +11,7 @@ CREATE TABLE ADDRESSESS (
 	_town_city VARCHAR(50),
 	_street VARCHAR(50),
 	_streeNumber INT,
+	_roomNumber VARCHAR(50),
 	_zip_postalCode CHAR(6),
 	
 	PRIMARY KEY (_addressID)
@@ -29,19 +30,32 @@ CREATE TABLE PERSONS (
 	_systemID CHAR(9) NOT NULL,
 	_password VARCHAR(50) NOT NULL,
 	_title CHAR(10) NOT NULL,
-	_name VARCHAR(250) NOT NULL,
+	_fullName VARCHAR(250) NOT NULL,
 	_surname VARCHAR(250) NOT NULL,
 	_email VARCHAR(50) NOT NULL,
 	_telephoneNumber CHAR(20),
 	_workNumber CHAR(20),
 	_faxNumber CHAR(20),
-	_cellphoneNumber CHAR(20),
-	_location BIGINT UNSIGNED,
+	_cellphoneNumber CHAR(20),	
 	_addressLine1 BIGINT UNSIGNED NOT NULL,
+	_upEmployee BOOLEAN NOT NULL,
 	
 	PRIMARY KEY (_systemID),
-	FOREIGN KEY (_location) REFERENCES LOCATIONS(_locationID),
 	FOREIGN KEY (_addressLine1) REFERENCES ADDRESSESS(_addressID)
+);
+
+CREATE TABLE UP_EMPLOYEE_INFORMATION (
+	_employeeID CHAR(9) NOT NULL,
+	_locationID BIGINT UNSIGNED,
+	_physicalAddress BIGINT UNSIGNED NOT NULL,
+	_position VARCHAR(50) NOT NULL,
+	_dateOfAppointment DATE NOT NULL,
+	_appointmentStatus VARCHAR(50) NOT NULL,
+	
+	PRIMARY KEY (_employeeID),
+	FOREIGN KEY (_employeeID) REFERENCES PERSONS(_systemID),
+	FOREIGN KEY (_locationID) REFERENCES LOCATIONS(_locationID),
+	FOREIGN KEY (_physicalAddress) REFERENCES ADDRESSESS(_addressID)
 );
 
 CREATE TABLE SECURITY_ROLES (
@@ -87,7 +101,8 @@ CREATE TABLE ENDORSEMENTS (
 	_endorsementID BIGINT UNSIGNED NOT NULL,
 	_deanID CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_content TEXT NOT NULL,
+	_rank INT UNSIGNED NOT NULL,
+	_motivation TEXT NOT NULL,
 	
 	PRIMARY KEY (_endorsementID),
 	FOREIGN KEY (_deanID) REFERENCES PERSONS(_systemID)
@@ -109,6 +124,7 @@ CREATE TABLE APPLICATIONS (
 	_applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_type ENUM("New", "Renewal"),
 	_status ENUM('open','refereed','finalised','recommended','endorsed','eligible','fundalbe'),
+	_information TEXT,
 	_fellow CHAR(9) NOT NULL,
 	_grantHolderID CHAR(9) NOT NULL,
 	_locationID BIGINT UNSIGNED NOT NULL,	
@@ -217,9 +233,14 @@ CREATE TABLE CVS (
 	_idNumber CHAR(20) NOT NULL,
 	_dateOfBirth DATE NOT NULL,
 	_gender ENUM('male','female'),
-	_nationality CHAR(50),
+	_citizenship CHAR(50),
 	_nrfRating CHAR(4),
-	
+	_race CHAR(20),
+	_recentInstitution VARCHAR(50),
+	_references TEXT,
+	_otherContributions TEXT,
+	_additionalInformation TEXT,
+
 	PRIMARY KEY(_cvID),
 	FOREIGN KEY (_ownerID) REFERENCES PERSONS(_systemID)
 );
@@ -231,7 +252,8 @@ CREATE TABLE ACADEMIC_QUALIFICATION (
 	_fieldOfStudy VARCHAR(100),
 	_instituation VARCHAR(100),
 	_yearObtained DATE,
-	
+	_distinctions TINYINT UNSIGNED,
+
 	PRIMARY KEY (_qualificationID),
 	FOREIGN KEY (_cvID) REFERENCES CVS(_cvID)
 );
@@ -239,7 +261,7 @@ CREATE TABLE ACADEMIC_QUALIFICATION (
 CREATE TABLE EXPERIENCE (
 	_experienceID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_cvID BIGINT UNSIGNED NOT NULL,
-	_position VARCHAR(100),
+	_capacity VARCHAR(100),
 	_organisation VARCHAR(100),
 	_startDate DATETIME NOT NULL,
 	_endDate DATETIME NOT NULL,
