@@ -39,14 +39,15 @@ CREATE TABLE PERSONS (
 	_cellphoneNumber CHAR(20),	
 	_addressLine1 BIGINT UNSIGNED NOT NULL,
 	_upEmployee BOOLEAN NOT NULL,
+	_locationID BIGINT UNSIGNED,
 	
 	PRIMARY KEY (_systemID),
+	FOREIGN KEY (_locationID) REFERENCES LOCATIONS(_locationID),
 	FOREIGN KEY (_addressLine1) REFERENCES ADDRESSESS(_addressID)
 );
 
 CREATE TABLE UP_EMPLOYEE_INFORMATION (
-	_employeeID CHAR(9) NOT NULL,
-	_locationID BIGINT UNSIGNED,
+	_employeeID CHAR(9) NOT NULL,	
 	_physicalAddress BIGINT UNSIGNED NOT NULL,
 	_position VARCHAR(50) NOT NULL,
 	_dateOfAppointment DATE NOT NULL,
@@ -54,14 +55,13 @@ CREATE TABLE UP_EMPLOYEE_INFORMATION (
 	
 	PRIMARY KEY (_employeeID),
 	FOREIGN KEY (_employeeID) REFERENCES PERSONS(_systemID),
-	FOREIGN KEY (_locationID) REFERENCES LOCATIONS(_locationID),
 	FOREIGN KEY (_physicalAddress) REFERENCES ADDRESSESS(_addressID)
 );
 
 CREATE TABLE SECURITY_ROLES (
 	_roleID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_name VARCHAR(150) NOT NULL,
-	_roleValue BIGINT UNSIGNED NOT NULL,
+	_roleMask BIGINT UNSIGNED NOT NULL,
 	
 	PRIMARY KEY (_roleID)
 );
@@ -112,9 +112,12 @@ CREATE TABLE FUNDING_REPORTS (
 	_reportID BIGINT UNSIGNED NOT NULL,
 	_drisID CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_startDate DATETIME NOT NULL,
-	_endDate DATETIME NOT NULL,
-	_content TEXT NOT NULL,
+	_fellowshipCost FLOAT,
+	_travelCost FLOAT,
+	_runningCost FLOAT,
+	_operatingCost FLOAT,
+	_equipmentCost FLOAT,
+	_conferenceCost FLOAT,
 	
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_drisID) REFERENCES PERSONS(_systemID)
@@ -131,6 +134,10 @@ CREATE TABLE APPLICATIONS (
 	_recommendationReport BIGINT UNSIGNED,
 	_endorsementID BIGINT UNSIGNED,
 	_fundingReportID BIGINT UNSIGNED,
+	_timestamp DATETIME NOT NULL,
+	_awardDate DATETIME,
+	_startDate DATE,
+	_endDate DATE,
 	
 	PRIMARY KEY (_applicationID),
 	FOREIGN KEY (_fellow) REFERENCES PERSONS(_systemID),
@@ -163,8 +170,6 @@ CREATE TABLE REFEREE_REPORTS (
 CREATE TABLE PROGRESS_REPORTS (
 	_reportID BIGINT UNSIGNED AUTO_INCREMENT,
 	_timestamp DATETIME NOT NULL,
-	_startDate DATETIME NOT NULL,
-	_endDate DATETIME NOT NULL,
 	_content TEXT NOT NULL,
 	
 	PRIMARY KEY (_reportID)
@@ -237,7 +242,7 @@ CREATE TABLE CVS (
 	_nrfRating CHAR(4),
 	_race CHAR(20),
 	_recentInstitution VARCHAR(50),
-	_references TEXT,
+	_researchOutput TEXT,
 	_otherContributions TEXT,
 	_additionalInformation TEXT,
 
