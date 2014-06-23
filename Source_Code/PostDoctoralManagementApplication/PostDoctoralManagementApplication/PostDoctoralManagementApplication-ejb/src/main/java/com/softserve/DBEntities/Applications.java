@@ -47,7 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Applications.findByTimestamp", query = "SELECT a FROM Applications a WHERE a.timestamp = :timestamp"),
     @NamedQuery(name = "Applications.findByAwardDate", query = "SELECT a FROM Applications a WHERE a.awardDate = :awardDate"),
     @NamedQuery(name = "Applications.findByStartDate", query = "SELECT a FROM Applications a WHERE a.startDate = :startDate"),
-    @NamedQuery(name = "Applications.findByEndDate", query = "SELECT a FROM Applications a WHERE a.endDate = :endDate")})
+    @NamedQuery(name = "Applications.findByEndDate", query = "SELECT a FROM Applications a WHERE a.endDate = :endDate"),
+    @NamedQuery(name = "Applications.findByProjectTitle", query = "SELECT a FROM Applications a WHERE a.projectTitle = :projectTitle")})
 public class Applications implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,10 +62,6 @@ public class Applications implements Serializable {
     @Size(max = 11)
     @Column(name = "_status")
     private String status;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "_information")
-    private String information;
     @Basic(optional = false)
     @NotNull
     @Column(name = "_timestamp")
@@ -79,6 +76,13 @@ public class Applications implements Serializable {
     @Column(name = "_endDate")
     @Temporal(TemporalType.DATE)
     private Date endDate;
+    @Size(max = 250)
+    @Column(name = "_projectTitle")
+    private String projectTitle;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "_information")
+    private String information;
     @ManyToMany(mappedBy = "applicationsCollection")
     private Collection<CommitteeMeetings> committeeMeetingsCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "applications")
@@ -94,9 +98,6 @@ public class Applications implements Serializable {
     @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
     @ManyToOne(optional = false)
     private Locations locationID;
-    @JoinColumn(name = "_recommendationReport", referencedColumnName = "_reportID")
-    @ManyToOne
-    private RecommendationReport recommendationReport;
     @JoinColumn(name = "_endorsementID", referencedColumnName = "_endorsementID")
     @ManyToOne
     private Endorsements endorsementID;
@@ -140,14 +141,6 @@ public class Applications implements Serializable {
         this.status = status;
     }
 
-    public String getInformation() {
-        return information;
-    }
-
-    public void setInformation(String information) {
-        this.information = information;
-    }
-
     public Date getTimestamp() {
         return timestamp;
     }
@@ -178,6 +171,22 @@ public class Applications implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
     }
 
     @XmlTransient
@@ -227,14 +236,6 @@ public class Applications implements Serializable {
 
     public void setLocationID(Locations locationID) {
         this.locationID = locationID;
-    }
-
-    public RecommendationReport getRecommendationReport() {
-        return recommendationReport;
-    }
-
-    public void setRecommendationReport(RecommendationReport recommendationReport) {
-        this.recommendationReport = recommendationReport;
     }
 
     public Endorsements getEndorsementID() {

@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Notifications.findAll", query = "SELECT n FROM Notifications n"),
     @NamedQuery(name = "Notifications.findByNotificationID", query = "SELECT n FROM Notifications n WHERE n.notificationID = :notificationID"),
+    @NamedQuery(name = "Notifications.findBySubject", query = "SELECT n FROM Notifications n WHERE n.subject = :subject"),
     @NamedQuery(name = "Notifications.findByTimestamp", query = "SELECT n FROM Notifications n WHERE n.timestamp = :timestamp")})
 public class Notifications implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -45,6 +46,9 @@ public class Notifications implements Serializable {
     @Basic(optional = false)
     @Column(name = "_notificationID")
     private Long notificationID;
+    @Size(max = 200)
+    @Column(name = "_subject")
+    private String subject;
     @Lob
     @Size(max = 65535)
     @Column(name = "_message")
@@ -79,6 +83,14 @@ public class Notifications implements Serializable {
 
     public void setNotificationID(Long notificationID) {
         this.notificationID = notificationID;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getMessage() {

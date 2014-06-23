@@ -77,6 +77,7 @@ CREATE TABLE PERSON_SECURITY_ROLE (
 
 CREATE TABLE NOTIFICATIONS (
 	_notificationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_subject VARCHAR(200),
 	_message TEXT,
 	_timestamp DATETIME NOT NULL,
 	_senderID CHAR(9) NOT NULL,
@@ -127,23 +128,23 @@ CREATE TABLE APPLICATIONS (
 	_applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_type ENUM("New", "Renewal"),
 	_status ENUM('open','refereed','finalised','recommended','endorsed','eligible','fundalbe'),
-	_information TEXT,
-	_fellow CHAR(9) NOT NULL,
-	_grantHolderID CHAR(9) NOT NULL,
-	_locationID BIGINT UNSIGNED NOT NULL,	
-	_recommendationReport BIGINT UNSIGNED,
-	_endorsementID BIGINT UNSIGNED,
-	_fundingReportID BIGINT UNSIGNED,
 	_timestamp DATETIME NOT NULL,
 	_awardDate DATETIME,
 	_startDate DATE,
 	_endDate DATE,
+	_projectTitle VARCHAR(250),
+	_information TEXT,
+	_fellow CHAR(9) NOT NULL,
+	_grantHolderID CHAR(9) NOT NULL,
+	_locationID BIGINT UNSIGNED NOT NULL,	
+	_endorsementID BIGINT UNSIGNED,
+	_fundingReportID BIGINT UNSIGNED,
+	
 	
 	PRIMARY KEY (_applicationID),
 	FOREIGN KEY (_fellow) REFERENCES PERSONS(_systemID),
 	FOREIGN KEY (_grantHolderID) REFERENCES PERSONS(_systemID),
 	FOREIGN KEY (_locationID) REFERENCES LOCATIONS(_locationID),
-	FOREIGN KEY (_recommendationReport) REFERENCES RECOMMENDATION_REPORT(_reportID),
 	FOREIGN KEY (_endorsementID) REFERENCES ENDORSEMENTS(_endorsementID),
 	FOREIGN KEY (_fundingReportID) REFERENCES FUNDING_REPORTS(_reportID)
 );
@@ -202,6 +203,24 @@ CREATE TABLE MINUTE_COMMENT (
 	FOREIGN KEY (_meetingID) REFERENCES COMMITTEE_MEETINGS(_meetingID),
 	FOREIGN KEY (_attendeeID) REFERENCES PERSONS(_systemID)
 );
+
+#CREATE TABLE NEW_APPLICATIONS_COMMITT_MEETINGS (
+#	_meetingID BIGINT UNSIGNED NOT NULL,
+#	_newApplicationID BIGINT UNSIGNED NOT NULL,
+#	
+#	PRIMARY KEY (_meetingID, _newApplicationID),
+#	FOREIGN KEY (_meetingID) REFERENCES COMMITTEE_MEETINGS(_meetingID),
+#	FOREIGN KEY (_newApplicationID) REFERENCES NEW_APPLICATIONS(_applicationID)
+#);
+
+#CREATE TABLE RENEWAL_APPLICATIONS_COMMITT_MEETINGS (
+#	_meetingID BIGINT UNSIGNED NOT NULL,
+#	_renewalApplicationID BIGINT UNSIGNED NOT NULL,
+	
+#	PRIMARY KEY (_meetingID, _renewalApplicationID),
+#	FOREIGN KEY (_meetingID) REFERENCES COMMITTEE_MEETINGS(_meetingID),
+#	FOREIGN KEY (_renewalApplicationID) REFERENCES RENEWAL_APPLICATIONS(_applicationID)
+#);
 
 CREATE TABLE ATTENDENCE_LIST (	
 	_meetingID BIGINT UNSIGNED NOT NULL,
