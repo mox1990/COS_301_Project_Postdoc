@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="referalReport">
+        <xs:complexType>
+            <xs:sequence>
+               <xs:element name="projectTitle"
+                           type="xs:string"/>
+               <xs:element name="projectSummary"
+                           type="xs:string"/>
+               <xs:element name="refereeAndCandidateAssociation"
+                           type="xs:string"/>
+               <xs:element name="evaluationOfCandidateTowardsProposedProject"
+                           type="xs:string"/>
+               <xs:element name="evaluationOfCandidateSelf"
+                           type="xs:string"/>              
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
