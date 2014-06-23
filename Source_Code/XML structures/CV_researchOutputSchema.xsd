@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">    
+    <xs:complexType name="reference">
+        <xs:sequence>
+            <xs:element name="publicationName"
+                        type="xs:string"/>            
+            <xs:element name="publicationDate"
+                        type="xs:date"/>
+            <xs:element name="publicationPageLocation"
+                        type="xs:string"/>
+            <xs:element name="publicationMediumName"
+                        type="xs:string"/>              
+            <xs:element name="publicationReferenceCode"
+                        type="xs:string"/>  
+            <xs:element name="publicationISBN"
+                        type="xs:string"/>                        
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="researchOutput">
+        <xs:complexType>
+            <xs:sequence>
+               <xs:element name="journalPublications"
+                           type="reference"/>
+               <xs:element name="bookChapterPublications"
+                           type="reference"/>
+               <xs:element name="conferencePaperPublications"
+                           type="reference"/>
+               <xs:element name="scientificPublicationsArticles"
+                           type="reference"/>
+               <xs:element name="technicalPolicyReports"
+                           type="reference"/>
+               <xs:element name="patents"
+                           type="reference"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
