@@ -150,10 +150,14 @@ Date,Time,Comment,Member
 "Tuesday, June 17, 2014",,Decided on using XML as content structure in certain databse fields,Group
 "Wednesday, June 18, 2014",,,
 "Thursday, June 19, 2014",,,
-"Friday, June 20, 2014",,,
+"Friday, June 20, 2014",,"Client meeting: Confirmed project timeline, Finance details. Prof Gruner attened",Group
 "Saturday, June 21, 2014",,End of june exams,
 "Sunday, June 22, 2014",,"Updated domain objects, refine SQL, converted log to CSV, Created entities",Mathys
-"Monday, June 23, 2014",,,
+"Monday, June 23, 2014",,Completed XML schemas,Mathys
+"Monday, June 23, 2014",,"Found client to dos: Reference style, candidate Referee report completion",Mathys
+"Monday, June 23, 2014",1:23 PM,Sent email to client for information,Mathys
+"Monday, June 23, 2014",1:44 PM,Client replies,Mathys
+"Monday, June 23, 2014",,"Updated domain objects, refine SQL, updated entities, created XML entities",Mathys
 "Tuesday, June 24, 2014",,,
 "Wednesday, June 25, 2014",,,
 "Thursday, June 26, 2014",,,

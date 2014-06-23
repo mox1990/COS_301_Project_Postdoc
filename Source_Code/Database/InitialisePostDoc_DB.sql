@@ -127,7 +127,7 @@ CREATE TABLE FUNDING_REPORTS (
 CREATE TABLE APPLICATIONS (
 	_applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_type ENUM("New", "Renewal"),
-	_status ENUM('open','refereed','finalised','recommended','endorsed','eligible','fundalbe'),
+	_status ENUM('open', 'declined','refereed','finalised','recommended','endorsed','eligible','funded', 'completed', 'terminated'),
 	_timestamp DATETIME NOT NULL,
 	_awardDate DATETIME,
 	_startDate DATE,
@@ -149,12 +149,12 @@ CREATE TABLE APPLICATIONS (
 	FOREIGN KEY (_fundingReportID) REFERENCES FUNDING_REPORTS(_reportID)
 );
 
-CREATE TABLE NEW_APPLICATIONS (
-	_applicationID BIGINT UNSIGNED NOT NULL,
-	
-	PRIMARY KEY (_applicationID),
-	FOREIGN KEY (_applicationID) REFERENCES APPLICATIONS(_applicationID)
-);
+#CREATE TABLE NEW_APPLICATIONS (
+#	_applicationID BIGINT UNSIGNED NOT NULL,
+#	
+#	PRIMARY KEY (_applicationID),
+#	FOREIGN KEY (_applicationID) REFERENCES APPLICATIONS(_applicationID)
+#);
 
 CREATE TABLE REFEREE_REPORTS (
 	_reportID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -164,26 +164,26 @@ CREATE TABLE REFEREE_REPORTS (
 	_content TEXT NOT NULL,
 	
 	PRIMARY KEY (_reportID),
-	FOREIGN KEY (_applicationID) REFERENCES NEW_APPLICATIONS(_applicationID),
+	FOREIGN KEY (_applicationID) REFERENCES APPLICATIONS(_applicationID),
 	FOREIGN KEY (_refereeID) REFERENCES PERSONS(_systemID)
 );
 
 CREATE TABLE PROGRESS_REPORTS (
 	_reportID BIGINT UNSIGNED AUTO_INCREMENT,
+	_applicationID BIGINT UNSIGNED NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_content TEXT NOT NULL,
 	
-	PRIMARY KEY (_reportID)
+	PRIMARY KEY (_reportID),
+	FOREIGN KEY (_applicationID) REFERENCES APPLICATIONS(_applicationID)
 );
 
-CREATE TABLE RENEWAL_APPLICATIONS (
-	_applicationID BIGINT UNSIGNED NOT NULL,
-	_progressReportID BIGINT UNSIGNED UNIQUE,
+#CREATE TABLE RENEWAL_APPLICATIONS (
+#	_applicationID BIGINT UNSIGNED NOT NULL,
 	
-	PRIMARY KEY (_applicationID),
-	FOREIGN KEY (_applicationID) REFERENCES APPLICATIONS(_applicationID),
-	FOREIGN KEY (_progressReportID) REFERENCES PROGRESS_REPORTS(_reportID)	
-);
+#	PRIMARY KEY (_applicationID),
+#	FOREIGN KEY (_applicationID) REFERENCES APPLICATIONS(_applicationID)
+#);
 
 CREATE TABLE COMMITTEE_MEETINGS (
 	_meetingID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
