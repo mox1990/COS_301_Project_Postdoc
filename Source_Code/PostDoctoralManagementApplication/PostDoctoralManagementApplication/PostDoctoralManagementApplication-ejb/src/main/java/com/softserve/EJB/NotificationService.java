@@ -1,0 +1,132 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.softserve.EJB;
+
+import com.softserve.DBEntities.Notifications;
+import com.softserve.DBEntities.Notifications;
+import com.softserve.DBEntities.Persons;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Properties;
+import javax.ejb.Stateless;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+/**
+ * This EJB handles the notification services
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
+ */
+@Stateless
+public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not
+    @PersistenceContext(unitName = "notifications")
+    private EntityManager em;
+    
+    public void sendNotification(NotificationRequest nRequest) throws MessagingException
+    {
+        switch(nRequest.nType)
+        {
+            case NotificationRequest.EMAIL:
+                sendEmail(nRequest.message, nRequest.subject, nRequest.recipients, nRequest.sender);
+                break;
+            case NotificationRequest.SYSTEM:
+                for(Persons recipient: nRequest.recipients)
+                {
+                    sendSystemNotification(nRequest.message, nRequest.subject, recipient, nRequest.sender);
+                }
+                break;
+            default:
+                throw new MessagingException("Cannot construct such a notification.");
+        }
+    }
+    
+    public void sendEmail(String mess, String subject, List<Persons> recipients, Persons sender) throws MessagingException
+    {
+        final String username = "iterativeKak@gmail.com";
+        final String password = "********";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true"); 
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+          new javax.mail.Authenticator() 
+          {
+            protected PasswordAuthentication getPasswordAuthentication() 
+            {
+                    return new PasswordAuthentication(username, password);
+            }
+          });
+
+        
+        int rSize = recipients.size();
+        Address[] addresses = new Address[rSize];
+        for(int i = 0; i < rSize; i++)
+        {
+            addresses[i] = new InternetAddress(recipients.get(i).getEmail());
+        }
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(sender.getEmail()));
+        message.setSubject(subject);
+        message.setRecipients(Message.RecipientType.TO, addresses);
+        message.setText(mess);
+
+        Transport.send(message);
+        
+    }
+    
+    public Notifications sendSystemNotification(String message, String subject, Persons recipient, Persons sender)
+    {
+        Notifications notification = new Notifications();
+        
+        notification.setRecieverID(recipient);
+        notification.setSenderID(sender);
+        notification.setMessage(message);
+        
+        em.persist(notification);
+        
+        return notification;
+    }
+    
+    public List<Notifications> findAll()
+    {
+        return em.createNamedQuery("Notifications.findAll", Notifications.class).getResultList();
+    }
+    
+    public List<Notifications> findByNotificationID(Long nID)
+    {
+        return em.createNamedQuery("Notifications.findByNotificationID", Notifications.class).setParameter("entryID", nID).getResultList();
+    }
+    
+    public List<Notifications> findBySubject(String subject)
+    {
+        return em.createNamedQuery("Notifications.findBySubject", Notifications.class).setParameter("subject", subject).getResultList();
+    }
+    
+    public List<Notifications> findByTimestamp(Timestamp tStamp)
+    {
+        return em.createNamedQuery("Notifications.findByTimestamp", Notifications.class).setParameter("timestamp", tStamp).getResultList();
+    }
+    
+    public List<Notifications> findBetweenRange(Timestamp start, Timestamp end)
+    {
+        // TODO: create the new namedQuery
+        return em.createNamedQuery("Notifications.findByTimestamp", Notifications.class).setParameter("timestamp", start).getResultList();
+    }
+}
