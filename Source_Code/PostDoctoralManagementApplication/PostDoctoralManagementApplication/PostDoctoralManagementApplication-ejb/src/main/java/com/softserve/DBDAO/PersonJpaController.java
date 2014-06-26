@@ -10,31 +10,34 @@ import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.UpEmployeeInformation;
-import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.CommitteeMeeting;
-import java.util.ArrayList;
-import java.util.Collection;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.CommitteeMeeting;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.FundingReport;
+import com.softserve.DBEntities.Location;
+import com.softserve.DBEntities.MinuteComment;
+import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.RefereeReport;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.MinuteComment;
-import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.DBEntities.UpEmployeeInformation;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -337,7 +340,7 @@ public class PersonJpaController implements Serializable {
 
     public void edit(Person person) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
-        try {
+        try {            
             utx.begin();
             em = getEntityManager();
             Person persistentPerson = em.find(Person.class, person.getSystemID());
@@ -947,6 +950,60 @@ public class PersonJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    /**
+     *This function searchs the person table in the database inorder to find the
+     * maximum value of the systemIDs with the particular prefix and year 
+     * combination
+     * @param year The year of systemIDs to browse as an integer e.g "2004"
+     * @param prefix The character prefix of the systemIDs to search. 
+     * note this parameter is case-sensitive e.g. "u"
+     * @return The last 5 characters as an int of the most recently added systemID 
+     * @throws NumberFormatException This is thrown when the last 5 characters 
+     * of the ID retrieved from the database cannot be converted
+     */
+    public int getMaxSystemIDForYear(int year, char prefix) throws NumberFormatException
+    {        
+        String tempYear = Integer.toString(year);
+        
+        //Extract last two digits of year code
+        if(tempYear.length() > 1)
+        {
+            tempYear = String.valueOf(tempYear.charAt(tempYear.length() - 2)) + String.valueOf(tempYear.charAt(tempYear.length() - 1));
+        }
+        else
+        {
+            tempYear = "0" + tempYear;
+        }
+        
+        tempYear = String.valueOf(prefix) + tempYear;
+        
+        EntityManager em = getEntityManager();
+        
+        String lastID = "";
+        //Finds maximum systemID for year and prefix combination
+        try
+        {                 
+            lastID = em.createQuery("SELECT p.systemID FROM Person p WHERE p.systemID LIKE ':year%' ORDER BY p.systemID DESC",String.class).setParameter("year", tempYear).setMaxResults(1).getSingleResult();
+        }
+        catch(NoResultException exception)
+        {
+            return 0;
+        }
+        
+        //Extracts count
+        lastID = lastID.substring(3);
+        
+        try
+        {
+            return Integer.parseInt(lastID);
+        }
+        catch(NumberFormatException ex)
+        {
+            throw ex;
+        }           
+        
     }
     
 }
