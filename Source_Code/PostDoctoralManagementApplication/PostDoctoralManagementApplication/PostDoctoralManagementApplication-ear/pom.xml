@@ -40,7 +40,8 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
+    <dependencies>       
+
         <dependency>
             <groupId>com.softserve</groupId>
             <artifactId>PostDoctoralManagementApplication-ejb</artifactId>

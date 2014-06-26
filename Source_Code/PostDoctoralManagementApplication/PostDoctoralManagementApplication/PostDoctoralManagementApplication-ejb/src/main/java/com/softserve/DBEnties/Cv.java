@@ -36,19 +36,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "cvs")
+@Table(name = "cv")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cvs.findAll", query = "SELECT c FROM Cvs c"),
-    @NamedQuery(name = "Cvs.findByCvID", query = "SELECT c FROM Cvs c WHERE c.cvID = :cvID"),
-    @NamedQuery(name = "Cvs.findByIdNumber", query = "SELECT c FROM Cvs c WHERE c.idNumber = :idNumber"),
-    @NamedQuery(name = "Cvs.findByDateOfBirth", query = "SELECT c FROM Cvs c WHERE c.dateOfBirth = :dateOfBirth"),
-    @NamedQuery(name = "Cvs.findByGender", query = "SELECT c FROM Cvs c WHERE c.gender = :gender"),
-    @NamedQuery(name = "Cvs.findByCitizenship", query = "SELECT c FROM Cvs c WHERE c.citizenship = :citizenship"),
-    @NamedQuery(name = "Cvs.findByNrfRating", query = "SELECT c FROM Cvs c WHERE c.nrfRating = :nrfRating"),
-    @NamedQuery(name = "Cvs.findByRace", query = "SELECT c FROM Cvs c WHERE c.race = :race"),
-    @NamedQuery(name = "Cvs.findByRecentInstitution", query = "SELECT c FROM Cvs c WHERE c.recentInstitution = :recentInstitution")})
-public class Cvs implements Serializable {
+    @NamedQuery(name = "Cv.findAll", query = "SELECT c FROM Cv c"),
+    @NamedQuery(name = "Cv.findByCvID", query = "SELECT c FROM Cv c WHERE c.cvID = :cvID"),
+    @NamedQuery(name = "Cv.findByIdNumber", query = "SELECT c FROM Cv c WHERE c.idNumber = :idNumber"),
+    @NamedQuery(name = "Cv.findByDateOfBirth", query = "SELECT c FROM Cv c WHERE c.dateOfBirth = :dateOfBirth"),
+    @NamedQuery(name = "Cv.findByGender", query = "SELECT c FROM Cv c WHERE c.gender = :gender"),
+    @NamedQuery(name = "Cv.findByCitizenship", query = "SELECT c FROM Cv c WHERE c.citizenship = :citizenship"),
+    @NamedQuery(name = "Cv.findByNrfRating", query = "SELECT c FROM Cv c WHERE c.nrfRating = :nrfRating"),
+    @NamedQuery(name = "Cv.findByRace", query = "SELECT c FROM Cv c WHERE c.race = :race"),
+    @NamedQuery(name = "Cv.findByRecentInstitution", query = "SELECT c FROM Cv c WHERE c.recentInstitution = :recentInstitution")})
+public class Cv implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,22 +92,22 @@ public class Cvs implements Serializable {
     @Size(max = 65535)
     @Column(name = "_additionalInformation")
     private String additionalInformation;
-    @JoinColumn(name = "_ownerID", referencedColumnName = "_systemID")
-    @ManyToOne(optional = false)
-    private Persons ownerID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
     private Collection<Experience> experienceCollection;
+    @JoinColumn(name = "_ownerID", referencedColumnName = "_systemID")
+    @ManyToOne(optional = false)
+    private Person ownerID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
     private Collection<AcademicQualification> academicQualificationCollection;
 
-    public Cvs() {
+    public Cv() {
     }
 
-    public Cvs(Long cvID) {
+    public Cv(Long cvID) {
         this.cvID = cvID;
     }
 
-    public Cvs(Long cvID, String idNumber, Date dateOfBirth) {
+    public Cv(Long cvID, String idNumber, Date dateOfBirth) {
         this.cvID = cvID;
         this.idNumber = idNumber;
         this.dateOfBirth = dateOfBirth;
@@ -201,14 +201,6 @@ public class Cvs implements Serializable {
         this.additionalInformation = additionalInformation;
     }
 
-    public Persons getOwnerID() {
-        return ownerID;
-    }
-
-    public void setOwnerID(Persons ownerID) {
-        this.ownerID = ownerID;
-    }
-
     @XmlTransient
     public Collection<Experience> getExperienceCollection() {
         return experienceCollection;
@@ -216,6 +208,14 @@ public class Cvs implements Serializable {
 
     public void setExperienceCollection(Collection<Experience> experienceCollection) {
         this.experienceCollection = experienceCollection;
+    }
+
+    public Person getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(Person ownerID) {
+        this.ownerID = ownerID;
     }
 
     @XmlTransient
@@ -237,10 +237,10 @@ public class Cvs implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cvs)) {
+        if (!(object instanceof Cv)) {
             return false;
         }
-        Cvs other = (Cvs) object;
+        Cv other = (Cv) object;
         if ((this.cvID == null && other.cvID != null) || (this.cvID != null && !this.cvID.equals(other.cvID))) {
             return false;
         }
@@ -249,7 +249,7 @@ public class Cvs implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Cvs[ cvID=" + cvID + " ]";
+        return "com.softserve.DBEnties.Cv[ cvID=" + cvID + " ]";
     }
     
 }

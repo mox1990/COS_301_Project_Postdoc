@@ -35,14 +35,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "committee_meetings")
+@Table(name = "committee_meeting")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CommitteeMeetings.findAll", query = "SELECT c FROM CommitteeMeetings c"),
-    @NamedQuery(name = "CommitteeMeetings.findByMeetingID", query = "SELECT c FROM CommitteeMeetings c WHERE c.meetingID = :meetingID"),
-    @NamedQuery(name = "CommitteeMeetings.findByStartDate", query = "SELECT c FROM CommitteeMeetings c WHERE c.startDate = :startDate"),
-    @NamedQuery(name = "CommitteeMeetings.findByEndDate", query = "SELECT c FROM CommitteeMeetings c WHERE c.endDate = :endDate")})
-public class CommitteeMeetings implements Serializable {
+    @NamedQuery(name = "CommitteeMeeting.findAll", query = "SELECT c FROM CommitteeMeeting c"),
+    @NamedQuery(name = "CommitteeMeeting.findByMeetingID", query = "SELECT c FROM CommitteeMeeting c WHERE c.meetingID = :meetingID"),
+    @NamedQuery(name = "CommitteeMeeting.findByStartDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.startDate = :startDate"),
+    @NamedQuery(name = "CommitteeMeeting.findByEndDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.endDate = :endDate")})
+public class CommitteeMeeting implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,23 +63,23 @@ public class CommitteeMeetings implements Serializable {
         @JoinColumn(name = "_meetingID", referencedColumnName = "_meetingID")}, inverseJoinColumns = {
         @JoinColumn(name = "_attendeeID", referencedColumnName = "_systemID")})
     @ManyToMany
-    private Collection<Persons> personsCollection;
+    private Collection<Person> personCollection;
     @JoinTable(name = "committee_meetings_applications", joinColumns = {
         @JoinColumn(name = "_meetingID", referencedColumnName = "_meetingID")}, inverseJoinColumns = {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany
-    private Collection<Applications> applicationsCollection;
+    private Collection<Application> applicationCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "meetingID")
     private Collection<MinuteComment> minuteCommentCollection;
 
-    public CommitteeMeetings() {
+    public CommitteeMeeting() {
     }
 
-    public CommitteeMeetings(Long meetingID) {
+    public CommitteeMeeting(Long meetingID) {
         this.meetingID = meetingID;
     }
 
-    public CommitteeMeetings(Long meetingID, Date startDate, Date endDate) {
+    public CommitteeMeeting(Long meetingID, Date startDate, Date endDate) {
         this.meetingID = meetingID;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -110,21 +110,21 @@ public class CommitteeMeetings implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Persons> getPersonsCollection() {
-        return personsCollection;
+    public Collection<Person> getPersonCollection() {
+        return personCollection;
     }
 
-    public void setPersonsCollection(Collection<Persons> personsCollection) {
-        this.personsCollection = personsCollection;
+    public void setPersonCollection(Collection<Person> personCollection) {
+        this.personCollection = personCollection;
     }
 
     @XmlTransient
-    public Collection<Applications> getApplicationsCollection() {
-        return applicationsCollection;
+    public Collection<Application> getApplicationCollection() {
+        return applicationCollection;
     }
 
-    public void setApplicationsCollection(Collection<Applications> applicationsCollection) {
-        this.applicationsCollection = applicationsCollection;
+    public void setApplicationCollection(Collection<Application> applicationCollection) {
+        this.applicationCollection = applicationCollection;
     }
 
     @XmlTransient
@@ -146,10 +146,10 @@ public class CommitteeMeetings implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CommitteeMeetings)) {
+        if (!(object instanceof CommitteeMeeting)) {
             return false;
         }
-        CommitteeMeetings other = (CommitteeMeetings) object;
+        CommitteeMeeting other = (CommitteeMeeting) object;
         if ((this.meetingID == null && other.meetingID != null) || (this.meetingID != null && !this.meetingID.equals(other.meetingID))) {
             return false;
         }
@@ -158,7 +158,7 @@ public class CommitteeMeetings implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.CommitteeMeetings[ meetingID=" + meetingID + " ]";
+        return "com.softserve.DBEnties.CommitteeMeeting[ meetingID=" + meetingID + " ]";
     }
     
 }

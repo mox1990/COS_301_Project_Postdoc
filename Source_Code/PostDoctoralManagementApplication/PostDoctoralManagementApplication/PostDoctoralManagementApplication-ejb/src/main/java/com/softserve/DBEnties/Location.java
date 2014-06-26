@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "locations")
+@Table(name = "location")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Locations.findAll", query = "SELECT l FROM Locations l"),
-    @NamedQuery(name = "Locations.findByLocationID", query = "SELECT l FROM Locations l WHERE l.locationID = :locationID"),
-    @NamedQuery(name = "Locations.findByInstitution", query = "SELECT l FROM Locations l WHERE l.institution = :institution"),
-    @NamedQuery(name = "Locations.findByFaculty", query = "SELECT l FROM Locations l WHERE l.faculty = :faculty"),
-    @NamedQuery(name = "Locations.findByDepartment", query = "SELECT l FROM Locations l WHERE l.department = :department")})
-public class Locations implements Serializable {
+    @NamedQuery(name = "Location.findAll", query = "SELECT l FROM Location l"),
+    @NamedQuery(name = "Location.findByLocationID", query = "SELECT l FROM Location l WHERE l.locationID = :locationID"),
+    @NamedQuery(name = "Location.findByInstitution", query = "SELECT l FROM Location l WHERE l.institution = :institution"),
+    @NamedQuery(name = "Location.findByFaculty", query = "SELECT l FROM Location l WHERE l.faculty = :faculty"),
+    @NamedQuery(name = "Location.findByDepartment", query = "SELECT l FROM Location l WHERE l.department = :department")})
+public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,19 +60,19 @@ public class Locations implements Serializable {
     @Size(min = 1, max = 250)
     @Column(name = "_department")
     private String department;
-    @OneToMany(mappedBy = "locationID")
-    private Collection<Persons> personsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "locationID")
-    private Collection<Applications> applicationsCollection;
+    private Collection<Application> applicationCollection;
+    @OneToMany(mappedBy = "locationID")
+    private Collection<Person> personCollection;
 
-    public Locations() {
+    public Location() {
     }
 
-    public Locations(Long locationID) {
+    public Location(Long locationID) {
         this.locationID = locationID;
     }
 
-    public Locations(Long locationID, String institution, String faculty, String department) {
+    public Location(Long locationID, String institution, String faculty, String department) {
         this.locationID = locationID;
         this.institution = institution;
         this.faculty = faculty;
@@ -112,21 +112,21 @@ public class Locations implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Persons> getPersonsCollection() {
-        return personsCollection;
+    public Collection<Application> getApplicationCollection() {
+        return applicationCollection;
     }
 
-    public void setPersonsCollection(Collection<Persons> personsCollection) {
-        this.personsCollection = personsCollection;
+    public void setApplicationCollection(Collection<Application> applicationCollection) {
+        this.applicationCollection = applicationCollection;
     }
 
     @XmlTransient
-    public Collection<Applications> getApplicationsCollection() {
-        return applicationsCollection;
+    public Collection<Person> getPersonCollection() {
+        return personCollection;
     }
 
-    public void setApplicationsCollection(Collection<Applications> applicationsCollection) {
-        this.applicationsCollection = applicationsCollection;
+    public void setPersonCollection(Collection<Person> personCollection) {
+        this.personCollection = personCollection;
     }
 
     @Override
@@ -139,10 +139,10 @@ public class Locations implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Locations)) {
+        if (!(object instanceof Location)) {
             return false;
         }
-        Locations other = (Locations) object;
+        Location other = (Location) object;
         if ((this.locationID == null && other.locationID != null) || (this.locationID != null && !this.locationID.equals(other.locationID))) {
             return false;
         }
@@ -151,7 +151,7 @@ public class Locations implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Locations[ locationID=" + locationID + " ]";
+        return "com.softserve.DBEnties.Location[ locationID=" + locationID + " ]";
     }
     
 }

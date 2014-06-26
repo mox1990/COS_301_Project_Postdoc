@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "progress_reports")
+@Table(name = "referee_report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ProgressReports.findAll", query = "SELECT p FROM ProgressReports p"),
-    @NamedQuery(name = "ProgressReports.findByReportID", query = "SELECT p FROM ProgressReports p WHERE p.reportID = :reportID"),
-    @NamedQuery(name = "ProgressReports.findByTimestamp", query = "SELECT p FROM ProgressReports p WHERE p.timestamp = :timestamp")})
-public class ProgressReports implements Serializable {
+    @NamedQuery(name = "RefereeReport.findAll", query = "SELECT r FROM RefereeReport r"),
+    @NamedQuery(name = "RefereeReport.findByReportID", query = "SELECT r FROM RefereeReport r WHERE r.reportID = :reportID"),
+    @NamedQuery(name = "RefereeReport.findByTimestamp", query = "SELECT r FROM RefereeReport r WHERE r.timestamp = :timestamp")})
+public class RefereeReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,16 +58,19 @@ public class ProgressReports implements Serializable {
     private String content;
     @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
-    private Applications applicationID;
+    private Application applicationID;
+    @JoinColumn(name = "_refereeID", referencedColumnName = "_systemID")
+    @ManyToOne(optional = false)
+    private Person refereeID;
 
-    public ProgressReports() {
+    public RefereeReport() {
     }
 
-    public ProgressReports(Long reportID) {
+    public RefereeReport(Long reportID) {
         this.reportID = reportID;
     }
 
-    public ProgressReports(Long reportID, Date timestamp, String content) {
+    public RefereeReport(Long reportID, Date timestamp, String content) {
         this.reportID = reportID;
         this.timestamp = timestamp;
         this.content = content;
@@ -97,12 +100,20 @@ public class ProgressReports implements Serializable {
         this.content = content;
     }
 
-    public Applications getApplicationID() {
+    public Application getApplicationID() {
         return applicationID;
     }
 
-    public void setApplicationID(Applications applicationID) {
+    public void setApplicationID(Application applicationID) {
         this.applicationID = applicationID;
+    }
+
+    public Person getRefereeID() {
+        return refereeID;
+    }
+
+    public void setRefereeID(Person refereeID) {
+        this.refereeID = refereeID;
     }
 
     @Override
@@ -115,10 +126,10 @@ public class ProgressReports implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProgressReports)) {
+        if (!(object instanceof RefereeReport)) {
             return false;
         }
-        ProgressReports other = (ProgressReports) object;
+        RefereeReport other = (RefereeReport) object;
         if ((this.reportID == null && other.reportID != null) || (this.reportID != null && !this.reportID.equals(other.reportID))) {
             return false;
         }
@@ -127,7 +138,7 @@ public class ProgressReports implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.ProgressReports[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEnties.RefereeReport[ reportID=" + reportID + " ]";
     }
     
 }

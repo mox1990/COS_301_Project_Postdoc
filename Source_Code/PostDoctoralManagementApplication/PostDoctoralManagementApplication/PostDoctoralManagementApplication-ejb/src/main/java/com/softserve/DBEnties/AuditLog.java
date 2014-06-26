@@ -57,7 +57,7 @@ public class AuditLog implements Serializable {
     private String action;
     @JoinColumn(name = "_personID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons personID;
+    private Person personID;
 
     public AuditLog() {
     }
@@ -96,11 +96,11 @@ public class AuditLog implements Serializable {
         this.action = action;
     }
 
-    public Persons getPersonID() {
+    public Person getPersonID() {
         return personID;
     }
 
-    public void setPersonID(Persons personID) {
+    public void setPersonID(Person personID) {
         this.personID = personID;
     }
 

@@ -33,14 +33,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "endorsements")
+@Table(name = "endorsement")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Endorsements.findAll", query = "SELECT e FROM Endorsements e"),
-    @NamedQuery(name = "Endorsements.findByEndorsementID", query = "SELECT e FROM Endorsements e WHERE e.endorsementID = :endorsementID"),
-    @NamedQuery(name = "Endorsements.findByTimestamp", query = "SELECT e FROM Endorsements e WHERE e.timestamp = :timestamp"),
-    @NamedQuery(name = "Endorsements.findByRank", query = "SELECT e FROM Endorsements e WHERE e.rank = :rank")})
-public class Endorsements implements Serializable {
+    @NamedQuery(name = "Endorsement.findAll", query = "SELECT e FROM Endorsement e"),
+    @NamedQuery(name = "Endorsement.findByEndorsementID", query = "SELECT e FROM Endorsement e WHERE e.endorsementID = :endorsementID"),
+    @NamedQuery(name = "Endorsement.findByTimestamp", query = "SELECT e FROM Endorsement e WHERE e.timestamp = :timestamp"),
+    @NamedQuery(name = "Endorsement.findByRank", query = "SELECT e FROM Endorsement e WHERE e.rank = :rank")})
+public class Endorsement implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -64,18 +64,18 @@ public class Endorsements implements Serializable {
     private String motivation;
     @JoinColumn(name = "_deanID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons deanID;
+    private Person deanID;
     @OneToMany(mappedBy = "endorsementID")
-    private Collection<Applications> applicationsCollection;
+    private Collection<Application> applicationCollection;
 
-    public Endorsements() {
+    public Endorsement() {
     }
 
-    public Endorsements(Long endorsementID) {
+    public Endorsement(Long endorsementID) {
         this.endorsementID = endorsementID;
     }
 
-    public Endorsements(Long endorsementID, Date timestamp, int rank, String motivation) {
+    public Endorsement(Long endorsementID, Date timestamp, int rank, String motivation) {
         this.endorsementID = endorsementID;
         this.timestamp = timestamp;
         this.rank = rank;
@@ -114,21 +114,21 @@ public class Endorsements implements Serializable {
         this.motivation = motivation;
     }
 
-    public Persons getDeanID() {
+    public Person getDeanID() {
         return deanID;
     }
 
-    public void setDeanID(Persons deanID) {
+    public void setDeanID(Person deanID) {
         this.deanID = deanID;
     }
 
     @XmlTransient
-    public Collection<Applications> getApplicationsCollection() {
-        return applicationsCollection;
+    public Collection<Application> getApplicationCollection() {
+        return applicationCollection;
     }
 
-    public void setApplicationsCollection(Collection<Applications> applicationsCollection) {
-        this.applicationsCollection = applicationsCollection;
+    public void setApplicationCollection(Collection<Application> applicationCollection) {
+        this.applicationCollection = applicationCollection;
     }
 
     @Override
@@ -141,10 +141,10 @@ public class Endorsements implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Endorsements)) {
+        if (!(object instanceof Endorsement)) {
             return false;
         }
-        Endorsements other = (Endorsements) object;
+        Endorsement other = (Endorsement) object;
         if ((this.endorsementID == null && other.endorsementID != null) || (this.endorsementID != null && !this.endorsementID.equals(other.endorsementID))) {
             return false;
         }
@@ -153,7 +153,7 @@ public class Endorsements implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Endorsements[ endorsementID=" + endorsementID + " ]";
+        return "com.softserve.DBEnties.Endorsement[ endorsementID=" + endorsementID + " ]";
     }
     
 }

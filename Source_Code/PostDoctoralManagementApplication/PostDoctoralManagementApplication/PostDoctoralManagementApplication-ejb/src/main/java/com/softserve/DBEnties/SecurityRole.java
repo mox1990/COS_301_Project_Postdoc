@@ -29,14 +29,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "security_roles")
+@Table(name = "security_role")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SecurityRoles.findAll", query = "SELECT s FROM SecurityRoles s"),
-    @NamedQuery(name = "SecurityRoles.findByRoleID", query = "SELECT s FROM SecurityRoles s WHERE s.roleID = :roleID"),
-    @NamedQuery(name = "SecurityRoles.findByName", query = "SELECT s FROM SecurityRoles s WHERE s.name = :name"),
-    @NamedQuery(name = "SecurityRoles.findByRoleMask", query = "SELECT s FROM SecurityRoles s WHERE s.roleMask = :roleMask")})
-public class SecurityRoles implements Serializable {
+    @NamedQuery(name = "SecurityRole.findAll", query = "SELECT s FROM SecurityRole s"),
+    @NamedQuery(name = "SecurityRole.findByRoleID", query = "SELECT s FROM SecurityRole s WHERE s.roleID = :roleID"),
+    @NamedQuery(name = "SecurityRole.findByName", query = "SELECT s FROM SecurityRole s WHERE s.name = :name"),
+    @NamedQuery(name = "SecurityRole.findByRoleMask", query = "SELECT s FROM SecurityRole s WHERE s.roleMask = :roleMask")})
+public class SecurityRole implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,17 +52,17 @@ public class SecurityRoles implements Serializable {
     @NotNull
     @Column(name = "_roleMask")
     private long roleMask;
-    @ManyToMany(mappedBy = "securityRolesCollection")
-    private Collection<Persons> personsCollection;
+    @ManyToMany(mappedBy = "securityRoleCollection")
+    private Collection<Person> personCollection;
 
-    public SecurityRoles() {
+    public SecurityRole() {
     }
 
-    public SecurityRoles(Long roleID) {
+    public SecurityRole(Long roleID) {
         this.roleID = roleID;
     }
 
-    public SecurityRoles(Long roleID, String name, long roleMask) {
+    public SecurityRole(Long roleID, String name, long roleMask) {
         this.roleID = roleID;
         this.name = name;
         this.roleMask = roleMask;
@@ -93,12 +93,12 @@ public class SecurityRoles implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Persons> getPersonsCollection() {
-        return personsCollection;
+    public Collection<Person> getPersonCollection() {
+        return personCollection;
     }
 
-    public void setPersonsCollection(Collection<Persons> personsCollection) {
-        this.personsCollection = personsCollection;
+    public void setPersonCollection(Collection<Person> personCollection) {
+        this.personCollection = personCollection;
     }
 
     @Override
@@ -111,10 +111,10 @@ public class SecurityRoles implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SecurityRoles)) {
+        if (!(object instanceof SecurityRole)) {
             return false;
         }
-        SecurityRoles other = (SecurityRoles) object;
+        SecurityRole other = (SecurityRole) object;
         if ((this.roleID == null && other.roleID != null) || (this.roleID != null && !this.roleID.equals(other.roleID))) {
             return false;
         }
@@ -123,7 +123,7 @@ public class SecurityRoles implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.SecurityRoles[ roleID=" + roleID + " ]";
+        return "com.softserve.DBEnties.SecurityRole[ roleID=" + roleID + " ]";
     }
     
 }

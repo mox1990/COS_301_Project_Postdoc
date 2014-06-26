@@ -32,14 +32,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "notifications")
+@Table(name = "notification")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Notifications.findAll", query = "SELECT n FROM Notifications n"),
-    @NamedQuery(name = "Notifications.findByNotificationID", query = "SELECT n FROM Notifications n WHERE n.notificationID = :notificationID"),
-    @NamedQuery(name = "Notifications.findBySubject", query = "SELECT n FROM Notifications n WHERE n.subject = :subject"),
-    @NamedQuery(name = "Notifications.findByTimestamp", query = "SELECT n FROM Notifications n WHERE n.timestamp = :timestamp")})
-public class Notifications implements Serializable {
+    @NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n"),
+    @NamedQuery(name = "Notification.findByNotificationID", query = "SELECT n FROM Notification n WHERE n.notificationID = :notificationID"),
+    @NamedQuery(name = "Notification.findBySubject", query = "SELECT n FROM Notification n WHERE n.subject = :subject"),
+    @NamedQuery(name = "Notification.findByTimestamp", query = "SELECT n FROM Notification n WHERE n.timestamp = :timestamp")})
+public class Notification implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,19 +60,19 @@ public class Notifications implements Serializable {
     private Date timestamp;
     @JoinColumn(name = "_senderID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons senderID;
+    private Person senderID;
     @JoinColumn(name = "_recieverID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons recieverID;
+    private Person recieverID;
 
-    public Notifications() {
+    public Notification() {
     }
 
-    public Notifications(Long notificationID) {
+    public Notification(Long notificationID) {
         this.notificationID = notificationID;
     }
 
-    public Notifications(Long notificationID, Date timestamp) {
+    public Notification(Long notificationID, Date timestamp) {
         this.notificationID = notificationID;
         this.timestamp = timestamp;
     }
@@ -109,19 +109,19 @@ public class Notifications implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Persons getSenderID() {
+    public Person getSenderID() {
         return senderID;
     }
 
-    public void setSenderID(Persons senderID) {
+    public void setSenderID(Person senderID) {
         this.senderID = senderID;
     }
 
-    public Persons getRecieverID() {
+    public Person getRecieverID() {
         return recieverID;
     }
 
-    public void setRecieverID(Persons recieverID) {
+    public void setRecieverID(Person recieverID) {
         this.recieverID = recieverID;
     }
 
@@ -135,10 +135,10 @@ public class Notifications implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notifications)) {
+        if (!(object instanceof Notification)) {
             return false;
         }
-        Notifications other = (Notifications) object;
+        Notification other = (Notification) object;
         if ((this.notificationID == null && other.notificationID != null) || (this.notificationID != null && !this.notificationID.equals(other.notificationID))) {
             return false;
         }
@@ -147,7 +147,7 @@ public class Notifications implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Notifications[ notificationID=" + notificationID + " ]";
+        return "com.softserve.DBEnties.Notification[ notificationID=" + notificationID + " ]";
     }
     
 }

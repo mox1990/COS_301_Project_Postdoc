@@ -31,19 +31,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "funding_reports")
+@Table(name = "funding_report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "FundingReports.findAll", query = "SELECT f FROM FundingReports f"),
-    @NamedQuery(name = "FundingReports.findByReportID", query = "SELECT f FROM FundingReports f WHERE f.reportID = :reportID"),
-    @NamedQuery(name = "FundingReports.findByTimestamp", query = "SELECT f FROM FundingReports f WHERE f.timestamp = :timestamp"),
-    @NamedQuery(name = "FundingReports.findByFellowshipCost", query = "SELECT f FROM FundingReports f WHERE f.fellowshipCost = :fellowshipCost"),
-    @NamedQuery(name = "FundingReports.findByTravelCost", query = "SELECT f FROM FundingReports f WHERE f.travelCost = :travelCost"),
-    @NamedQuery(name = "FundingReports.findByRunningCost", query = "SELECT f FROM FundingReports f WHERE f.runningCost = :runningCost"),
-    @NamedQuery(name = "FundingReports.findByOperatingCost", query = "SELECT f FROM FundingReports f WHERE f.operatingCost = :operatingCost"),
-    @NamedQuery(name = "FundingReports.findByEquipmentCost", query = "SELECT f FROM FundingReports f WHERE f.equipmentCost = :equipmentCost"),
-    @NamedQuery(name = "FundingReports.findByConferenceCost", query = "SELECT f FROM FundingReports f WHERE f.conferenceCost = :conferenceCost")})
-public class FundingReports implements Serializable {
+    @NamedQuery(name = "FundingReport.findAll", query = "SELECT f FROM FundingReport f"),
+    @NamedQuery(name = "FundingReport.findByReportID", query = "SELECT f FROM FundingReport f WHERE f.reportID = :reportID"),
+    @NamedQuery(name = "FundingReport.findByTimestamp", query = "SELECT f FROM FundingReport f WHERE f.timestamp = :timestamp"),
+    @NamedQuery(name = "FundingReport.findByFellowshipCost", query = "SELECT f FROM FundingReport f WHERE f.fellowshipCost = :fellowshipCost"),
+    @NamedQuery(name = "FundingReport.findByTravelCost", query = "SELECT f FROM FundingReport f WHERE f.travelCost = :travelCost"),
+    @NamedQuery(name = "FundingReport.findByRunningCost", query = "SELECT f FROM FundingReport f WHERE f.runningCost = :runningCost"),
+    @NamedQuery(name = "FundingReport.findByOperatingCost", query = "SELECT f FROM FundingReport f WHERE f.operatingCost = :operatingCost"),
+    @NamedQuery(name = "FundingReport.findByEquipmentCost", query = "SELECT f FROM FundingReport f WHERE f.equipmentCost = :equipmentCost"),
+    @NamedQuery(name = "FundingReport.findByConferenceCost", query = "SELECT f FROM FundingReport f WHERE f.conferenceCost = :conferenceCost")})
+public class FundingReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -70,18 +70,18 @@ public class FundingReports implements Serializable {
     private Float conferenceCost;
     @JoinColumn(name = "_drisID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons drisID;
+    private Person drisID;
     @OneToMany(mappedBy = "fundingReportID")
-    private Collection<Applications> applicationsCollection;
+    private Collection<Application> applicationCollection;
 
-    public FundingReports() {
+    public FundingReport() {
     }
 
-    public FundingReports(Long reportID) {
+    public FundingReport(Long reportID) {
         this.reportID = reportID;
     }
 
-    public FundingReports(Long reportID, Date timestamp) {
+    public FundingReport(Long reportID, Date timestamp) {
         this.reportID = reportID;
         this.timestamp = timestamp;
     }
@@ -150,21 +150,21 @@ public class FundingReports implements Serializable {
         this.conferenceCost = conferenceCost;
     }
 
-    public Persons getDrisID() {
+    public Person getDrisID() {
         return drisID;
     }
 
-    public void setDrisID(Persons drisID) {
+    public void setDrisID(Person drisID) {
         this.drisID = drisID;
     }
 
     @XmlTransient
-    public Collection<Applications> getApplicationsCollection() {
-        return applicationsCollection;
+    public Collection<Application> getApplicationCollection() {
+        return applicationCollection;
     }
 
-    public void setApplicationsCollection(Collection<Applications> applicationsCollection) {
-        this.applicationsCollection = applicationsCollection;
+    public void setApplicationCollection(Collection<Application> applicationCollection) {
+        this.applicationCollection = applicationCollection;
     }
 
     @Override
@@ -177,10 +177,10 @@ public class FundingReports implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof FundingReports)) {
+        if (!(object instanceof FundingReport)) {
             return false;
         }
-        FundingReports other = (FundingReports) object;
+        FundingReport other = (FundingReport) object;
         if ((this.reportID == null && other.reportID != null) || (this.reportID != null && !this.reportID.equals(other.reportID))) {
             return false;
         }
@@ -189,7 +189,7 @@ public class FundingReports implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.FundingReports[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEnties.FundingReport[ reportID=" + reportID + " ]";
     }
     
 }

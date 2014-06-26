@@ -28,19 +28,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "addressess")
+@Table(name = "address")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Addressess.findAll", query = "SELECT a FROM Addressess a"),
-    @NamedQuery(name = "Addressess.findByAddressID", query = "SELECT a FROM Addressess a WHERE a.addressID = :addressID"),
-    @NamedQuery(name = "Addressess.findByCountry", query = "SELECT a FROM Addressess a WHERE a.country = :country"),
-    @NamedQuery(name = "Addressess.findByProvince", query = "SELECT a FROM Addressess a WHERE a.province = :province"),
-    @NamedQuery(name = "Addressess.findByTownCity", query = "SELECT a FROM Addressess a WHERE a.townCity = :townCity"),
-    @NamedQuery(name = "Addressess.findByStreet", query = "SELECT a FROM Addressess a WHERE a.street = :street"),
-    @NamedQuery(name = "Addressess.findByStreeNumber", query = "SELECT a FROM Addressess a WHERE a.streeNumber = :streeNumber"),
-    @NamedQuery(name = "Addressess.findByRoomNumber", query = "SELECT a FROM Addressess a WHERE a.roomNumber = :roomNumber"),
-    @NamedQuery(name = "Addressess.findByZippostalCode", query = "SELECT a FROM Addressess a WHERE a.zippostalCode = :zippostalCode")})
-public class Addressess implements Serializable {
+    @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a"),
+    @NamedQuery(name = "Address.findByAddressID", query = "SELECT a FROM Address a WHERE a.addressID = :addressID"),
+    @NamedQuery(name = "Address.findByCountry", query = "SELECT a FROM Address a WHERE a.country = :country"),
+    @NamedQuery(name = "Address.findByProvince", query = "SELECT a FROM Address a WHERE a.province = :province"),
+    @NamedQuery(name = "Address.findByTownCity", query = "SELECT a FROM Address a WHERE a.townCity = :townCity"),
+    @NamedQuery(name = "Address.findByStreet", query = "SELECT a FROM Address a WHERE a.street = :street"),
+    @NamedQuery(name = "Address.findByStreeNumber", query = "SELECT a FROM Address a WHERE a.streeNumber = :streeNumber"),
+    @NamedQuery(name = "Address.findByRoomNumber", query = "SELECT a FROM Address a WHERE a.roomNumber = :roomNumber"),
+    @NamedQuery(name = "Address.findByZippostalCode", query = "SELECT a FROM Address a WHERE a.zippostalCode = :zippostalCode")})
+public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -70,12 +70,12 @@ public class Addressess implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "physicalAddress")
     private Collection<UpEmployeeInformation> upEmployeeInformationCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "addressLine1")
-    private Collection<Persons> personsCollection;
+    private Collection<Person> personCollection;
 
-    public Addressess() {
+    public Address() {
     }
 
-    public Addressess(Long addressID) {
+    public Address(Long addressID) {
         this.addressID = addressID;
     }
 
@@ -153,12 +153,12 @@ public class Addressess implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Persons> getPersonsCollection() {
-        return personsCollection;
+    public Collection<Person> getPersonCollection() {
+        return personCollection;
     }
 
-    public void setPersonsCollection(Collection<Persons> personsCollection) {
-        this.personsCollection = personsCollection;
+    public void setPersonCollection(Collection<Person> personCollection) {
+        this.personCollection = personCollection;
     }
 
     @Override
@@ -171,10 +171,10 @@ public class Addressess implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Addressess)) {
+        if (!(object instanceof Address)) {
             return false;
         }
-        Addressess other = (Addressess) object;
+        Address other = (Address) object;
         if ((this.addressID == null && other.addressID != null) || (this.addressID != null && !this.addressID.equals(other.addressID))) {
             return false;
         }
@@ -183,7 +183,7 @@ public class Addressess implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Addressess[ addressID=" + addressID + " ]";
+        return "com.softserve.DBEnties.Address[ addressID=" + addressID + " ]";
     }
     
 }

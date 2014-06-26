@@ -33,22 +33,22 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "persons")
+@Table(name = "person")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Persons.findAll", query = "SELECT p FROM Persons p"),
-    @NamedQuery(name = "Persons.findBySystemID", query = "SELECT p FROM Persons p WHERE p.systemID = :systemID"),
-    @NamedQuery(name = "Persons.findByPassword", query = "SELECT p FROM Persons p WHERE p.password = :password"),
-    @NamedQuery(name = "Persons.findByTitle", query = "SELECT p FROM Persons p WHERE p.title = :title"),
-    @NamedQuery(name = "Persons.findByFullName", query = "SELECT p FROM Persons p WHERE p.fullName = :fullName"),
-    @NamedQuery(name = "Persons.findBySurname", query = "SELECT p FROM Persons p WHERE p.surname = :surname"),
-    @NamedQuery(name = "Persons.findByEmail", query = "SELECT p FROM Persons p WHERE p.email = :email"),
-    @NamedQuery(name = "Persons.findByTelephoneNumber", query = "SELECT p FROM Persons p WHERE p.telephoneNumber = :telephoneNumber"),
-    @NamedQuery(name = "Persons.findByWorkNumber", query = "SELECT p FROM Persons p WHERE p.workNumber = :workNumber"),
-    @NamedQuery(name = "Persons.findByFaxNumber", query = "SELECT p FROM Persons p WHERE p.faxNumber = :faxNumber"),
-    @NamedQuery(name = "Persons.findByCellphoneNumber", query = "SELECT p FROM Persons p WHERE p.cellphoneNumber = :cellphoneNumber"),
-    @NamedQuery(name = "Persons.findByUpEmployee", query = "SELECT p FROM Persons p WHERE p.upEmployee = :upEmployee")})
-public class Persons implements Serializable {
+    @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
+    @NamedQuery(name = "Person.findBySystemID", query = "SELECT p FROM Person p WHERE p.systemID = :systemID"),
+    @NamedQuery(name = "Person.findByPassword", query = "SELECT p FROM Person p WHERE p.password = :password"),
+    @NamedQuery(name = "Person.findByTitle", query = "SELECT p FROM Person p WHERE p.title = :title"),
+    @NamedQuery(name = "Person.findByFullName", query = "SELECT p FROM Person p WHERE p.fullName = :fullName"),
+    @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.surname = :surname"),
+    @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
+    @NamedQuery(name = "Person.findByTelephoneNumber", query = "SELECT p FROM Person p WHERE p.telephoneNumber = :telephoneNumber"),
+    @NamedQuery(name = "Person.findByWorkNumber", query = "SELECT p FROM Person p WHERE p.workNumber = :workNumber"),
+    @NamedQuery(name = "Person.findByFaxNumber", query = "SELECT p FROM Person p WHERE p.faxNumber = :faxNumber"),
+    @NamedQuery(name = "Person.findByCellphoneNumber", query = "SELECT p FROM Person p WHERE p.cellphoneNumber = :cellphoneNumber"),
+    @NamedQuery(name = "Person.findByUpEmployee", query = "SELECT p FROM Person p WHERE p.upEmployee = :upEmployee")})
+public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -98,52 +98,52 @@ public class Persons implements Serializable {
     @NotNull
     @Column(name = "_upEmployee")
     private boolean upEmployee;
-    @ManyToMany(mappedBy = "personsCollection")
-    private Collection<CommitteeMeetings> committeeMeetingsCollection;
+    @ManyToMany(mappedBy = "personCollection")
+    private Collection<CommitteeMeeting> committeeMeetingCollection;
     @JoinTable(name = "person_security_role", joinColumns = {
         @JoinColumn(name = "_personID", referencedColumnName = "_systemID")}, inverseJoinColumns = {
         @JoinColumn(name = "_roleID", referencedColumnName = "_roleID")})
     @ManyToMany
-    private Collection<SecurityRoles> securityRolesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerID")
-    private Collection<Cvs> cvsCollection;
+    private Collection<SecurityRole> securityRoleCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personID")
     private Collection<AuditLog> auditLogCollection;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "persons")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deanID")
+    private Collection<Endorsement> endorsementCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private UpEmployeeInformation upEmployeeInformation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hodID")
     private Collection<RecommendationReport> recommendationReportCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "refereeID")
+    private Collection<RefereeReport> refereeReportCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "drisID")
-    private Collection<FundingReports> fundingReportsCollection;
+    private Collection<FundingReport> fundingReportCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "senderID")
+    private Collection<Notification> notificationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recieverID")
+    private Collection<Notification> notificationCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerID")
+    private Collection<Cv> cvCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
+    private Collection<Application> applicationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
+    private Collection<Application> applicationCollection1;
     @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
     @ManyToOne
-    private Locations locationID;
+    private Location locationID;
     @JoinColumn(name = "_addressLine1", referencedColumnName = "_addressID")
     @ManyToOne(optional = false)
-    private Addressess addressLine1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deanID")
-    private Collection<Endorsements> endorsementsCollection;
+    private Address addressLine1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendeeID")
     private Collection<MinuteComment> minuteCommentCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "senderID")
-    private Collection<Notifications> notificationsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recieverID")
-    private Collection<Notifications> notificationsCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
-    private Collection<Applications> applicationsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
-    private Collection<Applications> applicationsCollection1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "refereeID")
-    private Collection<RefereeReports> refereeReportsCollection;
 
-    public Persons() {
+    public Person() {
     }
 
-    public Persons(String systemID) {
+    public Person(String systemID) {
         this.systemID = systemID;
     }
 
-    public Persons(String systemID, String password, String title, String fullName, String surname, String email, boolean upEmployee) {
+    public Person(String systemID, String password, String title, String fullName, String surname, String email, boolean upEmployee) {
         this.systemID = systemID;
         this.password = password;
         this.title = title;
@@ -242,30 +242,21 @@ public class Persons implements Serializable {
     }
 
     @XmlTransient
-    public Collection<CommitteeMeetings> getCommitteeMeetingsCollection() {
-        return committeeMeetingsCollection;
+    public Collection<CommitteeMeeting> getCommitteeMeetingCollection() {
+        return committeeMeetingCollection;
     }
 
-    public void setCommitteeMeetingsCollection(Collection<CommitteeMeetings> committeeMeetingsCollection) {
-        this.committeeMeetingsCollection = committeeMeetingsCollection;
-    }
-
-    @XmlTransient
-    public Collection<SecurityRoles> getSecurityRolesCollection() {
-        return securityRolesCollection;
-    }
-
-    public void setSecurityRolesCollection(Collection<SecurityRoles> securityRolesCollection) {
-        this.securityRolesCollection = securityRolesCollection;
+    public void setCommitteeMeetingCollection(Collection<CommitteeMeeting> committeeMeetingCollection) {
+        this.committeeMeetingCollection = committeeMeetingCollection;
     }
 
     @XmlTransient
-    public Collection<Cvs> getCvsCollection() {
-        return cvsCollection;
+    public Collection<SecurityRole> getSecurityRoleCollection() {
+        return securityRoleCollection;
     }
 
-    public void setCvsCollection(Collection<Cvs> cvsCollection) {
-        this.cvsCollection = cvsCollection;
+    public void setSecurityRoleCollection(Collection<SecurityRole> securityRoleCollection) {
+        this.securityRoleCollection = securityRoleCollection;
     }
 
     @XmlTransient
@@ -275,6 +266,15 @@ public class Persons implements Serializable {
 
     public void setAuditLogCollection(Collection<AuditLog> auditLogCollection) {
         this.auditLogCollection = auditLogCollection;
+    }
+
+    @XmlTransient
+    public Collection<Endorsement> getEndorsementCollection() {
+        return endorsementCollection;
+    }
+
+    public void setEndorsementCollection(Collection<Endorsement> endorsementCollection) {
+        this.endorsementCollection = endorsementCollection;
     }
 
     public UpEmployeeInformation getUpEmployeeInformation() {
@@ -295,37 +295,82 @@ public class Persons implements Serializable {
     }
 
     @XmlTransient
-    public Collection<FundingReports> getFundingReportsCollection() {
-        return fundingReportsCollection;
+    public Collection<RefereeReport> getRefereeReportCollection() {
+        return refereeReportCollection;
     }
 
-    public void setFundingReportsCollection(Collection<FundingReports> fundingReportsCollection) {
-        this.fundingReportsCollection = fundingReportsCollection;
-    }
-
-    public Locations getLocationID() {
-        return locationID;
-    }
-
-    public void setLocationID(Locations locationID) {
-        this.locationID = locationID;
-    }
-
-    public Addressess getAddressLine1() {
-        return addressLine1;
-    }
-
-    public void setAddressLine1(Addressess addressLine1) {
-        this.addressLine1 = addressLine1;
+    public void setRefereeReportCollection(Collection<RefereeReport> refereeReportCollection) {
+        this.refereeReportCollection = refereeReportCollection;
     }
 
     @XmlTransient
-    public Collection<Endorsements> getEndorsementsCollection() {
-        return endorsementsCollection;
+    public Collection<FundingReport> getFundingReportCollection() {
+        return fundingReportCollection;
     }
 
-    public void setEndorsementsCollection(Collection<Endorsements> endorsementsCollection) {
-        this.endorsementsCollection = endorsementsCollection;
+    public void setFundingReportCollection(Collection<FundingReport> fundingReportCollection) {
+        this.fundingReportCollection = fundingReportCollection;
+    }
+
+    @XmlTransient
+    public Collection<Notification> getNotificationCollection() {
+        return notificationCollection;
+    }
+
+    public void setNotificationCollection(Collection<Notification> notificationCollection) {
+        this.notificationCollection = notificationCollection;
+    }
+
+    @XmlTransient
+    public Collection<Notification> getNotificationCollection1() {
+        return notificationCollection1;
+    }
+
+    public void setNotificationCollection1(Collection<Notification> notificationCollection1) {
+        this.notificationCollection1 = notificationCollection1;
+    }
+
+    @XmlTransient
+    public Collection<Cv> getCvCollection() {
+        return cvCollection;
+    }
+
+    public void setCvCollection(Collection<Cv> cvCollection) {
+        this.cvCollection = cvCollection;
+    }
+
+    @XmlTransient
+    public Collection<Application> getApplicationCollection() {
+        return applicationCollection;
+    }
+
+    public void setApplicationCollection(Collection<Application> applicationCollection) {
+        this.applicationCollection = applicationCollection;
+    }
+
+    @XmlTransient
+    public Collection<Application> getApplicationCollection1() {
+        return applicationCollection1;
+    }
+
+    public void setApplicationCollection1(Collection<Application> applicationCollection1) {
+        this.applicationCollection1 = applicationCollection1;
+    }
+
+    public Location getLocationID() {
+        return locationID;
+    }
+
+    public void setLocationID(Location locationID) {
+        this.locationID = locationID;
+    }
+
+    public Address getAddressLine1() {
+        return addressLine1;
+    }
+
+    public void setAddressLine1(Address addressLine1) {
+        this.addressLine1 = addressLine1;
     }
 
     @XmlTransient
@@ -335,51 +380,6 @@ public class Persons implements Serializable {
 
     public void setMinuteCommentCollection(Collection<MinuteComment> minuteCommentCollection) {
         this.minuteCommentCollection = minuteCommentCollection;
-    }
-
-    @XmlTransient
-    public Collection<Notifications> getNotificationsCollection() {
-        return notificationsCollection;
-    }
-
-    public void setNotificationsCollection(Collection<Notifications> notificationsCollection) {
-        this.notificationsCollection = notificationsCollection;
-    }
-
-    @XmlTransient
-    public Collection<Notifications> getNotificationsCollection1() {
-        return notificationsCollection1;
-    }
-
-    public void setNotificationsCollection1(Collection<Notifications> notificationsCollection1) {
-        this.notificationsCollection1 = notificationsCollection1;
-    }
-
-    @XmlTransient
-    public Collection<Applications> getApplicationsCollection() {
-        return applicationsCollection;
-    }
-
-    public void setApplicationsCollection(Collection<Applications> applicationsCollection) {
-        this.applicationsCollection = applicationsCollection;
-    }
-
-    @XmlTransient
-    public Collection<Applications> getApplicationsCollection1() {
-        return applicationsCollection1;
-    }
-
-    public void setApplicationsCollection1(Collection<Applications> applicationsCollection1) {
-        this.applicationsCollection1 = applicationsCollection1;
-    }
-
-    @XmlTransient
-    public Collection<RefereeReports> getRefereeReportsCollection() {
-        return refereeReportsCollection;
-    }
-
-    public void setRefereeReportsCollection(Collection<RefereeReports> refereeReportsCollection) {
-        this.refereeReportsCollection = refereeReportsCollection;
     }
 
     @Override
@@ -392,10 +392,10 @@ public class Persons implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Persons)) {
+        if (!(object instanceof Person)) {
             return false;
         }
-        Persons other = (Persons) object;
+        Person other = (Person) object;
         if ((this.systemID == null && other.systemID != null) || (this.systemID != null && !this.systemID.equals(other.systemID))) {
             return false;
         }
@@ -404,7 +404,7 @@ public class Persons implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Persons[ systemID=" + systemID + " ]";
+        return "com.softserve.DBEnties.Person[ systemID=" + systemID + " ]";
     }
     
 }

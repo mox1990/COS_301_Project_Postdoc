@@ -37,19 +37,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "applications")
+@Table(name = "application")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Applications.findAll", query = "SELECT a FROM Applications a"),
-    @NamedQuery(name = "Applications.findByApplicationID", query = "SELECT a FROM Applications a WHERE a.applicationID = :applicationID"),
-    @NamedQuery(name = "Applications.findByType", query = "SELECT a FROM Applications a WHERE a.type = :type"),
-    @NamedQuery(name = "Applications.findByStatus", query = "SELECT a FROM Applications a WHERE a.status = :status"),
-    @NamedQuery(name = "Applications.findByTimestamp", query = "SELECT a FROM Applications a WHERE a.timestamp = :timestamp"),
-    @NamedQuery(name = "Applications.findByAwardDate", query = "SELECT a FROM Applications a WHERE a.awardDate = :awardDate"),
-    @NamedQuery(name = "Applications.findByStartDate", query = "SELECT a FROM Applications a WHERE a.startDate = :startDate"),
-    @NamedQuery(name = "Applications.findByEndDate", query = "SELECT a FROM Applications a WHERE a.endDate = :endDate"),
-    @NamedQuery(name = "Applications.findByProjectTitle", query = "SELECT a FROM Applications a WHERE a.projectTitle = :projectTitle")})
-public class Applications implements Serializable {
+    @NamedQuery(name = "Application.findAll", query = "SELECT a FROM Application a"),
+    @NamedQuery(name = "Application.findByApplicationID", query = "SELECT a FROM Application a WHERE a.applicationID = :applicationID"),
+    @NamedQuery(name = "Application.findByType", query = "SELECT a FROM Application a WHERE a.type = :type"),
+    @NamedQuery(name = "Application.findByStatus", query = "SELECT a FROM Application a WHERE a.status = :status"),
+    @NamedQuery(name = "Application.findByTimestamp", query = "SELECT a FROM Application a WHERE a.timestamp = :timestamp"),
+    @NamedQuery(name = "Application.findByAwardDate", query = "SELECT a FROM Application a WHERE a.awardDate = :awardDate"),
+    @NamedQuery(name = "Application.findByStartDate", query = "SELECT a FROM Application a WHERE a.startDate = :startDate"),
+    @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
+    @NamedQuery(name = "Application.findByProjectTitle", query = "SELECT a FROM Application a WHERE a.projectTitle = :projectTitle")})
+public class Application implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,36 +83,36 @@ public class Applications implements Serializable {
     @Size(max = 65535)
     @Column(name = "_information")
     private String information;
-    @ManyToMany(mappedBy = "applicationsCollection")
-    private Collection<CommitteeMeetings> committeeMeetingsCollection;
+    @ManyToMany(mappedBy = "applicationCollection")
+    private Collection<CommitteeMeeting> committeeMeetingCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<ProgressReports> progressReportsCollection;
+    private Collection<RefereeReport> refereeReportCollection;
     @JoinColumn(name = "_fellow", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons fellow;
+    private Person fellow;
     @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons grantHolderID;
+    private Person grantHolderID;
     @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
     @ManyToOne(optional = false)
-    private Locations locationID;
+    private Location locationID;
     @JoinColumn(name = "_endorsementID", referencedColumnName = "_endorsementID")
     @ManyToOne
-    private Endorsements endorsementID;
+    private Endorsement endorsementID;
     @JoinColumn(name = "_fundingReportID", referencedColumnName = "_reportID")
     @ManyToOne
-    private FundingReports fundingReportID;
+    private FundingReport fundingReportID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<RefereeReports> refereeReportsCollection;
+    private Collection<ProgressReport> progressReportCollection;
 
-    public Applications() {
+    public Application() {
     }
 
-    public Applications(Long applicationID) {
+    public Application(Long applicationID) {
         this.applicationID = applicationID;
     }
 
-    public Applications(Long applicationID, Date timestamp) {
+    public Application(Long applicationID, Date timestamp) {
         this.applicationID = applicationID;
         this.timestamp = timestamp;
     }
@@ -190,70 +190,70 @@ public class Applications implements Serializable {
     }
 
     @XmlTransient
-    public Collection<CommitteeMeetings> getCommitteeMeetingsCollection() {
-        return committeeMeetingsCollection;
+    public Collection<CommitteeMeeting> getCommitteeMeetingCollection() {
+        return committeeMeetingCollection;
     }
 
-    public void setCommitteeMeetingsCollection(Collection<CommitteeMeetings> committeeMeetingsCollection) {
-        this.committeeMeetingsCollection = committeeMeetingsCollection;
+    public void setCommitteeMeetingCollection(Collection<CommitteeMeeting> committeeMeetingCollection) {
+        this.committeeMeetingCollection = committeeMeetingCollection;
     }
 
     @XmlTransient
-    public Collection<ProgressReports> getProgressReportsCollection() {
-        return progressReportsCollection;
+    public Collection<RefereeReport> getRefereeReportCollection() {
+        return refereeReportCollection;
     }
 
-    public void setProgressReportsCollection(Collection<ProgressReports> progressReportsCollection) {
-        this.progressReportsCollection = progressReportsCollection;
+    public void setRefereeReportCollection(Collection<RefereeReport> refereeReportCollection) {
+        this.refereeReportCollection = refereeReportCollection;
     }
 
-    public Persons getFellow() {
+    public Person getFellow() {
         return fellow;
     }
 
-    public void setFellow(Persons fellow) {
+    public void setFellow(Person fellow) {
         this.fellow = fellow;
     }
 
-    public Persons getGrantHolderID() {
+    public Person getGrantHolderID() {
         return grantHolderID;
     }
 
-    public void setGrantHolderID(Persons grantHolderID) {
+    public void setGrantHolderID(Person grantHolderID) {
         this.grantHolderID = grantHolderID;
     }
 
-    public Locations getLocationID() {
+    public Location getLocationID() {
         return locationID;
     }
 
-    public void setLocationID(Locations locationID) {
+    public void setLocationID(Location locationID) {
         this.locationID = locationID;
     }
 
-    public Endorsements getEndorsementID() {
+    public Endorsement getEndorsementID() {
         return endorsementID;
     }
 
-    public void setEndorsementID(Endorsements endorsementID) {
+    public void setEndorsementID(Endorsement endorsementID) {
         this.endorsementID = endorsementID;
     }
 
-    public FundingReports getFundingReportID() {
+    public FundingReport getFundingReportID() {
         return fundingReportID;
     }
 
-    public void setFundingReportID(FundingReports fundingReportID) {
+    public void setFundingReportID(FundingReport fundingReportID) {
         this.fundingReportID = fundingReportID;
     }
 
     @XmlTransient
-    public Collection<RefereeReports> getRefereeReportsCollection() {
-        return refereeReportsCollection;
+    public Collection<ProgressReport> getProgressReportCollection() {
+        return progressReportCollection;
     }
 
-    public void setRefereeReportsCollection(Collection<RefereeReports> refereeReportsCollection) {
-        this.refereeReportsCollection = refereeReportsCollection;
+    public void setProgressReportCollection(Collection<ProgressReport> progressReportCollection) {
+        this.progressReportCollection = progressReportCollection;
     }
 
     @Override
@@ -266,10 +266,10 @@ public class Applications implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Applications)) {
+        if (!(object instanceof Application)) {
             return false;
         }
-        Applications other = (Applications) object;
+        Application other = (Application) object;
         if ((this.applicationID == null && other.applicationID != null) || (this.applicationID != null && !this.applicationID.equals(other.applicationID))) {
             return false;
         }
@@ -278,7 +278,7 @@ public class Applications implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Applications[ applicationID=" + applicationID + " ]";
+        return "com.softserve.DBEnties.Application[ applicationID=" + applicationID + " ]";
     }
     
 }
