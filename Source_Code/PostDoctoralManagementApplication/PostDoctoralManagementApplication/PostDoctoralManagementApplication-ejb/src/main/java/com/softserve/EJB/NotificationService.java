@@ -6,9 +6,8 @@
 
 package com.softserve.EJB;
 
-import com.softserve.DBEntities.Notifications;
-import com.softserve.DBEntities.Notifications;
-import com.softserve.DBEntities.Persons;
+import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Person;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Properties;
@@ -43,7 +42,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                 sendEmail(nRequest.message, nRequest.subject, nRequest.recipients, nRequest.sender);
                 break;
             case NotificationRequest.SYSTEM:
-                for(Persons recipient: nRequest.recipients)
+                for(Person recipient: nRequest.recipients)
                 {
                     sendSystemNotification(nRequest.message, nRequest.subject, recipient, nRequest.sender);
                 }
@@ -53,7 +52,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         }
     }
     
-    public void sendEmail(String mess, String subject, List<Persons> recipients, Persons sender) throws MessagingException
+    public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException
     {
         final String username = "iterativeKak@gmail.com";
         final String password = "********";
@@ -91,9 +90,9 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         
     }
     
-    public Notifications sendSystemNotification(String message, String subject, Persons recipient, Persons sender)
+    public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender)
     {
-        Notifications notification = new Notifications();
+        Notification notification = new Notification();
         
         notification.setRecieverID(recipient);
         notification.setSenderID(sender);
@@ -104,29 +103,29 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         return notification;
     }
     
-    public List<Notifications> findAll()
+    public List<Notification> findAll()
     {
-        return em.createNamedQuery("Notifications.findAll", Notifications.class).getResultList();
+        return em.createNamedQuery("Notification.findAll", Notification.class).getResultList();
     }
     
-    public List<Notifications> findByNotificationID(Long nID)
+    public List<Notification> findByNotificationID(Long nID)
     {
-        return em.createNamedQuery("Notifications.findByNotificationID", Notifications.class).setParameter("entryID", nID).getResultList();
+        return em.createNamedQuery("Notification.findByNotificationID", Notification.class).setParameter("entryID", nID).getResultList();
     }
     
-    public List<Notifications> findBySubject(String subject)
+    public List<Notification> findBySubject(String subject)
     {
-        return em.createNamedQuery("Notifications.findBySubject", Notifications.class).setParameter("subject", subject).getResultList();
+        return em.createNamedQuery("Notification.findBySubject", Notification.class).setParameter("subject", subject).getResultList();
     }
     
-    public List<Notifications> findByTimestamp(Timestamp tStamp)
+    public List<Notification> findByTimestamp(Timestamp tStamp)
     {
-        return em.createNamedQuery("Notifications.findByTimestamp", Notifications.class).setParameter("timestamp", tStamp).getResultList();
+        return em.createNamedQuery("Notification.findByTimestamp", Notification.class).setParameter("timestamp", tStamp).getResultList();
     }
     
-    public List<Notifications> findBetweenRange(Timestamp start, Timestamp end)
+    public List<Notification> findBetweenRange(Timestamp start, Timestamp end)
     {
         // TODO: create the new namedQuery
-        return em.createNamedQuery("Notifications.findByTimestamp", Notifications.class).setParameter("timestamp", start).getResultList();
+        return em.createNamedQuery("Notification.findByTimestamp", Notification.class).setParameter("timestamp", start).getResultList();
     }
 }

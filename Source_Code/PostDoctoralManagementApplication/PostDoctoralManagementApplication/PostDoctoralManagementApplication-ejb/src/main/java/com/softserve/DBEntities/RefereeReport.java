@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.DBEnties;
+package com.softserve.DBEntities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "progress_report")
+@Table(name = "referee_report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ProgressReport.findAll", query = "SELECT p FROM ProgressReport p"),
-    @NamedQuery(name = "ProgressReport.findByReportID", query = "SELECT p FROM ProgressReport p WHERE p.reportID = :reportID"),
-    @NamedQuery(name = "ProgressReport.findByTimestamp", query = "SELECT p FROM ProgressReport p WHERE p.timestamp = :timestamp")})
-public class ProgressReport implements Serializable {
+    @NamedQuery(name = "RefereeReport.findAll", query = "SELECT r FROM RefereeReport r"),
+    @NamedQuery(name = "RefereeReport.findByReportID", query = "SELECT r FROM RefereeReport r WHERE r.reportID = :reportID"),
+    @NamedQuery(name = "RefereeReport.findByTimestamp", query = "SELECT r FROM RefereeReport r WHERE r.timestamp = :timestamp")})
+public class RefereeReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,15 +59,18 @@ public class ProgressReport implements Serializable {
     @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
     private Application applicationID;
+    @JoinColumn(name = "_refereeID", referencedColumnName = "_systemID")
+    @ManyToOne(optional = false)
+    private Person refereeID;
 
-    public ProgressReport() {
+    public RefereeReport() {
     }
 
-    public ProgressReport(Long reportID) {
+    public RefereeReport(Long reportID) {
         this.reportID = reportID;
     }
 
-    public ProgressReport(Long reportID, Date timestamp, String content) {
+    public RefereeReport(Long reportID, Date timestamp, String content) {
         this.reportID = reportID;
         this.timestamp = timestamp;
         this.content = content;
@@ -105,6 +108,14 @@ public class ProgressReport implements Serializable {
         this.applicationID = applicationID;
     }
 
+    public Person getRefereeID() {
+        return refereeID;
+    }
+
+    public void setRefereeID(Person refereeID) {
+        this.refereeID = refereeID;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -115,10 +126,10 @@ public class ProgressReport implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProgressReport)) {
+        if (!(object instanceof RefereeReport)) {
             return false;
         }
-        ProgressReport other = (ProgressReport) object;
+        RefereeReport other = (RefereeReport) object;
         if ((this.reportID == null && other.reportID != null) || (this.reportID != null && !this.reportID.equals(other.reportID))) {
             return false;
         }
@@ -127,7 +138,7 @@ public class ProgressReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.ProgressReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEnties.RefereeReport[ reportID=" + reportID + " ]";
     }
     
 }

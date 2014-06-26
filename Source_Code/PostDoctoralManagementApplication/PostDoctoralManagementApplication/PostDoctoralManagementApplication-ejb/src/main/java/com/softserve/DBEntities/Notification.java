@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.DBEnties;
+package com.softserve.DBEntities;
 
 import java.io.Serializable;
 import java.util.Date;

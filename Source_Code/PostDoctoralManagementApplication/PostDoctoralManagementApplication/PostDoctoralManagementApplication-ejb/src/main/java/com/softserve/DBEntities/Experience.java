@@ -65,7 +65,7 @@ public class Experience implements Serializable {
     private Date endDate;
     @JoinColumn(name = "_cvID", referencedColumnName = "_cvID")
     @ManyToOne(optional = false)
-    private Cvs cvID;
+    private Cv cvID;
 
     public Experience() {
     }
@@ -120,11 +120,11 @@ public class Experience implements Serializable {
         this.endDate = endDate;
     }
 
-    public Cvs getCvID() {
+    public Cv getCvID() {
         return cvID;
     }
 
-    public void setCvID(Cvs cvID) {
+    public void setCvID(Cv cvID) {
         this.cvID = cvID;
     }
 
@@ -150,7 +150,7 @@ public class Experience implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEntities.Experience[ experienceID=" + experienceID + " ]";
+        return "com.softserve.DBEnties.Experience[ experienceID=" + experienceID + " ]";
     }
     
 }

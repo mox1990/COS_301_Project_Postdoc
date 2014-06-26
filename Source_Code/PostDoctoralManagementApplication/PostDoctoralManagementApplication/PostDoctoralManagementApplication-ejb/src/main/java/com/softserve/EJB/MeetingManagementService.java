@@ -6,9 +6,9 @@
 
 package com.softserve.EJB;
 
-import com.softserve.DBEnties.Applications;
-import com.softserve.DBEnties.CommitteeMeetings;
-import com.softserve.DBEnties.Persons;
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.CommitteeMeeting;
+import com.softserve.DBEntities.Person;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +25,7 @@ import javax.persistence.PersistenceContext;
 @Stateful
 public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Inject
-    private CommitteeMeetings cMeeting;
+    private CommitteeMeeting cMeeting;
     
     @PersistenceContext(unitName = "committee_meetings")
     private EntityManager cem;
@@ -36,35 +36,35 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @PersistenceContext(unitName = "applications")
     EntityManager rem;
     
-    private Collection<Persons> inAttendence = new ArrayList();
+    private Collection<Person> inAttendence = new ArrayList();
     
-    public CommitteeMeetings startMeeting()
+    public CommitteeMeeting startMeeting()
     {
         cem.persist(cMeeting);
         return cMeeting;
     }
     
     // TODO: need to clarify what is wat with regards to renewals and such
-    public CommitteeMeetings addEndorsedApplication(/*CommitteeMeetings cMeeting*/) throws Exception
+    public CommitteeMeeting addEndorsedApplication(/*CommitteeMeetings cMeeting*/) throws Exception
     {
         // TODO: Fix implementation 
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        List<Applications> a = aem.createNamedQuery("Applications.findByType", Applications.class).setParameter("type", "endorsed").getResultList();
-        cMeeting.getApplicationsCollection().addAll(a);
+        List<Application> a = aem.createNamedQuery("Applications.findByType", Application.class).setParameter("type", "endorsed").getResultList();
+        cMeeting.getApplicationCollection().addAll(a);
         
         return cMeeting;
     }
     
-    public CommitteeMeetings addEndorsedRenewals(/*CommitteeMeetings cMeeting*/) throws Exception
+    public CommitteeMeeting addEndorsedRenewals(/*CommitteeMeetings cMeeting*/) throws Exception
     {
         // TODO: Fix implementation
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        List<Applications> a = aem.createNamedQuery("Applications.findByType", Applications.class).setParameter("type", "endorsed").getResultList();
-        cMeeting.getApplicationsCollection().addAll(a);
+        List<Application> a = aem.createNamedQuery("Applications.findByType", Application.class).setParameter("type", "endorsed").getResultList();
+        cMeeting.getApplicationCollection().addAll(a);
         
         return cMeeting;
     }

@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 
-package com.softserve.DBEnties;
+package com.softserve.DBEntities;
 
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -30,17 +32,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "recommendation_report")
+@Table(name = "progress_report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RecommendationReport.findAll", query = "SELECT r FROM RecommendationReport r"),
-    @NamedQuery(name = "RecommendationReport.findByReportID", query = "SELECT r FROM RecommendationReport r WHERE r.reportID = :reportID"),
-    @NamedQuery(name = "RecommendationReport.findByTimestamp", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp = :timestamp")})
-public class RecommendationReport implements Serializable {
+    @NamedQuery(name = "ProgressReport.findAll", query = "SELECT p FROM ProgressReport p"),
+    @NamedQuery(name = "ProgressReport.findByReportID", query = "SELECT p FROM ProgressReport p WHERE p.reportID = :reportID"),
+    @NamedQuery(name = "ProgressReport.findByTimestamp", query = "SELECT p FROM ProgressReport p WHERE p.timestamp = :timestamp")})
+public class ProgressReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "_reportID")
     private Long reportID;
     @Basic(optional = false)
@@ -54,18 +56,18 @@ public class RecommendationReport implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "_content")
     private String content;
-    @JoinColumn(name = "_hodID", referencedColumnName = "_systemID")
+    @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
-    private Person hodID;
+    private Application applicationID;
 
-    public RecommendationReport() {
+    public ProgressReport() {
     }
 
-    public RecommendationReport(Long reportID) {
+    public ProgressReport(Long reportID) {
         this.reportID = reportID;
     }
 
-    public RecommendationReport(Long reportID, Date timestamp, String content) {
+    public ProgressReport(Long reportID, Date timestamp, String content) {
         this.reportID = reportID;
         this.timestamp = timestamp;
         this.content = content;
@@ -95,12 +97,12 @@ public class RecommendationReport implements Serializable {
         this.content = content;
     }
 
-    public Person getHodID() {
-        return hodID;
+    public Application getApplicationID() {
+        return applicationID;
     }
 
-    public void setHodID(Person hodID) {
-        this.hodID = hodID;
+    public void setApplicationID(Application applicationID) {
+        this.applicationID = applicationID;
     }
 
     @Override
@@ -113,10 +115,10 @@ public class RecommendationReport implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RecommendationReport)) {
+        if (!(object instanceof ProgressReport)) {
             return false;
         }
-        RecommendationReport other = (RecommendationReport) object;
+        ProgressReport other = (ProgressReport) object;
         if ((this.reportID == null && other.reportID != null) || (this.reportID != null && !this.reportID.equals(other.reportID))) {
             return false;
         }
@@ -125,7 +127,7 @@ public class RecommendationReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.RecommendationReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEnties.ProgressReport[ reportID=" + reportID + " ]";
     }
     
 }

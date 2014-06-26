@@ -6,7 +6,9 @@
 
 package com.softserve.UserAccountManagementServices;
 
-import com.softserve.DBEnties.*;
+import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.UpEmployeeInformation;
 import java.util.ArrayList;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpSession;

@@ -6,7 +6,7 @@
 
 package PresistanceTests;
 
-import com.softserve.DBEnties.Person;
+import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import org.junit.After;

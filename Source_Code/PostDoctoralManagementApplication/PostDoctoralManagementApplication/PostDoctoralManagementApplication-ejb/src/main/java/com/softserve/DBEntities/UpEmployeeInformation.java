@@ -63,10 +63,10 @@ public class UpEmployeeInformation implements Serializable {
     private String appointmentStatus;
     @JoinColumn(name = "_employeeID", referencedColumnName = "_systemID", insertable = false, updatable = false)
     @OneToOne(optional = false)
-    private Persons persons;
+    private Person person;
     @JoinColumn(name = "_physicalAddress", referencedColumnName = "_addressID")
     @ManyToOne(optional = false)
-    private Addressess physicalAddress;
+    private Address physicalAddress;
 
     public UpEmployeeInformation() {
     }
@@ -114,19 +114,19 @@ public class UpEmployeeInformation implements Serializable {
         this.appointmentStatus = appointmentStatus;
     }
 
-    public Persons getPersons() {
-        return persons;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersons(Persons persons) {
-        this.persons = persons;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public Addressess getPhysicalAddress() {
+    public Address getPhysicalAddress() {
         return physicalAddress;
     }
 
-    public void setPhysicalAddress(Addressess physicalAddress) {
+    public void setPhysicalAddress(Address physicalAddress) {
         this.physicalAddress = physicalAddress;
     }
 
@@ -152,7 +152,7 @@ public class UpEmployeeInformation implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEntities.UpEmployeeInformation[ employeeID=" + employeeID + " ]";
+        return "com.softserve.DBEnties.UpEmployeeInformation[ employeeID=" + employeeID + " ]";
     }
     
 }

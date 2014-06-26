@@ -7,7 +7,7 @@
 package com.softserve.EJB;
 
 import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Persons;
+import com.softserve.DBEntities.Person;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +25,7 @@ public class AuditTrailService implements AuditTrailServiceLocal { // TODO: Fina
     @PersistenceContext(unitName = "audit_log")
     private EntityManager em;
     
-    public AuditLog logAction(Persons user, String action)
+    public AuditLog logAction(Person user, String action)
     {
         AuditLog aLog = new AuditLog();
         aLog.setAction(action);

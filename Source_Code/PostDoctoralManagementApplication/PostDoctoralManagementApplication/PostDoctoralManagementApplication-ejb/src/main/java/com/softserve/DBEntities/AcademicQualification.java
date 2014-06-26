@@ -63,7 +63,7 @@ public class AcademicQualification implements Serializable {
     private Short distinctions;
     @JoinColumn(name = "_cvID", referencedColumnName = "_cvID")
     @ManyToOne(optional = false)
-    private Cvs cvID;
+    private Cv cvID;
 
     public AcademicQualification() {
     }
@@ -120,11 +120,11 @@ public class AcademicQualification implements Serializable {
         this.distinctions = distinctions;
     }
 
-    public Cvs getCvID() {
+    public Cv getCvID() {
         return cvID;
     }
 
-    public void setCvID(Cvs cvID) {
+    public void setCvID(Cv cvID) {
         this.cvID = cvID;
     }
 
@@ -150,7 +150,7 @@ public class AcademicQualification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEntities.AcademicQualification[ qualificationID=" + qualificationID + " ]";
+        return "com.softserve.DBEnties.AcademicQualification[ qualificationID=" + qualificationID + " ]";
     }
     
 }

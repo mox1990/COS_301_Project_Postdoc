@@ -56,7 +56,7 @@ public class RecommendationReport implements Serializable {
     private String content;
     @JoinColumn(name = "_hodID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Persons hodID;
+    private Person hodID;
 
     public RecommendationReport() {
     }
@@ -95,11 +95,11 @@ public class RecommendationReport implements Serializable {
         this.content = content;
     }
 
-    public Persons getHodID() {
+    public Person getHodID() {
         return hodID;
     }
 
-    public void setHodID(Persons hodID) {
+    public void setHodID(Person hodID) {
         this.hodID = hodID;
     }
 
@@ -125,7 +125,7 @@ public class RecommendationReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEntities.RecommendationReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEnties.RecommendationReport[ reportID=" + reportID + " ]";
     }
     
 }

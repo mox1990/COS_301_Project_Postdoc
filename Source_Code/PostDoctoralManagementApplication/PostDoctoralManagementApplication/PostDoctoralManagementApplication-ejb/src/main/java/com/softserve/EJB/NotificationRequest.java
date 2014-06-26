@@ -6,7 +6,7 @@
 
 package com.softserve.EJB;
 
-import com.softserve.DBEntities.Persons;
+import com.softserve.DBEntities.Person;
 import java.util.List;
 
 /**
@@ -21,10 +21,10 @@ class NotificationRequest {
     public String message;
     public String subject;
     public String nType = SYSTEM;
-    public List<Persons> recipients; // Update the model diagram
-    public Persons sender;
+    public List<Person> recipients; // Update the model diagram
+    public Person sender;
     
-    public NotificationRequest(String message, String nType, List<Persons> recipients)
+    public NotificationRequest(String message, String nType, List<Person> recipients)
     {
         this.message = message;
         this.nType = nType;
