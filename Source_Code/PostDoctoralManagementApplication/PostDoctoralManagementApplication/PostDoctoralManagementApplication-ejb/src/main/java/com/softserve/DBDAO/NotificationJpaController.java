@@ -55,11 +55,11 @@ public class NotificationJpaController implements Serializable {
             }
             em.persist(notification);
             if (senderID != null) {
-                senderID.getNotificationCollection().add(notification);
+                senderID.getNotificationList().add(notification);
                 senderID = em.merge(senderID);
             }
             if (recieverID != null) {
-                recieverID.getNotificationCollection().add(notification);
+                recieverID.getNotificationList().add(notification);
                 recieverID = em.merge(recieverID);
             }
             utx.commit();
@@ -97,19 +97,19 @@ public class NotificationJpaController implements Serializable {
             }
             notification = em.merge(notification);
             if (senderIDOld != null && !senderIDOld.equals(senderIDNew)) {
-                senderIDOld.getNotificationCollection().remove(notification);
+                senderIDOld.getNotificationList().remove(notification);
                 senderIDOld = em.merge(senderIDOld);
             }
             if (senderIDNew != null && !senderIDNew.equals(senderIDOld)) {
-                senderIDNew.getNotificationCollection().add(notification);
+                senderIDNew.getNotificationList().add(notification);
                 senderIDNew = em.merge(senderIDNew);
             }
             if (recieverIDOld != null && !recieverIDOld.equals(recieverIDNew)) {
-                recieverIDOld.getNotificationCollection().remove(notification);
+                recieverIDOld.getNotificationList().remove(notification);
                 recieverIDOld = em.merge(recieverIDOld);
             }
             if (recieverIDNew != null && !recieverIDNew.equals(recieverIDOld)) {
-                recieverIDNew.getNotificationCollection().add(notification);
+                recieverIDNew.getNotificationList().add(notification);
                 recieverIDNew = em.merge(recieverIDNew);
             }
             utx.commit();
@@ -148,12 +148,12 @@ public class NotificationJpaController implements Serializable {
             }
             Person senderID = notification.getSenderID();
             if (senderID != null) {
-                senderID.getNotificationCollection().remove(notification);
+                senderID.getNotificationList().remove(notification);
                 senderID = em.merge(senderID);
             }
             Person recieverID = notification.getRecieverID();
             if (recieverID != null) {
-                recieverID.getNotificationCollection().remove(notification);
+                recieverID.getNotificationList().remove(notification);
                 recieverID = em.merge(recieverID);
             }
             em.remove(notification);

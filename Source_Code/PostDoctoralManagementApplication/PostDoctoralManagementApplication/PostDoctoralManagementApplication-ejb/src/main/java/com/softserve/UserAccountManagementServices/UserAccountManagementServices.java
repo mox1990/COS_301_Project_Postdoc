@@ -6,13 +6,17 @@
 
 package com.softserve.UserAccountManagementServices;
 
-import com.softserve.DBDAO.PersonJpaController;
+import com.softserve.DBDAO.*;
+import com.softserve.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -74,29 +78,114 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         return newID;
     }
     
-    public void createUserAccount(HttpSession session, boolean manualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo)
+    public void createUserAccount(HttpSession session, boolean manualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception
     {
         //AuthenticateUser(session);
         
         if(!manualSystemIDSpecification)
         {
-            //user.setSystemID(generateSystemID());
+            
+            if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
+            {
+                user.setSystemID(generateSystemID('a'));
+            }
+            else if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
+            {
+                user.setSystemID(generateSystemID('f'));
+            }
+            else
+            {
+                throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");
+            }
+            
+            userUPInfo.setEmployeeID(user.getSystemID());
         }
-    }
-    
-    public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation useUPInfo)
-    {
+        
+        EntityManagerFactory tempEMF = getEntityManagerFactory();
+        
+        AddressJpaController addressJpaController = new AddressJpaController(utx, getEntityManagerFactory());
+        addressJpaController.create(userAddress);
+        
+        PersonJpaController personJpaController = new PersonJpaController(utx, tempEMF);
+        personJpaController.create(user);
+        
+        if(userUPInfo != null)
+        {
+            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(utx, tempEMF);
+            upEmployeeInformationJpaController.create(userUPInfo);
+        }
         
     }
     
-    public void removeUserAccount(HttpSession session, String systemID)
+    public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception
     {
+        //AuthenticateUser(session);
+        EntityManagerFactory tempEMF = getEntityManagerFactory();
+        
+        AddressJpaController addressJpaController = new AddressJpaController(utx, getEntityManagerFactory());
+        addressJpaController.edit(userAddress);
+        
+                
+        UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(utx, tempEMF);
+        
+        if(userUPInfo != null)
+        {   
+            
+            if(upEmployeeInformationJpaController.findUpEmployeeInformation(userUPInfo.getEmployeeID()) != null)
+            {
+                upEmployeeInformationJpaController.edit(userUPInfo);
+            }
+            else
+            {
+                upEmployeeInformationJpaController.create(userUPInfo);
+                user.setUpEmployeeInformation(userUPInfo);
+            }
+        }
+        else
+        {
+            if(upEmployeeInformationJpaController.findUpEmployeeInformation(userUPInfo.getEmployeeID()) != null)
+            {
+                user.setUpEmployee(false);
+                user.setUpEmployeeInformation(null);
+                upEmployeeInformationJpaController.destroy(userUPInfo.getEmployeeID());                
+            }
+        }
+        
+        PersonJpaController personJpaController = new PersonJpaController(utx, tempEMF);
+        personJpaController.edit(user);
         
     }
     
-    public ArrayList<Person> viewAllUserAccounts(HttpSession session)
+    public void removeUserAccount(HttpSession session, String systemID) throws RollbackFailureException, Exception
     {
-        return null;
+        //AuthenticateUser(session);
+        EntityManagerFactory tempEMF = getEntityManagerFactory();
+        
+        PersonJpaController personJpaController = new PersonJpaController(utx, tempEMF);
+        AddressJpaController addressJpaController = new AddressJpaController(utx, getEntityManagerFactory());
+        
+        //Find person object
+        Person user = personJpaController.findPerson(systemID);
+        
+        //Remove primary address line
+        addressJpaController.destroy(user.getAddressLine1().getAddressID());        
+        
+        //Check if is UP employee if is then remove
+        if(user.getUpEmployee())
+        {
+            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(utx, tempEMF);
+            upEmployeeInformationJpaController.destroy(user.getUpEmployeeInformation().getEmployeeID());
+        }
+        
+        //Remove person from database
+        personJpaController.destroy(user.getSystemID());
+    }
+    
+    public List<Person> viewAllUserAccounts(HttpSession session)
+    {
+        //AuthenticateUser(session);
+        PersonJpaController personJpaController = new PersonJpaController(utx, getEntityManagerFactory());
+        return personJpaController.findPersonEntities();        
     }
     
 }

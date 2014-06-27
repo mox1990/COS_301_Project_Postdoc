@@ -147,7 +147,7 @@ public class Notification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Notification[ notificationID=" + notificationID + " ]";
+        return "com.softserve.DBEntities.Notification[ notificationID=" + notificationID + " ]";
     }
     
 }

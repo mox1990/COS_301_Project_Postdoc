@@ -138,7 +138,7 @@ public class RefereeReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.RefereeReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEntities.RefereeReport[ reportID=" + reportID + " ]";
     }
     
 }

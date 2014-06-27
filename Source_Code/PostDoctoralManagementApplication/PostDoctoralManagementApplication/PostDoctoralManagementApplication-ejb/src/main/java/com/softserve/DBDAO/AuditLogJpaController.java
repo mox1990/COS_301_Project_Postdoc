@@ -50,7 +50,7 @@ public class AuditLogJpaController implements Serializable {
             }
             em.persist(auditLog);
             if (personID != null) {
-                personID.getAuditLogCollection().add(auditLog);
+                personID.getAuditLogList().add(auditLog);
                 personID = em.merge(personID);
             }
             utx.commit();
@@ -82,11 +82,11 @@ public class AuditLogJpaController implements Serializable {
             }
             auditLog = em.merge(auditLog);
             if (personIDOld != null && !personIDOld.equals(personIDNew)) {
-                personIDOld.getAuditLogCollection().remove(auditLog);
+                personIDOld.getAuditLogList().remove(auditLog);
                 personIDOld = em.merge(personIDOld);
             }
             if (personIDNew != null && !personIDNew.equals(personIDOld)) {
-                personIDNew.getAuditLogCollection().add(auditLog);
+                personIDNew.getAuditLogList().add(auditLog);
                 personIDNew = em.merge(personIDNew);
             }
             utx.commit();
@@ -125,7 +125,7 @@ public class AuditLogJpaController implements Serializable {
             }
             Person personID = auditLog.getPersonID();
             if (personID != null) {
-                personID.getAuditLogCollection().remove(auditLog);
+                personID.getAuditLogList().remove(auditLog);
                 personID = em.merge(personID);
             }
             em.remove(auditLog);

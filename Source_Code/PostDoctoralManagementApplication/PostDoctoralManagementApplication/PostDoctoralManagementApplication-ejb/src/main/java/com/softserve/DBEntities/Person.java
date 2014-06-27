@@ -7,7 +7,7 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -98,35 +98,35 @@ public class Person implements Serializable {
     @NotNull
     @Column(name = "_upEmployee")
     private boolean upEmployee;
-    @ManyToMany(mappedBy = "personCollection")
-    private Collection<CommitteeMeeting> committeeMeetingCollection;
+    @ManyToMany(mappedBy = "personList")
+    private List<CommitteeMeeting> committeeMeetingList;
     @JoinTable(name = "person_security_role", joinColumns = {
         @JoinColumn(name = "_personID", referencedColumnName = "_systemID")}, inverseJoinColumns = {
         @JoinColumn(name = "_roleID", referencedColumnName = "_roleID")})
     @ManyToMany
-    private Collection<SecurityRole> securityRoleCollection;
+    private List<SecurityRole> securityRoleList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personID")
-    private Collection<AuditLog> auditLogCollection;
+    private List<AuditLog> auditLogList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deanID")
-    private Collection<Endorsement> endorsementCollection;
+    private List<Endorsement> endorsementList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private UpEmployeeInformation upEmployeeInformation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hodID")
-    private Collection<RecommendationReport> recommendationReportCollection;
+    private List<RecommendationReport> recommendationReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "refereeID")
-    private Collection<RefereeReport> refereeReportCollection;
+    private List<RefereeReport> refereeReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "drisID")
-    private Collection<FundingReport> fundingReportCollection;
+    private List<FundingReport> fundingReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "senderID")
-    private Collection<Notification> notificationCollection;
+    private List<Notification> notificationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recieverID")
-    private Collection<Notification> notificationCollection1;
+    private List<Notification> notificationList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerID")
-    private Collection<Cv> cvCollection;
+    private List<Cv> cvList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
-    private Collection<Application> applicationCollection;
+    private List<Application> applicationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
-    private Collection<Application> applicationCollection1;
+    private List<Application> applicationList1;
     @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
     @ManyToOne
     private Location locationID;
@@ -134,7 +134,7 @@ public class Person implements Serializable {
     @ManyToOne(optional = false)
     private Address addressLine1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendeeID")
-    private Collection<MinuteComment> minuteCommentCollection;
+    private List<MinuteComment> minuteCommentList;
 
     public Person() {
     }
@@ -242,39 +242,39 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public Collection<CommitteeMeeting> getCommitteeMeetingCollection() {
-        return committeeMeetingCollection;
+    public List<CommitteeMeeting> getCommitteeMeetingList() {
+        return committeeMeetingList;
     }
 
-    public void setCommitteeMeetingCollection(Collection<CommitteeMeeting> committeeMeetingCollection) {
-        this.committeeMeetingCollection = committeeMeetingCollection;
-    }
-
-    @XmlTransient
-    public Collection<SecurityRole> getSecurityRoleCollection() {
-        return securityRoleCollection;
-    }
-
-    public void setSecurityRoleCollection(Collection<SecurityRole> securityRoleCollection) {
-        this.securityRoleCollection = securityRoleCollection;
+    public void setCommitteeMeetingList(List<CommitteeMeeting> committeeMeetingList) {
+        this.committeeMeetingList = committeeMeetingList;
     }
 
     @XmlTransient
-    public Collection<AuditLog> getAuditLogCollection() {
-        return auditLogCollection;
+    public List<SecurityRole> getSecurityRoleList() {
+        return securityRoleList;
     }
 
-    public void setAuditLogCollection(Collection<AuditLog> auditLogCollection) {
-        this.auditLogCollection = auditLogCollection;
+    public void setSecurityRoleList(List<SecurityRole> securityRoleList) {
+        this.securityRoleList = securityRoleList;
     }
 
     @XmlTransient
-    public Collection<Endorsement> getEndorsementCollection() {
-        return endorsementCollection;
+    public List<AuditLog> getAuditLogList() {
+        return auditLogList;
     }
 
-    public void setEndorsementCollection(Collection<Endorsement> endorsementCollection) {
-        this.endorsementCollection = endorsementCollection;
+    public void setAuditLogList(List<AuditLog> auditLogList) {
+        this.auditLogList = auditLogList;
+    }
+
+    @XmlTransient
+    public List<Endorsement> getEndorsementList() {
+        return endorsementList;
+    }
+
+    public void setEndorsementList(List<Endorsement> endorsementList) {
+        this.endorsementList = endorsementList;
     }
 
     public UpEmployeeInformation getUpEmployeeInformation() {
@@ -286,75 +286,75 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public Collection<RecommendationReport> getRecommendationReportCollection() {
-        return recommendationReportCollection;
+    public List<RecommendationReport> getRecommendationReportList() {
+        return recommendationReportList;
     }
 
-    public void setRecommendationReportCollection(Collection<RecommendationReport> recommendationReportCollection) {
-        this.recommendationReportCollection = recommendationReportCollection;
-    }
-
-    @XmlTransient
-    public Collection<RefereeReport> getRefereeReportCollection() {
-        return refereeReportCollection;
-    }
-
-    public void setRefereeReportCollection(Collection<RefereeReport> refereeReportCollection) {
-        this.refereeReportCollection = refereeReportCollection;
+    public void setRecommendationReportList(List<RecommendationReport> recommendationReportList) {
+        this.recommendationReportList = recommendationReportList;
     }
 
     @XmlTransient
-    public Collection<FundingReport> getFundingReportCollection() {
-        return fundingReportCollection;
+    public List<RefereeReport> getRefereeReportList() {
+        return refereeReportList;
     }
 
-    public void setFundingReportCollection(Collection<FundingReport> fundingReportCollection) {
-        this.fundingReportCollection = fundingReportCollection;
-    }
-
-    @XmlTransient
-    public Collection<Notification> getNotificationCollection() {
-        return notificationCollection;
-    }
-
-    public void setNotificationCollection(Collection<Notification> notificationCollection) {
-        this.notificationCollection = notificationCollection;
+    public void setRefereeReportList(List<RefereeReport> refereeReportList) {
+        this.refereeReportList = refereeReportList;
     }
 
     @XmlTransient
-    public Collection<Notification> getNotificationCollection1() {
-        return notificationCollection1;
+    public List<FundingReport> getFundingReportList() {
+        return fundingReportList;
     }
 
-    public void setNotificationCollection1(Collection<Notification> notificationCollection1) {
-        this.notificationCollection1 = notificationCollection1;
-    }
-
-    @XmlTransient
-    public Collection<Cv> getCvCollection() {
-        return cvCollection;
-    }
-
-    public void setCvCollection(Collection<Cv> cvCollection) {
-        this.cvCollection = cvCollection;
+    public void setFundingReportList(List<FundingReport> fundingReportList) {
+        this.fundingReportList = fundingReportList;
     }
 
     @XmlTransient
-    public Collection<Application> getApplicationCollection() {
-        return applicationCollection;
+    public List<Notification> getNotificationList() {
+        return notificationList;
     }
 
-    public void setApplicationCollection(Collection<Application> applicationCollection) {
-        this.applicationCollection = applicationCollection;
+    public void setNotificationList(List<Notification> notificationList) {
+        this.notificationList = notificationList;
     }
 
     @XmlTransient
-    public Collection<Application> getApplicationCollection1() {
-        return applicationCollection1;
+    public List<Notification> getNotificationList1() {
+        return notificationList1;
     }
 
-    public void setApplicationCollection1(Collection<Application> applicationCollection1) {
-        this.applicationCollection1 = applicationCollection1;
+    public void setNotificationList1(List<Notification> notificationList1) {
+        this.notificationList1 = notificationList1;
+    }
+
+    @XmlTransient
+    public List<Cv> getCvList() {
+        return cvList;
+    }
+
+    public void setCvList(List<Cv> cvList) {
+        this.cvList = cvList;
+    }
+
+    @XmlTransient
+    public List<Application> getApplicationList() {
+        return applicationList;
+    }
+
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
+    }
+
+    @XmlTransient
+    public List<Application> getApplicationList1() {
+        return applicationList1;
+    }
+
+    public void setApplicationList1(List<Application> applicationList1) {
+        this.applicationList1 = applicationList1;
     }
 
     public Location getLocationID() {
@@ -374,12 +374,12 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public Collection<MinuteComment> getMinuteCommentCollection() {
-        return minuteCommentCollection;
+    public List<MinuteComment> getMinuteCommentList() {
+        return minuteCommentList;
     }
 
-    public void setMinuteCommentCollection(Collection<MinuteComment> minuteCommentCollection) {
-        this.minuteCommentCollection = minuteCommentCollection;
+    public void setMinuteCommentList(List<MinuteComment> minuteCommentList) {
+        this.minuteCommentList = minuteCommentList;
     }
 
     @Override
@@ -404,7 +404,7 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Person[ systemID=" + systemID + " ]";
+        return "com.softserve.DBEntities.Person[ systemID=" + systemID + " ]";
     }
     
 }

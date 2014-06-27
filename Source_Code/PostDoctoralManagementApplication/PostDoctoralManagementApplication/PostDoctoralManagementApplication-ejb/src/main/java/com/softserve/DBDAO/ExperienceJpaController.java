@@ -50,7 +50,7 @@ public class ExperienceJpaController implements Serializable {
             }
             em.persist(experience);
             if (cvID != null) {
-                cvID.getExperienceCollection().add(experience);
+                cvID.getExperienceList().add(experience);
                 cvID = em.merge(cvID);
             }
             utx.commit();
@@ -82,11 +82,11 @@ public class ExperienceJpaController implements Serializable {
             }
             experience = em.merge(experience);
             if (cvIDOld != null && !cvIDOld.equals(cvIDNew)) {
-                cvIDOld.getExperienceCollection().remove(experience);
+                cvIDOld.getExperienceList().remove(experience);
                 cvIDOld = em.merge(cvIDOld);
             }
             if (cvIDNew != null && !cvIDNew.equals(cvIDOld)) {
-                cvIDNew.getExperienceCollection().add(experience);
+                cvIDNew.getExperienceList().add(experience);
                 cvIDNew = em.merge(cvIDNew);
             }
             utx.commit();
@@ -125,7 +125,7 @@ public class ExperienceJpaController implements Serializable {
             }
             Cv cvID = experience.getCvID();
             if (cvID != null) {
-                cvID.getExperienceCollection().remove(experience);
+                cvID.getExperienceList().remove(experience);
                 cvID = em.merge(cvID);
             }
             em.remove(experience);

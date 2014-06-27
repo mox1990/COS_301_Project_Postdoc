@@ -16,7 +16,6 @@ import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -41,23 +40,23 @@ public class SecurityRoleJpaController implements Serializable {
     }
 
     public void create(SecurityRole securityRole) throws RollbackFailureException, Exception {
-        if (securityRole.getPersonCollection() == null) {
-            securityRole.setPersonCollection(new ArrayList<Person>());
+        if (securityRole.getPersonList() == null) {
+            securityRole.setPersonList(new ArrayList<Person>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Person> attachedPersonCollection = new ArrayList<Person>();
-            for (Person personCollectionPersonToAttach : securityRole.getPersonCollection()) {
-                personCollectionPersonToAttach = em.getReference(personCollectionPersonToAttach.getClass(), personCollectionPersonToAttach.getSystemID());
-                attachedPersonCollection.add(personCollectionPersonToAttach);
+            List<Person> attachedPersonList = new ArrayList<Person>();
+            for (Person personListPersonToAttach : securityRole.getPersonList()) {
+                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+                attachedPersonList.add(personListPersonToAttach);
             }
-            securityRole.setPersonCollection(attachedPersonCollection);
+            securityRole.setPersonList(attachedPersonList);
             em.persist(securityRole);
-            for (Person personCollectionPerson : securityRole.getPersonCollection()) {
-                personCollectionPerson.getSecurityRoleCollection().add(securityRole);
-                personCollectionPerson = em.merge(personCollectionPerson);
+            for (Person personListPerson : securityRole.getPersonList()) {
+                personListPerson.getSecurityRoleList().add(securityRole);
+                personListPerson = em.merge(personListPerson);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -80,26 +79,26 @@ public class SecurityRoleJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             SecurityRole persistentSecurityRole = em.find(SecurityRole.class, securityRole.getRoleID());
-            Collection<Person> personCollectionOld = persistentSecurityRole.getPersonCollection();
-            Collection<Person> personCollectionNew = securityRole.getPersonCollection();
-            Collection<Person> attachedPersonCollectionNew = new ArrayList<Person>();
-            for (Person personCollectionNewPersonToAttach : personCollectionNew) {
-                personCollectionNewPersonToAttach = em.getReference(personCollectionNewPersonToAttach.getClass(), personCollectionNewPersonToAttach.getSystemID());
-                attachedPersonCollectionNew.add(personCollectionNewPersonToAttach);
+            List<Person> personListOld = persistentSecurityRole.getPersonList();
+            List<Person> personListNew = securityRole.getPersonList();
+            List<Person> attachedPersonListNew = new ArrayList<Person>();
+            for (Person personListNewPersonToAttach : personListNew) {
+                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+                attachedPersonListNew.add(personListNewPersonToAttach);
             }
-            personCollectionNew = attachedPersonCollectionNew;
-            securityRole.setPersonCollection(personCollectionNew);
+            personListNew = attachedPersonListNew;
+            securityRole.setPersonList(personListNew);
             securityRole = em.merge(securityRole);
-            for (Person personCollectionOldPerson : personCollectionOld) {
-                if (!personCollectionNew.contains(personCollectionOldPerson)) {
-                    personCollectionOldPerson.getSecurityRoleCollection().remove(securityRole);
-                    personCollectionOldPerson = em.merge(personCollectionOldPerson);
+            for (Person personListOldPerson : personListOld) {
+                if (!personListNew.contains(personListOldPerson)) {
+                    personListOldPerson.getSecurityRoleList().remove(securityRole);
+                    personListOldPerson = em.merge(personListOldPerson);
                 }
             }
-            for (Person personCollectionNewPerson : personCollectionNew) {
-                if (!personCollectionOld.contains(personCollectionNewPerson)) {
-                    personCollectionNewPerson.getSecurityRoleCollection().add(securityRole);
-                    personCollectionNewPerson = em.merge(personCollectionNewPerson);
+            for (Person personListNewPerson : personListNew) {
+                if (!personListOld.contains(personListNewPerson)) {
+                    personListNewPerson.getSecurityRoleList().add(securityRole);
+                    personListNewPerson = em.merge(personListNewPerson);
                 }
             }
             utx.commit();
@@ -136,10 +135,10 @@ public class SecurityRoleJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.", enfe);
             }
-            Collection<Person> personCollection = securityRole.getPersonCollection();
-            for (Person personCollectionPerson : personCollection) {
-                personCollectionPerson.getSecurityRoleCollection().remove(securityRole);
-                personCollectionPerson = em.merge(personCollectionPerson);
+            List<Person> personList = securityRole.getPersonList();
+            for (Person personListPerson : personList) {
+                personListPerson.getSecurityRoleList().remove(securityRole);
+                personListPerson = em.merge(personListPerson);
             }
             em.remove(securityRole);
             utx.commit();

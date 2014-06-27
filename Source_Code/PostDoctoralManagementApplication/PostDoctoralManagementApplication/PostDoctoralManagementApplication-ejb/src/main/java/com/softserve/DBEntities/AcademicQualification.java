@@ -150,7 +150,7 @@ public class AcademicQualification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.AcademicQualification[ qualificationID=" + qualificationID + " ]";
+        return "com.softserve.DBEntities.AcademicQualification[ qualificationID=" + qualificationID + " ]";
     }
     
 }

@@ -295,7 +295,15 @@ CREATE TABLE EXPERIENCE (
 );
 
 
-
+INSERT INTO SECURITY_ROLE (_name, _roleMask) VALUES("Prospective fellow",0), 
+								("Referee",1),
+								("Research fellow",2),
+								("Grant holder",3),
+								("HOD", 4),
+								("Dean's office member",5),
+								("DRIS member", 6), 
+								("Post doctoral Committee member",7), 
+								("System administrator",8);
 
 
 

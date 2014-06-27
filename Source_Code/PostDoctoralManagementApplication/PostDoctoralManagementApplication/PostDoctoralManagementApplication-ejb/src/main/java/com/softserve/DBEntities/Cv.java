@@ -7,8 +7,8 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -93,12 +93,12 @@ public class Cv implements Serializable {
     @Column(name = "_additionalInformation")
     private String additionalInformation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
-    private Collection<Experience> experienceCollection;
+    private List<Experience> experienceList;
     @JoinColumn(name = "_ownerID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person ownerID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
-    private Collection<AcademicQualification> academicQualificationCollection;
+    private List<AcademicQualification> academicQualificationList;
 
     public Cv() {
     }
@@ -202,12 +202,12 @@ public class Cv implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Experience> getExperienceCollection() {
-        return experienceCollection;
+    public List<Experience> getExperienceList() {
+        return experienceList;
     }
 
-    public void setExperienceCollection(Collection<Experience> experienceCollection) {
-        this.experienceCollection = experienceCollection;
+    public void setExperienceList(List<Experience> experienceList) {
+        this.experienceList = experienceList;
     }
 
     public Person getOwnerID() {
@@ -219,12 +219,12 @@ public class Cv implements Serializable {
     }
 
     @XmlTransient
-    public Collection<AcademicQualification> getAcademicQualificationCollection() {
-        return academicQualificationCollection;
+    public List<AcademicQualification> getAcademicQualificationList() {
+        return academicQualificationList;
     }
 
-    public void setAcademicQualificationCollection(Collection<AcademicQualification> academicQualificationCollection) {
-        this.academicQualificationCollection = academicQualificationCollection;
+    public void setAcademicQualificationList(List<AcademicQualification> academicQualificationList) {
+        this.academicQualificationList = academicQualificationList;
     }
 
     @Override
@@ -249,7 +249,7 @@ public class Cv implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Cv[ cvID=" + cvID + " ]";
+        return "com.softserve.DBEntities.Cv[ cvID=" + cvID + " ]";
     }
     
 }

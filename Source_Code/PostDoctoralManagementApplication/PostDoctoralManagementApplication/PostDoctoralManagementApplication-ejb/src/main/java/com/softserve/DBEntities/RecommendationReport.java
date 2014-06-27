@@ -125,7 +125,7 @@ public class RecommendationReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.RecommendationReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEntities.RecommendationReport[ reportID=" + reportID + " ]";
     }
     
 }

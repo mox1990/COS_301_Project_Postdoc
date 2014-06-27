@@ -77,7 +77,7 @@ public class UpEmployeeInformationJpaController implements Serializable {
                 person = em.merge(person);
             }
             if (physicalAddress != null) {
-                physicalAddress.getUpEmployeeInformationCollection().add(upEmployeeInformation);
+                physicalAddress.getUpEmployeeInformationList().add(upEmployeeInformation);
                 physicalAddress = em.merge(physicalAddress);
             }
             utx.commit();
@@ -139,11 +139,11 @@ public class UpEmployeeInformationJpaController implements Serializable {
                 personNew = em.merge(personNew);
             }
             if (physicalAddressOld != null && !physicalAddressOld.equals(physicalAddressNew)) {
-                physicalAddressOld.getUpEmployeeInformationCollection().remove(upEmployeeInformation);
+                physicalAddressOld.getUpEmployeeInformationList().remove(upEmployeeInformation);
                 physicalAddressOld = em.merge(physicalAddressOld);
             }
             if (physicalAddressNew != null && !physicalAddressNew.equals(physicalAddressOld)) {
-                physicalAddressNew.getUpEmployeeInformationCollection().add(upEmployeeInformation);
+                physicalAddressNew.getUpEmployeeInformationList().add(upEmployeeInformation);
                 physicalAddressNew = em.merge(physicalAddressNew);
             }
             utx.commit();
@@ -187,7 +187,7 @@ public class UpEmployeeInformationJpaController implements Serializable {
             }
             Address physicalAddress = upEmployeeInformation.getPhysicalAddress();
             if (physicalAddress != null) {
-                physicalAddress.getUpEmployeeInformationCollection().remove(upEmployeeInformation);
+                physicalAddress.getUpEmployeeInformationList().remove(upEmployeeInformation);
                 physicalAddress = em.merge(physicalAddress);
             }
             em.remove(upEmployeeInformation);

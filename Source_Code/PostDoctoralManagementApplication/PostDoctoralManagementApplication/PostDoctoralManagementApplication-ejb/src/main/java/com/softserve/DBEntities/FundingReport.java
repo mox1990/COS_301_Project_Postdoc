@@ -7,8 +7,8 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,7 +72,7 @@ public class FundingReport implements Serializable {
     @ManyToOne(optional = false)
     private Person drisID;
     @OneToMany(mappedBy = "fundingReportID")
-    private Collection<Application> applicationCollection;
+    private List<Application> applicationList;
 
     public FundingReport() {
     }
@@ -159,12 +159,12 @@ public class FundingReport implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Application> getApplicationCollection() {
-        return applicationCollection;
+    public List<Application> getApplicationList() {
+        return applicationList;
     }
 
-    public void setApplicationCollection(Collection<Application> applicationCollection) {
-        this.applicationCollection = applicationCollection;
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
     }
 
     @Override
@@ -189,7 +189,7 @@ public class FundingReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.FundingReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEntities.FundingReport[ reportID=" + reportID + " ]";
     }
     
 }

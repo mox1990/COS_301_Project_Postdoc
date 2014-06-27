@@ -152,7 +152,7 @@ public class UpEmployeeInformation implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.UpEmployeeInformation[ employeeID=" + employeeID + " ]";
+        return "com.softserve.DBEntities.UpEmployeeInformation[ employeeID=" + employeeID + " ]";
     }
     
 }

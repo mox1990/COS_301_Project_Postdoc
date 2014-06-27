@@ -50,7 +50,7 @@ public class ProgressReportJpaController implements Serializable {
             }
             em.persist(progressReport);
             if (applicationID != null) {
-                applicationID.getProgressReportCollection().add(progressReport);
+                applicationID.getProgressReportList().add(progressReport);
                 applicationID = em.merge(applicationID);
             }
             utx.commit();
@@ -82,11 +82,11 @@ public class ProgressReportJpaController implements Serializable {
             }
             progressReport = em.merge(progressReport);
             if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
-                applicationIDOld.getProgressReportCollection().remove(progressReport);
+                applicationIDOld.getProgressReportList().remove(progressReport);
                 applicationIDOld = em.merge(applicationIDOld);
             }
             if (applicationIDNew != null && !applicationIDNew.equals(applicationIDOld)) {
-                applicationIDNew.getProgressReportCollection().add(progressReport);
+                applicationIDNew.getProgressReportList().add(progressReport);
                 applicationIDNew = em.merge(applicationIDNew);
             }
             utx.commit();
@@ -125,7 +125,7 @@ public class ProgressReportJpaController implements Serializable {
             }
             Application applicationID = progressReport.getApplicationID();
             if (applicationID != null) {
-                applicationID.getProgressReportCollection().remove(progressReport);
+                applicationID.getProgressReportList().remove(progressReport);
                 applicationID = em.merge(applicationID);
             }
             em.remove(progressReport);

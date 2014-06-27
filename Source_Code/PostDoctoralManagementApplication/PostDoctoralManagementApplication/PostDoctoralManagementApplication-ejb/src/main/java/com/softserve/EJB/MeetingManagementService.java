@@ -52,7 +52,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
             throw new Exception("Meeting has not been started.");
         
         List<Application> a = aem.createNamedQuery("Applications.findByType", Application.class).setParameter("type", "endorsed").getResultList();
-        cMeeting.getApplicationCollection().addAll(a);
+        cMeeting.getApplicationList().addAll(a);
         
         return cMeeting;
     }
@@ -64,7 +64,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
             throw new Exception("Meeting has not been started.");
         
         List<Application> a = aem.createNamedQuery("Applications.findByType", Application.class).setParameter("type", "endorsed").getResultList();
-        cMeeting.getApplicationCollection().addAll(a);
+        cMeeting.getApplicationList().addAll(a);
         
         return cMeeting;
     }

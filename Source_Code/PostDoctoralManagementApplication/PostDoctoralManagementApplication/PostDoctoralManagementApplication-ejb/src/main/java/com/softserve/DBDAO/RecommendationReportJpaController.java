@@ -51,7 +51,7 @@ public class RecommendationReportJpaController implements Serializable {
             }
             em.persist(recommendationReport);
             if (hodID != null) {
-                hodID.getRecommendationReportCollection().add(recommendationReport);
+                hodID.getRecommendationReportList().add(recommendationReport);
                 hodID = em.merge(hodID);
             }
             utx.commit();
@@ -86,11 +86,11 @@ public class RecommendationReportJpaController implements Serializable {
             }
             recommendationReport = em.merge(recommendationReport);
             if (hodIDOld != null && !hodIDOld.equals(hodIDNew)) {
-                hodIDOld.getRecommendationReportCollection().remove(recommendationReport);
+                hodIDOld.getRecommendationReportList().remove(recommendationReport);
                 hodIDOld = em.merge(hodIDOld);
             }
             if (hodIDNew != null && !hodIDNew.equals(hodIDOld)) {
-                hodIDNew.getRecommendationReportCollection().add(recommendationReport);
+                hodIDNew.getRecommendationReportList().add(recommendationReport);
                 hodIDNew = em.merge(hodIDNew);
             }
             utx.commit();
@@ -129,7 +129,7 @@ public class RecommendationReportJpaController implements Serializable {
             }
             Person hodID = recommendationReport.getHodID();
             if (hodID != null) {
-                hodID.getRecommendationReportCollection().remove(recommendationReport);
+                hodID.getRecommendationReportList().remove(recommendationReport);
                 hodID = em.merge(hodID);
             }
             em.remove(recommendationReport);

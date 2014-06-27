@@ -150,7 +150,7 @@ public class Experience implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Experience[ experienceID=" + experienceID + " ]";
+        return "com.softserve.DBEntities.Experience[ experienceID=" + experienceID + " ]";
     }
     
 }

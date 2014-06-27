@@ -18,9 +18,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import java.util.ArrayList;
-import java.util.Collection;
-import com.softserve.DBEntities.Person;
 import java.util.List;
+import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -44,45 +43,45 @@ public class AddressJpaController implements Serializable {
     }
 
     public void create(Address address) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (address.getUpEmployeeInformationCollection() == null) {
-            address.setUpEmployeeInformationCollection(new ArrayList<UpEmployeeInformation>());
+        if (address.getUpEmployeeInformationList() == null) {
+            address.setUpEmployeeInformationList(new ArrayList<UpEmployeeInformation>());
         }
-        if (address.getPersonCollection() == null) {
-            address.setPersonCollection(new ArrayList<Person>());
+        if (address.getPersonList() == null) {
+            address.setPersonList(new ArrayList<Person>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<UpEmployeeInformation> attachedUpEmployeeInformationCollection = new ArrayList<UpEmployeeInformation>();
-            for (UpEmployeeInformation upEmployeeInformationCollectionUpEmployeeInformationToAttach : address.getUpEmployeeInformationCollection()) {
-                upEmployeeInformationCollectionUpEmployeeInformationToAttach = em.getReference(upEmployeeInformationCollectionUpEmployeeInformationToAttach.getClass(), upEmployeeInformationCollectionUpEmployeeInformationToAttach.getEmployeeID());
-                attachedUpEmployeeInformationCollection.add(upEmployeeInformationCollectionUpEmployeeInformationToAttach);
+            List<UpEmployeeInformation> attachedUpEmployeeInformationList = new ArrayList<UpEmployeeInformation>();
+            for (UpEmployeeInformation upEmployeeInformationListUpEmployeeInformationToAttach : address.getUpEmployeeInformationList()) {
+                upEmployeeInformationListUpEmployeeInformationToAttach = em.getReference(upEmployeeInformationListUpEmployeeInformationToAttach.getClass(), upEmployeeInformationListUpEmployeeInformationToAttach.getEmployeeID());
+                attachedUpEmployeeInformationList.add(upEmployeeInformationListUpEmployeeInformationToAttach);
             }
-            address.setUpEmployeeInformationCollection(attachedUpEmployeeInformationCollection);
-            Collection<Person> attachedPersonCollection = new ArrayList<Person>();
-            for (Person personCollectionPersonToAttach : address.getPersonCollection()) {
-                personCollectionPersonToAttach = em.getReference(personCollectionPersonToAttach.getClass(), personCollectionPersonToAttach.getSystemID());
-                attachedPersonCollection.add(personCollectionPersonToAttach);
+            address.setUpEmployeeInformationList(attachedUpEmployeeInformationList);
+            List<Person> attachedPersonList = new ArrayList<Person>();
+            for (Person personListPersonToAttach : address.getPersonList()) {
+                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+                attachedPersonList.add(personListPersonToAttach);
             }
-            address.setPersonCollection(attachedPersonCollection);
+            address.setPersonList(attachedPersonList);
             em.persist(address);
-            for (UpEmployeeInformation upEmployeeInformationCollectionUpEmployeeInformation : address.getUpEmployeeInformationCollection()) {
-                Address oldPhysicalAddressOfUpEmployeeInformationCollectionUpEmployeeInformation = upEmployeeInformationCollectionUpEmployeeInformation.getPhysicalAddress();
-                upEmployeeInformationCollectionUpEmployeeInformation.setPhysicalAddress(address);
-                upEmployeeInformationCollectionUpEmployeeInformation = em.merge(upEmployeeInformationCollectionUpEmployeeInformation);
-                if (oldPhysicalAddressOfUpEmployeeInformationCollectionUpEmployeeInformation != null) {
-                    oldPhysicalAddressOfUpEmployeeInformationCollectionUpEmployeeInformation.getUpEmployeeInformationCollection().remove(upEmployeeInformationCollectionUpEmployeeInformation);
-                    oldPhysicalAddressOfUpEmployeeInformationCollectionUpEmployeeInformation = em.merge(oldPhysicalAddressOfUpEmployeeInformationCollectionUpEmployeeInformation);
+            for (UpEmployeeInformation upEmployeeInformationListUpEmployeeInformation : address.getUpEmployeeInformationList()) {
+                Address oldPhysicalAddressOfUpEmployeeInformationListUpEmployeeInformation = upEmployeeInformationListUpEmployeeInformation.getPhysicalAddress();
+                upEmployeeInformationListUpEmployeeInformation.setPhysicalAddress(address);
+                upEmployeeInformationListUpEmployeeInformation = em.merge(upEmployeeInformationListUpEmployeeInformation);
+                if (oldPhysicalAddressOfUpEmployeeInformationListUpEmployeeInformation != null) {
+                    oldPhysicalAddressOfUpEmployeeInformationListUpEmployeeInformation.getUpEmployeeInformationList().remove(upEmployeeInformationListUpEmployeeInformation);
+                    oldPhysicalAddressOfUpEmployeeInformationListUpEmployeeInformation = em.merge(oldPhysicalAddressOfUpEmployeeInformationListUpEmployeeInformation);
                 }
             }
-            for (Person personCollectionPerson : address.getPersonCollection()) {
-                Address oldAddressLine1OfPersonCollectionPerson = personCollectionPerson.getAddressLine1();
-                personCollectionPerson.setAddressLine1(address);
-                personCollectionPerson = em.merge(personCollectionPerson);
-                if (oldAddressLine1OfPersonCollectionPerson != null) {
-                    oldAddressLine1OfPersonCollectionPerson.getPersonCollection().remove(personCollectionPerson);
-                    oldAddressLine1OfPersonCollectionPerson = em.merge(oldAddressLine1OfPersonCollectionPerson);
+            for (Person personListPerson : address.getPersonList()) {
+                Address oldAddressLine1OfPersonListPerson = personListPerson.getAddressLine1();
+                personListPerson.setAddressLine1(address);
+                personListPerson = em.merge(personListPerson);
+                if (oldAddressLine1OfPersonListPerson != null) {
+                    oldAddressLine1OfPersonListPerson.getPersonList().remove(personListPerson);
+                    oldAddressLine1OfPersonListPerson = em.merge(oldAddressLine1OfPersonListPerson);
                 }
             }
             utx.commit();
@@ -109,64 +108,64 @@ public class AddressJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Address persistentAddress = em.find(Address.class, address.getAddressID());
-            Collection<UpEmployeeInformation> upEmployeeInformationCollectionOld = persistentAddress.getUpEmployeeInformationCollection();
-            Collection<UpEmployeeInformation> upEmployeeInformationCollectionNew = address.getUpEmployeeInformationCollection();
-            Collection<Person> personCollectionOld = persistentAddress.getPersonCollection();
-            Collection<Person> personCollectionNew = address.getPersonCollection();
+            List<UpEmployeeInformation> upEmployeeInformationListOld = persistentAddress.getUpEmployeeInformationList();
+            List<UpEmployeeInformation> upEmployeeInformationListNew = address.getUpEmployeeInformationList();
+            List<Person> personListOld = persistentAddress.getPersonList();
+            List<Person> personListNew = address.getPersonList();
             List<String> illegalOrphanMessages = null;
-            for (UpEmployeeInformation upEmployeeInformationCollectionOldUpEmployeeInformation : upEmployeeInformationCollectionOld) {
-                if (!upEmployeeInformationCollectionNew.contains(upEmployeeInformationCollectionOldUpEmployeeInformation)) {
+            for (UpEmployeeInformation upEmployeeInformationListOldUpEmployeeInformation : upEmployeeInformationListOld) {
+                if (!upEmployeeInformationListNew.contains(upEmployeeInformationListOldUpEmployeeInformation)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain UpEmployeeInformation " + upEmployeeInformationCollectionOldUpEmployeeInformation + " since its physicalAddress field is not nullable.");
+                    illegalOrphanMessages.add("You must retain UpEmployeeInformation " + upEmployeeInformationListOldUpEmployeeInformation + " since its physicalAddress field is not nullable.");
                 }
             }
-            for (Person personCollectionOldPerson : personCollectionOld) {
-                if (!personCollectionNew.contains(personCollectionOldPerson)) {
+            for (Person personListOldPerson : personListOld) {
+                if (!personListNew.contains(personListOldPerson)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Person " + personCollectionOldPerson + " since its addressLine1 field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Person " + personListOldPerson + " since its addressLine1 field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<UpEmployeeInformation> attachedUpEmployeeInformationCollectionNew = new ArrayList<UpEmployeeInformation>();
-            for (UpEmployeeInformation upEmployeeInformationCollectionNewUpEmployeeInformationToAttach : upEmployeeInformationCollectionNew) {
-                upEmployeeInformationCollectionNewUpEmployeeInformationToAttach = em.getReference(upEmployeeInformationCollectionNewUpEmployeeInformationToAttach.getClass(), upEmployeeInformationCollectionNewUpEmployeeInformationToAttach.getEmployeeID());
-                attachedUpEmployeeInformationCollectionNew.add(upEmployeeInformationCollectionNewUpEmployeeInformationToAttach);
+            List<UpEmployeeInformation> attachedUpEmployeeInformationListNew = new ArrayList<UpEmployeeInformation>();
+            for (UpEmployeeInformation upEmployeeInformationListNewUpEmployeeInformationToAttach : upEmployeeInformationListNew) {
+                upEmployeeInformationListNewUpEmployeeInformationToAttach = em.getReference(upEmployeeInformationListNewUpEmployeeInformationToAttach.getClass(), upEmployeeInformationListNewUpEmployeeInformationToAttach.getEmployeeID());
+                attachedUpEmployeeInformationListNew.add(upEmployeeInformationListNewUpEmployeeInformationToAttach);
             }
-            upEmployeeInformationCollectionNew = attachedUpEmployeeInformationCollectionNew;
-            address.setUpEmployeeInformationCollection(upEmployeeInformationCollectionNew);
-            Collection<Person> attachedPersonCollectionNew = new ArrayList<Person>();
-            for (Person personCollectionNewPersonToAttach : personCollectionNew) {
-                personCollectionNewPersonToAttach = em.getReference(personCollectionNewPersonToAttach.getClass(), personCollectionNewPersonToAttach.getSystemID());
-                attachedPersonCollectionNew.add(personCollectionNewPersonToAttach);
+            upEmployeeInformationListNew = attachedUpEmployeeInformationListNew;
+            address.setUpEmployeeInformationList(upEmployeeInformationListNew);
+            List<Person> attachedPersonListNew = new ArrayList<Person>();
+            for (Person personListNewPersonToAttach : personListNew) {
+                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+                attachedPersonListNew.add(personListNewPersonToAttach);
             }
-            personCollectionNew = attachedPersonCollectionNew;
-            address.setPersonCollection(personCollectionNew);
+            personListNew = attachedPersonListNew;
+            address.setPersonList(personListNew);
             address = em.merge(address);
-            for (UpEmployeeInformation upEmployeeInformationCollectionNewUpEmployeeInformation : upEmployeeInformationCollectionNew) {
-                if (!upEmployeeInformationCollectionOld.contains(upEmployeeInformationCollectionNewUpEmployeeInformation)) {
-                    Address oldPhysicalAddressOfUpEmployeeInformationCollectionNewUpEmployeeInformation = upEmployeeInformationCollectionNewUpEmployeeInformation.getPhysicalAddress();
-                    upEmployeeInformationCollectionNewUpEmployeeInformation.setPhysicalAddress(address);
-                    upEmployeeInformationCollectionNewUpEmployeeInformation = em.merge(upEmployeeInformationCollectionNewUpEmployeeInformation);
-                    if (oldPhysicalAddressOfUpEmployeeInformationCollectionNewUpEmployeeInformation != null && !oldPhysicalAddressOfUpEmployeeInformationCollectionNewUpEmployeeInformation.equals(address)) {
-                        oldPhysicalAddressOfUpEmployeeInformationCollectionNewUpEmployeeInformation.getUpEmployeeInformationCollection().remove(upEmployeeInformationCollectionNewUpEmployeeInformation);
-                        oldPhysicalAddressOfUpEmployeeInformationCollectionNewUpEmployeeInformation = em.merge(oldPhysicalAddressOfUpEmployeeInformationCollectionNewUpEmployeeInformation);
+            for (UpEmployeeInformation upEmployeeInformationListNewUpEmployeeInformation : upEmployeeInformationListNew) {
+                if (!upEmployeeInformationListOld.contains(upEmployeeInformationListNewUpEmployeeInformation)) {
+                    Address oldPhysicalAddressOfUpEmployeeInformationListNewUpEmployeeInformation = upEmployeeInformationListNewUpEmployeeInformation.getPhysicalAddress();
+                    upEmployeeInformationListNewUpEmployeeInformation.setPhysicalAddress(address);
+                    upEmployeeInformationListNewUpEmployeeInformation = em.merge(upEmployeeInformationListNewUpEmployeeInformation);
+                    if (oldPhysicalAddressOfUpEmployeeInformationListNewUpEmployeeInformation != null && !oldPhysicalAddressOfUpEmployeeInformationListNewUpEmployeeInformation.equals(address)) {
+                        oldPhysicalAddressOfUpEmployeeInformationListNewUpEmployeeInformation.getUpEmployeeInformationList().remove(upEmployeeInformationListNewUpEmployeeInformation);
+                        oldPhysicalAddressOfUpEmployeeInformationListNewUpEmployeeInformation = em.merge(oldPhysicalAddressOfUpEmployeeInformationListNewUpEmployeeInformation);
                     }
                 }
             }
-            for (Person personCollectionNewPerson : personCollectionNew) {
-                if (!personCollectionOld.contains(personCollectionNewPerson)) {
-                    Address oldAddressLine1OfPersonCollectionNewPerson = personCollectionNewPerson.getAddressLine1();
-                    personCollectionNewPerson.setAddressLine1(address);
-                    personCollectionNewPerson = em.merge(personCollectionNewPerson);
-                    if (oldAddressLine1OfPersonCollectionNewPerson != null && !oldAddressLine1OfPersonCollectionNewPerson.equals(address)) {
-                        oldAddressLine1OfPersonCollectionNewPerson.getPersonCollection().remove(personCollectionNewPerson);
-                        oldAddressLine1OfPersonCollectionNewPerson = em.merge(oldAddressLine1OfPersonCollectionNewPerson);
+            for (Person personListNewPerson : personListNew) {
+                if (!personListOld.contains(personListNewPerson)) {
+                    Address oldAddressLine1OfPersonListNewPerson = personListNewPerson.getAddressLine1();
+                    personListNewPerson.setAddressLine1(address);
+                    personListNewPerson = em.merge(personListNewPerson);
+                    if (oldAddressLine1OfPersonListNewPerson != null && !oldAddressLine1OfPersonListNewPerson.equals(address)) {
+                        oldAddressLine1OfPersonListNewPerson.getPersonList().remove(personListNewPerson);
+                        oldAddressLine1OfPersonListNewPerson = em.merge(oldAddressLine1OfPersonListNewPerson);
                     }
                 }
             }
@@ -205,19 +204,19 @@ public class AddressJpaController implements Serializable {
                 throw new NonexistentEntityException("The address with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<UpEmployeeInformation> upEmployeeInformationCollectionOrphanCheck = address.getUpEmployeeInformationCollection();
-            for (UpEmployeeInformation upEmployeeInformationCollectionOrphanCheckUpEmployeeInformation : upEmployeeInformationCollectionOrphanCheck) {
+            List<UpEmployeeInformation> upEmployeeInformationListOrphanCheck = address.getUpEmployeeInformationList();
+            for (UpEmployeeInformation upEmployeeInformationListOrphanCheckUpEmployeeInformation : upEmployeeInformationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Address (" + address + ") cannot be destroyed since the UpEmployeeInformation " + upEmployeeInformationCollectionOrphanCheckUpEmployeeInformation + " in its upEmployeeInformationCollection field has a non-nullable physicalAddress field.");
+                illegalOrphanMessages.add("This Address (" + address + ") cannot be destroyed since the UpEmployeeInformation " + upEmployeeInformationListOrphanCheckUpEmployeeInformation + " in its upEmployeeInformationList field has a non-nullable physicalAddress field.");
             }
-            Collection<Person> personCollectionOrphanCheck = address.getPersonCollection();
-            for (Person personCollectionOrphanCheckPerson : personCollectionOrphanCheck) {
+            List<Person> personListOrphanCheck = address.getPersonList();
+            for (Person personListOrphanCheckPerson : personListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Address (" + address + ") cannot be destroyed since the Person " + personCollectionOrphanCheckPerson + " in its personCollection field has a non-nullable addressLine1 field.");
+                illegalOrphanMessages.add("This Address (" + address + ") cannot be destroyed since the Person " + personListOrphanCheckPerson + " in its personList field has a non-nullable addressLine1 field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

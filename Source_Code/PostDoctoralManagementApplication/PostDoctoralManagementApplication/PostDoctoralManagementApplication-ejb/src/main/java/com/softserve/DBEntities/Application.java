@@ -7,8 +7,8 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -83,10 +83,10 @@ public class Application implements Serializable {
     @Size(max = 65535)
     @Column(name = "_information")
     private String information;
-    @ManyToMany(mappedBy = "applicationCollection")
-    private Collection<CommitteeMeeting> committeeMeetingCollection;
+    @ManyToMany(mappedBy = "applicationList")
+    private List<CommitteeMeeting> committeeMeetingList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<RefereeReport> refereeReportCollection;
+    private List<RefereeReport> refereeReportList;
     @JoinColumn(name = "_fellow", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person fellow;
@@ -103,7 +103,7 @@ public class Application implements Serializable {
     @ManyToOne
     private FundingReport fundingReportID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
-    private Collection<ProgressReport> progressReportCollection;
+    private List<ProgressReport> progressReportList;
 
     public Application() {
     }
@@ -190,21 +190,21 @@ public class Application implements Serializable {
     }
 
     @XmlTransient
-    public Collection<CommitteeMeeting> getCommitteeMeetingCollection() {
-        return committeeMeetingCollection;
+    public List<CommitteeMeeting> getCommitteeMeetingList() {
+        return committeeMeetingList;
     }
 
-    public void setCommitteeMeetingCollection(Collection<CommitteeMeeting> committeeMeetingCollection) {
-        this.committeeMeetingCollection = committeeMeetingCollection;
+    public void setCommitteeMeetingList(List<CommitteeMeeting> committeeMeetingList) {
+        this.committeeMeetingList = committeeMeetingList;
     }
 
     @XmlTransient
-    public Collection<RefereeReport> getRefereeReportCollection() {
-        return refereeReportCollection;
+    public List<RefereeReport> getRefereeReportList() {
+        return refereeReportList;
     }
 
-    public void setRefereeReportCollection(Collection<RefereeReport> refereeReportCollection) {
-        this.refereeReportCollection = refereeReportCollection;
+    public void setRefereeReportList(List<RefereeReport> refereeReportList) {
+        this.refereeReportList = refereeReportList;
     }
 
     public Person getFellow() {
@@ -248,12 +248,12 @@ public class Application implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ProgressReport> getProgressReportCollection() {
-        return progressReportCollection;
+    public List<ProgressReport> getProgressReportList() {
+        return progressReportList;
     }
 
-    public void setProgressReportCollection(Collection<ProgressReport> progressReportCollection) {
-        this.progressReportCollection = progressReportCollection;
+    public void setProgressReportList(List<ProgressReport> progressReportList) {
+        this.progressReportList = progressReportList;
     }
 
     @Override
@@ -278,7 +278,7 @@ public class Application implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Application[ applicationID=" + applicationID + " ]";
+        return "com.softserve.DBEntities.Application[ applicationID=" + applicationID + " ]";
     }
     
 }

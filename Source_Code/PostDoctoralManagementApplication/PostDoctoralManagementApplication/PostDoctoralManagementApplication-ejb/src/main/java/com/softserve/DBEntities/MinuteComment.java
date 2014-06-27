@@ -137,7 +137,7 @@ public class MinuteComment implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.MinuteComment[ commentID=" + commentID + " ]";
+        return "com.softserve.DBEntities.MinuteComment[ commentID=" + commentID + " ]";
     }
     
 }

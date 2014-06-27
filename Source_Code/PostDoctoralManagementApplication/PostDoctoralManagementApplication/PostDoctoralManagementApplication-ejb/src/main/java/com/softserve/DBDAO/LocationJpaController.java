@@ -17,9 +17,8 @@ import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Location;
 import java.util.ArrayList;
-import java.util.Collection;
-import com.softserve.DBEntities.Person;
 import java.util.List;
+import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -43,45 +42,45 @@ public class LocationJpaController implements Serializable {
     }
 
     public void create(Location location) throws RollbackFailureException, Exception {
-        if (location.getApplicationCollection() == null) {
-            location.setApplicationCollection(new ArrayList<Application>());
+        if (location.getApplicationList() == null) {
+            location.setApplicationList(new ArrayList<Application>());
         }
-        if (location.getPersonCollection() == null) {
-            location.setPersonCollection(new ArrayList<Person>());
+        if (location.getPersonList() == null) {
+            location.setPersonList(new ArrayList<Person>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Collection<Application> attachedApplicationCollection = new ArrayList<Application>();
-            for (Application applicationCollectionApplicationToAttach : location.getApplicationCollection()) {
-                applicationCollectionApplicationToAttach = em.getReference(applicationCollectionApplicationToAttach.getClass(), applicationCollectionApplicationToAttach.getApplicationID());
-                attachedApplicationCollection.add(applicationCollectionApplicationToAttach);
+            List<Application> attachedApplicationList = new ArrayList<Application>();
+            for (Application applicationListApplicationToAttach : location.getApplicationList()) {
+                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
+                attachedApplicationList.add(applicationListApplicationToAttach);
             }
-            location.setApplicationCollection(attachedApplicationCollection);
-            Collection<Person> attachedPersonCollection = new ArrayList<Person>();
-            for (Person personCollectionPersonToAttach : location.getPersonCollection()) {
-                personCollectionPersonToAttach = em.getReference(personCollectionPersonToAttach.getClass(), personCollectionPersonToAttach.getSystemID());
-                attachedPersonCollection.add(personCollectionPersonToAttach);
+            location.setApplicationList(attachedApplicationList);
+            List<Person> attachedPersonList = new ArrayList<Person>();
+            for (Person personListPersonToAttach : location.getPersonList()) {
+                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+                attachedPersonList.add(personListPersonToAttach);
             }
-            location.setPersonCollection(attachedPersonCollection);
+            location.setPersonList(attachedPersonList);
             em.persist(location);
-            for (Application applicationCollectionApplication : location.getApplicationCollection()) {
-                Location oldLocationIDOfApplicationCollectionApplication = applicationCollectionApplication.getLocationID();
-                applicationCollectionApplication.setLocationID(location);
-                applicationCollectionApplication = em.merge(applicationCollectionApplication);
-                if (oldLocationIDOfApplicationCollectionApplication != null) {
-                    oldLocationIDOfApplicationCollectionApplication.getApplicationCollection().remove(applicationCollectionApplication);
-                    oldLocationIDOfApplicationCollectionApplication = em.merge(oldLocationIDOfApplicationCollectionApplication);
+            for (Application applicationListApplication : location.getApplicationList()) {
+                Location oldLocationIDOfApplicationListApplication = applicationListApplication.getLocationID();
+                applicationListApplication.setLocationID(location);
+                applicationListApplication = em.merge(applicationListApplication);
+                if (oldLocationIDOfApplicationListApplication != null) {
+                    oldLocationIDOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
+                    oldLocationIDOfApplicationListApplication = em.merge(oldLocationIDOfApplicationListApplication);
                 }
             }
-            for (Person personCollectionPerson : location.getPersonCollection()) {
-                Location oldLocationIDOfPersonCollectionPerson = personCollectionPerson.getLocationID();
-                personCollectionPerson.setLocationID(location);
-                personCollectionPerson = em.merge(personCollectionPerson);
-                if (oldLocationIDOfPersonCollectionPerson != null) {
-                    oldLocationIDOfPersonCollectionPerson.getPersonCollection().remove(personCollectionPerson);
-                    oldLocationIDOfPersonCollectionPerson = em.merge(oldLocationIDOfPersonCollectionPerson);
+            for (Person personListPerson : location.getPersonList()) {
+                Location oldLocationIDOfPersonListPerson = personListPerson.getLocationID();
+                personListPerson.setLocationID(location);
+                personListPerson = em.merge(personListPerson);
+                if (oldLocationIDOfPersonListPerson != null) {
+                    oldLocationIDOfPersonListPerson.getPersonList().remove(personListPerson);
+                    oldLocationIDOfPersonListPerson = em.merge(oldLocationIDOfPersonListPerson);
                 }
             }
             utx.commit();
@@ -105,62 +104,62 @@ public class LocationJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Location persistentLocation = em.find(Location.class, location.getLocationID());
-            Collection<Application> applicationCollectionOld = persistentLocation.getApplicationCollection();
-            Collection<Application> applicationCollectionNew = location.getApplicationCollection();
-            Collection<Person> personCollectionOld = persistentLocation.getPersonCollection();
-            Collection<Person> personCollectionNew = location.getPersonCollection();
+            List<Application> applicationListOld = persistentLocation.getApplicationList();
+            List<Application> applicationListNew = location.getApplicationList();
+            List<Person> personListOld = persistentLocation.getPersonList();
+            List<Person> personListNew = location.getPersonList();
             List<String> illegalOrphanMessages = null;
-            for (Application applicationCollectionOldApplication : applicationCollectionOld) {
-                if (!applicationCollectionNew.contains(applicationCollectionOldApplication)) {
+            for (Application applicationListOldApplication : applicationListOld) {
+                if (!applicationListNew.contains(applicationListOldApplication)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Application " + applicationCollectionOldApplication + " since its locationID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Application " + applicationListOldApplication + " since its locationID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Application> attachedApplicationCollectionNew = new ArrayList<Application>();
-            for (Application applicationCollectionNewApplicationToAttach : applicationCollectionNew) {
-                applicationCollectionNewApplicationToAttach = em.getReference(applicationCollectionNewApplicationToAttach.getClass(), applicationCollectionNewApplicationToAttach.getApplicationID());
-                attachedApplicationCollectionNew.add(applicationCollectionNewApplicationToAttach);
+            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            for (Application applicationListNewApplicationToAttach : applicationListNew) {
+                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
+                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
             }
-            applicationCollectionNew = attachedApplicationCollectionNew;
-            location.setApplicationCollection(applicationCollectionNew);
-            Collection<Person> attachedPersonCollectionNew = new ArrayList<Person>();
-            for (Person personCollectionNewPersonToAttach : personCollectionNew) {
-                personCollectionNewPersonToAttach = em.getReference(personCollectionNewPersonToAttach.getClass(), personCollectionNewPersonToAttach.getSystemID());
-                attachedPersonCollectionNew.add(personCollectionNewPersonToAttach);
+            applicationListNew = attachedApplicationListNew;
+            location.setApplicationList(applicationListNew);
+            List<Person> attachedPersonListNew = new ArrayList<Person>();
+            for (Person personListNewPersonToAttach : personListNew) {
+                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+                attachedPersonListNew.add(personListNewPersonToAttach);
             }
-            personCollectionNew = attachedPersonCollectionNew;
-            location.setPersonCollection(personCollectionNew);
+            personListNew = attachedPersonListNew;
+            location.setPersonList(personListNew);
             location = em.merge(location);
-            for (Application applicationCollectionNewApplication : applicationCollectionNew) {
-                if (!applicationCollectionOld.contains(applicationCollectionNewApplication)) {
-                    Location oldLocationIDOfApplicationCollectionNewApplication = applicationCollectionNewApplication.getLocationID();
-                    applicationCollectionNewApplication.setLocationID(location);
-                    applicationCollectionNewApplication = em.merge(applicationCollectionNewApplication);
-                    if (oldLocationIDOfApplicationCollectionNewApplication != null && !oldLocationIDOfApplicationCollectionNewApplication.equals(location)) {
-                        oldLocationIDOfApplicationCollectionNewApplication.getApplicationCollection().remove(applicationCollectionNewApplication);
-                        oldLocationIDOfApplicationCollectionNewApplication = em.merge(oldLocationIDOfApplicationCollectionNewApplication);
+            for (Application applicationListNewApplication : applicationListNew) {
+                if (!applicationListOld.contains(applicationListNewApplication)) {
+                    Location oldLocationIDOfApplicationListNewApplication = applicationListNewApplication.getLocationID();
+                    applicationListNewApplication.setLocationID(location);
+                    applicationListNewApplication = em.merge(applicationListNewApplication);
+                    if (oldLocationIDOfApplicationListNewApplication != null && !oldLocationIDOfApplicationListNewApplication.equals(location)) {
+                        oldLocationIDOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
+                        oldLocationIDOfApplicationListNewApplication = em.merge(oldLocationIDOfApplicationListNewApplication);
                     }
                 }
             }
-            for (Person personCollectionOldPerson : personCollectionOld) {
-                if (!personCollectionNew.contains(personCollectionOldPerson)) {
-                    personCollectionOldPerson.setLocationID(null);
-                    personCollectionOldPerson = em.merge(personCollectionOldPerson);
+            for (Person personListOldPerson : personListOld) {
+                if (!personListNew.contains(personListOldPerson)) {
+                    personListOldPerson.setLocationID(null);
+                    personListOldPerson = em.merge(personListOldPerson);
                 }
             }
-            for (Person personCollectionNewPerson : personCollectionNew) {
-                if (!personCollectionOld.contains(personCollectionNewPerson)) {
-                    Location oldLocationIDOfPersonCollectionNewPerson = personCollectionNewPerson.getLocationID();
-                    personCollectionNewPerson.setLocationID(location);
-                    personCollectionNewPerson = em.merge(personCollectionNewPerson);
-                    if (oldLocationIDOfPersonCollectionNewPerson != null && !oldLocationIDOfPersonCollectionNewPerson.equals(location)) {
-                        oldLocationIDOfPersonCollectionNewPerson.getPersonCollection().remove(personCollectionNewPerson);
-                        oldLocationIDOfPersonCollectionNewPerson = em.merge(oldLocationIDOfPersonCollectionNewPerson);
+            for (Person personListNewPerson : personListNew) {
+                if (!personListOld.contains(personListNewPerson)) {
+                    Location oldLocationIDOfPersonListNewPerson = personListNewPerson.getLocationID();
+                    personListNewPerson.setLocationID(location);
+                    personListNewPerson = em.merge(personListNewPerson);
+                    if (oldLocationIDOfPersonListNewPerson != null && !oldLocationIDOfPersonListNewPerson.equals(location)) {
+                        oldLocationIDOfPersonListNewPerson.getPersonList().remove(personListNewPerson);
+                        oldLocationIDOfPersonListNewPerson = em.merge(oldLocationIDOfPersonListNewPerson);
                     }
                 }
             }
@@ -199,20 +198,20 @@ public class LocationJpaController implements Serializable {
                 throw new NonexistentEntityException("The location with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Application> applicationCollectionOrphanCheck = location.getApplicationCollection();
-            for (Application applicationCollectionOrphanCheckApplication : applicationCollectionOrphanCheck) {
+            List<Application> applicationListOrphanCheck = location.getApplicationList();
+            for (Application applicationListOrphanCheckApplication : applicationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Location (" + location + ") cannot be destroyed since the Application " + applicationCollectionOrphanCheckApplication + " in its applicationCollection field has a non-nullable locationID field.");
+                illegalOrphanMessages.add("This Location (" + location + ") cannot be destroyed since the Application " + applicationListOrphanCheckApplication + " in its applicationList field has a non-nullable locationID field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Person> personCollection = location.getPersonCollection();
-            for (Person personCollectionPerson : personCollection) {
-                personCollectionPerson.setLocationID(null);
-                personCollectionPerson = em.merge(personCollectionPerson);
+            List<Person> personList = location.getPersonList();
+            for (Person personListPerson : personList) {
+                personListPerson.setLocationID(null);
+                personListPerson = em.merge(personListPerson);
             }
             em.remove(location);
             utx.commit();

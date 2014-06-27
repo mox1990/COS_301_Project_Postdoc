@@ -17,10 +17,9 @@ import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Experience;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Cv;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -44,11 +43,11 @@ public class CvJpaController implements Serializable {
     }
 
     public void create(Cv cv) throws RollbackFailureException, Exception {
-        if (cv.getExperienceCollection() == null) {
-            cv.setExperienceCollection(new ArrayList<Experience>());
+        if (cv.getExperienceList() == null) {
+            cv.setExperienceList(new ArrayList<Experience>());
         }
-        if (cv.getAcademicQualificationCollection() == null) {
-            cv.setAcademicQualificationCollection(new ArrayList<AcademicQualification>());
+        if (cv.getAcademicQualificationList() == null) {
+            cv.setAcademicQualificationList(new ArrayList<AcademicQualification>());
         }
         EntityManager em = null;
         try {
@@ -59,39 +58,39 @@ public class CvJpaController implements Serializable {
                 ownerID = em.getReference(ownerID.getClass(), ownerID.getSystemID());
                 cv.setOwnerID(ownerID);
             }
-            Collection<Experience> attachedExperienceCollection = new ArrayList<Experience>();
-            for (Experience experienceCollectionExperienceToAttach : cv.getExperienceCollection()) {
-                experienceCollectionExperienceToAttach = em.getReference(experienceCollectionExperienceToAttach.getClass(), experienceCollectionExperienceToAttach.getExperienceID());
-                attachedExperienceCollection.add(experienceCollectionExperienceToAttach);
+            List<Experience> attachedExperienceList = new ArrayList<Experience>();
+            for (Experience experienceListExperienceToAttach : cv.getExperienceList()) {
+                experienceListExperienceToAttach = em.getReference(experienceListExperienceToAttach.getClass(), experienceListExperienceToAttach.getExperienceID());
+                attachedExperienceList.add(experienceListExperienceToAttach);
             }
-            cv.setExperienceCollection(attachedExperienceCollection);
-            Collection<AcademicQualification> attachedAcademicQualificationCollection = new ArrayList<AcademicQualification>();
-            for (AcademicQualification academicQualificationCollectionAcademicQualificationToAttach : cv.getAcademicQualificationCollection()) {
-                academicQualificationCollectionAcademicQualificationToAttach = em.getReference(academicQualificationCollectionAcademicQualificationToAttach.getClass(), academicQualificationCollectionAcademicQualificationToAttach.getQualificationID());
-                attachedAcademicQualificationCollection.add(academicQualificationCollectionAcademicQualificationToAttach);
+            cv.setExperienceList(attachedExperienceList);
+            List<AcademicQualification> attachedAcademicQualificationList = new ArrayList<AcademicQualification>();
+            for (AcademicQualification academicQualificationListAcademicQualificationToAttach : cv.getAcademicQualificationList()) {
+                academicQualificationListAcademicQualificationToAttach = em.getReference(academicQualificationListAcademicQualificationToAttach.getClass(), academicQualificationListAcademicQualificationToAttach.getQualificationID());
+                attachedAcademicQualificationList.add(academicQualificationListAcademicQualificationToAttach);
             }
-            cv.setAcademicQualificationCollection(attachedAcademicQualificationCollection);
+            cv.setAcademicQualificationList(attachedAcademicQualificationList);
             em.persist(cv);
             if (ownerID != null) {
-                ownerID.getCvCollection().add(cv);
+                ownerID.getCvList().add(cv);
                 ownerID = em.merge(ownerID);
             }
-            for (Experience experienceCollectionExperience : cv.getExperienceCollection()) {
-                Cv oldCvIDOfExperienceCollectionExperience = experienceCollectionExperience.getCvID();
-                experienceCollectionExperience.setCvID(cv);
-                experienceCollectionExperience = em.merge(experienceCollectionExperience);
-                if (oldCvIDOfExperienceCollectionExperience != null) {
-                    oldCvIDOfExperienceCollectionExperience.getExperienceCollection().remove(experienceCollectionExperience);
-                    oldCvIDOfExperienceCollectionExperience = em.merge(oldCvIDOfExperienceCollectionExperience);
+            for (Experience experienceListExperience : cv.getExperienceList()) {
+                Cv oldCvIDOfExperienceListExperience = experienceListExperience.getCvID();
+                experienceListExperience.setCvID(cv);
+                experienceListExperience = em.merge(experienceListExperience);
+                if (oldCvIDOfExperienceListExperience != null) {
+                    oldCvIDOfExperienceListExperience.getExperienceList().remove(experienceListExperience);
+                    oldCvIDOfExperienceListExperience = em.merge(oldCvIDOfExperienceListExperience);
                 }
             }
-            for (AcademicQualification academicQualificationCollectionAcademicQualification : cv.getAcademicQualificationCollection()) {
-                Cv oldCvIDOfAcademicQualificationCollectionAcademicQualification = academicQualificationCollectionAcademicQualification.getCvID();
-                academicQualificationCollectionAcademicQualification.setCvID(cv);
-                academicQualificationCollectionAcademicQualification = em.merge(academicQualificationCollectionAcademicQualification);
-                if (oldCvIDOfAcademicQualificationCollectionAcademicQualification != null) {
-                    oldCvIDOfAcademicQualificationCollectionAcademicQualification.getAcademicQualificationCollection().remove(academicQualificationCollectionAcademicQualification);
-                    oldCvIDOfAcademicQualificationCollectionAcademicQualification = em.merge(oldCvIDOfAcademicQualificationCollectionAcademicQualification);
+            for (AcademicQualification academicQualificationListAcademicQualification : cv.getAcademicQualificationList()) {
+                Cv oldCvIDOfAcademicQualificationListAcademicQualification = academicQualificationListAcademicQualification.getCvID();
+                academicQualificationListAcademicQualification.setCvID(cv);
+                academicQualificationListAcademicQualification = em.merge(academicQualificationListAcademicQualification);
+                if (oldCvIDOfAcademicQualificationListAcademicQualification != null) {
+                    oldCvIDOfAcademicQualificationListAcademicQualification.getAcademicQualificationList().remove(academicQualificationListAcademicQualification);
+                    oldCvIDOfAcademicQualificationListAcademicQualification = em.merge(oldCvIDOfAcademicQualificationListAcademicQualification);
                 }
             }
             utx.commit();
@@ -117,25 +116,25 @@ public class CvJpaController implements Serializable {
             Cv persistentCv = em.find(Cv.class, cv.getCvID());
             Person ownerIDOld = persistentCv.getOwnerID();
             Person ownerIDNew = cv.getOwnerID();
-            Collection<Experience> experienceCollectionOld = persistentCv.getExperienceCollection();
-            Collection<Experience> experienceCollectionNew = cv.getExperienceCollection();
-            Collection<AcademicQualification> academicQualificationCollectionOld = persistentCv.getAcademicQualificationCollection();
-            Collection<AcademicQualification> academicQualificationCollectionNew = cv.getAcademicQualificationCollection();
+            List<Experience> experienceListOld = persistentCv.getExperienceList();
+            List<Experience> experienceListNew = cv.getExperienceList();
+            List<AcademicQualification> academicQualificationListOld = persistentCv.getAcademicQualificationList();
+            List<AcademicQualification> academicQualificationListNew = cv.getAcademicQualificationList();
             List<String> illegalOrphanMessages = null;
-            for (Experience experienceCollectionOldExperience : experienceCollectionOld) {
-                if (!experienceCollectionNew.contains(experienceCollectionOldExperience)) {
+            for (Experience experienceListOldExperience : experienceListOld) {
+                if (!experienceListNew.contains(experienceListOldExperience)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Experience " + experienceCollectionOldExperience + " since its cvID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Experience " + experienceListOldExperience + " since its cvID field is not nullable.");
                 }
             }
-            for (AcademicQualification academicQualificationCollectionOldAcademicQualification : academicQualificationCollectionOld) {
-                if (!academicQualificationCollectionNew.contains(academicQualificationCollectionOldAcademicQualification)) {
+            for (AcademicQualification academicQualificationListOldAcademicQualification : academicQualificationListOld) {
+                if (!academicQualificationListNew.contains(academicQualificationListOldAcademicQualification)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain AcademicQualification " + academicQualificationCollectionOldAcademicQualification + " since its cvID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain AcademicQualification " + academicQualificationListOldAcademicQualification + " since its cvID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -145,48 +144,48 @@ public class CvJpaController implements Serializable {
                 ownerIDNew = em.getReference(ownerIDNew.getClass(), ownerIDNew.getSystemID());
                 cv.setOwnerID(ownerIDNew);
             }
-            Collection<Experience> attachedExperienceCollectionNew = new ArrayList<Experience>();
-            for (Experience experienceCollectionNewExperienceToAttach : experienceCollectionNew) {
-                experienceCollectionNewExperienceToAttach = em.getReference(experienceCollectionNewExperienceToAttach.getClass(), experienceCollectionNewExperienceToAttach.getExperienceID());
-                attachedExperienceCollectionNew.add(experienceCollectionNewExperienceToAttach);
+            List<Experience> attachedExperienceListNew = new ArrayList<Experience>();
+            for (Experience experienceListNewExperienceToAttach : experienceListNew) {
+                experienceListNewExperienceToAttach = em.getReference(experienceListNewExperienceToAttach.getClass(), experienceListNewExperienceToAttach.getExperienceID());
+                attachedExperienceListNew.add(experienceListNewExperienceToAttach);
             }
-            experienceCollectionNew = attachedExperienceCollectionNew;
-            cv.setExperienceCollection(experienceCollectionNew);
-            Collection<AcademicQualification> attachedAcademicQualificationCollectionNew = new ArrayList<AcademicQualification>();
-            for (AcademicQualification academicQualificationCollectionNewAcademicQualificationToAttach : academicQualificationCollectionNew) {
-                academicQualificationCollectionNewAcademicQualificationToAttach = em.getReference(academicQualificationCollectionNewAcademicQualificationToAttach.getClass(), academicQualificationCollectionNewAcademicQualificationToAttach.getQualificationID());
-                attachedAcademicQualificationCollectionNew.add(academicQualificationCollectionNewAcademicQualificationToAttach);
+            experienceListNew = attachedExperienceListNew;
+            cv.setExperienceList(experienceListNew);
+            List<AcademicQualification> attachedAcademicQualificationListNew = new ArrayList<AcademicQualification>();
+            for (AcademicQualification academicQualificationListNewAcademicQualificationToAttach : academicQualificationListNew) {
+                academicQualificationListNewAcademicQualificationToAttach = em.getReference(academicQualificationListNewAcademicQualificationToAttach.getClass(), academicQualificationListNewAcademicQualificationToAttach.getQualificationID());
+                attachedAcademicQualificationListNew.add(academicQualificationListNewAcademicQualificationToAttach);
             }
-            academicQualificationCollectionNew = attachedAcademicQualificationCollectionNew;
-            cv.setAcademicQualificationCollection(academicQualificationCollectionNew);
+            academicQualificationListNew = attachedAcademicQualificationListNew;
+            cv.setAcademicQualificationList(academicQualificationListNew);
             cv = em.merge(cv);
             if (ownerIDOld != null && !ownerIDOld.equals(ownerIDNew)) {
-                ownerIDOld.getCvCollection().remove(cv);
+                ownerIDOld.getCvList().remove(cv);
                 ownerIDOld = em.merge(ownerIDOld);
             }
             if (ownerIDNew != null && !ownerIDNew.equals(ownerIDOld)) {
-                ownerIDNew.getCvCollection().add(cv);
+                ownerIDNew.getCvList().add(cv);
                 ownerIDNew = em.merge(ownerIDNew);
             }
-            for (Experience experienceCollectionNewExperience : experienceCollectionNew) {
-                if (!experienceCollectionOld.contains(experienceCollectionNewExperience)) {
-                    Cv oldCvIDOfExperienceCollectionNewExperience = experienceCollectionNewExperience.getCvID();
-                    experienceCollectionNewExperience.setCvID(cv);
-                    experienceCollectionNewExperience = em.merge(experienceCollectionNewExperience);
-                    if (oldCvIDOfExperienceCollectionNewExperience != null && !oldCvIDOfExperienceCollectionNewExperience.equals(cv)) {
-                        oldCvIDOfExperienceCollectionNewExperience.getExperienceCollection().remove(experienceCollectionNewExperience);
-                        oldCvIDOfExperienceCollectionNewExperience = em.merge(oldCvIDOfExperienceCollectionNewExperience);
+            for (Experience experienceListNewExperience : experienceListNew) {
+                if (!experienceListOld.contains(experienceListNewExperience)) {
+                    Cv oldCvIDOfExperienceListNewExperience = experienceListNewExperience.getCvID();
+                    experienceListNewExperience.setCvID(cv);
+                    experienceListNewExperience = em.merge(experienceListNewExperience);
+                    if (oldCvIDOfExperienceListNewExperience != null && !oldCvIDOfExperienceListNewExperience.equals(cv)) {
+                        oldCvIDOfExperienceListNewExperience.getExperienceList().remove(experienceListNewExperience);
+                        oldCvIDOfExperienceListNewExperience = em.merge(oldCvIDOfExperienceListNewExperience);
                     }
                 }
             }
-            for (AcademicQualification academicQualificationCollectionNewAcademicQualification : academicQualificationCollectionNew) {
-                if (!academicQualificationCollectionOld.contains(academicQualificationCollectionNewAcademicQualification)) {
-                    Cv oldCvIDOfAcademicQualificationCollectionNewAcademicQualification = academicQualificationCollectionNewAcademicQualification.getCvID();
-                    academicQualificationCollectionNewAcademicQualification.setCvID(cv);
-                    academicQualificationCollectionNewAcademicQualification = em.merge(academicQualificationCollectionNewAcademicQualification);
-                    if (oldCvIDOfAcademicQualificationCollectionNewAcademicQualification != null && !oldCvIDOfAcademicQualificationCollectionNewAcademicQualification.equals(cv)) {
-                        oldCvIDOfAcademicQualificationCollectionNewAcademicQualification.getAcademicQualificationCollection().remove(academicQualificationCollectionNewAcademicQualification);
-                        oldCvIDOfAcademicQualificationCollectionNewAcademicQualification = em.merge(oldCvIDOfAcademicQualificationCollectionNewAcademicQualification);
+            for (AcademicQualification academicQualificationListNewAcademicQualification : academicQualificationListNew) {
+                if (!academicQualificationListOld.contains(academicQualificationListNewAcademicQualification)) {
+                    Cv oldCvIDOfAcademicQualificationListNewAcademicQualification = academicQualificationListNewAcademicQualification.getCvID();
+                    academicQualificationListNewAcademicQualification.setCvID(cv);
+                    academicQualificationListNewAcademicQualification = em.merge(academicQualificationListNewAcademicQualification);
+                    if (oldCvIDOfAcademicQualificationListNewAcademicQualification != null && !oldCvIDOfAcademicQualificationListNewAcademicQualification.equals(cv)) {
+                        oldCvIDOfAcademicQualificationListNewAcademicQualification.getAcademicQualificationList().remove(academicQualificationListNewAcademicQualification);
+                        oldCvIDOfAcademicQualificationListNewAcademicQualification = em.merge(oldCvIDOfAcademicQualificationListNewAcademicQualification);
                     }
                 }
             }
@@ -225,26 +224,26 @@ public class CvJpaController implements Serializable {
                 throw new NonexistentEntityException("The cv with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Experience> experienceCollectionOrphanCheck = cv.getExperienceCollection();
-            for (Experience experienceCollectionOrphanCheckExperience : experienceCollectionOrphanCheck) {
+            List<Experience> experienceListOrphanCheck = cv.getExperienceList();
+            for (Experience experienceListOrphanCheckExperience : experienceListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the Experience " + experienceCollectionOrphanCheckExperience + " in its experienceCollection field has a non-nullable cvID field.");
+                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the Experience " + experienceListOrphanCheckExperience + " in its experienceList field has a non-nullable cvID field.");
             }
-            Collection<AcademicQualification> academicQualificationCollectionOrphanCheck = cv.getAcademicQualificationCollection();
-            for (AcademicQualification academicQualificationCollectionOrphanCheckAcademicQualification : academicQualificationCollectionOrphanCheck) {
+            List<AcademicQualification> academicQualificationListOrphanCheck = cv.getAcademicQualificationList();
+            for (AcademicQualification academicQualificationListOrphanCheckAcademicQualification : academicQualificationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the AcademicQualification " + academicQualificationCollectionOrphanCheckAcademicQualification + " in its academicQualificationCollection field has a non-nullable cvID field.");
+                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the AcademicQualification " + academicQualificationListOrphanCheckAcademicQualification + " in its academicQualificationList field has a non-nullable cvID field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Person ownerID = cv.getOwnerID();
             if (ownerID != null) {
-                ownerID.getCvCollection().remove(cv);
+                ownerID.getCvList().remove(cv);
                 ownerID = em.merge(ownerID);
             }
             em.remove(cv);

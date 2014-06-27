@@ -21,10 +21,9 @@ import com.softserve.DBEntities.Endorsement;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.CommitteeMeeting;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.ProgressReport;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -48,14 +47,14 @@ public class ApplicationJpaController implements Serializable {
     }
 
     public void create(Application application) throws RollbackFailureException, Exception {
-        if (application.getCommitteeMeetingCollection() == null) {
-            application.setCommitteeMeetingCollection(new ArrayList<CommitteeMeeting>());
+        if (application.getCommitteeMeetingList() == null) {
+            application.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
         }
-        if (application.getRefereeReportCollection() == null) {
-            application.setRefereeReportCollection(new ArrayList<RefereeReport>());
+        if (application.getRefereeReportList() == null) {
+            application.setRefereeReportList(new ArrayList<RefereeReport>());
         }
-        if (application.getProgressReportCollection() == null) {
-            application.setProgressReportCollection(new ArrayList<ProgressReport>());
+        if (application.getProgressReportList() == null) {
+            application.setProgressReportList(new ArrayList<ProgressReport>());
         }
         EntityManager em = null;
         try {
@@ -86,65 +85,65 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportID = em.getReference(fundingReportID.getClass(), fundingReportID.getReportID());
                 application.setFundingReportID(fundingReportID);
             }
-            Collection<CommitteeMeeting> attachedCommitteeMeetingCollection = new ArrayList<CommitteeMeeting>();
-            for (CommitteeMeeting committeeMeetingCollectionCommitteeMeetingToAttach : application.getCommitteeMeetingCollection()) {
-                committeeMeetingCollectionCommitteeMeetingToAttach = em.getReference(committeeMeetingCollectionCommitteeMeetingToAttach.getClass(), committeeMeetingCollectionCommitteeMeetingToAttach.getMeetingID());
-                attachedCommitteeMeetingCollection.add(committeeMeetingCollectionCommitteeMeetingToAttach);
+            List<CommitteeMeeting> attachedCommitteeMeetingList = new ArrayList<CommitteeMeeting>();
+            for (CommitteeMeeting committeeMeetingListCommitteeMeetingToAttach : application.getCommitteeMeetingList()) {
+                committeeMeetingListCommitteeMeetingToAttach = em.getReference(committeeMeetingListCommitteeMeetingToAttach.getClass(), committeeMeetingListCommitteeMeetingToAttach.getMeetingID());
+                attachedCommitteeMeetingList.add(committeeMeetingListCommitteeMeetingToAttach);
             }
-            application.setCommitteeMeetingCollection(attachedCommitteeMeetingCollection);
-            Collection<RefereeReport> attachedRefereeReportCollection = new ArrayList<RefereeReport>();
-            for (RefereeReport refereeReportCollectionRefereeReportToAttach : application.getRefereeReportCollection()) {
-                refereeReportCollectionRefereeReportToAttach = em.getReference(refereeReportCollectionRefereeReportToAttach.getClass(), refereeReportCollectionRefereeReportToAttach.getReportID());
-                attachedRefereeReportCollection.add(refereeReportCollectionRefereeReportToAttach);
+            application.setCommitteeMeetingList(attachedCommitteeMeetingList);
+            List<RefereeReport> attachedRefereeReportList = new ArrayList<RefereeReport>();
+            for (RefereeReport refereeReportListRefereeReportToAttach : application.getRefereeReportList()) {
+                refereeReportListRefereeReportToAttach = em.getReference(refereeReportListRefereeReportToAttach.getClass(), refereeReportListRefereeReportToAttach.getReportID());
+                attachedRefereeReportList.add(refereeReportListRefereeReportToAttach);
             }
-            application.setRefereeReportCollection(attachedRefereeReportCollection);
-            Collection<ProgressReport> attachedProgressReportCollection = new ArrayList<ProgressReport>();
-            for (ProgressReport progressReportCollectionProgressReportToAttach : application.getProgressReportCollection()) {
-                progressReportCollectionProgressReportToAttach = em.getReference(progressReportCollectionProgressReportToAttach.getClass(), progressReportCollectionProgressReportToAttach.getReportID());
-                attachedProgressReportCollection.add(progressReportCollectionProgressReportToAttach);
+            application.setRefereeReportList(attachedRefereeReportList);
+            List<ProgressReport> attachedProgressReportList = new ArrayList<ProgressReport>();
+            for (ProgressReport progressReportListProgressReportToAttach : application.getProgressReportList()) {
+                progressReportListProgressReportToAttach = em.getReference(progressReportListProgressReportToAttach.getClass(), progressReportListProgressReportToAttach.getReportID());
+                attachedProgressReportList.add(progressReportListProgressReportToAttach);
             }
-            application.setProgressReportCollection(attachedProgressReportCollection);
+            application.setProgressReportList(attachedProgressReportList);
             em.persist(application);
             if (fellow != null) {
-                fellow.getApplicationCollection().add(application);
+                fellow.getApplicationList().add(application);
                 fellow = em.merge(fellow);
             }
             if (grantHolderID != null) {
-                grantHolderID.getApplicationCollection().add(application);
+                grantHolderID.getApplicationList().add(application);
                 grantHolderID = em.merge(grantHolderID);
             }
             if (locationID != null) {
-                locationID.getApplicationCollection().add(application);
+                locationID.getApplicationList().add(application);
                 locationID = em.merge(locationID);
             }
             if (endorsementID != null) {
-                endorsementID.getApplicationCollection().add(application);
+                endorsementID.getApplicationList().add(application);
                 endorsementID = em.merge(endorsementID);
             }
             if (fundingReportID != null) {
-                fundingReportID.getApplicationCollection().add(application);
+                fundingReportID.getApplicationList().add(application);
                 fundingReportID = em.merge(fundingReportID);
             }
-            for (CommitteeMeeting committeeMeetingCollectionCommitteeMeeting : application.getCommitteeMeetingCollection()) {
-                committeeMeetingCollectionCommitteeMeeting.getApplicationCollection().add(application);
-                committeeMeetingCollectionCommitteeMeeting = em.merge(committeeMeetingCollectionCommitteeMeeting);
+            for (CommitteeMeeting committeeMeetingListCommitteeMeeting : application.getCommitteeMeetingList()) {
+                committeeMeetingListCommitteeMeeting.getApplicationList().add(application);
+                committeeMeetingListCommitteeMeeting = em.merge(committeeMeetingListCommitteeMeeting);
             }
-            for (RefereeReport refereeReportCollectionRefereeReport : application.getRefereeReportCollection()) {
-                Application oldApplicationIDOfRefereeReportCollectionRefereeReport = refereeReportCollectionRefereeReport.getApplicationID();
-                refereeReportCollectionRefereeReport.setApplicationID(application);
-                refereeReportCollectionRefereeReport = em.merge(refereeReportCollectionRefereeReport);
-                if (oldApplicationIDOfRefereeReportCollectionRefereeReport != null) {
-                    oldApplicationIDOfRefereeReportCollectionRefereeReport.getRefereeReportCollection().remove(refereeReportCollectionRefereeReport);
-                    oldApplicationIDOfRefereeReportCollectionRefereeReport = em.merge(oldApplicationIDOfRefereeReportCollectionRefereeReport);
+            for (RefereeReport refereeReportListRefereeReport : application.getRefereeReportList()) {
+                Application oldApplicationIDOfRefereeReportListRefereeReport = refereeReportListRefereeReport.getApplicationID();
+                refereeReportListRefereeReport.setApplicationID(application);
+                refereeReportListRefereeReport = em.merge(refereeReportListRefereeReport);
+                if (oldApplicationIDOfRefereeReportListRefereeReport != null) {
+                    oldApplicationIDOfRefereeReportListRefereeReport.getRefereeReportList().remove(refereeReportListRefereeReport);
+                    oldApplicationIDOfRefereeReportListRefereeReport = em.merge(oldApplicationIDOfRefereeReportListRefereeReport);
                 }
             }
-            for (ProgressReport progressReportCollectionProgressReport : application.getProgressReportCollection()) {
-                Application oldApplicationIDOfProgressReportCollectionProgressReport = progressReportCollectionProgressReport.getApplicationID();
-                progressReportCollectionProgressReport.setApplicationID(application);
-                progressReportCollectionProgressReport = em.merge(progressReportCollectionProgressReport);
-                if (oldApplicationIDOfProgressReportCollectionProgressReport != null) {
-                    oldApplicationIDOfProgressReportCollectionProgressReport.getProgressReportCollection().remove(progressReportCollectionProgressReport);
-                    oldApplicationIDOfProgressReportCollectionProgressReport = em.merge(oldApplicationIDOfProgressReportCollectionProgressReport);
+            for (ProgressReport progressReportListProgressReport : application.getProgressReportList()) {
+                Application oldApplicationIDOfProgressReportListProgressReport = progressReportListProgressReport.getApplicationID();
+                progressReportListProgressReport.setApplicationID(application);
+                progressReportListProgressReport = em.merge(progressReportListProgressReport);
+                if (oldApplicationIDOfProgressReportListProgressReport != null) {
+                    oldApplicationIDOfProgressReportListProgressReport.getProgressReportList().remove(progressReportListProgressReport);
+                    oldApplicationIDOfProgressReportListProgressReport = em.merge(oldApplicationIDOfProgressReportListProgressReport);
                 }
             }
             utx.commit();
@@ -178,27 +177,27 @@ public class ApplicationJpaController implements Serializable {
             Endorsement endorsementIDNew = application.getEndorsementID();
             FundingReport fundingReportIDOld = persistentApplication.getFundingReportID();
             FundingReport fundingReportIDNew = application.getFundingReportID();
-            Collection<CommitteeMeeting> committeeMeetingCollectionOld = persistentApplication.getCommitteeMeetingCollection();
-            Collection<CommitteeMeeting> committeeMeetingCollectionNew = application.getCommitteeMeetingCollection();
-            Collection<RefereeReport> refereeReportCollectionOld = persistentApplication.getRefereeReportCollection();
-            Collection<RefereeReport> refereeReportCollectionNew = application.getRefereeReportCollection();
-            Collection<ProgressReport> progressReportCollectionOld = persistentApplication.getProgressReportCollection();
-            Collection<ProgressReport> progressReportCollectionNew = application.getProgressReportCollection();
+            List<CommitteeMeeting> committeeMeetingListOld = persistentApplication.getCommitteeMeetingList();
+            List<CommitteeMeeting> committeeMeetingListNew = application.getCommitteeMeetingList();
+            List<RefereeReport> refereeReportListOld = persistentApplication.getRefereeReportList();
+            List<RefereeReport> refereeReportListNew = application.getRefereeReportList();
+            List<ProgressReport> progressReportListOld = persistentApplication.getProgressReportList();
+            List<ProgressReport> progressReportListNew = application.getProgressReportList();
             List<String> illegalOrphanMessages = null;
-            for (RefereeReport refereeReportCollectionOldRefereeReport : refereeReportCollectionOld) {
-                if (!refereeReportCollectionNew.contains(refereeReportCollectionOldRefereeReport)) {
+            for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
+                if (!refereeReportListNew.contains(refereeReportListOldRefereeReport)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain RefereeReport " + refereeReportCollectionOldRefereeReport + " since its applicationID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain RefereeReport " + refereeReportListOldRefereeReport + " since its applicationID field is not nullable.");
                 }
             }
-            for (ProgressReport progressReportCollectionOldProgressReport : progressReportCollectionOld) {
-                if (!progressReportCollectionNew.contains(progressReportCollectionOldProgressReport)) {
+            for (ProgressReport progressReportListOldProgressReport : progressReportListOld) {
+                if (!progressReportListNew.contains(progressReportListOldProgressReport)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain ProgressReport " + progressReportCollectionOldProgressReport + " since its applicationID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain ProgressReport " + progressReportListOldProgressReport + " since its applicationID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -224,99 +223,99 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportIDNew = em.getReference(fundingReportIDNew.getClass(), fundingReportIDNew.getReportID());
                 application.setFundingReportID(fundingReportIDNew);
             }
-            Collection<CommitteeMeeting> attachedCommitteeMeetingCollectionNew = new ArrayList<CommitteeMeeting>();
-            for (CommitteeMeeting committeeMeetingCollectionNewCommitteeMeetingToAttach : committeeMeetingCollectionNew) {
-                committeeMeetingCollectionNewCommitteeMeetingToAttach = em.getReference(committeeMeetingCollectionNewCommitteeMeetingToAttach.getClass(), committeeMeetingCollectionNewCommitteeMeetingToAttach.getMeetingID());
-                attachedCommitteeMeetingCollectionNew.add(committeeMeetingCollectionNewCommitteeMeetingToAttach);
+            List<CommitteeMeeting> attachedCommitteeMeetingListNew = new ArrayList<CommitteeMeeting>();
+            for (CommitteeMeeting committeeMeetingListNewCommitteeMeetingToAttach : committeeMeetingListNew) {
+                committeeMeetingListNewCommitteeMeetingToAttach = em.getReference(committeeMeetingListNewCommitteeMeetingToAttach.getClass(), committeeMeetingListNewCommitteeMeetingToAttach.getMeetingID());
+                attachedCommitteeMeetingListNew.add(committeeMeetingListNewCommitteeMeetingToAttach);
             }
-            committeeMeetingCollectionNew = attachedCommitteeMeetingCollectionNew;
-            application.setCommitteeMeetingCollection(committeeMeetingCollectionNew);
-            Collection<RefereeReport> attachedRefereeReportCollectionNew = new ArrayList<RefereeReport>();
-            for (RefereeReport refereeReportCollectionNewRefereeReportToAttach : refereeReportCollectionNew) {
-                refereeReportCollectionNewRefereeReportToAttach = em.getReference(refereeReportCollectionNewRefereeReportToAttach.getClass(), refereeReportCollectionNewRefereeReportToAttach.getReportID());
-                attachedRefereeReportCollectionNew.add(refereeReportCollectionNewRefereeReportToAttach);
+            committeeMeetingListNew = attachedCommitteeMeetingListNew;
+            application.setCommitteeMeetingList(committeeMeetingListNew);
+            List<RefereeReport> attachedRefereeReportListNew = new ArrayList<RefereeReport>();
+            for (RefereeReport refereeReportListNewRefereeReportToAttach : refereeReportListNew) {
+                refereeReportListNewRefereeReportToAttach = em.getReference(refereeReportListNewRefereeReportToAttach.getClass(), refereeReportListNewRefereeReportToAttach.getReportID());
+                attachedRefereeReportListNew.add(refereeReportListNewRefereeReportToAttach);
             }
-            refereeReportCollectionNew = attachedRefereeReportCollectionNew;
-            application.setRefereeReportCollection(refereeReportCollectionNew);
-            Collection<ProgressReport> attachedProgressReportCollectionNew = new ArrayList<ProgressReport>();
-            for (ProgressReport progressReportCollectionNewProgressReportToAttach : progressReportCollectionNew) {
-                progressReportCollectionNewProgressReportToAttach = em.getReference(progressReportCollectionNewProgressReportToAttach.getClass(), progressReportCollectionNewProgressReportToAttach.getReportID());
-                attachedProgressReportCollectionNew.add(progressReportCollectionNewProgressReportToAttach);
+            refereeReportListNew = attachedRefereeReportListNew;
+            application.setRefereeReportList(refereeReportListNew);
+            List<ProgressReport> attachedProgressReportListNew = new ArrayList<ProgressReport>();
+            for (ProgressReport progressReportListNewProgressReportToAttach : progressReportListNew) {
+                progressReportListNewProgressReportToAttach = em.getReference(progressReportListNewProgressReportToAttach.getClass(), progressReportListNewProgressReportToAttach.getReportID());
+                attachedProgressReportListNew.add(progressReportListNewProgressReportToAttach);
             }
-            progressReportCollectionNew = attachedProgressReportCollectionNew;
-            application.setProgressReportCollection(progressReportCollectionNew);
+            progressReportListNew = attachedProgressReportListNew;
+            application.setProgressReportList(progressReportListNew);
             application = em.merge(application);
             if (fellowOld != null && !fellowOld.equals(fellowNew)) {
-                fellowOld.getApplicationCollection().remove(application);
+                fellowOld.getApplicationList().remove(application);
                 fellowOld = em.merge(fellowOld);
             }
             if (fellowNew != null && !fellowNew.equals(fellowOld)) {
-                fellowNew.getApplicationCollection().add(application);
+                fellowNew.getApplicationList().add(application);
                 fellowNew = em.merge(fellowNew);
             }
             if (grantHolderIDOld != null && !grantHolderIDOld.equals(grantHolderIDNew)) {
-                grantHolderIDOld.getApplicationCollection().remove(application);
+                grantHolderIDOld.getApplicationList().remove(application);
                 grantHolderIDOld = em.merge(grantHolderIDOld);
             }
             if (grantHolderIDNew != null && !grantHolderIDNew.equals(grantHolderIDOld)) {
-                grantHolderIDNew.getApplicationCollection().add(application);
+                grantHolderIDNew.getApplicationList().add(application);
                 grantHolderIDNew = em.merge(grantHolderIDNew);
             }
             if (locationIDOld != null && !locationIDOld.equals(locationIDNew)) {
-                locationIDOld.getApplicationCollection().remove(application);
+                locationIDOld.getApplicationList().remove(application);
                 locationIDOld = em.merge(locationIDOld);
             }
             if (locationIDNew != null && !locationIDNew.equals(locationIDOld)) {
-                locationIDNew.getApplicationCollection().add(application);
+                locationIDNew.getApplicationList().add(application);
                 locationIDNew = em.merge(locationIDNew);
             }
             if (endorsementIDOld != null && !endorsementIDOld.equals(endorsementIDNew)) {
-                endorsementIDOld.getApplicationCollection().remove(application);
+                endorsementIDOld.getApplicationList().remove(application);
                 endorsementIDOld = em.merge(endorsementIDOld);
             }
             if (endorsementIDNew != null && !endorsementIDNew.equals(endorsementIDOld)) {
-                endorsementIDNew.getApplicationCollection().add(application);
+                endorsementIDNew.getApplicationList().add(application);
                 endorsementIDNew = em.merge(endorsementIDNew);
             }
             if (fundingReportIDOld != null && !fundingReportIDOld.equals(fundingReportIDNew)) {
-                fundingReportIDOld.getApplicationCollection().remove(application);
+                fundingReportIDOld.getApplicationList().remove(application);
                 fundingReportIDOld = em.merge(fundingReportIDOld);
             }
             if (fundingReportIDNew != null && !fundingReportIDNew.equals(fundingReportIDOld)) {
-                fundingReportIDNew.getApplicationCollection().add(application);
+                fundingReportIDNew.getApplicationList().add(application);
                 fundingReportIDNew = em.merge(fundingReportIDNew);
             }
-            for (CommitteeMeeting committeeMeetingCollectionOldCommitteeMeeting : committeeMeetingCollectionOld) {
-                if (!committeeMeetingCollectionNew.contains(committeeMeetingCollectionOldCommitteeMeeting)) {
-                    committeeMeetingCollectionOldCommitteeMeeting.getApplicationCollection().remove(application);
-                    committeeMeetingCollectionOldCommitteeMeeting = em.merge(committeeMeetingCollectionOldCommitteeMeeting);
+            for (CommitteeMeeting committeeMeetingListOldCommitteeMeeting : committeeMeetingListOld) {
+                if (!committeeMeetingListNew.contains(committeeMeetingListOldCommitteeMeeting)) {
+                    committeeMeetingListOldCommitteeMeeting.getApplicationList().remove(application);
+                    committeeMeetingListOldCommitteeMeeting = em.merge(committeeMeetingListOldCommitteeMeeting);
                 }
             }
-            for (CommitteeMeeting committeeMeetingCollectionNewCommitteeMeeting : committeeMeetingCollectionNew) {
-                if (!committeeMeetingCollectionOld.contains(committeeMeetingCollectionNewCommitteeMeeting)) {
-                    committeeMeetingCollectionNewCommitteeMeeting.getApplicationCollection().add(application);
-                    committeeMeetingCollectionNewCommitteeMeeting = em.merge(committeeMeetingCollectionNewCommitteeMeeting);
+            for (CommitteeMeeting committeeMeetingListNewCommitteeMeeting : committeeMeetingListNew) {
+                if (!committeeMeetingListOld.contains(committeeMeetingListNewCommitteeMeeting)) {
+                    committeeMeetingListNewCommitteeMeeting.getApplicationList().add(application);
+                    committeeMeetingListNewCommitteeMeeting = em.merge(committeeMeetingListNewCommitteeMeeting);
                 }
             }
-            for (RefereeReport refereeReportCollectionNewRefereeReport : refereeReportCollectionNew) {
-                if (!refereeReportCollectionOld.contains(refereeReportCollectionNewRefereeReport)) {
-                    Application oldApplicationIDOfRefereeReportCollectionNewRefereeReport = refereeReportCollectionNewRefereeReport.getApplicationID();
-                    refereeReportCollectionNewRefereeReport.setApplicationID(application);
-                    refereeReportCollectionNewRefereeReport = em.merge(refereeReportCollectionNewRefereeReport);
-                    if (oldApplicationIDOfRefereeReportCollectionNewRefereeReport != null && !oldApplicationIDOfRefereeReportCollectionNewRefereeReport.equals(application)) {
-                        oldApplicationIDOfRefereeReportCollectionNewRefereeReport.getRefereeReportCollection().remove(refereeReportCollectionNewRefereeReport);
-                        oldApplicationIDOfRefereeReportCollectionNewRefereeReport = em.merge(oldApplicationIDOfRefereeReportCollectionNewRefereeReport);
+            for (RefereeReport refereeReportListNewRefereeReport : refereeReportListNew) {
+                if (!refereeReportListOld.contains(refereeReportListNewRefereeReport)) {
+                    Application oldApplicationIDOfRefereeReportListNewRefereeReport = refereeReportListNewRefereeReport.getApplicationID();
+                    refereeReportListNewRefereeReport.setApplicationID(application);
+                    refereeReportListNewRefereeReport = em.merge(refereeReportListNewRefereeReport);
+                    if (oldApplicationIDOfRefereeReportListNewRefereeReport != null && !oldApplicationIDOfRefereeReportListNewRefereeReport.equals(application)) {
+                        oldApplicationIDOfRefereeReportListNewRefereeReport.getRefereeReportList().remove(refereeReportListNewRefereeReport);
+                        oldApplicationIDOfRefereeReportListNewRefereeReport = em.merge(oldApplicationIDOfRefereeReportListNewRefereeReport);
                     }
                 }
             }
-            for (ProgressReport progressReportCollectionNewProgressReport : progressReportCollectionNew) {
-                if (!progressReportCollectionOld.contains(progressReportCollectionNewProgressReport)) {
-                    Application oldApplicationIDOfProgressReportCollectionNewProgressReport = progressReportCollectionNewProgressReport.getApplicationID();
-                    progressReportCollectionNewProgressReport.setApplicationID(application);
-                    progressReportCollectionNewProgressReport = em.merge(progressReportCollectionNewProgressReport);
-                    if (oldApplicationIDOfProgressReportCollectionNewProgressReport != null && !oldApplicationIDOfProgressReportCollectionNewProgressReport.equals(application)) {
-                        oldApplicationIDOfProgressReportCollectionNewProgressReport.getProgressReportCollection().remove(progressReportCollectionNewProgressReport);
-                        oldApplicationIDOfProgressReportCollectionNewProgressReport = em.merge(oldApplicationIDOfProgressReportCollectionNewProgressReport);
+            for (ProgressReport progressReportListNewProgressReport : progressReportListNew) {
+                if (!progressReportListOld.contains(progressReportListNewProgressReport)) {
+                    Application oldApplicationIDOfProgressReportListNewProgressReport = progressReportListNewProgressReport.getApplicationID();
+                    progressReportListNewProgressReport.setApplicationID(application);
+                    progressReportListNewProgressReport = em.merge(progressReportListNewProgressReport);
+                    if (oldApplicationIDOfProgressReportListNewProgressReport != null && !oldApplicationIDOfProgressReportListNewProgressReport.equals(application)) {
+                        oldApplicationIDOfProgressReportListNewProgressReport.getProgressReportList().remove(progressReportListNewProgressReport);
+                        oldApplicationIDOfProgressReportListNewProgressReport = em.merge(oldApplicationIDOfProgressReportListNewProgressReport);
                     }
                 }
             }
@@ -355,52 +354,52 @@ public class ApplicationJpaController implements Serializable {
                 throw new NonexistentEntityException("The application with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<RefereeReport> refereeReportCollectionOrphanCheck = application.getRefereeReportCollection();
-            for (RefereeReport refereeReportCollectionOrphanCheckRefereeReport : refereeReportCollectionOrphanCheck) {
+            List<RefereeReport> refereeReportListOrphanCheck = application.getRefereeReportList();
+            for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the RefereeReport " + refereeReportCollectionOrphanCheckRefereeReport + " in its refereeReportCollection field has a non-nullable applicationID field.");
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the RefereeReport " + refereeReportListOrphanCheckRefereeReport + " in its refereeReportList field has a non-nullable applicationID field.");
             }
-            Collection<ProgressReport> progressReportCollectionOrphanCheck = application.getProgressReportCollection();
-            for (ProgressReport progressReportCollectionOrphanCheckProgressReport : progressReportCollectionOrphanCheck) {
+            List<ProgressReport> progressReportListOrphanCheck = application.getProgressReportList();
+            for (ProgressReport progressReportListOrphanCheckProgressReport : progressReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the ProgressReport " + progressReportCollectionOrphanCheckProgressReport + " in its progressReportCollection field has a non-nullable applicationID field.");
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the ProgressReport " + progressReportListOrphanCheckProgressReport + " in its progressReportList field has a non-nullable applicationID field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Person fellow = application.getFellow();
             if (fellow != null) {
-                fellow.getApplicationCollection().remove(application);
+                fellow.getApplicationList().remove(application);
                 fellow = em.merge(fellow);
             }
             Person grantHolderID = application.getGrantHolderID();
             if (grantHolderID != null) {
-                grantHolderID.getApplicationCollection().remove(application);
+                grantHolderID.getApplicationList().remove(application);
                 grantHolderID = em.merge(grantHolderID);
             }
             Location locationID = application.getLocationID();
             if (locationID != null) {
-                locationID.getApplicationCollection().remove(application);
+                locationID.getApplicationList().remove(application);
                 locationID = em.merge(locationID);
             }
             Endorsement endorsementID = application.getEndorsementID();
             if (endorsementID != null) {
-                endorsementID.getApplicationCollection().remove(application);
+                endorsementID.getApplicationList().remove(application);
                 endorsementID = em.merge(endorsementID);
             }
             FundingReport fundingReportID = application.getFundingReportID();
             if (fundingReportID != null) {
-                fundingReportID.getApplicationCollection().remove(application);
+                fundingReportID.getApplicationList().remove(application);
                 fundingReportID = em.merge(fundingReportID);
             }
-            Collection<CommitteeMeeting> committeeMeetingCollection = application.getCommitteeMeetingCollection();
-            for (CommitteeMeeting committeeMeetingCollectionCommitteeMeeting : committeeMeetingCollection) {
-                committeeMeetingCollectionCommitteeMeeting.getApplicationCollection().remove(application);
-                committeeMeetingCollectionCommitteeMeeting = em.merge(committeeMeetingCollectionCommitteeMeeting);
+            List<CommitteeMeeting> committeeMeetingList = application.getCommitteeMeetingList();
+            for (CommitteeMeeting committeeMeetingListCommitteeMeeting : committeeMeetingList) {
+                committeeMeetingListCommitteeMeeting.getApplicationList().remove(application);
+                committeeMeetingListCommitteeMeeting = em.merge(committeeMeetingListCommitteeMeeting);
             }
             em.remove(application);
             utx.commit();

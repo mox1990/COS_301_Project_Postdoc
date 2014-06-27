@@ -10,34 +10,31 @@ import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Location;
-import com.softserve.DBEntities.MinuteComment;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.DBEntities.RefereeReport;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.UpEmployeeInformation;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.DBEntities.Location;
+import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.CommitteeMeeting;
+import java.util.ArrayList;
+import java.util.List;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.DBEntities.RefereeReport;
+import com.softserve.DBEntities.FundingReport;
+import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.MinuteComment;
+import com.softserve.DBEntities.Person;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.transaction.UserTransaction;
 
 /**
@@ -59,44 +56,44 @@ public class PersonJpaController implements Serializable {
     }
 
     public void create(Person person) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (person.getCommitteeMeetingCollection() == null) {
-            person.setCommitteeMeetingCollection(new ArrayList<CommitteeMeeting>());
+        if (person.getCommitteeMeetingList() == null) {
+            person.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
         }
-        if (person.getSecurityRoleCollection() == null) {
-            person.setSecurityRoleCollection(new ArrayList<SecurityRole>());
+        if (person.getSecurityRoleList() == null) {
+            person.setSecurityRoleList(new ArrayList<SecurityRole>());
         }
-        if (person.getAuditLogCollection() == null) {
-            person.setAuditLogCollection(new ArrayList<AuditLog>());
+        if (person.getAuditLogList() == null) {
+            person.setAuditLogList(new ArrayList<AuditLog>());
         }
-        if (person.getEndorsementCollection() == null) {
-            person.setEndorsementCollection(new ArrayList<Endorsement>());
+        if (person.getEndorsementList() == null) {
+            person.setEndorsementList(new ArrayList<Endorsement>());
         }
-        if (person.getRecommendationReportCollection() == null) {
-            person.setRecommendationReportCollection(new ArrayList<RecommendationReport>());
+        if (person.getRecommendationReportList() == null) {
+            person.setRecommendationReportList(new ArrayList<RecommendationReport>());
         }
-        if (person.getRefereeReportCollection() == null) {
-            person.setRefereeReportCollection(new ArrayList<RefereeReport>());
+        if (person.getRefereeReportList() == null) {
+            person.setRefereeReportList(new ArrayList<RefereeReport>());
         }
-        if (person.getFundingReportCollection() == null) {
-            person.setFundingReportCollection(new ArrayList<FundingReport>());
+        if (person.getFundingReportList() == null) {
+            person.setFundingReportList(new ArrayList<FundingReport>());
         }
-        if (person.getNotificationCollection() == null) {
-            person.setNotificationCollection(new ArrayList<Notification>());
+        if (person.getNotificationList() == null) {
+            person.setNotificationList(new ArrayList<Notification>());
         }
-        if (person.getNotificationCollection1() == null) {
-            person.setNotificationCollection1(new ArrayList<Notification>());
+        if (person.getNotificationList1() == null) {
+            person.setNotificationList1(new ArrayList<Notification>());
         }
-        if (person.getCvCollection() == null) {
-            person.setCvCollection(new ArrayList<Cv>());
+        if (person.getCvList() == null) {
+            person.setCvList(new ArrayList<Cv>());
         }
-        if (person.getApplicationCollection() == null) {
-            person.setApplicationCollection(new ArrayList<Application>());
+        if (person.getApplicationList() == null) {
+            person.setApplicationList(new ArrayList<Application>());
         }
-        if (person.getApplicationCollection1() == null) {
-            person.setApplicationCollection1(new ArrayList<Application>());
+        if (person.getApplicationList1() == null) {
+            person.setApplicationList1(new ArrayList<Application>());
         }
-        if (person.getMinuteCommentCollection() == null) {
-            person.setMinuteCommentCollection(new ArrayList<MinuteComment>());
+        if (person.getMinuteCommentList() == null) {
+            person.setMinuteCommentList(new ArrayList<MinuteComment>());
         }
         EntityManager em = null;
         try {
@@ -117,84 +114,84 @@ public class PersonJpaController implements Serializable {
                 addressLine1 = em.getReference(addressLine1.getClass(), addressLine1.getAddressID());
                 person.setAddressLine1(addressLine1);
             }
-            Collection<CommitteeMeeting> attachedCommitteeMeetingCollection = new ArrayList<CommitteeMeeting>();
-            for (CommitteeMeeting committeeMeetingCollectionCommitteeMeetingToAttach : person.getCommitteeMeetingCollection()) {
-                committeeMeetingCollectionCommitteeMeetingToAttach = em.getReference(committeeMeetingCollectionCommitteeMeetingToAttach.getClass(), committeeMeetingCollectionCommitteeMeetingToAttach.getMeetingID());
-                attachedCommitteeMeetingCollection.add(committeeMeetingCollectionCommitteeMeetingToAttach);
+            List<CommitteeMeeting> attachedCommitteeMeetingList = new ArrayList<CommitteeMeeting>();
+            for (CommitteeMeeting committeeMeetingListCommitteeMeetingToAttach : person.getCommitteeMeetingList()) {
+                committeeMeetingListCommitteeMeetingToAttach = em.getReference(committeeMeetingListCommitteeMeetingToAttach.getClass(), committeeMeetingListCommitteeMeetingToAttach.getMeetingID());
+                attachedCommitteeMeetingList.add(committeeMeetingListCommitteeMeetingToAttach);
             }
-            person.setCommitteeMeetingCollection(attachedCommitteeMeetingCollection);
-            Collection<SecurityRole> attachedSecurityRoleCollection = new ArrayList<SecurityRole>();
-            for (SecurityRole securityRoleCollectionSecurityRoleToAttach : person.getSecurityRoleCollection()) {
-                securityRoleCollectionSecurityRoleToAttach = em.getReference(securityRoleCollectionSecurityRoleToAttach.getClass(), securityRoleCollectionSecurityRoleToAttach.getRoleID());
-                attachedSecurityRoleCollection.add(securityRoleCollectionSecurityRoleToAttach);
+            person.setCommitteeMeetingList(attachedCommitteeMeetingList);
+            List<SecurityRole> attachedSecurityRoleList = new ArrayList<SecurityRole>();
+            for (SecurityRole securityRoleListSecurityRoleToAttach : person.getSecurityRoleList()) {
+                securityRoleListSecurityRoleToAttach = em.getReference(securityRoleListSecurityRoleToAttach.getClass(), securityRoleListSecurityRoleToAttach.getRoleID());
+                attachedSecurityRoleList.add(securityRoleListSecurityRoleToAttach);
             }
-            person.setSecurityRoleCollection(attachedSecurityRoleCollection);
-            Collection<AuditLog> attachedAuditLogCollection = new ArrayList<AuditLog>();
-            for (AuditLog auditLogCollectionAuditLogToAttach : person.getAuditLogCollection()) {
-                auditLogCollectionAuditLogToAttach = em.getReference(auditLogCollectionAuditLogToAttach.getClass(), auditLogCollectionAuditLogToAttach.getEntryID());
-                attachedAuditLogCollection.add(auditLogCollectionAuditLogToAttach);
+            person.setSecurityRoleList(attachedSecurityRoleList);
+            List<AuditLog> attachedAuditLogList = new ArrayList<AuditLog>();
+            for (AuditLog auditLogListAuditLogToAttach : person.getAuditLogList()) {
+                auditLogListAuditLogToAttach = em.getReference(auditLogListAuditLogToAttach.getClass(), auditLogListAuditLogToAttach.getEntryID());
+                attachedAuditLogList.add(auditLogListAuditLogToAttach);
             }
-            person.setAuditLogCollection(attachedAuditLogCollection);
-            Collection<Endorsement> attachedEndorsementCollection = new ArrayList<Endorsement>();
-            for (Endorsement endorsementCollectionEndorsementToAttach : person.getEndorsementCollection()) {
-                endorsementCollectionEndorsementToAttach = em.getReference(endorsementCollectionEndorsementToAttach.getClass(), endorsementCollectionEndorsementToAttach.getEndorsementID());
-                attachedEndorsementCollection.add(endorsementCollectionEndorsementToAttach);
+            person.setAuditLogList(attachedAuditLogList);
+            List<Endorsement> attachedEndorsementList = new ArrayList<Endorsement>();
+            for (Endorsement endorsementListEndorsementToAttach : person.getEndorsementList()) {
+                endorsementListEndorsementToAttach = em.getReference(endorsementListEndorsementToAttach.getClass(), endorsementListEndorsementToAttach.getEndorsementID());
+                attachedEndorsementList.add(endorsementListEndorsementToAttach);
             }
-            person.setEndorsementCollection(attachedEndorsementCollection);
-            Collection<RecommendationReport> attachedRecommendationReportCollection = new ArrayList<RecommendationReport>();
-            for (RecommendationReport recommendationReportCollectionRecommendationReportToAttach : person.getRecommendationReportCollection()) {
-                recommendationReportCollectionRecommendationReportToAttach = em.getReference(recommendationReportCollectionRecommendationReportToAttach.getClass(), recommendationReportCollectionRecommendationReportToAttach.getReportID());
-                attachedRecommendationReportCollection.add(recommendationReportCollectionRecommendationReportToAttach);
+            person.setEndorsementList(attachedEndorsementList);
+            List<RecommendationReport> attachedRecommendationReportList = new ArrayList<RecommendationReport>();
+            for (RecommendationReport recommendationReportListRecommendationReportToAttach : person.getRecommendationReportList()) {
+                recommendationReportListRecommendationReportToAttach = em.getReference(recommendationReportListRecommendationReportToAttach.getClass(), recommendationReportListRecommendationReportToAttach.getReportID());
+                attachedRecommendationReportList.add(recommendationReportListRecommendationReportToAttach);
             }
-            person.setRecommendationReportCollection(attachedRecommendationReportCollection);
-            Collection<RefereeReport> attachedRefereeReportCollection = new ArrayList<RefereeReport>();
-            for (RefereeReport refereeReportCollectionRefereeReportToAttach : person.getRefereeReportCollection()) {
-                refereeReportCollectionRefereeReportToAttach = em.getReference(refereeReportCollectionRefereeReportToAttach.getClass(), refereeReportCollectionRefereeReportToAttach.getReportID());
-                attachedRefereeReportCollection.add(refereeReportCollectionRefereeReportToAttach);
+            person.setRecommendationReportList(attachedRecommendationReportList);
+            List<RefereeReport> attachedRefereeReportList = new ArrayList<RefereeReport>();
+            for (RefereeReport refereeReportListRefereeReportToAttach : person.getRefereeReportList()) {
+                refereeReportListRefereeReportToAttach = em.getReference(refereeReportListRefereeReportToAttach.getClass(), refereeReportListRefereeReportToAttach.getReportID());
+                attachedRefereeReportList.add(refereeReportListRefereeReportToAttach);
             }
-            person.setRefereeReportCollection(attachedRefereeReportCollection);
-            Collection<FundingReport> attachedFundingReportCollection = new ArrayList<FundingReport>();
-            for (FundingReport fundingReportCollectionFundingReportToAttach : person.getFundingReportCollection()) {
-                fundingReportCollectionFundingReportToAttach = em.getReference(fundingReportCollectionFundingReportToAttach.getClass(), fundingReportCollectionFundingReportToAttach.getReportID());
-                attachedFundingReportCollection.add(fundingReportCollectionFundingReportToAttach);
+            person.setRefereeReportList(attachedRefereeReportList);
+            List<FundingReport> attachedFundingReportList = new ArrayList<FundingReport>();
+            for (FundingReport fundingReportListFundingReportToAttach : person.getFundingReportList()) {
+                fundingReportListFundingReportToAttach = em.getReference(fundingReportListFundingReportToAttach.getClass(), fundingReportListFundingReportToAttach.getReportID());
+                attachedFundingReportList.add(fundingReportListFundingReportToAttach);
             }
-            person.setFundingReportCollection(attachedFundingReportCollection);
-            Collection<Notification> attachedNotificationCollection = new ArrayList<Notification>();
-            for (Notification notificationCollectionNotificationToAttach : person.getNotificationCollection()) {
-                notificationCollectionNotificationToAttach = em.getReference(notificationCollectionNotificationToAttach.getClass(), notificationCollectionNotificationToAttach.getNotificationID());
-                attachedNotificationCollection.add(notificationCollectionNotificationToAttach);
+            person.setFundingReportList(attachedFundingReportList);
+            List<Notification> attachedNotificationList = new ArrayList<Notification>();
+            for (Notification notificationListNotificationToAttach : person.getNotificationList()) {
+                notificationListNotificationToAttach = em.getReference(notificationListNotificationToAttach.getClass(), notificationListNotificationToAttach.getNotificationID());
+                attachedNotificationList.add(notificationListNotificationToAttach);
             }
-            person.setNotificationCollection(attachedNotificationCollection);
-            Collection<Notification> attachedNotificationCollection1 = new ArrayList<Notification>();
-            for (Notification notificationCollection1NotificationToAttach : person.getNotificationCollection1()) {
-                notificationCollection1NotificationToAttach = em.getReference(notificationCollection1NotificationToAttach.getClass(), notificationCollection1NotificationToAttach.getNotificationID());
-                attachedNotificationCollection1.add(notificationCollection1NotificationToAttach);
+            person.setNotificationList(attachedNotificationList);
+            List<Notification> attachedNotificationList1 = new ArrayList<Notification>();
+            for (Notification notificationList1NotificationToAttach : person.getNotificationList1()) {
+                notificationList1NotificationToAttach = em.getReference(notificationList1NotificationToAttach.getClass(), notificationList1NotificationToAttach.getNotificationID());
+                attachedNotificationList1.add(notificationList1NotificationToAttach);
             }
-            person.setNotificationCollection1(attachedNotificationCollection1);
-            Collection<Cv> attachedCvCollection = new ArrayList<Cv>();
-            for (Cv cvCollectionCvToAttach : person.getCvCollection()) {
-                cvCollectionCvToAttach = em.getReference(cvCollectionCvToAttach.getClass(), cvCollectionCvToAttach.getCvID());
-                attachedCvCollection.add(cvCollectionCvToAttach);
+            person.setNotificationList1(attachedNotificationList1);
+            List<Cv> attachedCvList = new ArrayList<Cv>();
+            for (Cv cvListCvToAttach : person.getCvList()) {
+                cvListCvToAttach = em.getReference(cvListCvToAttach.getClass(), cvListCvToAttach.getCvID());
+                attachedCvList.add(cvListCvToAttach);
             }
-            person.setCvCollection(attachedCvCollection);
-            Collection<Application> attachedApplicationCollection = new ArrayList<Application>();
-            for (Application applicationCollectionApplicationToAttach : person.getApplicationCollection()) {
-                applicationCollectionApplicationToAttach = em.getReference(applicationCollectionApplicationToAttach.getClass(), applicationCollectionApplicationToAttach.getApplicationID());
-                attachedApplicationCollection.add(applicationCollectionApplicationToAttach);
+            person.setCvList(attachedCvList);
+            List<Application> attachedApplicationList = new ArrayList<Application>();
+            for (Application applicationListApplicationToAttach : person.getApplicationList()) {
+                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
+                attachedApplicationList.add(applicationListApplicationToAttach);
             }
-            person.setApplicationCollection(attachedApplicationCollection);
-            Collection<Application> attachedApplicationCollection1 = new ArrayList<Application>();
-            for (Application applicationCollection1ApplicationToAttach : person.getApplicationCollection1()) {
-                applicationCollection1ApplicationToAttach = em.getReference(applicationCollection1ApplicationToAttach.getClass(), applicationCollection1ApplicationToAttach.getApplicationID());
-                attachedApplicationCollection1.add(applicationCollection1ApplicationToAttach);
+            person.setApplicationList(attachedApplicationList);
+            List<Application> attachedApplicationList1 = new ArrayList<Application>();
+            for (Application applicationList1ApplicationToAttach : person.getApplicationList1()) {
+                applicationList1ApplicationToAttach = em.getReference(applicationList1ApplicationToAttach.getClass(), applicationList1ApplicationToAttach.getApplicationID());
+                attachedApplicationList1.add(applicationList1ApplicationToAttach);
             }
-            person.setApplicationCollection1(attachedApplicationCollection1);
-            Collection<MinuteComment> attachedMinuteCommentCollection = new ArrayList<MinuteComment>();
-            for (MinuteComment minuteCommentCollectionMinuteCommentToAttach : person.getMinuteCommentCollection()) {
-                minuteCommentCollectionMinuteCommentToAttach = em.getReference(minuteCommentCollectionMinuteCommentToAttach.getClass(), minuteCommentCollectionMinuteCommentToAttach.getCommentID());
-                attachedMinuteCommentCollection.add(minuteCommentCollectionMinuteCommentToAttach);
+            person.setApplicationList1(attachedApplicationList1);
+            List<MinuteComment> attachedMinuteCommentList = new ArrayList<MinuteComment>();
+            for (MinuteComment minuteCommentListMinuteCommentToAttach : person.getMinuteCommentList()) {
+                minuteCommentListMinuteCommentToAttach = em.getReference(minuteCommentListMinuteCommentToAttach.getClass(), minuteCommentListMinuteCommentToAttach.getCommentID());
+                attachedMinuteCommentList.add(minuteCommentListMinuteCommentToAttach);
             }
-            person.setMinuteCommentCollection(attachedMinuteCommentCollection);
+            person.setMinuteCommentList(attachedMinuteCommentList);
             em.persist(person);
             if (upEmployeeInformation != null) {
                 Person oldPersonOfUpEmployeeInformation = upEmployeeInformation.getPerson();
@@ -206,118 +203,118 @@ public class PersonJpaController implements Serializable {
                 upEmployeeInformation = em.merge(upEmployeeInformation);
             }
             if (locationID != null) {
-                locationID.getPersonCollection().add(person);
+                locationID.getPersonList().add(person);
                 locationID = em.merge(locationID);
             }
             if (addressLine1 != null) {
-                addressLine1.getPersonCollection().add(person);
+                addressLine1.getPersonList().add(person);
                 addressLine1 = em.merge(addressLine1);
             }
-            for (CommitteeMeeting committeeMeetingCollectionCommitteeMeeting : person.getCommitteeMeetingCollection()) {
-                committeeMeetingCollectionCommitteeMeeting.getPersonCollection().add(person);
-                committeeMeetingCollectionCommitteeMeeting = em.merge(committeeMeetingCollectionCommitteeMeeting);
+            for (CommitteeMeeting committeeMeetingListCommitteeMeeting : person.getCommitteeMeetingList()) {
+                committeeMeetingListCommitteeMeeting.getPersonList().add(person);
+                committeeMeetingListCommitteeMeeting = em.merge(committeeMeetingListCommitteeMeeting);
             }
-            for (SecurityRole securityRoleCollectionSecurityRole : person.getSecurityRoleCollection()) {
-                securityRoleCollectionSecurityRole.getPersonCollection().add(person);
-                securityRoleCollectionSecurityRole = em.merge(securityRoleCollectionSecurityRole);
+            for (SecurityRole securityRoleListSecurityRole : person.getSecurityRoleList()) {
+                securityRoleListSecurityRole.getPersonList().add(person);
+                securityRoleListSecurityRole = em.merge(securityRoleListSecurityRole);
             }
-            for (AuditLog auditLogCollectionAuditLog : person.getAuditLogCollection()) {
-                Person oldPersonIDOfAuditLogCollectionAuditLog = auditLogCollectionAuditLog.getPersonID();
-                auditLogCollectionAuditLog.setPersonID(person);
-                auditLogCollectionAuditLog = em.merge(auditLogCollectionAuditLog);
-                if (oldPersonIDOfAuditLogCollectionAuditLog != null) {
-                    oldPersonIDOfAuditLogCollectionAuditLog.getAuditLogCollection().remove(auditLogCollectionAuditLog);
-                    oldPersonIDOfAuditLogCollectionAuditLog = em.merge(oldPersonIDOfAuditLogCollectionAuditLog);
+            for (AuditLog auditLogListAuditLog : person.getAuditLogList()) {
+                Person oldPersonIDOfAuditLogListAuditLog = auditLogListAuditLog.getPersonID();
+                auditLogListAuditLog.setPersonID(person);
+                auditLogListAuditLog = em.merge(auditLogListAuditLog);
+                if (oldPersonIDOfAuditLogListAuditLog != null) {
+                    oldPersonIDOfAuditLogListAuditLog.getAuditLogList().remove(auditLogListAuditLog);
+                    oldPersonIDOfAuditLogListAuditLog = em.merge(oldPersonIDOfAuditLogListAuditLog);
                 }
             }
-            for (Endorsement endorsementCollectionEndorsement : person.getEndorsementCollection()) {
-                Person oldDeanIDOfEndorsementCollectionEndorsement = endorsementCollectionEndorsement.getDeanID();
-                endorsementCollectionEndorsement.setDeanID(person);
-                endorsementCollectionEndorsement = em.merge(endorsementCollectionEndorsement);
-                if (oldDeanIDOfEndorsementCollectionEndorsement != null) {
-                    oldDeanIDOfEndorsementCollectionEndorsement.getEndorsementCollection().remove(endorsementCollectionEndorsement);
-                    oldDeanIDOfEndorsementCollectionEndorsement = em.merge(oldDeanIDOfEndorsementCollectionEndorsement);
+            for (Endorsement endorsementListEndorsement : person.getEndorsementList()) {
+                Person oldDeanIDOfEndorsementListEndorsement = endorsementListEndorsement.getDeanID();
+                endorsementListEndorsement.setDeanID(person);
+                endorsementListEndorsement = em.merge(endorsementListEndorsement);
+                if (oldDeanIDOfEndorsementListEndorsement != null) {
+                    oldDeanIDOfEndorsementListEndorsement.getEndorsementList().remove(endorsementListEndorsement);
+                    oldDeanIDOfEndorsementListEndorsement = em.merge(oldDeanIDOfEndorsementListEndorsement);
                 }
             }
-            for (RecommendationReport recommendationReportCollectionRecommendationReport : person.getRecommendationReportCollection()) {
-                Person oldHodIDOfRecommendationReportCollectionRecommendationReport = recommendationReportCollectionRecommendationReport.getHodID();
-                recommendationReportCollectionRecommendationReport.setHodID(person);
-                recommendationReportCollectionRecommendationReport = em.merge(recommendationReportCollectionRecommendationReport);
-                if (oldHodIDOfRecommendationReportCollectionRecommendationReport != null) {
-                    oldHodIDOfRecommendationReportCollectionRecommendationReport.getRecommendationReportCollection().remove(recommendationReportCollectionRecommendationReport);
-                    oldHodIDOfRecommendationReportCollectionRecommendationReport = em.merge(oldHodIDOfRecommendationReportCollectionRecommendationReport);
+            for (RecommendationReport recommendationReportListRecommendationReport : person.getRecommendationReportList()) {
+                Person oldHodIDOfRecommendationReportListRecommendationReport = recommendationReportListRecommendationReport.getHodID();
+                recommendationReportListRecommendationReport.setHodID(person);
+                recommendationReportListRecommendationReport = em.merge(recommendationReportListRecommendationReport);
+                if (oldHodIDOfRecommendationReportListRecommendationReport != null) {
+                    oldHodIDOfRecommendationReportListRecommendationReport.getRecommendationReportList().remove(recommendationReportListRecommendationReport);
+                    oldHodIDOfRecommendationReportListRecommendationReport = em.merge(oldHodIDOfRecommendationReportListRecommendationReport);
                 }
             }
-            for (RefereeReport refereeReportCollectionRefereeReport : person.getRefereeReportCollection()) {
-                Person oldRefereeIDOfRefereeReportCollectionRefereeReport = refereeReportCollectionRefereeReport.getRefereeID();
-                refereeReportCollectionRefereeReport.setRefereeID(person);
-                refereeReportCollectionRefereeReport = em.merge(refereeReportCollectionRefereeReport);
-                if (oldRefereeIDOfRefereeReportCollectionRefereeReport != null) {
-                    oldRefereeIDOfRefereeReportCollectionRefereeReport.getRefereeReportCollection().remove(refereeReportCollectionRefereeReport);
-                    oldRefereeIDOfRefereeReportCollectionRefereeReport = em.merge(oldRefereeIDOfRefereeReportCollectionRefereeReport);
+            for (RefereeReport refereeReportListRefereeReport : person.getRefereeReportList()) {
+                Person oldRefereeIDOfRefereeReportListRefereeReport = refereeReportListRefereeReport.getRefereeID();
+                refereeReportListRefereeReport.setRefereeID(person);
+                refereeReportListRefereeReport = em.merge(refereeReportListRefereeReport);
+                if (oldRefereeIDOfRefereeReportListRefereeReport != null) {
+                    oldRefereeIDOfRefereeReportListRefereeReport.getRefereeReportList().remove(refereeReportListRefereeReport);
+                    oldRefereeIDOfRefereeReportListRefereeReport = em.merge(oldRefereeIDOfRefereeReportListRefereeReport);
                 }
             }
-            for (FundingReport fundingReportCollectionFundingReport : person.getFundingReportCollection()) {
-                Person oldDrisIDOfFundingReportCollectionFundingReport = fundingReportCollectionFundingReport.getDrisID();
-                fundingReportCollectionFundingReport.setDrisID(person);
-                fundingReportCollectionFundingReport = em.merge(fundingReportCollectionFundingReport);
-                if (oldDrisIDOfFundingReportCollectionFundingReport != null) {
-                    oldDrisIDOfFundingReportCollectionFundingReport.getFundingReportCollection().remove(fundingReportCollectionFundingReport);
-                    oldDrisIDOfFundingReportCollectionFundingReport = em.merge(oldDrisIDOfFundingReportCollectionFundingReport);
+            for (FundingReport fundingReportListFundingReport : person.getFundingReportList()) {
+                Person oldDrisIDOfFundingReportListFundingReport = fundingReportListFundingReport.getDrisID();
+                fundingReportListFundingReport.setDrisID(person);
+                fundingReportListFundingReport = em.merge(fundingReportListFundingReport);
+                if (oldDrisIDOfFundingReportListFundingReport != null) {
+                    oldDrisIDOfFundingReportListFundingReport.getFundingReportList().remove(fundingReportListFundingReport);
+                    oldDrisIDOfFundingReportListFundingReport = em.merge(oldDrisIDOfFundingReportListFundingReport);
                 }
             }
-            for (Notification notificationCollectionNotification : person.getNotificationCollection()) {
-                Person oldSenderIDOfNotificationCollectionNotification = notificationCollectionNotification.getSenderID();
-                notificationCollectionNotification.setSenderID(person);
-                notificationCollectionNotification = em.merge(notificationCollectionNotification);
-                if (oldSenderIDOfNotificationCollectionNotification != null) {
-                    oldSenderIDOfNotificationCollectionNotification.getNotificationCollection().remove(notificationCollectionNotification);
-                    oldSenderIDOfNotificationCollectionNotification = em.merge(oldSenderIDOfNotificationCollectionNotification);
+            for (Notification notificationListNotification : person.getNotificationList()) {
+                Person oldSenderIDOfNotificationListNotification = notificationListNotification.getSenderID();
+                notificationListNotification.setSenderID(person);
+                notificationListNotification = em.merge(notificationListNotification);
+                if (oldSenderIDOfNotificationListNotification != null) {
+                    oldSenderIDOfNotificationListNotification.getNotificationList().remove(notificationListNotification);
+                    oldSenderIDOfNotificationListNotification = em.merge(oldSenderIDOfNotificationListNotification);
                 }
             }
-            for (Notification notificationCollection1Notification : person.getNotificationCollection1()) {
-                Person oldRecieverIDOfNotificationCollection1Notification = notificationCollection1Notification.getRecieverID();
-                notificationCollection1Notification.setRecieverID(person);
-                notificationCollection1Notification = em.merge(notificationCollection1Notification);
-                if (oldRecieverIDOfNotificationCollection1Notification != null) {
-                    oldRecieverIDOfNotificationCollection1Notification.getNotificationCollection1().remove(notificationCollection1Notification);
-                    oldRecieverIDOfNotificationCollection1Notification = em.merge(oldRecieverIDOfNotificationCollection1Notification);
+            for (Notification notificationList1Notification : person.getNotificationList1()) {
+                Person oldRecieverIDOfNotificationList1Notification = notificationList1Notification.getRecieverID();
+                notificationList1Notification.setRecieverID(person);
+                notificationList1Notification = em.merge(notificationList1Notification);
+                if (oldRecieverIDOfNotificationList1Notification != null) {
+                    oldRecieverIDOfNotificationList1Notification.getNotificationList1().remove(notificationList1Notification);
+                    oldRecieverIDOfNotificationList1Notification = em.merge(oldRecieverIDOfNotificationList1Notification);
                 }
             }
-            for (Cv cvCollectionCv : person.getCvCollection()) {
-                Person oldOwnerIDOfCvCollectionCv = cvCollectionCv.getOwnerID();
-                cvCollectionCv.setOwnerID(person);
-                cvCollectionCv = em.merge(cvCollectionCv);
-                if (oldOwnerIDOfCvCollectionCv != null) {
-                    oldOwnerIDOfCvCollectionCv.getCvCollection().remove(cvCollectionCv);
-                    oldOwnerIDOfCvCollectionCv = em.merge(oldOwnerIDOfCvCollectionCv);
+            for (Cv cvListCv : person.getCvList()) {
+                Person oldOwnerIDOfCvListCv = cvListCv.getOwnerID();
+                cvListCv.setOwnerID(person);
+                cvListCv = em.merge(cvListCv);
+                if (oldOwnerIDOfCvListCv != null) {
+                    oldOwnerIDOfCvListCv.getCvList().remove(cvListCv);
+                    oldOwnerIDOfCvListCv = em.merge(oldOwnerIDOfCvListCv);
                 }
             }
-            for (Application applicationCollectionApplication : person.getApplicationCollection()) {
-                Person oldFellowOfApplicationCollectionApplication = applicationCollectionApplication.getFellow();
-                applicationCollectionApplication.setFellow(person);
-                applicationCollectionApplication = em.merge(applicationCollectionApplication);
-                if (oldFellowOfApplicationCollectionApplication != null) {
-                    oldFellowOfApplicationCollectionApplication.getApplicationCollection().remove(applicationCollectionApplication);
-                    oldFellowOfApplicationCollectionApplication = em.merge(oldFellowOfApplicationCollectionApplication);
+            for (Application applicationListApplication : person.getApplicationList()) {
+                Person oldFellowOfApplicationListApplication = applicationListApplication.getFellow();
+                applicationListApplication.setFellow(person);
+                applicationListApplication = em.merge(applicationListApplication);
+                if (oldFellowOfApplicationListApplication != null) {
+                    oldFellowOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
+                    oldFellowOfApplicationListApplication = em.merge(oldFellowOfApplicationListApplication);
                 }
             }
-            for (Application applicationCollection1Application : person.getApplicationCollection1()) {
-                Person oldGrantHolderIDOfApplicationCollection1Application = applicationCollection1Application.getGrantHolderID();
-                applicationCollection1Application.setGrantHolderID(person);
-                applicationCollection1Application = em.merge(applicationCollection1Application);
-                if (oldGrantHolderIDOfApplicationCollection1Application != null) {
-                    oldGrantHolderIDOfApplicationCollection1Application.getApplicationCollection1().remove(applicationCollection1Application);
-                    oldGrantHolderIDOfApplicationCollection1Application = em.merge(oldGrantHolderIDOfApplicationCollection1Application);
+            for (Application applicationList1Application : person.getApplicationList1()) {
+                Person oldGrantHolderIDOfApplicationList1Application = applicationList1Application.getGrantHolderID();
+                applicationList1Application.setGrantHolderID(person);
+                applicationList1Application = em.merge(applicationList1Application);
+                if (oldGrantHolderIDOfApplicationList1Application != null) {
+                    oldGrantHolderIDOfApplicationList1Application.getApplicationList1().remove(applicationList1Application);
+                    oldGrantHolderIDOfApplicationList1Application = em.merge(oldGrantHolderIDOfApplicationList1Application);
                 }
             }
-            for (MinuteComment minuteCommentCollectionMinuteComment : person.getMinuteCommentCollection()) {
-                Person oldAttendeeIDOfMinuteCommentCollectionMinuteComment = minuteCommentCollectionMinuteComment.getAttendeeID();
-                minuteCommentCollectionMinuteComment.setAttendeeID(person);
-                minuteCommentCollectionMinuteComment = em.merge(minuteCommentCollectionMinuteComment);
-                if (oldAttendeeIDOfMinuteCommentCollectionMinuteComment != null) {
-                    oldAttendeeIDOfMinuteCommentCollectionMinuteComment.getMinuteCommentCollection().remove(minuteCommentCollectionMinuteComment);
-                    oldAttendeeIDOfMinuteCommentCollectionMinuteComment = em.merge(oldAttendeeIDOfMinuteCommentCollectionMinuteComment);
+            for (MinuteComment minuteCommentListMinuteComment : person.getMinuteCommentList()) {
+                Person oldAttendeeIDOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getAttendeeID();
+                minuteCommentListMinuteComment.setAttendeeID(person);
+                minuteCommentListMinuteComment = em.merge(minuteCommentListMinuteComment);
+                if (oldAttendeeIDOfMinuteCommentListMinuteComment != null) {
+                    oldAttendeeIDOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
+                    oldAttendeeIDOfMinuteCommentListMinuteComment = em.merge(oldAttendeeIDOfMinuteCommentListMinuteComment);
                 }
             }
             utx.commit();
@@ -340,7 +337,7 @@ public class PersonJpaController implements Serializable {
 
     public void edit(Person person) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
-        try {            
+        try {
             utx.begin();
             em = getEntityManager();
             Person persistentPerson = em.find(Person.class, person.getSystemID());
@@ -350,32 +347,32 @@ public class PersonJpaController implements Serializable {
             Location locationIDNew = person.getLocationID();
             Address addressLine1Old = persistentPerson.getAddressLine1();
             Address addressLine1New = person.getAddressLine1();
-            Collection<CommitteeMeeting> committeeMeetingCollectionOld = persistentPerson.getCommitteeMeetingCollection();
-            Collection<CommitteeMeeting> committeeMeetingCollectionNew = person.getCommitteeMeetingCollection();
-            Collection<SecurityRole> securityRoleCollectionOld = persistentPerson.getSecurityRoleCollection();
-            Collection<SecurityRole> securityRoleCollectionNew = person.getSecurityRoleCollection();
-            Collection<AuditLog> auditLogCollectionOld = persistentPerson.getAuditLogCollection();
-            Collection<AuditLog> auditLogCollectionNew = person.getAuditLogCollection();
-            Collection<Endorsement> endorsementCollectionOld = persistentPerson.getEndorsementCollection();
-            Collection<Endorsement> endorsementCollectionNew = person.getEndorsementCollection();
-            Collection<RecommendationReport> recommendationReportCollectionOld = persistentPerson.getRecommendationReportCollection();
-            Collection<RecommendationReport> recommendationReportCollectionNew = person.getRecommendationReportCollection();
-            Collection<RefereeReport> refereeReportCollectionOld = persistentPerson.getRefereeReportCollection();
-            Collection<RefereeReport> refereeReportCollectionNew = person.getRefereeReportCollection();
-            Collection<FundingReport> fundingReportCollectionOld = persistentPerson.getFundingReportCollection();
-            Collection<FundingReport> fundingReportCollectionNew = person.getFundingReportCollection();
-            Collection<Notification> notificationCollectionOld = persistentPerson.getNotificationCollection();
-            Collection<Notification> notificationCollectionNew = person.getNotificationCollection();
-            Collection<Notification> notificationCollection1Old = persistentPerson.getNotificationCollection1();
-            Collection<Notification> notificationCollection1New = person.getNotificationCollection1();
-            Collection<Cv> cvCollectionOld = persistentPerson.getCvCollection();
-            Collection<Cv> cvCollectionNew = person.getCvCollection();
-            Collection<Application> applicationCollectionOld = persistentPerson.getApplicationCollection();
-            Collection<Application> applicationCollectionNew = person.getApplicationCollection();
-            Collection<Application> applicationCollection1Old = persistentPerson.getApplicationCollection1();
-            Collection<Application> applicationCollection1New = person.getApplicationCollection1();
-            Collection<MinuteComment> minuteCommentCollectionOld = persistentPerson.getMinuteCommentCollection();
-            Collection<MinuteComment> minuteCommentCollectionNew = person.getMinuteCommentCollection();
+            List<CommitteeMeeting> committeeMeetingListOld = persistentPerson.getCommitteeMeetingList();
+            List<CommitteeMeeting> committeeMeetingListNew = person.getCommitteeMeetingList();
+            List<SecurityRole> securityRoleListOld = persistentPerson.getSecurityRoleList();
+            List<SecurityRole> securityRoleListNew = person.getSecurityRoleList();
+            List<AuditLog> auditLogListOld = persistentPerson.getAuditLogList();
+            List<AuditLog> auditLogListNew = person.getAuditLogList();
+            List<Endorsement> endorsementListOld = persistentPerson.getEndorsementList();
+            List<Endorsement> endorsementListNew = person.getEndorsementList();
+            List<RecommendationReport> recommendationReportListOld = persistentPerson.getRecommendationReportList();
+            List<RecommendationReport> recommendationReportListNew = person.getRecommendationReportList();
+            List<RefereeReport> refereeReportListOld = persistentPerson.getRefereeReportList();
+            List<RefereeReport> refereeReportListNew = person.getRefereeReportList();
+            List<FundingReport> fundingReportListOld = persistentPerson.getFundingReportList();
+            List<FundingReport> fundingReportListNew = person.getFundingReportList();
+            List<Notification> notificationListOld = persistentPerson.getNotificationList();
+            List<Notification> notificationListNew = person.getNotificationList();
+            List<Notification> notificationList1Old = persistentPerson.getNotificationList1();
+            List<Notification> notificationList1New = person.getNotificationList1();
+            List<Cv> cvListOld = persistentPerson.getCvList();
+            List<Cv> cvListNew = person.getCvList();
+            List<Application> applicationListOld = persistentPerson.getApplicationList();
+            List<Application> applicationListNew = person.getApplicationList();
+            List<Application> applicationList1Old = persistentPerson.getApplicationList1();
+            List<Application> applicationList1New = person.getApplicationList1();
+            List<MinuteComment> minuteCommentListOld = persistentPerson.getMinuteCommentList();
+            List<MinuteComment> minuteCommentListNew = person.getMinuteCommentList();
             List<String> illegalOrphanMessages = null;
             if (upEmployeeInformationOld != null && !upEmployeeInformationOld.equals(upEmployeeInformationNew)) {
                 if (illegalOrphanMessages == null) {
@@ -383,92 +380,92 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("You must retain UpEmployeeInformation " + upEmployeeInformationOld + " since its person field is not nullable.");
             }
-            for (AuditLog auditLogCollectionOldAuditLog : auditLogCollectionOld) {
-                if (!auditLogCollectionNew.contains(auditLogCollectionOldAuditLog)) {
+            for (AuditLog auditLogListOldAuditLog : auditLogListOld) {
+                if (!auditLogListNew.contains(auditLogListOldAuditLog)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain AuditLog " + auditLogCollectionOldAuditLog + " since its personID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain AuditLog " + auditLogListOldAuditLog + " since its personID field is not nullable.");
                 }
             }
-            for (Endorsement endorsementCollectionOldEndorsement : endorsementCollectionOld) {
-                if (!endorsementCollectionNew.contains(endorsementCollectionOldEndorsement)) {
+            for (Endorsement endorsementListOldEndorsement : endorsementListOld) {
+                if (!endorsementListNew.contains(endorsementListOldEndorsement)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Endorsement " + endorsementCollectionOldEndorsement + " since its deanID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Endorsement " + endorsementListOldEndorsement + " since its deanID field is not nullable.");
                 }
             }
-            for (RecommendationReport recommendationReportCollectionOldRecommendationReport : recommendationReportCollectionOld) {
-                if (!recommendationReportCollectionNew.contains(recommendationReportCollectionOldRecommendationReport)) {
+            for (RecommendationReport recommendationReportListOldRecommendationReport : recommendationReportListOld) {
+                if (!recommendationReportListNew.contains(recommendationReportListOldRecommendationReport)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportCollectionOldRecommendationReport + " since its hodID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportListOldRecommendationReport + " since its hodID field is not nullable.");
                 }
             }
-            for (RefereeReport refereeReportCollectionOldRefereeReport : refereeReportCollectionOld) {
-                if (!refereeReportCollectionNew.contains(refereeReportCollectionOldRefereeReport)) {
+            for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
+                if (!refereeReportListNew.contains(refereeReportListOldRefereeReport)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain RefereeReport " + refereeReportCollectionOldRefereeReport + " since its refereeID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain RefereeReport " + refereeReportListOldRefereeReport + " since its refereeID field is not nullable.");
                 }
             }
-            for (FundingReport fundingReportCollectionOldFundingReport : fundingReportCollectionOld) {
-                if (!fundingReportCollectionNew.contains(fundingReportCollectionOldFundingReport)) {
+            for (FundingReport fundingReportListOldFundingReport : fundingReportListOld) {
+                if (!fundingReportListNew.contains(fundingReportListOldFundingReport)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain FundingReport " + fundingReportCollectionOldFundingReport + " since its drisID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain FundingReport " + fundingReportListOldFundingReport + " since its drisID field is not nullable.");
                 }
             }
-            for (Notification notificationCollectionOldNotification : notificationCollectionOld) {
-                if (!notificationCollectionNew.contains(notificationCollectionOldNotification)) {
+            for (Notification notificationListOldNotification : notificationListOld) {
+                if (!notificationListNew.contains(notificationListOldNotification)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Notification " + notificationCollectionOldNotification + " since its senderID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Notification " + notificationListOldNotification + " since its senderID field is not nullable.");
                 }
             }
-            for (Notification notificationCollection1OldNotification : notificationCollection1Old) {
-                if (!notificationCollection1New.contains(notificationCollection1OldNotification)) {
+            for (Notification notificationList1OldNotification : notificationList1Old) {
+                if (!notificationList1New.contains(notificationList1OldNotification)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Notification " + notificationCollection1OldNotification + " since its recieverID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Notification " + notificationList1OldNotification + " since its recieverID field is not nullable.");
                 }
             }
-            for (Cv cvCollectionOldCv : cvCollectionOld) {
-                if (!cvCollectionNew.contains(cvCollectionOldCv)) {
+            for (Cv cvListOldCv : cvListOld) {
+                if (!cvListNew.contains(cvListOldCv)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Cv " + cvCollectionOldCv + " since its ownerID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Cv " + cvListOldCv + " since its ownerID field is not nullable.");
                 }
             }
-            for (Application applicationCollectionOldApplication : applicationCollectionOld) {
-                if (!applicationCollectionNew.contains(applicationCollectionOldApplication)) {
+            for (Application applicationListOldApplication : applicationListOld) {
+                if (!applicationListNew.contains(applicationListOldApplication)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Application " + applicationCollectionOldApplication + " since its fellow field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Application " + applicationListOldApplication + " since its fellow field is not nullable.");
                 }
             }
-            for (Application applicationCollection1OldApplication : applicationCollection1Old) {
-                if (!applicationCollection1New.contains(applicationCollection1OldApplication)) {
+            for (Application applicationList1OldApplication : applicationList1Old) {
+                if (!applicationList1New.contains(applicationList1OldApplication)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Application " + applicationCollection1OldApplication + " since its grantHolderID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Application " + applicationList1OldApplication + " since its grantHolderID field is not nullable.");
                 }
             }
-            for (MinuteComment minuteCommentCollectionOldMinuteComment : minuteCommentCollectionOld) {
-                if (!minuteCommentCollectionNew.contains(minuteCommentCollectionOldMinuteComment)) {
+            for (MinuteComment minuteCommentListOldMinuteComment : minuteCommentListOld) {
+                if (!minuteCommentListNew.contains(minuteCommentListOldMinuteComment)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentCollectionOldMinuteComment + " since its attendeeID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its attendeeID field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -486,97 +483,97 @@ public class PersonJpaController implements Serializable {
                 addressLine1New = em.getReference(addressLine1New.getClass(), addressLine1New.getAddressID());
                 person.setAddressLine1(addressLine1New);
             }
-            Collection<CommitteeMeeting> attachedCommitteeMeetingCollectionNew = new ArrayList<CommitteeMeeting>();
-            for (CommitteeMeeting committeeMeetingCollectionNewCommitteeMeetingToAttach : committeeMeetingCollectionNew) {
-                committeeMeetingCollectionNewCommitteeMeetingToAttach = em.getReference(committeeMeetingCollectionNewCommitteeMeetingToAttach.getClass(), committeeMeetingCollectionNewCommitteeMeetingToAttach.getMeetingID());
-                attachedCommitteeMeetingCollectionNew.add(committeeMeetingCollectionNewCommitteeMeetingToAttach);
+            List<CommitteeMeeting> attachedCommitteeMeetingListNew = new ArrayList<CommitteeMeeting>();
+            for (CommitteeMeeting committeeMeetingListNewCommitteeMeetingToAttach : committeeMeetingListNew) {
+                committeeMeetingListNewCommitteeMeetingToAttach = em.getReference(committeeMeetingListNewCommitteeMeetingToAttach.getClass(), committeeMeetingListNewCommitteeMeetingToAttach.getMeetingID());
+                attachedCommitteeMeetingListNew.add(committeeMeetingListNewCommitteeMeetingToAttach);
             }
-            committeeMeetingCollectionNew = attachedCommitteeMeetingCollectionNew;
-            person.setCommitteeMeetingCollection(committeeMeetingCollectionNew);
-            Collection<SecurityRole> attachedSecurityRoleCollectionNew = new ArrayList<SecurityRole>();
-            for (SecurityRole securityRoleCollectionNewSecurityRoleToAttach : securityRoleCollectionNew) {
-                securityRoleCollectionNewSecurityRoleToAttach = em.getReference(securityRoleCollectionNewSecurityRoleToAttach.getClass(), securityRoleCollectionNewSecurityRoleToAttach.getRoleID());
-                attachedSecurityRoleCollectionNew.add(securityRoleCollectionNewSecurityRoleToAttach);
+            committeeMeetingListNew = attachedCommitteeMeetingListNew;
+            person.setCommitteeMeetingList(committeeMeetingListNew);
+            List<SecurityRole> attachedSecurityRoleListNew = new ArrayList<SecurityRole>();
+            for (SecurityRole securityRoleListNewSecurityRoleToAttach : securityRoleListNew) {
+                securityRoleListNewSecurityRoleToAttach = em.getReference(securityRoleListNewSecurityRoleToAttach.getClass(), securityRoleListNewSecurityRoleToAttach.getRoleID());
+                attachedSecurityRoleListNew.add(securityRoleListNewSecurityRoleToAttach);
             }
-            securityRoleCollectionNew = attachedSecurityRoleCollectionNew;
-            person.setSecurityRoleCollection(securityRoleCollectionNew);
-            Collection<AuditLog> attachedAuditLogCollectionNew = new ArrayList<AuditLog>();
-            for (AuditLog auditLogCollectionNewAuditLogToAttach : auditLogCollectionNew) {
-                auditLogCollectionNewAuditLogToAttach = em.getReference(auditLogCollectionNewAuditLogToAttach.getClass(), auditLogCollectionNewAuditLogToAttach.getEntryID());
-                attachedAuditLogCollectionNew.add(auditLogCollectionNewAuditLogToAttach);
+            securityRoleListNew = attachedSecurityRoleListNew;
+            person.setSecurityRoleList(securityRoleListNew);
+            List<AuditLog> attachedAuditLogListNew = new ArrayList<AuditLog>();
+            for (AuditLog auditLogListNewAuditLogToAttach : auditLogListNew) {
+                auditLogListNewAuditLogToAttach = em.getReference(auditLogListNewAuditLogToAttach.getClass(), auditLogListNewAuditLogToAttach.getEntryID());
+                attachedAuditLogListNew.add(auditLogListNewAuditLogToAttach);
             }
-            auditLogCollectionNew = attachedAuditLogCollectionNew;
-            person.setAuditLogCollection(auditLogCollectionNew);
-            Collection<Endorsement> attachedEndorsementCollectionNew = new ArrayList<Endorsement>();
-            for (Endorsement endorsementCollectionNewEndorsementToAttach : endorsementCollectionNew) {
-                endorsementCollectionNewEndorsementToAttach = em.getReference(endorsementCollectionNewEndorsementToAttach.getClass(), endorsementCollectionNewEndorsementToAttach.getEndorsementID());
-                attachedEndorsementCollectionNew.add(endorsementCollectionNewEndorsementToAttach);
+            auditLogListNew = attachedAuditLogListNew;
+            person.setAuditLogList(auditLogListNew);
+            List<Endorsement> attachedEndorsementListNew = new ArrayList<Endorsement>();
+            for (Endorsement endorsementListNewEndorsementToAttach : endorsementListNew) {
+                endorsementListNewEndorsementToAttach = em.getReference(endorsementListNewEndorsementToAttach.getClass(), endorsementListNewEndorsementToAttach.getEndorsementID());
+                attachedEndorsementListNew.add(endorsementListNewEndorsementToAttach);
             }
-            endorsementCollectionNew = attachedEndorsementCollectionNew;
-            person.setEndorsementCollection(endorsementCollectionNew);
-            Collection<RecommendationReport> attachedRecommendationReportCollectionNew = new ArrayList<RecommendationReport>();
-            for (RecommendationReport recommendationReportCollectionNewRecommendationReportToAttach : recommendationReportCollectionNew) {
-                recommendationReportCollectionNewRecommendationReportToAttach = em.getReference(recommendationReportCollectionNewRecommendationReportToAttach.getClass(), recommendationReportCollectionNewRecommendationReportToAttach.getReportID());
-                attachedRecommendationReportCollectionNew.add(recommendationReportCollectionNewRecommendationReportToAttach);
+            endorsementListNew = attachedEndorsementListNew;
+            person.setEndorsementList(endorsementListNew);
+            List<RecommendationReport> attachedRecommendationReportListNew = new ArrayList<RecommendationReport>();
+            for (RecommendationReport recommendationReportListNewRecommendationReportToAttach : recommendationReportListNew) {
+                recommendationReportListNewRecommendationReportToAttach = em.getReference(recommendationReportListNewRecommendationReportToAttach.getClass(), recommendationReportListNewRecommendationReportToAttach.getReportID());
+                attachedRecommendationReportListNew.add(recommendationReportListNewRecommendationReportToAttach);
             }
-            recommendationReportCollectionNew = attachedRecommendationReportCollectionNew;
-            person.setRecommendationReportCollection(recommendationReportCollectionNew);
-            Collection<RefereeReport> attachedRefereeReportCollectionNew = new ArrayList<RefereeReport>();
-            for (RefereeReport refereeReportCollectionNewRefereeReportToAttach : refereeReportCollectionNew) {
-                refereeReportCollectionNewRefereeReportToAttach = em.getReference(refereeReportCollectionNewRefereeReportToAttach.getClass(), refereeReportCollectionNewRefereeReportToAttach.getReportID());
-                attachedRefereeReportCollectionNew.add(refereeReportCollectionNewRefereeReportToAttach);
+            recommendationReportListNew = attachedRecommendationReportListNew;
+            person.setRecommendationReportList(recommendationReportListNew);
+            List<RefereeReport> attachedRefereeReportListNew = new ArrayList<RefereeReport>();
+            for (RefereeReport refereeReportListNewRefereeReportToAttach : refereeReportListNew) {
+                refereeReportListNewRefereeReportToAttach = em.getReference(refereeReportListNewRefereeReportToAttach.getClass(), refereeReportListNewRefereeReportToAttach.getReportID());
+                attachedRefereeReportListNew.add(refereeReportListNewRefereeReportToAttach);
             }
-            refereeReportCollectionNew = attachedRefereeReportCollectionNew;
-            person.setRefereeReportCollection(refereeReportCollectionNew);
-            Collection<FundingReport> attachedFundingReportCollectionNew = new ArrayList<FundingReport>();
-            for (FundingReport fundingReportCollectionNewFundingReportToAttach : fundingReportCollectionNew) {
-                fundingReportCollectionNewFundingReportToAttach = em.getReference(fundingReportCollectionNewFundingReportToAttach.getClass(), fundingReportCollectionNewFundingReportToAttach.getReportID());
-                attachedFundingReportCollectionNew.add(fundingReportCollectionNewFundingReportToAttach);
+            refereeReportListNew = attachedRefereeReportListNew;
+            person.setRefereeReportList(refereeReportListNew);
+            List<FundingReport> attachedFundingReportListNew = new ArrayList<FundingReport>();
+            for (FundingReport fundingReportListNewFundingReportToAttach : fundingReportListNew) {
+                fundingReportListNewFundingReportToAttach = em.getReference(fundingReportListNewFundingReportToAttach.getClass(), fundingReportListNewFundingReportToAttach.getReportID());
+                attachedFundingReportListNew.add(fundingReportListNewFundingReportToAttach);
             }
-            fundingReportCollectionNew = attachedFundingReportCollectionNew;
-            person.setFundingReportCollection(fundingReportCollectionNew);
-            Collection<Notification> attachedNotificationCollectionNew = new ArrayList<Notification>();
-            for (Notification notificationCollectionNewNotificationToAttach : notificationCollectionNew) {
-                notificationCollectionNewNotificationToAttach = em.getReference(notificationCollectionNewNotificationToAttach.getClass(), notificationCollectionNewNotificationToAttach.getNotificationID());
-                attachedNotificationCollectionNew.add(notificationCollectionNewNotificationToAttach);
+            fundingReportListNew = attachedFundingReportListNew;
+            person.setFundingReportList(fundingReportListNew);
+            List<Notification> attachedNotificationListNew = new ArrayList<Notification>();
+            for (Notification notificationListNewNotificationToAttach : notificationListNew) {
+                notificationListNewNotificationToAttach = em.getReference(notificationListNewNotificationToAttach.getClass(), notificationListNewNotificationToAttach.getNotificationID());
+                attachedNotificationListNew.add(notificationListNewNotificationToAttach);
             }
-            notificationCollectionNew = attachedNotificationCollectionNew;
-            person.setNotificationCollection(notificationCollectionNew);
-            Collection<Notification> attachedNotificationCollection1New = new ArrayList<Notification>();
-            for (Notification notificationCollection1NewNotificationToAttach : notificationCollection1New) {
-                notificationCollection1NewNotificationToAttach = em.getReference(notificationCollection1NewNotificationToAttach.getClass(), notificationCollection1NewNotificationToAttach.getNotificationID());
-                attachedNotificationCollection1New.add(notificationCollection1NewNotificationToAttach);
+            notificationListNew = attachedNotificationListNew;
+            person.setNotificationList(notificationListNew);
+            List<Notification> attachedNotificationList1New = new ArrayList<Notification>();
+            for (Notification notificationList1NewNotificationToAttach : notificationList1New) {
+                notificationList1NewNotificationToAttach = em.getReference(notificationList1NewNotificationToAttach.getClass(), notificationList1NewNotificationToAttach.getNotificationID());
+                attachedNotificationList1New.add(notificationList1NewNotificationToAttach);
             }
-            notificationCollection1New = attachedNotificationCollection1New;
-            person.setNotificationCollection1(notificationCollection1New);
-            Collection<Cv> attachedCvCollectionNew = new ArrayList<Cv>();
-            for (Cv cvCollectionNewCvToAttach : cvCollectionNew) {
-                cvCollectionNewCvToAttach = em.getReference(cvCollectionNewCvToAttach.getClass(), cvCollectionNewCvToAttach.getCvID());
-                attachedCvCollectionNew.add(cvCollectionNewCvToAttach);
+            notificationList1New = attachedNotificationList1New;
+            person.setNotificationList1(notificationList1New);
+            List<Cv> attachedCvListNew = new ArrayList<Cv>();
+            for (Cv cvListNewCvToAttach : cvListNew) {
+                cvListNewCvToAttach = em.getReference(cvListNewCvToAttach.getClass(), cvListNewCvToAttach.getCvID());
+                attachedCvListNew.add(cvListNewCvToAttach);
             }
-            cvCollectionNew = attachedCvCollectionNew;
-            person.setCvCollection(cvCollectionNew);
-            Collection<Application> attachedApplicationCollectionNew = new ArrayList<Application>();
-            for (Application applicationCollectionNewApplicationToAttach : applicationCollectionNew) {
-                applicationCollectionNewApplicationToAttach = em.getReference(applicationCollectionNewApplicationToAttach.getClass(), applicationCollectionNewApplicationToAttach.getApplicationID());
-                attachedApplicationCollectionNew.add(applicationCollectionNewApplicationToAttach);
+            cvListNew = attachedCvListNew;
+            person.setCvList(cvListNew);
+            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            for (Application applicationListNewApplicationToAttach : applicationListNew) {
+                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
+                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
             }
-            applicationCollectionNew = attachedApplicationCollectionNew;
-            person.setApplicationCollection(applicationCollectionNew);
-            Collection<Application> attachedApplicationCollection1New = new ArrayList<Application>();
-            for (Application applicationCollection1NewApplicationToAttach : applicationCollection1New) {
-                applicationCollection1NewApplicationToAttach = em.getReference(applicationCollection1NewApplicationToAttach.getClass(), applicationCollection1NewApplicationToAttach.getApplicationID());
-                attachedApplicationCollection1New.add(applicationCollection1NewApplicationToAttach);
+            applicationListNew = attachedApplicationListNew;
+            person.setApplicationList(applicationListNew);
+            List<Application> attachedApplicationList1New = new ArrayList<Application>();
+            for (Application applicationList1NewApplicationToAttach : applicationList1New) {
+                applicationList1NewApplicationToAttach = em.getReference(applicationList1NewApplicationToAttach.getClass(), applicationList1NewApplicationToAttach.getApplicationID());
+                attachedApplicationList1New.add(applicationList1NewApplicationToAttach);
             }
-            applicationCollection1New = attachedApplicationCollection1New;
-            person.setApplicationCollection1(applicationCollection1New);
-            Collection<MinuteComment> attachedMinuteCommentCollectionNew = new ArrayList<MinuteComment>();
-            for (MinuteComment minuteCommentCollectionNewMinuteCommentToAttach : minuteCommentCollectionNew) {
-                minuteCommentCollectionNewMinuteCommentToAttach = em.getReference(minuteCommentCollectionNewMinuteCommentToAttach.getClass(), minuteCommentCollectionNewMinuteCommentToAttach.getCommentID());
-                attachedMinuteCommentCollectionNew.add(minuteCommentCollectionNewMinuteCommentToAttach);
+            applicationList1New = attachedApplicationList1New;
+            person.setApplicationList1(applicationList1New);
+            List<MinuteComment> attachedMinuteCommentListNew = new ArrayList<MinuteComment>();
+            for (MinuteComment minuteCommentListNewMinuteCommentToAttach : minuteCommentListNew) {
+                minuteCommentListNewMinuteCommentToAttach = em.getReference(minuteCommentListNewMinuteCommentToAttach.getClass(), minuteCommentListNewMinuteCommentToAttach.getCommentID());
+                attachedMinuteCommentListNew.add(minuteCommentListNewMinuteCommentToAttach);
             }
-            minuteCommentCollectionNew = attachedMinuteCommentCollectionNew;
-            person.setMinuteCommentCollection(minuteCommentCollectionNew);
+            minuteCommentListNew = attachedMinuteCommentListNew;
+            person.setMinuteCommentList(minuteCommentListNew);
             person = em.merge(person);
             if (upEmployeeInformationNew != null && !upEmployeeInformationNew.equals(upEmployeeInformationOld)) {
                 Person oldPersonOfUpEmployeeInformation = upEmployeeInformationNew.getPerson();
@@ -588,163 +585,163 @@ public class PersonJpaController implements Serializable {
                 upEmployeeInformationNew = em.merge(upEmployeeInformationNew);
             }
             if (locationIDOld != null && !locationIDOld.equals(locationIDNew)) {
-                locationIDOld.getPersonCollection().remove(person);
+                locationIDOld.getPersonList().remove(person);
                 locationIDOld = em.merge(locationIDOld);
             }
             if (locationIDNew != null && !locationIDNew.equals(locationIDOld)) {
-                locationIDNew.getPersonCollection().add(person);
+                locationIDNew.getPersonList().add(person);
                 locationIDNew = em.merge(locationIDNew);
             }
             if (addressLine1Old != null && !addressLine1Old.equals(addressLine1New)) {
-                addressLine1Old.getPersonCollection().remove(person);
+                addressLine1Old.getPersonList().remove(person);
                 addressLine1Old = em.merge(addressLine1Old);
             }
             if (addressLine1New != null && !addressLine1New.equals(addressLine1Old)) {
-                addressLine1New.getPersonCollection().add(person);
+                addressLine1New.getPersonList().add(person);
                 addressLine1New = em.merge(addressLine1New);
             }
-            for (CommitteeMeeting committeeMeetingCollectionOldCommitteeMeeting : committeeMeetingCollectionOld) {
-                if (!committeeMeetingCollectionNew.contains(committeeMeetingCollectionOldCommitteeMeeting)) {
-                    committeeMeetingCollectionOldCommitteeMeeting.getPersonCollection().remove(person);
-                    committeeMeetingCollectionOldCommitteeMeeting = em.merge(committeeMeetingCollectionOldCommitteeMeeting);
+            for (CommitteeMeeting committeeMeetingListOldCommitteeMeeting : committeeMeetingListOld) {
+                if (!committeeMeetingListNew.contains(committeeMeetingListOldCommitteeMeeting)) {
+                    committeeMeetingListOldCommitteeMeeting.getPersonList().remove(person);
+                    committeeMeetingListOldCommitteeMeeting = em.merge(committeeMeetingListOldCommitteeMeeting);
                 }
             }
-            for (CommitteeMeeting committeeMeetingCollectionNewCommitteeMeeting : committeeMeetingCollectionNew) {
-                if (!committeeMeetingCollectionOld.contains(committeeMeetingCollectionNewCommitteeMeeting)) {
-                    committeeMeetingCollectionNewCommitteeMeeting.getPersonCollection().add(person);
-                    committeeMeetingCollectionNewCommitteeMeeting = em.merge(committeeMeetingCollectionNewCommitteeMeeting);
+            for (CommitteeMeeting committeeMeetingListNewCommitteeMeeting : committeeMeetingListNew) {
+                if (!committeeMeetingListOld.contains(committeeMeetingListNewCommitteeMeeting)) {
+                    committeeMeetingListNewCommitteeMeeting.getPersonList().add(person);
+                    committeeMeetingListNewCommitteeMeeting = em.merge(committeeMeetingListNewCommitteeMeeting);
                 }
             }
-            for (SecurityRole securityRoleCollectionOldSecurityRole : securityRoleCollectionOld) {
-                if (!securityRoleCollectionNew.contains(securityRoleCollectionOldSecurityRole)) {
-                    securityRoleCollectionOldSecurityRole.getPersonCollection().remove(person);
-                    securityRoleCollectionOldSecurityRole = em.merge(securityRoleCollectionOldSecurityRole);
+            for (SecurityRole securityRoleListOldSecurityRole : securityRoleListOld) {
+                if (!securityRoleListNew.contains(securityRoleListOldSecurityRole)) {
+                    securityRoleListOldSecurityRole.getPersonList().remove(person);
+                    securityRoleListOldSecurityRole = em.merge(securityRoleListOldSecurityRole);
                 }
             }
-            for (SecurityRole securityRoleCollectionNewSecurityRole : securityRoleCollectionNew) {
-                if (!securityRoleCollectionOld.contains(securityRoleCollectionNewSecurityRole)) {
-                    securityRoleCollectionNewSecurityRole.getPersonCollection().add(person);
-                    securityRoleCollectionNewSecurityRole = em.merge(securityRoleCollectionNewSecurityRole);
+            for (SecurityRole securityRoleListNewSecurityRole : securityRoleListNew) {
+                if (!securityRoleListOld.contains(securityRoleListNewSecurityRole)) {
+                    securityRoleListNewSecurityRole.getPersonList().add(person);
+                    securityRoleListNewSecurityRole = em.merge(securityRoleListNewSecurityRole);
                 }
             }
-            for (AuditLog auditLogCollectionNewAuditLog : auditLogCollectionNew) {
-                if (!auditLogCollectionOld.contains(auditLogCollectionNewAuditLog)) {
-                    Person oldPersonIDOfAuditLogCollectionNewAuditLog = auditLogCollectionNewAuditLog.getPersonID();
-                    auditLogCollectionNewAuditLog.setPersonID(person);
-                    auditLogCollectionNewAuditLog = em.merge(auditLogCollectionNewAuditLog);
-                    if (oldPersonIDOfAuditLogCollectionNewAuditLog != null && !oldPersonIDOfAuditLogCollectionNewAuditLog.equals(person)) {
-                        oldPersonIDOfAuditLogCollectionNewAuditLog.getAuditLogCollection().remove(auditLogCollectionNewAuditLog);
-                        oldPersonIDOfAuditLogCollectionNewAuditLog = em.merge(oldPersonIDOfAuditLogCollectionNewAuditLog);
+            for (AuditLog auditLogListNewAuditLog : auditLogListNew) {
+                if (!auditLogListOld.contains(auditLogListNewAuditLog)) {
+                    Person oldPersonIDOfAuditLogListNewAuditLog = auditLogListNewAuditLog.getPersonID();
+                    auditLogListNewAuditLog.setPersonID(person);
+                    auditLogListNewAuditLog = em.merge(auditLogListNewAuditLog);
+                    if (oldPersonIDOfAuditLogListNewAuditLog != null && !oldPersonIDOfAuditLogListNewAuditLog.equals(person)) {
+                        oldPersonIDOfAuditLogListNewAuditLog.getAuditLogList().remove(auditLogListNewAuditLog);
+                        oldPersonIDOfAuditLogListNewAuditLog = em.merge(oldPersonIDOfAuditLogListNewAuditLog);
                     }
                 }
             }
-            for (Endorsement endorsementCollectionNewEndorsement : endorsementCollectionNew) {
-                if (!endorsementCollectionOld.contains(endorsementCollectionNewEndorsement)) {
-                    Person oldDeanIDOfEndorsementCollectionNewEndorsement = endorsementCollectionNewEndorsement.getDeanID();
-                    endorsementCollectionNewEndorsement.setDeanID(person);
-                    endorsementCollectionNewEndorsement = em.merge(endorsementCollectionNewEndorsement);
-                    if (oldDeanIDOfEndorsementCollectionNewEndorsement != null && !oldDeanIDOfEndorsementCollectionNewEndorsement.equals(person)) {
-                        oldDeanIDOfEndorsementCollectionNewEndorsement.getEndorsementCollection().remove(endorsementCollectionNewEndorsement);
-                        oldDeanIDOfEndorsementCollectionNewEndorsement = em.merge(oldDeanIDOfEndorsementCollectionNewEndorsement);
+            for (Endorsement endorsementListNewEndorsement : endorsementListNew) {
+                if (!endorsementListOld.contains(endorsementListNewEndorsement)) {
+                    Person oldDeanIDOfEndorsementListNewEndorsement = endorsementListNewEndorsement.getDeanID();
+                    endorsementListNewEndorsement.setDeanID(person);
+                    endorsementListNewEndorsement = em.merge(endorsementListNewEndorsement);
+                    if (oldDeanIDOfEndorsementListNewEndorsement != null && !oldDeanIDOfEndorsementListNewEndorsement.equals(person)) {
+                        oldDeanIDOfEndorsementListNewEndorsement.getEndorsementList().remove(endorsementListNewEndorsement);
+                        oldDeanIDOfEndorsementListNewEndorsement = em.merge(oldDeanIDOfEndorsementListNewEndorsement);
                     }
                 }
             }
-            for (RecommendationReport recommendationReportCollectionNewRecommendationReport : recommendationReportCollectionNew) {
-                if (!recommendationReportCollectionOld.contains(recommendationReportCollectionNewRecommendationReport)) {
-                    Person oldHodIDOfRecommendationReportCollectionNewRecommendationReport = recommendationReportCollectionNewRecommendationReport.getHodID();
-                    recommendationReportCollectionNewRecommendationReport.setHodID(person);
-                    recommendationReportCollectionNewRecommendationReport = em.merge(recommendationReportCollectionNewRecommendationReport);
-                    if (oldHodIDOfRecommendationReportCollectionNewRecommendationReport != null && !oldHodIDOfRecommendationReportCollectionNewRecommendationReport.equals(person)) {
-                        oldHodIDOfRecommendationReportCollectionNewRecommendationReport.getRecommendationReportCollection().remove(recommendationReportCollectionNewRecommendationReport);
-                        oldHodIDOfRecommendationReportCollectionNewRecommendationReport = em.merge(oldHodIDOfRecommendationReportCollectionNewRecommendationReport);
+            for (RecommendationReport recommendationReportListNewRecommendationReport : recommendationReportListNew) {
+                if (!recommendationReportListOld.contains(recommendationReportListNewRecommendationReport)) {
+                    Person oldHodIDOfRecommendationReportListNewRecommendationReport = recommendationReportListNewRecommendationReport.getHodID();
+                    recommendationReportListNewRecommendationReport.setHodID(person);
+                    recommendationReportListNewRecommendationReport = em.merge(recommendationReportListNewRecommendationReport);
+                    if (oldHodIDOfRecommendationReportListNewRecommendationReport != null && !oldHodIDOfRecommendationReportListNewRecommendationReport.equals(person)) {
+                        oldHodIDOfRecommendationReportListNewRecommendationReport.getRecommendationReportList().remove(recommendationReportListNewRecommendationReport);
+                        oldHodIDOfRecommendationReportListNewRecommendationReport = em.merge(oldHodIDOfRecommendationReportListNewRecommendationReport);
                     }
                 }
             }
-            for (RefereeReport refereeReportCollectionNewRefereeReport : refereeReportCollectionNew) {
-                if (!refereeReportCollectionOld.contains(refereeReportCollectionNewRefereeReport)) {
-                    Person oldRefereeIDOfRefereeReportCollectionNewRefereeReport = refereeReportCollectionNewRefereeReport.getRefereeID();
-                    refereeReportCollectionNewRefereeReport.setRefereeID(person);
-                    refereeReportCollectionNewRefereeReport = em.merge(refereeReportCollectionNewRefereeReport);
-                    if (oldRefereeIDOfRefereeReportCollectionNewRefereeReport != null && !oldRefereeIDOfRefereeReportCollectionNewRefereeReport.equals(person)) {
-                        oldRefereeIDOfRefereeReportCollectionNewRefereeReport.getRefereeReportCollection().remove(refereeReportCollectionNewRefereeReport);
-                        oldRefereeIDOfRefereeReportCollectionNewRefereeReport = em.merge(oldRefereeIDOfRefereeReportCollectionNewRefereeReport);
+            for (RefereeReport refereeReportListNewRefereeReport : refereeReportListNew) {
+                if (!refereeReportListOld.contains(refereeReportListNewRefereeReport)) {
+                    Person oldRefereeIDOfRefereeReportListNewRefereeReport = refereeReportListNewRefereeReport.getRefereeID();
+                    refereeReportListNewRefereeReport.setRefereeID(person);
+                    refereeReportListNewRefereeReport = em.merge(refereeReportListNewRefereeReport);
+                    if (oldRefereeIDOfRefereeReportListNewRefereeReport != null && !oldRefereeIDOfRefereeReportListNewRefereeReport.equals(person)) {
+                        oldRefereeIDOfRefereeReportListNewRefereeReport.getRefereeReportList().remove(refereeReportListNewRefereeReport);
+                        oldRefereeIDOfRefereeReportListNewRefereeReport = em.merge(oldRefereeIDOfRefereeReportListNewRefereeReport);
                     }
                 }
             }
-            for (FundingReport fundingReportCollectionNewFundingReport : fundingReportCollectionNew) {
-                if (!fundingReportCollectionOld.contains(fundingReportCollectionNewFundingReport)) {
-                    Person oldDrisIDOfFundingReportCollectionNewFundingReport = fundingReportCollectionNewFundingReport.getDrisID();
-                    fundingReportCollectionNewFundingReport.setDrisID(person);
-                    fundingReportCollectionNewFundingReport = em.merge(fundingReportCollectionNewFundingReport);
-                    if (oldDrisIDOfFundingReportCollectionNewFundingReport != null && !oldDrisIDOfFundingReportCollectionNewFundingReport.equals(person)) {
-                        oldDrisIDOfFundingReportCollectionNewFundingReport.getFundingReportCollection().remove(fundingReportCollectionNewFundingReport);
-                        oldDrisIDOfFundingReportCollectionNewFundingReport = em.merge(oldDrisIDOfFundingReportCollectionNewFundingReport);
+            for (FundingReport fundingReportListNewFundingReport : fundingReportListNew) {
+                if (!fundingReportListOld.contains(fundingReportListNewFundingReport)) {
+                    Person oldDrisIDOfFundingReportListNewFundingReport = fundingReportListNewFundingReport.getDrisID();
+                    fundingReportListNewFundingReport.setDrisID(person);
+                    fundingReportListNewFundingReport = em.merge(fundingReportListNewFundingReport);
+                    if (oldDrisIDOfFundingReportListNewFundingReport != null && !oldDrisIDOfFundingReportListNewFundingReport.equals(person)) {
+                        oldDrisIDOfFundingReportListNewFundingReport.getFundingReportList().remove(fundingReportListNewFundingReport);
+                        oldDrisIDOfFundingReportListNewFundingReport = em.merge(oldDrisIDOfFundingReportListNewFundingReport);
                     }
                 }
             }
-            for (Notification notificationCollectionNewNotification : notificationCollectionNew) {
-                if (!notificationCollectionOld.contains(notificationCollectionNewNotification)) {
-                    Person oldSenderIDOfNotificationCollectionNewNotification = notificationCollectionNewNotification.getSenderID();
-                    notificationCollectionNewNotification.setSenderID(person);
-                    notificationCollectionNewNotification = em.merge(notificationCollectionNewNotification);
-                    if (oldSenderIDOfNotificationCollectionNewNotification != null && !oldSenderIDOfNotificationCollectionNewNotification.equals(person)) {
-                        oldSenderIDOfNotificationCollectionNewNotification.getNotificationCollection().remove(notificationCollectionNewNotification);
-                        oldSenderIDOfNotificationCollectionNewNotification = em.merge(oldSenderIDOfNotificationCollectionNewNotification);
+            for (Notification notificationListNewNotification : notificationListNew) {
+                if (!notificationListOld.contains(notificationListNewNotification)) {
+                    Person oldSenderIDOfNotificationListNewNotification = notificationListNewNotification.getSenderID();
+                    notificationListNewNotification.setSenderID(person);
+                    notificationListNewNotification = em.merge(notificationListNewNotification);
+                    if (oldSenderIDOfNotificationListNewNotification != null && !oldSenderIDOfNotificationListNewNotification.equals(person)) {
+                        oldSenderIDOfNotificationListNewNotification.getNotificationList().remove(notificationListNewNotification);
+                        oldSenderIDOfNotificationListNewNotification = em.merge(oldSenderIDOfNotificationListNewNotification);
                     }
                 }
             }
-            for (Notification notificationCollection1NewNotification : notificationCollection1New) {
-                if (!notificationCollection1Old.contains(notificationCollection1NewNotification)) {
-                    Person oldRecieverIDOfNotificationCollection1NewNotification = notificationCollection1NewNotification.getRecieverID();
-                    notificationCollection1NewNotification.setRecieverID(person);
-                    notificationCollection1NewNotification = em.merge(notificationCollection1NewNotification);
-                    if (oldRecieverIDOfNotificationCollection1NewNotification != null && !oldRecieverIDOfNotificationCollection1NewNotification.equals(person)) {
-                        oldRecieverIDOfNotificationCollection1NewNotification.getNotificationCollection1().remove(notificationCollection1NewNotification);
-                        oldRecieverIDOfNotificationCollection1NewNotification = em.merge(oldRecieverIDOfNotificationCollection1NewNotification);
+            for (Notification notificationList1NewNotification : notificationList1New) {
+                if (!notificationList1Old.contains(notificationList1NewNotification)) {
+                    Person oldRecieverIDOfNotificationList1NewNotification = notificationList1NewNotification.getRecieverID();
+                    notificationList1NewNotification.setRecieverID(person);
+                    notificationList1NewNotification = em.merge(notificationList1NewNotification);
+                    if (oldRecieverIDOfNotificationList1NewNotification != null && !oldRecieverIDOfNotificationList1NewNotification.equals(person)) {
+                        oldRecieverIDOfNotificationList1NewNotification.getNotificationList1().remove(notificationList1NewNotification);
+                        oldRecieverIDOfNotificationList1NewNotification = em.merge(oldRecieverIDOfNotificationList1NewNotification);
                     }
                 }
             }
-            for (Cv cvCollectionNewCv : cvCollectionNew) {
-                if (!cvCollectionOld.contains(cvCollectionNewCv)) {
-                    Person oldOwnerIDOfCvCollectionNewCv = cvCollectionNewCv.getOwnerID();
-                    cvCollectionNewCv.setOwnerID(person);
-                    cvCollectionNewCv = em.merge(cvCollectionNewCv);
-                    if (oldOwnerIDOfCvCollectionNewCv != null && !oldOwnerIDOfCvCollectionNewCv.equals(person)) {
-                        oldOwnerIDOfCvCollectionNewCv.getCvCollection().remove(cvCollectionNewCv);
-                        oldOwnerIDOfCvCollectionNewCv = em.merge(oldOwnerIDOfCvCollectionNewCv);
+            for (Cv cvListNewCv : cvListNew) {
+                if (!cvListOld.contains(cvListNewCv)) {
+                    Person oldOwnerIDOfCvListNewCv = cvListNewCv.getOwnerID();
+                    cvListNewCv.setOwnerID(person);
+                    cvListNewCv = em.merge(cvListNewCv);
+                    if (oldOwnerIDOfCvListNewCv != null && !oldOwnerIDOfCvListNewCv.equals(person)) {
+                        oldOwnerIDOfCvListNewCv.getCvList().remove(cvListNewCv);
+                        oldOwnerIDOfCvListNewCv = em.merge(oldOwnerIDOfCvListNewCv);
                     }
                 }
             }
-            for (Application applicationCollectionNewApplication : applicationCollectionNew) {
-                if (!applicationCollectionOld.contains(applicationCollectionNewApplication)) {
-                    Person oldFellowOfApplicationCollectionNewApplication = applicationCollectionNewApplication.getFellow();
-                    applicationCollectionNewApplication.setFellow(person);
-                    applicationCollectionNewApplication = em.merge(applicationCollectionNewApplication);
-                    if (oldFellowOfApplicationCollectionNewApplication != null && !oldFellowOfApplicationCollectionNewApplication.equals(person)) {
-                        oldFellowOfApplicationCollectionNewApplication.getApplicationCollection().remove(applicationCollectionNewApplication);
-                        oldFellowOfApplicationCollectionNewApplication = em.merge(oldFellowOfApplicationCollectionNewApplication);
+            for (Application applicationListNewApplication : applicationListNew) {
+                if (!applicationListOld.contains(applicationListNewApplication)) {
+                    Person oldFellowOfApplicationListNewApplication = applicationListNewApplication.getFellow();
+                    applicationListNewApplication.setFellow(person);
+                    applicationListNewApplication = em.merge(applicationListNewApplication);
+                    if (oldFellowOfApplicationListNewApplication != null && !oldFellowOfApplicationListNewApplication.equals(person)) {
+                        oldFellowOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
+                        oldFellowOfApplicationListNewApplication = em.merge(oldFellowOfApplicationListNewApplication);
                     }
                 }
             }
-            for (Application applicationCollection1NewApplication : applicationCollection1New) {
-                if (!applicationCollection1Old.contains(applicationCollection1NewApplication)) {
-                    Person oldGrantHolderIDOfApplicationCollection1NewApplication = applicationCollection1NewApplication.getGrantHolderID();
-                    applicationCollection1NewApplication.setGrantHolderID(person);
-                    applicationCollection1NewApplication = em.merge(applicationCollection1NewApplication);
-                    if (oldGrantHolderIDOfApplicationCollection1NewApplication != null && !oldGrantHolderIDOfApplicationCollection1NewApplication.equals(person)) {
-                        oldGrantHolderIDOfApplicationCollection1NewApplication.getApplicationCollection1().remove(applicationCollection1NewApplication);
-                        oldGrantHolderIDOfApplicationCollection1NewApplication = em.merge(oldGrantHolderIDOfApplicationCollection1NewApplication);
+            for (Application applicationList1NewApplication : applicationList1New) {
+                if (!applicationList1Old.contains(applicationList1NewApplication)) {
+                    Person oldGrantHolderIDOfApplicationList1NewApplication = applicationList1NewApplication.getGrantHolderID();
+                    applicationList1NewApplication.setGrantHolderID(person);
+                    applicationList1NewApplication = em.merge(applicationList1NewApplication);
+                    if (oldGrantHolderIDOfApplicationList1NewApplication != null && !oldGrantHolderIDOfApplicationList1NewApplication.equals(person)) {
+                        oldGrantHolderIDOfApplicationList1NewApplication.getApplicationList1().remove(applicationList1NewApplication);
+                        oldGrantHolderIDOfApplicationList1NewApplication = em.merge(oldGrantHolderIDOfApplicationList1NewApplication);
                     }
                 }
             }
-            for (MinuteComment minuteCommentCollectionNewMinuteComment : minuteCommentCollectionNew) {
-                if (!minuteCommentCollectionOld.contains(minuteCommentCollectionNewMinuteComment)) {
-                    Person oldAttendeeIDOfMinuteCommentCollectionNewMinuteComment = minuteCommentCollectionNewMinuteComment.getAttendeeID();
-                    minuteCommentCollectionNewMinuteComment.setAttendeeID(person);
-                    minuteCommentCollectionNewMinuteComment = em.merge(minuteCommentCollectionNewMinuteComment);
-                    if (oldAttendeeIDOfMinuteCommentCollectionNewMinuteComment != null && !oldAttendeeIDOfMinuteCommentCollectionNewMinuteComment.equals(person)) {
-                        oldAttendeeIDOfMinuteCommentCollectionNewMinuteComment.getMinuteCommentCollection().remove(minuteCommentCollectionNewMinuteComment);
-                        oldAttendeeIDOfMinuteCommentCollectionNewMinuteComment = em.merge(oldAttendeeIDOfMinuteCommentCollectionNewMinuteComment);
+            for (MinuteComment minuteCommentListNewMinuteComment : minuteCommentListNew) {
+                if (!minuteCommentListOld.contains(minuteCommentListNewMinuteComment)) {
+                    Person oldAttendeeIDOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getAttendeeID();
+                    minuteCommentListNewMinuteComment.setAttendeeID(person);
+                    minuteCommentListNewMinuteComment = em.merge(minuteCommentListNewMinuteComment);
+                    if (oldAttendeeIDOfMinuteCommentListNewMinuteComment != null && !oldAttendeeIDOfMinuteCommentListNewMinuteComment.equals(person)) {
+                        oldAttendeeIDOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
+                        oldAttendeeIDOfMinuteCommentListNewMinuteComment = em.merge(oldAttendeeIDOfMinuteCommentListNewMinuteComment);
                     }
                 }
             }
@@ -790,105 +787,105 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the UpEmployeeInformation " + upEmployeeInformationOrphanCheck + " in its upEmployeeInformation field has a non-nullable person field.");
             }
-            Collection<AuditLog> auditLogCollectionOrphanCheck = person.getAuditLogCollection();
-            for (AuditLog auditLogCollectionOrphanCheckAuditLog : auditLogCollectionOrphanCheck) {
+            List<AuditLog> auditLogListOrphanCheck = person.getAuditLogList();
+            for (AuditLog auditLogListOrphanCheckAuditLog : auditLogListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AuditLog " + auditLogCollectionOrphanCheckAuditLog + " in its auditLogCollection field has a non-nullable personID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AuditLog " + auditLogListOrphanCheckAuditLog + " in its auditLogList field has a non-nullable personID field.");
             }
-            Collection<Endorsement> endorsementCollectionOrphanCheck = person.getEndorsementCollection();
-            for (Endorsement endorsementCollectionOrphanCheckEndorsement : endorsementCollectionOrphanCheck) {
+            List<Endorsement> endorsementListOrphanCheck = person.getEndorsementList();
+            for (Endorsement endorsementListOrphanCheckEndorsement : endorsementListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Endorsement " + endorsementCollectionOrphanCheckEndorsement + " in its endorsementCollection field has a non-nullable deanID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Endorsement " + endorsementListOrphanCheckEndorsement + " in its endorsementList field has a non-nullable deanID field.");
             }
-            Collection<RecommendationReport> recommendationReportCollectionOrphanCheck = person.getRecommendationReportCollection();
-            for (RecommendationReport recommendationReportCollectionOrphanCheckRecommendationReport : recommendationReportCollectionOrphanCheck) {
+            List<RecommendationReport> recommendationReportListOrphanCheck = person.getRecommendationReportList();
+            for (RecommendationReport recommendationReportListOrphanCheckRecommendationReport : recommendationReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RecommendationReport " + recommendationReportCollectionOrphanCheckRecommendationReport + " in its recommendationReportCollection field has a non-nullable hodID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RecommendationReport " + recommendationReportListOrphanCheckRecommendationReport + " in its recommendationReportList field has a non-nullable hodID field.");
             }
-            Collection<RefereeReport> refereeReportCollectionOrphanCheck = person.getRefereeReportCollection();
-            for (RefereeReport refereeReportCollectionOrphanCheckRefereeReport : refereeReportCollectionOrphanCheck) {
+            List<RefereeReport> refereeReportListOrphanCheck = person.getRefereeReportList();
+            for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RefereeReport " + refereeReportCollectionOrphanCheckRefereeReport + " in its refereeReportCollection field has a non-nullable refereeID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RefereeReport " + refereeReportListOrphanCheckRefereeReport + " in its refereeReportList field has a non-nullable refereeID field.");
             }
-            Collection<FundingReport> fundingReportCollectionOrphanCheck = person.getFundingReportCollection();
-            for (FundingReport fundingReportCollectionOrphanCheckFundingReport : fundingReportCollectionOrphanCheck) {
+            List<FundingReport> fundingReportListOrphanCheck = person.getFundingReportList();
+            for (FundingReport fundingReportListOrphanCheckFundingReport : fundingReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the FundingReport " + fundingReportCollectionOrphanCheckFundingReport + " in its fundingReportCollection field has a non-nullable drisID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the FundingReport " + fundingReportListOrphanCheckFundingReport + " in its fundingReportList field has a non-nullable drisID field.");
             }
-            Collection<Notification> notificationCollectionOrphanCheck = person.getNotificationCollection();
-            for (Notification notificationCollectionOrphanCheckNotification : notificationCollectionOrphanCheck) {
+            List<Notification> notificationListOrphanCheck = person.getNotificationList();
+            for (Notification notificationListOrphanCheckNotification : notificationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationCollectionOrphanCheckNotification + " in its notificationCollection field has a non-nullable senderID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationListOrphanCheckNotification + " in its notificationList field has a non-nullable senderID field.");
             }
-            Collection<Notification> notificationCollection1OrphanCheck = person.getNotificationCollection1();
-            for (Notification notificationCollection1OrphanCheckNotification : notificationCollection1OrphanCheck) {
+            List<Notification> notificationList1OrphanCheck = person.getNotificationList1();
+            for (Notification notificationList1OrphanCheckNotification : notificationList1OrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationCollection1OrphanCheckNotification + " in its notificationCollection1 field has a non-nullable recieverID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationList1OrphanCheckNotification + " in its notificationList1 field has a non-nullable recieverID field.");
             }
-            Collection<Cv> cvCollectionOrphanCheck = person.getCvCollection();
-            for (Cv cvCollectionOrphanCheckCv : cvCollectionOrphanCheck) {
+            List<Cv> cvListOrphanCheck = person.getCvList();
+            for (Cv cvListOrphanCheckCv : cvListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Cv " + cvCollectionOrphanCheckCv + " in its cvCollection field has a non-nullable ownerID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Cv " + cvListOrphanCheckCv + " in its cvList field has a non-nullable ownerID field.");
             }
-            Collection<Application> applicationCollectionOrphanCheck = person.getApplicationCollection();
-            for (Application applicationCollectionOrphanCheckApplication : applicationCollectionOrphanCheck) {
+            List<Application> applicationListOrphanCheck = person.getApplicationList();
+            for (Application applicationListOrphanCheckApplication : applicationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationCollectionOrphanCheckApplication + " in its applicationCollection field has a non-nullable fellow field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationListOrphanCheckApplication + " in its applicationList field has a non-nullable fellow field.");
             }
-            Collection<Application> applicationCollection1OrphanCheck = person.getApplicationCollection1();
-            for (Application applicationCollection1OrphanCheckApplication : applicationCollection1OrphanCheck) {
+            List<Application> applicationList1OrphanCheck = person.getApplicationList1();
+            for (Application applicationList1OrphanCheckApplication : applicationList1OrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationCollection1OrphanCheckApplication + " in its applicationCollection1 field has a non-nullable grantHolderID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationList1OrphanCheckApplication + " in its applicationList1 field has a non-nullable grantHolderID field.");
             }
-            Collection<MinuteComment> minuteCommentCollectionOrphanCheck = person.getMinuteCommentCollection();
-            for (MinuteComment minuteCommentCollectionOrphanCheckMinuteComment : minuteCommentCollectionOrphanCheck) {
+            List<MinuteComment> minuteCommentListOrphanCheck = person.getMinuteCommentList();
+            for (MinuteComment minuteCommentListOrphanCheckMinuteComment : minuteCommentListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the MinuteComment " + minuteCommentCollectionOrphanCheckMinuteComment + " in its minuteCommentCollection field has a non-nullable attendeeID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable attendeeID field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Location locationID = person.getLocationID();
             if (locationID != null) {
-                locationID.getPersonCollection().remove(person);
+                locationID.getPersonList().remove(person);
                 locationID = em.merge(locationID);
             }
             Address addressLine1 = person.getAddressLine1();
             if (addressLine1 != null) {
-                addressLine1.getPersonCollection().remove(person);
+                addressLine1.getPersonList().remove(person);
                 addressLine1 = em.merge(addressLine1);
             }
-            Collection<CommitteeMeeting> committeeMeetingCollection = person.getCommitteeMeetingCollection();
-            for (CommitteeMeeting committeeMeetingCollectionCommitteeMeeting : committeeMeetingCollection) {
-                committeeMeetingCollectionCommitteeMeeting.getPersonCollection().remove(person);
-                committeeMeetingCollectionCommitteeMeeting = em.merge(committeeMeetingCollectionCommitteeMeeting);
+            List<CommitteeMeeting> committeeMeetingList = person.getCommitteeMeetingList();
+            for (CommitteeMeeting committeeMeetingListCommitteeMeeting : committeeMeetingList) {
+                committeeMeetingListCommitteeMeeting.getPersonList().remove(person);
+                committeeMeetingListCommitteeMeeting = em.merge(committeeMeetingListCommitteeMeeting);
             }
-            Collection<SecurityRole> securityRoleCollection = person.getSecurityRoleCollection();
-            for (SecurityRole securityRoleCollectionSecurityRole : securityRoleCollection) {
-                securityRoleCollectionSecurityRole.getPersonCollection().remove(person);
-                securityRoleCollectionSecurityRole = em.merge(securityRoleCollectionSecurityRole);
+            List<SecurityRole> securityRoleList = person.getSecurityRoleList();
+            for (SecurityRole securityRoleListSecurityRole : securityRoleList) {
+                securityRoleListSecurityRole.getPersonList().remove(person);
+                securityRoleListSecurityRole = em.merge(securityRoleListSecurityRole);
             }
             em.remove(person);
             utx.commit();
@@ -1002,8 +999,32 @@ public class PersonJpaController implements Serializable {
         catch(NumberFormatException ex)
         {
             throw ex;
-        }           
+        }     
         
     }
+    
+    /**
+     *This function can be used to check if a particular person has the 
+     * specified security role.
+     * @param person The person object to be checked
+     * @param roleID The roleID of the role to look for as a long
+     * @return True if the person does have the security role else false
+     */
+    public static boolean doesPersonHaveSecurityRole(Person person, long roleID)
+    {
+        boolean isFound = false;
+        
+        for(SecurityRole sr : person.getSecurityRoleList())
+        {
+            if(sr.getRoleID() == roleID)
+            {
+                isFound = true;
+                break;
+            }
+        }
+        
+        return isFound;        
+    }
+    
     
 }

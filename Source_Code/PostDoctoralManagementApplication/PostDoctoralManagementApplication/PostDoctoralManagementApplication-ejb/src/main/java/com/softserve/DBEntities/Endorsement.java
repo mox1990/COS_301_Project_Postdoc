@@ -7,8 +7,8 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,7 +66,7 @@ public class Endorsement implements Serializable {
     @ManyToOne(optional = false)
     private Person deanID;
     @OneToMany(mappedBy = "endorsementID")
-    private Collection<Application> applicationCollection;
+    private List<Application> applicationList;
 
     public Endorsement() {
     }
@@ -123,12 +123,12 @@ public class Endorsement implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Application> getApplicationCollection() {
-        return applicationCollection;
+    public List<Application> getApplicationList() {
+        return applicationList;
     }
 
-    public void setApplicationCollection(Collection<Application> applicationCollection) {
-        this.applicationCollection = applicationCollection;
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
     }
 
     @Override
@@ -153,7 +153,7 @@ public class Endorsement implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Endorsement[ endorsementID=" + endorsementID + " ]";
+        return "com.softserve.DBEntities.Endorsement[ endorsementID=" + endorsementID + " ]";
     }
     
 }

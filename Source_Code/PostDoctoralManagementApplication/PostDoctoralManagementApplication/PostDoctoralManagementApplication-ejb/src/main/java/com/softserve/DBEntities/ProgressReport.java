@@ -127,7 +127,7 @@ public class ProgressReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.ProgressReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEntities.ProgressReport[ reportID=" + reportID + " ]";
     }
     
 }

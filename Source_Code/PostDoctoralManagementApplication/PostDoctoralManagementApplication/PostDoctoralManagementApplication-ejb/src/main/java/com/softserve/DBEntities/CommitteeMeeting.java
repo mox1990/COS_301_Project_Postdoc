@@ -7,8 +7,8 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,14 +63,14 @@ public class CommitteeMeeting implements Serializable {
         @JoinColumn(name = "_meetingID", referencedColumnName = "_meetingID")}, inverseJoinColumns = {
         @JoinColumn(name = "_attendeeID", referencedColumnName = "_systemID")})
     @ManyToMany
-    private Collection<Person> personCollection;
+    private List<Person> personList;
     @JoinTable(name = "committee_meetings_applications", joinColumns = {
         @JoinColumn(name = "_meetingID", referencedColumnName = "_meetingID")}, inverseJoinColumns = {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany
-    private Collection<Application> applicationCollection;
+    private List<Application> applicationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "meetingID")
-    private Collection<MinuteComment> minuteCommentCollection;
+    private List<MinuteComment> minuteCommentList;
 
     public CommitteeMeeting() {
     }
@@ -110,30 +110,30 @@ public class CommitteeMeeting implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
-    }
-
-    @XmlTransient
-    public Collection<Application> getApplicationCollection() {
-        return applicationCollection;
-    }
-
-    public void setApplicationCollection(Collection<Application> applicationCollection) {
-        this.applicationCollection = applicationCollection;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 
     @XmlTransient
-    public Collection<MinuteComment> getMinuteCommentCollection() {
-        return minuteCommentCollection;
+    public List<Application> getApplicationList() {
+        return applicationList;
     }
 
-    public void setMinuteCommentCollection(Collection<MinuteComment> minuteCommentCollection) {
-        this.minuteCommentCollection = minuteCommentCollection;
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
+    }
+
+    @XmlTransient
+    public List<MinuteComment> getMinuteCommentList() {
+        return minuteCommentList;
+    }
+
+    public void setMinuteCommentList(List<MinuteComment> minuteCommentList) {
+        this.minuteCommentList = minuteCommentList;
     }
 
     @Override
@@ -158,7 +158,7 @@ public class CommitteeMeeting implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.CommitteeMeeting[ meetingID=" + meetingID + " ]";
+        return "com.softserve.DBEntities.CommitteeMeeting[ meetingID=" + meetingID + " ]";
     }
     
 }

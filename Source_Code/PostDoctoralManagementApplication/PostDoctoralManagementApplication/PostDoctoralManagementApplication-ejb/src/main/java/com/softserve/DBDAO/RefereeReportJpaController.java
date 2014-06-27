@@ -56,11 +56,11 @@ public class RefereeReportJpaController implements Serializable {
             }
             em.persist(refereeReport);
             if (applicationID != null) {
-                applicationID.getRefereeReportCollection().add(refereeReport);
+                applicationID.getRefereeReportList().add(refereeReport);
                 applicationID = em.merge(applicationID);
             }
             if (refereeID != null) {
-                refereeID.getRefereeReportCollection().add(refereeReport);
+                refereeID.getRefereeReportList().add(refereeReport);
                 refereeID = em.merge(refereeID);
             }
             utx.commit();
@@ -98,19 +98,19 @@ public class RefereeReportJpaController implements Serializable {
             }
             refereeReport = em.merge(refereeReport);
             if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
-                applicationIDOld.getRefereeReportCollection().remove(refereeReport);
+                applicationIDOld.getRefereeReportList().remove(refereeReport);
                 applicationIDOld = em.merge(applicationIDOld);
             }
             if (applicationIDNew != null && !applicationIDNew.equals(applicationIDOld)) {
-                applicationIDNew.getRefereeReportCollection().add(refereeReport);
+                applicationIDNew.getRefereeReportList().add(refereeReport);
                 applicationIDNew = em.merge(applicationIDNew);
             }
             if (refereeIDOld != null && !refereeIDOld.equals(refereeIDNew)) {
-                refereeIDOld.getRefereeReportCollection().remove(refereeReport);
+                refereeIDOld.getRefereeReportList().remove(refereeReport);
                 refereeIDOld = em.merge(refereeIDOld);
             }
             if (refereeIDNew != null && !refereeIDNew.equals(refereeIDOld)) {
-                refereeIDNew.getRefereeReportCollection().add(refereeReport);
+                refereeIDNew.getRefereeReportList().add(refereeReport);
                 refereeIDNew = em.merge(refereeIDNew);
             }
             utx.commit();
@@ -149,12 +149,12 @@ public class RefereeReportJpaController implements Serializable {
             }
             Application applicationID = refereeReport.getApplicationID();
             if (applicationID != null) {
-                applicationID.getRefereeReportCollection().remove(refereeReport);
+                applicationID.getRefereeReportList().remove(refereeReport);
                 applicationID = em.merge(applicationID);
             }
             Person refereeID = refereeReport.getRefereeID();
             if (refereeID != null) {
-                refereeID.getRefereeReportCollection().remove(refereeReport);
+                refereeID.getRefereeReportList().remove(refereeReport);
                 refereeID = em.merge(refereeID);
             }
             em.remove(refereeReport);

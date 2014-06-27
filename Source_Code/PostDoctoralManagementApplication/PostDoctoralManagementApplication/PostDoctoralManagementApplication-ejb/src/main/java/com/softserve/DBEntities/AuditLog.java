@@ -126,7 +126,7 @@ public class AuditLog implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.AuditLog[ entryID=" + entryID + " ]";
+        return "com.softserve.DBEntities.AuditLog[ entryID=" + entryID + " ]";
     }
     
 }

@@ -7,7 +7,7 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,9 +61,9 @@ public class Location implements Serializable {
     @Column(name = "_department")
     private String department;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "locationID")
-    private Collection<Application> applicationCollection;
+    private List<Application> applicationList;
     @OneToMany(mappedBy = "locationID")
-    private Collection<Person> personCollection;
+    private List<Person> personList;
 
     public Location() {
     }
@@ -112,21 +112,21 @@ public class Location implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Application> getApplicationCollection() {
-        return applicationCollection;
+    public List<Application> getApplicationList() {
+        return applicationList;
     }
 
-    public void setApplicationCollection(Collection<Application> applicationCollection) {
-        this.applicationCollection = applicationCollection;
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
     }
 
     @XmlTransient
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Location[ locationID=" + locationID + " ]";
+        return "com.softserve.DBEntities.Location[ locationID=" + locationID + " ]";
     }
     
 }

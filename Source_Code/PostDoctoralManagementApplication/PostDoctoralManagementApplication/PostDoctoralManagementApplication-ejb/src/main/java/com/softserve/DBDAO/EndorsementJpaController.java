@@ -18,7 +18,6 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Endorsement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,8 +42,8 @@ public class EndorsementJpaController implements Serializable {
     }
 
     public void create(Endorsement endorsement) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (endorsement.getApplicationCollection() == null) {
-            endorsement.setApplicationCollection(new ArrayList<Application>());
+        if (endorsement.getApplicationList() == null) {
+            endorsement.setApplicationList(new ArrayList<Application>());
         }
         EntityManager em = null;
         try {
@@ -55,24 +54,24 @@ public class EndorsementJpaController implements Serializable {
                 deanID = em.getReference(deanID.getClass(), deanID.getSystemID());
                 endorsement.setDeanID(deanID);
             }
-            Collection<Application> attachedApplicationCollection = new ArrayList<Application>();
-            for (Application applicationCollectionApplicationToAttach : endorsement.getApplicationCollection()) {
-                applicationCollectionApplicationToAttach = em.getReference(applicationCollectionApplicationToAttach.getClass(), applicationCollectionApplicationToAttach.getApplicationID());
-                attachedApplicationCollection.add(applicationCollectionApplicationToAttach);
+            List<Application> attachedApplicationList = new ArrayList<Application>();
+            for (Application applicationListApplicationToAttach : endorsement.getApplicationList()) {
+                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
+                attachedApplicationList.add(applicationListApplicationToAttach);
             }
-            endorsement.setApplicationCollection(attachedApplicationCollection);
+            endorsement.setApplicationList(attachedApplicationList);
             em.persist(endorsement);
             if (deanID != null) {
-                deanID.getEndorsementCollection().add(endorsement);
+                deanID.getEndorsementList().add(endorsement);
                 deanID = em.merge(deanID);
             }
-            for (Application applicationCollectionApplication : endorsement.getApplicationCollection()) {
-                Endorsement oldEndorsementIDOfApplicationCollectionApplication = applicationCollectionApplication.getEndorsementID();
-                applicationCollectionApplication.setEndorsementID(endorsement);
-                applicationCollectionApplication = em.merge(applicationCollectionApplication);
-                if (oldEndorsementIDOfApplicationCollectionApplication != null) {
-                    oldEndorsementIDOfApplicationCollectionApplication.getApplicationCollection().remove(applicationCollectionApplication);
-                    oldEndorsementIDOfApplicationCollectionApplication = em.merge(oldEndorsementIDOfApplicationCollectionApplication);
+            for (Application applicationListApplication : endorsement.getApplicationList()) {
+                Endorsement oldEndorsementIDOfApplicationListApplication = applicationListApplication.getEndorsementID();
+                applicationListApplication.setEndorsementID(endorsement);
+                applicationListApplication = em.merge(applicationListApplication);
+                if (oldEndorsementIDOfApplicationListApplication != null) {
+                    oldEndorsementIDOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
+                    oldEndorsementIDOfApplicationListApplication = em.merge(oldEndorsementIDOfApplicationListApplication);
                 }
             }
             utx.commit();
@@ -101,42 +100,42 @@ public class EndorsementJpaController implements Serializable {
             Endorsement persistentEndorsement = em.find(Endorsement.class, endorsement.getEndorsementID());
             Person deanIDOld = persistentEndorsement.getDeanID();
             Person deanIDNew = endorsement.getDeanID();
-            Collection<Application> applicationCollectionOld = persistentEndorsement.getApplicationCollection();
-            Collection<Application> applicationCollectionNew = endorsement.getApplicationCollection();
+            List<Application> applicationListOld = persistentEndorsement.getApplicationList();
+            List<Application> applicationListNew = endorsement.getApplicationList();
             if (deanIDNew != null) {
                 deanIDNew = em.getReference(deanIDNew.getClass(), deanIDNew.getSystemID());
                 endorsement.setDeanID(deanIDNew);
             }
-            Collection<Application> attachedApplicationCollectionNew = new ArrayList<Application>();
-            for (Application applicationCollectionNewApplicationToAttach : applicationCollectionNew) {
-                applicationCollectionNewApplicationToAttach = em.getReference(applicationCollectionNewApplicationToAttach.getClass(), applicationCollectionNewApplicationToAttach.getApplicationID());
-                attachedApplicationCollectionNew.add(applicationCollectionNewApplicationToAttach);
+            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            for (Application applicationListNewApplicationToAttach : applicationListNew) {
+                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
+                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
             }
-            applicationCollectionNew = attachedApplicationCollectionNew;
-            endorsement.setApplicationCollection(applicationCollectionNew);
+            applicationListNew = attachedApplicationListNew;
+            endorsement.setApplicationList(applicationListNew);
             endorsement = em.merge(endorsement);
             if (deanIDOld != null && !deanIDOld.equals(deanIDNew)) {
-                deanIDOld.getEndorsementCollection().remove(endorsement);
+                deanIDOld.getEndorsementList().remove(endorsement);
                 deanIDOld = em.merge(deanIDOld);
             }
             if (deanIDNew != null && !deanIDNew.equals(deanIDOld)) {
-                deanIDNew.getEndorsementCollection().add(endorsement);
+                deanIDNew.getEndorsementList().add(endorsement);
                 deanIDNew = em.merge(deanIDNew);
             }
-            for (Application applicationCollectionOldApplication : applicationCollectionOld) {
-                if (!applicationCollectionNew.contains(applicationCollectionOldApplication)) {
-                    applicationCollectionOldApplication.setEndorsementID(null);
-                    applicationCollectionOldApplication = em.merge(applicationCollectionOldApplication);
+            for (Application applicationListOldApplication : applicationListOld) {
+                if (!applicationListNew.contains(applicationListOldApplication)) {
+                    applicationListOldApplication.setEndorsementID(null);
+                    applicationListOldApplication = em.merge(applicationListOldApplication);
                 }
             }
-            for (Application applicationCollectionNewApplication : applicationCollectionNew) {
-                if (!applicationCollectionOld.contains(applicationCollectionNewApplication)) {
-                    Endorsement oldEndorsementIDOfApplicationCollectionNewApplication = applicationCollectionNewApplication.getEndorsementID();
-                    applicationCollectionNewApplication.setEndorsementID(endorsement);
-                    applicationCollectionNewApplication = em.merge(applicationCollectionNewApplication);
-                    if (oldEndorsementIDOfApplicationCollectionNewApplication != null && !oldEndorsementIDOfApplicationCollectionNewApplication.equals(endorsement)) {
-                        oldEndorsementIDOfApplicationCollectionNewApplication.getApplicationCollection().remove(applicationCollectionNewApplication);
-                        oldEndorsementIDOfApplicationCollectionNewApplication = em.merge(oldEndorsementIDOfApplicationCollectionNewApplication);
+            for (Application applicationListNewApplication : applicationListNew) {
+                if (!applicationListOld.contains(applicationListNewApplication)) {
+                    Endorsement oldEndorsementIDOfApplicationListNewApplication = applicationListNewApplication.getEndorsementID();
+                    applicationListNewApplication.setEndorsementID(endorsement);
+                    applicationListNewApplication = em.merge(applicationListNewApplication);
+                    if (oldEndorsementIDOfApplicationListNewApplication != null && !oldEndorsementIDOfApplicationListNewApplication.equals(endorsement)) {
+                        oldEndorsementIDOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
+                        oldEndorsementIDOfApplicationListNewApplication = em.merge(oldEndorsementIDOfApplicationListNewApplication);
                     }
                 }
             }
@@ -176,13 +175,13 @@ public class EndorsementJpaController implements Serializable {
             }
             Person deanID = endorsement.getDeanID();
             if (deanID != null) {
-                deanID.getEndorsementCollection().remove(endorsement);
+                deanID.getEndorsementList().remove(endorsement);
                 deanID = em.merge(deanID);
             }
-            Collection<Application> applicationCollection = endorsement.getApplicationCollection();
-            for (Application applicationCollectionApplication : applicationCollection) {
-                applicationCollectionApplication.setEndorsementID(null);
-                applicationCollectionApplication = em.merge(applicationCollectionApplication);
+            List<Application> applicationList = endorsement.getApplicationList();
+            for (Application applicationListApplication : applicationList) {
+                applicationListApplication.setEndorsementID(null);
+                applicationListApplication = em.merge(applicationListApplication);
             }
             em.remove(endorsement);
             utx.commit();

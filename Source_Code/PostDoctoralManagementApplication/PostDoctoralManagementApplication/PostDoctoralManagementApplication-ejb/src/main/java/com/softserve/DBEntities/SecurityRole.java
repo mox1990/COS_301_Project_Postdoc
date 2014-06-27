@@ -7,7 +7,7 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,8 +52,8 @@ public class SecurityRole implements Serializable {
     @NotNull
     @Column(name = "_roleMask")
     private long roleMask;
-    @ManyToMany(mappedBy = "securityRoleCollection")
-    private Collection<Person> personCollection;
+    @ManyToMany(mappedBy = "securityRoleList")
+    private List<Person> personList;
 
     public SecurityRole() {
     }
@@ -93,12 +93,12 @@ public class SecurityRole implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class SecurityRole implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.SecurityRole[ roleID=" + roleID + " ]";
+        return "com.softserve.DBEntities.SecurityRole[ roleID=" + roleID + " ]";
     }
     
 }

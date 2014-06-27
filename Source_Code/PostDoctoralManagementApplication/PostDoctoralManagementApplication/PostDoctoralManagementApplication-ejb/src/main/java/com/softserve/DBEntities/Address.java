@@ -7,7 +7,7 @@
 package com.softserve.DBEntities;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,9 +68,9 @@ public class Address implements Serializable {
     @Column(name = "_zip_postalCode")
     private String zippostalCode;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "physicalAddress")
-    private Collection<UpEmployeeInformation> upEmployeeInformationCollection;
+    private List<UpEmployeeInformation> upEmployeeInformationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "addressLine1")
-    private Collection<Person> personCollection;
+    private List<Person> personList;
 
     public Address() {
     }
@@ -144,21 +144,21 @@ public class Address implements Serializable {
     }
 
     @XmlTransient
-    public Collection<UpEmployeeInformation> getUpEmployeeInformationCollection() {
-        return upEmployeeInformationCollection;
+    public List<UpEmployeeInformation> getUpEmployeeInformationList() {
+        return upEmployeeInformationList;
     }
 
-    public void setUpEmployeeInformationCollection(Collection<UpEmployeeInformation> upEmployeeInformationCollection) {
-        this.upEmployeeInformationCollection = upEmployeeInformationCollection;
+    public void setUpEmployeeInformationList(List<UpEmployeeInformation> upEmployeeInformationList) {
+        this.upEmployeeInformationList = upEmployeeInformationList;
     }
 
     @XmlTransient
-    public Collection<Person> getPersonCollection() {
-        return personCollection;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setPersonCollection(Collection<Person> personCollection) {
-        this.personCollection = personCollection;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 
     @Override
@@ -183,7 +183,7 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEnties.Address[ addressID=" + addressID + " ]";
+        return "com.softserve.DBEntities.Address[ addressID=" + addressID + " ]";
     }
     
 }

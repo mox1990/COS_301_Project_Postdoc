@@ -18,7 +18,6 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.FundingReport;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,8 +42,8 @@ public class FundingReportJpaController implements Serializable {
     }
 
     public void create(FundingReport fundingReport) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (fundingReport.getApplicationCollection() == null) {
-            fundingReport.setApplicationCollection(new ArrayList<Application>());
+        if (fundingReport.getApplicationList() == null) {
+            fundingReport.setApplicationList(new ArrayList<Application>());
         }
         EntityManager em = null;
         try {
@@ -55,24 +54,24 @@ public class FundingReportJpaController implements Serializable {
                 drisID = em.getReference(drisID.getClass(), drisID.getSystemID());
                 fundingReport.setDrisID(drisID);
             }
-            Collection<Application> attachedApplicationCollection = new ArrayList<Application>();
-            for (Application applicationCollectionApplicationToAttach : fundingReport.getApplicationCollection()) {
-                applicationCollectionApplicationToAttach = em.getReference(applicationCollectionApplicationToAttach.getClass(), applicationCollectionApplicationToAttach.getApplicationID());
-                attachedApplicationCollection.add(applicationCollectionApplicationToAttach);
+            List<Application> attachedApplicationList = new ArrayList<Application>();
+            for (Application applicationListApplicationToAttach : fundingReport.getApplicationList()) {
+                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
+                attachedApplicationList.add(applicationListApplicationToAttach);
             }
-            fundingReport.setApplicationCollection(attachedApplicationCollection);
+            fundingReport.setApplicationList(attachedApplicationList);
             em.persist(fundingReport);
             if (drisID != null) {
-                drisID.getFundingReportCollection().add(fundingReport);
+                drisID.getFundingReportList().add(fundingReport);
                 drisID = em.merge(drisID);
             }
-            for (Application applicationCollectionApplication : fundingReport.getApplicationCollection()) {
-                FundingReport oldFundingReportIDOfApplicationCollectionApplication = applicationCollectionApplication.getFundingReportID();
-                applicationCollectionApplication.setFundingReportID(fundingReport);
-                applicationCollectionApplication = em.merge(applicationCollectionApplication);
-                if (oldFundingReportIDOfApplicationCollectionApplication != null) {
-                    oldFundingReportIDOfApplicationCollectionApplication.getApplicationCollection().remove(applicationCollectionApplication);
-                    oldFundingReportIDOfApplicationCollectionApplication = em.merge(oldFundingReportIDOfApplicationCollectionApplication);
+            for (Application applicationListApplication : fundingReport.getApplicationList()) {
+                FundingReport oldFundingReportIDOfApplicationListApplication = applicationListApplication.getFundingReportID();
+                applicationListApplication.setFundingReportID(fundingReport);
+                applicationListApplication = em.merge(applicationListApplication);
+                if (oldFundingReportIDOfApplicationListApplication != null) {
+                    oldFundingReportIDOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
+                    oldFundingReportIDOfApplicationListApplication = em.merge(oldFundingReportIDOfApplicationListApplication);
                 }
             }
             utx.commit();
@@ -101,42 +100,42 @@ public class FundingReportJpaController implements Serializable {
             FundingReport persistentFundingReport = em.find(FundingReport.class, fundingReport.getReportID());
             Person drisIDOld = persistentFundingReport.getDrisID();
             Person drisIDNew = fundingReport.getDrisID();
-            Collection<Application> applicationCollectionOld = persistentFundingReport.getApplicationCollection();
-            Collection<Application> applicationCollectionNew = fundingReport.getApplicationCollection();
+            List<Application> applicationListOld = persistentFundingReport.getApplicationList();
+            List<Application> applicationListNew = fundingReport.getApplicationList();
             if (drisIDNew != null) {
                 drisIDNew = em.getReference(drisIDNew.getClass(), drisIDNew.getSystemID());
                 fundingReport.setDrisID(drisIDNew);
             }
-            Collection<Application> attachedApplicationCollectionNew = new ArrayList<Application>();
-            for (Application applicationCollectionNewApplicationToAttach : applicationCollectionNew) {
-                applicationCollectionNewApplicationToAttach = em.getReference(applicationCollectionNewApplicationToAttach.getClass(), applicationCollectionNewApplicationToAttach.getApplicationID());
-                attachedApplicationCollectionNew.add(applicationCollectionNewApplicationToAttach);
+            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            for (Application applicationListNewApplicationToAttach : applicationListNew) {
+                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
+                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
             }
-            applicationCollectionNew = attachedApplicationCollectionNew;
-            fundingReport.setApplicationCollection(applicationCollectionNew);
+            applicationListNew = attachedApplicationListNew;
+            fundingReport.setApplicationList(applicationListNew);
             fundingReport = em.merge(fundingReport);
             if (drisIDOld != null && !drisIDOld.equals(drisIDNew)) {
-                drisIDOld.getFundingReportCollection().remove(fundingReport);
+                drisIDOld.getFundingReportList().remove(fundingReport);
                 drisIDOld = em.merge(drisIDOld);
             }
             if (drisIDNew != null && !drisIDNew.equals(drisIDOld)) {
-                drisIDNew.getFundingReportCollection().add(fundingReport);
+                drisIDNew.getFundingReportList().add(fundingReport);
                 drisIDNew = em.merge(drisIDNew);
             }
-            for (Application applicationCollectionOldApplication : applicationCollectionOld) {
-                if (!applicationCollectionNew.contains(applicationCollectionOldApplication)) {
-                    applicationCollectionOldApplication.setFundingReportID(null);
-                    applicationCollectionOldApplication = em.merge(applicationCollectionOldApplication);
+            for (Application applicationListOldApplication : applicationListOld) {
+                if (!applicationListNew.contains(applicationListOldApplication)) {
+                    applicationListOldApplication.setFundingReportID(null);
+                    applicationListOldApplication = em.merge(applicationListOldApplication);
                 }
             }
-            for (Application applicationCollectionNewApplication : applicationCollectionNew) {
-                if (!applicationCollectionOld.contains(applicationCollectionNewApplication)) {
-                    FundingReport oldFundingReportIDOfApplicationCollectionNewApplication = applicationCollectionNewApplication.getFundingReportID();
-                    applicationCollectionNewApplication.setFundingReportID(fundingReport);
-                    applicationCollectionNewApplication = em.merge(applicationCollectionNewApplication);
-                    if (oldFundingReportIDOfApplicationCollectionNewApplication != null && !oldFundingReportIDOfApplicationCollectionNewApplication.equals(fundingReport)) {
-                        oldFundingReportIDOfApplicationCollectionNewApplication.getApplicationCollection().remove(applicationCollectionNewApplication);
-                        oldFundingReportIDOfApplicationCollectionNewApplication = em.merge(oldFundingReportIDOfApplicationCollectionNewApplication);
+            for (Application applicationListNewApplication : applicationListNew) {
+                if (!applicationListOld.contains(applicationListNewApplication)) {
+                    FundingReport oldFundingReportIDOfApplicationListNewApplication = applicationListNewApplication.getFundingReportID();
+                    applicationListNewApplication.setFundingReportID(fundingReport);
+                    applicationListNewApplication = em.merge(applicationListNewApplication);
+                    if (oldFundingReportIDOfApplicationListNewApplication != null && !oldFundingReportIDOfApplicationListNewApplication.equals(fundingReport)) {
+                        oldFundingReportIDOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
+                        oldFundingReportIDOfApplicationListNewApplication = em.merge(oldFundingReportIDOfApplicationListNewApplication);
                     }
                 }
             }
@@ -176,13 +175,13 @@ public class FundingReportJpaController implements Serializable {
             }
             Person drisID = fundingReport.getDrisID();
             if (drisID != null) {
-                drisID.getFundingReportCollection().remove(fundingReport);
+                drisID.getFundingReportList().remove(fundingReport);
                 drisID = em.merge(drisID);
             }
-            Collection<Application> applicationCollection = fundingReport.getApplicationCollection();
-            for (Application applicationCollectionApplication : applicationCollection) {
-                applicationCollectionApplication.setFundingReportID(null);
-                applicationCollectionApplication = em.merge(applicationCollectionApplication);
+            List<Application> applicationList = fundingReport.getApplicationList();
+            for (Application applicationListApplication : applicationList) {
+                applicationListApplication.setFundingReportID(null);
+                applicationListApplication = em.merge(applicationListApplication);
             }
             em.remove(fundingReport);
             utx.commit();

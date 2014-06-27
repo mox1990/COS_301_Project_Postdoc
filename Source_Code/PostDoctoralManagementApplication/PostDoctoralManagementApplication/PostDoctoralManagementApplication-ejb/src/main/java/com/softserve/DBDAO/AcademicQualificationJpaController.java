@@ -50,7 +50,7 @@ public class AcademicQualificationJpaController implements Serializable {
             }
             em.persist(academicQualification);
             if (cvID != null) {
-                cvID.getAcademicQualificationCollection().add(academicQualification);
+                cvID.getAcademicQualificationList().add(academicQualification);
                 cvID = em.merge(cvID);
             }
             utx.commit();
@@ -82,11 +82,11 @@ public class AcademicQualificationJpaController implements Serializable {
             }
             academicQualification = em.merge(academicQualification);
             if (cvIDOld != null && !cvIDOld.equals(cvIDNew)) {
-                cvIDOld.getAcademicQualificationCollection().remove(academicQualification);
+                cvIDOld.getAcademicQualificationList().remove(academicQualification);
                 cvIDOld = em.merge(cvIDOld);
             }
             if (cvIDNew != null && !cvIDNew.equals(cvIDOld)) {
-                cvIDNew.getAcademicQualificationCollection().add(academicQualification);
+                cvIDNew.getAcademicQualificationList().add(academicQualification);
                 cvIDNew = em.merge(cvIDNew);
             }
             utx.commit();
@@ -125,7 +125,7 @@ public class AcademicQualificationJpaController implements Serializable {
             }
             Cv cvID = academicQualification.getCvID();
             if (cvID != null) {
-                cvID.getAcademicQualificationCollection().remove(academicQualification);
+                cvID.getAcademicQualificationList().remove(academicQualification);
                 cvID = em.merge(cvID);
             }
             em.remove(academicQualification);

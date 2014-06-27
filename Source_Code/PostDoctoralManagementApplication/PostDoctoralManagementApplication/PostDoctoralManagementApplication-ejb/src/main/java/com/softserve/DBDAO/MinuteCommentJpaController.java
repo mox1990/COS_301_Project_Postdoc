@@ -56,11 +56,11 @@ public class MinuteCommentJpaController implements Serializable {
             }
             em.persist(minuteComment);
             if (meetingID != null) {
-                meetingID.getMinuteCommentCollection().add(minuteComment);
+                meetingID.getMinuteCommentList().add(minuteComment);
                 meetingID = em.merge(meetingID);
             }
             if (attendeeID != null) {
-                attendeeID.getMinuteCommentCollection().add(minuteComment);
+                attendeeID.getMinuteCommentList().add(minuteComment);
                 attendeeID = em.merge(attendeeID);
             }
             utx.commit();
@@ -98,19 +98,19 @@ public class MinuteCommentJpaController implements Serializable {
             }
             minuteComment = em.merge(minuteComment);
             if (meetingIDOld != null && !meetingIDOld.equals(meetingIDNew)) {
-                meetingIDOld.getMinuteCommentCollection().remove(minuteComment);
+                meetingIDOld.getMinuteCommentList().remove(minuteComment);
                 meetingIDOld = em.merge(meetingIDOld);
             }
             if (meetingIDNew != null && !meetingIDNew.equals(meetingIDOld)) {
-                meetingIDNew.getMinuteCommentCollection().add(minuteComment);
+                meetingIDNew.getMinuteCommentList().add(minuteComment);
                 meetingIDNew = em.merge(meetingIDNew);
             }
             if (attendeeIDOld != null && !attendeeIDOld.equals(attendeeIDNew)) {
-                attendeeIDOld.getMinuteCommentCollection().remove(minuteComment);
+                attendeeIDOld.getMinuteCommentList().remove(minuteComment);
                 attendeeIDOld = em.merge(attendeeIDOld);
             }
             if (attendeeIDNew != null && !attendeeIDNew.equals(attendeeIDOld)) {
-                attendeeIDNew.getMinuteCommentCollection().add(minuteComment);
+                attendeeIDNew.getMinuteCommentList().add(minuteComment);
                 attendeeIDNew = em.merge(attendeeIDNew);
             }
             utx.commit();
@@ -149,12 +149,12 @@ public class MinuteCommentJpaController implements Serializable {
             }
             CommitteeMeeting meetingID = minuteComment.getMeetingID();
             if (meetingID != null) {
-                meetingID.getMinuteCommentCollection().remove(minuteComment);
+                meetingID.getMinuteCommentList().remove(minuteComment);
                 meetingID = em.merge(meetingID);
             }
             Person attendeeID = minuteComment.getAttendeeID();
             if (attendeeID != null) {
-                attendeeID.getMinuteCommentCollection().remove(minuteComment);
+                attendeeID.getMinuteCommentList().remove(minuteComment);
                 attendeeID = em.merge(attendeeID);
             }
             em.remove(minuteComment);
