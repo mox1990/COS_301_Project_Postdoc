@@ -7,8 +7,8 @@
   <packaging>pom</packaging>
   <name>PostDoctoralManagementApplication</name>
   <modules>
-    <module>PostDoctoralManagementApplication-ear</module>
     <module>PostDoctoralManagementApplication-web</module>
-    <module>PostDoctoralManagementApplication-ejb</module>
+    <module>PostDoctoralManagementApplication-ejb</module>  
+    <module>PostDoctoralManagementApplication-ear</module>    
   </modules>
 </project>

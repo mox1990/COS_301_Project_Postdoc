@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.EJB;
+package com.softserve.ejb;
 
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
@@ -31,7 +31,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not
-    @PersistenceContext(unitName = "notifications")
+    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManager em;
     
     public void sendNotification(NotificationRequest nRequest) throws MessagingException

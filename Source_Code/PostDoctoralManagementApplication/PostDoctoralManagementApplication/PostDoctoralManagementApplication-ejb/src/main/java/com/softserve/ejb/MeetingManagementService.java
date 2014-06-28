@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.EJB;
+package com.softserve.ejb;
 
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.CommitteeMeeting;
@@ -24,16 +24,16 @@ import javax.persistence.PersistenceContext;
  */
 @Stateful
 public class MeetingManagementService implements MeetingManagementServiceLocal {
-    @Inject
+    //@Inject
     private CommitteeMeeting cMeeting;
     
-    @PersistenceContext(unitName = "committee_meetings")
+    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManager cem;
     
-    @PersistenceContext(unitName = "applications")
+    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     EntityManager aem;
     
-    @PersistenceContext(unitName = "applications")
+    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     EntityManager rem;
     
     private Collection<Person> inAttendence = new ArrayList();

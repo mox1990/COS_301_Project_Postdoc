@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.EJB;
+package com.softserve.ejb;
 
 import javax.ejb.Local;
 import javax.mail.MessagingException;

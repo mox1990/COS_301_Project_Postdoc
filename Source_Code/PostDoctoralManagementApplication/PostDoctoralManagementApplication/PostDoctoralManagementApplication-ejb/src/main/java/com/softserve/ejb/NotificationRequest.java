@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.EJB;
+package com.softserve.ejb;
 
 import com.softserve.DBEntities.Person;
 import java.util.List;

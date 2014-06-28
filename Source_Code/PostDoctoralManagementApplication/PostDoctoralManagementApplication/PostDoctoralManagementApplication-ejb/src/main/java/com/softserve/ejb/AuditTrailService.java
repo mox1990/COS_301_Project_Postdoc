@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.EJB;
+package com.softserve.ejb;
 
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class AuditTrailService implements AuditTrailServiceLocal { // TODO: Finalize the local or remote spec
 
-    @PersistenceContext(unitName = "audit_log")
+    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManager em;
     
     public AuditLog logAction(Person user, String action)

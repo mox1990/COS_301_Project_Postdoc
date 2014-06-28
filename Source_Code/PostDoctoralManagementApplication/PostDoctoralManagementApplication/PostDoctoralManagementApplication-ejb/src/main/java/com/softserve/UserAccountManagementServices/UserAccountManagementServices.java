@@ -17,11 +17,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
 
@@ -31,22 +38,32 @@ import javax.transaction.UserTransaction;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
-public class UserAccountManagementServices implements UserAccountManagementServicesLocal {
+@TransactionManagement(TransactionManagementType.BEAN)
+public class UserAccountManagementServices implements UserAccountManagementServicesLocal {     
     
-    @Resource
-    private UserTransaction utx;
+    private UserTransaction getUserTransaction()
+    {
+        try 
+        {
+            return (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+        } 
+        catch (NamingException ex) 
+        {
+            Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
     
     private EntityManagerFactory getEntityManagerFactory()
     {
         return Persistence.createEntityManagerFactory(com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME);        
-    }       
-    
+    } 
     
     private String generateSystemID(char prefix)
     {
         String newID = "";
         
-        PersonJpaController personJpaController = new PersonJpaController(utx, getEntityManagerFactory());
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), getEntityManagerFactory());
         
         GregorianCalendar cal = new GregorianCalendar();
         
@@ -69,7 +86,10 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             newID += "0";
             newID += Integer.toString(curYear);
         }
-        
+        while(newID.length() + Integer.toString(lastestIDValue).length() < 9)
+        {
+            newID += "0";
+        }
         newID += Integer.toString(lastestIDValue);
         
         cal = null;
@@ -101,17 +121,40 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             userUPInfo.setEmployeeID(user.getSystemID());
         }
         
-        EntityManagerFactory tempEMF = getEntityManagerFactory();
         
-        AddressJpaController addressJpaController = new AddressJpaController(utx, getEntityManagerFactory());
+        if(userAddress.getAddressID() == null)
+        {
+            System.out.println("Null 1");
+        }
+        else
+        {
+            System.out.println(userAddress.getAddressID());
+        }
+        
+        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), getEntityManagerFactory());
         addressJpaController.create(userAddress);
+ 
+        //user.setAddressLine1(userAddress);        
         
-        PersonJpaController personJpaController = new PersonJpaController(utx, tempEMF);
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), getEntityManagerFactory());
         personJpaController.create(user);
+        
+        if(userAddress.getAddressID() == null)
+        {
+            System.out.println("Null 2");
+        }
+        else
+        {
+            System.out.println(userAddress.getAddressID());
+        }
+        
+        user.setAddressLine1(userAddress);
+        personJpaController.edit(user);
+        
         
         if(userUPInfo != null)
         {
-            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(utx, tempEMF);
+            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), getEntityManagerFactory());
             upEmployeeInformationJpaController.create(userUPInfo);
         }
         
@@ -122,11 +165,11 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         //AuthenticateUser(session);
         EntityManagerFactory tempEMF = getEntityManagerFactory();
         
-        AddressJpaController addressJpaController = new AddressJpaController(utx, getEntityManagerFactory());
+        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), getEntityManagerFactory());
         addressJpaController.edit(userAddress);
         
                 
-        UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(utx, tempEMF);
+        UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), tempEMF);
         
         if(userUPInfo != null)
         {   
@@ -151,7 +194,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             }
         }
         
-        PersonJpaController personJpaController = new PersonJpaController(utx, tempEMF);
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), tempEMF);
         personJpaController.edit(user);
         
     }
@@ -161,8 +204,8 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         //AuthenticateUser(session);
         EntityManagerFactory tempEMF = getEntityManagerFactory();
         
-        PersonJpaController personJpaController = new PersonJpaController(utx, tempEMF);
-        AddressJpaController addressJpaController = new AddressJpaController(utx, getEntityManagerFactory());
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), tempEMF);
+        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), getEntityManagerFactory());
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);
@@ -173,7 +216,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         //Check if is UP employee if is then remove
         if(user.getUpEmployee())
         {
-            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(utx, tempEMF);
+            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), tempEMF);
             upEmployeeInformationJpaController.destroy(user.getUpEmployeeInformation().getEmployeeID());
         }
         
@@ -184,7 +227,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
     public List<Person> viewAllUserAccounts(HttpSession session)
     {
         //AuthenticateUser(session);
-        PersonJpaController personJpaController = new PersonJpaController(utx, getEntityManagerFactory());
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), getEntityManagerFactory());
         return personJpaController.findPersonEntities();        
     }
     
