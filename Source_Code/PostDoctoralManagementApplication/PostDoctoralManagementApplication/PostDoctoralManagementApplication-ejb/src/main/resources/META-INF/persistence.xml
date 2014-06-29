@@ -4,7 +4,10 @@
     <jta-data-source>PostDoc_DB</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="eclipselink.logging.logger" value="JavaLogger"/>
+      <property name="eclipselink.logging.level" value="ALL"/>
+      <property name="eclipselink.persistence-context.flush-mode" value="auto"/>
     </properties>
   </persistence-unit>
 </persistence>

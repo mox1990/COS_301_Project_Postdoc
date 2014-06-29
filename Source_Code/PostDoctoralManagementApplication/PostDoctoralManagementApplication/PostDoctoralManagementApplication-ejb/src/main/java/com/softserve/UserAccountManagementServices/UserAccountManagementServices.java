@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -29,6 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
 
@@ -37,9 +39,13 @@ import javax.transaction.UserTransaction;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserAccountManagementServices implements UserAccountManagementServicesLocal {     
+    
+    @PersistenceUnit(unitName = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU")
+    private EntityManagerFactory emf;
     
     private UserTransaction getUserTransaction()
     {
@@ -53,17 +59,12 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             return null;
         }
     }
-    
-    private EntityManagerFactory getEntityManagerFactory()
-    {
-        return Persistence.createEntityManagerFactory(com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME);        
-    } 
-    
+
     private String generateSystemID(char prefix)
     {
         String newID = "";
         
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), getEntityManagerFactory());
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
         
         GregorianCalendar cal = new GregorianCalendar();
         
@@ -98,6 +99,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         return newID;
     }
     
+    @Override
     public void createUserAccount(HttpSession session, boolean manualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception
     {
         //AuthenticateUser(session);
@@ -131,13 +133,8 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             System.out.println(userAddress.getAddressID());
         }
         
-        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), getEntityManagerFactory());
+        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), emf);
         addressJpaController.create(userAddress);
- 
-        //user.setAddressLine1(userAddress);        
-        
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), getEntityManagerFactory());
-        personJpaController.create(user);
         
         if(userAddress.getAddressID() == null)
         {
@@ -147,29 +144,30 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         {
             System.out.println(userAddress.getAddressID());
         }
+ 
+        user.setAddressLine1(userAddress);        
         
-        user.setAddressLine1(userAddress);
-        personJpaController.edit(user);
-        
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
+        personJpaController.create(user);        
         
         if(userUPInfo != null)
         {
-            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), getEntityManagerFactory());
+            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), emf);
             upEmployeeInformationJpaController.create(userUPInfo);
         }
         
     }
     
+    @Override
     public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         //AuthenticateUser(session);
-        EntityManagerFactory tempEMF = getEntityManagerFactory();
         
-        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), getEntityManagerFactory());
+        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), emf);
         addressJpaController.edit(userAddress);
         
                 
-        UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), tempEMF);
+        UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), emf);
         
         if(userUPInfo != null)
         {   
@@ -194,18 +192,18 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             }
         }
         
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), tempEMF);
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
         personJpaController.edit(user);
         
     }
     
+    @Override
     public void removeUserAccount(HttpSession session, String systemID) throws RollbackFailureException, Exception
     {
         //AuthenticateUser(session);
-        EntityManagerFactory tempEMF = getEntityManagerFactory();
         
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), tempEMF);
-        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), getEntityManagerFactory());
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
+        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), emf);
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);
@@ -216,7 +214,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         //Check if is UP employee if is then remove
         if(user.getUpEmployee())
         {
-            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), tempEMF);
+            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), emf);
             upEmployeeInformationJpaController.destroy(user.getUpEmployeeInformation().getEmployeeID());
         }
         
@@ -224,11 +222,55 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         personJpaController.destroy(user.getSystemID());
     }
     
+    @Override
     public List<Person> viewAllUserAccounts(HttpSession session)
     {
         //AuthenticateUser(session);
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), getEntityManagerFactory());
+        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
         return personJpaController.findPersonEntities();        
     }
+    
+
+    @Override
+    public void testAddresses() 
+    {
+        for(int i = 0; i < 15; i++ )
+        {
+            Address ad = new Address();
+            
+            ad.setCountry("South Africa");
+            ad.setProvince("MP");
+            ad.setZippostalCode("120" + i);
+
+            try 
+            {
+                AddressJpaController addressJpaController = new AddressJpaController((UserTransaction) new InitialContext().doLookup("java:comp/UserTransaction"), emf);
+                addressJpaController.create(ad);                
+            } 
+            catch (NamingException ex) 
+            {
+                Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (RollbackFailureException ex) 
+            {
+                Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            catch (Exception ex) 
+            {
+                Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(ad.getAddressID() != null)
+            {
+                System.out.print("Adress id is " + ad.getAddressID());
+            }
+            else
+            {
+                System.out.print("Address " + i + "'s ID is null");
+            }
+            
+        }
+    }
+    
     
 }

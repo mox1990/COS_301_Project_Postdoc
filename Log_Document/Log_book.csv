@@ -158,13 +158,15 @@ Date,Time,Comment,Member
 "Monday, June 23, 2014",1:23 PM,Sent email to client for information,Mathys
 "Monday, June 23, 2014",1:44 PM,Client replies,Mathys
 "Monday, June 23, 2014",,"Updated domain objects, refine SQL, updated entities, created XML entities",Mathys
-"Tuesday, June 24, 2014",,,
+"Tuesday, June 24, 2014",,Did research into mock objects and junit. Found Mockito is best. Added mockito dependency,Mathys
 "Wednesday, June 25, 2014",,Power outage at Mathys' Residence was not able to work,Mathys
 "Thursday, June 26, 2014",,Started user account management services. Added DAO for all entities. Updated SQL. Refactored some code,Mathys
 "Thursday, June 26, 2014",,"Added Audit, Notification and started on MeetingManagement services",Alfred
 "Friday, June 27, 2014",,"Refactored some code, Added security roles to SQL script. Added to user account management module.",Mathys
-"Saturday, June 28, 2014",,,
-"Sunday, June 29, 2014",,,
+"Saturday, June 28, 2014",,Fixed an error with maven ear plugin configuration,Mathys
+"Saturday, June 28, 2014",,Researched persistence and different JTA management of EJB. Created a integeration test to provide framework template for rest of team,Mathys
+"Sunday, June 29, 2014",,Did further research in persistence due to errounous behaviour in integration test. Fixed and completed test,Mathys
+"Sunday, June 29, 2014",,Found some Glassfish server warnings relating to JAXB jars. Recommend further study,Mathys
 "Monday, June 30, 2014",,,
 "Tuesday, July 1, 2014",,,
 "Wednesday, July 2, 2014",,,

@@ -22,6 +22,7 @@ import java.util.List;
 import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
 import javax.transaction.UserTransaction;
 
 /**
@@ -83,8 +84,8 @@ public class AddressJpaController implements Serializable {
                     oldAddressLine1OfPersonListPerson.getPersonList().remove(personListPerson);
                     oldAddressLine1OfPersonListPerson = em.merge(oldAddressLine1OfPersonListPerson);
                 }
-            }
-            utx.commit();
+            }            
+            utx.commit(); 
         } catch (Exception ex) {
             try {
                 utx.rollback();
@@ -97,7 +98,7 @@ public class AddressJpaController implements Serializable {
             throw ex;
         } finally {
             if (em != null) {
-                em.close();
+                em.close();                
             }
         }
     }

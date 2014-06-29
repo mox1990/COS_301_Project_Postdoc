@@ -8,6 +8,10 @@
     <h:body>
         Hello from Facelets
         <h:form>
+            <h:commandButton value="Run address creation test" action="#{testingJSFManagedBean.createAddressessTest()}"/>
+        </h:form>
+        
+        <h:form>
             <h:outputLabel value="System ID of person"/>
             <h:inputText value="#{testingJSFManagedBean.systemID}"/>
             <h:commandButton value="createPerson" action="#{testingJSFManagedBean.createPerson}"/>

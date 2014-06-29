@@ -27,4 +27,5 @@ public interface UserAccountManagementServicesLocal {
     public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception;
     public void removeUserAccount(HttpSession session, String systemID) throws RollbackFailureException, Exception;
     public List<Person> viewAllUserAccounts(HttpSession session);
+    public void testAddresses();
 }
