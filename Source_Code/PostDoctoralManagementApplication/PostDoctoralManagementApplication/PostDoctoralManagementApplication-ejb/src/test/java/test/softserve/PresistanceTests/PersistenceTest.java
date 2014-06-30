@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package PresistanceTests;
+package test.softserve.PresistanceTests;
 
 import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;

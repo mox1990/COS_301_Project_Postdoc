@@ -8,31 +8,24 @@ package com.softserve.UserAccountManagementServices;
 
 import com.softserve.DBDAO.*;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -44,28 +37,58 @@ import javax.transaction.UserTransaction;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserAccountManagementServices implements UserAccountManagementServicesLocal {     
     
-    @PersistenceUnit(unitName = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU")
+    /**
+     * This injection provides a container-managed entitymanagerfactory. This
+     * is used to give the DAOs the ability to use application managed 
+     * entity managers in JTA context so that manual transaction demarcation.
+     */
+    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
-    private UserTransaction getUserTransaction()
+    /**
+     *This function creates an instance of the PersonJpaController. 
+     * Note this function's secondary goal is to simplify the subclass mocking 
+     * of the UserAccountManagementServices in the unit testing 
+     * @return An instance of PersonJpaController
+     */
+    protected PersonJpaController getPersonDAO()
     {
-        try 
-        {
-            return (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-        } 
-        catch (NamingException ex) 
-        {
-            Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
-
+    
+    /**
+     *This function creates an instance of the AddressJpaController. 
+     * Note this function's secondary goal is to simplify the subclass mocking 
+     * of the UserAccountManagementServices in the unit testing 
+     * @return An instance of AddressJpaController
+     */
+    protected AddressJpaController getAddressDAO()
+    {
+        return new AddressJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    /**
+     *This function creates an instance of the UpEmployeeInformationJpaController. 
+     * Note this function's secondary goal is to simplify the subclass mocking 
+     * of the UserAccountManagementServices in the unit testing 
+     * @return An instance of UpEmployeeInformationJpaController
+     */
+    protected UpEmployeeInformationJpaController getUPEmployeeInfoDAO()
+    {
+        return new UpEmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    /**
+     *This function is used to automatically generate a new valid SystemID
+     * @param prefix The prefix to be used for the 9 character systemID
+     * @return The newly generated SystemID as a string
+     */
     private String generateSystemID(char prefix)
     {
+        PersonJpaController personJpaController = getPersonDAO();
+        
         String newID = "";
-        
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
-        
+
         GregorianCalendar cal = new GregorianCalendar();
         
         int curYear = cal.get(Calendar.YEAR);        
@@ -93,18 +116,38 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         }
         newID += Integer.toString(lastestIDValue);
         
-        cal = null;
-        personJpaController = null;
-        
         return newID;
     }
     
+    /**
+     *This function is used to create a new user account and its associated 
+     * account information.
+     * @param session The current HttpSession that is used for user authentication
+     * @param useManualSystemIDSpecification A boolean indicating if the systemID
+     * has been manually specified in the user or if the system needs to 
+     * generate one automatically
+     * @param user A Person object which contains the user's information
+     * @param userAddress A Address object which contains the user's primary 
+     * address line information
+     * @param userUPInfo A UpEmployeeInformation object which contains the 
+     * user's UP employee information if they are a UP employee
+     * @throws AutomaticSystemIDGenerationException Is thrown if the system has to generate a systemID for a user that is not an administrator nor fellow
+     * @throws com.softserve.DBDAO.exceptions.PreexistingEntityException Is thrown if an address, person or employeeinfo does already exist in the database
+     * @throws com.softserve.DBDAO.exceptions.RollbackFailureException Is thrown if an address, person or employeeinfo failed to rollback due to some error 
+     * @throws Exception Is thrown if an unknown error has occurred
+     */
     @Override
-    public void createUserAccount(HttpSession session, boolean manualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception
+    public void createUserAccount(HttpSession session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {
         //AuthenticateUser(session);
         
-        if(!manualSystemIDSpecification)
+        //Prep the DAOs
+        PersonJpaController personJpaController = getPersonDAO();
+        AddressJpaController addressJpaController = getAddressDAO();
+        UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
+        
+        //Check if automatic systemID generation is required
+        if(!useManualSystemIDSpecification)
         {
             
             if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
@@ -121,53 +164,49 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             }
             
             userUPInfo.setEmployeeID(user.getSystemID());
-        }
+        } 
         
-        
-        if(userAddress.getAddressID() == null)
-        {
-            System.out.println("Null 1");
-        }
-        else
-        {
-            System.out.println(userAddress.getAddressID());
-        }
-        
-        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), emf);
+        //Store address in database
         addressJpaController.create(userAddress);
+        //Link to unpersisted person
+        user.setAddressLine1(userAddress);       
         
-        if(userAddress.getAddressID() == null)
-        {
-            System.out.println("Null 2");
-        }
-        else
-        {
-            System.out.println(userAddress.getAddressID());
-        }
- 
-        user.setAddressLine1(userAddress);        
-        
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
+        //******Possible concurrency issue if multiple automaic System IDs are generated******
         personJpaController.create(user);        
         
         if(userUPInfo != null)
         {
-            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), emf);
             upEmployeeInformationJpaController.create(userUPInfo);
         }
         
     }
     
+    /**
+     *This function is used to update a existing user account and its associated 
+     * account information.
+     * @param session The current HttpSession that is used for user authentication
+     * @param user A Person object which contains the user's information
+     * @param userAddress A Address object which contains the user's primary 
+     * address line information
+     * @param userUPInfo A UpEmployeeInformation object which contains the 
+     * user's UP employee information if they are a UP employee
+     * @throws NonexistentEntityException Is thrown if any of the person or address entities don't exist in the database
+     * @throws com.softserve.DBDAO.exceptions.RollbackFailureException Is thrown if an address, person or employeeinfo failed to rollback due to some error 
+     * @throws Exception Is thrown if an unknown error has occurred
+     */
     @Override
     public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         //AuthenticateUser(session);
         
-        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), emf);
-        addressJpaController.edit(userAddress);
+        PersonJpaController personJpaController = getPersonDAO();
+        AddressJpaController addressJpaController = getAddressDAO();
+        UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
         
-                
-        UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), emf);
+        if(userAddress != null)
+        {
+            addressJpaController.edit(userAddress); 
+        }
         
         if(userUPInfo != null)
         {   
@@ -192,18 +231,25 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             }
         }
         
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
         personJpaController.edit(user);
         
     }
     
+    /**
+     *This function is used to remove the specified user account from the database
+     * @param session The current HttpSession that is used for user authentication
+     * @param systemID The systemID of the user account to be removed
+     * @throws RollbackFailureException
+     * @throws Exception Is thrown if an unknown error has occurred
+     */
     @Override
     public void removeUserAccount(HttpSession session, String systemID) throws RollbackFailureException, Exception
     {
         //AuthenticateUser(session);
         
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
-        AddressJpaController addressJpaController = new AddressJpaController(getUserTransaction(), emf);
+        PersonJpaController personJpaController = getPersonDAO();
+        AddressJpaController addressJpaController = getAddressDAO();
+        UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);
@@ -214,7 +260,6 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         //Check if is UP employee if is then remove
         if(user.getUpEmployee())
         {
-            UpEmployeeInformationJpaController upEmployeeInformationJpaController = new UpEmployeeInformationJpaController(getUserTransaction(), emf);
             upEmployeeInformationJpaController.destroy(user.getUpEmployeeInformation().getEmployeeID());
         }
         
@@ -222,18 +267,30 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         personJpaController.destroy(user.getSystemID());
     }
     
+    /**
+     *This function is used to retreive all the users stored in the database.
+     * @param session The current HttpSession that is used for user authentication
+     * @return A list of Person objects representing the user accounts
+     */
     @Override
     public List<Person> viewAllUserAccounts(HttpSession session)
     {
         //AuthenticateUser(session);
-        PersonJpaController personJpaController = new PersonJpaController(getUserTransaction(), emf);
+        
+        PersonJpaController personJpaController = getPersonDAO();
+        
         return personJpaController.findPersonEntities();        
     }
     
-
+    /**
+     *This is a simple example and testing function. It will not be deployed 
+     * in final production.
+     */
     @Override
     public void testAddresses() 
     {
+        AddressJpaController addressJpaController = getAddressDAO();
+        
         for(int i = 0; i < 15; i++ )
         {
             Address ad = new Address();
@@ -244,7 +301,6 @@ public class UserAccountManagementServices implements UserAccountManagementServi
 
             try 
             {
-                AddressJpaController addressJpaController = new AddressJpaController((UserTransaction) new InitialContext().doLookup("java:comp/UserTransaction"), emf);
                 addressJpaController.create(ad);                
             } 
             catch (NamingException ex) 

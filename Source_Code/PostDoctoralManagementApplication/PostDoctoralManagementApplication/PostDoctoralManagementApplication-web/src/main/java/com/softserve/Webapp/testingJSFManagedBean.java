@@ -6,8 +6,6 @@ package com.softserve.Webapp;
  * and open the template in the editor.
  */
 
-import com.softserve.DBDAO.AddressJpaController;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.UserAccountManagementServices.UserAccountManagementServicesLocal;
@@ -18,17 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.NoneScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.http.HttpSession;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -39,11 +30,10 @@ import javax.transaction.UserTransaction;
 @SessionScoped
 public class testingJSFManagedBean implements Serializable {
     
+    
     @EJB
     private UserAccountManagementServicesLocal management;
     private String systemID;
-    
-    
     
     /**
      * Creates a new instance of testingJSFManagedBean

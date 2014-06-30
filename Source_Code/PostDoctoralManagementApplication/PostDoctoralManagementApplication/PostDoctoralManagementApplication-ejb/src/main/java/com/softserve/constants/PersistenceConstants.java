@@ -6,6 +6,13 @@
 
 package com.softserve.constants;
 
+import com.softserve.UserAccountManagementServices.UserAccountManagementServices;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.transaction.UserTransaction;
+
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
@@ -25,6 +32,17 @@ public class PersistenceConstants {
     public final static long SECURITY_ROLE_ID_DRIS_MEMBER = 6;
     public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 7;
     public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 8;
-    
-    
+         
+    public static UserTransaction getUserTransaction()
+    {
+        try 
+        {
+            return (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+        } 
+        catch (NamingException ex) 
+        {
+            Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }    
 }
