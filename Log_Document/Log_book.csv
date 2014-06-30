@@ -167,7 +167,8 @@ Date,Time,Comment,Member
 "Saturday, June 28, 2014",,Researched persistence and different JTA management of EJB. Created a integeration test to provide framework template for rest of team,Mathys
 "Sunday, June 29, 2014",,Did further research in persistence due to errounous behaviour in integration test. Fixed and completed test,Mathys
 "Sunday, June 29, 2014",,Found some Glassfish server warnings relating to JAXB jars. Recommend further study,Mathys
-"Monday, June 30, 2014",,,
+"Monday, June 30, 2014",,Researched some more on mockito and unit testing. Create intial unit test for Enities. Created a inial behaviour unit test for user account management,Mathys
+"Monday, June 30, 2014",,Updated some parts in the useraccountmanagment service. Please look to seen new approach that caters for behaviour unit testing,Mathys
 "Tuesday, July 1, 2014",,,
 "Wednesday, July 2, 2014",,,
 "Thursday, July 3, 2014",,,

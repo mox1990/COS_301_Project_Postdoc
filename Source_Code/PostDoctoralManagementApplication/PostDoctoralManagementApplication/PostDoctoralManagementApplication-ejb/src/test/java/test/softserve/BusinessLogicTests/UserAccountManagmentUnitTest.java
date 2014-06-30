@@ -6,9 +6,13 @@
 
 package test.softserve.BusinessLogicTests;
 
-import com.softserve.UserAccountManagementServices.UserAccountManagementServices;
-import com.softserve.UserAccountManagementServices.UserAccountManagementServicesLocal;
-import javax.persistence.EntityManagerFactory;
+import com.softserve.DBDAO.AddressJpaController;
+import com.softserve.DBDAO.PersonJpaController;
+import com.softserve.DBDAO.UpEmployeeInformationJpaController;
+import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.UpEmployeeInformation;
+import javax.servlet.http.HttpSession;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -18,7 +22,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import org.mockito.runners.MockitoJUnitRunner;
+import test.softserve.MockEJBClasses.UserAccountManagementServicesMockUnit;
 
 /**
  *
@@ -27,7 +34,9 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class UserAccountManagmentUnitTest {
-        
+      
+    
+    
     public UserAccountManagmentUnitTest() {
     }
     
@@ -41,8 +50,7 @@ public class UserAccountManagmentUnitTest {
     }
     
     @Before
-    public void setUp() {        
-        
+    public void setUp() {              
     }
     
     @After
@@ -53,8 +61,35 @@ public class UserAccountManagmentUnitTest {
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void hello() 
-    {
-        assertTrue(true);
+    public void userAccountCreate_Manual_UnitTest() 
+    {        
+        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
+        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
+        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
+        UpEmployeeInformationJpaController mockUpEmployeeInformationJpaController = mock(UpEmployeeInformationJpaController.class);
+        
+        instance.setaDAO(mockAddressJpaController);
+        instance.setpDAO(mockPersonJpaController);
+        instance.setuDAO(mockUpEmployeeInformationJpaController);
+        
+        Person mockPerson = mock(Person.class);
+        Address mockAddress = mock(Address.class);
+        UpEmployeeInformation mockUpInfo = mock(UpEmployeeInformation.class);        
+        HttpSession mockSession = mock(HttpSession.class);
+        
+        try
+        {
+            instance.createUserAccount(mockSession, true, mockPerson, mockAddress, mockUpInfo);
+            verify(mockAddressJpaController).create(mockAddress);
+            verify(mockPerson).setAddressLine1(mockAddress);
+            verify(mockPersonJpaController).create(mockPerson);
+            verify(mockUpEmployeeInformationJpaController).create(mockUpInfo);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
+        
+        
     }
 }
