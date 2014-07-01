@@ -95,6 +95,9 @@ public class Application implements Serializable {
     @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person grantHolderID;
+    @JoinColumn(name = "_recommendationReportID", referencedColumnName = "_reportID")
+    @ManyToOne
+    private RecommendationReport recommendationReportID;
     @JoinColumn(name = "_endorsementID", referencedColumnName = "_endorsementID")
     @ManyToOne
     private Endorsement endorsementID;
@@ -193,8 +196,8 @@ public class Application implements Serializable {
         return refereeList;
     }
 
-    public void setRefereeList(List<Person> refereeList) {
-        this.refereeList = refereeList;
+    public void setRefereeList(List<Person> personList) {
+        this.refereeList = personList;
     }
 
     @XmlTransient
@@ -229,6 +232,14 @@ public class Application implements Serializable {
 
     public void setGrantHolderID(Person grantHolderID) {
         this.grantHolderID = grantHolderID;
+    }
+
+    public RecommendationReport getRecommendationReportID() {
+        return recommendationReportID;
+    }
+
+    public void setRecommendationReportID(RecommendationReport recommendationReportID) {
+        this.recommendationReportID = recommendationReportID;
     }
 
     public Endorsement getEndorsementID() {

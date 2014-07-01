@@ -4,13 +4,12 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.GrantHolderFinalisationService;
+package com.softserve.HODApprovalServices;
 
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Cv;
-import com.softserve.Exceptions.CVAlreadExistsException;
+import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
@@ -21,9 +20,10 @@ import javax.ejb.Local;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Local
-public interface GrantHolderFinalisationServiceLocal {
-    public void createGrantHolderCV(Session session, Cv cv) throws NonexistentEntityException, CVAlreadExistsException, Exception;
+public interface HODApprovalServicesLocal {
     public List<Application> loadPendingApplications(Session session);
-    public void finaliseApplication(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception;
+    public void declineAppliction(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception;
+    public void ammendAppliction(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception;
+    public void approveApplication(Session session, Application application, RecommendationReport recommendationReport) throws NonexistentEntityException, RollbackFailureException, Exception;
     
 }

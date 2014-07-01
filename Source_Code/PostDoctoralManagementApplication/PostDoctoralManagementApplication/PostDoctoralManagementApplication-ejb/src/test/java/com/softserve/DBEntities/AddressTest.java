@@ -6,10 +6,11 @@
 
 package com.softserve.DBEntities;
 
+import java.util.ArrayList;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -30,95 +31,105 @@ public class AddressTest {
     }
 
     @Test
-    public void testGetAddressID() {
+    public void testSetAndGetAddressID() 
+    {
+        Address instance = new Address();
+        instance.setAddressID(new Long(1));
+        assertEquals(new Long(1), instance.getAddressID());
     }
 
     @Test
-    public void testSetAddressID() {
+    public void testSetAndGetCountry() 
+    {
+        Address instance = new Address();
+        instance.setCountry("South Africa");
+        assertEquals("South Africa", instance.getCountry());
     }
 
     @Test
-    public void testGetCountry() {
+    public void testSetAndGetProvince() 
+    {
+        Address instance = new Address();
+        instance.setProvince("Western Cape");
+        assertEquals("Western Cape", instance.getProvince());
     }
 
     @Test
-    public void testSetCountry() {
+    public void testSetAndGetTownCity() 
+    {
+        Address instance = new Address();
+        instance.setTownCity("Cape Town");
+        assertEquals("Cape Town", instance.getTownCity());
     }
 
     @Test
-    public void testGetProvince() {
+    public void testSetAndGetStreet() 
+    {
+        Address instance = new Address();
+        instance.setStreet("Johnny Street");
+        assertEquals("Johnny Street", instance.getStreet());
     }
 
     @Test
-    public void testSetProvince() {
+    public void testSetAndGetStreeNumber() 
+    {
+        Address instance = new Address();
+        instance.setStreeNumber(Integer.MAX_VALUE);
+        assertEquals(new Integer(Integer.MAX_VALUE), instance.getStreeNumber());
     }
 
     @Test
-    public void testGetTownCity() {
+    public void testSetAndGetRoomNumber() 
+    {
+        Address instance = new Address();
+        instance.setRoomNumber("IT 4-59");
+        assertEquals("IT 4-59", instance.getRoomNumber());
     }
 
     @Test
-    public void testSetTownCity() {
+    public void testSetAndGetZippostalCode() 
+    {
+        Address instance = new Address();
+        instance.setZippostalCode("1142");
+        assertEquals("1142", instance.getZippostalCode());
     }
 
     @Test
-    public void testGetStreet() {
+    public void testSetAndGetUpEmployeeInformationList() 
+    {
+        Address instance = new Address();
+        instance.setUpEmployeeInformationList(new ArrayList<UpEmployeeInformation>());
+        UpEmployeeInformation employeeInformation = new UpEmployeeInformation("u12019837");
+        instance.getUpEmployeeInformationList().add(employeeInformation);
+        assertEquals(employeeInformation, instance.getUpEmployeeInformationList().get(0));
+        assertTrue((instance.getUpEmployeeInformationList().size() == 1));
     }
 
     @Test
-    public void testSetStreet() {
+    public void testSetAndGetPersonList() 
+    {
+        Address instance = new Address();
+        instance.setPersonList(new ArrayList<Person>());
+        Person person = new Person("u12019837");
+        instance.getPersonList().add(person);
+        assertEquals(person, instance.getPersonList().get(0));
+        assertTrue((instance.getPersonList().size() == 1));
     }
 
     @Test
-    public void testGetStreeNumber() {
+    public void testEquals() 
+    {
+        Address instance1 = new Address(new Long(1));
+        Address instance2 = new Address(new Long(1));
+        
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetStreeNumber() {
-    }
-
-    @Test
-    public void testGetRoomNumber() {
-    }
-
-    @Test
-    public void testSetRoomNumber() {
-    }
-
-    @Test
-    public void testGetZippostalCode() {
-    }
-
-    @Test
-    public void testSetZippostalCode() {
-    }
-
-    @Test
-    public void testGetUpEmployeeInformationList() {
-    }
-
-    @Test
-    public void testSetUpEmployeeInformationList() {
-    }
-
-    @Test
-    public void testGetPersonList() {
-    }
-
-    @Test
-    public void testSetPersonList() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        Address instance = new Address(new Long(1));
+        assertEquals("com.softserve.DBEntities.Address[ addressID=" + 1 + " ]", instance.toString());
     }
     
 }

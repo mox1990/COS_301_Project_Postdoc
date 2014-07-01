@@ -135,7 +135,8 @@ CREATE TABLE APPLICATION (
 	_projectTitle VARCHAR(250),
 	_information TEXT,
 	_fellow CHAR(9) NOT NULL,	
-	_grantHolderID CHAR(9) NOT NULL,	
+	_grantHolderID CHAR(9) NOT NULL,
+	_recommendationReportID BIGINT UNSIGNED,
 	_endorsementID BIGINT UNSIGNED,
 	_fundingReportID BIGINT UNSIGNED,
 	
@@ -143,7 +144,7 @@ CREATE TABLE APPLICATION (
 	PRIMARY KEY (_applicationID),
 	FOREIGN KEY (_fellow) REFERENCES PERSON(_systemID),
 	FOREIGN KEY (_grantHolderID) REFERENCES PERSON(_systemID),
-	FOREIGN KEY (_locationID) REFERENCES LOCATION(_locationID),
+	FOREIGN KEY (_recommendationReportID) REFERENCES RECOMMENDATION_REPORT(_reportID),
 	FOREIGN KEY (_endorsementID) REFERENCES ENDORSEMENT(_endorsementID),
 	FOREIGN KEY (_fundingReportID) REFERENCES FUNDING_REPORT(_reportID)
 ) ENGINE=InnoDB;

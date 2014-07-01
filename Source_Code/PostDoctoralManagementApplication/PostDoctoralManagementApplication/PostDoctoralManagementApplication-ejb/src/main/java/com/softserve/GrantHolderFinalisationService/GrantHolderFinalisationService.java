@@ -118,6 +118,8 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         applicationJpaController.edit(application);
         
+        //Send notification to appropriate HOD
+        
     }
     
     
