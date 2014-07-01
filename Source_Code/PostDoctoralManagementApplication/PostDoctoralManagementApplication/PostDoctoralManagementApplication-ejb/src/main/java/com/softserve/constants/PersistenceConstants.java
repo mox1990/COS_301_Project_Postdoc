@@ -32,7 +32,21 @@ public class PersistenceConstants {
     public final static long SECURITY_ROLE_ID_DRIS_MEMBER = 6;
     public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 7;
     public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 8;
-         
+    
+    //Application status constants
+    public final static String APPLICATION_STATUS_OPEN = "open";
+    public final static String APPLICATION_STATUS_DECLINED = "declined";
+    public final static String APPLICATION_STATUS_REFEREED = "refereed";
+    public final static String APPLICATION_STATUS_FINALISED = "finalised";
+    public final static String APPLICATION_STATUS_RECOMMENDED = "recommended";
+    public final static String APPLICATION_STATUS_ENDORSED = "endorsed";
+    public final static String APPLICATION_STATUS_ELIGIBLE = "eligible";
+    public final static String APPLICATION_STATUS_FUNDED = "funded";
+    public final static String APPLICATION_STATUS_COMPLETED = "completed";
+    public final static String APPLICATION_STATUS_TERMINATED = "terminated";
+    
+    
+    
     public static UserTransaction getUserTransaction()
     {
         try 

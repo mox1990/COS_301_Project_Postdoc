@@ -1,7 +1,7 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBEntities;
@@ -105,6 +105,11 @@ public class Person implements Serializable {
         @JoinColumn(name = "_roleID", referencedColumnName = "_roleID")})
     @ManyToMany
     private List<SecurityRole> securityRoleList;
+    @JoinTable(name = "referee_application", joinColumns = {
+        @JoinColumn(name = "_refereeID", referencedColumnName = "_systemID")}, inverseJoinColumns = {
+        @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
+    @ManyToMany
+    private List<Application> applicationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personID")
     private List<AuditLog> auditLogList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "deanID")
@@ -124,9 +129,9 @@ public class Person implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerID")
     private List<Cv> cvList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
-    private List<Application> applicationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
     private List<Application> applicationList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
+    private List<Application> applicationList2;
     @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
     @ManyToOne
     private Location locationID;
@@ -260,6 +265,15 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
+    public List<Application> getApplicationList() {
+        return applicationList;
+    }
+
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
+    }
+
+    @XmlTransient
     public List<AuditLog> getAuditLogList() {
         return auditLogList;
     }
@@ -340,21 +354,21 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public List<Application> getApplicationList() {
-        return applicationList;
-    }
-
-    public void setApplicationList(List<Application> applicationList) {
-        this.applicationList = applicationList;
-    }
-
-    @XmlTransient
     public List<Application> getApplicationList1() {
         return applicationList1;
     }
 
     public void setApplicationList1(List<Application> applicationList1) {
         this.applicationList1 = applicationList1;
+    }
+
+    @XmlTransient
+    public List<Application> getApplicationList2() {
+        return applicationList2;
+    }
+
+    public void setApplicationList2(List<Application> applicationList2) {
+        this.applicationList2 = applicationList2;
     }
 
     public Location getLocationID() {

@@ -1,24 +1,22 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
 
-import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.DBEntities.Location;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Location;
+import com.softserve.DBEntities.Person;
 import java.util.ArrayList;
 import java.util.List;
-import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
@@ -42,9 +40,6 @@ public class LocationJpaController implements Serializable {
     }
 
     public void create(Location location) throws RollbackFailureException, Exception {
-        if (location.getApplicationList() == null) {
-            location.setApplicationList(new ArrayList<Application>());
-        }
         if (location.getPersonList() == null) {
             location.setPersonList(new ArrayList<Person>());
         }
@@ -52,12 +47,6 @@ public class LocationJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            List<Application> attachedApplicationList = new ArrayList<Application>();
-            for (Application applicationListApplicationToAttach : location.getApplicationList()) {
-                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
-                attachedApplicationList.add(applicationListApplicationToAttach);
-            }
-            location.setApplicationList(attachedApplicationList);
             List<Person> attachedPersonList = new ArrayList<Person>();
             for (Person personListPersonToAttach : location.getPersonList()) {
                 personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
@@ -65,15 +54,6 @@ public class LocationJpaController implements Serializable {
             }
             location.setPersonList(attachedPersonList);
             em.persist(location);
-            for (Application applicationListApplication : location.getApplicationList()) {
-                Location oldLocationIDOfApplicationListApplication = applicationListApplication.getLocationID();
-                applicationListApplication.setLocationID(location);
-                applicationListApplication = em.merge(applicationListApplication);
-                if (oldLocationIDOfApplicationListApplication != null) {
-                    oldLocationIDOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
-                    oldLocationIDOfApplicationListApplication = em.merge(oldLocationIDOfApplicationListApplication);
-                }
-            }
             for (Person personListPerson : location.getPersonList()) {
                 Location oldLocationIDOfPersonListPerson = personListPerson.getLocationID();
                 personListPerson.setLocationID(location);
@@ -98,35 +78,14 @@ public class LocationJpaController implements Serializable {
         }
     }
 
-    public void edit(Location location) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Location location) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
             Location persistentLocation = em.find(Location.class, location.getLocationID());
-            List<Application> applicationListOld = persistentLocation.getApplicationList();
-            List<Application> applicationListNew = location.getApplicationList();
             List<Person> personListOld = persistentLocation.getPersonList();
             List<Person> personListNew = location.getPersonList();
-            List<String> illegalOrphanMessages = null;
-            for (Application applicationListOldApplication : applicationListOld) {
-                if (!applicationListNew.contains(applicationListOldApplication)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Application " + applicationListOldApplication + " since its locationID field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            List<Application> attachedApplicationListNew = new ArrayList<Application>();
-            for (Application applicationListNewApplicationToAttach : applicationListNew) {
-                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
-                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
-            }
-            applicationListNew = attachedApplicationListNew;
-            location.setApplicationList(applicationListNew);
             List<Person> attachedPersonListNew = new ArrayList<Person>();
             for (Person personListNewPersonToAttach : personListNew) {
                 personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
@@ -135,17 +94,6 @@ public class LocationJpaController implements Serializable {
             personListNew = attachedPersonListNew;
             location.setPersonList(personListNew);
             location = em.merge(location);
-            for (Application applicationListNewApplication : applicationListNew) {
-                if (!applicationListOld.contains(applicationListNewApplication)) {
-                    Location oldLocationIDOfApplicationListNewApplication = applicationListNewApplication.getLocationID();
-                    applicationListNewApplication.setLocationID(location);
-                    applicationListNewApplication = em.merge(applicationListNewApplication);
-                    if (oldLocationIDOfApplicationListNewApplication != null && !oldLocationIDOfApplicationListNewApplication.equals(location)) {
-                        oldLocationIDOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
-                        oldLocationIDOfApplicationListNewApplication = em.merge(oldLocationIDOfApplicationListNewApplication);
-                    }
-                }
-            }
             for (Person personListOldPerson : personListOld) {
                 if (!personListNew.contains(personListOldPerson)) {
                     personListOldPerson.setLocationID(null);
@@ -185,7 +133,7 @@ public class LocationJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -196,17 +144,6 @@ public class LocationJpaController implements Serializable {
                 location.getLocationID();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The location with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Application> applicationListOrphanCheck = location.getApplicationList();
-            for (Application applicationListOrphanCheckApplication : applicationListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Location (" + location + ") cannot be destroyed since the Application " + applicationListOrphanCheckApplication + " in its applicationList field has a non-nullable locationID field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             List<Person> personList = location.getPersonList();
             for (Person personListPerson : personList) {

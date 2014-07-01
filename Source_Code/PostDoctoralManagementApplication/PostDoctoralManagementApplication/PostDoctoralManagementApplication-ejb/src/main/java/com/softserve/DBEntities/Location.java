@@ -1,7 +1,7 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBEntities;
@@ -9,7 +9,6 @@ package com.softserve.DBEntities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,8 +59,6 @@ public class Location implements Serializable {
     @Size(min = 1, max = 250)
     @Column(name = "_department")
     private String department;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "locationID")
-    private List<Application> applicationList;
     @OneToMany(mappedBy = "locationID")
     private List<Person> personList;
 
@@ -109,15 +106,6 @@ public class Location implements Serializable {
 
     public void setDepartment(String department) {
         this.department = department;
-    }
-
-    @XmlTransient
-    public List<Application> getApplicationList() {
-        return applicationList;
-    }
-
-    public void setApplicationList(List<Application> applicationList) {
-        this.applicationList = applicationList;
     }
 
     @XmlTransient

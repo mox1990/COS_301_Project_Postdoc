@@ -1,7 +1,7 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
@@ -16,16 +16,16 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Endorsement;
 import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.CommitteeMeeting;
 import java.util.ArrayList;
 import java.util.List;
+import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.ProgressReport;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -47,6 +47,9 @@ public class ApplicationJpaController implements Serializable {
     }
 
     public void create(Application application) throws RollbackFailureException, Exception {
+        if (application.getRefereeList() == null) {
+            application.setRefereeList(new ArrayList<Person>());
+        }
         if (application.getCommitteeMeetingList() == null) {
             application.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
         }
@@ -70,11 +73,6 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderID = em.getReference(grantHolderID.getClass(), grantHolderID.getSystemID());
                 application.setGrantHolderID(grantHolderID);
             }
-            Location locationID = application.getLocationID();
-            if (locationID != null) {
-                locationID = em.getReference(locationID.getClass(), locationID.getLocationID());
-                application.setLocationID(locationID);
-            }
             Endorsement endorsementID = application.getEndorsementID();
             if (endorsementID != null) {
                 endorsementID = em.getReference(endorsementID.getClass(), endorsementID.getEndorsementID());
@@ -85,6 +83,12 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportID = em.getReference(fundingReportID.getClass(), fundingReportID.getReportID());
                 application.setFundingReportID(fundingReportID);
             }
+            List<Person> attachedPersonList = new ArrayList<Person>();
+            for (Person personListPersonToAttach : application.getRefereeList()) {
+                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+                attachedPersonList.add(personListPersonToAttach);
+            }
+            application.setRefereeList(attachedPersonList);
             List<CommitteeMeeting> attachedCommitteeMeetingList = new ArrayList<CommitteeMeeting>();
             for (CommitteeMeeting committeeMeetingListCommitteeMeetingToAttach : application.getCommitteeMeetingList()) {
                 committeeMeetingListCommitteeMeetingToAttach = em.getReference(committeeMeetingListCommitteeMeetingToAttach.getClass(), committeeMeetingListCommitteeMeetingToAttach.getMeetingID());
@@ -112,10 +116,6 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderID.getApplicationList().add(application);
                 grantHolderID = em.merge(grantHolderID);
             }
-            if (locationID != null) {
-                locationID.getApplicationList().add(application);
-                locationID = em.merge(locationID);
-            }
             if (endorsementID != null) {
                 endorsementID.getApplicationList().add(application);
                 endorsementID = em.merge(endorsementID);
@@ -123,6 +123,10 @@ public class ApplicationJpaController implements Serializable {
             if (fundingReportID != null) {
                 fundingReportID.getApplicationList().add(application);
                 fundingReportID = em.merge(fundingReportID);
+            }
+            for (Person personListPerson : application.getRefereeList()) {
+                personListPerson.getApplicationList().add(application);
+                personListPerson = em.merge(personListPerson);
             }
             for (CommitteeMeeting committeeMeetingListCommitteeMeeting : application.getCommitteeMeetingList()) {
                 committeeMeetingListCommitteeMeeting.getApplicationList().add(application);
@@ -171,12 +175,12 @@ public class ApplicationJpaController implements Serializable {
             Person fellowNew = application.getFellow();
             Person grantHolderIDOld = persistentApplication.getGrantHolderID();
             Person grantHolderIDNew = application.getGrantHolderID();
-            Location locationIDOld = persistentApplication.getLocationID();
-            Location locationIDNew = application.getLocationID();
             Endorsement endorsementIDOld = persistentApplication.getEndorsementID();
             Endorsement endorsementIDNew = application.getEndorsementID();
             FundingReport fundingReportIDOld = persistentApplication.getFundingReportID();
             FundingReport fundingReportIDNew = application.getFundingReportID();
+            List<Person> personListOld = persistentApplication.getRefereeList();
+            List<Person> personListNew = application.getRefereeList();
             List<CommitteeMeeting> committeeMeetingListOld = persistentApplication.getCommitteeMeetingList();
             List<CommitteeMeeting> committeeMeetingListNew = application.getCommitteeMeetingList();
             List<RefereeReport> refereeReportListOld = persistentApplication.getRefereeReportList();
@@ -211,10 +215,6 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderIDNew = em.getReference(grantHolderIDNew.getClass(), grantHolderIDNew.getSystemID());
                 application.setGrantHolderID(grantHolderIDNew);
             }
-            if (locationIDNew != null) {
-                locationIDNew = em.getReference(locationIDNew.getClass(), locationIDNew.getLocationID());
-                application.setLocationID(locationIDNew);
-            }
             if (endorsementIDNew != null) {
                 endorsementIDNew = em.getReference(endorsementIDNew.getClass(), endorsementIDNew.getEndorsementID());
                 application.setEndorsementID(endorsementIDNew);
@@ -223,6 +223,13 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportIDNew = em.getReference(fundingReportIDNew.getClass(), fundingReportIDNew.getReportID());
                 application.setFundingReportID(fundingReportIDNew);
             }
+            List<Person> attachedPersonListNew = new ArrayList<Person>();
+            for (Person personListNewPersonToAttach : personListNew) {
+                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+                attachedPersonListNew.add(personListNewPersonToAttach);
+            }
+            personListNew = attachedPersonListNew;
+            application.setRefereeList(personListNew);
             List<CommitteeMeeting> attachedCommitteeMeetingListNew = new ArrayList<CommitteeMeeting>();
             for (CommitteeMeeting committeeMeetingListNewCommitteeMeetingToAttach : committeeMeetingListNew) {
                 committeeMeetingListNewCommitteeMeetingToAttach = em.getReference(committeeMeetingListNewCommitteeMeetingToAttach.getClass(), committeeMeetingListNewCommitteeMeetingToAttach.getMeetingID());
@@ -261,14 +268,6 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderIDNew.getApplicationList().add(application);
                 grantHolderIDNew = em.merge(grantHolderIDNew);
             }
-            if (locationIDOld != null && !locationIDOld.equals(locationIDNew)) {
-                locationIDOld.getApplicationList().remove(application);
-                locationIDOld = em.merge(locationIDOld);
-            }
-            if (locationIDNew != null && !locationIDNew.equals(locationIDOld)) {
-                locationIDNew.getApplicationList().add(application);
-                locationIDNew = em.merge(locationIDNew);
-            }
             if (endorsementIDOld != null && !endorsementIDOld.equals(endorsementIDNew)) {
                 endorsementIDOld.getApplicationList().remove(application);
                 endorsementIDOld = em.merge(endorsementIDOld);
@@ -284,6 +283,18 @@ public class ApplicationJpaController implements Serializable {
             if (fundingReportIDNew != null && !fundingReportIDNew.equals(fundingReportIDOld)) {
                 fundingReportIDNew.getApplicationList().add(application);
                 fundingReportIDNew = em.merge(fundingReportIDNew);
+            }
+            for (Person personListOldPerson : personListOld) {
+                if (!personListNew.contains(personListOldPerson)) {
+                    personListOldPerson.getApplicationList().remove(application);
+                    personListOldPerson = em.merge(personListOldPerson);
+                }
+            }
+            for (Person personListNewPerson : personListNew) {
+                if (!personListOld.contains(personListNewPerson)) {
+                    personListNewPerson.getApplicationList().add(application);
+                    personListNewPerson = em.merge(personListNewPerson);
+                }
             }
             for (CommitteeMeeting committeeMeetingListOldCommitteeMeeting : committeeMeetingListOld) {
                 if (!committeeMeetingListNew.contains(committeeMeetingListOldCommitteeMeeting)) {
@@ -381,11 +392,6 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderID.getApplicationList().remove(application);
                 grantHolderID = em.merge(grantHolderID);
             }
-            Location locationID = application.getLocationID();
-            if (locationID != null) {
-                locationID.getApplicationList().remove(application);
-                locationID = em.merge(locationID);
-            }
             Endorsement endorsementID = application.getEndorsementID();
             if (endorsementID != null) {
                 endorsementID.getApplicationList().remove(application);
@@ -395,6 +401,11 @@ public class ApplicationJpaController implements Serializable {
             if (fundingReportID != null) {
                 fundingReportID.getApplicationList().remove(application);
                 fundingReportID = em.merge(fundingReportID);
+            }
+            List<Person> personList = application.getRefereeList();
+            for (Person personListPerson : personList) {
+                personListPerson.getApplicationList().remove(application);
+                personListPerson = em.merge(personListPerson);
             }
             List<CommitteeMeeting> committeeMeetingList = application.getCommitteeMeetingList();
             for (CommitteeMeeting committeeMeetingListCommitteeMeeting : committeeMeetingList) {
@@ -461,6 +472,19 @@ public class ApplicationJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    /**
+     *This function is used to return all the applications of a particular status
+     * @param applicationStatus The status of the application as a string
+     * @return A list of applications with following type
+     */
+    public List<Application> findAllApplicationsWithStatus(String applicationStatus)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status", Application.class).setParameter("status", applicationStatus);
+        return q.getResultList();
     }
     
 }

@@ -1,7 +1,7 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBEntities;
@@ -84,6 +84,8 @@ public class Application implements Serializable {
     @Column(name = "_information")
     private String information;
     @ManyToMany(mappedBy = "applicationList")
+    private List<Person> refereeList;
+    @ManyToMany(mappedBy = "applicationList")
     private List<CommitteeMeeting> committeeMeetingList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
     private List<RefereeReport> refereeReportList;
@@ -93,9 +95,6 @@ public class Application implements Serializable {
     @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person grantHolderID;
-    @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
-    @ManyToOne(optional = false)
-    private Location locationID;
     @JoinColumn(name = "_endorsementID", referencedColumnName = "_endorsementID")
     @ManyToOne
     private Endorsement endorsementID;
@@ -190,6 +189,15 @@ public class Application implements Serializable {
     }
 
     @XmlTransient
+    public List<Person> getRefereeList() {
+        return refereeList;
+    }
+
+    public void setRefereeList(List<Person> refereeList) {
+        this.refereeList = refereeList;
+    }
+
+    @XmlTransient
     public List<CommitteeMeeting> getCommitteeMeetingList() {
         return committeeMeetingList;
     }
@@ -221,14 +229,6 @@ public class Application implements Serializable {
 
     public void setGrantHolderID(Person grantHolderID) {
         this.grantHolderID = grantHolderID;
-    }
-
-    public Location getLocationID() {
-        return locationID;
-    }
-
-    public void setLocationID(Location locationID) {
-        this.locationID = locationID;
     }
 
     public Endorsement getEndorsementID() {
