@@ -169,8 +169,9 @@ Date,Time,Comment,Member
 "Sunday, June 29, 2014",,Found some Glassfish server warnings relating to JAXB jars. Recommend further study,Mathys
 "Monday, June 30, 2014",,Researched some more on mockito and unit testing. Create intial unit test for Enities. Created a inial behaviour unit test for user account management,Mathys
 "Monday, June 30, 2014",,Updated some parts in the useraccountmanagment service. Please look to seen new approach that caters for behaviour unit testing,Mathys
-"Tuesday, July 1, 2014",,,
-"Wednesday, July 2, 2014",,,
+"Tuesday, July 1, 2014",,Updated sql. Refactored some code. rgenerated some unit tests for entites. Added Grantholder and HOD approval services and complete there initial implenetation,Mathys
+"Wednesday, July 2, 2014",,Added and completed the initial implentation of the Dean endorsement and DRIS approval services. Intial back end implenetation according to work schedule complete,Mathys
+"Wednesday, July 2, 2014",,Updated sql and added some constants. Refactored some of the packages to make a more unified folder structure. Completed application unit test,Mathys
 "Thursday, July 3, 2014",,,
 "Friday, July 4, 2014",,,
 "Saturday, July 5, 2014",,,

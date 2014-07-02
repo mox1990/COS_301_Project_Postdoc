@@ -45,7 +45,9 @@ public class PersistenceConstants {
     public final static String APPLICATION_STATUS_COMPLETED = "completed";
     public final static String APPLICATION_STATUS_TERMINATED = "terminated";
     
-    
+    //Application type constants
+    public final static String APPLICATION_TYPE_NEW = "new";
+    public final static String APPLICATION_TYPE_RENEWAL = "renewal"; 
     
     public static UserTransaction getUserTransaction()
     {

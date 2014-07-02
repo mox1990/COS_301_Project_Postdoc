@@ -8,7 +8,7 @@ package com.softserve.Webapp;
 
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
-import com.softserve.UserAccountManagementServices.UserAccountManagementServicesLocal;
+import com.softserve.ejb.UserAccountManagementServicesLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
