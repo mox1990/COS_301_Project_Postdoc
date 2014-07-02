@@ -12,7 +12,7 @@ import com.softserve.DBDAO.UpEmployeeInformationJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
-import javax.servlet.http.HttpSession;
+import com.softserve.system.Session;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -20,8 +20,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -75,7 +73,7 @@ public class UserAccountManagmentUnitTest {
         Person mockPerson = mock(Person.class);
         Address mockAddress = mock(Address.class);
         UpEmployeeInformation mockUpInfo = mock(UpEmployeeInformation.class);        
-        HttpSession mockSession = mock(HttpSession.class);
+        Session mockSession = mock(Session.class);
         
         try
         {

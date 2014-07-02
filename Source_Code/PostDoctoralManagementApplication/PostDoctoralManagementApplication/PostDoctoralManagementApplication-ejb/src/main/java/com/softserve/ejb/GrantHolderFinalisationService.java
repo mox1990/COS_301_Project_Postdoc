@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.GrantHolderFinalisationService;
+package com.softserve.ejb;
 
 import com.softserve.ApplicationServices.ApplicationServices;
 import com.softserve.DBDAO.ApplicationJpaController;
@@ -118,9 +118,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         applicationJpaController.edit(application);
         
-        //Send notification to appropriate HOD
+        //Log action
         
+        //Send notification to appropriate HOD        
     }
-    
-    
+        
 }

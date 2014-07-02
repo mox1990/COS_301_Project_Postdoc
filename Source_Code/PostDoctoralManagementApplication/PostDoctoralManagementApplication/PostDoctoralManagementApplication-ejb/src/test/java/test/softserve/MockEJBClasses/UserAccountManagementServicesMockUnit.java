@@ -6,6 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
+import com.softserve.ejb.UserAccountManagementServices;
 import com.softserve.DBDAO.*;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
@@ -14,7 +15,6 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
-import com.softserve.UserAccountManagementServices.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;

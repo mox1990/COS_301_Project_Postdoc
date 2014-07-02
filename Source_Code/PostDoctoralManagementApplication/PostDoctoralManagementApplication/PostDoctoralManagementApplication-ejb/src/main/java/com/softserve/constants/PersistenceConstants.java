@@ -6,7 +6,7 @@
 
 package com.softserve.constants;
 
-import com.softserve.UserAccountManagementServices.UserAccountManagementServices;
+import com.softserve.ejb.UserAccountManagementServices;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;

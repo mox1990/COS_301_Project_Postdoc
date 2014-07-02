@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import java.util.ArrayList;
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,151 +32,180 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testGetApplicationID() {
+    public void testSetAndGetAndGetApplicationID() 
+    {         
+        Application instance = new Application();
+        instance.setApplicationID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE), instance.getApplicationID());
     }
 
     @Test
-    public void testSetApplicationID() {
+    public void testSetAndGetAndGetType() 
+    {
+        Application instance = new Application();
+        instance.setType("renewal");
+        assertEquals("renewal", instance.getType());
     }
 
     @Test
-    public void testGetType() {
+    public void testSetAndGetAndGetStatus() 
+    {
+        Application instance = new Application();
+        instance.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED);
+        assertEquals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED, instance.getStatus());
     }
 
     @Test
-    public void testSetType() {
+    public void testSetAndGetAndGetTimestamp() 
+    {
+        Application instance = new Application();
+        instance.setTimestamp(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getTimestamp());
     }
 
     @Test
-    public void testGetStatus() {
+    public void testSetAndGetAndGetAwardDate() 
+    {
+        Application instance = new Application();
+        instance.setAwardDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getAwardDate());
     }
 
     @Test
-    public void testSetStatus() {
+    public void testSetAndGetAndGetStartDate() 
+    {
+        Application instance = new Application();
+        instance.setStartDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getStartDate());
     }
 
     @Test
-    public void testGetTimestamp() {
+    public void testSetAndGetAndGetEndDate() 
+    {
+        Application instance = new Application();
+        instance.setEndDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getEndDate());
     }
 
     @Test
-    public void testSetTimestamp() {
+    public void testSetAndGetAndGetProjectTitle() 
+    {
+        Application instance = new Application();
+        instance.setProjectTitle("WMD Research");
+        assertEquals("WMD Research", instance.getProjectTitle());
     }
 
     @Test
-    public void testGetAwardDate() {
+    public void testSetAndGetInformation() 
+    {
+        Application instance = new Application();
+        instance.setInformation("<?xml version=1.0?> \n <root> <project>WMD<project/><root/>");
+        assertEquals("<?xml version=1.0?> \n <root> <project>WMD<project/><root/>", instance.getInformation());
     }
 
     @Test
-    public void testSetAwardDate() {
+    public void testSetAndGetRefereeList() 
+    {
+        Application instance = new Application();
+        instance.setRefereeList(new ArrayList<Person>());
+        Person person = new Person("r12019837");
+        instance.getRefereeList().add(person);
+        assertEquals(person, instance.getRefereeList().get(0));
+        assertTrue((instance.getRefereeList().size() == 1));
     }
 
     @Test
-    public void testGetStartDate() {
+    public void testSetAndGetCommitteeMeetingList() 
+    {
+        Application instance = new Application();
+        instance.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
+        CommitteeMeeting meeting = new CommitteeMeeting(Long.MAX_VALUE);
+        instance.getCommitteeMeetingList().add(meeting);
+        assertEquals(meeting, instance.getCommitteeMeetingList().get(0));
+        assertTrue((instance.getCommitteeMeetingList().size() == 1));
     }
 
     @Test
-    public void testSetStartDate() {
+    public void testSetAndGetRefereeReportList() 
+    {
+        Application instance = new Application();
+        instance.setRefereeReportList(new ArrayList<RefereeReport>());
+        RefereeReport report = new RefereeReport(Long.MAX_VALUE);
+        instance.getRefereeReportList().add(report);
+        assertEquals(report, instance.getRefereeReportList().get(0));
+        assertTrue((instance.getRefereeReportList().size() == 1));
     }
 
     @Test
-    public void testGetEndDate() {
+    public void testSetAndGetFellow() 
+    {
+        Application instance = new Application();
+        Person person = new Person("r12019837");
+        instance.setFellow(person);
+        assertEquals(person, instance.getFellow());
     }
 
     @Test
-    public void testSetEndDate() {
+    public void testSetAndGetGrantHolderID() 
+    {
+        Application instance = new Application();
+        Person person = new Person("p12019837");
+        instance.setGrantHolderID(person);
+        assertEquals(person, instance.getGrantHolderID());
     }
 
     @Test
-    public void testGetProjectTitle() {
+    public void testSetAndGetRecommendationReportID() 
+    {
+        Application instance = new Application();
+        RecommendationReport report = new RecommendationReport(Long.MAX_VALUE);
+        instance.setRecommendationReportID(report);
+        assertEquals(report, instance.getRecommendationReportID());
     }
 
     @Test
-    public void testSetProjectTitle() {
+    public void testSetAndGetEndorsementID() 
+    {
+        Application instance = new Application();
+        Endorsement report = new Endorsement(Long.MAX_VALUE);
+        instance.setEndorsementID(report);
+        assertEquals(report, instance.getEndorsementID());
     }
 
     @Test
-    public void testGetInformation() {
+    public void testSetAndGetFundingReportID() 
+    {
+        Application instance = new Application();
+        FundingReport report = new FundingReport(Long.MAX_VALUE);
+        instance.setFundingReportID(report);
+        assertEquals(report, instance.getFundingReportID());
     }
 
     @Test
-    public void testSetInformation() {
+    public void testSetAndGetProgressReportList() 
+    {
+        Application instance = new Application();
+        ProgressReport report = new ProgressReport(Long.MAX_VALUE);
+        instance.setProgressReportList(new ArrayList<ProgressReport> ());
+        instance.getProgressReportList().add(report);
+        assertEquals(report, instance.getProgressReportList().get(0));
+        assertTrue((instance.getProgressReportList().size() == 1));
     }
 
     @Test
-    public void testGetCommitteeMeetingList() {
+    public void testEquals() 
+    {
+        Application instance1 = new Application(new Long(1));
+        Application instance2 = new Application(new Long(1));
+        
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetCommitteeMeetingList() {
-    }
-
-    @Test
-    public void testGetRefereeReportList() {
-    }
-
-    @Test
-    public void testSetRefereeReportList() {
-    }
-
-    @Test
-    public void testGetFellow() {
-    }
-
-    @Test
-    public void testSetFellow() {
-    }
-
-    @Test
-    public void testGetGrantHolderID() {
-    }
-
-    @Test
-    public void testSetGrantHolderID() {
-    }
-
-    @Test
-    public void testGetLocationID() {
-    }
-
-    @Test
-    public void testSetLocationID() {
-    }
-
-    @Test
-    public void testGetEndorsementID() {
-    }
-
-    @Test
-    public void testSetEndorsementID() {
-    }
-
-    @Test
-    public void testGetFundingReportID() {
-    }
-
-    @Test
-    public void testSetFundingReportID() {
-    }
-
-    @Test
-    public void testGetProgressReportList() {
-    }
-
-    @Test
-    public void testSetProgressReportList() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        Application instance = new Application(new Long(1));
+        assertEquals("com.softserve.DBEntities.Application[ applicationID=" + 1 + " ]", instance.toString());
     }
     
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.UserAccountManagementServices;
+package com.softserve.ejb;
 
 import com.softserve.DBDAO.*;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
@@ -14,6 +14,7 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
+import com.softserve.system.Session;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -137,9 +138,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void createUserAccount(HttpSession session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
+    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {
-        //AuthenticateUser(session);
+        //AuthenticUser(session, list of privliges)
         
         //Prep the DAOs
         PersonJpaController personJpaController = getPersonDAO();
@@ -195,9 +196,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticateUser(session);
+        //AuthenticUser(session, list of privliges)
         
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
@@ -243,9 +244,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void removeUserAccount(HttpSession session, String systemID) throws RollbackFailureException, Exception
+    public void removeUserAccount(Session session, String systemID) throws RollbackFailureException, Exception
     {
-        //AuthenticateUser(session);
+        //AuthenticUser(session, list of privliges)
         
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
@@ -273,9 +274,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
      * @return A list of Person objects representing the user accounts
      */
     @Override
-    public List<Person> viewAllUserAccounts(HttpSession session)
+    public List<Person> viewAllUserAccounts(Session session)
     {
-        //AuthenticateUser(session);
+        //AuthenticUser(session, list of privliges)
         
         PersonJpaController personJpaController = getPersonDAO();
         

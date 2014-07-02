@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.softserve.UserAccountManagementServices;
+package com.softserve.ejb;
 
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -12,9 +12,9 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
+import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -23,9 +23,9 @@ import javax.servlet.http.HttpSession;
  */
 @Local
 public interface UserAccountManagementServicesLocal {
-    public void createUserAccount(HttpSession session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception;
-    public void updateUserAccount(HttpSession session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception;
-    public void removeUserAccount(HttpSession session, String systemID) throws RollbackFailureException, Exception;
-    public List<Person> viewAllUserAccounts(HttpSession session);
+    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception;
+    public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception;
+    public void removeUserAccount(Session session, String systemID) throws RollbackFailureException, Exception;
+    public List<Person> viewAllUserAccounts(Session session);
     public void testAddresses();
 }

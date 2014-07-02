@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.HODApprovalServices;
+package com.softserve.ejb;
 
 import com.softserve.ApplicationServices.ApplicationServices;
 import com.softserve.DBDAO.ApplicationJpaController;
@@ -55,7 +55,7 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
     }
     
-    public void declineAppliction(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void denyAppliction(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         //AuthenticUser(session, list of privliges)
         
@@ -65,10 +65,12 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         
         applicationJpaController.edit(application);
         
+        //Log action
+        
         //Send notification to grant holder and applicatant
     }
     
-    public void ammendAppliction(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void ammendAppliction(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         //AuthenticUser(session, list of privliges)
         
@@ -77,6 +79,8 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
         
         applicationJpaController.edit(application);
+        
+        //Log action
         
         //Send notification to grant holder and applicatant
     }
@@ -93,7 +97,18 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         application.setRecommendationReportID(recommendationReport);
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
         
-        applicationJpaController.edit(application);
+        try
+        {
+            applicationJpaController.edit(application);
+        }
+        catch(Exception ex)
+        {
+            //If an error occurs during update of application the recommendation report must be removed as well
+            recommendationReportJpaController.destroy(recommendationReport.getReportID());
+            throw ex;
+        }
+                
+        //Log action
         
         //Send notification to Deans office
     }
