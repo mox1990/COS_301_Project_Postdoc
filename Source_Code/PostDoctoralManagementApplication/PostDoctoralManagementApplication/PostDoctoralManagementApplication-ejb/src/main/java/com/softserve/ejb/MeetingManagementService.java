@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.DBDAO.MinuteCommentJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.CommitteeMeeting;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -46,6 +48,11 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         return new CommitteeMeetingJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected MinuteCommentJpaController getMinuteCommentDAO()
+    {
+        return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     public CommitteeMeeting startMeeting(Session sess) throws Exception
     {
         if(cMeeting.getMeetingID() == null)
@@ -55,6 +62,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
             cMeeting.setApplicationList(new ArrayList<Application>());
             cMeeting.setMinuteCommentList(new ArrayList<MinuteComment>());
             cMeeting.setPersonList(new ArrayList<Person>());
+            
+            // TODO: Create the pre meeting documentation... comments such as when meeting started...
             
             getCommitteeMeetingDAO().create(cMeeting);
         }
@@ -73,11 +82,13 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public CommitteeMeeting addEndorsedApplication(/*CommitteeMeetings cMeeting*/) throws Exception
     {
         // TODO: Fix implementation 
+        EntityManager em = emf.createEntityManager();
+        
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        //List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_NEW).getResultList();
-        //cMeeting.getApplicationList().addAll(a);
+        List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_NEW).getResultList();
+        cMeeting.getApplicationList().addAll(a);
         
         getCommitteeMeetingDAO().edit(cMeeting);
         
@@ -87,32 +98,79 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public CommitteeMeeting addEndorsedRenewals(/*CommitteeMeetings cMeeting*/) throws Exception
     {
         // TODO: Fix implementation
+        EntityManager em = emf.createEntityManager();
+        
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        //List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_RENEWAL).getResultList();
-        //cMeeting.getApplicationList().addAll(a);
+        List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_RENEWAL).getResultList();
+        cMeeting.getApplicationList().addAll(a);
         
         return cMeeting;
     }
     
-    public void addMemberToMeeting(/*CommitteeMeetings cMeeting*/Person p) throws Exception
+    public CommitteeMeeting addMemberToMeeting(/*CommitteeMeetings cMeeting*/Person p) throws Exception
     {
         // TODO: Fix implementation 
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        // TODO: Report it into audit trail.
+        // TODO: Make a comment of it...
         
         if(p.getSecurityRoleList().contains(PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER)
                 && !cMeeting.getPersonList().contains(p))
         {
             cMeeting.getPersonList().add(p);
+            getCommitteeMeetingDAO().edit(cMeeting);
         }
+        
+        return cMeeting;
     }
     
-    public void notifyCommitteeMembers(String message, Session s)
+    public CommitteeMeeting removeMemberFromMeeting(Person p) throws Exception
     {
-        // TODO: Build the notification...
+        if(cMeeting.getMeetingID() == null)
+            throw new Exception("Meeting has not been started.");
+        
+        // TODO: Make a comment of it...
+        
+        if(cMeeting.getPersonList().contains(p))
+        {
+            cMeeting.getPersonList().add(p);
+            getCommitteeMeetingDAO().edit(cMeeting);
+        }
+        
+        return cMeeting;
+    }
+    
+    public List<Person> getAttendants()
+    {
+        return cMeeting.getPersonList();
+    }
+    
+    public List<Application> getApplications()
+    {
+        return cMeeting.getApplicationList();
+    }
+    
+    public MinuteComment addMinuteComment(Session sess, String comment) throws Exception
+    {
+        // TODO: Make a call to the audit trail...
+        
+        MinuteComment min = new MinuteComment(null, new Timestamp(new Date().getTime()), comment);
+        min.setAttendeeID(sess.getUser());
+        
+        getMinuteCommentDAO().create(min);
+        
+        cMeeting.getMinuteCommentList().add(min);
+        getCommitteeMeetingDAO().edit(cMeeting);
+        
+        return min;
+    }
+    
+    public Application resolveApplication(Application a)
+    {
+        // TODO: all the politics of the game.
+        return null;
     }
 }

@@ -6,7 +6,15 @@
 
 package com.softserve.ejb;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.softserve.DBDAO.ApplicationJpaController;
+
 import com.softserve.system.Session;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
@@ -15,10 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,14 +34,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.Document;
 
 /**
  * Gives a generic implementation of the Report generationservice
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Stateful
+@Stateless
 public class ReportServices implements ReportServicesLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
@@ -55,7 +61,7 @@ public class ReportServices implements ReportServicesLocal {
     
     public ByteArrayOutputStream exportSpreadsheetReport(Timestamp start, Timestamp end)
     {
-        // TODO: ADD Apache POI API and write it's code here!!!!!
+        // TODO: Write code with a clear head
         /*Workbook workbook = new XSSFWorkbook();
          
         for(Class<?> entity: entities)
@@ -79,11 +85,11 @@ public class ReportServices implements ReportServicesLocal {
         
         return null;
     }
-    //Below code needs to be check certain classes cant be found even after dependancy resolution
-    /*
-    public ByteArrayOutputStream exportPDFReport(Timestamp start, Timestamp end)
+
+    public ByteArrayOutputStream exportPDFReport(Timestamp start, Timestamp end) throws DocumentException
     {
-        // TODO: Add the iText dependency...
+        EntityManager em = emf.createEntityManager();
+        
         Document doc = new Document();
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
         PdfWriter docWriter = PdfWriter.getInstance(doc, baosPDF);
@@ -148,5 +154,5 @@ public class ReportServices implements ReportServicesLocal {
         
         return table;
     }
-    */
+    
 }
