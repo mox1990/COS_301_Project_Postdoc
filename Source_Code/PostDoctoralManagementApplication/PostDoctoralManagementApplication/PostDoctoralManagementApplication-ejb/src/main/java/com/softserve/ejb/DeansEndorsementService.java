@@ -16,6 +16,8 @@ import com.softserve.DBEntities.Endorsement;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -25,6 +27,7 @@ import javax.persistence.PersistenceUnit;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
@@ -44,7 +47,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     {
         //AuthenticUser(session, list of privliges)
         
-        ApplicationServices applicationServices = new ApplicationServices();
+        ApplicationServices applicationServices = new ApplicationServices(emf);
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
     }

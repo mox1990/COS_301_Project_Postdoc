@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import java.util.Date;
+import javax.validation.constraints.AssertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,47 +32,52 @@ public class AuditLogTest {
     }
 
     @Test
-    public void testGetEntryID() {
+    public void testSetAndGetEntryID() 
+    {
+        AuditLog instance = new AuditLog();
+        instance.setEntryID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE), instance.getEntryID());
     }
 
     @Test
-    public void testSetEntryID() {
+    public void testSetAndGetTimestamp() 
+    {
+        AuditLog instance = new AuditLog();
+        instance.setTimestamp(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getTimestamp());
     }
 
     @Test
-    public void testGetTimestamp() {
+    public void testSetAndGetAction() 
+    {
+        AuditLog instance = new AuditLog();
+        instance.setAction("Updated database");
+        assertEquals("Updated database", instance.getAction());
     }
 
     @Test
-    public void testSetTimestamp() {
+    public void testSetAndGetPersonID() 
+    {
+        AuditLog instance = new AuditLog();
+        Person person = new Person("r12019837");
+        instance.setPersonID(person);
+        assertEquals(person, instance.getPersonID());
     }
 
     @Test
-    public void testGetAction() {
+    public void testEquals() 
+    {
+        AuditLog instance1 = new AuditLog(Long.MAX_VALUE);
+        AuditLog instance2 = new AuditLog(Long.MAX_VALUE);
+        
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetAction() {
-    }
-
-    @Test
-    public void testGetPersonID() {
-    }
-
-    @Test
-    public void testSetPersonID() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        AuditLog instance = new AuditLog(new Long(1));
+        assertEquals("com.softserve.DBEntities.AuditLog[ entryID=" + 1 + " ]", instance.toString());
     }
     
 }

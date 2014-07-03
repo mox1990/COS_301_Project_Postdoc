@@ -11,6 +11,8 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
@@ -20,11 +22,14 @@ import javax.servlet.http.HttpSession;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Stateless
 public class ApplicationServices {
-
-    @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    
     private EntityManagerFactory emf;
+
+    public ApplicationServices(EntityManagerFactory emf) 
+    {
+        this.emf = emf;
+    }
     
     protected ApplicationJpaController getApplicationDAO()
     {

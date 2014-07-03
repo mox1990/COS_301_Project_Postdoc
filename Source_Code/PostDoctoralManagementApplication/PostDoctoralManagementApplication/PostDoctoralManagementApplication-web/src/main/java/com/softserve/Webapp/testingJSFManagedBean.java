@@ -9,6 +9,7 @@ package com.softserve.Webapp;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.ejb.UserAccountManagementServicesLocal;
+import com.softserve.system.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class testingJSFManagedBean implements Serializable {
         
         try 
         {
-            management.createUserAccount((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false), true, person, address, null);
+            management.createUserAccount(new Session((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false), person), true, person, address, null);
             
         } catch (Exception ex) {
             Logger.getLogger(testingJSFManagedBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,7 +83,7 @@ public class testingJSFManagedBean implements Serializable {
     
     public List<Person> getPeopleList()
     {
-        List<Person> people = management.viewAllUserAccounts((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false));
+        List<Person> people = management.viewAllUserAccounts(new Session((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false), null));
         
         return people;
     }

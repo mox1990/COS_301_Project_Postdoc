@@ -16,13 +16,11 @@ import com.softserve.constants.PersistenceConstants;
 import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateful;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 
 /**
  * This EJB handles the notification services
@@ -34,8 +32,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     //TODO: @Inject
     private CommitteeMeeting cMeeting = new CommitteeMeeting();
     
-    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManager em;
+    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
     
     /**
      *This function creates an instance of the PersonJpaController. 
@@ -78,8 +76,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_NEW).getResultList();
-        cMeeting.getApplicationList().addAll(a);
+        //List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_NEW).getResultList();
+        //cMeeting.getApplicationList().addAll(a);
         
         getCommitteeMeetingDAO().edit(cMeeting);
         
@@ -92,8 +90,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         if(cMeeting.getMeetingID() == null)
             throw new Exception("Meeting has not been started.");
         
-        List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_RENEWAL).getResultList();
-        cMeeting.getApplicationList().addAll(a);
+        //List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_RENEWAL).getResultList();
+        //cMeeting.getApplicationList().addAll(a);
         
         return cMeeting;
     }

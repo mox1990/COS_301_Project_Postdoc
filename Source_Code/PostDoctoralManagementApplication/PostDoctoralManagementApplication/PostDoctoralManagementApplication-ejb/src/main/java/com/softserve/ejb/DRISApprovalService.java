@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -29,6 +31,7 @@ import javax.persistence.PersistenceUnit;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
@@ -54,7 +57,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     {
         //AuthenticUser(session, list of privliges)
         
-        ApplicationServices applicationServices = new ApplicationServices();
+        ApplicationServices applicationServices = new ApplicationServices(emf);
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
     }
@@ -69,7 +72,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     {
         //AuthenticUser(session, list of privliges)
         
-        ApplicationServices applicationServices = new ApplicationServices();
+        ApplicationServices applicationServices = new ApplicationServices(emf);
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
     }

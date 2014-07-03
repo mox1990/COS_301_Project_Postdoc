@@ -17,7 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,6 +27,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.Document;
 
 /**
  * Gives a generic implementation of the Report generationservice
@@ -34,8 +37,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 @Stateful
 public class ReportServices implements ReportServicesLocal {
 
-    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManager em;
+    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
     
     private List<Class<?>> entities = new ArrayList<>();
     
@@ -76,7 +79,8 @@ public class ReportServices implements ReportServicesLocal {
         
         return null;
     }
-    
+    //Below code needs to be check certain classes cant be found even after dependancy resolution
+    /*
     public ByteArrayOutputStream exportPDFReport(Timestamp start, Timestamp end)
     {
         // TODO: Add the iText dependency...
@@ -144,4 +148,5 @@ public class ReportServices implements ReportServicesLocal {
         
         return table;
     }
+    */
 }
