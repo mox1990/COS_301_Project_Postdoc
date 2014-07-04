@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import java.util.ArrayList;
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,63 +32,70 @@ public class EndorsementTest {
     }
 
     @Test
-    public void testGetEndorsementID() {
+    public void testSetAndGetEndorsementID() 
+    {
+        Endorsement instance = new Endorsement(Long.MIN_VALUE);
+        instance.setEndorsementID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getEndorsementID());
     }
 
     @Test
-    public void testSetEndorsementID() {
+    public void testSetAndGetTimestamp() 
+    {
+        Endorsement instance = new Endorsement();
+        instance.setTimestamp(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getTimestamp());
     }
 
     @Test
-    public void testGetTimestamp() {
+    public void testSetAndGetRank() 
+    {
+        Endorsement instance = new Endorsement();
+        instance.setRank(1);
+        assertEquals(1,instance.getRank());
     }
 
     @Test
-    public void testSetTimestamp() {
+    public void testSetAndGetMotivation() 
+    {
+        Endorsement instance = new Endorsement();
+        instance.setMotivation("Very very very good");
+        assertEquals("Very very very good",instance.getMotivation());
     }
 
     @Test
-    public void testGetRank() {
+    public void testSetAndGetDeanID() 
+    {
+        Endorsement instance = new Endorsement();
+        Person person = new Person("r12019837");
+        instance.setDeanID(person);
+        assertEquals(person, instance.getDeanID());
     }
 
     @Test
-    public void testSetRank() {
+    public void testSetAndGetApplicationList() 
+    {
+        Endorsement instance = new Endorsement();
+        instance.setApplicationList(new ArrayList<Application>());
+        Application a = new Application(new Long(1));
+        instance.getApplicationList().add(a);
+        assertEquals(a, instance.getApplicationList().get(0));
+        assertTrue((instance.getApplicationList().size() == 1));
     }
 
     @Test
-    public void testGetMotivation() {
+    public void testEquals() 
+    {
+        Endorsement instance1 = new Endorsement(Long.MAX_VALUE);
+        Endorsement instance2 = new Endorsement(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetMotivation() {
-    }
-
-    @Test
-    public void testGetDeanID() {
-    }
-
-    @Test
-    public void testSetDeanID() {
-    }
-
-    @Test
-    public void testGetApplicationList() {
-    }
-
-    @Test
-    public void testSetApplicationList() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString()
+    {
+        Endorsement instance = new Endorsement(new Long(1));
+        assertEquals("com.softserve.DBEntities.Endorsement[ endorsementID=" + 1 + " ]", instance.toString());
     }
     
 }

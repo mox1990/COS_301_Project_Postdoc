@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import java.util.ArrayList;
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,95 +32,102 @@ public class FundingReportTest {
     }
 
     @Test
-    public void testGetReportID() {
+    public void testSetAndGetReportID() 
+    {
+        FundingReport instance = new FundingReport(Long.MIN_VALUE);
+        instance.setReportID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getReportID());
     }
 
     @Test
-    public void testSetReportID() {
+    public void testSetAndGetTimestamp() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setTimestamp(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getTimestamp());
     }
 
     @Test
-    public void testGetTimestamp() {
+    public void testSetAndGetFellowshipCost() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setFellowshipCost(1000f);
+        assertEquals(new Float(1000f),instance.getFellowshipCost());
     }
 
     @Test
-    public void testSetTimestamp() {
+    public void testSetAndGetTravelCost() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setTravelCost(1000f);
+        assertEquals(new Float(1000f),instance.getTravelCost());
     }
 
     @Test
-    public void testGetFellowshipCost() {
+    public void testSetAndGetRunningCost() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setRunningCost(1000f);
+        assertEquals(new Float(1000f),instance.getRunningCost());
     }
 
     @Test
-    public void testSetFellowshipCost() {
+    public void testSetAndGetOperatingCost() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setOperatingCost(1000f);
+        assertEquals(new Float(1000f),instance.getOperatingCost());
     }
 
     @Test
-    public void testGetTravelCost() {
+    public void testSetAndGetEquipmentCost() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setEquipmentCost(1000f);
+        assertEquals(new Float(1000f),instance.getEquipmentCost());
     }
 
     @Test
-    public void testSetTravelCost() {
+    public void testSetAndGetConferenceCost() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setConferenceCost(1000f);
+        assertEquals(new Float(1000f),instance.getConferenceCost());
     }
 
     @Test
-    public void testGetRunningCost() {
+    public void testSetAndGetDrisID() 
+    {
+        FundingReport instance = new FundingReport();
+        Person person = new Person("r12019837");
+        instance.setDrisID(person);
+        assertEquals(person, instance.getDrisID());
     }
 
     @Test
-    public void testSetRunningCost() {
+    public void testSetAndGetApplicationList() 
+    {
+        FundingReport instance = new FundingReport();
+        instance.setApplicationList(new ArrayList<Application>());
+        Application a = new Application(new Long(1));
+        instance.getApplicationList().add(a);
+        assertEquals(a, instance.getApplicationList().get(0));
+        assertTrue((instance.getApplicationList().size() == 1));
     }
 
     @Test
-    public void testGetOperatingCost() {
+    public void testEquals() 
+    {
+        FundingReport instance1 = new FundingReport(Long.MAX_VALUE);
+        FundingReport instance2 = new FundingReport(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetOperatingCost() {
-    }
-
-    @Test
-    public void testGetEquipmentCost() {
-    }
-
-    @Test
-    public void testSetEquipmentCost() {
-    }
-
-    @Test
-    public void testGetConferenceCost() {
-    }
-
-    @Test
-    public void testSetConferenceCost() {
-    }
-
-    @Test
-    public void testGetDrisID() {
-    }
-
-    @Test
-    public void testSetDrisID() {
-    }
-
-    @Test
-    public void testGetApplicationList() {
-    }
-
-    @Test
-    public void testSetApplicationList() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        FundingReport instance = new FundingReport(new Long(1));
+        assertEquals("com.softserve.DBEntities.FundingReport[ reportID=" + 1 + " ]", instance.toString());
     }
     
 }

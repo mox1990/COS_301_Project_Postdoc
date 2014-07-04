@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,63 +31,67 @@ public class ExperienceTest {
     }
 
     @Test
-    public void testGetExperienceID() {
+    public void testSetAndGetExperienceID() 
+    {
+        Experience instance = new Experience(Long.MIN_VALUE);
+        instance.setExperienceID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getExperienceID());
     }
 
     @Test
-    public void testSetExperienceID() {
+    public void testSetAndGetCapacity() 
+    {
+        Experience instance = new Experience();
+        instance.setCapacity("Sales clark");
+        assertEquals("Sales clark",instance.getCapacity());
     }
 
     @Test
-    public void testGetCapacity() {
+    public void testSetAndGetOrganisation() 
+    {
+        Experience instance = new Experience();
+        instance.setOrganisation("Harry's CIA");
+        assertEquals("Harry's CIA",instance.getOrganisation());
     }
 
     @Test
-    public void testSetCapacity() {
+    public void testSetAndGetStartDate() 
+    {
+        Experience instance = new Experience();
+        instance.setStartDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getStartDate());
     }
 
     @Test
-    public void testGetOrganisation() {
+    public void testSetAndGetEndDate() 
+    {
+        Experience instance = new Experience();
+        instance.setEndDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getEndDate());
     }
 
     @Test
-    public void testSetOrganisation() {
+    public void testSetAndGetCvID() 
+    {
+        Experience instance = new Experience();
+        Cv cv = new Cv(Long.MAX_VALUE);
+        instance.setCvID(cv);
+        assertEquals(cv, instance.getCvID());
     }
 
     @Test
-    public void testGetStartDate() {
+    public void testEquals() 
+    {
+        Experience instance1 = new Experience(Long.MAX_VALUE);
+        Experience instance2 = new Experience(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetStartDate() {
-    }
-
-    @Test
-    public void testGetEndDate() {
-    }
-
-    @Test
-    public void testSetEndDate() {
-    }
-
-    @Test
-    public void testGetCvID() {
-    }
-
-    @Test
-    public void testSetCvID() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        Experience instance = new Experience(new Long(1));
+        assertEquals("com.softserve.DBEntities.Experience[ experienceID=" + 1 + " ]", instance.toString());
     }
     
 }
