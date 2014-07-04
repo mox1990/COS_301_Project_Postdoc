@@ -34,7 +34,7 @@ public class EndorsementTest {
     @Test
     public void testSetAndGetEndorsementID() 
     {
-        Endorsement instance = new Endorsement(Long.MIN_VALUE);
+        Endorsement instance = new Endorsement();
         instance.setEndorsementID(Long.MIN_VALUE);
         assertEquals(new Long(Long.MIN_VALUE),instance.getEndorsementID());
     }

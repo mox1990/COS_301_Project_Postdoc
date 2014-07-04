@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,63 +31,61 @@ public class LocationTest {
     }
 
     @Test
-    public void testGetLocationID() {
+    public void testSetAndGetLocationID() 
+    {
+        Location instance = new Location(Long.MIN_VALUE);
+        instance.setLocationID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getLocationID());
     }
 
     @Test
-    public void testSetLocationID() {
+    public void testSetAndGetInstitution() 
+    {
+        Location instance = new Location();
+        instance.setInstitution("University of Cape Town");
+        assertEquals("University of Cape Town",instance.getInstitution());
     }
 
     @Test
-    public void testGetInstitution() {
+    public void testSetAndGetFaculty() 
+    {
+        Location instance = new Location();
+        instance.setFaculty("EBIT");
+        assertEquals("EBIT",instance.getFaculty());
     }
 
     @Test
-    public void testSetInstitution() {
+    public void testSetAndGetDepartment() 
+    {
+        Location instance = new Location();
+        instance.setDepartment("Department of Computer Science");
+        assertEquals("Department of Computer Science",instance.getDepartment());
     }
 
     @Test
-    public void testGetFaculty() {
+    public void testSetAndGetPersonList() 
+    {
+        Location instance = new Location();
+        instance.setPersonList(new ArrayList<Person>());
+        Person person = new Person("r12019837");
+        instance.getPersonList().add(person);
+        assertEquals(person, instance.getPersonList().get(0));
+        assertTrue((instance.getPersonList().size() == 1));
     }
 
     @Test
-    public void testSetFaculty() {
+    public void testEquals() 
+    {
+        Location instance1 = new Location(Long.MAX_VALUE);
+        Location instance2 = new Location(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testGetDepartment() {
-    }
-
-    @Test
-    public void testSetDepartment() {
-    }
-
-    @Test
-    public void testGetApplicationList() {
-    }
-
-    @Test
-    public void testSetApplicationList() {
-    }
-
-    @Test
-    public void testGetPersonList() {
-    }
-
-    @Test
-    public void testSetPersonList() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        Location instance = new Location(new Long(1));
+        assertEquals("com.softserve.DBEntities.Location[ locationID=" + 1 + " ]", instance.toString());
     }
     
 }

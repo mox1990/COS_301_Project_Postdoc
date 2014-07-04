@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,63 +31,68 @@ public class UpEmployeeInformationTest {
     }
 
     @Test
-    public void testGetEmployeeID() {
+    public void testSetAndGetEmployeeID() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation();
+        instance.setEmployeeID("p12019838");
+        assertEquals("p12019838",instance.getEmployeeID());
     }
 
     @Test
-    public void testSetEmployeeID() {
+    public void testSetAndGetPosition() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation();
+        instance.setPosition("Important");
+        assertEquals("Important",instance.getPosition());
     }
 
     @Test
-    public void testGetPosition() {
+    public void testSetAndGetDateOfAppointment() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation();
+        instance.setDateOfAppointment(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getDateOfAppointment());
     }
 
     @Test
-    public void testSetPosition() {
+    public void testSetAndGetAppointmentStatus() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation();
+        instance.setAppointmentStatus("Employeed");
+        assertEquals("Employeed",instance.getAppointmentStatus());
     }
 
     @Test
-    public void testGetDateOfAppointment() {
+    public void testSetAndGetPerson() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation();
+        Person person = new Person("r12019837");
+        instance.setPerson(person);
+        assertEquals(person, instance.getPerson());
     }
 
     @Test
-    public void testSetDateOfAppointment() {
+    public void testSetAndGetPhysicalAddress() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation();
+        Address address = new Address(new Long(1));
+        instance.setPhysicalAddress(address);
+        assertEquals(address, instance.getPhysicalAddress());
     }
 
     @Test
-    public void testGetAppointmentStatus() {
+    public void testEquals() 
+    {
+        UpEmployeeInformation instance1 = new UpEmployeeInformation("p12019838");
+        UpEmployeeInformation instance2 = new UpEmployeeInformation("p12019838");
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetAppointmentStatus() {
-    }
-
-    @Test
-    public void testGetPerson() {
-    }
-
-    @Test
-    public void testSetPerson() {
-    }
-
-    @Test
-    public void testGetPhysicalAddress() {
-    }
-
-    @Test
-    public void testSetPhysicalAddress() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        UpEmployeeInformation instance = new UpEmployeeInformation("p12019838");
+        assertEquals("com.softserve.DBEntities.UpEmployeeInformation[ employeeID=" + "p12019838" + " ]", instance.toString());  
     }
     
 }

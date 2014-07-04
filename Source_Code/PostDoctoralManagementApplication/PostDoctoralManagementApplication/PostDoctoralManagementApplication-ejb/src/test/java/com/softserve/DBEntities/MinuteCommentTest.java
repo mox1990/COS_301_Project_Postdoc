@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,55 +31,60 @@ public class MinuteCommentTest {
     }
 
     @Test
-    public void testGetCommentID() {
+    public void testSetAndGetCommentID() 
+    {
+        MinuteComment instance = new MinuteComment();
+        instance.setCommentID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getCommentID());
     }
 
     @Test
-    public void testSetCommentID() {
+    public void testSetAndGetTimestamp() 
+    {
+        MinuteComment instance = new MinuteComment();
+        instance.setTimestamp(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getTimestamp());
     }
 
     @Test
-    public void testGetTimestamp() {
+    public void testSetAndGetComment() 
+    {
+        MinuteComment instance = new MinuteComment();
+        instance.setComment("Watch this space");
+        assertEquals("Watch this space",instance.getComment());
     }
 
     @Test
-    public void testSetTimestamp() {
+    public void testSetAndGetMeetingID() 
+    {
+        MinuteComment instance = new MinuteComment();
+        CommitteeMeeting meeting = new CommitteeMeeting(Long.MAX_VALUE);
+        instance.setMeetingID(meeting);
+        assertEquals(meeting, instance.getMeetingID());
     }
 
     @Test
-    public void testGetComment() {
+    public void testSetAndGetAttendeeID() 
+    {
+        MinuteComment instance = new MinuteComment();
+        Person person = new Person("r12019837");
+        instance.setAttendeeID(person);
+        assertEquals(person, instance.getAttendeeID());
     }
 
     @Test
-    public void testSetComment() {
+    public void testEquals() 
+    {
+        MinuteComment instance1 = new MinuteComment(Long.MAX_VALUE);
+        MinuteComment instance2 = new MinuteComment(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testGetMeetingID() {
-    }
-
-    @Test
-    public void testSetMeetingID() {
-    }
-
-    @Test
-    public void testGetAttendeeID() {
-    }
-
-    @Test
-    public void testSetAttendeeID() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        MinuteComment instance = new MinuteComment(new Long(1));
+        assertEquals("com.softserve.DBEntities.MinuteComment[ commentID=" + 1 + " ]", instance.toString());
     }
     
 }

@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,47 +31,53 @@ public class SecurityRoleTest {
     }
 
     @Test
-    public void testGetRoleID() {
+    public void testSetAndGetRoleID() 
+    {
+        SecurityRole instance = new SecurityRole();
+        instance.setRoleID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getRoleID());
     }
 
     @Test
-    public void testSetRoleID() {
+    public void testSetAndGetName() 
+    {
+        SecurityRole instance = new SecurityRole();
+        instance.setName("High level");
+        assertEquals("High level",instance.getName());
     }
 
     @Test
-    public void testGetName() {
+    public void testSetAndGetRoleMask() 
+    {
+        SecurityRole instance = new SecurityRole();
+        instance.setRoleMask(1);
+        assertEquals(1,instance.getRoleMask());
     }
 
     @Test
-    public void testSetName() {
+    public void testSetAndGetPersonList() 
+    {
+        SecurityRole instance = new SecurityRole();
+        instance.setPersonList(new ArrayList<Person>());
+        Person person = new Person("r12019837");
+        instance.getPersonList().add(person);
+        assertEquals(person, instance.getPersonList().get(0));
+        assertTrue((instance.getPersonList().size() == 1));
     }
 
     @Test
-    public void testGetRoleMask() {
+    public void testEquals() 
+    {
+        SecurityRole instance1 = new SecurityRole(Long.MAX_VALUE);
+        SecurityRole instance2 = new SecurityRole(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testSetRoleMask() {
-    }
-
-    @Test
-    public void testGetPersonList() {
-    }
-
-    @Test
-    public void testSetPersonList() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        SecurityRole instance = new SecurityRole(new Long(1));
+        assertEquals("com.softserve.DBEntities.SecurityRole[ roleID=" + 1 + " ]", instance.toString());
     }
     
 }

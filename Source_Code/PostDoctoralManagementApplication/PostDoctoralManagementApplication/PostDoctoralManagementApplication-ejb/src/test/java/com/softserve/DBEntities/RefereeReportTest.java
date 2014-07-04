@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,55 +31,60 @@ public class RefereeReportTest {
     }
 
     @Test
-    public void testGetReportID() {
+    public void testSetAndGetReportID() 
+    {
+        RefereeReport instance = new RefereeReport();
+        instance.setReportID(Long.MIN_VALUE);
+        assertEquals(new Long(Long.MIN_VALUE),instance.getReportID());
     }
 
     @Test
-    public void testSetReportID() {
+    public void testSetAndGetTimestamp() 
+    {
+        RefereeReport instance = new RefereeReport();
+        instance.setTimestamp(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11),instance.getTimestamp());
     }
 
     @Test
-    public void testGetTimestamp() {
+    public void testSetAndGetContent() 
+    {
+        RefereeReport instance = new RefereeReport();
+        instance.setContent("<?xml version=1.0?> \n <root> <project>WMD<project/><root/>");
+        assertEquals("<?xml version=1.0?> \n <root> <project>WMD<project/><root/>",instance.getContent());
     }
 
     @Test
-    public void testSetTimestamp() {
+    public void testSetAndGetApplicationID() 
+    {
+        RefereeReport instance = new RefereeReport();
+        Application app = new Application(Long.MIN_VALUE);
+        instance.setApplicationID(app);
+        assertEquals(app, instance.getApplicationID());
     }
 
     @Test
-    public void testGetContent() {
+    public void testSetAndGetRefereeID() 
+    {
+        RefereeReport instance = new RefereeReport();
+        Person person = new Person("r12019837");
+        instance.setRefereeID(person);
+        assertEquals(person, instance.getRefereeID());
     }
 
     @Test
-    public void testSetContent() {
+    public void testEquals() 
+    {
+        RefereeReport instance1 = new RefereeReport(Long.MAX_VALUE);
+        RefereeReport instance2 = new RefereeReport(Long.MAX_VALUE);
+        assertTrue(instance1.equals(instance2));
     }
 
     @Test
-    public void testGetApplicationID() {
-    }
-
-    @Test
-    public void testSetApplicationID() {
-    }
-
-    @Test
-    public void testGetRefereeID() {
-    }
-
-    @Test
-    public void testSetRefereeID() {
-    }
-
-    @Test
-    public void testHashCode() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void testToString() {
+    public void testToString() 
+    {
+        RefereeReport instance = new RefereeReport(new Long(1));
+        assertEquals("com.softserve.DBEntities.RefereeReport[ reportID=" + 1 + " ]", instance.toString());
     }
     
 }

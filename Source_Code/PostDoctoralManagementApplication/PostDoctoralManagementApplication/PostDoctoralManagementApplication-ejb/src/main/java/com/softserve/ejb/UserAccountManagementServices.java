@@ -159,6 +159,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             {
                 user.setSystemID(generateSystemID('f'));
             }
+            //Added for referee
             else
             {
                 throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");
