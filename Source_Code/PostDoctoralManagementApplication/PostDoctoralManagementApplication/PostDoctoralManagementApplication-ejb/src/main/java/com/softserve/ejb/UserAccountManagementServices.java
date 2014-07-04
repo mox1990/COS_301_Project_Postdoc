@@ -84,7 +84,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
      * @param prefix The prefix to be used for the 9 character systemID
      * @return The newly generated SystemID as a string
      */
-    private String generateSystemID(char prefix)
+    protected String generateSystemID(char prefix)
     {
         PersonJpaController personJpaController = getPersonDAO();
         
@@ -159,7 +159,10 @@ public class UserAccountManagementServices implements UserAccountManagementServi
             {
                 user.setSystemID(generateSystemID('f'));
             }
-            //Added for referee
+            else if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
+            {
+                user.setSystemID(generateSystemID('r'));
+            }
             else
             {
                 throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");

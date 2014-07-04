@@ -49,6 +49,17 @@ public class PersistenceConstants {
     public final static String APPLICATION_TYPE_NEW = "new";
     public final static String APPLICATION_TYPE_RENEWAL = "renewal"; 
     
+    //CV gender constants
+    public final static String CV_GENDER_MALE = "male";
+    public final static String CV_GENDER_FEMALE = "female";
+    
+    //Person title constants
+    public final static String PERSON_TITLE_MR = "Mr";
+    public final static String PERSON_TITLE_MRS = "Mrs";
+    public final static String PERSON_TITLE_MS = "Ms";
+    public final static String PERSON_TITLE_DR = "Dr";
+    public final static String PERSON_TITLE_PROF = "Prof";
+    
     public static UserTransaction getUserTransaction()
     {
         try 

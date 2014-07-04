@@ -8,24 +8,6 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.ejb.UserAccountManagementServices;
 import com.softserve.DBDAO.*;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.PreexistingEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.UpEmployeeInformation;
-import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.NamingException;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import javax.servlet.http.HttpSession;
-import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
 
 /**
  *
@@ -88,6 +70,10 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
         return uDAO;
     }
     
+    public String Mock_generateSystemID(char prefix)
+    {
+        return generateSystemID(prefix);
+    }
     
     
     
