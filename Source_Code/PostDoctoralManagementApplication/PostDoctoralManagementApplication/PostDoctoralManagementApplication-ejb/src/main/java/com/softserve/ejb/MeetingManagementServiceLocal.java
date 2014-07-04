@@ -6,6 +6,12 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.CommitteeMeeting;
+import com.softserve.DBEntities.MinuteComment;
+import com.softserve.DBEntities.Person;
+import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,5 +21,13 @@ import javax.ejb.Local;
  */
 @Local
 public interface MeetingManagementServiceLocal {
-    
+    public CommitteeMeeting startMeeting(Session sess) throws Exception;
+    public CommitteeMeeting endMeeting(Session sess) throws Exception;
+    public CommitteeMeeting addEndorsedApplication(Session sess) throws Exception;
+    public CommitteeMeeting addEndorsedRenewals(Session sess) throws Exception;
+    public CommitteeMeeting addMemberToMeeting(Session sess) throws Exception;
+    public CommitteeMeeting removeMemberFromMeeting(Session sess) throws Exception;
+    public List<Person> getAttendants();
+    public List<Application> getApplications();
+    public MinuteComment addMinuteComment(Session sess, String comment) throws Exception;
 }
