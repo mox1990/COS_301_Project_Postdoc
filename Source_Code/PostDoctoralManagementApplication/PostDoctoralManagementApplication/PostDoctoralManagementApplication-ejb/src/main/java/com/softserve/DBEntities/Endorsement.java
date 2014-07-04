@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Endorsement.findAll", query = "SELECT e FROM Endorsement e"),
     @NamedQuery(name = "Endorsement.findByEndorsementID", query = "SELECT e FROM Endorsement e WHERE e.endorsementID = :endorsementID"),
     @NamedQuery(name = "Endorsement.findByTimestamp", query = "SELECT e FROM Endorsement e WHERE e.timestamp = :timestamp"),
+    @NamedQuery(name = "Endorsement.findByTimestampBetweenRange", query = "SELECT e FROM Endorsement e WHERE e.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "Endorsement.findByRank", query = "SELECT e FROM Endorsement e WHERE e.rank = :rank")})
 public class Endorsement implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MinuteComment.findAll", query = "SELECT m FROM MinuteComment m"),
     @NamedQuery(name = "MinuteComment.findByCommentID", query = "SELECT m FROM MinuteComment m WHERE m.commentID = :commentID"),
     @NamedQuery(name = "MinuteComment.findByTimestamp", query = "SELECT m FROM MinuteComment m WHERE m.timestamp = :timestamp"),
+    @NamedQuery(name = "MinuteComment.findByTimestampBetweenRange", query = "SELECT m FROM MinuteComment m WHERE m.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "MinuteComment.findByComment", query = "SELECT m FROM MinuteComment m WHERE m.comment = :comment")})
 public class MinuteComment implements Serializable {
     private static final long serialVersionUID = 1L;

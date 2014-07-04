@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Notification.findByNotificationID", query = "SELECT n FROM Notification n WHERE n.notificationID = :notificationID"),
     @NamedQuery(name = "Notification.findBySubject", query = "SELECT n FROM Notification n WHERE n.subject = :subject"),
     @NamedQuery(name = "Notification.findByTimestamp", query = "SELECT n FROM Notification n WHERE n.timestamp = :timestamp"),
-    @NamedQuery(name = "Notification.findBetweenRange", query = "SELECT a FROM AuditLog a WHERE a.timestamp BETWEEN :start AND :end")})
+    @NamedQuery(name = "Notification.findBetweenRange", query = "SELECT n FROM Notification n WHERE n.timestamp BETWEEN :start AND :end")})
 
 public class Notification implements Serializable {
     private static final long serialVersionUID = 1L;

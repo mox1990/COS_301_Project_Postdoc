@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FundingReport.findAll", query = "SELECT f FROM FundingReport f"),
     @NamedQuery(name = "FundingReport.findByReportID", query = "SELECT f FROM FundingReport f WHERE f.reportID = :reportID"),
     @NamedQuery(name = "FundingReport.findByTimestamp", query = "SELECT f FROM FundingReport f WHERE f.timestamp = :timestamp"),
+    @NamedQuery(name = "FundingReport.findByTimestampBetweenRange", query = "SELECT f FROM FundingReport f WHERE f.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "FundingReport.findByFellowshipCost", query = "SELECT f FROM FundingReport f WHERE f.fellowshipCost = :fellowshipCost"),
     @NamedQuery(name = "FundingReport.findByTravelCost", query = "SELECT f FROM FundingReport f WHERE f.travelCost = :travelCost"),
     @NamedQuery(name = "FundingReport.findByRunningCost", query = "SELECT f FROM FundingReport f WHERE f.runningCost = :runningCost"),

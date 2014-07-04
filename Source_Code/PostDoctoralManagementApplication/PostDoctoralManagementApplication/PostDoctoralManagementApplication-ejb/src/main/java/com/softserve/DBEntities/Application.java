@@ -45,9 +45,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByType", query = "SELECT a FROM Application a WHERE a.type = :type"),
     @NamedQuery(name = "Application.findByStatus", query = "SELECT a FROM Application a WHERE a.status = :status"),
     @NamedQuery(name = "Application.findByTimestamp", query = "SELECT a FROM Application a WHERE a.timestamp = :timestamp"),
+    @NamedQuery(name = "Application.findByTimestampBetweenRange", query = "SELECT a FROM Application a WHERE a.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByAwardDate", query = "SELECT a FROM Application a WHERE a.awardDate = :awardDate"),
+    @NamedQuery(name = "Application.findByAwardDateBetweenRange", query = "SELECT a FROM Application a WHERE a.awardDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByStartDate", query = "SELECT a FROM Application a WHERE a.startDate = :startDate"),
+    @NamedQuery(name = "Application.findByStartDateBetweenRange", query = "SELECT a FROM Application a WHERE a.startDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
+    @NamedQuery(name = "Application.findByEndDateBetweenRange", query = "SELECT a FROM Application a WHERE a.endDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByProjectTitle", query = "SELECT a FROM Application a WHERE a.projectTitle = :projectTitle")})
 public class Application implements Serializable {
     private static final long serialVersionUID = 1L;

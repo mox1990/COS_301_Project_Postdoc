@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "RecommendationReport.findAll", query = "SELECT r FROM RecommendationReport r"),
     @NamedQuery(name = "RecommendationReport.findByReportID", query = "SELECT r FROM RecommendationReport r WHERE r.reportID = :reportID"),
-    @NamedQuery(name = "RecommendationReport.findByTimestamp", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp = :timestamp")})
+    @NamedQuery(name = "RecommendationReport.findByTimestamp", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp = :timestamp"),
+    @NamedQuery(name = "RecommendationReport.findByTimestampBetweenRange", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp BETWEEN :start AND :end")})
 public class RecommendationReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ProgressReport.findAll", query = "SELECT p FROM ProgressReport p"),
     @NamedQuery(name = "ProgressReport.findByReportID", query = "SELECT p FROM ProgressReport p WHERE p.reportID = :reportID"),
-    @NamedQuery(name = "ProgressReport.findByTimestamp", query = "SELECT p FROM ProgressReport p WHERE p.timestamp = :timestamp")})
+    @NamedQuery(name = "ProgressReport.findByTimestamp", query = "SELECT p FROM ProgressReport p WHERE p.timestamp = :timestamp"),
+    @NamedQuery(name = "ProgressReport.findByTimestampBetweenRange", query = "SELECT p FROM ProgressReport p WHERE p.timestamp BETWEEN :start AND :end")})
 public class ProgressReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
