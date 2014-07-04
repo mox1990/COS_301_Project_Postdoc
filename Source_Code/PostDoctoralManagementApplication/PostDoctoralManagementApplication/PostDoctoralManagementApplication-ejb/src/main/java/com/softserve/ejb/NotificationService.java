@@ -6,9 +6,12 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.AuditLogJpaController;
+import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.Stateless;
@@ -22,7 +25,9 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
 /**
  * This EJB handles the notification services
@@ -31,10 +36,16 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not
-    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManager em;
+    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
     
-    public void sendNotification(NotificationRequest nRequest) throws MessagingException
+    protected NotificationJpaController getNotificationDAO()
+    {
+        return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    @Override
+    public void sendNotification(NotificationRequest nRequest) throws Exception
     {
         switch(nRequest.nType)
         {
@@ -52,6 +63,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         }
     }
     
+    @Override
     public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException
     {
         final String username = "iterativeKak@gmail.com";
@@ -66,6 +78,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         Session session = Session.getInstance(props,
           new javax.mail.Authenticator() 
           {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() 
             {
                     return new PasswordAuthentication(username, password);
@@ -90,7 +103,21 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         
     }
     
-    public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender)
+    @Override
+    public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception
+    {
+        List<Notification> notifications = new ArrayList<>();
+        
+        for(Person recipient: recipients)
+        {
+            notifications.add(sendSystemNotification(message, subject, recipient, sender));
+        }
+        
+        return notifications;
+    }
+    
+    @Override
+    public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception
     {
         Notification notification = new Notification();
         
@@ -98,34 +125,38 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         notification.setSenderID(sender);
         notification.setMessage(message);
         
-        em.persist(notification);
+        getNotificationDAO().create(notification);
         
         return notification;
     }
     
+    @Override
     public List<Notification> findAll()
     {
-        return em.createNamedQuery("Notification.findAll", Notification.class).getResultList();
+        return emf.createEntityManager().createNamedQuery("Notification.findAll", Notification.class).getResultList();
     }
     
+    @Override
     public List<Notification> findByNotificationID(Long nID)
     {
-        return em.createNamedQuery("Notification.findByNotificationID", Notification.class).setParameter("entryID", nID).getResultList();
+        return emf.createEntityManager().createNamedQuery("Notification.findByNotificationID", Notification.class).setParameter("entryID", nID).getResultList();
     }
     
+    @Override
     public List<Notification> findBySubject(String subject)
     {
-        return em.createNamedQuery("Notification.findBySubject", Notification.class).setParameter("subject", subject).getResultList();
+        return emf.createEntityManager().createNamedQuery("Notification.findBySubject", Notification.class).setParameter("subject", subject).getResultList();
     }
     
+    @Override
     public List<Notification> findByTimestamp(Timestamp tStamp)
     {
-        return em.createNamedQuery("Notification.findByTimestamp", Notification.class).setParameter("timestamp", tStamp).getResultList();
+        return emf.createEntityManager().createNamedQuery("Notification.findByTimestamp", Notification.class).setParameter("timestamp", tStamp).getResultList();
     }
     
+    @Override
     public List<Notification> findBetweenRange(Timestamp start, Timestamp end)
     {
-        // TODO: create the new namedQuery
-        return em.createNamedQuery("Notification.findByTimestamp", Notification.class).setParameter("timestamp", start).getResultList();
+        return emf.createEntityManager().createNamedQuery("Notification.findBetweenRange", Notification.class).setParameter("start", start).setParameter("end", start).getResultList();
     }
 }
