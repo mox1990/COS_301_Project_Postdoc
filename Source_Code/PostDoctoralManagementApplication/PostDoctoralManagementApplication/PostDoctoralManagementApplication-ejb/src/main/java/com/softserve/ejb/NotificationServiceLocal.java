@@ -20,10 +20,10 @@ import javax.mail.MessagingException;
  */
 @Local
 public interface NotificationServiceLocal {
-    public void sendNotification(NotificationRequest nRequest) throws Exception; // TODO: Consider deleting this method...
-    public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception;
-    public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception;
-    public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException;
+    public void sendNotification(Notification notification, boolean sendEmail) throws Exception; // TODO: Consider deleting this method...
+    //public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception;
+    //public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception;
+    //public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException;
     public List<Notification> findAll();
     public List<Notification> findByNotificationID(Long nID);
     public List<Notification> findBySubject(String subject);

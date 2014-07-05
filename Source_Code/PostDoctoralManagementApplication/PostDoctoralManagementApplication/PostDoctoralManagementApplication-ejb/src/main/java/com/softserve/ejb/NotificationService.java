@@ -6,12 +6,9 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.AuditLogJpaController;
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.Stateless;
@@ -21,12 +18,9 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
 /**
@@ -36,6 +30,7 @@ import javax.persistence.PersistenceUnit;
  */
 @Stateless
 public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not
+    
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
@@ -45,6 +40,59 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     }
     
     @Override
+    public void sendNotification(Notification notification, boolean sendEmail) throws Exception
+    {   
+        NotificationJpaController notificationJpaController = getNotificationDAO();
+        //Send system notification
+        notificationJpaController.create(notification);
+        
+        if(sendEmail)
+        {
+            try
+            {
+                sendEmail(notification);
+            }
+            catch(MessagingException ex)
+            {
+                notificationJpaController.destroy(notification.getNotificationID());
+                throw ex;
+            }
+        }
+    }
+    
+    protected void sendEmail(Notification notification) throws MessagingException
+    {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true"); 
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+          new javax.mail.Authenticator() 
+          {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() 
+            {
+                    return new PasswordAuthentication(com.softserve.constants.SystemConstants.MAIL_USERNAME, com.softserve.constants.SystemConstants.MAIL_PASSWORD);
+            }
+          });
+
+        Address[] addresses = new Address[1];
+        addresses[0] = new InternetAddress(notification.getRecieverID().getEmail());
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(notification.getSenderID().getEmail()));
+        message.setSubject(notification.getSubject());
+        message.setRecipients(Message.RecipientType.TO, addresses);
+        message.setText(notification.getMessage());
+
+        Transport.send(message);        
+    }
+    
+    //Note this function is not percisly to the spec. It should be that a notification sends a notification plus an email or not
+    //Also the notification entity renders the notification request class a bit useless. 
+    /*@Override
     public void sendNotification(NotificationRequest nRequest) throws Exception
     {
         switch(nRequest.nType)
@@ -61,8 +109,21 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
             default:
                 throw new MessagingException("Cannot construct such a notification.");
         }
-    }
+    }*/
     
+    
+    
+    //This is unessary modularity
+    /*
+    private void sendSystemNotification(Notification notification) throws Exception
+    {           
+        getNotificationDAO().create(notification);
+        
+    }*/
+    
+    //Use the notification object it will work better and plus it already contains the data
+    //The service shouldn't provide multi recipient ids since one notification represents only one email
+    /*
     @Override
     public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException
     {
@@ -101,8 +162,12 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
 
         Transport.send(message);
         
-    }
+    }*/
     
+    
+    
+    //Not part of specification. Remember this EJB is to carry out the business logic not create the entities required for the business logic thats the managed beans job
+    /*
     @Override
     public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception
     {
@@ -114,21 +179,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         }
         
         return notifications;
-    }
+    }*/
     
-    @Override
-    public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception
-    {
-        Notification notification = new Notification();
-        
-        notification.setRecieverID(recipient);
-        notification.setSenderID(sender);
-        notification.setMessage(message);
-        
-        getNotificationDAO().create(notification);
-        
-        return notification;
-    }
+   
+    
     
     @Override
     public List<Notification> findAll()
