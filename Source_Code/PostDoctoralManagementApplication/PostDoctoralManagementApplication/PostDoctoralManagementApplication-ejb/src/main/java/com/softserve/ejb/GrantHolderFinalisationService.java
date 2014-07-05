@@ -54,6 +54,21 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected DBEntitiesFactory getDBEntitiesFactory()
+    {
+        return new DBEntitiesFactory();
+    }
+    
+    protected NotificationService getNotificationServiceEJB()
+    {
+        return new NotificationService();
+    }
+    
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return new AuditTrailService();
+    }
+    
     private boolean hasCV(Session session)
     {
         return (session.getUser().getCvList().size() != 0);
@@ -120,24 +135,20 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
-        
+        //Finalise application
+        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);        
         applicationJpaController.edit(application);
         
-        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
-        
-        //Log action
-        AuditTrailService auditTrailService = new AuditTrailService();
-        
+        //Log action      
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
-        //Send notification to HOD
-        NotificationService notificationService = new NotificationService();
-        
+        //Send notification to HOD        
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), null, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ".");
-        
         notificationService.sendNotification(notification, true);
         
     }

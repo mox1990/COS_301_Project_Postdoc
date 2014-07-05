@@ -46,12 +46,28 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         return new RecommendationReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected DBEntitiesFactory getDBEntitiesFactory()
+    {
+        return new DBEntitiesFactory();
+    }
+    
+    protected NotificationService getNotificationServiceEJB()
+    {
+        return new NotificationService();
+    }
+    
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return new AuditTrailService();
+    }
+    
     /**
      *This function loads all the applications that need to approved/declined by the 
      * specified HOD
      * @param session The session object used to authenticate the user
      * @return A list of all the applications that user can Approved/declined
      */
+    @Override
     public List<Application> loadPendingApplications(Session session)
     {
         //AuthenticUser(session, list of privliges)
@@ -66,22 +82,19 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-        
+        //Deny application
+        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);        
         applicationJpaController.edit(application);
         
-        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
-        
-        //Log action
-        AuditTrailService auditTrailService = new AuditTrailService();
-        
+        //Log action  
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
         //Send notification to grant holder and applicatantD
-        NotificationService notificationService = new NotificationService();
-        
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
         notificationService.sendNotification(notification, true);
         
@@ -94,22 +107,19 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
-        
+        //Ammend application
+        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);        
         applicationJpaController.edit(application);
         
-        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
-        
-        //Log action
-        AuditTrailService auditTrailService = new AuditTrailService();
-        
+        //Log action        
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
-        //Send notification to grant holder and applicatantD
-        NotificationService notificationService = new NotificationService();
-        
+        //Send notification to grant holder and applicatantD        
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
         notificationService.sendNotification(notification, true);
         
@@ -123,6 +133,9 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         RecommendationReportJpaController recommendationReportJpaController = getRecommmendationReportDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         recommendationReportJpaController.create(recommendationReport);
         
@@ -140,17 +153,12 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
             throw ex;
         }
         
-        
-        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
-        
         //Log action
-        AuditTrailService auditTrailService = new AuditTrailService();
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
         //Send notification to Deans office
-        NotificationService notificationService = new NotificationService();
         
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application was approved by " + session.getUser().getCompleteName() + ". Please review for endorsement.");
         notificationService.sendNotification(notification, true);
