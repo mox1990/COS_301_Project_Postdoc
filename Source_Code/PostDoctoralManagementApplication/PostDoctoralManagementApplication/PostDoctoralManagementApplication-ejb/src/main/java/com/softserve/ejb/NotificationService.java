@@ -9,9 +9,12 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -29,7 +32,8 @@ import javax.persistence.PersistenceUnit;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
-public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not
+@TransactionManagement(TransactionManagementType.BEAN)
+public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not <- should be local
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
@@ -43,7 +47,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     public void sendNotification(Notification notification, boolean sendEmail) throws Exception
     {   
         NotificationJpaController notificationJpaController = getNotificationDAO();
-        //Send system notification
+        
+        //Set as current time
+        notification.setTimestamp(new Timestamp(new Date().getTime()));
+        //Send system notification        
         notificationJpaController.create(notification);
         
         if(sendEmail)

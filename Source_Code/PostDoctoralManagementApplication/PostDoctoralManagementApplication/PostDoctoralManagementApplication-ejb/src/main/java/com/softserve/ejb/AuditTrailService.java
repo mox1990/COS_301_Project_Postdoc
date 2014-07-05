@@ -8,11 +8,12 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.AuditLogJpaController;
 import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Person;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -21,6 +22,7 @@ import javax.persistence.PersistenceUnit;
  * @author K
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class AuditTrailService implements AuditTrailServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
@@ -31,18 +33,13 @@ public class AuditTrailService implements AuditTrailServiceLocal {
         return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    //Just changed it so that it recieves the auditLog object not creates which should be hanadled by the calling function
     @Override
-    public AuditLog logAction(Person user, String action) throws Exception
-    {
-        AuditLog aLog = new AuditLog();
-        aLog.setAction(action);
-        aLog.setPersonID(user);
+    public void logAction(AuditLog auditLog) throws Exception
+    {        
+        auditLog.setTimestamp(new Timestamp(new Date().getTime()));
         
-        aLog.setTimestamp(new Timestamp(new Date().getTime()));
-        
-        getAuditLogDAO().create(aLog);
-        
-        return aLog;
+        getAuditLogDAO().create(auditLog);
     }
     
     @Override

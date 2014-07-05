@@ -172,9 +172,10 @@ Date,Time,Comment,Member
 "Tuesday, July 1, 2014",,Updated sql. Refactored some code. rgenerated some unit tests for entites. Added Grantholder and HOD approval services and complete there initial implenetation,Mathys
 "Wednesday, July 2, 2014",,Added and completed the initial implentation of the Dean endorsement and DRIS approval services. Intial back end implenetation according to work schedule complete,Mathys
 "Wednesday, July 2, 2014",,Updated sql and added some constants. Refactored some of the packages to make a more unified folder structure. Completed application unit test,Mathys
-"Thursday, July 3, 2014",,,
-"Friday, July 4, 2014",,,
-"Saturday, July 5, 2014",,,
+"Thursday, July 3, 2014",,Added some unit tests for the entities,Mathys
+"Friday, July 4, 2014",,Added scrum reports. Completed entities unit tests,Mathys
+"Saturday, July 5, 2014",,Found some inconsistencies in notification service implementation and specifications. Refactored code. Review code for reasons,Mathys
+"Saturday, July 5, 2014",,Started integrating audit log and notification services with already existing services,Mathys
 "Sunday, July 6, 2014",,,
 "Monday, July 7, 2014",,,
 "Tuesday, July 8, 2014",,,

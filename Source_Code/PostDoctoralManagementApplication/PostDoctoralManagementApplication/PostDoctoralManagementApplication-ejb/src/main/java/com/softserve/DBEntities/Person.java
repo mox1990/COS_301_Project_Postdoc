@@ -245,6 +245,11 @@ public class Person implements Serializable {
     public void setUpEmployee(boolean upEmployee) {
         this.upEmployee = upEmployee;
     }
+    
+    public String getCompleteName()
+    {
+        return getTitle() + ". " + getFullName() + " " + getSurname();
+    }
 
     @XmlTransient
     public List<CommitteeMeeting> getCommitteeMeetingList() {

@@ -12,7 +12,10 @@ import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -68,9 +71,22 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         
         applicationJpaController.edit(application);
         
-        //Log action
+        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
         
-        //Send notification to grant holder and applicatant
+        //Log action
+        AuditTrailService auditTrailService = new AuditTrailService();
+        
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+        
+        //Send notification to grant holder and applicatantD
+        NotificationService notificationService = new NotificationService();
+        
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
+        
+        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
     }
     
     public void ammendAppliction(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
@@ -83,9 +99,22 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         
         applicationJpaController.edit(application);
         
-        //Log action
+        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
         
-        //Send notification to grant holder and applicatant
+        //Log action
+        AuditTrailService auditTrailService = new AuditTrailService();
+        
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+        
+        //Send notification to grant holder and applicatantD
+        NotificationService notificationService = new NotificationService();
+        
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
+        
+        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
     }
     
     public void approveApplication(Session session, Application application, RecommendationReport recommendationReport) throws NonexistentEntityException, RollbackFailureException, Exception
@@ -110,9 +139,20 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
             recommendationReportJpaController.destroy(recommendationReport.getReportID());
             throw ex;
         }
-                
+        
+        
+        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
+        
         //Log action
+        AuditTrailService auditTrailService = new AuditTrailService();
+        
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
         
         //Send notification to Deans office
+        NotificationService notificationService = new NotificationService();
+        
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application was approved by " + session.getUser().getCompleteName() + ". Please review for endorsement.");
+        notificationService.sendNotification(notification, true);
     }
 }

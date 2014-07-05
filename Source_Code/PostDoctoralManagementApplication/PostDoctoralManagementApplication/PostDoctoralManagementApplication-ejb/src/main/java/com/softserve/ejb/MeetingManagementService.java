@@ -179,7 +179,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public MinuteComment addMinuteComment(Session sess, String comment) throws Exception
     {
-        aLog.logAction(sess.getUser(), comment);
+        //aLog.logAction(sess.getUser(), comment);
         
         MinuteComment min = new MinuteComment(null, new Timestamp(new Date().getTime()), comment);
         min.setAttendeeID(sess.getUser());

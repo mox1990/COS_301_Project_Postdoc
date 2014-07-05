@@ -13,10 +13,14 @@ import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.Exceptions.CVAlreadExistsException;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -121,9 +125,21 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         applicationJpaController.edit(application);
         
-        //Log action
+        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
         
-        //Send notification to appropriate HOD        
+        //Log action
+        AuditTrailService auditTrailService = new AuditTrailService();
+        
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+        
+        //Send notification to HOD
+        NotificationService notificationService = new NotificationService();
+        
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), null, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ".");
+        
+        notificationService.sendNotification(notification, true);
+        
     }
         
 }

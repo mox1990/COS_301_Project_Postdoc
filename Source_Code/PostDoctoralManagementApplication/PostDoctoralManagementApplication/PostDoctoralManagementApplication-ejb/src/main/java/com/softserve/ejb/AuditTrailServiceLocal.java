@@ -18,7 +18,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface AuditTrailServiceLocal {
-    public AuditLog logAction(Person user, String action) throws Exception;
+    public void logAction(AuditLog auditLog) throws Exception;
     public List<AuditLog> findAll();
     public List<AuditLog> findByTimestamp(Timestamp tStamp);
     public List<AuditLog> findBetweenRange(Timestamp start, Timestamp end);
