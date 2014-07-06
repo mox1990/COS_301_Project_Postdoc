@@ -14,6 +14,7 @@ import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.MinuteComment;
 import com.softserve.DBEntities.Person;
 import com.softserve.constants.PersistenceConstants;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -35,9 +36,6 @@ import javax.persistence.PersistenceUnit;
 public class MeetingManagementService implements MeetingManagementServiceLocal {
     private CommitteeMeeting cMeeting = new CommitteeMeeting();
     
-    @EJB
-    private AuditTrailService aLog;
-    
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
@@ -55,6 +53,21 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     protected MinuteCommentJpaController getMinuteCommentDAO()
     {
         return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected DBEntitiesFactory getDBEntitiesFactory()
+    {
+        return new DBEntitiesFactory();
+    }
+    
+    protected NotificationService getNotificationServiceEJB()
+    {
+        return new NotificationService();
+    }
+    
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return new AuditTrailService();
     }
     
     @Override

@@ -12,8 +12,13 @@ import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Person;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -43,6 +48,21 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new EndorsementJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected DBEntitiesFactory getDBEntitiesFactory()
+    {
+        return new DBEntitiesFactory();
+    }
+    
+    protected NotificationService getNotificationServiceEJB()
+    {
+        return new NotificationService();
+    }
+    
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return new AuditTrailService();
+    }
+    
     public List<Application> loadPendingApplications(Session session)
     {
         //AuthenticUser(session, list of privliges)
@@ -57,14 +77,23 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-        
         applicationJpaController.edit(application);
         
-        //Log action
-        
-        //Send notification to grant holder and applicatant
+        //Log action  
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+
+        //Send notification to grant holder and applicatantD
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
+
+        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
     }
     
     public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws RollbackFailureException, NonexistentEntityException, Exception
@@ -73,6 +102,9 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         EndorsementJpaController endorsementJpaController = getEndorsementDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         endorsementJpaController.create(endorsementReport);
         
@@ -90,8 +122,19 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
             throw ex;
         }
         
-        //Log action
-        
+        //Log action  
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+
         //Send notification to DRIS member(s)
+        List<Person> DRISMembers = applicationJpaController.findAllDRISMembersWhoCanApproveApplication(application);
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        for(Person p : DRISMembers)
+        {
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Application endorsed", "The following application has been endorsed by " + session.getUser().getCompleteName() + ". Please review for eligbility."));
+        }
+        notificationService.sendBatchNotifications(notifications, true);
+        
+        
     }
 }
