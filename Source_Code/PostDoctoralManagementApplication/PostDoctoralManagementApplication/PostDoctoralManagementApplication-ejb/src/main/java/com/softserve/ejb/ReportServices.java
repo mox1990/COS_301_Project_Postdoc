@@ -14,9 +14,11 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBEntities.Application;
 
 import com.softserve.system.Session;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -46,44 +48,92 @@ public class ReportServices implements ReportServicesLocal {
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
-    private List<Class<?>> entities = new ArrayList<>();
-    
-    public void addClassToReport(Class<?> entity)
-    {
-        if(!entities.contains(entity))
-            entities.add(entity);
-    }
-    
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
-    public ByteArrayOutputStream exportSpreadsheetReport(Timestamp start, Timestamp end)
+    public ByteArrayOutputStream exportApplicationSpreadsheetReport(Timestamp start, Timestamp end) throws IOException
     {
         // TODO: Write code with a clear head
-        /*Workbook workbook = new XSSFWorkbook();
-         
-        for(Class<?> entity: entities)
-        {
-            Sheet sheet = workbook.createSheet(entity.getCanonicalName());
 
-            List<?> items = em.createNamedQuery(entity.getCanonicalName() + ".findByTimestamp", entity).setParameter("timestamp", start).getResultList();
-            int rIndex = 0;
-            
-            for(Object item: items)
-            {
-                Row row = sheet.createRow(rIndex++);
-                int cIndex = 0;
-                
-                Cell cell0 = row.createCell(cIndex++);
-                cell0.setCellValue(item.getName());
-                Cell cell1 = row.createCell(cIndex++);
-                cell1.setCellValue(item.getShortCode());
-            }            
-        }*/
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet applicationSheet = workbook.createSheet("Application");
         
-        return null;
+        List<String> sheetNames = new ArrayList<>(); // For embedded table
+        List<List<Long>> embeddedIds = new ArrayList<>(); // purposes.
+        
+        EntityManager em = emf.createEntityManager();
+        
+        // Setup headers
+        setupSheetHeaders(applicationSheet, Application.class);
+        
+        // Enter data...
+        int rIndex = 1; // Adding values from the second row onwards.
+        List<Application> applications = em.createNamedQuery("Application.findByTimestampBetweenRange", Application.class).setParameter("start", start).setParameter("end", end).getResultList(); // Need to get this more generic
+        for(Application application: applications)
+        {
+            Row row = applicationSheet.createRow(rIndex++);
+            addEntityToWorksheetRow(row, application, sheetNames, embeddedIds, workbook);
+        }   
+        
+        // TODO: Make calls to export embedded tables...
+        workbook.write(baos);
+        return baos;   
+    }
+    
+    private void setupSheetHeaders(Sheet sheet, Class<?> entity)
+    {
+        Field[] fields = entity.getDeclaredFields();
+        Row row = sheet.createRow(0);
+        int cIndex = 0;
+        
+        for(Field field: fields)
+        {
+            Cell cell = row.createCell(cIndex++);
+            cell.setCellValue(field.getName());
+        }
+    }
+    
+    private void addEntityToWorksheetRow(Row row, Object entity, List<String> sheetNames, List<List<Long>> ids, Workbook workbook)
+    {
+        int cIndex = 0;
+        Field[] fields = entity.getClass().getDeclaredFields();
+        
+        for(Field field: fields)
+        {
+            try 
+            {
+                Cell cell = row.createCell(cIndex++);
+                
+                // Doing this for other tables generation...
+                String attrib = field.get(entity).getClass().getCanonicalName();
+                String value = field.get(entity).toString();
+                
+                if(value.contains("com.softserve.DBEntities."))
+                {
+                    value = value.substring(value.indexOf("="), value.indexOf("]"));
+                    if(sheetNames.contains(attrib))
+                    {
+                        ids.get(sheetNames.indexOf(attrib)).add(Long.parseLong(value));
+                    }
+                    else
+                    {
+                        sheetNames.add(attrib.getClass().getCanonicalName());
+                        ids.get(sheetNames.indexOf(attrib)).add(Long.parseLong(value));
+                    }
+                }
+                // What is basically required...
+                cell.setCellValue(value);
+            } 
+            catch (IllegalArgumentException | IllegalAccessException ex) 
+            {
+                Cell cell = row.createCell(cIndex++);
+                cell.setCellValue(" ");
+                Logger.getLogger(ExportApplicationServices.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public ByteArrayOutputStream exportPDFReport(Timestamp start, Timestamp end) throws DocumentException
@@ -97,24 +147,19 @@ public class ReportServices implements ReportServicesLocal {
         doc.add(new Paragraph("Created on: " + new java.util.Date()));
         // TODO: Might wanna add more information about who is creating the report
         
-        for(Class<?> entity: entities)
-        {
-            System.out.println("Type: " + entity.getCanonicalName());
-            PdfPTable table = setupTable(entity);
-            
-            List<?> items = em.createNamedQuery(entity.getCanonicalName() + ".findByTimestamp", entity).setParameter("timestamp", start).getResultList();
-            
-            for(Object item: items)
-            {
-                table = addItemToTable(table, item);
-            }
-            doc.add(table);
+        
+        PdfPTable applicationTable = setupTable(Application.class);
+
+        List<Application> entities = em.createNamedQuery("Application.findByTimestampBetweenRange", Application.class).setParameter("start", start).setParameter("end", end).getResultList();
+
+        for(Application entity: entities)
+        {            
+            applicationTable = addEntityToTable(applicationTable, entity);
         }
+        doc.add(applicationTable);
         
         doc.close();
         docWriter.close();
-        
-        entities = new ArrayList<>();
         
         return baosPDF;
     }
@@ -137,7 +182,7 @@ public class ReportServices implements ReportServicesLocal {
         return table;
     }
     
-    private PdfPTable addItemToTable(PdfPTable table, Object entity)
+    private PdfPTable addEntityToTable(PdfPTable table, Object entity)
     {
         Field[] fields = entity.getClass().getDeclaredFields();
         
