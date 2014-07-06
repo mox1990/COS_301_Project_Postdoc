@@ -14,9 +14,11 @@ import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -159,8 +161,12 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         auditTrailService.logAction(auditLog);
         
         //Send notification to Deans office
-        
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application was approved by " + session.getUser().getCompleteName() + ". Please review for endorsement.");
-        notificationService.sendNotification(notification, true);
+        List<Person> DeansOfficeMembers = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        for(Person p : DeansOfficeMembers)
+        {
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+        }
+        notificationService.sendBatchNotifications(notifications, true);
     }
 }

@@ -14,8 +14,12 @@ import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.FundingReport;
+import com.softserve.DBEntities.Notification;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -45,6 +49,21 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     protected FundingReportJpaController getFundingReportDAO()
     {
         return new FundingReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected DBEntitiesFactory getDBEntitiesFactory()
+    {
+        return new DBEntitiesFactory();
+    }
+    
+    protected NotificationService getNotificationServiceEJB()
+    {
+        return new NotificationService();
+    }
+    
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return new AuditTrailService();
     }
     
     /**
@@ -121,6 +140,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         Date dobDate = application.getFellow().getCvList().get(0).getDateOfBirth();
         GregorianCalendar curCal = new GregorianCalendar();
@@ -131,20 +153,28 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
         {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
-            
             applicationJpaController.edit(application);
             
-            //Log action
+            //Log action  
+            AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application made eligible" + application.getApplicationID(), session.getUser());
+            auditTrailService.logAction(auditLog);
         }
         else
         {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-            
             applicationJpaController.edit(application);
             
-            //Log action
-            
-            //Send notification with reason to grant holder and applicant
+            //Log action  
+            AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+            auditTrailService.logAction(auditLog);
+        
+            //Send notification to grant holder and applicatantD
+            String reason = "Prospective fellow does not meet the eligiblity requirement";
+            Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            notificationService.sendNotification(notification, true);
+        
+            notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            notificationService.sendNotification(notification, true);
         }
     }
     
@@ -153,22 +183,34 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-        
         applicationJpaController.edit(application);
         
-        //Log action
-        
-        //Send notification to grant holder and applicatant
+        //Log action  
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+
+        //Send notification to grant holder and applicatantD
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
+
+        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notificationService.sendNotification(notification, true);
     }
     
-    public void approveFunding(Session session, Application application, FundingReport fundingReport, String cscMesssage, String finaceMessage) throws RollbackFailureException, Exception
+    public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, String cscMesssage, String finaceMessage) throws RollbackFailureException, Exception
     {
         //AuthenticUser(session, list of privliges)
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         FundingReportJpaController fundingReportJpaController = getFundingReportDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         fundingReportJpaController.create(fundingReport);
         
@@ -186,8 +228,19 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             throw ex;
         }
                 
-        //Log action
-        
+        //Log action  
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
+        auditTrailService.logAction(auditLog);
+
         //Send notification to CSC, Finance, grant holder and applicatant
+        ArrayList<Notification> notifications = new ArrayList<Notification>();        
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
+        //CSC and finance person
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + cscMesssage));
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + finaceMessage));
+        notificationService.sendBatchNotifications(notifications, true);
+        
+        
     }
 }

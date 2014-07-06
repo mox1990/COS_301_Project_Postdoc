@@ -487,4 +487,28 @@ public class ApplicationJpaController implements Serializable {
         return q.getResultList();
     }
     
+    public List<Person> findAllHODsWhoCanRecommendApplication(Application application)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.locationID = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolderID().getLocationID()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD);
+        return q.getResultList();
+    }
+    
+    public List<Person> findAllDeansOfficeMembersWhoCanEndorseApplication(Application application)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.locationID.faculty = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolderID().getLocationID().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER);
+        return q.getResultList();
+    }
+    
+    public List<Person> findAllDRISMembersWhoCanApproveApplication(Application application)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.securityRoleList.roleID = :secRole", Person.class).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER);
+        return q.getResultList();
+    }
+    
 }

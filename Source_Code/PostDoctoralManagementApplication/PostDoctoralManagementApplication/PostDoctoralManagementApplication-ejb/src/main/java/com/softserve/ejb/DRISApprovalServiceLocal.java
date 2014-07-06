@@ -25,5 +25,5 @@ public interface DRISApprovalServiceLocal {
     public List<Application> loadPendingEligibleApplications(Session session);
     public void checkApplicationForEligiblity(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception;
     public void denyFunding(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception;
-    public void approveFunding(Session session, Application application, FundingReport fundingReport, String cscMesssage, String finaceMessage) throws RollbackFailureException, Exception;
+    public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, String cscMesssage, String finaceMessage) throws RollbackFailureException, Exception;
 }

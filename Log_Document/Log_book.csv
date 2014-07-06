@@ -174,9 +174,11 @@ Date,Time,Comment,Member
 "Wednesday, July 2, 2014",,Updated sql and added some constants. Refactored some of the packages to make a more unified folder structure. Completed application unit test,Mathys
 "Thursday, July 3, 2014",,Added some unit tests for the entities,Mathys
 "Friday, July 4, 2014",,Added scrum reports. Completed entities unit tests,Mathys
-"Saturday, July 5, 2014",,Found some inconsistencies in notification service implementation and specifications. Refactored code. Review code for reasons,Mathys
+"Saturday, July 5, 2014",,Found some inconsistencies in audittrail notification service implementation and specifications. Refactored code. Review code for reasons,Mathys
 "Saturday, July 5, 2014",,Started integrating audit log and notification services with already existing services,Mathys
-"Sunday, July 6, 2014",,,
+"Saturday, July 5, 2014",,Requested to help complete one of Carlos work units. Given Application Progress viewer,Mathys Carlo
+"Sunday, July 6, 2014",,"Completed the audit log and notification service integration into DRIS HOD, Dean and grant holder approval services.",Mathys
+"Sunday, July 6, 2014",,Added to person unit test for completeName function. Added batch function for notification services,Mathys
 "Monday, July 7, 2014",,,
 "Tuesday, July 8, 2014",,,
 "Wednesday, July 9, 2014",,,

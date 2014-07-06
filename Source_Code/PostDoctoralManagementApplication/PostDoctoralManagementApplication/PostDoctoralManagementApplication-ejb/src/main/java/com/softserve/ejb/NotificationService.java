@@ -43,6 +43,14 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception
+    {
+        for(Notification n : notifications)
+        {
+            sendNotification(n, sendEmail);
+        }
+    }
+    
     @Override
     public void sendNotification(Notification notification, boolean sendEmail) throws Exception
     {   

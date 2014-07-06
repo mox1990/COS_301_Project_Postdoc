@@ -20,6 +20,7 @@ import com.softserve.DBEntities.Person;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -148,8 +149,13 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         auditTrailService.logAction(auditLog);
         
         //Send notification to HOD        
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), null, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ".");
-        notificationService.sendNotification(notification, true);
+        List<Person> HODs = applicationJpaController.findAllHODsWhoCanRecommendApplication(application);
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        for(Person p : HODs)
+        {
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+        }
+        notificationService.sendBatchNotifications(notifications, true);
         
     }
         
