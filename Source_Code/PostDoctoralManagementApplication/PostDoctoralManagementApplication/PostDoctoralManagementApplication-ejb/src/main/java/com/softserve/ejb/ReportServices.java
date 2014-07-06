@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 
 import com.softserve.system.Session;
@@ -75,12 +76,41 @@ public class ReportServices implements ReportServicesLocal {
         for(Application application: applications)
         {
             Row row = applicationSheet.createRow(rIndex++);
-            addEntityToWorksheetRow(row, application, sheetNames, embeddedIds, workbook);
+            addEntityToWorksheetRow(row, application, sheetNames, embeddedIds);
         }   
         
-        // TODO: Make calls to export embedded tables...
+        for(String entityName: sheetNames)
+        {
+            switch(entityName)
+            {
+                case "Address": // TODO: Are we gonna need to also export all the embedded tables...
+                    populateAddressSheet(workbook.createSheet(entityName), embeddedIds.get(sheetNames.indexOf(entityName)));
+                    break;
+            }
+        }
         workbook.write(baos);
         return baos;   
+    }
+    
+    private void populateAddressSheet(Sheet addressSheet, List<Long> addressIDs)
+    {
+        
+        List<String> sheetNames = new ArrayList<>(); // For embedded table
+        List<List<Long>> embeddedIds = new ArrayList<>(); // purposes.
+        
+        EntityManager em = emf.createEntityManager();
+        
+        // Setup headers
+        setupSheetHeaders(addressSheet, Application.class);
+        
+        // Enter data...
+        int rIndex = 1; // Adding values from the second row onwards.
+        for(Long addressID: addressIDs)
+        {
+            Address address = em.createNamedQuery("Address.findByAddressID", Address.class).setParameter("addressID", addressID).getSingleResult();
+            Row row = addressSheet.createRow(rIndex++);
+            addEntityToWorksheetRow(row, address, sheetNames, embeddedIds);
+        }
     }
     
     private void setupSheetHeaders(Sheet sheet, Class<?> entity)
@@ -96,7 +126,7 @@ public class ReportServices implements ReportServicesLocal {
         }
     }
     
-    private void addEntityToWorksheetRow(Row row, Object entity, List<String> sheetNames, List<List<Long>> ids, Workbook workbook)
+    private void addEntityToWorksheetRow(Row row, Object entity, List<String> sheetNames, List<List<Long>> ids)
     {
         int cIndex = 0;
         Field[] fields = entity.getClass().getDeclaredFields();
