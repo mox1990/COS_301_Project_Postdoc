@@ -98,6 +98,9 @@ public class Person implements Serializable {
     @NotNull
     @Column(name = "_upEmployee")
     private boolean upEmployee;
+    @Basic(optional = false)
+    @Column(name = "_accountStatus")
+    private String accountStatus;
     @ManyToMany(mappedBy = "personList")
     private List<CommitteeMeeting> committeeMeetingList;
     @JoinTable(name = "person_security_role", joinColumns = {
@@ -244,6 +247,14 @@ public class Person implements Serializable {
 
     public void setUpEmployee(boolean upEmployee) {
         this.upEmployee = upEmployee;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
     }
     
     public String getCompleteName()

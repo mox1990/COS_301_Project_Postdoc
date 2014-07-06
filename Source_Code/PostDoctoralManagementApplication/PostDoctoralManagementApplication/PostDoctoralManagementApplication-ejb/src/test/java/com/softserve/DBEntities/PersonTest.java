@@ -180,6 +180,14 @@ public class PersonTest {
         instance.setUpEmployeeInformation(upinfo);
         assertEquals(upinfo, instance.getUpEmployeeInformation());
     }
+    
+    @Test
+    public void testSetAndGetAccountStatus() 
+    {
+        Person instance = new Person();
+        instance.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        assertEquals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE, instance.getAccountStatus());
+    }
 
     @Test
     public void testSetAndGetRecommendationReportList() 

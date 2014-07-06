@@ -39,6 +39,7 @@ CREATE TABLE PERSON (
 	_cellphoneNumber CHAR(20),	
 	_addressLine1 BIGINT UNSIGNED NOT NULL,
 	_upEmployee BOOLEAN NOT NULL,
+	_accountStatus ENUM('active','disabled','dorment'),
 	_locationID BIGINT UNSIGNED,
 	
 	PRIMARY KEY (_systemID),

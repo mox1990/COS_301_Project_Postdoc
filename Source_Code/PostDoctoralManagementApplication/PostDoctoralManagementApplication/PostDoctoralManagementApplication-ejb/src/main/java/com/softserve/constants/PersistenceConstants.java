@@ -33,6 +33,11 @@ public class PersistenceConstants {
     public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 7;
     public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 8;
     
+    //Account status constants
+    public final static String ACCOUNT_STATUS_ACTIVE = "active";
+    public final static String ACCOUNT_STATUS_DISABLED = "disabled";
+    public final static String ACCOUNT_STATUS_DORMENT = "dorment";
+    
     //Application status constants
     public final static String APPLICATION_STATUS_OPEN = "open";
     public final static String APPLICATION_STATUS_DECLINED = "declined";

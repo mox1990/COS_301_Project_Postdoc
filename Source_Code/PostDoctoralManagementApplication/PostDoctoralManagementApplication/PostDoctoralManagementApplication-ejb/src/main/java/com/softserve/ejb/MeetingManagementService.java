@@ -9,9 +9,13 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.DBDAO.MinuteCommentJpaController;
 import com.softserve.DBDAO.PersonJpaController;
+import com.softserve.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.MinuteComment;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.constants.PersistenceConstants;
 import com.softserve.system.DBEntitiesFactory;
@@ -34,7 +38,8 @@ import javax.persistence.PersistenceUnit;
  */
 @Stateful
 public class MeetingManagementService implements MeetingManagementServiceLocal {
-    private CommitteeMeeting cMeeting = new CommitteeMeeting();
+    //All our ejb should be stateless due to the beter reusablity of the ejb
+    //private CommitteeMeeting cMeeting = new CommitteeMeeting();
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
@@ -71,24 +76,110 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     }
     
     @Override
-    public CommitteeMeeting startMeeting(Session sess) throws Exception
+    public void createMeeting(Session session, CommitteeMeeting committeeMeeting, List<Person> attendanceList) throws Exception
     {
-        if(cMeeting.getMeetingID() == null)
+        //AuthenticUser(session, list of privliges)
+        
+        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
+        
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        
+        for(Person p : attendanceList)
         {
-            cMeeting.setStartDate(new Timestamp(new Date().getTime()));
-            
-            cMeeting.setApplicationList(new ArrayList<Application>());
-            cMeeting.setMinuteCommentList(new ArrayList<MinuteComment>());
-            cMeeting.setPersonList(new ArrayList<Person>());
-            
-            cMeeting.getMinuteCommentList().add(addMinuteComment(sess, sess.getUser().getTitle() + " " + sess.getUser().getSurname() + " started meeting."));
-            
-            getCommitteeMeetingDAO().create(cMeeting);
+            committeeMeeting.getPersonList().add(p);
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
         }
-        return cMeeting;
+        
+        committeeMeetingJpaController.create(committeeMeeting);
+        
+        notificationService.sendBatchNotifications(notifications, true);
+        
+        //Log action      
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created a postdoctoral committee meeting", session.getUser());
+        auditTrailService.logAction(auditLog);
     }
     
     @Override
+    public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws NonexistentEntityException, RollbackFailureException, Exception
+    {
+        //AuthenticUser(session, list of privliges)
+        
+        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
+        
+        committeeMeetingJpaController.edit(committeeMeeting);
+        
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        
+        for(Person p : committeeMeeting.getPersonList())
+        {
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
+        }
+        
+        notificationService.sendBatchNotifications(notifications, true);
+        
+        //Log action      
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
+        auditTrailService.logAction(auditLog);
+    }
+    
+    //This is a good idea to allow manual start and end aswell
+    @Override
+    public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
+    {
+        //AuthenticUser(session, list of privliges)
+        
+        committeeMeeting.setStartDate(new Timestamp(new Date().getTime()));
+        getCommitteeMeetingDAO().edit(committeeMeeting);
+    }
+    
+    @Override
+    public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
+    {
+        //AuthenticUser(session, list of privliges)
+        
+        committeeMeeting.setEndDate(new Timestamp(new Date().getTime()));
+        getCommitteeMeetingDAO().edit(committeeMeeting);
+    }
+    
+    //The changes are to make the function more inline with the specification
+    @Override
+    public void addMinuteComment(Session session, MinuteComment minuteComment) throws Exception 
+    {
+        //aLog.logAction(sess.getUser(), comment);
+        
+        minuteComment.setAttendeeID(session.getUser());
+        
+        getMinuteCommentDAO().create(minuteComment);
+        
+        //This is already handled by the DAO
+        //cMeeting.getMinuteCommentList().add(min);
+        //getCommitteeMeetingDAO().edit(cMeeting);
+    }
+    
+    @Override
+    public List<CommitteeMeeting> getAllMeetings(Session session)
+    {
+        //AuthenticUser(session, list of privliges)
+        
+        return getCommitteeMeetingDAO().findCommitteeMeetingEntities();
+    }
+    
+    @Override
+    public List<CommitteeMeeting> getAllActiveMeetings(Session session)
+    {
+        //AuthenticUser(session, list of privliges)
+        
+        return getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
+    }
+    
+    //A committee meeting should not be deleted from the database when a meeting ends
+    /*@Override
     public CommitteeMeeting endMeeting(Session sess) throws Exception
     {
         cMeeting.setEndDate(new Timestamp(new Date().getTime()));
@@ -102,8 +193,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         cMeeting.setStartDate(null);
         
         return cMeeting;
-    }
-    
+    }*/
+    /* These functions are handled by the managed bean. The update function will handle this mainly
     @Override
     public CommitteeMeeting addEndorsedApplication(Session sess) throws Exception
     {        
@@ -188,20 +279,6 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     {
         return cMeeting.getApplicationList();
     }
+    */
     
-    @Override
-    public MinuteComment addMinuteComment(Session sess, String comment) throws Exception
-    {
-        //aLog.logAction(sess.getUser(), comment);
-        
-        MinuteComment min = new MinuteComment(null, new Timestamp(new Date().getTime()), comment);
-        min.setAttendeeID(sess.getUser());
-        
-        getMinuteCommentDAO().create(min);
-        
-        cMeeting.getMinuteCommentList().add(min);
-        getCommitteeMeetingDAO().edit(cMeeting);
-        
-        return min;
-    }
 }

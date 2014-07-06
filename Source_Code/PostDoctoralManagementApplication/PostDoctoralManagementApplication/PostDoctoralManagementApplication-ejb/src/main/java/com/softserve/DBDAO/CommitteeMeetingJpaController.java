@@ -9,19 +9,21 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.Person;
-import java.util.ArrayList;
-import java.util.List;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.MinuteComment;
+import com.softserve.DBEntities.Person;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -305,4 +307,11 @@ public class CommitteeMeetingJpaController implements Serializable {
         }
     }
     
+    public List<CommitteeMeeting> findAllActiveCommitteeMeetings()
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE :curDate BETWEEN c.startDate AND c.endDate", CommitteeMeeting.class).setParameter("curDate", new Date());
+        return q.getResultList();
+    }
 }
