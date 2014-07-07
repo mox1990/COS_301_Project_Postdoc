@@ -11,17 +11,21 @@ import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.system.Session;
 import java.util.List;
-import javax.ejb.Local;
 
 /**
  *
  * @author Carlo
  */
+
 @Local
-public interface ApplicationRenewalLocal
+public interface NewApplicationLocal
 {
-    public void createProgressReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
-    public void submitProgressReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
+    public Application createNewApplication(Session session);
+    public void generateOnDemandUser();
+    public void specifyReferee(String name, String email);
+    public void specifyGrantHolder(String name, String email);
+    public void createCV();
+    public void submitReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
     
    
 }
