@@ -6,6 +6,12 @@
 
 package com.softserve.ejb;
 
+import com.itextpdf.text.DocumentException;
+import com.softserve.DBEntities.Application;
+import com.softserve.system.Session;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -14,5 +20,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface ReportServicesLocal {
-    
+    public ByteArrayOutputStream exportApplicationSpreadsheetReport(Session session, List<Application> applications) throws IOException;
+    public ByteArrayOutputStream exportPDFReport(Session session, List<Class<?>> entities) throws DocumentException;
 }

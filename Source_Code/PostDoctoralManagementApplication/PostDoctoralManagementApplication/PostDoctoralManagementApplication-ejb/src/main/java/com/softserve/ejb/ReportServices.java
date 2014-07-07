@@ -13,16 +13,11 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
-
 import com.softserve.system.Session;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,8 +25,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -44,132 +37,119 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
-public class ReportServices implements ReportServicesLocal {
-
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
-    
-    protected ApplicationJpaController getApplicationDAO()
+public class ReportServices implements ReportServicesLocal 
+{    
+    @Override
+    public ByteArrayOutputStream exportApplicationSpreadsheetReport(Session session, List<Application> applications) throws IOException
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    public ByteArrayOutputStream exportApplicationSpreadsheetReport(Timestamp start, Timestamp end) throws IOException
-    {
-        // TODO: Write code with a clear head
-
+        //AuthenticUser(session, list of privliges)
+        
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Workbook workbook = new XSSFWorkbook();
         Sheet applicationSheet = workbook.createSheet("Application");
+
+        Row row = applicationSheet.createRow(0);
+        int cIndex = 0;
         
-        List<String> sheetNames = new ArrayList<>(); // For embedded table
-        List<List<Long>> embeddedIds = new ArrayList<>(); // purposes.
+        Cell cell = row.createCell(cIndex++);
+        cell.setCellValue("applicationID");
         
-        EntityManager em = emf.createEntityManager();
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("fellow");
         
-        // Setup headers
-        setupSheetHeaders(applicationSheet, Application.class);
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("grantHolderID");
         
-        // Enter data...
-        int rIndex = 1; // Adding values from the second row onwards.
-        List<Application> applications = em.createNamedQuery("Application.findByTimestampBetweenRange", Application.class).setParameter("start", start).setParameter("end", end).getResultList(); // Need to get this more generic
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("projectTitle");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("information");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("startDate");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("endDate");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("status");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("eligiblityCheckDate");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("endorsementID");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("finalisationDate");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("fundingReportID");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("recommendationReportID");
+        
+        cell = row.createCell(cIndex++);
+        cell.setCellValue("type");
+        
+        int rIndex = 1; 
         for(Application application: applications)
         {
-            Row row = applicationSheet.createRow(rIndex++);
-            addEntityToWorksheetRow(row, application, sheetNames, embeddedIds);
+            row = applicationSheet.createRow(rIndex++);
+            cIndex = 0;
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getApplicationID());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getFellow().getCompleteName());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getGrantHolderID().getCompleteName());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getProjectTitle());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getInformation());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getStartDate());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getEndDate());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getStatus());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getEligiblityCheckDate());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getEndorsementID().getDeanID().getCompleteName() + ": " + application.getEndorsementID().getMotivation());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getFinalisationDate());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getFundingReportID().toString());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getRecommendationReportID().getHodID().getCompleteName() + ": " + application.getRecommendationReportID().getContent());
+            
+            cell = row.createCell(cIndex++);
+            cell.setCellValue(application.getType());
         }   
         
-        for(String entityName: sheetNames)
-        {
-            switch(entityName)
-            {
-                case "Address": // TODO: Are we gonna need to also export all the embedded tables...
-                    populateAddressSheet(workbook.createSheet(entityName), embeddedIds.get(sheetNames.indexOf(entityName)));
-                    break;
-            }
-        }
         workbook.write(baos);
         return baos;   
     }
-    
-    private void populateAddressSheet(Sheet addressSheet, List<Long> addressIDs)
-    {
-        
-        List<String> sheetNames = new ArrayList<>(); // For embedded table
-        List<List<Long>> embeddedIds = new ArrayList<>(); // purposes.
-        
-        EntityManager em = emf.createEntityManager();
-        
-        // Setup headers
-        setupSheetHeaders(addressSheet, Application.class);
-        
-        // Enter data...
-        int rIndex = 1; // Adding values from the second row onwards.
-        for(Long addressID: addressIDs)
-        {
-            Address address = em.createNamedQuery("Address.findByAddressID", Address.class).setParameter("addressID", addressID).getSingleResult();
-            Row row = addressSheet.createRow(rIndex++);
-            addEntityToWorksheetRow(row, address, sheetNames, embeddedIds);
-        }
-    }
-    
-    private void setupSheetHeaders(Sheet sheet, Class<?> entity)
-    {
-        Field[] fields = entity.getDeclaredFields();
-        Row row = sheet.createRow(0);
-        int cIndex = 0;
-        
-        for(Field field: fields)
-        {
-            Cell cell = row.createCell(cIndex++);
-            cell.setCellValue(field.getName());
-        }
-    }
-    
-    private void addEntityToWorksheetRow(Row row, Object entity, List<String> sheetNames, List<List<Long>> ids)
-    {
-        int cIndex = 0;
-        Field[] fields = entity.getClass().getDeclaredFields();
-        
-        for(Field field: fields)
-        {
-            try 
-            {
-                Cell cell = row.createCell(cIndex++);
-                
-                // Doing this for other tables generation...
-                String attrib = field.get(entity).getClass().getCanonicalName();
-                String value = field.get(entity).toString();
-                
-                if(value.contains("com.softserve.DBEntities."))
-                {
-                    value = value.substring(value.indexOf("="), value.indexOf("]"));
-                    if(sheetNames.contains(attrib))
-                    {
-                        ids.get(sheetNames.indexOf(attrib)).add(Long.parseLong(value));
-                    }
-                    else
-                    {
-                        sheetNames.add(attrib.getClass().getCanonicalName());
-                        ids.get(sheetNames.indexOf(attrib)).add(Long.parseLong(value));
-                    }
-                }
-                // What is basically required...
-                cell.setCellValue(value);
-            } 
-            catch (IllegalArgumentException | IllegalAccessException ex) 
-            {
-                Cell cell = row.createCell(cIndex++);
-                cell.setCellValue(" ");
-                Logger.getLogger(ExportApplicationServices.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
 
-    public ByteArrayOutputStream exportPDFReport(Timestamp start, Timestamp end) throws DocumentException
+    @Override
+    public ByteArrayOutputStream exportPDFReport(Session session, List<Class<?>> entities) throws DocumentException
     {
-        EntityManager em = emf.createEntityManager();
-        
+        //AuthenticUser(session, list of privliges)        
         Document doc = new Document();
         ByteArrayOutputStream baosPDF = new ByteArrayOutputStream();
         PdfWriter docWriter = PdfWriter.getInstance(doc, baosPDF);
@@ -179,10 +159,8 @@ public class ReportServices implements ReportServicesLocal {
         
         
         PdfPTable applicationTable = setupTable(Application.class);
-
-        List<Application> entities = em.createNamedQuery("Application.findByTimestampBetweenRange", Application.class).setParameter("start", start).setParameter("end", end).getResultList();
-
-        for(Application entity: entities)
+        
+        for(Object entity: entities)
         {            
             applicationTable = addEntityToTable(applicationTable, entity);
         }
@@ -194,9 +172,9 @@ public class ReportServices implements ReportServicesLocal {
         return baosPDF;
     }
     
-    private PdfPTable setupTable(Class<?> entity)
+    private PdfPTable setupTable(Object entity)
     {
-        Field[] fields = entity.getDeclaredFields();
+        Field[] fields = entity.getClass().getDeclaredFields();
         
         PdfPTable table = new PdfPTable(fields.length);
         PdfPCell cell;
