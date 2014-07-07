@@ -64,11 +64,19 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testSetAndGetAndGetAwardDate() 
+    public void testSetAndGetAndGetFinalisationDate() 
     {
         Application instance = new Application();
-        instance.setAwardDate(new Date(2014, 06, 11));
-        assertEquals(new Date(2014, 06, 11), instance.getAwardDate());
+        instance.setFinalisationDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getFinalisationDate());
+    }
+    
+    @Test
+    public void testSetAndGetAndGetEligiblityCheckDate() 
+    {
+        Application instance = new Application();
+        instance.setEligiblityCheckDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getEligiblityCheckDate());
     }
 
     @Test

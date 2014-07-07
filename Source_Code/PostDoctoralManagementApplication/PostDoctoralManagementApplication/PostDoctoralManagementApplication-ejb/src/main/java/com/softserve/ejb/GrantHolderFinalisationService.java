@@ -141,6 +141,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         NotificationService notificationService = getNotificationServiceEJB();
         
         //Finalise application
+        application.setFinalisationDate(new Date());
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);        
         applicationJpaController.edit(application);
         

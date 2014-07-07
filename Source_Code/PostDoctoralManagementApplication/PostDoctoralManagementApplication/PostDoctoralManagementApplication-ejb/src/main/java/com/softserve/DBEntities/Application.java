@@ -46,8 +46,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByStatus", query = "SELECT a FROM Application a WHERE a.status = :status"),
     @NamedQuery(name = "Application.findByTimestamp", query = "SELECT a FROM Application a WHERE a.timestamp = :timestamp"),
     @NamedQuery(name = "Application.findByTimestampBetweenRange", query = "SELECT a FROM Application a WHERE a.timestamp BETWEEN :start AND :end"),
-    @NamedQuery(name = "Application.findByAwardDate", query = "SELECT a FROM Application a WHERE a.awardDate = :awardDate"),
-    @NamedQuery(name = "Application.findByAwardDateBetweenRange", query = "SELECT a FROM Application a WHERE a.awardDate BETWEEN :start AND :end"),
+    @NamedQuery(name = "Application.findByFinalisationDateDate", query = "SELECT a FROM Application a WHERE a.finalisationDate = :awardDate"),
+    @NamedQuery(name = "Application.findByFinalisationDateBetweenRange", query = "SELECT a FROM Application a WHERE a.finalisationDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByStartDate", query = "SELECT a FROM Application a WHERE a.startDate = :startDate"),
     @NamedQuery(name = "Application.findByStartDateBetweenRange", query = "SELECT a FROM Application a WHERE a.startDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
@@ -71,9 +71,12 @@ public class Application implements Serializable {
     @Column(name = "_timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
-    @Column(name = "_awardDate")
+    @Column(name = "_finalisationDate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date awardDate;
+    private Date finalisationDate;
+    @Column(name = "_eligiblityCheckDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date eligiblityCheckDate;
     @Column(name = "_startDate")
     @Temporal(TemporalType.DATE)
     private Date startDate;
@@ -155,12 +158,20 @@ public class Application implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Date getAwardDate() {
-        return awardDate;
+    public Date getFinalisationDate() {
+        return finalisationDate;
     }
 
-    public void setAwardDate(Date awardDate) {
-        this.awardDate = awardDate;
+    public void setFinalisationDate(Date finalisationDate) {
+        this.finalisationDate = finalisationDate;
+    }
+
+    public Date getEligiblityCheckDate() {
+        return eligiblityCheckDate;
+    }
+
+    public void setEligiblityCheckDate(Date eligiblityCheckDate) {
+        this.eligiblityCheckDate = eligiblityCheckDate;
     }
 
     public Date getStartDate() {

@@ -35,6 +35,10 @@ public class ApplicationStageStatus {
     
     public Person getAuthority() {
         return authority;
-    } 
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     
 }

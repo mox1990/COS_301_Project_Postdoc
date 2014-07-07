@@ -149,9 +149,10 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         GregorianCalendar dobCal = new GregorianCalendar();
         dobCal.setTime(dobDate);
         
-        
+        application.setEligiblityCheckDate(new Date());
         if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
         {
+            
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
             applicationJpaController.edit(application);
             

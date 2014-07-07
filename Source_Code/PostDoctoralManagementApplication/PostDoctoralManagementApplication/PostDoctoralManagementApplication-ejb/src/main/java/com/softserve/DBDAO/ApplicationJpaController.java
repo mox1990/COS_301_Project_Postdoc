@@ -511,4 +511,19 @@ public class ApplicationJpaController implements Serializable {
         return q.getResultList();
     }
     
+    public List<Application> findAllApplicationsWhosFellowIs(Person fellow)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.fellow = :f", Application.class).setParameter("f", fellow);
+        return q.getResultList();
+    }
+    
+    public List<Application> findAllApplicationsWhosGrantHolderIs(Person grantHolder)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.grantHolderID = :gh", Application.class).setParameter("gh", grantHolder);
+        return q.getResultList();
+    }
 }

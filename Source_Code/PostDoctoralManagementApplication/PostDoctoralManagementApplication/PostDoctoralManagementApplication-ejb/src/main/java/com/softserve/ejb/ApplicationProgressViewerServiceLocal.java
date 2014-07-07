@@ -6,6 +6,10 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBEntities.Application;
+import com.softserve.system.ApplicationStageStatus;
+import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,5 +19,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface ApplicationProgressViewerServiceLocal {
-    
+    public List<Application> getAllApplicationsWithFellow(Session session);
+    public List<Application> getAllApplicationsWithGrantHolder(Session session);
+    public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application);
 }

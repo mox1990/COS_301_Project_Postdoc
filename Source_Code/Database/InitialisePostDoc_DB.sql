@@ -130,7 +130,9 @@ CREATE TABLE APPLICATION (
 	_type ENUM('new', 'renewal'),
 	_status ENUM('open', 'declined','refereed','finalised','recommended','endorsed','eligible','funded', 'completed', 'terminated'),
 	_timestamp DATETIME NOT NULL,
-	_awardDate DATETIME,
+	_finalisationDate DATETIME,
+	_eligiblityCheckDate DATETIME,
+	_eligiblityChecker CHAR(9),
 	_startDate DATE,
 	_endDate DATE,
 	_projectTitle VARCHAR(250),
@@ -145,6 +147,7 @@ CREATE TABLE APPLICATION (
 	PRIMARY KEY (_applicationID),
 	FOREIGN KEY (_fellow) REFERENCES PERSON(_systemID),
 	FOREIGN KEY (_grantHolderID) REFERENCES PERSON(_systemID),
+	FOREIGN KEY (_eligiblityChecker) REFERENCES PERSON(_systemID),
 	FOREIGN KEY (_recommendationReportID) REFERENCES RECOMMENDATION_REPORT(_reportID),
 	FOREIGN KEY (_endorsementID) REFERENCES ENDORSEMENT(_endorsementID),
 	FOREIGN KEY (_fundingReportID) REFERENCES FUNDING_REPORT(_reportID)
