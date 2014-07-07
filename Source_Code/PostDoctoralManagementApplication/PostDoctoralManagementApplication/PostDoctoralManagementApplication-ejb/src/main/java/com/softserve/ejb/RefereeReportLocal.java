@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package com.softserve.ejb;
 
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -12,7 +13,7 @@ import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
 
-package com.softserve.ejb;
+
 
 /**
  *

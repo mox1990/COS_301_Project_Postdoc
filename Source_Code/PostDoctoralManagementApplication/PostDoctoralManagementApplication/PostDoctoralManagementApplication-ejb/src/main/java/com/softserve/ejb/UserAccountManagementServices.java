@@ -11,9 +11,11 @@ import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -79,6 +81,21 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         return new UpEmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected DBEntitiesFactory getDBEntitiesFactory()
+    {
+        return new DBEntitiesFactory();
+    }
+    
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return new AuditTrailService();
+    }
+    
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
+    }
+    
     /**
      *This function is used to automatically generate a new valid SystemID
      * @param prefix The prefix to be used for the 9 character systemID
@@ -87,10 +104,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
     protected String generateSystemID(char prefix)
     {
         PersonJpaController personJpaController = getPersonDAO();
+        GregorianCalendar cal = new GregorianCalendar();        
         
         String newID = "";
-
-        GregorianCalendar cal = new GregorianCalendar();
         
         int curYear = cal.get(Calendar.YEAR);        
         
@@ -146,20 +162,22 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         //Check if automatic systemID generation is required
         if(!useManualSystemIDSpecification)
         {
             
-            if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
+            if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
             {
                 user.setSystemID(generateSystemID('a'));
             }
-            else if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
+            else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
             {
                 user.setSystemID(generateSystemID('f'));
             }
-            else if(PersonJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
+            else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
             {
                 user.setSystemID(generateSystemID('r'));
             }
@@ -168,7 +186,10 @@ public class UserAccountManagementServices implements UserAccountManagementServi
                 throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");
             }
             
-            userUPInfo.setEmployeeID(user.getSystemID());
+            if(userUPInfo != null)
+            {
+                userUPInfo.setEmployeeID(user.getSystemID());
+            }
         } 
         
         //Store address in database
@@ -183,6 +204,10 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         {
             upEmployeeInformationJpaController.create(userUPInfo);
         }
+        
+        //Log action
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created new user account", session.getUser());
+        auditTrailService.logAction(auditLog);
         
     }
     
@@ -207,6 +232,8 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         if(userAddress != null)
         {
@@ -238,6 +265,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         
         personJpaController.edit(user);
         
+        //Log action
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated user account", session.getUser());
+        auditTrailService.logAction(auditLog);
     }
     
     /**
@@ -255,6 +285,8 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);
@@ -270,6 +302,10 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         
         //Remove person from database
         personJpaController.destroy(user.getSystemID());
+        
+        //Log action
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Removed user account", session.getUser());
+        auditTrailService.logAction(auditLog);
     }
     
     /**

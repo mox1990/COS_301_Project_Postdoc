@@ -6,8 +6,11 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.ejb.UserAccountManagementServices;
 import com.softserve.DBDAO.*;
+import com.softserve.ejb.AuditTrailService;
+import com.softserve.ejb.UserAccountManagementServices;
+import com.softserve.system.DBEntitiesFactory;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -20,6 +23,9 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     private PersonJpaController pDAO = null;
     private AddressJpaController aDAO = null;
     private UpEmployeeInformationJpaController uDAO = null;
+    private DBEntitiesFactory dbFactory = null;
+    private AuditTrailService atsEJB = null;
+    private GregorianCalendar cal = null;
 
     public void setpDAO(PersonJpaController pDAO) {
         this.pDAO = pDAO;
@@ -32,7 +38,23 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     public void setuDAO(UpEmployeeInformationJpaController uDAO) {
         this.uDAO = uDAO;
     }
+
+    public void setDbFactory(DBEntitiesFactory dbFactory) {
+        this.dbFactory = dbFactory;
+    }
+
+    public void setAtsEJB(AuditTrailService atsEJB) {
+        this.atsEJB = atsEJB;
+    }
+
+    public void setCal(GregorianCalendar cal) {
+        this.cal = cal;
+    }
     
+    @Override
+    protected GregorianCalendar getGregorianCalendar() {
+        return cal;
+    }
     
     /**
      *This function creates an instance of the PersonJpaController. 
@@ -69,12 +91,22 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     {
         return uDAO;
     }
+
+    @Override
+    protected AuditTrailService getAuditTrailServiceEJB() 
+    {
+        return atsEJB;
+    }
+
+    @Override
+    protected DBEntitiesFactory getDBEntitiesFactory() 
+    {
+        return dbFactory;
+    }
     
     public String Mock_generateSystemID(char prefix)
     {
         return generateSystemID(prefix);
     }
-    
-    
     
 }

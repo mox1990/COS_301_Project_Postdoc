@@ -11,6 +11,7 @@ import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.system.Session;
 import java.util.List;
+import javax.ejb.Local;
 
 /**
  *

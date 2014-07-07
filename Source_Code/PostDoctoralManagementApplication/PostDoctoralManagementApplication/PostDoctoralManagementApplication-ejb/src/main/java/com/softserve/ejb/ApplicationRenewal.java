@@ -6,8 +6,12 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
+import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -62,5 +66,15 @@ public class ApplicationRenewal implements ApplicationRenewalLocal { // TODO: Fi
     public List<AuditLog> findByAction(String action)
     {
         return em.createNamedQuery("AuditLog.findByAction", AuditLog.class).setParameter("action", action).getResultList();
+    }
+
+    @Override
+    public void createProgressReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void submitProgressReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

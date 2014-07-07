@@ -1010,7 +1010,7 @@ public class PersonJpaController implements Serializable {
      * @param roleID The roleID of the role to look for as a long
      * @return True if the person does have the security role else false
      */
-    public static boolean doesPersonHaveSecurityRole(Person person, long roleID)
+    public boolean doesPersonHaveSecurityRole(Person person, long roleID)
     {
         boolean isFound = false;
         
