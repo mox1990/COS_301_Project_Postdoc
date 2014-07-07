@@ -6,10 +6,13 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.SecurityRoleJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -19,8 +22,7 @@ import javax.ejb.Local;
 @Local
 public interface UserGatewayLocal 
 {
-    public void authenticateUser(Person user, UpEmployeeInformation userUPInfo);
-    public void getRole(Person user);
+    public int authenticateUser(Session session ,Person user, List<SecurityRole> role);
     public void generateOnDemandAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo);
-    public void activateOnDemandAccount(Person user, boolean active);
+    public void activateOnDemandAccount(Session session ,Person user);
 }
