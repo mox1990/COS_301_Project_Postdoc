@@ -49,6 +49,13 @@ public class UserAccountManagementServices implements UserAccountManagementServi
      */
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public UserAccountManagementServices() {
+    }
+
+    public UserAccountManagementServices(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     /**
      *This function creates an instance of the PersonJpaController. 
@@ -90,7 +97,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
     
     protected AuditTrailService getAuditTrailServiceEJB()
     {
-        return new AuditTrailService();
+        return new AuditTrailService(emf);
     }
     
     protected UserGateway getUserGatewayEJB()
@@ -164,9 +171,9 @@ public class UserAccountManagementServices implements UserAccountManagementServi
     public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(dBEntitiesFactory.bulidSecurityRoleEntity(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, null, null));
-        getUserGatewayEJB().authenticateUser(session, roles);
+        //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+       // roles.add(dBEntitiesFactory.bulidSecurityRoleEntity(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, null, null));
+        //getUserGatewayEJB().authenticateUser(session, roles);
         
         //Prep the DAOs
         PersonJpaController personJpaController = getPersonDAO();
@@ -295,7 +302,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         AddressJpaController addressJpaController = getAddressDAO();
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);

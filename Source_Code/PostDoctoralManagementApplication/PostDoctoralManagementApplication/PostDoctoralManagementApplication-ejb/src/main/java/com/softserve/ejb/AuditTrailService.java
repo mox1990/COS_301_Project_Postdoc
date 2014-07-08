@@ -32,6 +32,16 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     {
         return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
+
+    public AuditTrailService() 
+    {
+    }
+    
+    
+    public AuditTrailService(EntityManagerFactory emf) 
+    {
+        this.emf = emf;
+    }
     
     //Just changed it so that it recieves the auditLog object not creates which should be hanadled by the calling function
     @Override

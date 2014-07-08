@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -35,15 +37,18 @@ import javax.servlet.http.HttpSession;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserGateway implements UserGatewayLocal
  { // TODO: Finalize the local or remote spec
-
+    
+    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
+    
     protected AuditTrailService getAuditTrailServiceEJB()
     {
-        return new AuditTrailService();
+        return new AuditTrailService(emf);
     }
     
     protected UserAccountManagementServices getUserAccountManagementServicesEJB()
     {
-        return new UserAccountManagementServices();
+        return new UserAccountManagementServices(emf);
     }
     
     protected NotificationService getNotificationServiceEJB()

@@ -1,0 +1,50 @@
+/*
+This file is copyrighted to the authors stated below.
+Any duplication or modifications or usage of the file's contents               
+that is not approved by the stated authors is prohibited.
+*/
+/* 
+    Created on : Jul 8, 2014, 2:26:35 PM
+    Author     : SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred Ngako (12236731) Tokologo Machaba (12078027) ]
+*/
+
+#sideL
+{
+    background-color: whitesmoke;
+    
+    float: left;
+    width: 400px;
+    height: 300px;
+    min-height: 200px;
+    overflow: hidden;
+    
+    border-right-color: black;
+    border-right-style: solid;
+    border-right-width: 8px;
+    padding-top: 100px;
+    padding-left: 50px;
+}
+
+#sideR
+{
+    background-color: whitesmoke;
+    float: left;
+    width: 425px;
+    height: 300px;
+    overflow: hidden;
+    
+    border-left-color: black;
+    border-left-style: solid;
+    border-left-width: 8px;
+    
+    padding-top: 100px;
+    padding-left: 25px;
+  
+}
+
+#apply
+{
+        
+    height: 200px;
+    width: auto;
+}
