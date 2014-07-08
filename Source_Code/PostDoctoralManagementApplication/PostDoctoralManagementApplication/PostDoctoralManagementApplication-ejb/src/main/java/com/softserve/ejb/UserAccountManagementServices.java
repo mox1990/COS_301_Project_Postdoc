@@ -13,10 +13,12 @@ import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -91,6 +93,11 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         return new AuditTrailService();
     }
     
+    protected UserGateway getUserGatewayEJB()
+    {
+        return new UserGateway();
+    }
+    
     protected GregorianCalendar getGregorianCalendar()
     {
         return new GregorianCalendar();
@@ -156,13 +163,15 @@ public class UserAccountManagementServices implements UserAccountManagementServi
     @Override
     public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(dBEntitiesFactory.bulidSecurityRoleEntity(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, null, null));
+        getUserGatewayEJB().authenticateUser(session, roles);
         
         //Prep the DAOs
         PersonJpaController personJpaController = getPersonDAO();
-        AddressJpaController addressJpaController = getAddressDAO();
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AddressJpaController addressJpaController = getAddressDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         //Check if automatic systemID generation is required
@@ -321,6 +330,13 @@ public class UserAccountManagementServices implements UserAccountManagementServi
         PersonJpaController personJpaController = getPersonDAO();
         
         return personJpaController.findPersonEntities();        
+    }
+    
+    public Person getUserBySystemIDOrEmail(String intput)
+    {
+        PersonJpaController personJpaController = getPersonDAO();
+        
+        return personJpaController.getUserBySystemIDOrEmail(intput);
     }
     
     /**

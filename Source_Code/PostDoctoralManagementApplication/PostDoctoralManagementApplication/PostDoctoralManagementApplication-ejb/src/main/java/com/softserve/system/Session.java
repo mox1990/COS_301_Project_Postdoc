@@ -18,11 +18,19 @@ public class Session {
     
     private HttpSession session = null;
     private Person user = null;
+    private boolean systemLevel = false;
 
     public Session(HttpSession Session, Person User) 
     {
         user = User;
         session = Session;
+    }
+    
+    public Session(HttpSession Session, Person User, Boolean sysLevel) 
+    {
+        user = User;
+        session = Session;
+        systemLevel = sysLevel;
     }
     
     public HttpSession getSession()
@@ -33,5 +41,20 @@ public class Session {
     public Person getUser()
     {
         return user;
+    }
+    
+    public Boolean getLoggedInStatus()
+    {
+        return (Boolean) session.getAttribute("status");
+    }
+    
+    public void setLoggedInStatus(Boolean status)
+    {
+        session.setAttribute("status",status);
+    }
+    
+    public boolean isSystem()
+    {
+        return systemLevel;
     }
 }

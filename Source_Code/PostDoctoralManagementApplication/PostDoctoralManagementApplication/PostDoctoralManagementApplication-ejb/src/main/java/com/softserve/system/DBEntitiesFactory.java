@@ -52,5 +52,16 @@ public class DBEntitiesFactory {
         return notification;
     }
     
+    public SecurityRole bulidSecurityRoleEntity(Long id, String roleName, Long roleMask)
+    {
+        SecurityRole securityRole= new SecurityRole();
+        
+        securityRole.setRoleID(id);
+        securityRole.setName(roleName);
+        securityRole.setRoleID(roleMask);
+        
+        return securityRole;
+    }
+    
     //Rest of entities: Add as required
 }

@@ -1026,5 +1026,12 @@ public class PersonJpaController implements Serializable {
         return isFound;        
     }
     
+    public Person getUserBySystemIDOrEmail(String input)
+    {
+        EntityManager em = getEntityManager();
+        
+        return em.createQuery("SELECT p FROM Person p WHERE p.systemID = :in OR p.email = :in", Person.class).setParameter("in", input).getSingleResult();
+    }
+    
     
 }

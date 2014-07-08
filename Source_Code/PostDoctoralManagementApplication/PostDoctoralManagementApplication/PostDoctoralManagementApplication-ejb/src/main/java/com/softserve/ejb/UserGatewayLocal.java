@@ -11,9 +11,11 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -22,7 +24,10 @@ import javax.ejb.Local;
 @Local
 public interface UserGatewayLocal 
 {
-    public int authenticateUser(Session session ,Person user, List<SecurityRole> role);
-    public void generateOnDemandAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo);
-    public void activateOnDemandAccount(Session session ,Person user);
+    public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception;
+    public Session login(HttpSession httpSession) throws AuthenticationException, Exception;
+    public void logout(Session session) throws Exception;
+    public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException;    
+    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws Exception;
+    public void activateOnDemandAccount(Session session, Person user) throws Exception;
 }
