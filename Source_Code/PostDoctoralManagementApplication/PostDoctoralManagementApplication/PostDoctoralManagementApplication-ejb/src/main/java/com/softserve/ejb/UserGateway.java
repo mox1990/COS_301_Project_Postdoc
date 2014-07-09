@@ -6,22 +6,13 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.*;
-import com.softserve.DBDAO.exceptions.PreexistingEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Generator;
 import com.softserve.system.Session;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;

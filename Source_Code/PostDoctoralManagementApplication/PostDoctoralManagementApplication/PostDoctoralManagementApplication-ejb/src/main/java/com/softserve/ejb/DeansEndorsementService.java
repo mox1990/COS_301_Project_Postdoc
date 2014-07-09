@@ -16,6 +16,8 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Endorsement;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -53,6 +55,11 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new DBEntitiesFactory();
     }
     
+    protected UserGateway getUserGatewayServiceEJB()
+    {
+        return new UserGateway(emf);
+    }
+    
     protected NotificationService getNotificationServiceEJB()
     {
         return new NotificationService(emf);
@@ -63,18 +70,31 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new AuditTrailService(emf);
     }
     
-    public List<Application> loadPendingApplications(Session session)
+    protected ApplicationServices getApplicationServicesUTIL()
     {
-        //AuthenticUser(session, list of privliges)
+        return new ApplicationServices(emf);
+    }
+    
+    @Override
+    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = new ApplicationServices(emf);
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
     }
     
-    public void denyApplication(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
+    @Override
+    public void denyApplication(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
@@ -96,9 +116,13 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         notificationService.sendNotification(notification, true);
     }
     
-    public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws RollbackFailureException, NonexistentEntityException, Exception
+    @Override
+    public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws AuthenticationException, RollbackFailureException, NonexistentEntityException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         EndorsementJpaController endorsementJpaController = getEndorsementDAO();

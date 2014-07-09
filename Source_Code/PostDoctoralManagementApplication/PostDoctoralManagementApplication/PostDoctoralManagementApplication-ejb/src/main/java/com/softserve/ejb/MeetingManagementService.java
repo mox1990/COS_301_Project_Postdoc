@@ -8,26 +8,24 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.DBDAO.MinuteCommentJpaController;
-import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.MinuteComment;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
-import com.softserve.constants.PersistenceConstants;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -37,6 +35,7 @@ import javax.persistence.PersistenceUnit;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateful
+@TransactionManagement(TransactionManagementType.BEAN)
 public class MeetingManagementService implements MeetingManagementServiceLocal {
     //All our ejb should be stateless due to the beter reusablity of the ejb
     //private CommitteeMeeting cMeeting = new CommitteeMeeting();
@@ -44,6 +43,10 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    /**
+     *
+     * @param emf
+     */
     public MeetingManagementService(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -59,30 +62,66 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         return new CommitteeMeetingJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected MinuteCommentJpaController getMinuteCommentDAO()
     {
         return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
     }
     
+    /**
+     *
+     * @return
+     */
+    protected UserGateway getUserGatewayServiceEJB()
+    {
+        return new UserGateway(emf);
+    }
+    
+    /**
+     *
+     * @return
+     */
     protected NotificationService getNotificationServiceEJB()
     {
         return new NotificationService(emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected AuditTrailService getAuditTrailServiceEJB()
     {
-        return new AuditTrailService();
+        return new AuditTrailService(emf);
     }
     
+    /**
+     *
+     * @param session
+     * @param committeeMeeting
+     * @param attendanceList
+     * @throws AuthenticationException
+     * @throws Exception
+     */
     @Override
-    public void createMeeting(Session session, CommitteeMeeting committeeMeeting, List<Person> attendanceList) throws Exception
+    public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
@@ -91,14 +130,16 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         
-        for(Person p : attendanceList)
+        //Create notifications for each attendee
+        for(Person p : committeeMeeting.getPersonList())
         {
-            committeeMeeting.getPersonList().add(p);
             notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
         }
         
+        //Create the meeting
         committeeMeetingJpaController.create(committeeMeeting);
         
+        //Send notification batch to attendees
         notificationService.sendBatchNotifications(notifications, true);
         
         //Log action      
@@ -106,10 +147,22 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         auditTrailService.logAction(auditLog);
     }
     
+    /**
+     *
+     * @param session
+     * @param committeeMeeting
+     * @throws AuthenticationException
+     * @throws NonexistentEntityException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
     @Override
-    public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
@@ -133,29 +186,62 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     }
     
     //This is a good idea to allow manual start and end aswell
-    @Override
-    public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
+
+    /**
+     *
+     * @param session
+     * @param committeeMeeting
+     * @throws AuthenticationException
+     * @throws Exception
+     */
+        @Override
+    public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception 
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         committeeMeeting.setStartDate(new Timestamp(new Date().getTime()));
         getCommitteeMeetingDAO().edit(committeeMeeting);
     }
     
+    /**
+     *
+     * @param session
+     * @param committeeMeeting
+     * @throws AuthenticationException
+     * @throws Exception
+     */
     @Override
-    public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
+    public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception 
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         committeeMeeting.setEndDate(new Timestamp(new Date().getTime()));
         getCommitteeMeetingDAO().edit(committeeMeeting);
     }
     
     //The changes are to make the function more inline with the specification
-    @Override
-    public void addMinuteComment(Session session, MinuteComment minuteComment) throws Exception 
+
+    /**
+     *
+     * @param session
+     * @param minuteComment
+     * @throws AuthenticationException
+     * @throws Exception
+     */
+        @Override
+    public void addMinuteComment(Session session, MinuteComment minuteComment) throws AuthenticationException, Exception 
     {
-        //aLog.logAction(sess.getUser(), comment);
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         minuteComment.setAttendeeID(session.getUser());
         
@@ -166,18 +252,40 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         //getCommitteeMeetingDAO().edit(cMeeting);
     }
     
+    /**
+     *
+     * @param session
+     * @return
+     * @throws AuthenticationException
+     * @throws Exception
+     */
     @Override
-    public List<CommitteeMeeting> getAllMeetings(Session session)
+    public List<CommitteeMeeting> getAllMeetings(Session session) throws AuthenticationException, Exception 
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         return getCommitteeMeetingDAO().findCommitteeMeetingEntities();
     }
     
+    /**
+     *
+     * @param session
+     * @return
+     * @throws AuthenticationException
+     * @throws Exception
+     */
     @Override
-    public List<CommitteeMeeting> getAllActiveMeetings(Session session)
+    public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws AuthenticationException, Exception 
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         return getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
     }

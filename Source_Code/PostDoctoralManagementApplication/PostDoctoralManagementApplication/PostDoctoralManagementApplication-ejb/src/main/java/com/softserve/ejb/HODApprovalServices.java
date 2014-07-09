@@ -16,6 +16,8 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -37,30 +39,72 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public HODApprovalServices(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
+    /**
+     *
+     * @return
+     */
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected RecommendationReportJpaController getRecommmendationReportDAO()
     {
         return new RecommendationReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
     }
     
+    /**
+     *
+     * @return
+     */
+    protected UserGateway getUserGatewayServiceEJB()
+    {
+        return new UserGateway(emf);
+    }
+    
+    /**
+     *
+     * @return
+     */
     protected NotificationService getNotificationServiceEJB()
     {
         return new NotificationService(emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected AuditTrailService getAuditTrailServiceEJB()
     {
         return new AuditTrailService(emf);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    protected ApplicationServices getApplicationServicesUTIL()
+    {
+        return new ApplicationServices(emf);
     }
     
     /**
@@ -68,20 +112,39 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
      * specified HOD
      * @param session The session object used to authenticate the user
      * @return A list of all the applications that user can Approved/declined
+     * @throws com.softserve.Exceptions.AuthenticationException
+     * @throws java.lang.Exception
      */
     @Override
-    public List<Application> loadPendingApplications(Session session)
+    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = new ApplicationServices(emf);
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
     }
     
-    public void denyAppliction(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
+    /**
+     *
+     * @param session
+     * @param application
+     * @param reason
+     * @throws AuthenticationException
+     * @throws NonexistentEntityException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
+    public void denyAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
@@ -104,9 +167,23 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         notificationService.sendNotification(notification, true);
     }
     
-    public void ammendAppliction(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
+    /**
+     *
+     * @param session
+     * @param application
+     * @param reason
+     * @throws AuthenticationException
+     * @throws NonexistentEntityException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
+    public void ammendAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
@@ -129,9 +206,23 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         notificationService.sendNotification(notification, true);
     }
     
-    public void approveApplication(Session session, Application application, RecommendationReport recommendationReport) throws NonexistentEntityException, RollbackFailureException, Exception
+    /**
+     *
+     * @param session
+     * @param application
+     * @param recommendationReport
+     * @throws AuthenticationException
+     * @throws NonexistentEntityException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
+    public void approveApplication(Session session, Application application, RecommendationReport recommendationReport) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         RecommendationReportJpaController recommendationReportJpaController = getRecommmendationReportDAO();

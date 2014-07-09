@@ -13,7 +13,7 @@ import com.softserve.system.Session;
 import java.util.List;
 
 
-public class RefereeReport implements RefereeReportLocal {
+public class RefereeReportService implements RefereeReportServiceLocal {
 
     @Override
     public List<Application> loadPendingReports(Session session) {

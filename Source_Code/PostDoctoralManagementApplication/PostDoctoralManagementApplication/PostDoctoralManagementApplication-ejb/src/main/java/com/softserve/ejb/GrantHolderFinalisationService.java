@@ -17,6 +17,8 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -39,72 +41,110 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public GrantHolderFinalisationService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
+    /**
+     *
+     * @return
+     */
     protected PersonJpaController getPersonDAO()
     {
         return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected CvJpaController getCVDAO()
     {
         return new CvJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
     }
     
+    /**
+     *
+     * @return
+     */
+    protected UserGateway getUserGatewayServiceEJB()
+    {
+        return new UserGateway(emf);
+    }
+    
+    /**
+     *
+     * @return
+     */
     protected NotificationService getNotificationServiceEJB()
     {
         return new NotificationService(emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected AuditTrailService getAuditTrailServiceEJB()
     {
         return new AuditTrailService(emf);
     }
     
-    private boolean hasCV(Session session)
+    /**
+     *
+     * @return
+     */
+    protected CVManagementService getCVManagementServiceEJB()
     {
-        return (session.getUser().getCvList().size() != 0);
+        return new CVManagementService(emf);
+    }
+    
+    /**
+     *
+     * @return
+     */
+    protected ApplicationServices getApplicationServicesUTIL()
+    {
+        return new ApplicationServices(emf);
     }
     
     /**
      *This function is used to create a CV for a grant holder
      * @param session The session which is used to authenticate the user
      * @param cv The CV object containing the cv data to be added
+     * @throws com.softserve.Exceptions.AuthenticationException
      * @throws NonexistentEntityException If the session user does not exist
      * @throws CVAlreadExistsException If the grant holder already has a CV
      * @throws Exception If an unknown error occurs
      */
-    public void createGrantHolderCV(Session session, Cv cv) throws NonexistentEntityException, CVAlreadExistsException, Exception
+    @Override
+    public void createGrantHolderCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        if(!hasCV(session))
-        {
-            CvJpaController cvJpaController = getCVDAO();
-            PersonJpaController personJpaController = getPersonDAO();
-
-            cvJpaController.create(cv);
-
-            Person user = session.getUser();
-            List<Cv> cvList = user.getCvList();        
-            cvList.add(cv);
-            user.setCvList(cvList);
-
-            personJpaController.edit(user);  
-        }
-        else
-        {
-            throw new CVAlreadExistsException("The grant holder already has a CV");
-        }
+        getCVManagementServiceEJB().createCV(session, cv);
     }
     
     /**
@@ -112,12 +152,17 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * specified grant holder
      * @param session The session object used to authenticate the user
      * @return A list of all the applications that user can finalise
+     * @throws com.softserve.Exceptions.AuthenticationException
      */
-    public List<Application> loadPendingApplications(Session session)
+    @Override
+    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = new ApplicationServices(emf);
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
     }
@@ -131,9 +176,13 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws RollbackFailureException If an error occured while rolling back the entry in the database
      * @throws Exception If an unknown error occured
      */
+    @Override
     public void finaliseApplication(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();

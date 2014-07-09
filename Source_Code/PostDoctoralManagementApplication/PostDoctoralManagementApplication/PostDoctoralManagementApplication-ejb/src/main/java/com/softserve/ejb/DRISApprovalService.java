@@ -9,7 +9,6 @@ package com.softserve.ejb;
 import com.softserve.ApplicationServices.ApplicationServices;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.AcademicQualification;
@@ -17,6 +16,8 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -41,62 +42,66 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
+    /**
+     *
+     * @return
+     */
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected FundingReportJpaController getFundingReportDAO()
     {
         return new FundingReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
     }
     
+    /**
+     *
+     * @return
+     */
+    protected UserGateway getUserGatewayServiceEJB()
+    {
+        return new UserGateway(emf);
+    }
+    
+    /**
+     *
+     * @return
+     */
     protected NotificationService getNotificationServiceEJB()
     {
         return new NotificationService(emf);
     }
     
+    /**
+     *
+     * @return
+     */
     protected AuditTrailService getAuditTrailServiceEJB()
     {
         return new AuditTrailService(emf);
     }
     
-    /**
-     *This function loads all the applications that need to approved/declined by the 
-     * specified HOD
-     * @param session The session object used to authenticate the user
-     * @return A list of all the applications that user can Approved/declined
-     */
-    public List<Application> loadPendingEndorsedApplications(Session session)
+    protected ApplicationServices getApplicationServicesUTIL()
     {
-        //AuthenticUser(session, list of privliges)
-        
-        ApplicationServices applicationServices = new ApplicationServices(emf);
-        
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        return new ApplicationServices(emf);
     }
     
-    /**
-     *This function loads all the applications that need to approved/declined by the 
-     * specified HOD
-     * @param session The session object used to authenticate the user
-     * @return A list of all the applications that user can Approved/declined
-     */
-    public List<Application> loadPendingEligibleApplications(Session session)
-    {
-        //AuthenticUser(session, list of privliges)
-        
-        ApplicationServices applicationServices = new ApplicationServices(emf);
-        
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
-    }
-    
-    private boolean hasPhD(Application application)
+    protected boolean hasPhD(Application application)
     {
         List<AcademicQualification> aqList = application.getFellow().getCvList().get(0).getAcademicQualificationList();
         
@@ -111,7 +116,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         return false;
     }
     
-    private boolean hasObtainedPhDInLast5Years(Application application)
+    protected boolean hasObtainedPhDInLast5Years(Application application)
     {     
         
         List<AcademicQualification> aqList = application.getFellow().getCvList().get(0).getAcademicQualificationList();
@@ -135,9 +140,69 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         return false;
     }
     
-    public void checkApplicationForEligiblity(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception
+    /**
+     *This function loads all the applications that need to approved/declined by the 
+     * specified HOD
+     * @param session The session object used to authenticate the user
+     * @return A list of all the applications that user can Approved/declined
+     * @throws com.softserve.Exceptions.AuthenticationException
+     * @throws java.lang.Exception
+     */
+    @Override
+    public List<Application> loadPendingEndorsedApplications(Session session) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+    }
+    
+    /**
+     *This function loads all the applications that need to approved/declined by the 
+     * specified HOD
+     * @param session The session object used to authenticate the user
+     * @return A list of all the applications that user can Approved/declined
+     * @throws com.softserve.Exceptions.AuthenticationException
+     */
+    
+    @Override
+    public List<Application> loadPendingEligibleApplications(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+    }
+    
+
+    
+    /**
+     *
+     * @param session
+     * @param application
+     * @throws AuthenticationException
+     * @throws NonexistentEntityException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
+    public void checkApplicationForEligiblity(Session session, Application application) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
@@ -179,15 +244,31 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }
     }
     
-    public void denyFunding(Session session, Application application, String reason) throws NonexistentEntityException, RollbackFailureException, Exception
+    /**
+     *
+     * @param session
+     * @param application
+     * @param reason
+     * @throws AuthenticationException
+     * @throws NonexistentEntityException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
+    public void denyFunding(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
+        //Set application status to declined
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
         applicationJpaController.edit(application);
         
@@ -203,9 +284,26 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         notificationService.sendNotification(notification, true);
     }
     
-    public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, String cscMesssage, String finaceMessage) throws RollbackFailureException, Exception
+    /**
+     *
+     * @param session
+     * @param application
+     * @param fundingReport
+     * @param applicantMessage
+     * @param cscMesssage
+     * @param finaceMessage
+     * @throws AuthenticationException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
+    public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, String cscMesssage, String finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         FundingReportJpaController fundingReportJpaController = getFundingReportDAO();
@@ -213,8 +311,10 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
+        //Create funding report
         fundingReportJpaController.create(fundingReport);
         
+        //Set application status to funded
         application.setFundingReportID(fundingReport);
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
         

@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 @Local
 public interface NotificationServiceLocal {
     public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception;
-    public void sendNotification(Notification notification, boolean sendEmail) throws Exception; // TODO: Consider deleting this method...
+    public void sendNotification(Notification notification, boolean sendEmail) throws Exception; 
     //public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception;
     //public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception;
     //public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException;

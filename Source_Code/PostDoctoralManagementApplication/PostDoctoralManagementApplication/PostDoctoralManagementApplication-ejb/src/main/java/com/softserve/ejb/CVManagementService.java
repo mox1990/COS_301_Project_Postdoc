@@ -9,7 +9,7 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
-import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.Exceptions.*;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import javax.ejb.Stateless;
@@ -37,7 +37,7 @@ public class CVManagementService implements CVManagementServiceLocal {
     protected CvJpaController getCVDAO()
     {
         return new CvJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
+    }    
     
     protected UserGateway getUserGatewayServiceEJB()
     {
@@ -54,20 +54,34 @@ public class CVManagementService implements CVManagementServiceLocal {
         return new DBEntitiesFactory();
     }
     
+    protected boolean hasCV(Session session)
+    {
+        return (!session.getUser().getCvList().isEmpty());
+    }
+    
+    @Override
     public void createCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
         getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getOwnerID());
+        
+        if(hasCV(session))
+        {
+            throw new CVAlreadExistsException("The user already has a cv");
+        }
         
         CvJpaController cvJpaController = getCVDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
+        cv.setOwnerID(session.getUser());
         cvJpaController.create(cv);
+        
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created user cv", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
+    @Override
     public void updateCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
         getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getOwnerID());

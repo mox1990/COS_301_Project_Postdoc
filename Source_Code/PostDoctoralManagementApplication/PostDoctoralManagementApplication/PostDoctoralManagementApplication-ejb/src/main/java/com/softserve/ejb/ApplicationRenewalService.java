@@ -24,7 +24,7 @@ import javax.persistence.PersistenceContext;
  * @author K
  */
 @Stateless
-public class ApplicationRenewal implements ApplicationRenewalLocal { // TODO: Finalize the local or remote spec
+public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
 
     @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManager em;

@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBEntities.Application;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.ApplicationStageStatus;
 import com.softserve.system.Session;
 import java.util.List;
@@ -19,7 +20,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface ApplicationProgressViewerServiceLocal {
-    public List<Application> getAllApplicationsWithFellow(Session session);
-    public List<Application> getAllApplicationsWithGrantHolder(Session session);
-    public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application);
+    public List<Application> getAllApplicationsWithFellow(Session session) throws AuthenticationException, Exception;
+    public List<Application> getAllApplicationsWithGrantHolder(Session session) throws AuthenticationException, Exception;
+    public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception;
 }

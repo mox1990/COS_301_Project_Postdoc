@@ -7,9 +7,10 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RefereeReport;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.ApplicationStageStatus;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -35,43 +36,57 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
      * entity managers in JTA context so that manual transaction demarcation.
      */
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
+    private EntityManagerFactory emf;    
     
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
-    @Override
-    public List<Application> getAllApplicationsWithFellow(Session session)
+    protected UserGateway getUserGatewayServiceEJB()
     {
-        //AuthenticUser(session, list of privliges)
+        return new UserGateway(emf);
+    }
+    
+    @Override
+    public List<Application> getAllApplicationsWithFellow(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         return getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
     }
     
     @Override
-    public List<Application> getAllApplicationsWithGrantHolder(Session session)
+    public List<Application> getAllApplicationsWithGrantHolder(Session session) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         return getApplicationDAO().findAllApplicationsWhosGrantHolderIs(session.getUser());
     }
     
     @Override
-    public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application)
+    public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
-        
-        //Prep the DAOs
-        PersonJpaController personJpaController = getPersonDAO();
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        
+        UserGateway userGateway = getUserGatewayServiceEJB();
+        try
+        {
+            //Authenticate user ownership of account
+            userGateway.authenticateUserAsOwner(session, application.getFellow());
+        } 
+        catch(AuthenticationException ex)
+        {
+            //Authenticate user privliges
+            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            userGateway.authenticateUser(session, roles);
+        }
+                
         List<ApplicationStageStatus> stageStatuses = new ArrayList<ApplicationStageStatus>();
         
         //Opening information

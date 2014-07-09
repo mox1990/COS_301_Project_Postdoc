@@ -19,7 +19,8 @@ import javax.persistence.PersistenceUnit;
 
 /**
  *
- * @author K
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -31,12 +32,7 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     protected AuditLogJpaController getAuditLogDAO()
     {
         return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-
-    public AuditTrailService() 
-    {
-    }
-    
+    }    
     
     public AuditTrailService(EntityManagerFactory emf) 
     {
