@@ -43,7 +43,7 @@ public class ApplicationServices {
         List<Application> output = applicationJpaController.findAllApplicationsWithStatus(applicationStatusGroup);
         
         
-        if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+        if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {   
             //Possible optimization. Can use user.getApplicationListX() to get list
             for(int i = 0; i < output.size(); i++)

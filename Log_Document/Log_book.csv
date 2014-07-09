@@ -150,7 +150,7 @@ Date,Time,Comment,Member
 "Tuesday, June 17, 2014",,Decided on using XML as content structure in certain databse fields,Group
 "Wednesday, June 18, 2014",,,
 "Thursday, June 19, 2014",,,
-"Friday, June 20, 2014",,"Client meeting: Confirmed project timeline, Finance details. Prof Gruner attened and provided clarification on finance details",Group
+"Friday, June 20, 2014",,"Client meeting: Confirmed project timeline, Finance details. Prof Gruner attened and provided clarification on finance details and progress reports.",Group
 "Saturday, June 21, 2014",,End of june exams,
 "Sunday, June 22, 2014",,"Updated domain objects, refine SQL, converted log to CSV, Created entities",Mathys
 "Monday, June 23, 2014",,Completed XML schemas,Mathys
@@ -181,9 +181,16 @@ Date,Time,Comment,Member
 "Sunday, July 6, 2014",,Added to person unit test for completeName function. Added batch function for notification services,Mathys
 "Sunday, July 6, 2014",,Found some inconsistencies between committee meeting service implementation and specifications. Refactored code. Review code for reasons,Mathys
 "Sunday, July 6, 2014",,Added new field to person table to cater for on-demand user account creation,Mathys
-"Monday, July 7, 2014",,,
-"Tuesday, July 8, 2014",,,
-"Wednesday, July 9, 2014",,,
+"Monday, July 7, 2014",,Added more dates to application table inorder to compensate for application progress info. Completed application progress viewer. Updated the application stage status class.,Mathys
+"Monday, July 7, 2014",,Added some unit tests to some creat user account functions. Advise waiting for other dependicies to finish before procceding further.,Mathys
+"Tuesday, July 8, 2014",,Refactored usergateway and improved cetain areas in accordance to spec. Researched on java ee session management. ,Mathys
+"Tuesday, July 8, 2014",,Created a initial front-end login screen. Created a CSS for general layout components. Implemented managed bean to test if back-end functions work as expeced. Found fault.,Mathys
+"Tuesday, July 8, 2014",,Debugged and implemented work around for audit trail sevices still need to do for rest of session beans. Problem was related to entity manager factory injection.,Mathys
+"Tuesday, July 8, 2014",,Refactored some more faulty code. Started on NewApplicationService inorder to meet project deadlines. Created CV management service. Still needs to be documented,Mathys
+"Wednesday, July 9, 2014",,Added security role objects to persistence constants for role setup. Added a new application status as well to SQL and constants inorder to allow application edit check points.,Mathys
+"Wednesday, July 9, 2014",,Started integrating some authentication routines in other services,Mathys
+"Wednesday, July 9, 2014",,Completed integeration of authentication. Refactored and trimmed code to make coherent. Completed new application service to get project back on track with deadlines,Mathys
+"Wednesday, July 9, 2014",,Completed referee report service. Found a couple of issues to address and ammend.,Mathys
 "Thursday, July 10, 2014",,,
 "Friday, July 11, 2014",,,
 "Saturday, July 12, 2014",,,

@@ -7,8 +7,6 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
@@ -19,7 +17,6 @@ import com.softserve.Exceptions.*;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -27,8 +24,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
 /**
- *
- * @author Carlo
+ * 
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)

@@ -6,8 +6,6 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
@@ -15,12 +13,12 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.Exceptions.UserAlreadyExistsException;
 import com.softserve.system.Session;
-import java.util.List;
 import javax.ejb.Local;
 
 /**
- *
- * @author Carlo
+ * 
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 
 @Local

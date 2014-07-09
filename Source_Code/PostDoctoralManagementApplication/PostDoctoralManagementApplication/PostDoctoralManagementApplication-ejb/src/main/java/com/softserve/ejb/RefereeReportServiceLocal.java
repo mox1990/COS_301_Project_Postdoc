@@ -5,23 +5,22 @@
  */
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.RefereeReport;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
 
-
-
 /**
  *
- * @author Carlo
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Local
 public interface RefereeReportServiceLocal 
 {
-    public List<Application> loadPendingReports(Session session);
-    public void createReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
-    public void submitReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception; 
+    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception;
+    public void submitReferralReport(Session session, Application application, RefereeReport refereeReport) throws AuthenticationException, RollbackFailureException, Exception; 
 }

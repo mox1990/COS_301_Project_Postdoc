@@ -128,7 +128,7 @@ CREATE TABLE FUNDING_REPORT (
 CREATE TABLE APPLICATION (
 	_applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_type ENUM('new', 'renewal'),
-	_status ENUM('open', 'declined','refereed','finalised','recommended','endorsed','eligible','funded', 'completed', 'terminated'),
+	_status ENUM('open', 'submitted', 'declined','refereed','finalised','recommended','endorsed','eligible','funded', 'completed', 'terminated'),
 	_timestamp DATETIME NOT NULL,
 	_finalisationDate DATETIME,
 	_eligiblityCheckDate DATETIME,

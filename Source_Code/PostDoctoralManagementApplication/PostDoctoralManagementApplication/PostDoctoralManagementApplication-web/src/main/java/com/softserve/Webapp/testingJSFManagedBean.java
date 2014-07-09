@@ -8,7 +8,7 @@ package com.softserve.Webapp;
 
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
-import com.softserve.ejb.UserAccountManagementServicesLocal;
+import com.softserve.ejb.UserAccountManagementServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class testingJSFManagedBean implements Serializable {
     
     
     @EJB
-    private UserAccountManagementServicesLocal management;
+    private UserAccountManagementServiceLocal management;
     private String systemID;
     
     /**
