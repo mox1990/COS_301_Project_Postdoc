@@ -6,7 +6,8 @@
 
 package com.softserve.constants;
 
-import com.softserve.ejb.UserAccountManagementServices;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.ejb.UserAccountManagementService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -33,6 +34,16 @@ public class PersistenceConstants {
     public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 7;
     public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 8;
     
+    public final static SecurityRole SECURITY_ROLE_PROSPECTIVE_FELLOW = new SecurityRole((long) 0);
+    public final static SecurityRole SECURITY_ROLE_REFEREE = new SecurityRole((long) 1);
+    public final static SecurityRole SECURITY_ROLE_RESEARCH_FELLOW = new SecurityRole((long) 2);
+    public final static SecurityRole SECURITY_ROLE_GRANT_HOLDER = new SecurityRole((long) 3);
+    public final static SecurityRole SECURITY_ROLE_HOD = new SecurityRole((long) 4);
+    public final static SecurityRole SECURITY_ROLE_DEANS_OFFICE_MEMBER = new SecurityRole((long) 5);
+    public final static SecurityRole SECURITY_ROLE_DRIS_MEMBER = new SecurityRole((long) 6);
+    public final static SecurityRole SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER = new SecurityRole((long) 7);
+    public final static SecurityRole SECURITY_ROLE_SYSTEM_ADMINISTRATOR = new SecurityRole((long) 8);
+    
     //Account status constants
     public final static String ACCOUNT_STATUS_ACTIVE = "active";
     public final static String ACCOUNT_STATUS_DISABLED = "disabled";
@@ -40,6 +51,7 @@ public class PersistenceConstants {
     
     //Application status constants
     public final static String APPLICATION_STATUS_OPEN = "open";
+    public final static String APPLICATION_STATUS_SUBMITTED = "submitted";
     public final static String APPLICATION_STATUS_DECLINED = "declined";
     public final static String APPLICATION_STATUS_REFEREED = "refereed";
     public final static String APPLICATION_STATUS_FINALISED = "finalised";
@@ -73,7 +85,7 @@ public class PersistenceConstants {
         } 
         catch (NamingException ex) 
         {
-            Logger.getLogger(UserAccountManagementServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserAccountManagementService.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }    

@@ -8,7 +8,7 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.*;
 import com.softserve.ejb.AuditTrailService;
-import com.softserve.ejb.UserAccountManagementServices;
+import com.softserve.ejb.UserAccountManagementService;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 
@@ -18,7 +18,7 @@ import java.util.GregorianCalendar;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 
-public class UserAccountManagementServicesMockUnit extends UserAccountManagementServices {     
+public class UserAccountManagementServicesMockUnit extends UserAccountManagementService {     
     
     private PersonJpaController pDAO = null;
     private AddressJpaController aDAO = null;
@@ -59,7 +59,7 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     /**
      *This function creates an instance of the PersonJpaController. 
      * Note this function's secondary goal is to simplify the subclass mocking 
-     * of the UserAccountManagementServices in the unit testing 
+ of the UserAccountManagementService in the unit testing 
      * @return An instance of PersonJpaController
      */
     @Override
@@ -71,7 +71,7 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     /**
      *This function creates an instance of the AddressJpaController. 
      * Note this function's secondary goal is to simplify the subclass mocking 
-     * of the UserAccountManagementServices in the unit testing 
+ of the UserAccountManagementService in the unit testing 
      * @return An instance of AddressJpaController
      */
     @Override
@@ -83,7 +83,7 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     /**
      *This function creates an instance of the UpEmployeeInformationJpaController. 
      * Note this function's secondary goal is to simplify the subclass mocking 
-     * of the UserAccountManagementServices in the unit testing 
+ of the UserAccountManagementService in the unit testing 
      * @return An instance of UpEmployeeInformationJpaController
      */
     @Override

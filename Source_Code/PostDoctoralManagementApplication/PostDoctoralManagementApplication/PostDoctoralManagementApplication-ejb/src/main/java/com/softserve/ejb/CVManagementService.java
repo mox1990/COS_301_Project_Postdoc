@@ -64,7 +64,7 @@ public class CVManagementService implements CVManagementServiceLocal {
         
         cvJpaController.create(cv);
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Create user cv", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created user cv", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     

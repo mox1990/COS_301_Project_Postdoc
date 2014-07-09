@@ -50,9 +50,9 @@ public class UserGateway implements UserGatewayLocal
         return new AuditTrailService(emf);
     }
     
-    protected UserAccountManagementServices getUserAccountManagementServicesEJB()
+    protected UserAccountManagementService getUserAccountManagementServicesEJB()
     {
-        return new UserAccountManagementServices(emf);
+        return new UserAccountManagementService(emf);
     }
     
     protected NotificationService getNotificationServiceEJB()
@@ -65,11 +65,6 @@ public class UserGateway implements UserGatewayLocal
         return new DBEntitiesFactory();
     }
     
-    protected Generator getGeneratorUTIL()
-    {
-        return new Generator();
-    }
-    
     
     @Override
     public Session login(HttpSession httpSession) throws AuthenticationException, Exception
@@ -79,7 +74,7 @@ public class UserGateway implements UserGatewayLocal
             throw new Exception("Not httpsession given");
         }
         
-        UserAccountManagementServices accounts = getUserAccountManagementServicesEJB();
+        UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
@@ -134,7 +129,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException
     {
-        UserAccountManagementServices accounts = getUserAccountManagementServicesEJB();
+        UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
         Person user = accounts.getUserBySystemIDOrEmail((String) httpSession.getAttribute("systemID"));
         
         if(user != null)
@@ -158,7 +153,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception
     {
-        UserAccountManagementServices accounts = getUserAccountManagementServicesEJB();
+        UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
@@ -234,60 +229,6 @@ public class UserGateway implements UserGatewayLocal
         {
             throw new AuthenticationException("User is not the owner");
         }
-    }
-    
-    
-    
-    protected String generateRandomPassword()
-    {
-        return getGeneratorUTIL().generateRandomHexString();
-    }
-    
-    
-    @Override
-    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws Exception
-    {
-        //Use this to create a new account
-        UserAccountManagementServices accountManagement = getUserAccountManagementServicesEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
-        //Set account to dorment
-        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
-        //Set new random password
-        user.setPassword(generateRandomPassword());
-        
-        //Create a user account using a system level system authentication
-        accountManagement.createUserAccount(new Session(session.getSession(), session.getUser(), true), useManualSystemIDSpecification, user, userAddress, userUPInfo);
-        
-        //Notify the new user
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
-        notificationService.sendNotification(notification, true);
-        
-        //Log this action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Generated on demand account", session.getUser());
-        auditTrailService.logAction(auditLog);
-    }
-    
-    /**
-     *
-     * @param user
-     * @param active
-     */
-    @Override
-    public void activateOnDemandAccount(Session session, Person user) throws Exception
-    {
-        UserAccountManagementServices accountManagement = getUserAccountManagementServicesEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
-        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-        accountManagement.updateUserAccount(session, user, null, null);
-        
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Activated on demand account", session.getUser());
-        auditTrailService.logAction(auditLog);
-
-    }
+    } 
     
 }

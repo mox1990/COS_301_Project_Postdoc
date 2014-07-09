@@ -22,10 +22,12 @@ import javax.ejb.Local;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Local
-public interface UserAccountManagementServicesLocal {
+public interface UserAccountManagementServiceLocal {
     public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception;
     public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception;
     public void removeUserAccount(Session session, String systemID) throws RollbackFailureException, Exception;
     public List<Person> viewAllUserAccounts(Session session);
+    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws Exception;
+    public void activateOnDemandAccount(Session session, Person user) throws Exception;
     public void testAddresses();
 }
