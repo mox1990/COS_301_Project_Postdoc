@@ -40,6 +40,10 @@ public class UserGateway implements UserGatewayLocal
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public UserGateway(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     protected AuditTrailService getAuditTrailServiceEJB()
     {
@@ -53,7 +57,7 @@ public class UserGateway implements UserGatewayLocal
     
     protected NotificationService getNotificationServiceEJB()
     {
-        return new NotificationService();
+        return new NotificationService(emf);
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -223,6 +227,16 @@ public class UserGateway implements UserGatewayLocal
             throw new AuthenticationException("User username does not match");
         }
     }
+
+    @Override
+    public void authenticateUserAsOwner(Session session, Person person) throws AuthenticationException, Exception {
+        if(!session.getUser().equals(person))
+        {
+            throw new AuthenticationException("User is not the owner");
+        }
+    }
+    
+    
     
     protected String generateRandomPassword()
     {

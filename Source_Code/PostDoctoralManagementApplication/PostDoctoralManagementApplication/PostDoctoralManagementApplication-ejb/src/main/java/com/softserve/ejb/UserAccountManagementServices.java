@@ -102,7 +102,7 @@ public class UserAccountManagementServices implements UserAccountManagementServi
     
     protected UserGateway getUserGatewayEJB()
     {
-        return new UserGateway();
+        return new UserGateway(emf);
     }
     
     protected GregorianCalendar getGregorianCalendar()

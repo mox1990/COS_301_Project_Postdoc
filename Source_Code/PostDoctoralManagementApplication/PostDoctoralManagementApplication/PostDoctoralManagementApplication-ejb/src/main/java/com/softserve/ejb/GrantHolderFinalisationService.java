@@ -62,12 +62,12 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     
     protected NotificationService getNotificationServiceEJB()
     {
-        return new NotificationService();
+        return new NotificationService(emf);
     }
     
     protected AuditTrailService getAuditTrailServiceEJB()
     {
-        return new AuditTrailService();
+        return new AuditTrailService(emf);
     }
     
     private boolean hasCV(Session session)

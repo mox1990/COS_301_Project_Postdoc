@@ -55,12 +55,12 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
     
     protected NotificationService getNotificationServiceEJB()
     {
-        return new NotificationService();
+        return new NotificationService(emf);
     }
     
     protected AuditTrailService getAuditTrailServiceEJB()
     {
-        return new AuditTrailService();
+        return new AuditTrailService(emf);
     }
     
     /**

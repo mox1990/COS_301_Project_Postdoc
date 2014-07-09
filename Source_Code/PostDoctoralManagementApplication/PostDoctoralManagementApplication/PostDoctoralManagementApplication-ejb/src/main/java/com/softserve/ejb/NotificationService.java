@@ -37,6 +37,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public NotificationService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     protected NotificationJpaController getNotificationDAO()
     {

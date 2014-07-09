@@ -43,6 +43,10 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public MeetingManagementService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     /**
      *This function creates an instance of the PersonJpaController. 
@@ -67,7 +71,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     
     protected NotificationService getNotificationServiceEJB()
     {
-        return new NotificationService();
+        return new NotificationService(emf);
     }
     
     protected AuditTrailService getAuditTrailServiceEJB()

@@ -9,6 +9,7 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Cv;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
@@ -19,14 +20,10 @@ import javax.ejb.Local;
  */
 
 @Local
-public interface NewApplicationLocal
+public interface NewApplicationServiceLocal
 {
-    public Application createNewApplication(Session session);
-    public void generateOnDemandUser();
-    public void specifyReferee(String name, String email);
-    public void specifyGrantHolder(String name, String email);
-    public void createCV();
-    public void submitReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
     
+    public void createNewApplication(Session session, Application application);
+    public void createProspectiveFellowCV(Session session, Cv cv);    
    
 }
