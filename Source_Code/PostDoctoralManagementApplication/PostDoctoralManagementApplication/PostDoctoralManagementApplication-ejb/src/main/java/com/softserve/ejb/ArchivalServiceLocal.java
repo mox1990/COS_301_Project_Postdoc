@@ -6,13 +6,17 @@
 
 package com.softserve.ejb;
 
+import java.io.IOException;
 import javax.ejb.Local;
 
 /**
  *
- * @author kgothatso
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Local
 public interface ArchivalServiceLocal {
-    
+    public void backupDatabase();
+    public void archiveOldInformation();
+    public void retrieveArchievedInformation(String filename) throws IOException;
 }
