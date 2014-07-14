@@ -42,6 +42,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public GrantHolderFinalisationService() {
+    }
+    
     public GrantHolderFinalisationService(EntityManagerFactory emf) {
         this.emf = emf;
     }

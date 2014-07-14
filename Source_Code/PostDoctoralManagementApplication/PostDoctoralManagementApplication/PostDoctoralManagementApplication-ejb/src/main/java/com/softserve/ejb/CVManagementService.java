@@ -30,6 +30,9 @@ public class CVManagementService implements CVManagementServiceLocal {
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public CVManagementService() {
+    }
+    
     public CVManagementService(EntityManagerFactory emf) {
         this.emf = emf;
     }

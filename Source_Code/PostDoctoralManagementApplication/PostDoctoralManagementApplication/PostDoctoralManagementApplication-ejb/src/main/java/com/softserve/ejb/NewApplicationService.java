@@ -34,7 +34,14 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-    
+
+    public NewApplicationService() {
+    }
+
+    public NewApplicationService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+            
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);

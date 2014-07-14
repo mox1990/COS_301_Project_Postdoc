@@ -33,6 +33,9 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public ProgressReportManagementService() {
+    }
+    
     public ProgressReportManagementService(EntityManagerFactory emf) {
         this.emf = emf;
     }

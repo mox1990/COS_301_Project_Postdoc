@@ -36,7 +36,14 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
      * entity managers in JTA context so that manual transaction demarcation.
      */
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;    
+    private EntityManagerFactory emf;
+
+    public ApplicationProgressViewerService() {
+    }
+
+    public ApplicationProgressViewerService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     protected ApplicationJpaController getApplicationDAO()
     {

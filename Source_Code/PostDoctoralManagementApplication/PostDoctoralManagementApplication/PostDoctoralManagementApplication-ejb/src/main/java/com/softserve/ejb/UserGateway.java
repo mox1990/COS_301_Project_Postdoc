@@ -32,6 +32,9 @@ public class UserGateway implements UserGatewayLocal
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public UserGateway() {
+    }
+    
     public UserGateway(EntityManagerFactory emf) {
         this.emf = emf;
     }

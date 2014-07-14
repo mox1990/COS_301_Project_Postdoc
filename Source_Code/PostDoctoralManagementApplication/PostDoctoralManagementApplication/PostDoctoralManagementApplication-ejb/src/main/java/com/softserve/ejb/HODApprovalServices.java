@@ -40,6 +40,9 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public HODApprovalServices() {
+    }
+    
     public HODApprovalServices(EntityManagerFactory emf) {
         this.emf = emf;
     }

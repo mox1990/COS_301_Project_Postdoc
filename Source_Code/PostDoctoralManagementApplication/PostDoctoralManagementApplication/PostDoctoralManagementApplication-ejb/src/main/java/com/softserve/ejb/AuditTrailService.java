@@ -28,16 +28,19 @@ public class AuditTrailService implements AuditTrailServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-    
-    protected AuditLogJpaController getAuditLogDAO()
-    {
-        return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }    
+
+    public AuditTrailService() {
+    }
     
     public AuditTrailService(EntityManagerFactory emf) 
     {
         this.emf = emf;
     }
+    
+    protected AuditLogJpaController getAuditLogDAO()
+    {
+        return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }  
     
     //Just changed it so that it recieves the auditLog object not creates which should be hanadled by the calling function
     @Override

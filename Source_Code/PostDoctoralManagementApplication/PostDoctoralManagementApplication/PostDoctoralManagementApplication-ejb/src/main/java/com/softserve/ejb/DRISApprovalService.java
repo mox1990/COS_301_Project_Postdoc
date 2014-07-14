@@ -41,6 +41,13 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public DRISApprovalService() {
+    }
+
+    public DRISApprovalService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     /**
      *

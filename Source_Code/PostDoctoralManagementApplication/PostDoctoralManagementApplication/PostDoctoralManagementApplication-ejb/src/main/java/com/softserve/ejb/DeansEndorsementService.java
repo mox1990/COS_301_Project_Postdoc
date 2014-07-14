@@ -39,6 +39,13 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+
+    public DeansEndorsementService() {
+    }
+
+    public DeansEndorsementService(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
     
     protected ApplicationJpaController getApplicationDAO()
     {

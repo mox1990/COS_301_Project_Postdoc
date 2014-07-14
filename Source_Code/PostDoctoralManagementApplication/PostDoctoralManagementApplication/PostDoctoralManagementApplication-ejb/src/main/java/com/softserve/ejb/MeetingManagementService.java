@@ -43,6 +43,9 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public MeetingManagementService() {
+    }
+    
     /**
      *
      * @param emf

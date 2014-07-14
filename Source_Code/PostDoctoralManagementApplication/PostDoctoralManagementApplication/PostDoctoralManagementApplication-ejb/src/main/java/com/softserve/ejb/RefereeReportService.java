@@ -38,6 +38,9 @@ public class RefereeReportService implements RefereeReportServiceLocal {
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    public RefereeReportService() {
+    }
+    
     public RefereeReportService(EntityManagerFactory emf) {
         this.emf = emf;
     }
