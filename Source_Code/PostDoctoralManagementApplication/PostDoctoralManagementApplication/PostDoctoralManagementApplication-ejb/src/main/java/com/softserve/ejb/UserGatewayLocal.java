@@ -24,7 +24,7 @@ public interface UserGatewayLocal
 {
     public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception;
     public void authenticateUserAsOwner(Session session, Person person) throws AuthenticationException, Exception;
-    public Session login(HttpSession httpSession) throws AuthenticationException, Exception;
+    public void login(Session httpSession) throws AuthenticationException, Exception;
     public void logout(Session session) throws Exception;
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException;    
     

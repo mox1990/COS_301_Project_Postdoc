@@ -416,7 +416,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         user.setPassword(getGeneratorUTIL().generateRandomHexString());
         
         //Create a user account using a system level system authentication
-        createUserAccount(new Session(session.getSession(), session.getUser(), true), useManualSystemIDSpecification, user, userAddress, userUPInfo);
+        createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user, userAddress, userUPInfo);
         
         //Notify the new user
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());

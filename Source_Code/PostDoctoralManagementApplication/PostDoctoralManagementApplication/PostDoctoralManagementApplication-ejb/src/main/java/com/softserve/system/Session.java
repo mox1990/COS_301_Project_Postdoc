@@ -24,6 +24,7 @@ public class Session {
     {
         user = User;
         session = Session;
+        systemLevel = false;
     }
     
     public Session(HttpSession Session, Person User, Boolean sysLevel) 
@@ -33,7 +34,7 @@ public class Session {
         systemLevel = sysLevel;
     }
     
-    public HttpSession getSession()
+    public HttpSession getHttpSession()
     {
         return session;
     }
@@ -41,6 +42,26 @@ public class Session {
     public Person getUser()
     {
         return user;
+    }
+    
+    public String getHttpSessionUsername()
+    {
+        return (String) session.getAttribute("username");
+    }
+    
+    public void setHttpSessionUsername(String username)
+    {
+        session.setAttribute("username", username);
+    }
+    
+    public String getHttpSessionPassword()
+    {
+        return (String) session.getAttribute("password");
+    }
+    
+    public void setHttpSessionPassword(String password)
+    {
+        session.setAttribute("password", password);
     }
     
     public Boolean getLoggedInStatus()
@@ -56,5 +77,20 @@ public class Session {
     public boolean isSystem()
     {
         return systemLevel;
+    }
+    
+    public boolean doesHttpSessionUsernameMatchUserUsername()
+    {
+        return (user.getSystemID().toLowerCase().equals(getHttpSessionUsername().toLowerCase()));
+    }
+    
+    public boolean doesHttpSessionUsernameMatchUserEmail()
+    {
+        return (user.getEmail().toLowerCase().equals(getHttpSessionUsername().toLowerCase()));
+    }
+    
+    public boolean doesHttpSessionPasswordMatchUserPassword()
+    {
+        return (user.getPassword().equals(getHttpSessionPassword()));
     }
 }

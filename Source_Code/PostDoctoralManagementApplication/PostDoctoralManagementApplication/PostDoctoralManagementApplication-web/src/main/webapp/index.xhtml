@@ -14,28 +14,40 @@
                 <div class="containerHeader"></div>
                 <div class="containerBody">
                     <div class="subContainer">
+                        <div id="header">
+                            <h1 class="header1">Welcome to the UP Postdoctoral application management system</h1>
+                        </div>
                         <div id="sideL">
                             <button id="apply" class="button">Click here to apply for fellowship</button>
                         </div>
-                        <div id="sideR">
+                        <div id="sideR">                            
                             <h:form>
                                 <h:outputLabel value="User name or email:"/>
                                 <br/>
-                                <h:inputText value="#{loginManagedBean.username}"/>
+                                <h:inputText value="#{indexBean.usernameOrEmail}"/>
                                 <br/>
                                 <h:outputLabel value="Password:"/>
                                 <br/>
-                                <h:inputText value="#{loginManagedBean.password}"/>
+                                <h:inputText value="#{indexBean.password}"/>
                                 <br/>
-                                <h:commandButton class="button" value="Login" action="#{loginManagedBean.login()}"></h:commandButton>
+                                <h:commandButton id="loginButton" class="button" value="Login" binding="#{indexBean.errorMessageComponent}" action="#{indexBean.performLoginRequest()}"></h:commandButton>
+                                <br/>
+                                <div class="errorContainer">
+                                    <h:message class="errorSpan" id="loginErrors" for="loginButton" />
+                                </div>
                             </h:form>
+                            
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="containerFooter"></div>
             </div>            
         </div>
     </h:body>
+
+
+
+
 </html>
 

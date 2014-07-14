@@ -61,49 +61,38 @@ public class UserGateway implements UserGatewayLocal
     
     
     @Override
-    public Session login(HttpSession httpSession) throws AuthenticationException, Exception
+    public void login(Session session) throws AuthenticationException, Exception
     {        
-        if(httpSession == null)
+        if(session == null)
         {
-            throw new Exception("Not httpsession given");
+            throw new Exception("Session is null");
         }
         
         UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
-        //Looksup person from database
-        Person user = accounts.getUserBySystemIDOrEmail((String) httpSession.getAttribute("systemID"));
-        
-        //If the user does not exist throw an exception
-        if(user == null)
-        {
-            throw new AuthenticationException("The user does not exist");
-        }
-        
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
         //Check if httpsession systemID has the same as the entities systemID or email address
-        if (((String) httpSession.getAttribute("systemID")).toLowerCase().equals(user.getSystemID().toLowerCase()) || ((String) httpSession.getAttribute("systemID")).toLowerCase().equals(user.getEmail().toLowerCase()))
+        if (session.doesHttpSessionUsernameMatchUserUsername() || session.doesHttpSessionUsernameMatchUserEmail())
         {
+            
             //Checks if httpsession password and entities password still match
-            if (httpSession.getAttribute("password").equals(user.getPassword())) 
+            if (session.doesHttpSessionPasswordMatchUserPassword()) 
             {
                 //Set login status to true
-                httpSession.setAttribute("status", Boolean.TRUE);
+                session.setLoggedInStatus(Boolean.TRUE);
                 //Log action
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("User logged in", user);
+                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("User logged in", session.getUser());
                 auditTrailService.logAction(auditLog);
-                //Return a session wrapper
-                return new Session(httpSession, user);
             } 
             else
             {
-                httpSession.setAttribute("status", Boolean.FALSE);
+                session.setLoggedInStatus(Boolean.FALSE);
                 throw new AuthenticationException("User password does not match");
             }
         }
         else
         {
-            httpSession.setAttribute("status", Boolean.FALSE);
+            session.setLoggedInStatus(Boolean.FALSE);
             throw new AuthenticationException("User username does not match");
         }
     }
@@ -114,17 +103,19 @@ public class UserGateway implements UserGatewayLocal
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
+        session.setLoggedInStatus(Boolean.FALSE);
+        
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("User logged out", session.getUser());
         auditTrailService.logAction(auditLog);
         
-        session.getSession().setAttribute("status", Boolean.FALSE);
+        
     }
     
     @Override
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException
     {
         UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
-        Person user = accounts.getUserBySystemIDOrEmail((String) httpSession.getAttribute("systemID"));
+        Person user = accounts.getUserBySystemIDOrEmail((String) httpSession.getAttribute("username"));
         
         if(user != null)
         {
@@ -157,10 +148,10 @@ public class UserGateway implements UserGatewayLocal
         }
         
         //Check if httpsession systemID still the same as the entities systemID or email address
-        if (((String) session.getSession().getAttribute("systemID")).toLowerCase().equals(session.getUser().getSystemID().toLowerCase()) || ((String) session.getSession().getAttribute("systemID")).toLowerCase().equals(session.getUser().getEmail().toLowerCase()))
+        if (session.doesHttpSessionUsernameMatchUserUsername() || session.doesHttpSessionUsernameMatchUserEmail())
         {
             //Checks if httpsession password and entities password still match
-            if (session.getSession().getAttribute("password").equals(session.getUser().getPassword())) 
+            if (session.doesHttpSessionPasswordMatchUserPassword()) 
             {
                 //Check if user session has been given temporal system level access
                 if(session.isSystem())
@@ -183,28 +174,6 @@ public class UserGateway implements UserGatewayLocal
                 auditTrailService.logAction(auditLog);
                 
                 throw new AuthenticationException("User does not have the correct priviliges for this section");
-                /*
-                //What if the roles are in a different order???
-                //Hard coded the size of the array...
-                long[] roleID = new long[10];
-                long[] roleIDSentIN = new long[10];
-                List<SecurityRole> personRole = allPerson.getSecurityRoleList();
-                for(int j = 0; j < personRole.size(); j++)
-                {
-                    roleID[j] = personRole.get(j).getRoleID();
-                    roleIDSentIN[j] = role.get(j).getRoleID();                            
-                }
-                Arrays.sort(roleID);
-                Arrays.sort(roleIDSentIN);
-                for(int k = 0; k < roleID.length; k++)
-                {
-                    if(roleID[k] != roleIDSentIN[k])
-                    {
-                        //incorrect security role
-                        check = 3;
-                    }
-                }
-                */
             } 
             else
             {
