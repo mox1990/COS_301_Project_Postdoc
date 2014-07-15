@@ -8,6 +8,7 @@ package com.softserve.Webapp;
 
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 
 /**
@@ -15,12 +16,12 @@ import javax.inject.Inject;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hODDeclineRequestBean")
+@Named(value = "hodDeclineRequestBean")
 @RequestScoped
 public class HODDeclineRequestBean {
     
     @Inject
-    private HODServicesBean hODServicesBean;
+    private HODServicesBean hodServicesBean;
     
     private String reason = "";
     
@@ -28,6 +29,16 @@ public class HODDeclineRequestBean {
      * Creates a new instance of HODRecommendBean
      */
     public HODDeclineRequestBean() {
+    }
+    
+    public UIComponent getErrorContainer() 
+    {
+        return hodServicesBean.getErrorContainer();
+    }
+
+    public void setErrorContainer(UIComponent errorContainer) 
+    {
+        hodServicesBean.setErrorContainer(errorContainer);
     }
     
     public String getReason() {
@@ -38,9 +49,9 @@ public class HODDeclineRequestBean {
         this.reason = reason;
     }
     
-    public void preformDeclineRequest()
+    public String preformDeclineRequest()
     {
-        hODServicesBean.declineCurrentlySelectedApplication(reason);
+        return hodServicesBean.declineCurrentlySelectedApplication(reason);
     }
     
 }

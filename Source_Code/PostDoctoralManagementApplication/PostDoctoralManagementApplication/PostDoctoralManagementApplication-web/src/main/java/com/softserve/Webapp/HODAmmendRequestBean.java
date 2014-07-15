@@ -6,7 +6,10 @@
 
 package com.softserve.Webapp;
 
+import com.softserve.DBEntities.RecommendationReport;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -20,7 +23,7 @@ import javax.inject.Named;
 public class HODAmmendRequestBean {
 
     @Inject
-    private HODServicesBean hODServicesBean;
+    private HODServicesBean hodServicesBean;
     
     private String reason = "";
     
@@ -28,6 +31,16 @@ public class HODAmmendRequestBean {
      * Creates a new instance of HODRecommendBean
      */
     public HODAmmendRequestBean() {
+    }
+    
+    public UIComponent getErrorContainer() 
+    {
+        return hodServicesBean.getErrorContainer();
+    }
+
+    public void setErrorContainer(UIComponent errorContainer) 
+    {
+        hodServicesBean.setErrorContainer(errorContainer);
     }
 
     public String getReason() {
@@ -38,9 +51,9 @@ public class HODAmmendRequestBean {
         this.reason = reason;
     }
     
-    public void preformAmmendRequest()
+    public String preformAmmendRequest()
     {
-        hODServicesBean.ammendCurrentlySelectedApplication(reason);
+        return hodServicesBean.ammendCurrentlySelectedApplication(reason);
     }
     
 }

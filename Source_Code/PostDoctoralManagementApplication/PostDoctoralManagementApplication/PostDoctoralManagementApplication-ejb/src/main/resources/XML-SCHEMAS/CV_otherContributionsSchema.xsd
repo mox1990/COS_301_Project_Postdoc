@@ -13,17 +13,26 @@
                         type="xs:date"/>                        
         </xs:sequence>
     </xs:complexType>
+    
+    <xs:complexType name="items">
+        <xs:sequence>
+            <xs:element name="item"
+                        type="item"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
     <xs:element name="otherContributions">
         <xs:complexType>
             <xs:sequence>
                <xs:element name="conferencesWorkshopsCourses"
-                           type="item"/>
+                           type="items"/>
                <xs:element name="teamworkCollaboration"
-                           type="item"/>
+                           type="items"/>
                <xs:element name="memberships"
-                           type="item"/>
+                           type="items"/>
                <xs:element name="vistsToInsitutions"
-                           type="item"/>
+                           type="items"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

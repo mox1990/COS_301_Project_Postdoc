@@ -368,6 +368,18 @@ public class Person implements Serializable {
     public void setCvList(List<Cv> cvList) {
         this.cvList = cvList;
     }
+    
+    public Cv getFirstCv()
+    {
+        if(cvList != null  && cvList.size() > 0)
+        {
+            return cvList.get(0);
+        }
+        else
+        {
+            return new Cv();
+        }
+    }
 
     @XmlTransient
     public List<Application> getApplicationList1() {

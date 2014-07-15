@@ -35,11 +35,11 @@ public class XMLUnmarshaller {
         return (ApplicationInformation) unmarshaller.unmarshal(new StreamSource(new StringReader(applicationInformation)));        
     }
     
-    public RecommendationReport unmarshalRecommendationReportString(String recommendationReport) throws JAXBException
+    public RecommendationReportContent unmarshalRecommendationReportContentString(String recommendationReportContent) throws JAXBException
     {
         JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.HOD.RecommendationReport");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
-        return (RecommendationReport) unmarshaller.unmarshal(new StreamSource(new StringReader(recommendationReport)));        
+        return (RecommendationReportContent) unmarshaller.unmarshal(new StreamSource(new StringReader(recommendationReportContent)));        
     }
     
     public ReferalReport unmarshalReferalReportString(String referalReport) throws JAXBException
@@ -49,11 +49,11 @@ public class XMLUnmarshaller {
         return (ReferalReport) unmarshaller.unmarshal(new StreamSource(new StringReader(referalReport)));        
     }
     
-    public ProgressReport unmarshalProgressReportString(String progressReport) throws JAXBException
+    public ProgressReportContent unmarshalProgressReportContentString(String progressReportContent) throws JAXBException
     {
         JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow.ProgressReport");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
-        return (ProgressReport) unmarshaller.unmarshal(new StreamSource(new StringReader(progressReport)));        
+        return (ProgressReportContent) unmarshaller.unmarshal(new StreamSource(new StringReader(progressReportContent)));        
     }
     
     public OtherContributions unmarshalOtherContributionsString(String otherContributions) throws JAXBException

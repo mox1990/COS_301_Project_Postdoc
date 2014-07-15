@@ -16,15 +16,16 @@
                     
                 </div>
                 <div class="containerBody">
-                    <p:accordionPanel value="#{hodServicesBean.pendingApplications}" var="pendingApp">
-                        <p:tab title="Application #{pendingApp.applicationID} - #{pendingApp.fellow.completeName}">
+                    <p:accordionPanel dynamic="true" cache="true" value="#{hodServicesBean.pendingApplications}" var="pendingApp">
+                        <p:tab title="Application #{pendingApp.applicationID} - #{pendingApp.projectTitle}">
                             <h:panelGrid columns="2" cellpadding="10px">
                                 <h:outputText value="Fellow:"/>
                                 <h:outputText value="#{pendingApp.fellow.completeName}"/>
-                                <h:outputText value="#{pendingApp.information}"
-                                                  
-                            </h:panelGrid>
-                            
+                                <h:outputText value="Grant holder:"/>
+                                <h:outputText value="#{pendingApp.grantHolderID.completeName}"/>                                
+                                <p:commandButton value="Click for more information" action="#{hodServicesBean.setCurrentlySelectedApplication(pendingApp)}"/> 
+                                #{hodApplicationViewerRequestBean.application.fellow.firstCv.researchOutputXMLEntity.journalPublications.references}
+                            </h:panelGrid>                            
                         </p:tab>
                     </p:accordionPanel> 
                 </div>

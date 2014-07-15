@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import auto.softserve.XMLEntities.application.ApplicationInformation;
+import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -204,6 +207,19 @@ public class Application implements Serializable {
 
     public void setInformation(String information) {
         this.information = information;
+    }
+    
+    public ApplicationInformation getInformationXMLEntity()
+    {
+        XMLUnmarshaller xmlu = new XMLUnmarshaller();        
+        try 
+        {        
+            return xmlu.unmarshalApplicationInformationString(getInformation());
+        } 
+        catch (JAXBException ex) 
+        {
+            return null;
+        }
     }
 
     @XmlTransient

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -32,46 +33,115 @@ import javax.inject.Named;
 @ConversationScoped
 public class HODServicesBean implements Serializable {
     
+    //Injections
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject
-    private Conversation conversation;
+    private Conversation conversation;    
     @EJB
-    private HODApprovalServicesLocal hODApprovalServicesLocal;
+    private HODApprovalServicesLocal hodApprovalServicesLocal;
     
-    /*private List<Application> pendingApplications;
-    
-    private int startIndexOfPendingApplications = 0;
-    private final int maxNoOfPendingApplications = 20;*/
-    private Application currentlySelectedApplication = null;
+    //Conversation level variables
     private UIComponent errorContainer;
+    private List<Application> pendingApplications;
+    private Application currentlySelectedApplication = null;   
+    
+    
+    
+    /*private int startIndexOfPendingApplications = 0;
+    private final int maxNoOfPendingApplications = 20;*/
     
     /**
      * Creates a new instance of HODRecommendationServiceBean
      */
     public HODServicesBean() {
     }
+    
+    @PostConstruct
+    public void init()
+    {
+        try 
+        {
+            conversation.begin();
+            pendingApplications = hodApprovalServicesLocal.loadPendingApplications(sessionManagerBean.getSession(),0,hodApprovalServicesLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.handleException(errorContainer, ex);
+        }
+    }
 
+    public Conversation getConversation() {
+        return conversation;
+    }
+    
+    public List<Application> getPendingApplications()
+    {        
+        return pendingApplications;
+    }
+    
     public Application getCurrentlySelectedApplication() {
         return currentlySelectedApplication;
     }
 
     public void setCurrentlySelectedApplication(Application currentlySelectedApplication) {
         this.currentlySelectedApplication = currentlySelectedApplication;
-    }    
-    
-    public List<Application> loadPendingApplications()
+    }
+
+    public UIComponent getErrorContainer() {
+        return errorContainer;
+    }
+
+    public void setErrorContainer(UIComponent errorContainer) {
+        this.errorContainer = errorContainer;
+    }
+            
+    public String declineCurrentlySelectedApplication(String reasonMessage)
     {
-        conversation.begin();
         try 
         {
-            return hODApprovalServicesLocal.loadPendingApplications(sessionManagerBean.getSession(),0,hODApprovalServicesLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
+            hodApprovalServicesLocal.denyAppliction(sessionManagerBean.getSession(), currentlySelectedApplication, reasonMessage);
+            return goToApplicationSelectionView();
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.handleException(errorContainer, ex);
-            return new ArrayList<Application>();
-        }
+            ExceptionUtil.handleException(errorContainer, ex); 
+            return "";
+        }        
+    }
+    
+    public String ammendCurrentlySelectedApplication(String reasonMessage)
+    {
+        try 
+        {
+            hodApprovalServicesLocal.ammendAppliction(sessionManagerBean.getSession(), currentlySelectedApplication, reasonMessage);
+            return goToApplicationSelectionView();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.handleException(errorContainer, ex); 
+            return "";
+        }        
+    }
+    
+    public String recommendCurrentlySelectedApplication(RecommendationReport report)
+    {
+        try 
+        {
+            hodApprovalServicesLocal.approveApplication(sessionManagerBean.getSession(), currentlySelectedApplication, report);
+            return goToApplicationSelectionView();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.handleException(errorContainer, ex); 
+            return "";
+        }        
+    }
+    
+    public String goToApplicationViewer(Application application)
+    {
+        setCurrentlySelectedApplication(application);   
+        return "HODRecommendationService_ApplicationViewer?faces-redirect=true";
     }
     
     public String goToDeclineView()
@@ -79,39 +149,9 @@ public class HODServicesBean implements Serializable {
         return "HODRecommendationService_ApplicationDecline?faces-redirect=true";
     }
     
-    public String declineCurrentlySelectedApplication(String reasonMessage)
-    {
-        try 
-        {
-            hODApprovalServicesLocal.denyAppliction(sessionManagerBean.getSession(), currentlySelectedApplication, reasonMessage);
-            conversation.end();
-            return "HODRecommendationService_ApplicationSelection?faces-redirect=true";
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.handleException(errorContainer, ex); 
-            return "";
-        }        
-    }
-    
     public String goToAmmendView()
     {
         return "HODRecommendationService_ApplicationAmmend?faces-redirect=true";
-    }
-    
-    public String ammendCurrentlySelectedApplication(String reasonMessage)
-    {
-        try 
-        {
-            hODApprovalServicesLocal.ammendAppliction(sessionManagerBean.getSession(), currentlySelectedApplication, reasonMessage);
-            conversation.end();
-            return "HODRecommendationService_ApplicationSelection?faces-redirect=true";
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.handleException(errorContainer, ex); 
-            return "";
-        }        
     }
     
     public String goToRecommendView()
@@ -119,26 +159,13 @@ public class HODServicesBean implements Serializable {
         return "HODRecommendationService_ApplicationRecommend?faces-redirect=true";
     }
     
-    public String recommendCurrentlySelectedApplication(RecommendationReport report)
-    {
-        try 
-        {
-            hODApprovalServicesLocal.approveApplication(sessionManagerBean.getSession(), currentlySelectedApplication, report);
-            conversation.end();
-            return "HODRecommendationService_ApplicationSelection?faces-redirect=true";
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.handleException(errorContainer, ex); 
-            return "";
-        }        
-    }
-    
     public String goToApplicationSelectionView()
     {
         conversation.end();
+        init();
         return "HODRecommendationService_ApplicationSelection?faces-redirect=true";
     }
+    
     
     /* Old pagenation attempt
     public void setStartIndexOfPendingApplications(int startIndexOfPendingApplications) {

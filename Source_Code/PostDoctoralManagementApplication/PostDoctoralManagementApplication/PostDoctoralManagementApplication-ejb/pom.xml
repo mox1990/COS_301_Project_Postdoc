@@ -153,7 +153,7 @@
                             <packageName>auto.softserve.XMLEntities.fellow</packageName>
                             <outputDirectory>${basedir}/src/main/java/</outputDirectory>
                             <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
-                            <schemaFiles>Fellow_progressReportSchema.xsd</schemaFiles>
+                            <schemaFiles>Fellow_progressReportContentSchema.xsd</schemaFiles>
                             <clearOutputDir>FALSE</clearOutputDir>
                         </configuration>
                     </execution>
@@ -167,7 +167,7 @@
                             <packageName>auto.softserve.XMLEntities.HOD</packageName>
                             <outputDirectory>${basedir}/src/main/java/</outputDirectory>
                             <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
-                            <schemaFiles>HOD_recommendationSchema.xsd</schemaFiles>
+                            <schemaFiles>HOD_recommendationReportContentSchema.xsd</schemaFiles>
                             <clearOutputDir>FALSE</clearOutputDir>
                         </configuration>
                     </execution>

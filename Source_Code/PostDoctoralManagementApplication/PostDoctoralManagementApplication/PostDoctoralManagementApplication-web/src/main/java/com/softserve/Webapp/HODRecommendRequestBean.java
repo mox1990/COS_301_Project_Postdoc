@@ -7,7 +7,9 @@
 package com.softserve.Webapp;
 
 import com.softserve.DBEntities.RecommendationReport;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -21,7 +23,7 @@ import javax.inject.Named;
 public class HODRecommendRequestBean {
     
     @Inject
-    private HODServicesBean hODServicesBean;
+    private HODServicesBean hodServicesBean;    
     
     private RecommendationReport recommendationReport = null;
     
@@ -29,8 +31,23 @@ public class HODRecommendRequestBean {
      * Creates a new instance of HODRecommendBean
      */
     public HODRecommendRequestBean() 
+    {        
+    }
+    
+    @PostConstruct
+    public void init()
     {
         recommendationReport = new RecommendationReport();
+    }
+    
+    public UIComponent getErrorContainer() 
+    {
+        return hodServicesBean.getErrorContainer();
+    }
+
+    public void setErrorContainer(UIComponent errorContainer) 
+    {
+        hodServicesBean.setErrorContainer(errorContainer);
     }
 
     public RecommendationReport getRecommendationReport() {
@@ -41,9 +58,9 @@ public class HODRecommendRequestBean {
         this.recommendationReport = recommendationReport;
     }
     
-    public void preformRecommendRequest()
+    public String preformRecommendRequest()
     {
-        hODServicesBean.recommendCurrentlySelectedApplication(recommendationReport);
+        return hodServicesBean.recommendCurrentlySelectedApplication(recommendationReport);
     }
     
 }

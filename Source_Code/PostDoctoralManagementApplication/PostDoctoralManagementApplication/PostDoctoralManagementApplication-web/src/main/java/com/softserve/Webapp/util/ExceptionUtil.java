@@ -23,6 +23,13 @@ public class ExceptionUtil {
     public static void handleException(UIComponent errorDisplayer, Exception ex)
     {        
         FacesMessage facesMessage = new FacesMessage(ex.getMessage());
-        FacesContext.getCurrentInstance().addMessage(errorDisplayer.getClientId(), facesMessage);
+        if(errorDisplayer == null)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        }
+        else
+        {
+            FacesContext.getCurrentInstance().addMessage(errorDisplayer.getClientId(), facesMessage);
+        }
     }
 }

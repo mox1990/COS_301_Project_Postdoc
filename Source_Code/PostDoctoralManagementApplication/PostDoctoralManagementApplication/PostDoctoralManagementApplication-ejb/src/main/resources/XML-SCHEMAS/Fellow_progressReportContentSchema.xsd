@@ -29,7 +29,7 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:element name="progressReport"> 
+    <xs:element name="ProgressReportContent"> 
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="projectAimsAttainment">

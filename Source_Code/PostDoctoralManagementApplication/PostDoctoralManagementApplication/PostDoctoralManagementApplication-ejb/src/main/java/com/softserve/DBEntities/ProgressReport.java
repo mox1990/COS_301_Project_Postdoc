@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import auto.softserve.XMLEntities.fellow.ProgressReportContent;
+import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -24,6 +26,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -96,6 +99,20 @@ public class ProgressReport implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+    
+    public ProgressReportContent getContentXMLEntity()
+    {
+        XMLUnmarshaller xmlu = new XMLUnmarshaller();
+        
+        try 
+        {        
+            return xmlu.unmarshalProgressReportContentString(getContent());
+        } 
+        catch (JAXBException ex) 
+        {
+            return null;
+        }
     }
 
     public Application getApplicationID() {
