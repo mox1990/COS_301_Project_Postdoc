@@ -156,7 +156,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @throws java.lang.Exception
      */
     @Override
-    public List<Application> loadPendingEndorsedApplications(Session session) throws AuthenticationException, Exception
+    public List<Application> loadPendingEndorsedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -166,8 +166,24 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         ApplicationServices applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,StartIndex,maxNumberOfRecords);
     }
+
+    @Override
+    public int countTotalPendingEndorsedApplications(Session session) throws AuthenticationException, Exception 
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+    }
+    
+    
     
     /**
      *This function loads all the applications that need to approved/declined by the 
@@ -178,7 +194,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      */
     
     @Override
-    public List<Application> loadPendingEligibleApplications(Session session) throws AuthenticationException, Exception
+    public List<Application> loadPendingEligibleApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -188,10 +204,22 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         ApplicationServices applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, StartIndex, maxNumberOfRecords);
     }
-    
 
+    @Override
+    public int countTotalPendingEligibleApplications(Session session) throws AuthenticationException, Exception 
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+    }
     
     /**
      *

@@ -22,8 +22,10 @@ import javax.ejb.Local;
  */
 @Local
 public interface DRISApprovalServiceLocal {
-    public List<Application> loadPendingEndorsedApplications(Session session) throws AuthenticationException, Exception;
-    public List<Application> loadPendingEligibleApplications(Session session) throws AuthenticationException, Exception;
+    public List<Application> loadPendingEndorsedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
+    public int countTotalPendingEndorsedApplications(Session session) throws AuthenticationException, Exception;
+    public List<Application> loadPendingEligibleApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
+    public int countTotalPendingEligibleApplications(Session session) throws AuthenticationException, Exception;
     public void checkApplicationForEligiblity(Session session, Application application) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
     public void denyFunding(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
     public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, String cscMesssage, String finaceMessage) throws AuthenticationException, RollbackFailureException, Exception;

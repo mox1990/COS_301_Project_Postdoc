@@ -22,7 +22,8 @@ import javax.ejb.Local;
  */
 @Local
 public interface HODApprovalServicesLocal {
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception;
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception;
     public void denyAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
     public void ammendAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
     public void approveApplication(Session session, Application application, RecommendationReport recommendationReport) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;

@@ -21,6 +21,7 @@ import javax.ejb.Local;
 @Local
 public interface RefereeReportServiceLocal 
 {
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception;
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception;
     public void submitReferralReport(Session session, Application application, RefereeReport refereeReport) throws AuthenticationException, RollbackFailureException, Exception; 
 }

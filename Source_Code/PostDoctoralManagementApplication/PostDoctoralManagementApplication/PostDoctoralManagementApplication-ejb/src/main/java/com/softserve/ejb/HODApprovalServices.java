@@ -119,7 +119,7 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
      * @throws java.lang.Exception
      */
     @Override
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -128,7 +128,20 @@ public class HODApprovalServices implements HODApprovalServicesLocal {
         
         ApplicationServices applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
+    }
+    
+    @Override
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
     }
     
     /**

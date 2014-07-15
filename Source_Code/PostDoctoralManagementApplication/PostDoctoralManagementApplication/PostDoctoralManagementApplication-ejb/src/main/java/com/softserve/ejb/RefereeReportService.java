@@ -117,7 +117,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
      * @throws java.lang.Exception
      */
     @Override
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -126,9 +126,32 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         
         ApplicationServices applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, StartIndex, maxNumberOfRecords);
     }
     
+    @Override
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+    }
+    
+    /**
+     *
+     * @param session
+     * @param application
+     * @param refereeReport
+     * @throws AuthenticationException
+     * @throws RollbackFailureException
+     * @throws Exception
+     */
+    @Override
     public void submitReferralReport(Session session, Application application, RefereeReport refereeReport) throws AuthenticationException, RollbackFailureException, Exception
     {
         //Authenticate user privliges

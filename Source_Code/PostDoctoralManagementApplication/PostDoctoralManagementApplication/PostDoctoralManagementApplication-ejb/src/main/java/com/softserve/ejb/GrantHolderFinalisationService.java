@@ -154,11 +154,13 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      *This function loads all the applications that need to finalised by the 
      * specified grant holder
      * @param session The session object used to authenticate the user
+     * @param StartIndex
+     * @param maxNumberOfRecords
      * @return A list of all the applications that user can finalise
      * @throws com.softserve.Exceptions.AuthenticationException
      */
     @Override
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -167,7 +169,20 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         ApplicationServices applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED, StartIndex, maxNumberOfRecords);
+    }
+    
+    @Override
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        
+        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
     }
     
     /**

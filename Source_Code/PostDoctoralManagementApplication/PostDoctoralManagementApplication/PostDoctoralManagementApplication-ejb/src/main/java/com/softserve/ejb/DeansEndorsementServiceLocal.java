@@ -22,7 +22,8 @@ import javax.ejb.Local;
  */
 @Local
 public interface DeansEndorsementServiceLocal {
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception;
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception;
     public void denyApplication(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
     public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws AuthenticationException, RollbackFailureException, NonexistentEntityException, Exception;    
 }

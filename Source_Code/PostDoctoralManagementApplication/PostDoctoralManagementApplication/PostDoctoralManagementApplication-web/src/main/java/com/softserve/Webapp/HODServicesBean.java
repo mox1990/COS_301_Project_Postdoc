@@ -6,8 +6,7 @@
 
 package com.softserve.Webapp;
 
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import auto.softserve.XMLEntities.application.*;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -40,6 +39,10 @@ public class HODServicesBean implements Serializable {
     @EJB
     private HODApprovalServicesLocal hODApprovalServicesLocal;
     
+    /*private List<Application> pendingApplications;
+    
+    private int startIndexOfPendingApplications = 0;
+    private final int maxNoOfPendingApplications = 20;*/
     private Application currentlySelectedApplication = null;
     private UIComponent errorContainer;
     
@@ -55,14 +58,14 @@ public class HODServicesBean implements Serializable {
 
     public void setCurrentlySelectedApplication(Application currentlySelectedApplication) {
         this.currentlySelectedApplication = currentlySelectedApplication;
-    }
+    }    
     
-    public List<Application> getPendingApplications()
+    public List<Application> loadPendingApplications()
     {
         conversation.begin();
         try 
         {
-            return hODApprovalServicesLocal.loadPendingApplications(sessionManagerBean.getSession());
+            return hODApprovalServicesLocal.loadPendingApplications(sessionManagerBean.getSession(),0,hODApprovalServicesLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
         } 
         catch (Exception ex) 
         {
@@ -136,4 +139,34 @@ public class HODServicesBean implements Serializable {
         conversation.end();
         return "HODRecommendationService_ApplicationSelection?faces-redirect=true";
     }
+    
+    /* Old pagenation attempt
+    public void setStartIndexOfPendingApplications(int startIndexOfPendingApplications) {
+        this.startIndexOfPendingApplications = startIndexOfPendingApplications;
+    }    
+
+    public List<Application> getPendingApplications() {
+        return pendingApplications;
+    }
+
+    public void setPendingApplications(List<Application> pendingApplications) {
+        this.pendingApplications = pendingApplications;
+    }    
+    
+    public void addNextApplicationsToList()
+    {
+        try 
+        {
+            if(startIndexOfPendingApplications + maxNoOfPendingApplications < hODApprovalServicesLocal.countTotalPendingApplications(sessionManagerBean.getSession()))
+            {
+                startIndexOfPendingApplications += maxNoOfPendingApplications;
+                
+                pendingApplications.addAll(loadPendingApplications());
+            }
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(HODServicesBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 }

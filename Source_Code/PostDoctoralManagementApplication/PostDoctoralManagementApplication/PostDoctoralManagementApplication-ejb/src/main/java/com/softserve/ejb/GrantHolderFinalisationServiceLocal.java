@@ -24,6 +24,7 @@ import javax.ejb.Local;
 @Local
 public interface GrantHolderFinalisationServiceLocal {
     public void createGrantHolderCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception;
-    public List<Application> loadPendingApplications(Session session) throws AuthenticationException, Exception;
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
+    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception;
     public void finaliseApplication(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception;    
 }
