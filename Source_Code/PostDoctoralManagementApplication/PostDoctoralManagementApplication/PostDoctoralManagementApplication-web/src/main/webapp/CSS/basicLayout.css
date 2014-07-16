@@ -110,6 +110,17 @@ body
     
 }
 
+.informationContainer
+{
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    display: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .header1
 {
     color: black;
@@ -118,6 +129,28 @@ body
     border-bottom-color: darkred;
     border-bottom-style: solid;
     border-bottom-width: 6px;
+    font-weight: bold;
+}
+
+.header2
+{
+    color: black;
+    text-align: center;
+    font-size: 12pt;
+    border-bottom-color: darkred;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    font-weight: bold;
+}
+
+.informationContainerHeader1
+{
+    color: black;
+    text-align: left;
+    font-size: 12pt;
+    border-bottom-color: darkred;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
 }
 
 .errorContainer
@@ -151,6 +184,33 @@ body
     
 }
 
+.fieldErrorMessage
+{
+    color: white;
+    
+    border-style: solid;
+    border-width: 4px;
+    border-color: black;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 3px;
+    
+    background: #a90329; /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E5MDMyOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjQ0JSIgc3RvcC1jb2xvcj0iIzhmMDIyMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM2ZDAwMTkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  #a90329 0%, #8f0222 44%, #6d0019 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a90329), color-stop(44%,#8f0222), color-stop(100%,#6d0019)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 ); /* IE6-8 */
+    
+    overflow: hidden;
+}
+
 .button
 {
     width: 400px;
@@ -159,6 +219,7 @@ body
     border: solid gray;
     border-radius: 5px;
     margin: 2px;
+    text-align: center;
     
 }
 
@@ -193,7 +254,7 @@ form input[readonly]
 
 form select
 {
-    width: 400px;
+    width: 352px;
     font-size: 16pt;
     color: black;
     border: solid gray;
@@ -242,10 +303,12 @@ form label
 {
     font-size: 14pt;
     font-weight: bold;
-    margin-left: 4px
+    margin-left: 4px;
+    
 }
 
 form label span
 {
     color: red;
 }
+

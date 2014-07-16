@@ -62,4 +62,8 @@ public class IndexBean {
         return sessionManagerBean.login(errorMessageComponent,usernameOrEmail,password);
     }
     
+    public String goToUserAccountCreationForProspectiveFellowView()
+    {
+        return "UserAccountManagement_ProspectiveFellowCreateUser?faces-redirect=true";
+    }
 }

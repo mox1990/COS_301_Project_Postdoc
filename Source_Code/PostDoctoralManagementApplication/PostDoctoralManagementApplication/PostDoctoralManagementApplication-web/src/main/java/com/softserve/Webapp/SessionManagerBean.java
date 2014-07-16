@@ -87,4 +87,9 @@ public class SessionManagerBean implements Serializable {
         
         return userGateway.getSessionFromHttpSession(httpSession);
     }
+    
+    public Session getSystemLevelSession()
+    {
+        return new Session(null, null, Boolean.TRUE);
+    }
 }

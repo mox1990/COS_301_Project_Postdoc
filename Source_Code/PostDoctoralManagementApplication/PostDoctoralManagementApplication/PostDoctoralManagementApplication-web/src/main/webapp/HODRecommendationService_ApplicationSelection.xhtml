@@ -23,7 +23,7 @@
                                 <h:outputText value="#{pendingApp.fellow.completeName}"/>
                                 <h:outputText value="Grant holder:"/>
                                 <h:outputText value="#{pendingApp.grantHolderID.completeName}"/>                                
-                                <p:commandButton value="Click for more information" action="#{hodServicesBean.setCurrentlySelectedApplication(pendingApp)}"/> 
+                                <p:commandButton rendered="#{sessionManagerBean.session.doesUserHaveSecurityRole(1)}"value="Click for more information" action="#{hodServicesBean.setCurrentlySelectedApplication(pendingApp)}"/> 
                                 #{hodApplicationViewerRequestBean.application.fellow.firstCv.researchOutputXMLEntity.journalPublications.references}
                             </h:panelGrid>                            
                         </p:tab>

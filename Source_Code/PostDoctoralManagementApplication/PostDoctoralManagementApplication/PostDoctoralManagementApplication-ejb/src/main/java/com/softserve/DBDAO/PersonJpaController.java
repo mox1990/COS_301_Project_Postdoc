@@ -982,7 +982,7 @@ public class PersonJpaController implements Serializable {
         //Finds maximum systemID for year and prefix combination
         try
         {                 
-            lastID = em.createQuery("SELECT p.systemID FROM Person p WHERE p.systemID LIKE ':year%' ORDER BY p.systemID DESC",String.class).setParameter("year", tempYear).setMaxResults(1).getSingleResult();
+            lastID = em.createQuery("SELECT p.systemID FROM Person p WHERE p.systemID LIKE :year ORDER BY p.systemID DESC",String.class).setParameter("year", tempYear + "%").setMaxResults(1).getSingleResult();
         }
         catch(NoResultException exception)
         {

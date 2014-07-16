@@ -1,10 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>UP Post doctoral application management system</title>
         <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
+        <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        <script type="text/javascript">
+            function showInfoDiv(divindex)
+            {
+                $("#info" + divindex).show();
+            }
+            
+            function hideInfoDiv(divindex)
+            {
+                $("#info" + divindex).hide();
+            }            
+        </script>
     </h:head>
     <h:body>
         <div class="background">
@@ -15,7 +28,41 @@
                     
                 </div>
                 <div class="containerBody">
-                    <button>Click me</button>
+                    <div>
+                        <h1 class="header1"> Welcome #{sessionManagerBean.session.user.completeName}. </h1>
+                        <h2>Please select the service you wish to use</h2>
+                    </div>
+                    <div>                        
+                        <p:button onmouseover="showInfoDiv(1)" onmouseout="hideInfoDiv(1)" styleClass="button button-fill" value="Application services"/>
+                        <div id="info1" class="informationContainer">
+                            <h1 class="informationContainerHeader1">Information:</h1>
+                            Selecting application services will give you access to the various sections of the application process that you have security clearence for.
+                            You can use these services to open a new application or renew an old one if you are prospective or current fellow.
+                            
+                        </div>
+                        <p:button onmouseover="showInfoDiv(2)" onmouseout="hideInfoDiv(2)" styleClass="button button-fill" value="Report services"/>
+                        <p:panel
+                        <div id="info2" class="informationContainer">
+                            
+                        </div>
+                        <p:button onmouseover="showInfoDiv(3)" onmouseout="hideInfoDiv(3)" styleClass="button button-fill" value="User account management services"/>
+                        <div id="info3" class="informationContainer">
+                            
+                        </div>
+                        <p:button onmouseover="showInfoDiv(4)" onmouseout="hideInfoDiv(4)" styleClass="button button-fill" value="Data import and export services"/>
+                        <div id="info4" class="informationContainer">
+                            
+                        </div>
+                        <p:button onmouseover="showInfoDiv(5)" onmouseout="hideInfoDiv(5)" styleClass="button button-fill" value="Aduit trail services"/>
+                        <div id="info5" class="informationContainer">
+                            
+                        </div>
+                        <p:button onmouseover="showInfoDiv(6)" onmouseout="hideInfoDiv(6)" styleClass="button button-fill" value="Archival services"/>
+                        <div id="info6" class="informationContainer">
+                            
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="containerFooter"></div>
             </div>            

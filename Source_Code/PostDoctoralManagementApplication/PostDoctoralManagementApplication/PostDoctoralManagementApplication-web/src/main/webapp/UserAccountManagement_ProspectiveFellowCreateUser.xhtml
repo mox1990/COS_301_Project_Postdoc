@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Prospective fellow user account creation</title>
+        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
+        <link rel="stylesheet" type="text/css" href="CSS/useraccountCreationScreen.css"/>
+    </h:head>
+    <h:body>
+        <div class="background">
+            <div class="sideNavBar"></div>
+            <div class="container">
+                <div class="containerHeader"></div>
+                <div class="containerBody">
+                    <div class="subContainer">
+                        <div id="header">
+                            <h1 class="header1">Prospective fellow user account creation</h1>
+                            <h2>Please complete the fields below</h2>
+                        </div>
+                        <div>
+                            <h:form>
+                                <center>
+                                <h:panelGrid columns="3" cellpadding="5">
+                                    <f:facet name="header"> 
+                                        <h:outputText styleClass="header2" value="Person information"/>
+                                    </f:facet>                                    
+                                    <p:outputLabel value="Title:" for="title"/>                                    
+                                    <p:selectOneMenu id="title" value="#{newUserAccountCreationRequestBean.person.title}">
+                                        <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
+                                    </p:selectOneMenu>
+                                    <h:message for="title" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Full name:" for="fname"/>                                
+                                    <p:inputText id="fname" value="#{newUserAccountCreationRequestBean.person.fullName}"/>
+                                    <h:message for="fname" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Surname:" for="sname"/>                                
+                                    <p:inputText id="sname" value="#{newUserAccountCreationRequestBean.person.surname}"/>
+                                    <h:message for="sname" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Email:" for="email"/>                                
+                                    <p:inputText id="email" value="#{newUserAccountCreationRequestBean.person.email}"/>
+                                    <h:message for="email" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Telephone number:" for="telephoneNumber"/>                                
+                                    <p:inputText id="telephoneNumber" value="#{newUserAccountCreationRequestBean.person.telephoneNumber}"/>
+                                    <h:message for="telephoneNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Work phone number:" for="workNumber"/>                                
+                                    <p:inputText id="workNumber" value="#{newUserAccountCreationRequestBean.person.workNumber}"/>
+                                    <h:message for="workNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Fax number:" for="faxNumber"/>                               
+                                    <p:inputText id="faxNumber" value="#{newUserAccountCreationRequestBean.person.faxNumber}"/>
+                                    <h:message for="faxNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Cellphone number:" for="cellphoneNumber"/>                                
+                                    <p:inputText id="cellphoneNumber" value="#{newUserAccountCreationRequestBean.person.cellphoneNumber}"/>
+                                    <h:message for="cellphoneNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Are you an UP empolyee:" for="upEmployee"/>                                
+                                    <p:selectBooleanCheckbox id="upEmployee" value="#{newUserAccountCreationRequestBean.person.upEmployee}"/>
+                                    <h:message for="upEmployee" styleClass="fieldErrorMessage"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="3" cellpadding="5" >
+                                    <f:facet name="header"> 
+                                        <h:outputText styleClass="header2" value="Physical home address"/>
+                                    </f:facet>
+                                    <p:outputLabel value="Country:" for="country"/>                                
+                                    <p:inputText id="country" value="#{newUserAccountCreationRequestBean.address.country}"/>
+                                    <h:message for="country" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Province:" for="province"/>                                
+                                    <p:inputText id="province" value="#{newUserAccountCreationRequestBean.address.province}"/>
+                                    <h:message for="province" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Town / City:" for="townCity"/>                                
+                                    <p:inputText id="townCity" value="#{newUserAccountCreationRequestBean.address.townCity}"/>
+                                    <h:message for="townCity" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Street name:" for="street"/>                                
+                                    <p:inputText id="street" value="#{newUserAccountCreationRequestBean.address.street}"/>
+                                    <h:message for="street" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Street number:" for="streeNumber"/>                                
+                                    <p:inputText id="streeNumber" value="#{newUserAccountCreationRequestBean.address.streeNumber}"/>
+                                    <h:message for="streeNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Room number:" for="roomNumber"/>                                
+                                    <p:inputText id="roomNumber" value="#{newUserAccountCreationRequestBean.address.roomNumber}"/>
+                                    <h:message for="roomNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Zip / Postal Code:" for="zippostalCode"/>                                
+                                    <p:inputText id="zippostalCode" value="#{newUserAccountCreationRequestBean.address.zippostalCode}"/>
+                                    <h:message for="zippostalCode" styleClass="fieldErrorMessage"/>
+                                </h:panelGrid>   
+                                <h:panelGrid columns="3" cellpadding="5" >
+                                    <f:facet name="header"> 
+                                        <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
+                                    </f:facet>
+                                    <p:outputLabel value="Empoyee ID:" for="systemID"/>                                
+                                    <p:inputText id="systemID" value="#{newUserAccountCreationRequestBean.person.systemID}" />
+                                    <h:message for="systemID" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Date of employeement" for="dateOfAppointment"/>                                
+                                    <p:calendar id="dateOfAppointment" value="#{newUserAccountCreationRequestBean.employeeInformation.dateOfAppointment}" navigator="true" pattern="yyyy-MMM-dd"/>
+                                    <h:message for="dateOfAppointment" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Appointment status:" for="appointmentStatus"/>                                
+                                    <p:inputText id="appointmentStatus" value="#{newUserAccountCreationRequestBean.employeeInformation.appointmentStatus}"/>
+                                    <h:message for="appointmentStatus" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Position:" for="position"/>                                
+                                    <p:inputText id="position" value="#{newUserAccountCreationRequestBean.employeeInformation.position}"/>
+                                    <h:message for="position" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Country:" for="ecountry"/>                                
+                                    <p:inputText id="ecountry" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.country}"/>
+                                    <h:message for="ecountry" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Province:" for="eprovince"/>                                
+                                    <p:inputText id="eprovince" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.province}"/>
+                                    <h:message for="eprovince" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Town / City:" for="etownCity"/>                                
+                                    <p:inputText id="etownCity" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.townCity}"/>
+                                    <h:message for="etownCity" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Street name:" for="estreet"/>                                
+                                    <p:inputText id="estreet" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.street}"/>
+                                    <h:message for="estreet" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Street number:" for="estreeNumber"/>                                
+                                    <p:inputText id="estreeNumber" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.streeNumber}"/>
+                                    <h:message for="estreeNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Room number:" for="eroomNumber"/>                                
+                                    <p:inputText id="eroomNumber" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.roomNumber}"/>
+                                    <h:message for="eroomNumber" styleClass="fieldErrorMessage"/>
+                                    
+                                    <p:outputLabel value="Zip / Postal Code:" for="ezippostalCode"/>                                
+                                    <p:inputText id="ezippostalCode" value="#{newUserAccountCreationRequestBean.employeeInformation.physicalAddress.zippostalCode}"/>
+                                    <h:message for="ezippostalCode" styleClass="fieldErrorMessage"/>
+                                </h:panelGrid>
+                                <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{newUserAccountCreationRequestBean.errorContainer}" action="#{newUserAccountCreationRequestBean.performProspectiveFellowUserAccountCreation()}" ajax="false"/>
+                                <div class="errorContainer">
+                                    <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>
+                                </div>
+                                </center>
+                            </h:form>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="containerFooter"></div>
+            </div>            
+        </div>
+    </h:body>
+</html>
+

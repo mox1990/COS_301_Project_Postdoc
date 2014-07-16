@@ -142,6 +142,12 @@ public class UserGateway implements UserGatewayLocal
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
+        //Check if user session has been given temporal system level access
+        if(session.isSystem())
+        {
+            return;
+        }
+        
         if(!session.getLoggedInStatus())
         {
             throw new AuthenticationException("The user is no longer logged in");
@@ -153,11 +159,7 @@ public class UserGateway implements UserGatewayLocal
             //Checks if httpsession password and entities password still match
             if (session.doesHttpSessionPasswordMatchUserPassword()) 
             {
-                //Check if user session has been given temporal system level access
-                if(session.isSystem())
-                {
-                    return;
-                }
+               
                 
                 //Checks if user has the correct security role
                 for(SecurityRole sr :session.getUser().getSecurityRoleList())

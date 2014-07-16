@@ -7,6 +7,7 @@
 package com.softserve.system;
 
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -92,5 +93,15 @@ public class Session {
     public boolean doesHttpSessionPasswordMatchUserPassword()
     {
         return (user.getPassword().equals(getHttpSessionPassword()));
+    }
+    
+    public boolean doesUserHaveSecurityRole(int roleID)
+    {
+        return doesUserHaveSecurityRole(new SecurityRole((long) roleID));
+    }
+    
+    public boolean doesUserHaveSecurityRole(SecurityRole securityRole)
+    {
+        return user.getSecurityRoleList().contains(securityRole);
     }
 }
