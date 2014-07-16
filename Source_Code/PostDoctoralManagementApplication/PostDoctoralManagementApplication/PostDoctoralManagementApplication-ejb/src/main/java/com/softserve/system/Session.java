@@ -8,6 +8,7 @@ package com.softserve.system;
 
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
+import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -103,5 +104,17 @@ public class Session {
     public boolean doesUserHaveSecurityRole(SecurityRole securityRole)
     {
         return user.getSecurityRoleList().contains(securityRole);
+    }
+    
+    public boolean doesUserHaveAnyOfTheseSecurityRole(ArrayList<SecurityRole> securityRoles)
+    {
+       for(SecurityRole sr: securityRoles)
+       {
+           if(doesUserHaveSecurityRole(sr))
+           {
+               return true;
+           }
+       }
+       return false;
     }
 }

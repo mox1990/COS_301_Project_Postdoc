@@ -10,12 +10,14 @@
         <script type="text/javascript">
             function showInfoDiv(divindex)
             {
-                $("#info" + divindex).show();
+                $('.informationContainer').stop(true, true);
+                $("#info" + divindex).slideDown({duration : 250, easing : 'linear'});
             }
             
             function hideInfoDiv(divindex)
             {
-                $("#info" + divindex).hide();
+                $('.informationContainer').stop(true, true);
+                $("#info" + divindex).slideUp({duration : 250, easing : 'linear'});
             }            
         </script>
     </h:head>
@@ -33,6 +35,7 @@
                         <h2>Please select the service you wish to use</h2>
                     </div>
                     <div>                        
+                        
                         <p:button onmouseover="showInfoDiv(1)" onmouseout="hideInfoDiv(1)" styleClass="button button-fill" value="Application services"/>
                         <div id="info1" class="informationContainer">
                             <h1 class="informationContainerHeader1">Information:</h1>
@@ -40,27 +43,39 @@
                             You can use these services to open a new application or renew an old one if you are prospective or current fellow.
                             
                         </div>
-                        <p:button onmouseover="showInfoDiv(2)" onmouseout="hideInfoDiv(2)" styleClass="button button-fill" value="Report services"/>
-                        <p:panel
-                        <div id="info2" class="informationContainer">
-                            
-                        </div>
+                        
+                        <p:panel rendered="#{welcomeBean.reportServicesDisplayable}">
+                            <p:button onmouseover="showInfoDiv(2)" onmouseout="hideInfoDiv(2)" styleClass="button button-fill" value="Report services"/>                        
+                            <div id="info2" class="informationContainer">
+
+                            </div>
+                        </p:panel>
+                        
                         <p:button onmouseover="showInfoDiv(3)" onmouseout="hideInfoDiv(3)" styleClass="button button-fill" value="User account management services"/>
                         <div id="info3" class="informationContainer">
                             
                         </div>
-                        <p:button onmouseover="showInfoDiv(4)" onmouseout="hideInfoDiv(4)" styleClass="button button-fill" value="Data import and export services"/>
-                        <div id="info4" class="informationContainer">
-                            
-                        </div>
-                        <p:button onmouseover="showInfoDiv(5)" onmouseout="hideInfoDiv(5)" styleClass="button button-fill" value="Aduit trail services"/>
-                        <div id="info5" class="informationContainer">
-                            
-                        </div>
-                        <p:button onmouseover="showInfoDiv(6)" onmouseout="hideInfoDiv(6)" styleClass="button button-fill" value="Archival services"/>
-                        <div id="info6" class="informationContainer">
-                            
-                        </div>
+                        
+                        <p:panel rendered="#{welcomeBean.dataImportExportServicesDisplayable}">
+                            <p:button onmouseover="showInfoDiv(4)" onmouseout="hideInfoDiv(4)" styleClass="button button-fill" value="Data import and export services"/>
+                            <div id="info4" class="informationContainer">
+
+                            </div>
+                        </p:panel>
+                        
+                        <p:panel rendered="#{welcomeBean.auditTrailServicesDisplayable}">
+                            <p:button onmouseover="showInfoDiv(5)" onmouseout="hideInfoDiv(5)" styleClass="button button-fill" value="Aduit trail services"/>
+                            <div id="info5" class="informationContainer">
+
+                            </div>
+                        </p:panel>
+                        
+                        <p:panel rendered="#{welcomeBean.archivalServicesDisplayable}">
+                            <p:button onmouseover="showInfoDiv(6)" onmouseout="hideInfoDiv(6)" styleClass="button button-fill" value="Archival services"/>
+                            <div id="info6" class="informationContainer">
+
+                            </div>
+                        </p:panel>
                     </div>
                     
                 </div>

@@ -24,25 +24,25 @@ public class PersistenceConstants {
     public final static String PERSISTENCE_UNIT_NAME = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU";
     
     //Security role IDs constants
-    public final static long SECURITY_ROLE_ID_PROSPECTIVE_FELLOW = 0;
-    public final static long SECURITY_ROLE_ID_REFEREE = 1;
-    public final static long SECURITY_ROLE_ID_RESEARCH_FELLOW = 2;
-    public final static long SECURITY_ROLE_ID_GRANT_HOLDER = 3;
-    public final static long SECURITY_ROLE_ID_HOD = 4;
-    public final static long SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER = 5;
-    public final static long SECURITY_ROLE_ID_DRIS_MEMBER = 6;
-    public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 7;
-    public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 8;
+    public final static long SECURITY_ROLE_ID_PROSPECTIVE_FELLOW = 1;
+    public final static long SECURITY_ROLE_ID_REFEREE = 2;
+    public final static long SECURITY_ROLE_ID_RESEARCH_FELLOW = 3;
+    public final static long SECURITY_ROLE_ID_GRANT_HOLDER = 4;
+    public final static long SECURITY_ROLE_ID_HOD = 5;
+    public final static long SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER = 6;
+    public final static long SECURITY_ROLE_ID_DRIS_MEMBER = 7;
+    public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 8;
+    public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 9;
     
-    public final static SecurityRole SECURITY_ROLE_PROSPECTIVE_FELLOW = new SecurityRole((long) 0);
-    public final static SecurityRole SECURITY_ROLE_REFEREE = new SecurityRole((long) 1);
-    public final static SecurityRole SECURITY_ROLE_RESEARCH_FELLOW = new SecurityRole((long) 2);
-    public final static SecurityRole SECURITY_ROLE_GRANT_HOLDER = new SecurityRole((long) 3);
-    public final static SecurityRole SECURITY_ROLE_HOD = new SecurityRole((long) 4);
-    public final static SecurityRole SECURITY_ROLE_DEANS_OFFICE_MEMBER = new SecurityRole((long) 5);
-    public final static SecurityRole SECURITY_ROLE_DRIS_MEMBER = new SecurityRole((long) 6);
-    public final static SecurityRole SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER = new SecurityRole((long) 7);
-    public final static SecurityRole SECURITY_ROLE_SYSTEM_ADMINISTRATOR = new SecurityRole((long) 8);
+    public final static SecurityRole SECURITY_ROLE_PROSPECTIVE_FELLOW = new SecurityRole((long) 1);
+    public final static SecurityRole SECURITY_ROLE_REFEREE = new SecurityRole((long) 2);
+    public final static SecurityRole SECURITY_ROLE_RESEARCH_FELLOW = new SecurityRole((long) 3);
+    public final static SecurityRole SECURITY_ROLE_GRANT_HOLDER = new SecurityRole((long) 4);
+    public final static SecurityRole SECURITY_ROLE_HOD = new SecurityRole((long) 5);
+    public final static SecurityRole SECURITY_ROLE_DEANS_OFFICE_MEMBER = new SecurityRole((long) 6);
+    public final static SecurityRole SECURITY_ROLE_DRIS_MEMBER = new SecurityRole((long) 7);
+    public final static SecurityRole SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER = new SecurityRole((long) 8);
+    public final static SecurityRole SECURITY_ROLE_SYSTEM_ADMINISTRATOR = new SecurityRole((long) 9);
     
     //Account status constants
     public final static String ACCOUNT_STATUS_ACTIVE = "active";

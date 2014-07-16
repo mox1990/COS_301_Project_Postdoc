@@ -269,7 +269,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
         
         //Log action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created new user account", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created new user account", (session.getUser() == null && session.isSystem())  ? user : session.getUser()); //This is a isolated instance when a prospective fellow creates a new account
         auditTrailService.logAction(auditLog);
         
     }
@@ -360,6 +360,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        if(session.getUser().getSystemID().equals(systemID))
+        {
+            throw new Exception("You cannot delete your own account");
+        }
         
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();

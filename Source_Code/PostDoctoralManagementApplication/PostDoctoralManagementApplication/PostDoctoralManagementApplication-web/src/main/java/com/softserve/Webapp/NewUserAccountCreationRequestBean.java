@@ -99,7 +99,8 @@ public class NewUserAccountCreationRequestBean {
         } 
         catch (Exception ex) 
         {
-            System.out.println("Hi2");
+            
+            System.out.println(ex.getMessage());
             ExceptionUtil.handleException(errorContainer, ex);
             return "";
         }
