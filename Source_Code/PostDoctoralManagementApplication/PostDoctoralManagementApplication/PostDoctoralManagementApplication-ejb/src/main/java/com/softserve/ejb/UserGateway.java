@@ -158,8 +158,7 @@ public class UserGateway implements UserGatewayLocal
         {
             //Checks if httpsession password and entities password still match
             if (session.doesHttpSessionPasswordMatchUserPassword()) 
-            {
-               
+            {                
                 
                 //Checks if user has the correct security role
                 for(SecurityRole sr :session.getUser().getSecurityRoleList())

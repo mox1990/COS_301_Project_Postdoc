@@ -8,6 +8,8 @@ package com.softserve.constants;
 
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.UserAccountManagementService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -88,5 +90,17 @@ public class PersistenceConstants {
             Logger.getLogger(UserAccountManagementService.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-    }    
+    }
+    
+    public static List<SecurityRole> getAllSecurityRoles()
+    {
+        List<SecurityRole> list = new ArrayList<SecurityRole>();
+        
+        for(long i = 1; i < 10; i++)
+        {
+            list.add(new SecurityRole((long) i));
+        }
+        
+        return list;
+    }
 }

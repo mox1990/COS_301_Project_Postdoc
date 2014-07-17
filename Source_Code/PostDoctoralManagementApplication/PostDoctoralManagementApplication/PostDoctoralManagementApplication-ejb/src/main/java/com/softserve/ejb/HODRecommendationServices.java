@@ -35,15 +35,15 @@ import javax.persistence.PersistenceUnit;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class HODApprovalServices implements HODApprovalServicesLocal {
+public class HODRecommendationServices implements HODRecommendationServicesLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
-    public HODApprovalServices() {
+    public HODRecommendationServices() {
     }
     
-    public HODApprovalServices(EntityManagerFactory emf) {
+    public HODRecommendationServices(EntityManagerFactory emf) {
         this.emf = emf;
     }
     

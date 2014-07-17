@@ -21,7 +21,7 @@ import javax.ejb.Local;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Local
-public interface HODApprovalServicesLocal {
+public interface HODRecommendationServicesLocal {
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
     public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception;
     public void denyAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
