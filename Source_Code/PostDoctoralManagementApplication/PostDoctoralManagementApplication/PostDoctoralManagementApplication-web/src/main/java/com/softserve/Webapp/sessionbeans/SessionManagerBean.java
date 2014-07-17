@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.sessionbeans;
 
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;

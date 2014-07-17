@@ -4,11 +4,12 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.requestbeans;
 
 import auto.softserve.XMLEntities.CV.*;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Cv;
+import com.softserve.Webapp.HODServicesBean;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -4,8 +4,9 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.requestbeans;
 
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;

@@ -4,9 +4,10 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.Webapp.HODServicesBean;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -18,26 +19,19 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodRecommendRequestBean")
+@Named(value = "hodAmmendRequestBean")
 @RequestScoped
-public class HODRecommendRequestBean {
-    
+public class HODAmmendRequestBean {
+
     @Inject
-    private HODServicesBean hodServicesBean;    
+    private HODServicesBean hodServicesBean;
     
-    private RecommendationReport recommendationReport = null;
+    private String reason = "";
     
     /**
      * Creates a new instance of HODRecommendBean
      */
-    public HODRecommendRequestBean() 
-    {        
-    }
-    
-    @PostConstruct
-    public void init()
-    {
-        recommendationReport = new RecommendationReport();
+    public HODAmmendRequestBean() {
     }
     
     public UIComponent getErrorContainer() 
@@ -50,17 +44,17 @@ public class HODRecommendRequestBean {
         hodServicesBean.setErrorContainer(errorContainer);
     }
 
-    public RecommendationReport getRecommendationReport() {
-        return recommendationReport;
+    public String getReason() {
+        return reason;
     }
 
-    public void setRecommendationReport(RecommendationReport recommendationReport) {
-        this.recommendationReport = recommendationReport;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
     
-    public String preformRecommendRequest()
+    public String preformAmmendRequest()
     {
-        return hodServicesBean.recommendCurrentlySelectedApplication(recommendationReport);
+        return hodServicesBean.ammendCurrentlySelectedApplication(reason);
     }
     
 }

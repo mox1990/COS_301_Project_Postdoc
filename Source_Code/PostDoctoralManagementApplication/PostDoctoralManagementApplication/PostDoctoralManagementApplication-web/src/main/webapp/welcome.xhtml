@@ -2,86 +2,111 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>UP Post doctoral application management system</title>
-        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
-        <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
-        <script type="text/javascript">
-            function showInfoDiv(divindex)
-            {
-                $('.informationContainer').stop(true, true);
-                $("#info" + divindex).slideDown({duration : 250, easing : 'linear'});
-            }
-            
-            function hideInfoDiv(divindex)
-            {
-                $('.informationContainer').stop(true, true);
-                $("#info" + divindex).slideUp({duration : 250, easing : 'linear'});
-            }            
-        </script>
-    </h:head>
-    <h:body>
-        <div class="background">
-            <div class="sideNavBar"></div>
-            <div class="container">
-                <div class="containerHeader"></div>
-                <div class="containerNavBar">
-                    
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="templates/generalPageTemplate.xhtml">
+        <ui:param name="pageTitle" value="Welcome"/>
+        
+        <ui:define name="CSSStyleSheets">
+            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        </ui:define>
+        
+        <ui:define name="JSScripts">
+            <script type="text/javascript">
+                function showInfoDiv(divindex)
+                {
+                    $('.informationContainer').stop(true, true);
+                    $("#info" + divindex).slideDown({duration : 250, easing : 'linear'});
+                }
+
+                function hideInfoDiv(divindex)
+                {
+                    $('.informationContainer').stop(true, true);
+                    $("#info" + divindex).slideUp({duration : 250, easing : 'linear'});
+                }            
+            </script>
+        </ui:define>
+        
+        <ui:define name="pageBreadBrumb">
+            <div class="containerNavBar">
+
+            </div>
+        </ui:define>
+        
+        <ui:define name="pageBody">
+                <div>
+                    <h1 class="header1"> Welcome #{sessionManagerBean.session.user.completeName}. </h1>
+                    <h2>Please select the service you wish to use</h2>
                 </div>
-                <div class="containerBody">
-                    <div>
-                        <h1 class="header1"> Welcome #{sessionManagerBean.session.user.completeName}. </h1>
-                        <h2>Please select the service you wish to use</h2>
-                    </div>
-                    <div>                        
-                        
-                        <p:button onmouseover="showInfoDiv(1)" onmouseout="hideInfoDiv(1)" styleClass="button button-fill" value="Application services"/>
-                        <div id="info1" class="informationContainer">
-                            <h1 class="informationContainerHeader1">Information:</h1>
+                <div>
+                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(1)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
+                        <ui:param name="buttonName" value="Application services"/>
+                        <ui:param name="infoContainerID" value="info1"/>
+                        <ui:define name="informationContent">
                             Selecting application services will give you access to the various sections of the application process that you have security clearence for.
-                            You can use these services to open a new application or renew an old one if you are prospective or current fellow.
-                            
-                        </div>
-                        
-                        <p:panel rendered="#{welcomeBean.reportServicesDisplayable}">
-                            <p:button onmouseover="showInfoDiv(2)" onmouseout="hideInfoDiv(2)" styleClass="button button-fill" value="Report services"/>                        
-                            <div id="info2" class="informationContainer">
-
-                            </div>
-                        </p:panel>
-                        
-                        <p:button onmouseover="showInfoDiv(3)" onmouseout="hideInfoDiv(3)" styleClass="button button-fill" value="User account management services"/>
-                        <div id="info3" class="informationContainer">
-                            
-                        </div>
-                        
-                        <p:panel rendered="#{welcomeBean.dataImportExportServicesDisplayable}">
-                            <p:button onmouseover="showInfoDiv(4)" onmouseout="hideInfoDiv(4)" styleClass="button button-fill" value="Data import and export services"/>
-                            <div id="info4" class="informationContainer">
-
-                            </div>
-                        </p:panel>
-                        
-                        <p:panel rendered="#{welcomeBean.auditTrailServicesDisplayable}">
-                            <p:button onmouseover="showInfoDiv(5)" onmouseout="hideInfoDiv(5)" styleClass="button button-fill" value="Aduit trail services"/>
-                            <div id="info5" class="informationContainer">
-
-                            </div>
-                        </p:panel>
-                        
-                        <p:panel rendered="#{welcomeBean.archivalServicesDisplayable}">
-                            <p:button onmouseover="showInfoDiv(6)" onmouseout="hideInfoDiv(6)" styleClass="button button-fill" value="Archival services"/>
-                            <div id="info6" class="informationContainer">
-
-                            </div>
-                        </p:panel>
-                    </div>
+                            You can use these services to open a new application or renew an old one if you are prospective or current fellow.   
+                        </ui:define>
+                    </ui:decorate>
                     
+                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.reportServicesDisplayable}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(2)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
+                        <ui:param name="buttonName" value="Report services"/>
+                        <ui:param name="infoContainerID" value="info2"/>
+                        <ui:define name="informationContent">
+                            The user account management service allows you to manage your user account.
+                        </ui:define>
+                    </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(3)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
+                        <ui:param name="buttonName" value="User account management services"/>
+                        <ui:param name="infoContainerID" value="info3"/>
+                        <ui:define name="informationContent">
+                            The user account management service allows you to manage your user account.
+                        </ui:define>
+                    </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.dataImportExportServicesDisplayable}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(4)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
+                        <ui:param name="buttonName" value="Data import and export services"/>
+                        <ui:param name="infoContainerID" value="info4"/>
+                        <ui:define name="informationContent">
+                            This service allows one to back up the database and any old data
+                        </ui:define>
+                    </ui:decorate>
+
+                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.auditTrailServicesDisplayable}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(5)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
+                        <ui:param name="buttonName" value="Audit trail services"/>
+                        <ui:param name="infoContainerID" value="info5"/>
+                        <ui:define name="informationContent">
+                            This service allows one to back up the database and any old data
+                        </ui:define>
+                    </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.archivalServicesDisplayable}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(6)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
+                        <ui:param name="buttonName" value="Archival services"/>
+                        <ui:param name="infoContainerID" value="info6"/>
+                        <ui:define name="informationContent">
+                            This service allows one to back up the database and any old data
+                        </ui:define>
+                    </ui:decorate>
                 </div>
-                <div class="containerFooter"></div>
-            </div>            
-        </div>
-    </h:body>
+        </ui:define>
+    </ui:composition>
 </html>
 

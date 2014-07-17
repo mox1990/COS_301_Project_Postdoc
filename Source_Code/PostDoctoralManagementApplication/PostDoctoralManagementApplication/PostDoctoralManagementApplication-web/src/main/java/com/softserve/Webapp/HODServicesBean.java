@@ -6,6 +6,7 @@
 
 package com.softserve.Webapp;
 
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import auto.softserve.XMLEntities.application.*;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RecommendationReport;

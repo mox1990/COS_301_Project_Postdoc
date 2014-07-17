@@ -75,7 +75,7 @@ public class testingJSFManagedBean implements Serializable {
             Session session = new Session((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false), person,true);
             session.setLoggedInStatus(Boolean.TRUE);
             
-            management.createUserAccount(session, true, person, address, null);
+            management.createUserAccount(session, true, person, address, null, null);
             
         } catch (Exception ex) {
             Logger.getLogger(testingJSFManagedBean.class.getName()).log(Level.SEVERE, null, ex);

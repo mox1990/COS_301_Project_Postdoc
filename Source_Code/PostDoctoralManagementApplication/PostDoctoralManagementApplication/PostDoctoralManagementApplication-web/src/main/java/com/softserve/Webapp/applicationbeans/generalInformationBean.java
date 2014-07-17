@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.applicationbeans;
 
 import java.util.ArrayList;
 import java.util.List;

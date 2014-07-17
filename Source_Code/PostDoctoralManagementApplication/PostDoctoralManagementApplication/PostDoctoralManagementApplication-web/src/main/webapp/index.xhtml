@@ -2,52 +2,42 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>UP Post doctoral application management system</title>
-        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
-        <link rel="stylesheet" type="text/css" href="CSS/loginScreenLayout.css"/>
-    </h:head>
-    <h:body>
-        <div class="background">
-            <div class="sideNavBar"></div>
-            <div class="container">
-                <div class="containerHeader"></div>
-                <div class="containerBody">
-                    <div class="subContainer">
-                        <div id="header">
-                            <h1 class="header1">Welcome to the UP Postdoctoral application management system</h1>
-                        </div>
-                        <div id="sideL">
-                            <p:button id="apply" styleClass="button" value="Click here to apply for fellowship" outcome="#{indexBean.goToUserAccountCreationForProspectiveFellowView()}"></p:button>
-                        </div>
-                        <div id="sideR">                            
-                            <h:form>
-                                <h:outputLabel value="User name or email:"/>
-                                <br/>
-                                <p:inputText value="#{indexBean.usernameOrEmail}"/>
-                                <br/>
-                                <h:outputLabel value="Password:"/>
-                                <br/>
-                                <p:inputText value="#{indexBean.password}"/>
-                                <br/>
-                                <p:commandButton id="loginButton" styleClass="button" value="Login" binding="#{indexBean.errorMessageComponent}" action="#{indexBean.performLoginRequest()}" ajax="false"></p:commandButton>
-                                <br/>
-                                <div class="errorContainer">
-                                    <h:message styleClass="errorSpan" id="loginErrors" for="loginButton" />
-                                </div>
-                            </h:form>  
-                        </div>
-                    </div>
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="templates/generalPageTemplate.xhtml">
+        <ui:param name="pageTitle" value="Portal"/>
+        
+        <ui:define name="CSSStyleSheets">
+            <link rel="stylesheet" type="text/css" href="CSS/loginScreenLayout.css"/>
+        </ui:define>
+        
+        <ui:define name="pageBody">
+            <div class="subContainer">
+                <div id="header">
+                    <h1 class="header1">Welcome to the UP Postdoctoral application management system</h1>
                 </div>
-
-                <div class="containerFooter"></div>
-            </div>            
-        </div>
-    </h:body>
-
-
-
-
+                <div id="sideL">
+                    <p:button id="apply" styleClass="button" value="Click here to apply for fellowship" outcome="#{indexBean.goToUserAccountCreationForProspectiveFellowView()}"></p:button>
+                </div>
+                <div id="sideR">                            
+                    <h:form>
+                        <h:outputLabel value="User name or email:"/>
+                        <br/>
+                        <p:inputText value="#{indexBean.usernameOrEmail}"/>
+                        <br/>
+                        <h:outputLabel value="Password:"/>
+                        <br/>
+                        <p:inputText value="#{indexBean.password}"/>
+                        <br/>
+                        <p:commandButton id="loginButton" styleClass="button" value="Login" binding="#{indexBean.errorMessageComponent}" action="#{indexBean.performLoginRequest()}" ajax="false"></p:commandButton>
+                        <br/>
+                        <div class="errorContainer">
+                            <h:message styleClass="errorSpan" id="loginErrors" for="loginButton" />
+                        </div>
+                    </h:form>  
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

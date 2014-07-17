@@ -212,7 +212,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
+    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address upAddress) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {     
         //Authenticate user privliges
         UserGateway userGateway = getUserGatewayServiceEJB();
@@ -253,7 +253,8 @@ public class UserAccountManagementService implements UserAccountManagementServic
             {
                 userUPInfo.setEmployeeID(user.getSystemID());
             }
-        } 
+        }
+        
         
         //Store address in database
         addressJpaController.create(userAddress);
@@ -265,6 +266,9 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         if(userUPInfo != null)
         {
+            addressJpaController.create(upAddress);
+            userUPInfo.setPhysicalAddress(upAddress);
+            userUPInfo.setPerson(user);
             upEmployeeInformationJpaController.create(userUPInfo);
         }
         
@@ -403,7 +407,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws Exception
      */
     @Override
-    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws Exception
+    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address UpAddress) throws Exception
     {
         //Use this to create a new account
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
@@ -421,7 +425,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         user.setPassword(getGeneratorUTIL().generateRandomHexString());
         
         //Create a user account using a system level system authentication
-        createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user, userAddress, userUPInfo);
+        createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user, userAddress, userUPInfo, UpAddress);
         
         //Notify the new user
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());

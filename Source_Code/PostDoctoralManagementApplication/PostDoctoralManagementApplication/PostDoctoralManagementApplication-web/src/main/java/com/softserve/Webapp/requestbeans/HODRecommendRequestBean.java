@@ -4,9 +4,10 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.Webapp.HODServicesBean;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -18,19 +19,26 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodAmmendRequestBean")
+@Named(value = "hodRecommendRequestBean")
 @RequestScoped
-public class HODAmmendRequestBean {
-
-    @Inject
-    private HODServicesBean hodServicesBean;
+public class HODRecommendRequestBean {
     
-    private String reason = "";
+    @Inject
+    private HODServicesBean hodServicesBean;    
+    
+    private RecommendationReport recommendationReport = null;
     
     /**
      * Creates a new instance of HODRecommendBean
      */
-    public HODAmmendRequestBean() {
+    public HODRecommendRequestBean() 
+    {        
+    }
+    
+    @PostConstruct
+    public void init()
+    {
+        recommendationReport = new RecommendationReport();
     }
     
     public UIComponent getErrorContainer() 
@@ -43,17 +51,17 @@ public class HODAmmendRequestBean {
         hodServicesBean.setErrorContainer(errorContainer);
     }
 
-    public String getReason() {
-        return reason;
+    public RecommendationReport getRecommendationReport() {
+        return recommendationReport;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setRecommendationReport(RecommendationReport recommendationReport) {
+        this.recommendationReport = recommendationReport;
     }
     
-    public String preformAmmendRequest()
+    public String preformRecommendRequest()
     {
-        return hodServicesBean.ammendCurrentlySelectedApplication(reason);
+        return hodServicesBean.recommendCurrentlySelectedApplication(recommendationReport);
     }
     
 }

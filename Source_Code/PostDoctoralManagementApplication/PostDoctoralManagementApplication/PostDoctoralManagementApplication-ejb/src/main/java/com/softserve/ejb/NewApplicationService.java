@@ -130,7 +130,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         //Check if grant holder already exists
         if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
         {
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", false, grantHolder,new Address(), null);
+            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", false, grantHolder,new Address(), null, null);
         }
         
         //Link grant holder to application
@@ -159,7 +159,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         //Check if referee already exists
         if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
         {
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee,new Address(), null);
+            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee,new Address(), null, null);
         }
         
         //Link referee to application

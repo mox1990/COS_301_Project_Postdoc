@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:component>
+        <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
+            <f:facet name="header"> 
+                <ui:insert name="header"/>
+            </f:facet>
+            <p:outputLabel value="Empoyee ID:" for="systemID"/>                                
+            <p:inputText id="systemID" value="#{employeeInformation.employeeID}" />
+            <h:message for="systemID" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Date of employeement" for="dateOfAppointment"/>                                
+            <p:calendar id="dateOfAppointment" value="#{employeeInformation.dateOfAppointment}" navigator="true" pattern="yyyy-mm-dd"/>
+            <h:message for="dateOfAppointment" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Appointment status:" for="appointmentStatus"/>                                
+            <p:inputText id="appointmentStatus" value="#{employeeInformation.appointmentStatus}"/>
+            <h:message for="appointmentStatus" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Position:" for="position"/>                                
+            <p:inputText id="position" value="#{employeeInformation.position}"/>
+            <h:message for="position" styleClass="fieldErrorMessage"/>
+        </h:panelGrid>
+    </ui:component>
+</html>
+

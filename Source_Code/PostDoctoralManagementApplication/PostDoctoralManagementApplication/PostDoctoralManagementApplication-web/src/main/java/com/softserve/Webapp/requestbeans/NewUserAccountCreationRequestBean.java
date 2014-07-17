@@ -4,8 +4,9 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp;
+package com.softserve.Webapp.requestbeans;
 
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
@@ -39,6 +40,7 @@ public class NewUserAccountCreationRequestBean {
     private Person person;
     private Address address;
     private UpEmployeeInformation employeeInformation;
+    private Address upAddress;
     
     /**
      * Creates a new instance of UserAccountCreationRequestBean
@@ -52,7 +54,7 @@ public class NewUserAccountCreationRequestBean {
         person = new Person();
         address = new Address();
         employeeInformation = new UpEmployeeInformation();
-        employeeInformation.setPhysicalAddress(new Address());
+        upAddress = new Address();
     }
 
     public Person getPerson() {
@@ -79,6 +81,14 @@ public class NewUserAccountCreationRequestBean {
         this.employeeInformation = employeeInformation;
     }
 
+    public Address getUpAddress() {
+        return upAddress;
+    }
+
+    public void setUpAddress(Address upAddress) {
+        this.upAddress = upAddress;
+    }
+        
     public UIComponent getErrorContainer() {
         return errorContainer;
     }
@@ -94,7 +104,15 @@ public class NewUserAccountCreationRequestBean {
         {
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
             person.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-            userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null);
+            if(employeeInformation.getEmployeeID().equals(""))
+            {
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);
+            }
+            else
+            {
+                person.setSystemID(employeeInformation.getEmployeeID());
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), true, person, address, employeeInformation, upAddress);
+            }
             return "index?force-redirect=true";
         } 
         catch (Exception ex) 

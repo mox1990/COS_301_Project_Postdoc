@@ -23,11 +23,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface UserAccountManagementServiceLocal {
-    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws AutomaticSystemIDGenerationException, Exception;
+    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address upAddress) throws AutomaticSystemIDGenerationException, Exception;
     public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception;
     public void removeUserAccount(Session session, String systemID) throws RollbackFailureException, Exception;
     public List<Person> viewAllUserAccounts(Session session);
-    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws Exception;
+    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address UpAddress) throws Exception;
     public void activateOnDemandAccount(Session session, Person user) throws Exception;
     public void testAddresses();
 }
