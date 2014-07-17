@@ -6,7 +6,9 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:component>
         <p:outputPanel rendered="#{isPanelRendered}">
-            <p:button onmouseover="#{showFunction}" onmouseout="#{hideFunction}" styleClass="button button-fill" value="#{buttonName}" onclick="#{buttonAction}"/>
+            <h:form>
+                <p:commandButton action="#{buttonBean[buttonAction]}" onmouseover="#{showFunction}" onmouseout="#{hideFunction}" styleClass="button button-fill" value="#{buttonName}" ajax="flase"  />
+            </h:form>
             <div id="#{infoContainerID}" class="informationContainer">
                 <h1 class="informationContainerHeader1">Information:</h1>
                 <ui:insert name="informationContent"/>

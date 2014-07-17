@@ -9,9 +9,11 @@ package com.softserve.Webapp.requestbeans;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +34,20 @@ public class welcomeBean {
      * Creates a new instance of welcomeBean
      */
     public welcomeBean() {
+    }
+    
+    @PostConstruct
+    private void init()
+    {
+        //try
+       // {
+       //     sessionManagerBean.authoriseUserViewAccess(com.softserve.constants.PersistenceConstants.getAllSecurityRoles());
+       // }
+       // catch(IOException ex)
+       // {
+        //    return;
+        //}
+       //         
     }
     
     public boolean isReportServicesDisplayable()

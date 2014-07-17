@@ -31,15 +31,21 @@ public class conversationManagerBean implements Serializable {
     public conversationManagerBean() {
     }
     
+    public Conversation getConversation()
+    {
+        return  conversation;
+    }
+    
     public void startConversation()
     {
         conversation.begin();
-        clearConversationStorage();
+        converstationStroage = new ArrayList<Object>();
     }
     
     public void stopConversation()
     {
         clearConversationStorage();
+        converstationStroage = null;
         conversation.end();
     }
     

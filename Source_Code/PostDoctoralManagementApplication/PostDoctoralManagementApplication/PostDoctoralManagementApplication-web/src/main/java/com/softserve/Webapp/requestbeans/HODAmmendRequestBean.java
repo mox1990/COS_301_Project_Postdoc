@@ -6,9 +6,15 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.Webapp.HODServicesBean;
+import com.softserve.Webapp.conversationbeans.conversationManagerBean;
+import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.HODRecommendationServices;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
@@ -24,7 +30,16 @@ import javax.inject.Named;
 public class HODAmmendRequestBean {
 
     @Inject
-    private HODServicesBean hodServicesBean;
+    private SessionManagerBean sessionManagerBean;
+    @Inject 
+    private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private conversationManagerBean conversationManagerBean;
+    
+    @EJB
+    private HODRecommendationServices hodRecommendationServices;
+    
+    private UIComponent errorContainer;
     
     private String reason = "";
     
@@ -34,16 +49,19 @@ public class HODAmmendRequestBean {
     public HODAmmendRequestBean() {
     }
     
-    public UIComponent getErrorContainer() 
+    public Application getSelectedApplication()
     {
-        return hodServicesBean.getErrorContainer();
+        return conversationManagerBean.getObjectFromStroage(0, Application.class);
     }
 
-    public void setErrorContainer(UIComponent errorContainer) 
-    {
-        hodServicesBean.setErrorContainer(errorContainer);
+    public UIComponent getErrorContainer() {
+        return errorContainer;
     }
 
+    public void setErrorContainer(UIComponent errorContainer) {
+        this.errorContainer = errorContainer;
+    }
+            
     public String getReason() {
         return reason;
     }
@@ -54,7 +72,16 @@ public class HODAmmendRequestBean {
     
     public String preformAmmendRequest()
     {
-        return hodServicesBean.ammendCurrentlySelectedApplication(reason);
+        try
+        {
+            hodRecommendationServices.ammendAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
+            return navigationManagerBean.goToPreviousBreadCrumb();
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.handleException(errorContainer, ex);
+            return "";
+        }
     }
     
 }
