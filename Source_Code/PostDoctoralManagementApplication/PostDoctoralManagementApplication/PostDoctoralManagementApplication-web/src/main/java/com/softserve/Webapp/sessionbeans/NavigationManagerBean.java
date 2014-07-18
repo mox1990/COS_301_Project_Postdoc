@@ -72,14 +72,39 @@ public class NavigationManagerBean implements Serializable {
         return breadCrumbs.get(breadCrumbs.size() - 1);
     }
     
-    public String goToBreadCrumb(int index)
+    public String CheckPath(String path)
     {
-        BreadCrumb breadCrumb = breadCrumbs.get(index);
-        while(breadCrumbs.size() - 1 > index)
+        int i = getIndexOfBreadCrumbWithPath(path);
+        
+        if(i < 0)
+        {
+            return goToLink(getLatestBreadCrumb());
+        }
+        
+        return "";
+    }
+    
+    public void applicationBasedNavigation(String path)
+    {
+        if(!path.equals(""))
+        {
+            FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, path);
+        }
+    }
+    
+    public void clearBreadCrumbsTo(int index)
+    {
+        while(breadCrumbs.size() > 0 && breadCrumbs.size() - 1 > index)
         {
             breadCrumbs.get(breadCrumbs.size() - 1).terminateConversation();
             breadCrumbs.remove(breadCrumbs.size() - 1);
         }
+    }
+    
+    public String goToBreadCrumb(int index)
+    {
+        BreadCrumb breadCrumb = breadCrumbs.get(index);
+        clearBreadCrumbsTo(index);
         
         return goToLink(breadCrumb);
     }
@@ -89,10 +114,17 @@ public class NavigationManagerBean implements Serializable {
         return goToBreadCrumb(breadCrumbs.size() - 2);
     }
     
+    public int getIndexOfBreadCrumbWithPath(String path)
+    {
+        BreadCrumb breadCrumb = new BreadCrumb(path);
+        
+        return breadCrumbs.indexOf(breadCrumb);
+    }
+    
     public String goToPortalView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("index", "Portal");
-        breadCrumbs.clear();
+        
         
         return goToLink(breadCrumb);
     }

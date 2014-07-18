@@ -16,6 +16,53 @@
                 <ui:decorate template="templates/breadCrumb_Component.xhtml"/>
             </div>
         </ui:define>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1"> User account management services menu</h1>
+                <h2>Please select the service you wish to use</h2>
+            </div>
+            <div>
+                <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:param name="isPanelRendered" value="#{true}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(1)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
+                    <ui:param name="buttonName" value="Upadate personal user account"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToApplicationServicesHomeView"/>
+                    <ui:param name="infoContainerID" value="info1"/>
+                    <ui:define name="informationContent">
+                        This will allow you to review your own user account an update it accordingly if you so wish.  
+                    </ui:define>
+                </ui:decorate>
+
+                <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:param name="isPanelRendered" value="#{welcomeBean.reportServicesDisplayable}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(2)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
+                    <ui:param name="buttonName" value="Create a new user account"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToReportServicesHomeView"/>
+                    <ui:param name="infoContainerID" value="info2"/>
+                    <ui:define name="informationContent">
+                        This will allow you as system adminstrator to create a new user manually.
+                    </ui:define>
+                </ui:decorate>
+
+                <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:param name="isPanelRendered" value="#{true}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(3)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
+                    <ui:param name="buttonName" value="View all user accounts"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToUserAccountManagementServicesHomeView"/>
+                    <ui:param name="infoContainerID" value="info3"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view all the user accounts registered on the system.
+                    </ui:define>
+                </ui:decorate>               
+            </div>
+        </ui:define>
     </ui:composition>
 </html>
 
