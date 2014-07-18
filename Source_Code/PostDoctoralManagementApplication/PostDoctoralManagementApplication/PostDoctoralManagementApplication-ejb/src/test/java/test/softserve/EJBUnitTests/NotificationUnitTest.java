@@ -51,7 +51,7 @@ public class NotificationUnitTest {
     /**
      * Test of sendBatchNotifications method, of class NotificationService.
      */
-    @Test
+    /*@Test
     public void testSendBatchNotifications() {
         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
         
@@ -75,7 +75,7 @@ public class NotificationUnitTest {
         {
             fail("An exception occured");
         }
-    }
+    }*/
 
     /**
      * Test of sendNotification method, of class NotificationService.
@@ -104,7 +104,7 @@ public class NotificationUnitTest {
     /**
      * Test of sendNotification method, of class NotificationService.
      */
-    @Test
+   /* @Test
     public void testSendNotificationWithEmail() {
         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
         
@@ -123,6 +123,6 @@ public class NotificationUnitTest {
         {
             fail("An exception occured");
         }
-    }
+    }*/
     
 }

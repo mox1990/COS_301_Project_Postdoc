@@ -85,9 +85,28 @@ public class BreadCrumb {
         }
     }
     
-    public String getURL(FacesContext context)
+    public void stripPath(FacesContext context)
     {
-        return context.getCurrentInstance().getExternalContext().getContextName() + PageLinkFromContext + "?" + queryString;
+        System.out.print("S0 " + PageLinkFromContext);
+        String out = PageLinkFromContext.replace(".xhtml", "");
+        System.out.print("S1 " + out);
+       
+        System.out.print("Striping with " + getServingURL(context) + "/");
+        out = out.replace(getServingURL(context) + "/", "");
+        System.out.print("S2 " + out);
+        PageLinkFromContext = out;
+    }
+    
+    public String getURL(FacesContext context)
+    {        
+        return getServingURL(context) + "/" + PageLinkFromContext + "?" + queryString;
+    }
+    
+    public String getServingURL(FacesContext context)
+    {
+        String out = context.getCurrentInstance().getExternalContext().getRequestContextPath()+ context.getCurrentInstance().getExternalContext().getRequestServletPath();
+        System.out.print("Serving URL: " + out);
+        return out;
     }
     
     public String getURL()

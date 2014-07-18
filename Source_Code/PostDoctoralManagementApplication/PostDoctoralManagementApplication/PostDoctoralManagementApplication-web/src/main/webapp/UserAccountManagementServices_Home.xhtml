@@ -7,8 +7,8 @@
     <ui:composition template="templates/generalPageTemplate.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
-        <ui:define name="CSSStyleSheets">
-            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        <ui:define name="JSScripts">
+            <script type="text/javascript" src="JS/generalFunctions.js"></script>
         </ui:define>
         
         <ui:define name="pageBreadBrumb">
@@ -29,7 +29,7 @@
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
                     <ui:param name="buttonName" value="Upadate personal user account"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToApplicationServicesHomeView"/>
+                    <ui:param name="buttonAction" value="goToUserAccountManagementPersonalAccountView"/>
                     <ui:param name="infoContainerID" value="info1"/>
                     <ui:define name="informationContent">
                         This will allow you to review your own user account an update it accordingly if you so wish.  
@@ -42,7 +42,7 @@
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
                     <ui:param name="buttonName" value="Create a new user account"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToReportServicesHomeView"/>
+                    <ui:param name="buttonAction" value="goToUserAccountManagementGeneralAccountCreationView"/>
                     <ui:param name="infoContainerID" value="info2"/>
                     <ui:define name="informationContent">
                         This will allow you as system adminstrator to create a new user manually.
@@ -55,7 +55,7 @@
                     <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
                     <ui:param name="buttonName" value="View all user accounts"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToUserAccountManagementServicesHomeView"/>
+                    <ui:param name="buttonAction" value="goToUserAccountManagementAccountsViewerView"/>
                     <ui:param name="infoContainerID" value="info3"/>
                     <ui:define name="informationContent">
                         This will allow you to view all the user accounts registered on the system.

@@ -12,19 +12,7 @@
         </ui:define>
         
         <ui:define name="JSScripts">
-            <script type="text/javascript">
-                function showInfoDiv(divindex)
-                {
-                    $('.informationContainer').stop(true, true);
-                    $("#info" + divindex).slideDown({duration : 250, easing : 'linear'});
-                }
-
-                function hideInfoDiv(divindex)
-                {
-                    $('.informationContainer').stop(true, true);
-                    $("#info" + divindex).slideUp({duration : 250, easing : 'linear'});
-                }            
-            </script>
+            <script type="text/javascript" src="JS/generalFunctions.js"></script>
         </ui:define>
         
         <ui:define name="pageBreadBrumb">

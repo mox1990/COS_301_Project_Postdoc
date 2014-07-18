@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Conversation;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -63,28 +62,48 @@ public class NavigationManagerBean implements Serializable {
         {
             breadCrumb.setQueryString("faces-redirect=true");
             
-            return breadCrumb.getURL(FacesContext.getCurrentInstance());
+            return breadCrumb.getURL();
         }
     }
     
     public BreadCrumb getLatestBreadCrumb()
     {
-        return breadCrumbs.get(breadCrumbs.size() - 1);
+        if(breadCrumbs.size() == 0)
+        {
+            return new BreadCrumb("");
+        }
+        else
+        {
+            return breadCrumbs.get(breadCrumbs.size() - 1);
+        }
     }
     
     public String CheckPath(String path)
     {
+        System.out.println("================ Path " + path);
         int i = getIndexOfBreadCrumbWithPath(path);
         
+        System.out.println("================ P" + i);
+        System.out.println("================ L" + getLatestBreadCrumb().getPageLinkFromContext());
         if(i < 0)
         {
+            System.out.println("O1");            
             return goToLink(getLatestBreadCrumb());
         }
+        else if(i != breadCrumbs.size() - 1)
+        {
+            System.out.println("O2");
+            return goToBreadCrumb(i);
+        }
+        else
+        {
+            System.out.println("O3");
+            return "";
+        }
         
-        return "";
     }
     
-    public void applicationBasedNavigation(String path)
+    public void callFacesNavigator(String path)
     {
         if(!path.equals(""))
         {
@@ -117,7 +136,8 @@ public class NavigationManagerBean implements Serializable {
     public int getIndexOfBreadCrumbWithPath(String path)
     {
         BreadCrumb breadCrumb = new BreadCrumb(path);
-        
+        breadCrumb.stripPath(FacesContext.getCurrentInstance());
+        System.out.print("=======Link after strip " + breadCrumb.getPageLinkFromContext());
         return breadCrumbs.indexOf(breadCrumb);
     }
     
@@ -139,7 +159,7 @@ public class NavigationManagerBean implements Serializable {
     public String goToWelcomeView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("welcome", "Home");
-        breadCrumbs.clear();
+        clearBreadCrumbsTo(-1);
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -233,6 +253,28 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToUserAccountManagementPersonalAccountView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountViewer", "Account viewer");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
     
+    public String goToUserAccountManagementAccountsViewerView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountsViewer", "Accounts viewer");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToUserAccountManagementGeneralAccountCreationView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_GeneralAccountCreationView", "User account creation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
     
 }
