@@ -6,15 +6,19 @@
 
 package com.softserve.Webapp.sessionbeans;
 
+import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.*;
 import com.softserve.system.Session;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +31,9 @@ import javax.servlet.http.HttpSession;
 @SessionScoped
 public class SessionManagerBean implements Serializable {
 
+    @Inject
+    private NavigationManagerBean navigationManagerBean;
+    
     @EJB
     private UserGatewayLocal userGateway;
     
@@ -56,7 +63,7 @@ public class SessionManagerBean implements Serializable {
             System.out.println("Test " + httpSession.getAttribute("username"));
             
             userGateway.login(session);
-            return "welcome";
+            return navigationManagerBean.goToWelcomeView();
         }
         catch(Exception ex)
         {
@@ -78,7 +85,7 @@ public class SessionManagerBean implements Serializable {
             return "";
         }
         
-        return "index";
+        return navigationManagerBean.goToPortalView();
     }
     
     public Session getSession() throws AuthenticationException
@@ -91,5 +98,17 @@ public class SessionManagerBean implements Serializable {
     public Session getSystemLevelSession()
     {
         return new Session(null, null, Boolean.TRUE);
+    }
+    
+    public void authoriseUserViewAccess(List<SecurityRole> allowedRoles) throws IOException
+    {
+        try
+        {
+            userGateway.authenticateUser(getSession(), allowedRoles);
+        }
+        catch(Exception ex)
+        {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(navigationManagerBean.goToPortalView());
+        }
     }
 }

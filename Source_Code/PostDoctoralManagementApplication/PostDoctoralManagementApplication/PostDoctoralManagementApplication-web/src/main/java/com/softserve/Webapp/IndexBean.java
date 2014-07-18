@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp.requestbeans;
+package com.softserve.Webapp;
 
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import javax.enterprise.context.RequestScoped;
@@ -24,7 +24,7 @@ public class IndexBean {
     @Inject
     private SessionManagerBean sessionManagerBean;
     
-    private UIComponent errorMessageComponent;
+    private UIComponent errorContainer;
     private String usernameOrEmail = "";
     private String password = "";    
     
@@ -34,14 +34,14 @@ public class IndexBean {
     public IndexBean() {
     }
 
-    public UIComponent getErrorMessageComponent() {
-        return errorMessageComponent;
+    public UIComponent getErrorContainer() {
+        return errorContainer;
     }
 
-    public void setErrorMessageComponent(UIComponent errorMessageComponent) {
-        this.errorMessageComponent = errorMessageComponent;
+    public void setErrorContainer(UIComponent errorContainer) {
+        this.errorContainer = errorContainer;
     }
-
+    
     public String getUsernameOrEmail() {
         return usernameOrEmail;
     }
@@ -60,11 +60,8 @@ public class IndexBean {
     
     public String performLoginRequest()
     {
-        return sessionManagerBean.login(errorMessageComponent,usernameOrEmail,password);
-    }
-    
-    public String goToUserAccountCreationForProspectiveFellowView()
-    {
-        return "UserAccountManagement_ProspectiveFellowCreateUser?faces-redirect=true";
+        String l = sessionManagerBean.login(errorContainer,usernameOrEmail,password);
+        System.out.println("====== " + l);
+        return l;
     }
 }

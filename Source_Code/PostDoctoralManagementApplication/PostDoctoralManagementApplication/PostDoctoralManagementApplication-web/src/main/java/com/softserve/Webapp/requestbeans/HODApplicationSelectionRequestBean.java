@@ -6,13 +6,14 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import auto.softserve.XMLEntities.CV.*;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Cv;
 import com.softserve.Webapp.conversationbeans.conversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.HODRecommendationServices;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -24,9 +25,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodApplicationViewerRequestBean")
+@Named(value = "hodApplicationSelectionRequestBean")
 @RequestScoped
-public class HODApplicationViewerRequestBean {
+public class HODApplicationSelectionRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -41,22 +42,28 @@ public class HODApplicationViewerRequestBean {
     private UIComponent errorContainer;
     
     /**
-     * Creates a new instance of HODApplicationViewerRequestBean
+     * Creates a new instance of HODApplicationSelectionRequestBean
      */
-    public HODApplicationViewerRequestBean() {
+    public HODApplicationSelectionRequestBean() {
     }
     
-    public Application getSelectedApplication()
+    public List<Application> getPendingApplications()
+    {   
+        try
+        {
+            conversationManagerBean.startConversation();
+            navigationManagerBean.getLatestBreadCrumb().setConversation(conversationManagerBean.getConversation());
+            return hodRecommendationServices.loadPendingApplications(sessionManagerBean.getSession(), 0, hodRecommendationServices.countTotalPendingApplications(sessionManagerBean.getSession()));
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.handleException(errorContainer, ex);
+            return new ArrayList<Application>();
+        }
+    }
+    
+    public void markApplicationAsSelected(Application application)
     {
-        return conversationManagerBean.getObjectFromStroage(0, Application.class);
+        conversationManagerBean.addObjectToStorage(application);
     }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    } 
-    
 }

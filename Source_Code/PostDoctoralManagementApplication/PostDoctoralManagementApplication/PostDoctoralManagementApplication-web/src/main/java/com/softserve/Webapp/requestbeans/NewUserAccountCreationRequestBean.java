@@ -11,6 +11,8 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.Webapp.conversationbeans.conversationManagerBean;
+import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.util.ArrayList;
@@ -32,6 +34,11 @@ public class NewUserAccountCreationRequestBean {
 
     @Inject
     private SessionManagerBean sessionManagerBean;
+    @Inject 
+    private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private conversationManagerBean conversationManagerBean;
+    
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
@@ -99,7 +106,6 @@ public class NewUserAccountCreationRequestBean {
     
     public String performProspectiveFellowUserAccountCreation()
     {        
-        System.out.println("Hi1");
         try 
         {
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
@@ -113,12 +119,10 @@ public class NewUserAccountCreationRequestBean {
                 person.setSystemID(employeeInformation.getEmployeeID());
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), true, person, address, employeeInformation, upAddress);
             }
-            return "index?force-redirect=true";
+            return navigationManagerBean.goToPortalView();
         } 
         catch (Exception ex) 
         {
-            
-            System.out.println(ex.getMessage());
             ExceptionUtil.handleException(errorContainer, ex);
             return "";
         }
