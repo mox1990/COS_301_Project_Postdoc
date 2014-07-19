@@ -191,17 +191,22 @@ Date,Time,Comment,Member
 "Wednesday, July 9, 2014",,Started integrating some authentication routines in other services,Mathys
 "Wednesday, July 9, 2014",,Completed integeration of authentication. Refactored and trimmed code to make coherent. Completed new application service to get project back on track with deadlines,Mathys
 "Wednesday, July 9, 2014",,Completed referee report service. Found a couple of issues to address and ammend.,Mathys
-"Thursday, July 10, 2014",,,
-"Friday, July 11, 2014",,,
-"Saturday, July 12, 2014",,,
-"Sunday, July 13, 2014",,,
-"Monday, July 14, 2014",,,
-"Tuesday, July 15, 2014",,,
-"Wednesday, July 16, 2014",,,
-"Thursday, July 17, 2014",,,
-"Thursday, July 17, 2014",,,
-"Thursday, July 17, 2014",,,
-"Friday, July 18, 2014",,,
+"Thursday, July 10, 2014",,Was away due to family reasons,Mathys
+"Friday, July 11, 2014",,Was away due to family reasons,Mathys
+"Saturday, July 12, 2014",,Was away due to family reasons,Mathys
+"Sunday, July 13, 2014",,Was away due to family reasons,Mathys
+"Monday, July 14, 2014",,Fixed undeployable issue of EJB by adding a defualt constructor. Started on web pages. Refactored session bean. Researched various elements on JSF. ,Mathys
+"Monday, July 14, 2014",,Found primefaces to be a good solid JSF component liabary that was easy to use. Decied to use. ,Mathys
+"Monday, July 14, 2014",,Added HOD managed beans and completed them as far as possible. Still trying to understand backing beans,Mathys
+"Tuesday, July 15, 2014",,"Refactored additional information, othercontributions and researchoutput schemas due to them not being as expected. Created a XML unmarsheller class for string to XML object con",Mathys
+"Tuesday, July 15, 2014",,Refactored loadPendingApplications of all EJBs so to allow range selection. Worked on HOD front-end but encoutering problems. Researched more on backing beans and JSF,Mathys
+"Wednesday, July 16, 2014",,Refactored authenticate user function to allow system level to bypass user verification. Updated query used by automatic user ID generator due to errors it created,Mathys
+"Wednesday, July 16, 2014",,Created a prospective fellow user account creation web page. Created a welcome page. Designed backing beans. Still trying to understand backing beans and scopes properly,Mathys
+"Thursday, July 17, 2014",,Created webpage templates and refactored other web pages. Created a navigationManagerBean to govern page navigation. Created a conversationManagerBean for temp storage.,Mathys
+"Thursday, July 17, 2014",,Refactored the user account management create account function to support the creation of a UP work address. Added security roles function and renamed HOD EJB,Mathys
+"Thursday, July 17, 2014",,Created breadcrumb facility. But encountered problem with back button support.,Mathys
+"Friday, July 18, 2014",,Did researh into back button problem. Tried to implment some solutions but only worked partial. Started on User account management web pages. ,Mathys
+"Friday, July 18, 2014",,Had some internet conection problems and other personal matters to attend to. Hence could not submit Scrum reports.,Mathys
 "Saturday, July 19, 2014",,,
 "Sunday, July 20, 2014",,,
 "Monday, July 21, 2014",,,
