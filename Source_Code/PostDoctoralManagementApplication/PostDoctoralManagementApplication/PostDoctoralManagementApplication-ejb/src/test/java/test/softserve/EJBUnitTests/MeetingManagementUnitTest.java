@@ -71,8 +71,9 @@ public class MeetingManagementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
+        
         
         //Load dependices mocks' into instance
         instance.setCMDAO(mockCommitteeMeetingJpaController);
@@ -94,7 +95,7 @@ public class MeetingManagementUnitTest {
             
             //Verify correct function behaviour
             verify(mockCommitteeMeetingJpaController).create(mockCommitteeMeeting);           
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
