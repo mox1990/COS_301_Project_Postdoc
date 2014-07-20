@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="templates/generalPageTemplate.xhtml">
+        <ui:param name="pageTitle" value="Application Progress Viewer"/>
+        
+        <ui:define name="CSSStyleSheets">
+            <link rel="stylesheet" type="text/css" href="CSS/NewApplication.css"/>
+        </ui:define>
+
+	<head>
+		<script type="text/javascript">
+
+		function checkForm(form)
+		{
+		
+			if(!form.terms.checked)
+			{
+				alert("Please indicate that you accept the Terms and Conditions");
+				form.terms.focus();
+				return false;
+			}
+			return true;
+		}
+
+</script
+	</head>
+ <ui:define name="pageBody">
+	<body>
+		<div id="form">
+		<strong>APPLICATION FOR A POSTDOCTORAL FELLOWSHIP (Please tick appropriate boxes below)</strong>
+			<p><input type="checkbox" name="terms"> External Candidate</p>
+			<p><input type="checkbox" name="terms"> UP PhD graduate</p>
+			<p><input type="checkbox" name="terms"> Externally funded fellowship</p>
+
+			<form action="" method="post" name="f">
+				<fieldset>
+					
+					<legend>1. Particulars of the Research Leader</legend>
+					<p> Title, Initials and Surname: </p>
+					<input type="text" id="names" tabindex="1"/>
+					<p> UP department, school and faculty: </p>
+					<input type="text" id="department" tabindex="2"/>
+					<p> Position: </p>
+					<input type="text" id="position" tabindex="3"/>
+					<p> Current NRF rating: </p>
+					<input type="text" id="rating" tabindex="4"/>
+					<p> Tel/Fax: </p>
+					<input type="text" id="fax_tel" tabindex="5"/>
+					<p>Email: </p>
+					<input type="email" id="email" tabindex="6"/>
+					
+				</fieldset>
+				<br/>
+				<fieldset>
+					
+					<legend>2. Particulars of the Proposed Fellow</legend>
+					<p> Title, Initials and Surname: </p>
+					<input type="text" id="names" tabindex="1"/>
+					<p> Most recent institution afflied with: </p>
+					<input type="text" id="last_institution" tabindex="2"/>
+					<p> Highest Qualification: </p>
+					<input type="text" id="qualification" tabindex="3"/>
+					<p> Date highest qualification obtained: </p>
+					<input type="date" id="date_of_qualification" tabindex="4"/>
+					<p> Institution that awarded highest qualification: </p>
+					<input type="text" id="highest_institution" tabindex="5"/>
+					
+				</fieldset>
+				<br/>
+				<fieldset>
+					
+					<p>Title of Research Project/Thesis</p>
+					<input type="text" id="names" tabindex="1"/>
+					<p>Expected Period of Support</p>
+					<input type="text" id="names" tabindex="2"/>
+					<p>Importance of research</p>
+					<input type="text" id="names"  style="font-size:14pt;height:300px;width:300px" tabindex="3"/>
+					<p>Aims and Objectives of Project/Thesis</p>
+					<input type="text" id="names"  style="font-size:14pt;height:300px;width:300px" tabindex="4"/>
+					<p>Research Methodology</p>
+					<input type="text" id="names"  style="font-size:14pt;height:300px;width:300px" tabindex="5"/>
+					<p>Research Work Plan</p>
+					<input type="text" id="names"  style="font-size:14pt;height:300px;width:300px" tabindex="6"/>
+					<p>Expected Outcomes and Output</p>
+					<input type="text" id="names" style="font-size:14pt;height:300px;width:300px" tabindex="7"/>
+					<p>Infrastructure and Funding of Project</p>
+					<input type="text" id="names" style="font-size:14pt;height:300px;width:300px" tabindex="8"/>
+					<p>Team Members involved in Research</p>
+					<input type="text" id="names" style="font-size:14pt;height:300px;width:300px" tabindex="9"/>
+					<p>Short Self-Evaluation of Achievements of the Research Leader and the Group over the past three years</p>
+					<input type="text" id="names" style="font-size:14pt;height:300px;width:300px" tabindex="10"/>
+					
+				</fieldset>
+				<br/>
+				<strong>DECLARATION BY RESEARCH LEADER</strong>
+				<p>I certify that the information in this form is correct, that the necessary infrastructure for the fellow is available and if we are awarded a postdoctoral fellowship, we shall follow the recommended guidelines stipulated in the Constitution of the Postdoctoral Fellowship Programme</p>
+				<p><strong><input type="checkbox" name="terms"> Agree to terms and conditions</strong></p>
+				<p><strong><input type="submit"></p></strong></p>
+				
+		</div>
+	</body>
+
+</html>
