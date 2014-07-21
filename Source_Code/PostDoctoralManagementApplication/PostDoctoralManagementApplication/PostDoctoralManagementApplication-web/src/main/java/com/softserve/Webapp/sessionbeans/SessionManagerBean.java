@@ -78,6 +78,8 @@ public class SessionManagerBean implements Serializable {
         try 
         {   
             userGateway.logout(getSession());
+            
+            return navigationManagerBean.goToPortalView();
         } 
         catch (Exception ex) 
         {
@@ -85,7 +87,7 @@ public class SessionManagerBean implements Serializable {
             return "";
         }
         
-        return navigationManagerBean.goToPortalView();
+        
     }
     
     public Session getSession() throws AuthenticationException

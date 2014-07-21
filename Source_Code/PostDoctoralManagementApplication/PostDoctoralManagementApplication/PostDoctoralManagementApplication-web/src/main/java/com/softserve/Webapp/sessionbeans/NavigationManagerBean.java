@@ -144,7 +144,7 @@ public class NavigationManagerBean implements Serializable {
     public String goToPortalView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("index", "Portal");
-        
+        clearBreadCrumbsTo(-1);
         
         return goToLink(breadCrumb);
     }

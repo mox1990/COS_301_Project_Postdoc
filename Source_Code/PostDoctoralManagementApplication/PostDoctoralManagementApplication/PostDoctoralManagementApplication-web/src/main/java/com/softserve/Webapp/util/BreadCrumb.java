@@ -6,6 +6,7 @@
 
 package com.softserve.Webapp.util;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.enterprise.context.Conversation;
 import javax.faces.context.FacesContext;
@@ -15,7 +16,7 @@ import javax.faces.context.FacesContext;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class BreadCrumb {
+public class BreadCrumb implements Serializable {
     
     private String PageLinkFromContext = "";
     private String queryString = "";

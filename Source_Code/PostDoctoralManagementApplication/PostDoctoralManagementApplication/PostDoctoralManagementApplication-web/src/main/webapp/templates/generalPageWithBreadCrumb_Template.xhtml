@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:event listener="#{navigationManagerBean.callFacesNavigator(navigationManagerBean.CheckPath(request.requestURI))}" type="preRenderView"/>
+    <h:head>
+        <title>UP Post doctoral application management system - #{pageTitle}</title>
+        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
+        <ui:insert name="CSSStyleSheets"/>
+        <ui:insert name="JSScripts"/>
+    </h:head>
+    <h:body>
+        <div class="background">
+            <div class="sideNavBar"></div>
+            <div class="container">
+                <div class="containerHeader">
+                    <ui:insert name="pageHeader"/>
+                </div>
+                <div class="containerNavBar">                   
+                    <ui:decorate template="breadCrumb_Component.xhtml"/>
+                </div>
+                <div class="containerBody">
+                    <ui:insert name="pageBody"/>
+                </div>
+                <div class="containerFooter">
+                    <ui:insert name="pageFooter"/>
+                </div>
+            </div>            
+        </div>
+    </h:body>
+
+
+
+
+</html>
+

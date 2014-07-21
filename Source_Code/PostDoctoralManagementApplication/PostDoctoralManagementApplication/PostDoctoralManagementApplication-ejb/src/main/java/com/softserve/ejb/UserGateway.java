@@ -104,7 +104,8 @@ public class UserGateway implements UserGatewayLocal
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         session.setLoggedInStatus(Boolean.FALSE);
-        
+        session.getHttpSession().setAttribute("username", "");
+        session.getHttpSession().setAttribute("password", "");
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("User logged out", session.getUser());
         auditTrailService.logAction(auditLog);
         

@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <ui:composition template="templates/generalPageTemplate.xhtml">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
         <ui:define name="CSSStyleSheets">
@@ -15,19 +15,13 @@
             <script type="text/javascript" src="JS/generalFunctions.js"></script>
         </ui:define>
         
-        <ui:define name="pageBreadBrumb">
-            <div class="containerNavBar">
-                <ui:decorate template="templates/breadCrumb_Component.xhtml"/>
-            </div>
-        </ui:define>
-        
         <ui:define name="pageBody">
                 <div>
                     <h1 class="header1"> Welcome #{sessionManagerBean.session.user.completeName}. </h1>
                     <h2>Please select the service you wish to use</h2>
                 </div>
                 <div>
-                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{true}"/>
                         <ui:param name="showFunction" value="showInfoDiv(1)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
@@ -41,7 +35,7 @@
                         </ui:define>
                     </ui:decorate>
                     
-                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{welcomeBean.reportServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(2)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
@@ -54,7 +48,7 @@
                         </ui:define>
                     </ui:decorate>
                     
-                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{true}"/>
                         <ui:param name="showFunction" value="showInfoDiv(3)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
@@ -67,7 +61,7 @@
                         </ui:define>
                     </ui:decorate>
                     
-                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{welcomeBean.dataImportExportServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(4)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
@@ -80,7 +74,7 @@
                         </ui:define>
                     </ui:decorate>
 
-                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{welcomeBean.auditTrailServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(5)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
@@ -93,7 +87,7 @@
                         </ui:define>
                     </ui:decorate>
                     
-                    <ui:decorate template="templates/panelButton_Template.xhtml">
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{welcomeBean.archivalServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(6)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(6)"/>

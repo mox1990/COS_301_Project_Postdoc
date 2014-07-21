@@ -58,10 +58,22 @@ public class NewUserAccountCreationRequestBean {
     @PostConstruct
     public void init()
     {
-        person = new Person();
+        if(conversationManagerBean.getConversation().isTransient())
+        {
+            person = new Person();
+            conversationManagerBean.startConversation();
+            conversationManagerBean.addObjectToStorage(person);
+        }
+        else
+        {
+            person = conversationManagerBean.getObjectFromStroage(0, Person.class);
+        }
+        
         address = new Address();
         employeeInformation = new UpEmployeeInformation();
         upAddress = new Address();
+        
+        
     }
 
     public Person getPerson() {
@@ -119,6 +131,7 @@ public class NewUserAccountCreationRequestBean {
                 person.setSystemID(employeeInformation.getEmployeeID());
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), true, person, address, employeeInformation, upAddress);
             }
+            
             return navigationManagerBean.goToPortalView();
         } 
         catch (Exception ex) 

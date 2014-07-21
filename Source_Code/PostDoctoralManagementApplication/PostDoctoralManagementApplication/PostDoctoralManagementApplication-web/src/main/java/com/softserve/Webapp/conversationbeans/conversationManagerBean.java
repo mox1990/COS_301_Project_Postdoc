@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -20,7 +21,8 @@ import javax.inject.Named;
 @Named(value = "conversationManagerBean")
 @ConversationScoped
 public class conversationManagerBean implements Serializable {
-
+    
+    @Inject
     private Conversation conversation;
     
     private ArrayList<Object> converstationStroage;

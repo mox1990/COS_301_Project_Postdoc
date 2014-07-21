@@ -145,6 +145,20 @@ body
     font-weight: bold;
 }
 
+.text-label
+{
+    font-weight: bold;
+}
+
+.box-round
+{
+    border-radius: 6px;
+    border-width: 2px;
+    border-style: solid;
+    color: grey;
+    padding: 5px;
+}
+
 .breadCrumbs
 {    
     width: 992px;

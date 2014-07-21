@@ -1,12 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="User account viewer"/>
+        
+        <ui:define name="CSSStyleSheets">
+            <link rel="stylesheet" type="text/css" href="CSS/loginScreenLayout.css"/>
+        </ui:define>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">User accounts viewer</h1>
+                <h2>Click on the user accounts to view more details and options</h2>
+            </div>
+            <div>
+                <p:accordionPanel dynamic="true" cache="true" value="#{userAccountsViewerRequestBean.userAccounts}" var="account" styleClass="box-round">
+                    <p:tab title="User account - #{account.systemID} - #{account.completeName}">
+                        <h:panelGrid columns="2">
+                            <h:outputText styleClass="text-label" value="Full name:"/>
+                            <h:outputText value="#{account.fullName}"/>
+                            <h:outputText styleClass="text-label" value="Surname name:"/>
+                            <h:outputText value="#{account.surname}"/>
+                            <h:outputText styleClass="text-label" value="Email address:"/>
+                            <h:outputText value="#{account.email}"/>
+                            <h:outputText styleClass="text-label" value="Account Status:"/>
+                            <h:outputText value="#{account.accountStatus}"/>
+                            <h:outputText styleClass="text-label" value="Is UP employee:"/>
+                            <h:outputText value="#{account.upEmployee}"/>
+                        </h:panelGrid>
+                        <h:form>
+                            
+                        </h:form>
+                    </p:tab>
+                </p:accordionPanel>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 
