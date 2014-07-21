@@ -100,6 +100,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
         return new UpEmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected SecurityRoleJpaController getSecurityRoleDAO()
+    {
+        return new SecurityRoleJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     /**
      *
      * @return
@@ -462,9 +467,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @return A list of Person objects representing the user accounts
      */
     @Override
-    public List<Person> viewAllUserAccounts(Session session)
+    public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception
     {
-        //AuthenticUser(session, list of privliges)
+        UserGateway userGateway = getUserGatewayServiceEJB();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        userGateway.authenticateUser(session, roles);
         
         PersonJpaController personJpaController = getPersonDAO();
         
@@ -537,6 +545,19 @@ public class UserAccountManagementService implements UserAccountManagementServic
     public Person getUserBySystemID(String systemID)
     {
         return getPersonDAO().findPerson(systemID);
+    }
+    
+    @Override
+    public List<SecurityRole> getAllSecurityRoles()
+    {
+        try
+        {
+            return getSecurityRoleDAO().findSecurityRoleEntities();
+        }
+        catch(Exception ex)
+        {
+            return new ArrayList<SecurityRole>();
+        }
     }
     
     

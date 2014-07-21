@@ -6,22 +6,24 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Webapp.conversationbeans.conversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -49,6 +51,10 @@ public class NewUserAccountCreationRequestBean {
     private UpEmployeeInformation employeeInformation;
     private Address upAddress;
     
+    private List<SecurityRole> sourceRoles;
+    private List<SecurityRole> targetRoles;
+    private DualListModel<SecurityRole> securityRoles;
+    
     /**
      * Creates a new instance of UserAccountCreationRequestBean
      */
@@ -58,7 +64,7 @@ public class NewUserAccountCreationRequestBean {
     @PostConstruct
     public void init()
     {
-        if(conversationManagerBean.getConversation().isTransient())
+        if(!conversationManagerBean.isConversationActive() || !conversationManagerBean.getConverseID().equals("post"))
         {
             person = new Person();
             conversationManagerBean.startConversation();
@@ -73,6 +79,9 @@ public class NewUserAccountCreationRequestBean {
         employeeInformation = new UpEmployeeInformation();
         upAddress = new Address();
         
+        sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
+        targetRoles = new ArrayList<SecurityRole>();
+        securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles);
         
     }
 
@@ -107,7 +116,23 @@ public class NewUserAccountCreationRequestBean {
     public void setUpAddress(Address upAddress) {
         this.upAddress = upAddress;
     }
+
+    public DualListModel<SecurityRole> getSecurityRoles() {
+        return securityRoles;
+    }
+
+    public void setSecurityRoles(DualListModel<SecurityRole> securityRoles) 
+    {
+        this.securityRoles = securityRoles;
         
+        if(this.securityRoles.getTarget().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
+        {
+            List<SecurityRole> tempList = this.securityRoles.getSource();
+            this.securityRoles.getSource().clear();
+            this.securityRoles.getTarget().addAll(tempList);                 
+        }        
+    }
+                
     public UIComponent getErrorContainer() {
         return errorContainer;
     }
@@ -133,6 +158,31 @@ public class NewUserAccountCreationRequestBean {
             }
             
             return navigationManagerBean.goToPortalView();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.handleException(errorContainer, ex);
+            return "";
+        }
+    }
+    
+    public String performGeneralUserAccountCreationRequest()
+    {
+        try 
+        {
+            person.setSecurityRoleList(targetRoles);
+            
+            if(employeeInformation.getEmployeeID().equals(""))
+            {
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, null, null);
+            }
+            else
+            {
+                person.setSystemID(employeeInformation.getEmployeeID());
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, employeeInformation, upAddress);
+            }
+            
+            return navigationManagerBean.goToPreviousBreadCrumb();
         } 
         catch (Exception ex) 
         {

@@ -8,6 +8,7 @@ package com.softserve.Webapp;
 
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
+import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
@@ -84,11 +85,5 @@ public class testingJSFManagedBean implements Serializable {
         
     }
     
-    public List<Person> getPeopleList()
-    {
-        List<Person> people = management.viewAllUserAccounts(new Session((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false), null));
-        
-        return people;
-    }
     
 }

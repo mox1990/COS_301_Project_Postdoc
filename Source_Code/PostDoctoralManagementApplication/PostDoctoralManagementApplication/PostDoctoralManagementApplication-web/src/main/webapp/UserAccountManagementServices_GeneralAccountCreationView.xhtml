@@ -1,12 +1,78 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPage_Template.xhtml">
+        <ui:param name="pageTitle" value="Welcome"/>
+        
+        <ui:define name="CSSStyleSheets">
+            <link rel="stylesheet" type="text/css" href="CSS/useraccountCreationScreen.css"/>
+        </ui:define>
+
+        <ui:define name="pageBody">
+            <div>
+                 <h1 class="header1">Prospective fellow user account creation</h1>
+                 <h2>Please complete the fields below</h2>
+            </div>
+
+            <div>
+                <h:form>
+                    <center>
+                        <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
+                            <ui:param name="person" value="#{newUserAccountCreationRequestBean.person}"/>
+                            <ui:param name="renderAttribute" value="#{true}"/>
+                            <ui:define name="header">
+                                <h:outputText styleClass="header2" value="Person information"/>
+                            </ui:define>
+                        </ui:decorate>
+
+                        <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
+                            <ui:param name="address" value="#{newUserAccountCreationRequestBean.address}"/>
+                            <ui:param name="renderAttribute" value="#{true}"/>
+                            <ui:param name="prefix" value="r"/>
+                            <ui:define name="header">
+                                <h:outputText styleClass="header2" value="Residential address"/>
+                            </ui:define>
+                        </ui:decorate>                        
+                        
+                        <ui:decorate template="templates/securityFieldInput_Template.xhtml">
+                            <ui:param name="securityRoles" value="#{newUserAccountCreationRequestBean.securityRoles}"/>
+                            <ui:define name="header">
+                                <h:outputText styleClass="header2" value="Select Security roles"/>
+                            </ui:define>
+                        </ui:decorate> 
+                        
+                        <p:outputPanel id="upEmployeeInfoPanel">
+                            <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
+                                <ui:param name="employeeInformation" value="#{newUserAccountCreationRequestBean.employeeInformation}"/>
+                                <ui:param name="renderAttribute" value="#{newUserAccountCreationRequestBean.person.upEmployee}"/>
+                                <ui:define name="header">
+                                    <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
+                                </ui:define>
+                            </ui:decorate>
+                            
+                            <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
+                                <ui:param name="address" value="#{newUserAccountCreationRequestBean.upAddress}"/>
+                                <ui:param name="renderAttribute" value="#{newUserAccountCreationRequestBean.person.upEmployee}"/>
+                                <ui:param name="prefix" value="e"/>
+                                <ui:define name="header">
+                                    <h:outputText styleClass="header2" value="UP office address"/>
+                                </ui:define>
+                            </ui:decorate>                            
+                        </p:outputPanel>
+                        
+                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{newUserAccountCreationRequestBean.errorContainer}" action="#{newUserAccountCreationRequestBean.performProspectiveFellowUserAccountCreation()}" ajax="false"/>
+                        
+                        <div class="errorContainer">
+                            <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>
+                        </div>
+                    </center>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

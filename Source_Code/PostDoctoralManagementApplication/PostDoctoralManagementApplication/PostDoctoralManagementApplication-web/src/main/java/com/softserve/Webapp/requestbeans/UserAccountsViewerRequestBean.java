@@ -53,6 +53,10 @@ public class UserAccountsViewerRequestBean {
         try
         {
             System.out.println("Start converse ");
+            if(!conversationManagerBean.isConversationActive())
+            {
+                conversationManagerBean.stopConversation();
+            }
             conversationManagerBean.startConversation();
             System.out.println("Before query ");
             List<Person> accounts = userAccountManagementServiceLocal.viewAllUserAccounts(sessionManagerBean.getSession());
@@ -62,7 +66,6 @@ public class UserAccountsViewerRequestBean {
         catch(Exception ex)
         {
             System.out.println("Exception");
-            System.out.println(ex.getLocalizedMessage());
             ExceptionUtil.handleException(errorContainer, ex);
             return new ArrayList<Person>();
         }

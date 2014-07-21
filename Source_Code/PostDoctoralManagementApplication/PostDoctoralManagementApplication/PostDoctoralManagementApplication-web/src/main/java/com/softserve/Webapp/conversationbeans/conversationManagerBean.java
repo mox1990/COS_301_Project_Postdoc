@@ -26,6 +26,7 @@ public class conversationManagerBean implements Serializable {
     private Conversation conversation;
     
     private ArrayList<Object> converstationStroage;
+    private String converseID = "";
     
     /**
      * Creates a new instance of conversationManagerBean
@@ -50,7 +51,15 @@ public class conversationManagerBean implements Serializable {
         converstationStroage = null;
         conversation.end();
     }
-    
+
+    public void setConverseID(String converseID) {
+        this.converseID = converseID;
+    }
+
+    public String getConverseID() {
+        return converseID;
+    }
+            
     public <T> T getObjectFromStroage(int index, Class<T> objectClass)
     {
         try
@@ -77,4 +86,10 @@ public class conversationManagerBean implements Serializable {
     {
         converstationStroage.clear();
     }
+    
+    public boolean isConversationActive()
+    {
+        return conversation.isTransient();
+    }
+   
 }
