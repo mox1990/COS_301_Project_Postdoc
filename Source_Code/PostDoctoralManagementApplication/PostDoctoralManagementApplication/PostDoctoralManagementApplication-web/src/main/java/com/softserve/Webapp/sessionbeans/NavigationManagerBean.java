@@ -13,6 +13,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -23,6 +24,9 @@ import javax.inject.Named;
 @Named(value = "navigationManagerBean")
 @SessionScoped
 public class NavigationManagerBean implements Serializable {
+    
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
     
     private ArrayList<BreadCrumb> breadCrumbs;
     
@@ -44,12 +48,56 @@ public class NavigationManagerBean implements Serializable {
         return breadCrumbs;
     }
     
+    public BreadCrumb getLatestBreadCrumb()
+    {
+        if(breadCrumbs.isEmpty())
+        {
+            return new BreadCrumb("");
+        }
+        else
+        {
+            return breadCrumbs.get(breadCrumbs.size() - 1);
+        }
+    }
+    
     private void addToBreadCrumbs(BreadCrumb breadCrumb)
     {
         if(!breadCrumbs.contains(breadCrumb))
         {
             breadCrumbs.add(breadCrumb);
         }
+    }
+    
+    public void clearBreadCrumbsTo(int index)
+    {
+        conversationManagerBean.deregisterAllConverstations();
+        
+        while(breadCrumbs.size() > 0 && breadCrumbs.size() - 1 > index)
+        {            
+            breadCrumbs.remove(breadCrumbs.size() - 1);
+        }
+        
+    }
+    
+    public String goToBreadCrumb(int index)
+    {
+        BreadCrumb breadCrumb = breadCrumbs.get(index);
+        clearBreadCrumbsTo(index);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToPreviousBreadCrumb()
+    {
+        return goToBreadCrumb(breadCrumbs.size() - 2);
+    }
+    
+    public int getIndexOfBreadCrumbWithPath(String path)
+    {
+        BreadCrumb breadCrumb = new BreadCrumb(path);
+        breadCrumb.stripPath(FacesContext.getCurrentInstance());
+        System.out.print("=======Link after strip " + breadCrumb.getPageLinkFromContext());
+        return breadCrumbs.indexOf(breadCrumb);
     }
     
     private String goToLink(BreadCrumb breadCrumb)
@@ -63,18 +111,6 @@ public class NavigationManagerBean implements Serializable {
             breadCrumb.setQueryString("faces-redirect=true");
             
             return breadCrumb.getURL();
-        }
-    }
-    
-    public BreadCrumb getLatestBreadCrumb()
-    {
-        if(breadCrumbs.size() == 0)
-        {
-            return new BreadCrumb("");
-        }
-        else
-        {
-            return breadCrumbs.get(breadCrumbs.size() - 1);
         }
     }
     
@@ -110,37 +146,6 @@ public class NavigationManagerBean implements Serializable {
             FacesContext.getCurrentInstance().getApplication().getNavigationHandler().handleNavigation(FacesContext.getCurrentInstance(), null, path);
         }
     }
-    
-    public void clearBreadCrumbsTo(int index)
-    {
-        while(breadCrumbs.size() > 0 && breadCrumbs.size() - 1 > index)
-        {
-            breadCrumbs.get(breadCrumbs.size() - 1).terminateConversation();
-            breadCrumbs.remove(breadCrumbs.size() - 1);
-        }
-    }
-    
-    public String goToBreadCrumb(int index)
-    {
-        BreadCrumb breadCrumb = breadCrumbs.get(index);
-        clearBreadCrumbsTo(index);
-        
-        return goToLink(breadCrumb);
-    }
-    
-    public String goToPreviousBreadCrumb()
-    {
-        return goToBreadCrumb(breadCrumbs.size() - 2);
-    }
-    
-    public int getIndexOfBreadCrumbWithPath(String path)
-    {
-        BreadCrumb breadCrumb = new BreadCrumb(path);
-        breadCrumb.stripPath(FacesContext.getCurrentInstance());
-        System.out.print("=======Link after strip " + breadCrumb.getPageLinkFromContext());
-        return breadCrumbs.indexOf(breadCrumb);
-    }
-    
     public String goToPortalView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("index", "Portal");
@@ -261,9 +266,9 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
-    public String goToUserAccountManagementAccountsViewerView()
+    public String goToUserAccountManagementPersonalAccountViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountsViewer", "Accounts viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_PersonalAccountViewer", "Personal account viewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);

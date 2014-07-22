@@ -297,7 +297,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address upAddress) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         
         UserGateway userGateway = getUserGatewayServiceEJB();
@@ -330,10 +330,13 @@ public class UserAccountManagementService implements UserAccountManagementServic
             
             if(upEmployeeInformationJpaController.findUpEmployeeInformation(userUPInfo.getEmployeeID()) != null)
             {
+                userUPInfo.setPhysicalAddress(upAddress);
                 upEmployeeInformationJpaController.edit(userUPInfo);
             }
             else
             {
+                addressJpaController.create(upAddress);
+                userUPInfo.setPhysicalAddress(upAddress);
                 upEmployeeInformationJpaController.create(userUPInfo);
                 user.setUpEmployeeInformation(userUPInfo);
             }
@@ -458,7 +461,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-        updateUserAccount(session, user, null, null);
+        updateUserAccount(session, user, null, null, null);
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Activated on demand account", session.getUser());
         auditTrailService.logAction(auditLog);

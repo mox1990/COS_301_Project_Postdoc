@@ -8,7 +8,7 @@ package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Person;
 import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.Webapp.conversationbeans.conversationManagerBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -37,8 +37,6 @@ public class UserAccountsViewerRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    @Inject
-    private conversationManagerBean conversationManagerBean;
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
@@ -69,17 +67,8 @@ public class UserAccountsViewerRequestBean {
     
     public void selectUserAccount(Person person)
     {
-        
-        if(!conversationManagerBean.isConversationActive())
-        {
-            System.out.println("Stopping converse ");
-            conversationManagerBean.stopConversation();
-        }
-        System.out.println("Starting converse ");
-        conversationManagerBean.startConversation();
-        System.out.println("Before Add ");
-        conversationManagerBean.clearConversationStorage();
-        conversationManagerBean.addObjectToStorage(person);        
+        sessionManagerBean.clearSessionStroage();
+        sessionManagerBean.addObjectToSessionStroage(person);        
     }
     
     public String editUserAccount(Person person)

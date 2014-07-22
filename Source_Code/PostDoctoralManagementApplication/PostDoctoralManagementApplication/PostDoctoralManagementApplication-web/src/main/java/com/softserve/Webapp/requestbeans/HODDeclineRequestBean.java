@@ -7,7 +7,7 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Application;
-import com.softserve.Webapp.conversationbeans.conversationManagerBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -31,8 +31,6 @@ public class HODDeclineRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    @Inject
-    private conversationManagerBean conversationManagerBean;
     
     @EJB
     private HODRecommendationServices hodRecommendationServices;
@@ -49,7 +47,7 @@ public class HODDeclineRequestBean {
     
     public Application getSelectedApplication()
     {
-        return conversationManagerBean.getObjectFromStroage(0, Application.class);
+        return sessionManagerBean.getObjectFromSessionStroage(0, Application.class);
     }
 
     public UIComponent getErrorContainer() {

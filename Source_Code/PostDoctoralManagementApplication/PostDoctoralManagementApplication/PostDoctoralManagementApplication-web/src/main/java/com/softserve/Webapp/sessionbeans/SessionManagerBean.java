@@ -13,7 +13,10 @@ import com.softserve.ejb.*;
 import com.softserve.system.Session;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
@@ -37,10 +40,18 @@ public class SessionManagerBean implements Serializable {
     @EJB
     private UserGatewayLocal userGateway;
     
+    private ArrayList<Object> sessionStroage;
+    
     /**
      * Creates a new instance of LoginManagedBean
      */
     public SessionManagerBean() {
+    }
+    
+    @PostConstruct
+    public void init()
+    {
+        sessionStroage = new ArrayList<Object>();
     }
     
     public String login(UIComponent errorMessageComponent, String username, String password)
@@ -63,11 +74,13 @@ public class SessionManagerBean implements Serializable {
             System.out.println("Test " + httpSession.getAttribute("username"));
             
             userGateway.login(session);
+            
             return navigationManagerBean.goToWelcomeView();
         }
         catch(Exception ex)
         {
-            //errorMessage = "User name and/or password is invalid";
+            System.out.println("Login exception");
+//errorMessage = "User name and/or password is invalid";
             ExceptionUtil.handleException(errorMessageComponent, ex);
             return "";
         }
@@ -112,5 +125,33 @@ public class SessionManagerBean implements Serializable {
         {
             FacesContext.getCurrentInstance().getExternalContext().redirect(navigationManagerBean.goToPortalView());
         }
+    }    
+    
+    public <T> T getObjectFromSessionStroage(int index, Class<T> objectClass)
+    {
+        try
+        {
+            return objectClass.cast(sessionStroage.get(index));
+        }
+        catch(ClassCastException ex)
+        {
+            return null;
+        }
+    }
+    
+    public int addObjectToSessionStroage(Object object)
+    {
+        sessionStroage.add(object);
+        return sessionStroage.size() - 1;
+    }
+    
+    public void removeObjectFromSessionStroageAt(int index)
+    {
+        sessionStroage.remove(index);
+    }
+    
+    public void clearSessionStroage()
+    {
+        sessionStroage.clear();
     }
 }

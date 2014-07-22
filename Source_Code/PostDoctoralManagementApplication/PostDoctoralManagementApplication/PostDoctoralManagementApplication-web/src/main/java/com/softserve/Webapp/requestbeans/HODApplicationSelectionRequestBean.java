@@ -7,7 +7,7 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Application;
-import com.softserve.Webapp.conversationbeans.conversationManagerBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -33,9 +33,7 @@ public class HODApplicationSelectionRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    @Inject
-    private conversationManagerBean conversationManagerBean;
-    
+
     @EJB
     private HODRecommendationServices hodRecommendationServices;
     
@@ -51,8 +49,6 @@ public class HODApplicationSelectionRequestBean {
     {   
         try
         {
-            conversationManagerBean.startConversation();
-            navigationManagerBean.getLatestBreadCrumb().setConversation(conversationManagerBean.getConversation());
             return hodRecommendationServices.loadPendingApplications(sessionManagerBean.getSession(), 0, hodRecommendationServices.countTotalPendingApplications(sessionManagerBean.getSession()));
         }
         catch(Exception ex)
@@ -64,6 +60,6 @@ public class HODApplicationSelectionRequestBean {
     
     public void markApplicationAsSelected(Application application)
     {
-        conversationManagerBean.addObjectToStorage(application);
+        sessionManagerBean.addObjectToSessionStroage(application);
     }
 }

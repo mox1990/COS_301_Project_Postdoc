@@ -15,16 +15,16 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
+import javax.inject.Named;
+import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -32,9 +32,9 @@ import org.primefaces.model.DualListModel;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "generalUserAccountCreationBean")
+@Named(value = "userAccountsGeneralAccountEditBean")
 @ConversationScoped
-public class GeneralUserAccountCreationBean implements Serializable{
+public class UserAccountsGeneralAccountEditBean implements Serializable {
 
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -65,26 +65,41 @@ public class GeneralUserAccountCreationBean implements Serializable{
     /**
      * Creates a new instance of UserAccountCreationRequestBean
      */
-    public GeneralUserAccountCreationBean() {
+    public UserAccountsGeneralAccountEditBean() {
     }
     
     @PostConstruct
     public void init()
     {
         conversationManagerBean.registerConversation(conversation);
-        conversation.begin();
+        conversationManagerBean.startConversation(conversation);
         
-        person = new Person();  
-        address = new Address();
-        employeeInformation = new UpEmployeeInformation();
-        upAddress = new Address();
+        person = sessionManagerBean.getObjectFromSessionStroage(0, Person.class);  
+        address = person.getAddressLine1();
         
-        sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
+        if(person.getUpEmployee())
+        {
+            employeeInformation = person.getUpEmployeeInformation();
+            upAddress = person.getUpEmployeeInformation().getPhysicalAddress();
+        }
+        else
+        {
+            employeeInformation = new UpEmployeeInformation();
+            upAddress = new Address();
+        }
+        
+        sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();        
         sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         
-        targetRoles = new ArrayList<SecurityRole>();
-        securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles);
+        targetRoles.addAll(person.getSecurityRoleList());
+        sourceRoles.removeAll(targetRoles);
+
+        securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles); 
         
+        if(targetRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
+        {
+            isSystemAdmin = true;            
+        }
     }
 
     public Person getPerson() {
@@ -144,13 +159,14 @@ public class GeneralUserAccountCreationBean implements Serializable{
         this.errorContainer = errorContainer;
     }
         
-    public String performGeneralUserAccountCreationRequest()
+    public String performGeneralUserAccountEditRequest()
     {
         try 
         {
             if(isSystemAdmin)
-            {
+            {                
                 targetRoles.addAll(sourceRoles);
+                sourceRoles.clear();
                 targetRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
             
@@ -158,12 +174,12 @@ public class GeneralUserAccountCreationBean implements Serializable{
             
             if(employeeInformation.getEmployeeID().equals(""))
             {
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, null, null);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, null, null);
             }
             else
             {
                 person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, employeeInformation, upAddress);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, employeeInformation, upAddress);
             }
             
             conversationManagerBean.deregisterConversation(conversation);
@@ -175,4 +191,5 @@ public class GeneralUserAccountCreationBean implements Serializable{
             return "";
         }
     }
+    
 }

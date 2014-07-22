@@ -63,6 +63,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public void login(Session session) throws AuthenticationException, Exception
     {        
+        
         if(session == null)
         {
             throw new Exception("Session is null");
@@ -78,12 +79,10 @@ public class UserGateway implements UserGatewayLocal
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
         //Check if httpsession systemID has the same as the entities systemID or email address
         if (session.doesHttpSessionUsernameMatchUserUsername() || session.doesHttpSessionUsernameMatchUserEmail())
-        {
-            
+        {            
             //Checks if httpsession password and entities password still match
             if (session.doesHttpSessionPasswordMatchUserPassword()) 
             {
-                
                 //Set login status to true
                 session.setLoggedInStatus(Boolean.TRUE);
                 //Log action

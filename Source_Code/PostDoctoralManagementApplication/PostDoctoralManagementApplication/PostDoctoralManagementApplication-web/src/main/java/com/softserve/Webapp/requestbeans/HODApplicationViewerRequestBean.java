@@ -9,7 +9,7 @@ package com.softserve.Webapp.requestbeans;
 import auto.softserve.XMLEntities.CV.*;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Cv;
-import com.softserve.Webapp.conversationbeans.conversationManagerBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.ejb.HODRecommendationServices;
@@ -32,8 +32,6 @@ public class HODApplicationViewerRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    @Inject
-    private conversationManagerBean conversationManagerBean;
     
     @EJB
     private HODRecommendationServices hodRecommendationServices;
@@ -48,7 +46,7 @@ public class HODApplicationViewerRequestBean {
     
     public Application getSelectedApplication()
     {
-        return conversationManagerBean.getObjectFromStroage(0, Application.class);
+        return sessionManagerBean.getObjectFromSessionStroage(0, Application.class);
     }
 
     public UIComponent getErrorContainer() {

@@ -77,13 +77,9 @@ public class BreadCrumb implements Serializable {
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
     }
-            
-    public void terminateConversation()
-    {
-        if(conversation != null && !conversation.isTransient())
-        {
-            conversation.end();
-        }
+
+    public Conversation getConversation() {
+        return conversation;
     }
     
     public void stripPath(FacesContext context)
