@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp.requestbeans;
+package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
@@ -15,14 +15,18 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -30,16 +34,16 @@ import org.primefaces.model.DualListModel;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "newUserAccountCreationRequestBean")
-@RequestScoped
-public class NewUserAccountCreationRequestBean {
+@Named(value = "generalUserAccountCreationBean")
+@ConversationScoped
+public class GeneralUserAccountCreationBean implements Serializable{
 
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
     @Inject
-    private conversationManagerBean conversationManagerBean;
+    private Conversation conversation;
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
@@ -51,6 +55,8 @@ public class NewUserAccountCreationRequestBean {
     private UpEmployeeInformation employeeInformation;
     private Address upAddress;
     
+    private boolean isSystemAdmin;
+    
     private List<SecurityRole> sourceRoles;
     private List<SecurityRole> targetRoles;
     private DualListModel<SecurityRole> securityRoles;
@@ -58,23 +64,15 @@ public class NewUserAccountCreationRequestBean {
     /**
      * Creates a new instance of UserAccountCreationRequestBean
      */
-    public NewUserAccountCreationRequestBean() {
+    public GeneralUserAccountCreationBean() {
     }
     
     @PostConstruct
     public void init()
     {
-        if(!conversationManagerBean.isConversationActive() || !conversationManagerBean.getConverseID().equals("post"))
-        {
-            person = new Person();
-            conversationManagerBean.startConversation();
-            conversationManagerBean.addObjectToStorage(person);
-        }
-        else
-        {
-            person = conversationManagerBean.getObjectFromStroage(0, Person.class);
-        }
+        conversation.begin();
         
+        person = new Person();  
         address = new Address();
         employeeInformation = new UpEmployeeInformation();
         upAddress = new Address();
@@ -122,17 +120,18 @@ public class NewUserAccountCreationRequestBean {
     }
 
     public void setSecurityRoles(DualListModel<SecurityRole> securityRoles) 
-    {
-        this.securityRoles = securityRoles;
-        
-        if(this.securityRoles.getTarget().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
-        {
-            List<SecurityRole> tempList = this.securityRoles.getSource();
-            this.securityRoles.getSource().clear();
-            this.securityRoles.getTarget().addAll(tempList);                 
-        }        
+    {        
+        this.securityRoles = securityRoles;      
     }
-                
+
+    public void setIsSystemAdmin(boolean isSystemAdmin) {
+        this.isSystemAdmin = isSystemAdmin;
+    }
+
+    public boolean isIsSystemAdmin() {
+        return isSystemAdmin;
+    }
+    
     public UIComponent getErrorContainer() {
         return errorContainer;
     }
@@ -140,36 +139,17 @@ public class NewUserAccountCreationRequestBean {
     public void setErrorContainer(UIComponent errorContainer) {
         this.errorContainer = errorContainer;
     }
-    
-    public String performProspectiveFellowUserAccountCreation()
-    {        
-        try 
-        {
-            person.setSecurityRoleList(new ArrayList<SecurityRole>());
-            person.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-            if(employeeInformation.getEmployeeID().equals(""))
-            {
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);
-            }
-            else
-            {
-                person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), true, person, address, employeeInformation, upAddress);
-            }
-            
-            return navigationManagerBean.goToPortalView();
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.handleException(errorContainer, ex);
-            return "";
-        }
-    }
-    
+        
     public String performGeneralUserAccountCreationRequest()
     {
         try 
         {
+            if(isSystemAdmin)
+            {
+                targetRoles.addAll(sourceRoles);
+                targetRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            }
+            
             person.setSecurityRoleList(targetRoles);
             
             if(employeeInformation.getEmployeeID().equals(""))
@@ -181,7 +161,7 @@ public class NewUserAccountCreationRequestBean {
                 person.setSystemID(employeeInformation.getEmployeeID());
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, employeeInformation, upAddress);
             }
-            
+            conversation.end();
             return navigationManagerBean.goToPreviousBreadCrumb();
         } 
         catch (Exception ex) 
@@ -190,6 +170,4 @@ public class NewUserAccountCreationRequestBean {
             return "";
         }
     }
-    
-    
 }

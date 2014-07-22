@@ -253,7 +253,7 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
-    public String goToUserAccountManagementPersonalAccountView()
+    public String goToUserAccountManagementlAccountViewer()
     {
         BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountViewer", "Account viewer");
         addToBreadCrumbs(breadCrumb);

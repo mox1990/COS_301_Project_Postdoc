@@ -18,7 +18,7 @@
             </div>
             <div>
                 <p:accordionPanel dynamic="true" cache="true" value="#{userAccountsViewerRequestBean.userAccounts}" var="account" styleClass="box-round">
-                    <p:tab title="User account - #{account.systemID} - #{account.completeName}">
+                    <p:tab title="User account - #{account.systemID} - #{account.completeName}" >
                         <h:panelGrid columns="2">
                             <h:outputText styleClass="text-label" value="Full name:"/>
                             <h:outputText value="#{account.fullName}"/>
@@ -33,7 +33,7 @@
                         </h:panelGrid>
                         <h:form>
                             <p:commandButton value="Edit user account" styleClass="button-fill"/>
-                            <p:commandButton value="Remove user account" styleClass="button-fill"/>
+                            <p:commandButton value="Remove user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.removeUserAccount(account)}" rendered="#{!userAccountsViewerRequestBean.isUserAccountDisabled(account)}"/>
                         </h:form>
                     </p:tab>
                 </p:accordionPanel>

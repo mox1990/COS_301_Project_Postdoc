@@ -117,4 +117,9 @@ public class Session {
        }
        return false;
     }
+    
+    public boolean isUserAccountDisabled()
+    {
+        return user.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+    }
 }

@@ -383,7 +383,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);
-        
+        /*
         //Remove primary address line
         addressJpaController.destroy(user.getAddressLine1().getAddressID());        
         
@@ -395,6 +395,10 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         //Remove person from database
         personJpaController.destroy(user.getSystemID());
+        */
+        
+        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+        personJpaController.edit(user);
         
         //Log action
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Removed user account", session.getUser());

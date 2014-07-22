@@ -7,6 +7,7 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Person;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.conversationbeans.conversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -14,6 +15,8 @@ import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -51,14 +54,7 @@ public class UserAccountsViewerRequestBean {
     public List<Person> getUserAccounts()
     {
         try
-        {
-            System.out.println("Start converse ");
-            if(!conversationManagerBean.isConversationActive())
-            {
-                conversationManagerBean.stopConversation();
-            }
-            conversationManagerBean.startConversation();
-            System.out.println("Before query ");
+        {            
             List<Person> accounts = userAccountManagementServiceLocal.viewAllUserAccounts(sessionManagerBean.getSession());
             System.out.println("Number of accounts " + accounts.size());
             return accounts;
@@ -73,6 +69,41 @@ public class UserAccountsViewerRequestBean {
     
     public void selectUserAccount(Person person)
     {
+        
+        if(!conversationManagerBean.isConversationActive())
+        {
+            System.out.println("Stopping converse ");
+            conversationManagerBean.stopConversation();
+        }
+        System.out.println("Starting converse ");
+        conversationManagerBean.startConversation();
+        System.out.println("Before Add ");
+        conversationManagerBean.clearConversationStorage();
         conversationManagerBean.addObjectToStorage(person);        
+    }
+    
+    public String editUserAccount(Person person)
+    {
+        selectUserAccount(person);
+        return navigationManagerBean.goToUserAccountManagementlAccountViewer();
+    }
+    
+    public String removeUserAccount(Person person)
+    {
+        try 
+        {
+            userAccountManagementServiceLocal.removeUserAccount(sessionManagerBean.getSession(), person.getSystemID());
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.handleException(errorContainer, ex);
+        }
+        
+        return "";
+    }
+    
+    public boolean isUserAccountDisabled(Person account)
+    {
+        return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
     }
 }

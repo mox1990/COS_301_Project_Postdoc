@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <ui:composition template="templates/generalPage_Template.xhtml">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
         <ui:define name="CSSStyleSheets">
@@ -14,7 +14,7 @@
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">Prospective fellow user account creation</h1>
+                 <h1 class="header1">User account creation</h1>
                  <h2>Please complete the fields below</h2>
             </div>
 
@@ -22,7 +22,7 @@
                 <h:form>
                     <center>
                         <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
-                            <ui:param name="person" value="#{newUserAccountCreationRequestBean.person}"/>
+                            <ui:param name="person" value="#{generalUserAccountCreationBean.person}"/>
                             <ui:param name="renderAttribute" value="#{true}"/>
                             <ui:define name="header">
                                 <h:outputText styleClass="header2" value="Person information"/>
@@ -30,7 +30,7 @@
                         </ui:decorate>
 
                         <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                            <ui:param name="address" value="#{newUserAccountCreationRequestBean.address}"/>
+                            <ui:param name="address" value="#{generalUserAccountCreationBean.address}"/>
                             <ui:param name="renderAttribute" value="#{true}"/>
                             <ui:param name="prefix" value="r"/>
                             <ui:define name="header">
@@ -39,7 +39,9 @@
                         </ui:decorate>                        
                         
                         <ui:decorate template="templates/securityFieldInput_Template.xhtml">
-                            <ui:param name="securityRoles" value="#{newUserAccountCreationRequestBean.securityRoles}"/>
+                            <ui:param name="securityRoles" value="#{generalUserAccountCreationBean.securityRoles}"/>
+                            <ui:param name="booleanValue" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
+                            <ui:param name="disabledAttribute" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
                             <ui:define name="header">
                                 <h:outputText styleClass="header2" value="Select Security roles"/>
                             </ui:define>
@@ -47,16 +49,16 @@
                         
                         <p:outputPanel id="upEmployeeInfoPanel">
                             <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
-                                <ui:param name="employeeInformation" value="#{newUserAccountCreationRequestBean.employeeInformation}"/>
-                                <ui:param name="renderAttribute" value="#{newUserAccountCreationRequestBean.person.upEmployee}"/>
+                                <ui:param name="employeeInformation" value="#{generalUserAccountCreationBean.employeeInformation}"/>
+                                <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
                                 <ui:define name="header">
                                     <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
                                 </ui:define>
                             </ui:decorate>
                             
                             <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                                <ui:param name="address" value="#{newUserAccountCreationRequestBean.upAddress}"/>
-                                <ui:param name="renderAttribute" value="#{newUserAccountCreationRequestBean.person.upEmployee}"/>
+                                <ui:param name="address" value="#{generalUserAccountCreationBean.upAddress}"/>
+                                <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
                                 <ui:param name="prefix" value="e"/>
                                 <ui:define name="header">
                                     <h:outputText styleClass="header2" value="UP office address"/>
@@ -64,7 +66,7 @@
                             </ui:decorate>                            
                         </p:outputPanel>
                         
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{newUserAccountCreationRequestBean.errorContainer}" action="#{newUserAccountCreationRequestBean.performProspectiveFellowUserAccountCreation()}" ajax="false"/>
+                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{generalUserAccountCreationBean.errorContainer}" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" ajax="false"/>
                         
                         <div class="errorContainer">
                             <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>

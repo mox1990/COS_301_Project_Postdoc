@@ -68,6 +68,11 @@ public class UserGateway implements UserGatewayLocal
             throw new Exception("Session is null");
         }
         
+        if(session.isUserAccountDisabled())
+        {
+            throw new AuthenticationException("User account disabled");
+        }
+        
         UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
@@ -78,6 +83,7 @@ public class UserGateway implements UserGatewayLocal
             //Checks if httpsession password and entities password still match
             if (session.doesHttpSessionPasswordMatchUserPassword()) 
             {
+                
                 //Set login status to true
                 session.setLoggedInStatus(Boolean.TRUE);
                 //Log action

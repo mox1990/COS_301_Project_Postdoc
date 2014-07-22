@@ -84,7 +84,7 @@ public class SessionManagerBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.handleException(errorMessageComponent, ex);
-            return "";
+            return navigationManagerBean.goToPortalView();
         }
         
         
