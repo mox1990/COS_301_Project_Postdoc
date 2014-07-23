@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AuditLog.findAll", query = "SELECT a FROM AuditLog a"),
     @NamedQuery(name = "AuditLog.findByEntryID", query = "SELECT a FROM AuditLog a WHERE a.entryID = :entryID"),
     @NamedQuery(name = "AuditLog.findByTimestamp", query = "SELECT a FROM AuditLog a WHERE a.timestamp = :timestamp"),
-    @NamedQuery(name = "AuditLog.findBetweenRange", query = "SELECT a FROM AuditLog a WHERE a.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "AuditLog.findByAction", query = "SELECT a FROM AuditLog a WHERE a.action = :action")})
 public class AuditLog implements Serializable {
     private static final long serialVersionUID = 1L;

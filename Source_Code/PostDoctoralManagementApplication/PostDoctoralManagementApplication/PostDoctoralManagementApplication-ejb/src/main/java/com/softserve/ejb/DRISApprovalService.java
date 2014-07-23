@@ -110,7 +110,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     protected boolean hasPhD(Application application)
     {
-        List<AcademicQualification> aqList = application.getFellow().getCvList().get(0).getAcademicQualificationList();
+        List<AcademicQualification> aqList = application.getFellow().getCv().getAcademicQualificationList();
         
         for(AcademicQualification aq : aqList)
         {
@@ -126,7 +126,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     protected boolean hasObtainedPhDInLast5Years(Application application)
     {     
         
-        List<AcademicQualification> aqList = application.getFellow().getCvList().get(0).getAcademicQualificationList();
+        List<AcademicQualification> aqList = application.getFellow().getCv().getAcademicQualificationList();
         
         GregorianCalendar curCal = new GregorianCalendar();
         GregorianCalendar obtainCal = new GregorianCalendar();
@@ -244,7 +244,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
-        Date dobDate = application.getFellow().getCvList().get(0).getDateOfBirth();
+        Date dobDate = application.getFellow().getCv().getDateOfBirth();
         GregorianCalendar curCal = new GregorianCalendar();
         GregorianCalendar dobCal = new GregorianCalendar();
         dobCal.setTime(dobDate);
@@ -350,7 +350,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         fundingReportJpaController.create(fundingReport);
         
         //Set application status to funded
-        application.setFundingReportID(fundingReport);
+        application.setFundingReport(fundingReport);
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
         
         try

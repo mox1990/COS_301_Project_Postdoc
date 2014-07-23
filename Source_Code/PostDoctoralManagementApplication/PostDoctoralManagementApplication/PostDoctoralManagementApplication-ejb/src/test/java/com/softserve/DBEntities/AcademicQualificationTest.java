@@ -82,8 +82,8 @@ public class AcademicQualificationTest {
     public void testSetAndGetCvID() 
     {
         AcademicQualification instance = new AcademicQualification();
-        instance.setCvID(new Cv(new Long(2)));
-        assertEquals(new Cv(new Long(2)), instance.getCvID());
+        instance.setCvID(new Cv("u12019837"));
+        assertEquals(new Cv("u12019837"), instance.getCvID());
     }
 
     @Test

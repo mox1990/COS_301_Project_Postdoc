@@ -8,7 +8,6 @@ package com.softserve.DBEntities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,13 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,7 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FundingReport.findAll", query = "SELECT f FROM FundingReport f"),
     @NamedQuery(name = "FundingReport.findByReportID", query = "SELECT f FROM FundingReport f WHERE f.reportID = :reportID"),
     @NamedQuery(name = "FundingReport.findByTimestamp", query = "SELECT f FROM FundingReport f WHERE f.timestamp = :timestamp"),
-    @NamedQuery(name = "FundingReport.findByTimestampBetweenRange", query = "SELECT f FROM FundingReport f WHERE f.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "FundingReport.findByFellowshipCost", query = "SELECT f FROM FundingReport f WHERE f.fellowshipCost = :fellowshipCost"),
     @NamedQuery(name = "FundingReport.findByTravelCost", query = "SELECT f FROM FundingReport f WHERE f.travelCost = :travelCost"),
     @NamedQuery(name = "FundingReport.findByRunningCost", query = "SELECT f FROM FundingReport f WHERE f.runningCost = :runningCost"),
@@ -69,11 +66,12 @@ public class FundingReport implements Serializable {
     private Float equipmentCost;
     @Column(name = "_conferenceCost")
     private Float conferenceCost;
+    @JoinColumn(name = "_reportID", referencedColumnName = "_applicationID", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Application application;
     @JoinColumn(name = "_drisID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person drisID;
-    @OneToMany(mappedBy = "fundingReportID")
-    private List<Application> applicationList;
 
     public FundingReport() {
     }
@@ -151,21 +149,20 @@ public class FundingReport implements Serializable {
         this.conferenceCost = conferenceCost;
     }
 
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
     public Person getDrisID() {
         return drisID;
     }
 
     public void setDrisID(Person drisID) {
         this.drisID = drisID;
-    }
-
-    @XmlTransient
-    public List<Application> getApplicationList() {
-        return applicationList;
-    }
-
-    public void setApplicationList(List<Application> applicationList) {
-        this.applicationList = applicationList;
     }
 
     @Override

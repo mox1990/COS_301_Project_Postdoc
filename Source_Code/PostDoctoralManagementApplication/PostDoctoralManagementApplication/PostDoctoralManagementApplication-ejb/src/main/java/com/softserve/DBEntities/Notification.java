@@ -38,9 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n"),
     @NamedQuery(name = "Notification.findByNotificationID", query = "SELECT n FROM Notification n WHERE n.notificationID = :notificationID"),
     @NamedQuery(name = "Notification.findBySubject", query = "SELECT n FROM Notification n WHERE n.subject = :subject"),
-    @NamedQuery(name = "Notification.findByTimestamp", query = "SELECT n FROM Notification n WHERE n.timestamp = :timestamp"),
-    @NamedQuery(name = "Notification.findBetweenRange", query = "SELECT n FROM Notification n WHERE n.timestamp BETWEEN :start AND :end")})
-
+    @NamedQuery(name = "Notification.findByEmailStatus", query = "SELECT n FROM Notification n WHERE n.emailStatus = :emailStatus"),
+    @NamedQuery(name = "Notification.findByTimestamp", query = "SELECT n FROM Notification n WHERE n.timestamp = :timestamp")})
 public class Notification implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,6 +54,9 @@ public class Notification implements Serializable {
     @Size(max = 65535)
     @Column(name = "_message")
     private String message;
+    @Size(max = 8)
+    @Column(name = "_emailStatus")
+    private String emailStatus;
     @Basic(optional = false)
     @NotNull
     @Column(name = "_timestamp")
@@ -101,6 +103,14 @@ public class Notification implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getEmailStatus() {
+        return emailStatus;
+    }
+
+    public void setEmailStatus(String emailStatus) {
+        this.emailStatus = emailStatus;
     }
 
     public Date getTimestamp() {

@@ -41,9 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CommitteeMeeting.findAll", query = "SELECT c FROM CommitteeMeeting c"),
     @NamedQuery(name = "CommitteeMeeting.findByMeetingID", query = "SELECT c FROM CommitteeMeeting c WHERE c.meetingID = :meetingID"),
     @NamedQuery(name = "CommitteeMeeting.findByStartDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.startDate = :startDate"),
-    @NamedQuery(name = "CommitteeMeeting.findByStartDateBetweenRange", query = "SELECT c FROM CommitteeMeeting c WHERE c.startDate BETWEEN :start AND :end"),
-    @NamedQuery(name = "CommitteeMeeting.findByEndDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.endDate = :endDate"),
-    @NamedQuery(name = "CommitteeMeeting.findByEndDateBetweenRange", query = "SELECT c FROM CommitteeMeeting c WHERE c.endDate BETWEEN :start AND :end")})
+    @NamedQuery(name = "CommitteeMeeting.findByEndDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.endDate = :endDate")})
 public class CommitteeMeeting implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

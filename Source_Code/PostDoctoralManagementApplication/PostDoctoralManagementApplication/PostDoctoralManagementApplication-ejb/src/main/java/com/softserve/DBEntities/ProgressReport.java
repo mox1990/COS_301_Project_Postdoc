@@ -6,8 +6,6 @@
 
 package com.softserve.DBEntities;
 
-import auto.softserve.XMLEntities.fellow.ProgressReportContent;
-import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -26,7 +24,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -40,8 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ProgressReport.findAll", query = "SELECT p FROM ProgressReport p"),
     @NamedQuery(name = "ProgressReport.findByReportID", query = "SELECT p FROM ProgressReport p WHERE p.reportID = :reportID"),
-    @NamedQuery(name = "ProgressReport.findByTimestamp", query = "SELECT p FROM ProgressReport p WHERE p.timestamp = :timestamp"),
-    @NamedQuery(name = "ProgressReport.findByTimestampBetweenRange", query = "SELECT p FROM ProgressReport p WHERE p.timestamp BETWEEN :start AND :end")})
+    @NamedQuery(name = "ProgressReport.findByTimestamp", query = "SELECT p FROM ProgressReport p WHERE p.timestamp = :timestamp")})
 public class ProgressReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -99,20 +95,6 @@ public class ProgressReport implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-    
-    public ProgressReportContent getContentXMLEntity()
-    {
-        XMLUnmarshaller xmlu = new XMLUnmarshaller();
-        
-        try 
-        {        
-            return xmlu.unmarshalProgressReportContentString(getContent());
-        } 
-        catch (JAXBException ex) 
-        {
-            return null;
-        }
     }
 
     public Application getApplicationID() {

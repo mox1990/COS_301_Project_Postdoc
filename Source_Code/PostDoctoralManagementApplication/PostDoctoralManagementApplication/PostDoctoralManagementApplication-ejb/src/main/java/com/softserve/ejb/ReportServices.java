@@ -127,16 +127,16 @@ public class ReportServices implements ReportServicesLocal
             cell.setCellValue(application.getEligiblityCheckDate());
             
             cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getEndorsementID().getDeanID().getCompleteName() + ": " + application.getEndorsementID().getMotivation());
+            cell.setCellValue(application.getEndorsement().getDeanID().getCompleteName() + ": " + application.getEndorsement().getMotivation());
             
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getFinalisationDate());
             
             cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getFundingReportID().toString());
+            cell.setCellValue(application.getFundingReport().toString());
             
             cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getRecommendationReportID().getHodID().getCompleteName() + ": " + application.getRecommendationReportID().getContent());
+            cell.setCellValue(application.getRecommendationReport().getHodID().getCompleteName() + ": " + application.getRecommendationReport().getContent());
             
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getType());

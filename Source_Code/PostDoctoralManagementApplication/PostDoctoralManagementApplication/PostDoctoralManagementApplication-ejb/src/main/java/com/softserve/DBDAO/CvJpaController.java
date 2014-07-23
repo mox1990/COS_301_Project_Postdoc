@@ -1,13 +1,14 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
 
 import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -42,21 +43,35 @@ public class CvJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Cv cv) throws RollbackFailureException, Exception {
+    public void create(Cv cv) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         if (cv.getExperienceList() == null) {
             cv.setExperienceList(new ArrayList<Experience>());
         }
         if (cv.getAcademicQualificationList() == null) {
             cv.setAcademicQualificationList(new ArrayList<AcademicQualification>());
         }
+        List<String> illegalOrphanMessages = null;
+        Person personOrphanCheck = cv.getPerson();
+        if (personOrphanCheck != null) {
+            Cv oldCvOfPerson = personOrphanCheck.getCv();
+            if (oldCvOfPerson != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("The Person " + personOrphanCheck + " already has an item of type Cv whose person column cannot be null. Please make another selection for the person field.");
+            }
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Person ownerID = cv.getOwnerID();
-            if (ownerID != null) {
-                ownerID = em.getReference(ownerID.getClass(), ownerID.getSystemID());
-                cv.setOwnerID(ownerID);
+            Person person = cv.getPerson();
+            if (person != null) {
+                person = em.getReference(person.getClass(), person.getSystemID());
+                cv.setPerson(person);
             }
             List<Experience> attachedExperienceList = new ArrayList<Experience>();
             for (Experience experienceListExperienceToAttach : cv.getExperienceList()) {
@@ -71,9 +86,9 @@ public class CvJpaController implements Serializable {
             }
             cv.setAcademicQualificationList(attachedAcademicQualificationList);
             em.persist(cv);
-            if (ownerID != null) {
-                ownerID.getCvList().add(cv);
-                ownerID = em.merge(ownerID);
+            if (person != null) {
+                person.setCv(cv);
+                person = em.merge(person);
             }
             for (Experience experienceListExperience : cv.getExperienceList()) {
                 Cv oldCvIDOfExperienceListExperience = experienceListExperience.getCvID();
@@ -100,6 +115,9 @@ public class CvJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
+            if (findCv(cv.getCvID()) != null) {
+                throw new PreexistingEntityException("Cv " + cv + " already exists.", ex);
+            }
             throw ex;
         } finally {
             if (em != null) {
@@ -114,13 +132,22 @@ public class CvJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Cv persistentCv = em.find(Cv.class, cv.getCvID());
-            Person ownerIDOld = persistentCv.getOwnerID();
-            Person ownerIDNew = cv.getOwnerID();
+            Person personOld = persistentCv.getPerson();
+            Person personNew = cv.getPerson();
             List<Experience> experienceListOld = persistentCv.getExperienceList();
             List<Experience> experienceListNew = cv.getExperienceList();
             List<AcademicQualification> academicQualificationListOld = persistentCv.getAcademicQualificationList();
             List<AcademicQualification> academicQualificationListNew = cv.getAcademicQualificationList();
             List<String> illegalOrphanMessages = null;
+            if (personNew != null && !personNew.equals(personOld)) {
+                Cv oldCvOfPerson = personNew.getCv();
+                if (oldCvOfPerson != null) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("The Person " + personNew + " already has an item of type Cv whose person column cannot be null. Please make another selection for the person field.");
+                }
+            }
             for (Experience experienceListOldExperience : experienceListOld) {
                 if (!experienceListNew.contains(experienceListOldExperience)) {
                     if (illegalOrphanMessages == null) {
@@ -140,9 +167,9 @@ public class CvJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (ownerIDNew != null) {
-                ownerIDNew = em.getReference(ownerIDNew.getClass(), ownerIDNew.getSystemID());
-                cv.setOwnerID(ownerIDNew);
+            if (personNew != null) {
+                personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
+                cv.setPerson(personNew);
             }
             List<Experience> attachedExperienceListNew = new ArrayList<Experience>();
             for (Experience experienceListNewExperienceToAttach : experienceListNew) {
@@ -159,13 +186,13 @@ public class CvJpaController implements Serializable {
             academicQualificationListNew = attachedAcademicQualificationListNew;
             cv.setAcademicQualificationList(academicQualificationListNew);
             cv = em.merge(cv);
-            if (ownerIDOld != null && !ownerIDOld.equals(ownerIDNew)) {
-                ownerIDOld.getCvList().remove(cv);
-                ownerIDOld = em.merge(ownerIDOld);
+            if (personOld != null && !personOld.equals(personNew)) {
+                personOld.setCv(null);
+                personOld = em.merge(personOld);
             }
-            if (ownerIDNew != null && !ownerIDNew.equals(ownerIDOld)) {
-                ownerIDNew.getCvList().add(cv);
-                ownerIDNew = em.merge(ownerIDNew);
+            if (personNew != null && !personNew.equals(personOld)) {
+                personNew.setCv(cv);
+                personNew = em.merge(personNew);
             }
             for (Experience experienceListNewExperience : experienceListNew) {
                 if (!experienceListOld.contains(experienceListNewExperience)) {
@@ -198,7 +225,7 @@ public class CvJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = cv.getCvID();
+                String id = cv.getCvID();
                 if (findCv(id) == null) {
                     throw new NonexistentEntityException("The cv with id " + id + " no longer exists.");
                 }
@@ -211,7 +238,7 @@ public class CvJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -241,10 +268,10 @@ public class CvJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Person ownerID = cv.getOwnerID();
-            if (ownerID != null) {
-                ownerID.getCvList().remove(cv);
-                ownerID = em.merge(ownerID);
+            Person person = cv.getPerson();
+            if (person != null) {
+                person.setCv(null);
+                person = em.merge(person);
             }
             em.remove(cv);
             utx.commit();
@@ -286,7 +313,7 @@ public class CvJpaController implements Serializable {
         }
     }
 
-    public Cv findCv(Long id) {
+    public Cv findCv(String id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Cv.class, id);

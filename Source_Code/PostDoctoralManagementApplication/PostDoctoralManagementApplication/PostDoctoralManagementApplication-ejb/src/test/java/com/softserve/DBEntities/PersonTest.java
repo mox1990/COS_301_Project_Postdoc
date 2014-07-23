@@ -245,14 +245,13 @@ public class PersonTest {
     }
 
     @Test
-    public void testSetAndGetCvList() 
+    public void testSetAndGetCv() 
     {
         Person instance = new Person();
-        instance.setCvList(new ArrayList<Cv>());
-        Cv c = new Cv(new Long(1));
-        instance.getCvList().add(c);
-        assertEquals(c, instance.getCvList().get(0));
-        assertTrue((instance.getCvList().size() == 1));
+        Cv cv = new Cv("u12019837");
+        instance.setCv(cv);
+        assertEquals(cv, instance.getCv());
+       
     }
 
     @Test

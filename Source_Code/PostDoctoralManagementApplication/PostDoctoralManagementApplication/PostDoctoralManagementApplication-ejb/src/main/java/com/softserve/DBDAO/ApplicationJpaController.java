@@ -15,9 +15,10 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.FundingReport;
+import com.softserve.DBEntities.Person;
 import java.util.ArrayList;
 import java.util.List;
 import com.softserve.DBEntities.CommitteeMeeting;
@@ -47,8 +48,8 @@ public class ApplicationJpaController implements Serializable {
     }
 
     public void create(Application application) throws RollbackFailureException, Exception {
-        if (application.getRefereeList() == null) {
-            application.setRefereeList(new ArrayList<Person>());
+        if (application.getPersonList() == null) {
+            application.setPersonList(new ArrayList<Person>());
         }
         if (application.getCommitteeMeetingList() == null) {
             application.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
@@ -63,6 +64,21 @@ public class ApplicationJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
+            Endorsement endorsement = application.getEndorsement();
+            if (endorsement != null) {
+                endorsement = em.getReference(endorsement.getClass(), endorsement.getEndorsementID());
+                application.setEndorsement(endorsement);
+            }
+            RecommendationReport recommendationReport = application.getRecommendationReport();
+            if (recommendationReport != null) {
+                recommendationReport = em.getReference(recommendationReport.getClass(), recommendationReport.getReportID());
+                application.setRecommendationReport(recommendationReport);
+            }
+            FundingReport fundingReport = application.getFundingReport();
+            if (fundingReport != null) {
+                fundingReport = em.getReference(fundingReport.getClass(), fundingReport.getReportID());
+                application.setFundingReport(fundingReport);
+            }
             Person fellow = application.getFellow();
             if (fellow != null) {
                 fellow = em.getReference(fellow.getClass(), fellow.getSystemID());
@@ -73,22 +89,12 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderID = em.getReference(grantHolderID.getClass(), grantHolderID.getSystemID());
                 application.setGrantHolderID(grantHolderID);
             }
-            Endorsement endorsementID = application.getEndorsementID();
-            if (endorsementID != null) {
-                endorsementID = em.getReference(endorsementID.getClass(), endorsementID.getEndorsementID());
-                application.setEndorsementID(endorsementID);
-            }
-            FundingReport fundingReportID = application.getFundingReportID();
-            if (fundingReportID != null) {
-                fundingReportID = em.getReference(fundingReportID.getClass(), fundingReportID.getReportID());
-                application.setFundingReportID(fundingReportID);
-            }
             List<Person> attachedPersonList = new ArrayList<Person>();
-            for (Person personListPersonToAttach : application.getRefereeList()) {
+            for (Person personListPersonToAttach : application.getPersonList()) {
                 personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
                 attachedPersonList.add(personListPersonToAttach);
             }
-            application.setRefereeList(attachedPersonList);
+            application.setPersonList(attachedPersonList);
             List<CommitteeMeeting> attachedCommitteeMeetingList = new ArrayList<CommitteeMeeting>();
             for (CommitteeMeeting committeeMeetingListCommitteeMeetingToAttach : application.getCommitteeMeetingList()) {
                 committeeMeetingListCommitteeMeetingToAttach = em.getReference(committeeMeetingListCommitteeMeetingToAttach.getClass(), committeeMeetingListCommitteeMeetingToAttach.getMeetingID());
@@ -108,6 +114,33 @@ public class ApplicationJpaController implements Serializable {
             }
             application.setProgressReportList(attachedProgressReportList);
             em.persist(application);
+            if (endorsement != null) {
+                Application oldApplicationOfEndorsement = endorsement.getApplication();
+                if (oldApplicationOfEndorsement != null) {
+                    oldApplicationOfEndorsement.setEndorsement(null);
+                    oldApplicationOfEndorsement = em.merge(oldApplicationOfEndorsement);
+                }
+                endorsement.setApplication(application);
+                endorsement = em.merge(endorsement);
+            }
+            if (recommendationReport != null) {
+                Application oldApplicationOfRecommendationReport = recommendationReport.getApplication();
+                if (oldApplicationOfRecommendationReport != null) {
+                    oldApplicationOfRecommendationReport.setRecommendationReport(null);
+                    oldApplicationOfRecommendationReport = em.merge(oldApplicationOfRecommendationReport);
+                }
+                recommendationReport.setApplication(application);
+                recommendationReport = em.merge(recommendationReport);
+            }
+            if (fundingReport != null) {
+                Application oldApplicationOfFundingReport = fundingReport.getApplication();
+                if (oldApplicationOfFundingReport != null) {
+                    oldApplicationOfFundingReport.setFundingReport(null);
+                    oldApplicationOfFundingReport = em.merge(oldApplicationOfFundingReport);
+                }
+                fundingReport.setApplication(application);
+                fundingReport = em.merge(fundingReport);
+            }
             if (fellow != null) {
                 fellow.getApplicationList().add(application);
                 fellow = em.merge(fellow);
@@ -116,15 +149,7 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderID.getApplicationList().add(application);
                 grantHolderID = em.merge(grantHolderID);
             }
-            if (endorsementID != null) {
-                endorsementID.getApplicationList().add(application);
-                endorsementID = em.merge(endorsementID);
-            }
-            if (fundingReportID != null) {
-                fundingReportID.getApplicationList().add(application);
-                fundingReportID = em.merge(fundingReportID);
-            }
-            for (Person personListPerson : application.getRefereeList()) {
+            for (Person personListPerson : application.getPersonList()) {
                 personListPerson.getApplicationList().add(application);
                 personListPerson = em.merge(personListPerson);
             }
@@ -171,16 +196,18 @@ public class ApplicationJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Application persistentApplication = em.find(Application.class, application.getApplicationID());
+            Endorsement endorsementOld = persistentApplication.getEndorsement();
+            Endorsement endorsementNew = application.getEndorsement();
+            RecommendationReport recommendationReportOld = persistentApplication.getRecommendationReport();
+            RecommendationReport recommendationReportNew = application.getRecommendationReport();
+            FundingReport fundingReportOld = persistentApplication.getFundingReport();
+            FundingReport fundingReportNew = application.getFundingReport();
             Person fellowOld = persistentApplication.getFellow();
             Person fellowNew = application.getFellow();
             Person grantHolderIDOld = persistentApplication.getGrantHolderID();
             Person grantHolderIDNew = application.getGrantHolderID();
-            Endorsement endorsementIDOld = persistentApplication.getEndorsementID();
-            Endorsement endorsementIDNew = application.getEndorsementID();
-            FundingReport fundingReportIDOld = persistentApplication.getFundingReportID();
-            FundingReport fundingReportIDNew = application.getFundingReportID();
-            List<Person> personListOld = persistentApplication.getRefereeList();
-            List<Person> personListNew = application.getRefereeList();
+            List<Person> personListOld = persistentApplication.getPersonList();
+            List<Person> personListNew = application.getPersonList();
             List<CommitteeMeeting> committeeMeetingListOld = persistentApplication.getCommitteeMeetingList();
             List<CommitteeMeeting> committeeMeetingListNew = application.getCommitteeMeetingList();
             List<RefereeReport> refereeReportListOld = persistentApplication.getRefereeReportList();
@@ -188,6 +215,24 @@ public class ApplicationJpaController implements Serializable {
             List<ProgressReport> progressReportListOld = persistentApplication.getProgressReportList();
             List<ProgressReport> progressReportListNew = application.getProgressReportList();
             List<String> illegalOrphanMessages = null;
+            if (endorsementOld != null && !endorsementOld.equals(endorsementNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain Endorsement " + endorsementOld + " since its application field is not nullable.");
+            }
+            if (recommendationReportOld != null && !recommendationReportOld.equals(recommendationReportNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportOld + " since its application field is not nullable.");
+            }
+            if (fundingReportOld != null && !fundingReportOld.equals(fundingReportNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain FundingReport " + fundingReportOld + " since its application field is not nullable.");
+            }
             for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
                 if (!refereeReportListNew.contains(refereeReportListOldRefereeReport)) {
                     if (illegalOrphanMessages == null) {
@@ -207,6 +252,18 @@ public class ApplicationJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            if (endorsementNew != null) {
+                endorsementNew = em.getReference(endorsementNew.getClass(), endorsementNew.getEndorsementID());
+                application.setEndorsement(endorsementNew);
+            }
+            if (recommendationReportNew != null) {
+                recommendationReportNew = em.getReference(recommendationReportNew.getClass(), recommendationReportNew.getReportID());
+                application.setRecommendationReport(recommendationReportNew);
+            }
+            if (fundingReportNew != null) {
+                fundingReportNew = em.getReference(fundingReportNew.getClass(), fundingReportNew.getReportID());
+                application.setFundingReport(fundingReportNew);
+            }
             if (fellowNew != null) {
                 fellowNew = em.getReference(fellowNew.getClass(), fellowNew.getSystemID());
                 application.setFellow(fellowNew);
@@ -215,21 +272,13 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderIDNew = em.getReference(grantHolderIDNew.getClass(), grantHolderIDNew.getSystemID());
                 application.setGrantHolderID(grantHolderIDNew);
             }
-            if (endorsementIDNew != null) {
-                endorsementIDNew = em.getReference(endorsementIDNew.getClass(), endorsementIDNew.getEndorsementID());
-                application.setEndorsementID(endorsementIDNew);
-            }
-            if (fundingReportIDNew != null) {
-                fundingReportIDNew = em.getReference(fundingReportIDNew.getClass(), fundingReportIDNew.getReportID());
-                application.setFundingReportID(fundingReportIDNew);
-            }
             List<Person> attachedPersonListNew = new ArrayList<Person>();
             for (Person personListNewPersonToAttach : personListNew) {
                 personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
                 attachedPersonListNew.add(personListNewPersonToAttach);
             }
             personListNew = attachedPersonListNew;
-            application.setRefereeList(personListNew);
+            application.setPersonList(personListNew);
             List<CommitteeMeeting> attachedCommitteeMeetingListNew = new ArrayList<CommitteeMeeting>();
             for (CommitteeMeeting committeeMeetingListNewCommitteeMeetingToAttach : committeeMeetingListNew) {
                 committeeMeetingListNewCommitteeMeetingToAttach = em.getReference(committeeMeetingListNewCommitteeMeetingToAttach.getClass(), committeeMeetingListNewCommitteeMeetingToAttach.getMeetingID());
@@ -252,6 +301,33 @@ public class ApplicationJpaController implements Serializable {
             progressReportListNew = attachedProgressReportListNew;
             application.setProgressReportList(progressReportListNew);
             application = em.merge(application);
+            if (endorsementNew != null && !endorsementNew.equals(endorsementOld)) {
+                Application oldApplicationOfEndorsement = endorsementNew.getApplication();
+                if (oldApplicationOfEndorsement != null) {
+                    oldApplicationOfEndorsement.setEndorsement(null);
+                    oldApplicationOfEndorsement = em.merge(oldApplicationOfEndorsement);
+                }
+                endorsementNew.setApplication(application);
+                endorsementNew = em.merge(endorsementNew);
+            }
+            if (recommendationReportNew != null && !recommendationReportNew.equals(recommendationReportOld)) {
+                Application oldApplicationOfRecommendationReport = recommendationReportNew.getApplication();
+                if (oldApplicationOfRecommendationReport != null) {
+                    oldApplicationOfRecommendationReport.setRecommendationReport(null);
+                    oldApplicationOfRecommendationReport = em.merge(oldApplicationOfRecommendationReport);
+                }
+                recommendationReportNew.setApplication(application);
+                recommendationReportNew = em.merge(recommendationReportNew);
+            }
+            if (fundingReportNew != null && !fundingReportNew.equals(fundingReportOld)) {
+                Application oldApplicationOfFundingReport = fundingReportNew.getApplication();
+                if (oldApplicationOfFundingReport != null) {
+                    oldApplicationOfFundingReport.setFundingReport(null);
+                    oldApplicationOfFundingReport = em.merge(oldApplicationOfFundingReport);
+                }
+                fundingReportNew.setApplication(application);
+                fundingReportNew = em.merge(fundingReportNew);
+            }
             if (fellowOld != null && !fellowOld.equals(fellowNew)) {
                 fellowOld.getApplicationList().remove(application);
                 fellowOld = em.merge(fellowOld);
@@ -267,22 +343,6 @@ public class ApplicationJpaController implements Serializable {
             if (grantHolderIDNew != null && !grantHolderIDNew.equals(grantHolderIDOld)) {
                 grantHolderIDNew.getApplicationList().add(application);
                 grantHolderIDNew = em.merge(grantHolderIDNew);
-            }
-            if (endorsementIDOld != null && !endorsementIDOld.equals(endorsementIDNew)) {
-                endorsementIDOld.getApplicationList().remove(application);
-                endorsementIDOld = em.merge(endorsementIDOld);
-            }
-            if (endorsementIDNew != null && !endorsementIDNew.equals(endorsementIDOld)) {
-                endorsementIDNew.getApplicationList().add(application);
-                endorsementIDNew = em.merge(endorsementIDNew);
-            }
-            if (fundingReportIDOld != null && !fundingReportIDOld.equals(fundingReportIDNew)) {
-                fundingReportIDOld.getApplicationList().remove(application);
-                fundingReportIDOld = em.merge(fundingReportIDOld);
-            }
-            if (fundingReportIDNew != null && !fundingReportIDNew.equals(fundingReportIDOld)) {
-                fundingReportIDNew.getApplicationList().add(application);
-                fundingReportIDNew = em.merge(fundingReportIDNew);
             }
             for (Person personListOldPerson : personListOld) {
                 if (!personListNew.contains(personListOldPerson)) {
@@ -365,6 +425,27 @@ public class ApplicationJpaController implements Serializable {
                 throw new NonexistentEntityException("The application with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            Endorsement endorsementOrphanCheck = application.getEndorsement();
+            if (endorsementOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the Endorsement " + endorsementOrphanCheck + " in its endorsement field has a non-nullable application field.");
+            }
+            RecommendationReport recommendationReportOrphanCheck = application.getRecommendationReport();
+            if (recommendationReportOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the RecommendationReport " + recommendationReportOrphanCheck + " in its recommendationReport field has a non-nullable application field.");
+            }
+            FundingReport fundingReportOrphanCheck = application.getFundingReport();
+            if (fundingReportOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the FundingReport " + fundingReportOrphanCheck + " in its fundingReport field has a non-nullable application field.");
+            }
             List<RefereeReport> refereeReportListOrphanCheck = application.getRefereeReportList();
             for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -392,17 +473,7 @@ public class ApplicationJpaController implements Serializable {
                 grantHolderID.getApplicationList().remove(application);
                 grantHolderID = em.merge(grantHolderID);
             }
-            Endorsement endorsementID = application.getEndorsementID();
-            if (endorsementID != null) {
-                endorsementID.getApplicationList().remove(application);
-                endorsementID = em.merge(endorsementID);
-            }
-            FundingReport fundingReportID = application.getFundingReportID();
-            if (fundingReportID != null) {
-                fundingReportID.getApplicationList().remove(application);
-                fundingReportID = em.merge(fundingReportID);
-            }
-            List<Person> personList = application.getRefereeList();
+            List<Person> personList = application.getPersonList();
             for (Person personListPerson : personList) {
                 personListPerson.getApplicationList().remove(application);
                 personListPerson = em.merge(personListPerson);
@@ -485,7 +556,7 @@ public class ApplicationJpaController implements Serializable {
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status", Application.class).setParameter("status", applicationStatus).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
-    }
+}
     
     public List<Application> findAllApplicationsWithStatusAndReferee(String applicationStatus, Person referee, int startRecord, int maxRecords)
     {

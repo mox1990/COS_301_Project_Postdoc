@@ -1,7 +1,7 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
@@ -9,21 +9,21 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import com.softserve.DBEntities.Person;
+import java.util.ArrayList;
+import java.util.List;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.MinuteComment;
-import com.softserve.DBEntities.Person;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**

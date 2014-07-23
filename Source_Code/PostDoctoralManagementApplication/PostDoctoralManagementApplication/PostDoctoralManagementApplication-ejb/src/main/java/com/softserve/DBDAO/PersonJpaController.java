@@ -1,7 +1,7 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
@@ -16,20 +16,20 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.CommitteeMeeting;
 import java.util.ArrayList;
 import java.util.List;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Endorsement;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.MinuteComment;
 import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
@@ -62,6 +62,9 @@ public class PersonJpaController implements Serializable {
         if (person.getSecurityRoleList() == null) {
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
         }
+        if (person.getApplicationList() == null) {
+            person.setApplicationList(new ArrayList<Application>());
+        }
         if (person.getAuditLogList() == null) {
             person.setAuditLogList(new ArrayList<AuditLog>());
         }
@@ -83,14 +86,11 @@ public class PersonJpaController implements Serializable {
         if (person.getNotificationList1() == null) {
             person.setNotificationList1(new ArrayList<Notification>());
         }
-        if (person.getCvList() == null) {
-            person.setCvList(new ArrayList<Cv>());
-        }
-        if (person.getApplicationList() == null) {
-            person.setApplicationList(new ArrayList<Application>());
-        }
         if (person.getApplicationList1() == null) {
             person.setApplicationList1(new ArrayList<Application>());
+        }
+        if (person.getApplicationList2() == null) {
+            person.setApplicationList2(new ArrayList<Application>());
         }
         if (person.getMinuteCommentList() == null) {
             person.setMinuteCommentList(new ArrayList<MinuteComment>());
@@ -103,6 +103,11 @@ public class PersonJpaController implements Serializable {
             if (upEmployeeInformation != null) {
                 upEmployeeInformation = em.getReference(upEmployeeInformation.getClass(), upEmployeeInformation.getEmployeeID());
                 person.setUpEmployeeInformation(upEmployeeInformation);
+            }
+            Cv cv = person.getCv();
+            if (cv != null) {
+                cv = em.getReference(cv.getClass(), cv.getCvID());
+                person.setCv(cv);
             }
             Location locationID = person.getLocationID();
             if (locationID != null) {
@@ -126,6 +131,12 @@ public class PersonJpaController implements Serializable {
                 attachedSecurityRoleList.add(securityRoleListSecurityRoleToAttach);
             }
             person.setSecurityRoleList(attachedSecurityRoleList);
+            List<Application> attachedApplicationList = new ArrayList<Application>();
+            for (Application applicationListApplicationToAttach : person.getApplicationList()) {
+                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
+                attachedApplicationList.add(applicationListApplicationToAttach);
+            }
+            person.setApplicationList(attachedApplicationList);
             List<AuditLog> attachedAuditLogList = new ArrayList<AuditLog>();
             for (AuditLog auditLogListAuditLogToAttach : person.getAuditLogList()) {
                 auditLogListAuditLogToAttach = em.getReference(auditLogListAuditLogToAttach.getClass(), auditLogListAuditLogToAttach.getEntryID());
@@ -168,24 +179,18 @@ public class PersonJpaController implements Serializable {
                 attachedNotificationList1.add(notificationList1NotificationToAttach);
             }
             person.setNotificationList1(attachedNotificationList1);
-            List<Cv> attachedCvList = new ArrayList<Cv>();
-            for (Cv cvListCvToAttach : person.getCvList()) {
-                cvListCvToAttach = em.getReference(cvListCvToAttach.getClass(), cvListCvToAttach.getCvID());
-                attachedCvList.add(cvListCvToAttach);
-            }
-            person.setCvList(attachedCvList);
-            List<Application> attachedApplicationList = new ArrayList<Application>();
-            for (Application applicationListApplicationToAttach : person.getApplicationList()) {
-                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
-                attachedApplicationList.add(applicationListApplicationToAttach);
-            }
-            person.setApplicationList(attachedApplicationList);
             List<Application> attachedApplicationList1 = new ArrayList<Application>();
             for (Application applicationList1ApplicationToAttach : person.getApplicationList1()) {
                 applicationList1ApplicationToAttach = em.getReference(applicationList1ApplicationToAttach.getClass(), applicationList1ApplicationToAttach.getApplicationID());
                 attachedApplicationList1.add(applicationList1ApplicationToAttach);
             }
             person.setApplicationList1(attachedApplicationList1);
+            List<Application> attachedApplicationList2 = new ArrayList<Application>();
+            for (Application applicationList2ApplicationToAttach : person.getApplicationList2()) {
+                applicationList2ApplicationToAttach = em.getReference(applicationList2ApplicationToAttach.getClass(), applicationList2ApplicationToAttach.getApplicationID());
+                attachedApplicationList2.add(applicationList2ApplicationToAttach);
+            }
+            person.setApplicationList2(attachedApplicationList2);
             List<MinuteComment> attachedMinuteCommentList = new ArrayList<MinuteComment>();
             for (MinuteComment minuteCommentListMinuteCommentToAttach : person.getMinuteCommentList()) {
                 minuteCommentListMinuteCommentToAttach = em.getReference(minuteCommentListMinuteCommentToAttach.getClass(), minuteCommentListMinuteCommentToAttach.getCommentID());
@@ -202,6 +207,15 @@ public class PersonJpaController implements Serializable {
                 upEmployeeInformation.setPerson(person);
                 upEmployeeInformation = em.merge(upEmployeeInformation);
             }
+            if (cv != null) {
+                Person oldPersonOfCv = cv.getPerson();
+                if (oldPersonOfCv != null) {
+                    oldPersonOfCv.setCv(null);
+                    oldPersonOfCv = em.merge(oldPersonOfCv);
+                }
+                cv.setPerson(person);
+                cv = em.merge(cv);
+            }
             if (locationID != null) {
                 locationID.getPersonList().add(person);
                 locationID = em.merge(locationID);
@@ -217,6 +231,10 @@ public class PersonJpaController implements Serializable {
             for (SecurityRole securityRoleListSecurityRole : person.getSecurityRoleList()) {
                 securityRoleListSecurityRole.getPersonList().add(person);
                 securityRoleListSecurityRole = em.merge(securityRoleListSecurityRole);
+            }
+            for (Application applicationListApplication : person.getApplicationList()) {
+                applicationListApplication.getPersonList().add(person);
+                applicationListApplication = em.merge(applicationListApplication);
             }
             for (AuditLog auditLogListAuditLog : person.getAuditLogList()) {
                 Person oldPersonIDOfAuditLogListAuditLog = auditLogListAuditLog.getPersonID();
@@ -281,31 +299,22 @@ public class PersonJpaController implements Serializable {
                     oldRecieverIDOfNotificationList1Notification = em.merge(oldRecieverIDOfNotificationList1Notification);
                 }
             }
-            for (Cv cvListCv : person.getCvList()) {
-                Person oldOwnerIDOfCvListCv = cvListCv.getOwnerID();
-                cvListCv.setOwnerID(person);
-                cvListCv = em.merge(cvListCv);
-                if (oldOwnerIDOfCvListCv != null) {
-                    oldOwnerIDOfCvListCv.getCvList().remove(cvListCv);
-                    oldOwnerIDOfCvListCv = em.merge(oldOwnerIDOfCvListCv);
-                }
-            }
-            for (Application applicationListApplication : person.getApplicationList()) {
-                Person oldFellowOfApplicationListApplication = applicationListApplication.getFellow();
-                applicationListApplication.setFellow(person);
-                applicationListApplication = em.merge(applicationListApplication);
-                if (oldFellowOfApplicationListApplication != null) {
-                    oldFellowOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
-                    oldFellowOfApplicationListApplication = em.merge(oldFellowOfApplicationListApplication);
-                }
-            }
             for (Application applicationList1Application : person.getApplicationList1()) {
-                Person oldGrantHolderIDOfApplicationList1Application = applicationList1Application.getGrantHolderID();
-                applicationList1Application.setGrantHolderID(person);
+                Person oldFellowOfApplicationList1Application = applicationList1Application.getFellow();
+                applicationList1Application.setFellow(person);
                 applicationList1Application = em.merge(applicationList1Application);
-                if (oldGrantHolderIDOfApplicationList1Application != null) {
-                    oldGrantHolderIDOfApplicationList1Application.getApplicationList1().remove(applicationList1Application);
-                    oldGrantHolderIDOfApplicationList1Application = em.merge(oldGrantHolderIDOfApplicationList1Application);
+                if (oldFellowOfApplicationList1Application != null) {
+                    oldFellowOfApplicationList1Application.getApplicationList1().remove(applicationList1Application);
+                    oldFellowOfApplicationList1Application = em.merge(oldFellowOfApplicationList1Application);
+                }
+            }
+            for (Application applicationList2Application : person.getApplicationList2()) {
+                Person oldGrantHolderIDOfApplicationList2Application = applicationList2Application.getGrantHolderID();
+                applicationList2Application.setGrantHolderID(person);
+                applicationList2Application = em.merge(applicationList2Application);
+                if (oldGrantHolderIDOfApplicationList2Application != null) {
+                    oldGrantHolderIDOfApplicationList2Application.getApplicationList2().remove(applicationList2Application);
+                    oldGrantHolderIDOfApplicationList2Application = em.merge(oldGrantHolderIDOfApplicationList2Application);
                 }
             }
             for (MinuteComment minuteCommentListMinuteComment : person.getMinuteCommentList()) {
@@ -343,6 +352,8 @@ public class PersonJpaController implements Serializable {
             Person persistentPerson = em.find(Person.class, person.getSystemID());
             UpEmployeeInformation upEmployeeInformationOld = persistentPerson.getUpEmployeeInformation();
             UpEmployeeInformation upEmployeeInformationNew = person.getUpEmployeeInformation();
+            Cv cvOld = persistentPerson.getCv();
+            Cv cvNew = person.getCv();
             Location locationIDOld = persistentPerson.getLocationID();
             Location locationIDNew = person.getLocationID();
             Address addressLine1Old = persistentPerson.getAddressLine1();
@@ -351,6 +362,8 @@ public class PersonJpaController implements Serializable {
             List<CommitteeMeeting> committeeMeetingListNew = person.getCommitteeMeetingList();
             List<SecurityRole> securityRoleListOld = persistentPerson.getSecurityRoleList();
             List<SecurityRole> securityRoleListNew = person.getSecurityRoleList();
+            List<Application> applicationListOld = persistentPerson.getApplicationList();
+            List<Application> applicationListNew = person.getApplicationList();
             List<AuditLog> auditLogListOld = persistentPerson.getAuditLogList();
             List<AuditLog> auditLogListNew = person.getAuditLogList();
             List<Endorsement> endorsementListOld = persistentPerson.getEndorsementList();
@@ -365,12 +378,10 @@ public class PersonJpaController implements Serializable {
             List<Notification> notificationListNew = person.getNotificationList();
             List<Notification> notificationList1Old = persistentPerson.getNotificationList1();
             List<Notification> notificationList1New = person.getNotificationList1();
-            List<Cv> cvListOld = persistentPerson.getCvList();
-            List<Cv> cvListNew = person.getCvList();
-            List<Application> applicationListOld = persistentPerson.getApplicationList();
-            List<Application> applicationListNew = person.getApplicationList();
             List<Application> applicationList1Old = persistentPerson.getApplicationList1();
             List<Application> applicationList1New = person.getApplicationList1();
+            List<Application> applicationList2Old = persistentPerson.getApplicationList2();
+            List<Application> applicationList2New = person.getApplicationList2();
             List<MinuteComment> minuteCommentListOld = persistentPerson.getMinuteCommentList();
             List<MinuteComment> minuteCommentListNew = person.getMinuteCommentList();
             List<String> illegalOrphanMessages = null;
@@ -379,6 +390,12 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("You must retain UpEmployeeInformation " + upEmployeeInformationOld + " since its person field is not nullable.");
+            }
+            if (cvOld != null && !cvOld.equals(cvNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain Cv " + cvOld + " since its person field is not nullable.");
             }
             for (AuditLog auditLogListOldAuditLog : auditLogListOld) {
                 if (!auditLogListNew.contains(auditLogListOldAuditLog)) {
@@ -436,28 +453,20 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Notification " + notificationList1OldNotification + " since its recieverID field is not nullable.");
                 }
             }
-            for (Cv cvListOldCv : cvListOld) {
-                if (!cvListNew.contains(cvListOldCv)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Cv " + cvListOldCv + " since its ownerID field is not nullable.");
-                }
-            }
-            for (Application applicationListOldApplication : applicationListOld) {
-                if (!applicationListNew.contains(applicationListOldApplication)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Application " + applicationListOldApplication + " since its fellow field is not nullable.");
-                }
-            }
             for (Application applicationList1OldApplication : applicationList1Old) {
                 if (!applicationList1New.contains(applicationList1OldApplication)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Application " + applicationList1OldApplication + " since its grantHolderID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Application " + applicationList1OldApplication + " since its fellow field is not nullable.");
+                }
+            }
+            for (Application applicationList2OldApplication : applicationList2Old) {
+                if (!applicationList2New.contains(applicationList2OldApplication)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Application " + applicationList2OldApplication + " since its grantHolderID field is not nullable.");
                 }
             }
             for (MinuteComment minuteCommentListOldMinuteComment : minuteCommentListOld) {
@@ -474,6 +483,10 @@ public class PersonJpaController implements Serializable {
             if (upEmployeeInformationNew != null) {
                 upEmployeeInformationNew = em.getReference(upEmployeeInformationNew.getClass(), upEmployeeInformationNew.getEmployeeID());
                 person.setUpEmployeeInformation(upEmployeeInformationNew);
+            }
+            if (cvNew != null) {
+                cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
+                person.setCv(cvNew);
             }
             if (locationIDNew != null) {
                 locationIDNew = em.getReference(locationIDNew.getClass(), locationIDNew.getLocationID());
@@ -497,6 +510,13 @@ public class PersonJpaController implements Serializable {
             }
             securityRoleListNew = attachedSecurityRoleListNew;
             person.setSecurityRoleList(securityRoleListNew);
+            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            for (Application applicationListNewApplicationToAttach : applicationListNew) {
+                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
+                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
+            }
+            applicationListNew = attachedApplicationListNew;
+            person.setApplicationList(applicationListNew);
             List<AuditLog> attachedAuditLogListNew = new ArrayList<AuditLog>();
             for (AuditLog auditLogListNewAuditLogToAttach : auditLogListNew) {
                 auditLogListNewAuditLogToAttach = em.getReference(auditLogListNewAuditLogToAttach.getClass(), auditLogListNewAuditLogToAttach.getEntryID());
@@ -546,20 +566,6 @@ public class PersonJpaController implements Serializable {
             }
             notificationList1New = attachedNotificationList1New;
             person.setNotificationList1(notificationList1New);
-            List<Cv> attachedCvListNew = new ArrayList<Cv>();
-            for (Cv cvListNewCvToAttach : cvListNew) {
-                cvListNewCvToAttach = em.getReference(cvListNewCvToAttach.getClass(), cvListNewCvToAttach.getCvID());
-                attachedCvListNew.add(cvListNewCvToAttach);
-            }
-            cvListNew = attachedCvListNew;
-            person.setCvList(cvListNew);
-            List<Application> attachedApplicationListNew = new ArrayList<Application>();
-            for (Application applicationListNewApplicationToAttach : applicationListNew) {
-                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
-                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
-            }
-            applicationListNew = attachedApplicationListNew;
-            person.setApplicationList(applicationListNew);
             List<Application> attachedApplicationList1New = new ArrayList<Application>();
             for (Application applicationList1NewApplicationToAttach : applicationList1New) {
                 applicationList1NewApplicationToAttach = em.getReference(applicationList1NewApplicationToAttach.getClass(), applicationList1NewApplicationToAttach.getApplicationID());
@@ -567,6 +573,13 @@ public class PersonJpaController implements Serializable {
             }
             applicationList1New = attachedApplicationList1New;
             person.setApplicationList1(applicationList1New);
+            List<Application> attachedApplicationList2New = new ArrayList<Application>();
+            for (Application applicationList2NewApplicationToAttach : applicationList2New) {
+                applicationList2NewApplicationToAttach = em.getReference(applicationList2NewApplicationToAttach.getClass(), applicationList2NewApplicationToAttach.getApplicationID());
+                attachedApplicationList2New.add(applicationList2NewApplicationToAttach);
+            }
+            applicationList2New = attachedApplicationList2New;
+            person.setApplicationList2(applicationList2New);
             List<MinuteComment> attachedMinuteCommentListNew = new ArrayList<MinuteComment>();
             for (MinuteComment minuteCommentListNewMinuteCommentToAttach : minuteCommentListNew) {
                 minuteCommentListNewMinuteCommentToAttach = em.getReference(minuteCommentListNewMinuteCommentToAttach.getClass(), minuteCommentListNewMinuteCommentToAttach.getCommentID());
@@ -583,6 +596,15 @@ public class PersonJpaController implements Serializable {
                 }
                 upEmployeeInformationNew.setPerson(person);
                 upEmployeeInformationNew = em.merge(upEmployeeInformationNew);
+            }
+            if (cvNew != null && !cvNew.equals(cvOld)) {
+                Person oldPersonOfCv = cvNew.getPerson();
+                if (oldPersonOfCv != null) {
+                    oldPersonOfCv.setCv(null);
+                    oldPersonOfCv = em.merge(oldPersonOfCv);
+                }
+                cvNew.setPerson(person);
+                cvNew = em.merge(cvNew);
             }
             if (locationIDOld != null && !locationIDOld.equals(locationIDNew)) {
                 locationIDOld.getPersonList().remove(person);
@@ -622,6 +644,18 @@ public class PersonJpaController implements Serializable {
                 if (!securityRoleListOld.contains(securityRoleListNewSecurityRole)) {
                     securityRoleListNewSecurityRole.getPersonList().add(person);
                     securityRoleListNewSecurityRole = em.merge(securityRoleListNewSecurityRole);
+                }
+            }
+            for (Application applicationListOldApplication : applicationListOld) {
+                if (!applicationListNew.contains(applicationListOldApplication)) {
+                    applicationListOldApplication.getPersonList().remove(person);
+                    applicationListOldApplication = em.merge(applicationListOldApplication);
+                }
+            }
+            for (Application applicationListNewApplication : applicationListNew) {
+                if (!applicationListOld.contains(applicationListNewApplication)) {
+                    applicationListNewApplication.getPersonList().add(person);
+                    applicationListNewApplication = em.merge(applicationListNewApplication);
                 }
             }
             for (AuditLog auditLogListNewAuditLog : auditLogListNew) {
@@ -701,36 +735,25 @@ public class PersonJpaController implements Serializable {
                     }
                 }
             }
-            for (Cv cvListNewCv : cvListNew) {
-                if (!cvListOld.contains(cvListNewCv)) {
-                    Person oldOwnerIDOfCvListNewCv = cvListNewCv.getOwnerID();
-                    cvListNewCv.setOwnerID(person);
-                    cvListNewCv = em.merge(cvListNewCv);
-                    if (oldOwnerIDOfCvListNewCv != null && !oldOwnerIDOfCvListNewCv.equals(person)) {
-                        oldOwnerIDOfCvListNewCv.getCvList().remove(cvListNewCv);
-                        oldOwnerIDOfCvListNewCv = em.merge(oldOwnerIDOfCvListNewCv);
-                    }
-                }
-            }
-            for (Application applicationListNewApplication : applicationListNew) {
-                if (!applicationListOld.contains(applicationListNewApplication)) {
-                    Person oldFellowOfApplicationListNewApplication = applicationListNewApplication.getFellow();
-                    applicationListNewApplication.setFellow(person);
-                    applicationListNewApplication = em.merge(applicationListNewApplication);
-                    if (oldFellowOfApplicationListNewApplication != null && !oldFellowOfApplicationListNewApplication.equals(person)) {
-                        oldFellowOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
-                        oldFellowOfApplicationListNewApplication = em.merge(oldFellowOfApplicationListNewApplication);
-                    }
-                }
-            }
             for (Application applicationList1NewApplication : applicationList1New) {
                 if (!applicationList1Old.contains(applicationList1NewApplication)) {
-                    Person oldGrantHolderIDOfApplicationList1NewApplication = applicationList1NewApplication.getGrantHolderID();
-                    applicationList1NewApplication.setGrantHolderID(person);
+                    Person oldFellowOfApplicationList1NewApplication = applicationList1NewApplication.getFellow();
+                    applicationList1NewApplication.setFellow(person);
                     applicationList1NewApplication = em.merge(applicationList1NewApplication);
-                    if (oldGrantHolderIDOfApplicationList1NewApplication != null && !oldGrantHolderIDOfApplicationList1NewApplication.equals(person)) {
-                        oldGrantHolderIDOfApplicationList1NewApplication.getApplicationList1().remove(applicationList1NewApplication);
-                        oldGrantHolderIDOfApplicationList1NewApplication = em.merge(oldGrantHolderIDOfApplicationList1NewApplication);
+                    if (oldFellowOfApplicationList1NewApplication != null && !oldFellowOfApplicationList1NewApplication.equals(person)) {
+                        oldFellowOfApplicationList1NewApplication.getApplicationList1().remove(applicationList1NewApplication);
+                        oldFellowOfApplicationList1NewApplication = em.merge(oldFellowOfApplicationList1NewApplication);
+                    }
+                }
+            }
+            for (Application applicationList2NewApplication : applicationList2New) {
+                if (!applicationList2Old.contains(applicationList2NewApplication)) {
+                    Person oldGrantHolderIDOfApplicationList2NewApplication = applicationList2NewApplication.getGrantHolderID();
+                    applicationList2NewApplication.setGrantHolderID(person);
+                    applicationList2NewApplication = em.merge(applicationList2NewApplication);
+                    if (oldGrantHolderIDOfApplicationList2NewApplication != null && !oldGrantHolderIDOfApplicationList2NewApplication.equals(person)) {
+                        oldGrantHolderIDOfApplicationList2NewApplication.getApplicationList2().remove(applicationList2NewApplication);
+                        oldGrantHolderIDOfApplicationList2NewApplication = em.merge(oldGrantHolderIDOfApplicationList2NewApplication);
                     }
                 }
             }
@@ -787,6 +810,13 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the UpEmployeeInformation " + upEmployeeInformationOrphanCheck + " in its upEmployeeInformation field has a non-nullable person field.");
             }
+            Cv cvOrphanCheck = person.getCv();
+            if (cvOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Cv " + cvOrphanCheck + " in its cv field has a non-nullable person field.");
+            }
             List<AuditLog> auditLogListOrphanCheck = person.getAuditLogList();
             for (AuditLog auditLogListOrphanCheckAuditLog : auditLogListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -836,26 +866,19 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationList1OrphanCheckNotification + " in its notificationList1 field has a non-nullable recieverID field.");
             }
-            List<Cv> cvListOrphanCheck = person.getCvList();
-            for (Cv cvListOrphanCheckCv : cvListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Cv " + cvListOrphanCheckCv + " in its cvList field has a non-nullable ownerID field.");
-            }
-            List<Application> applicationListOrphanCheck = person.getApplicationList();
-            for (Application applicationListOrphanCheckApplication : applicationListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationListOrphanCheckApplication + " in its applicationList field has a non-nullable fellow field.");
-            }
             List<Application> applicationList1OrphanCheck = person.getApplicationList1();
             for (Application applicationList1OrphanCheckApplication : applicationList1OrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationList1OrphanCheckApplication + " in its applicationList1 field has a non-nullable grantHolderID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationList1OrphanCheckApplication + " in its applicationList1 field has a non-nullable fellow field.");
+            }
+            List<Application> applicationList2OrphanCheck = person.getApplicationList2();
+            for (Application applicationList2OrphanCheckApplication : applicationList2OrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationList2OrphanCheckApplication + " in its applicationList2 field has a non-nullable grantHolderID field.");
             }
             List<MinuteComment> minuteCommentListOrphanCheck = person.getMinuteCommentList();
             for (MinuteComment minuteCommentListOrphanCheckMinuteComment : minuteCommentListOrphanCheck) {
@@ -886,6 +909,11 @@ public class PersonJpaController implements Serializable {
             for (SecurityRole securityRoleListSecurityRole : securityRoleList) {
                 securityRoleListSecurityRole.getPersonList().remove(person);
                 securityRoleListSecurityRole = em.merge(securityRoleListSecurityRole);
+            }
+            List<Application> applicationList = person.getApplicationList();
+            for (Application applicationListApplication : applicationList) {
+                applicationListApplication.getPersonList().remove(person);
+                applicationListApplication = em.merge(applicationListApplication);
             }
             em.remove(person);
             utx.commit();

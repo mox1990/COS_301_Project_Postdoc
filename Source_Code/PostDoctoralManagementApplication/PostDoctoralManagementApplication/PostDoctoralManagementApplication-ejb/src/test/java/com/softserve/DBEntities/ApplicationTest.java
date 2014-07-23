@@ -112,14 +112,14 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testSetAndGetRefereeList() 
+    public void testSetAndGetPersonList() 
     {
         Application instance = new Application();
-        instance.setRefereeList(new ArrayList<Person>());
+        instance.setPersonList(new ArrayList<Person>());
         Person person = new Person("r12019837");
-        instance.getRefereeList().add(person);
-        assertEquals(person, instance.getRefereeList().get(0));
-        assertTrue((instance.getRefereeList().size() == 1));
+        instance.getPersonList().add(person);
+        assertEquals(person, instance.getPersonList().get(0));
+        assertTrue((instance.getPersonList().size() == 1));
     }
 
     @Test
@@ -167,8 +167,8 @@ public class ApplicationTest {
     {
         Application instance = new Application();
         RecommendationReport report = new RecommendationReport(Long.MAX_VALUE);
-        instance.setRecommendationReportID(report);
-        assertEquals(report, instance.getRecommendationReportID());
+        instance.setRecommendationReport(report);
+        assertEquals(report, instance.getRecommendationReport());
     }
 
     @Test
@@ -176,8 +176,8 @@ public class ApplicationTest {
     {
         Application instance = new Application();
         Endorsement report = new Endorsement(Long.MAX_VALUE);
-        instance.setEndorsementID(report);
-        assertEquals(report, instance.getEndorsementID());
+        instance.setEndorsement(report);
+        assertEquals(report, instance.getEndorsement());
     }
 
     @Test
@@ -185,8 +185,8 @@ public class ApplicationTest {
     {
         Application instance = new Application();
         FundingReport report = new FundingReport(Long.MAX_VALUE);
-        instance.setFundingReportID(report);
-        assertEquals(report, instance.getFundingReportID());
+        instance.setFundingReport(report);
+        assertEquals(report, instance.getFundingReport());
     }
 
     @Test

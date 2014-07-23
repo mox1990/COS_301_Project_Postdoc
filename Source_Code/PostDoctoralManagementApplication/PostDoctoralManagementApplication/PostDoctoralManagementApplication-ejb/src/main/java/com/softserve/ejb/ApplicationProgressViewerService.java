@@ -110,32 +110,32 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         stageStatuses.add(new ApplicationStageStatus(application.getFinalisationDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, application.getGrantHolderID()));
         
         //HOD recommendation information
-        if(application.getRecommendationReportID() != null)
+        if(application.getRecommendationReport()!= null)
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getRecommendationReportID().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, application.getRecommendationReportID().getHodID()));
+            stageStatuses.add(new ApplicationStageStatus(application.getRecommendationReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, application.getRecommendationReport().getHodID()));
         }
         
         //Deans endorsement information
-        if(application.getEndorsementID()!= null)
+        if(application.getEndorsement()!= null)
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getEndorsementID().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, application.getEndorsementID().getDeanID()));
+            stageStatuses.add(new ApplicationStageStatus(application.getEndorsement().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, application.getEndorsement().getDeanID()));
         }
         
         //Eligiblity information information
-        if(application.getEndorsementID()!= null)
+        if(application.getEndorsement()!= null)
         {
             stageStatuses.add(new ApplicationStageStatus(application.getEligiblityCheckDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, null));
         }
         
         //Funding information information
-        if(application.getFundingReportID()!= null)
+        if(application.getFundingReport()!= null)
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getFundingReportID().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, application.getFundingReportID().getDrisID()));
+            stageStatuses.add(new ApplicationStageStatus(application.getFundingReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, application.getFundingReport().getDrisID()));
         }
         
         if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED))
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getFundingReportID().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, application.getFundingReportID().getDrisID()));
+            stageStatuses.add(new ApplicationStageStatus(application.getFundingReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, application.getFundingReport().getDrisID()));
         }
 
         

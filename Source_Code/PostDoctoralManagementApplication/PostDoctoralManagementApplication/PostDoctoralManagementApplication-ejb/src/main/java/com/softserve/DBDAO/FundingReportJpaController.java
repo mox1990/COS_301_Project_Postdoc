@@ -1,11 +1,12 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
 
+import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -14,9 +15,9 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.FundingReport;
+import com.softserve.DBEntities.Person;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -41,38 +42,43 @@ public class FundingReportJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(FundingReport fundingReport) throws PreexistingEntityException, RollbackFailureException, Exception {
-        if (fundingReport.getApplicationList() == null) {
-            fundingReport.setApplicationList(new ArrayList<Application>());
+    public void create(FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+        List<String> illegalOrphanMessages = null;
+        Application applicationOrphanCheck = fundingReport.getApplication();
+        if (applicationOrphanCheck != null) {
+            FundingReport oldFundingReportOfApplication = applicationOrphanCheck.getFundingReport();
+            if (oldFundingReportOfApplication != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("The Application " + applicationOrphanCheck + " already has an item of type FundingReport whose application column cannot be null. Please make another selection for the application field.");
+            }
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            Application application = fundingReport.getApplication();
+            if (application != null) {
+                application = em.getReference(application.getClass(), application.getApplicationID());
+                fundingReport.setApplication(application);
+            }
             Person drisID = fundingReport.getDrisID();
             if (drisID != null) {
                 drisID = em.getReference(drisID.getClass(), drisID.getSystemID());
                 fundingReport.setDrisID(drisID);
             }
-            List<Application> attachedApplicationList = new ArrayList<Application>();
-            for (Application applicationListApplicationToAttach : fundingReport.getApplicationList()) {
-                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
-                attachedApplicationList.add(applicationListApplicationToAttach);
-            }
-            fundingReport.setApplicationList(attachedApplicationList);
             em.persist(fundingReport);
+            if (application != null) {
+                application.setFundingReport(fundingReport);
+                application = em.merge(application);
+            }
             if (drisID != null) {
                 drisID.getFundingReportList().add(fundingReport);
                 drisID = em.merge(drisID);
-            }
-            for (Application applicationListApplication : fundingReport.getApplicationList()) {
-                FundingReport oldFundingReportIDOfApplicationListApplication = applicationListApplication.getFundingReportID();
-                applicationListApplication.setFundingReportID(fundingReport);
-                applicationListApplication = em.merge(applicationListApplication);
-                if (oldFundingReportIDOfApplicationListApplication != null) {
-                    oldFundingReportIDOfApplicationListApplication.getApplicationList().remove(applicationListApplication);
-                    oldFundingReportIDOfApplicationListApplication = em.merge(oldFundingReportIDOfApplicationListApplication);
-                }
             }
             utx.commit();
         } catch (Exception ex) {
@@ -92,28 +98,46 @@ public class FundingReportJpaController implements Serializable {
         }
     }
 
-    public void edit(FundingReport fundingReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
             FundingReport persistentFundingReport = em.find(FundingReport.class, fundingReport.getReportID());
+            Application applicationOld = persistentFundingReport.getApplication();
+            Application applicationNew = fundingReport.getApplication();
             Person drisIDOld = persistentFundingReport.getDrisID();
             Person drisIDNew = fundingReport.getDrisID();
-            List<Application> applicationListOld = persistentFundingReport.getApplicationList();
-            List<Application> applicationListNew = fundingReport.getApplicationList();
+            List<String> illegalOrphanMessages = null;
+            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+                FundingReport oldFundingReportOfApplication = applicationNew.getFundingReport();
+                if (oldFundingReportOfApplication != null) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type FundingReport whose application column cannot be null. Please make another selection for the application field.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (applicationNew != null) {
+                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+                fundingReport.setApplication(applicationNew);
+            }
             if (drisIDNew != null) {
                 drisIDNew = em.getReference(drisIDNew.getClass(), drisIDNew.getSystemID());
                 fundingReport.setDrisID(drisIDNew);
             }
-            List<Application> attachedApplicationListNew = new ArrayList<Application>();
-            for (Application applicationListNewApplicationToAttach : applicationListNew) {
-                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
-                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
-            }
-            applicationListNew = attachedApplicationListNew;
-            fundingReport.setApplicationList(applicationListNew);
             fundingReport = em.merge(fundingReport);
+            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+                applicationOld.setFundingReport(null);
+                applicationOld = em.merge(applicationOld);
+            }
+            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+                applicationNew.setFundingReport(fundingReport);
+                applicationNew = em.merge(applicationNew);
+            }
             if (drisIDOld != null && !drisIDOld.equals(drisIDNew)) {
                 drisIDOld.getFundingReportList().remove(fundingReport);
                 drisIDOld = em.merge(drisIDOld);
@@ -121,23 +145,6 @@ public class FundingReportJpaController implements Serializable {
             if (drisIDNew != null && !drisIDNew.equals(drisIDOld)) {
                 drisIDNew.getFundingReportList().add(fundingReport);
                 drisIDNew = em.merge(drisIDNew);
-            }
-            for (Application applicationListOldApplication : applicationListOld) {
-                if (!applicationListNew.contains(applicationListOldApplication)) {
-                    applicationListOldApplication.setFundingReportID(null);
-                    applicationListOldApplication = em.merge(applicationListOldApplication);
-                }
-            }
-            for (Application applicationListNewApplication : applicationListNew) {
-                if (!applicationListOld.contains(applicationListNewApplication)) {
-                    FundingReport oldFundingReportIDOfApplicationListNewApplication = applicationListNewApplication.getFundingReportID();
-                    applicationListNewApplication.setFundingReportID(fundingReport);
-                    applicationListNewApplication = em.merge(applicationListNewApplication);
-                    if (oldFundingReportIDOfApplicationListNewApplication != null && !oldFundingReportIDOfApplicationListNewApplication.equals(fundingReport)) {
-                        oldFundingReportIDOfApplicationListNewApplication.getApplicationList().remove(applicationListNewApplication);
-                        oldFundingReportIDOfApplicationListNewApplication = em.merge(oldFundingReportIDOfApplicationListNewApplication);
-                    }
-                }
             }
             utx.commit();
         } catch (Exception ex) {
@@ -173,15 +180,15 @@ public class FundingReportJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The fundingReport with id " + id + " no longer exists.", enfe);
             }
+            Application application = fundingReport.getApplication();
+            if (application != null) {
+                application.setFundingReport(null);
+                application = em.merge(application);
+            }
             Person drisID = fundingReport.getDrisID();
             if (drisID != null) {
                 drisID.getFundingReportList().remove(fundingReport);
                 drisID = em.merge(drisID);
-            }
-            List<Application> applicationList = fundingReport.getApplicationList();
-            for (Application applicationListApplication : applicationList) {
-                applicationListApplication.setFundingReportID(null);
-                applicationListApplication = em.merge(applicationListApplication);
             }
             em.remove(fundingReport);
             utx.commit();

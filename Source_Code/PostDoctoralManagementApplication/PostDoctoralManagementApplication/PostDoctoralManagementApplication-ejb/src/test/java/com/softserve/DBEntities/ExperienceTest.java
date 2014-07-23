@@ -74,7 +74,7 @@ public class ExperienceTest {
     public void testSetAndGetCvID() 
     {
         Experience instance = new Experience();
-        Cv cv = new Cv(Long.MAX_VALUE);
+        Cv cv = new Cv("u12019837");
         instance.setCvID(cv);
         assertEquals(cv, instance.getCvID());
     }

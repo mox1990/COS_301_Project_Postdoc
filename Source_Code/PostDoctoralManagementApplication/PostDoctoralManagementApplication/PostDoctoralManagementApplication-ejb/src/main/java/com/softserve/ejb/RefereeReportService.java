@@ -172,7 +172,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application refereed" + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
-        if(application.getRefereeList().size() == application.getRefereeReportList().size())
+        if(application.getPersonList().size() == application.getRefereeReportList().size())
         {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
         

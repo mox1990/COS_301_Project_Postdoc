@@ -35,8 +35,8 @@ public class CvTest {
     public void testSetAndGetCvID() 
     {
         Cv instance = new Cv();
-        instance.setCvID(Long.MIN_VALUE);
-        assertEquals(new Long(Long.MIN_VALUE),instance.getCvID());
+        instance.setCvID("u12019837");
+        assertEquals("u12019837",instance.getCvID());
     }
 
     @Test
@@ -131,12 +131,12 @@ public class CvTest {
     }
 
     @Test
-    public void testSetAndGetOwnerID() 
+    public void testSetAndGetPerson() 
     {
         Cv instance = new Cv();
         Person person = new Person("r12019837");
-        instance.setOwnerID(person);
-        assertEquals(person, instance.getOwnerID());
+        instance.setPerson(person);
+        assertEquals(person, instance.getPerson());
     }
 
     @Test
@@ -153,16 +153,16 @@ public class CvTest {
     @Test
     public void testEquals() 
     {
-        Cv instance1 = new Cv(Long.MAX_VALUE);
-        Cv instance2 = new Cv(Long.MAX_VALUE);
+        Cv instance1 = new Cv("u12019837");
+        Cv instance2 = new Cv("u12019837");
         assertTrue(instance1.equals(instance2));
     }
 
     @Test
     public void testToString() 
     {
-        Cv instance = new Cv(new Long(1));
-        assertEquals("com.softserve.DBEntities.Cv[ cvID=" + 1 + " ]", instance.toString());
+        Cv instance = new Cv("u12019837");
+        assertEquals("com.softserve.DBEntities.Cv[ cvID=" + "u12019837" + " ]", instance.toString());
     }
     
 }

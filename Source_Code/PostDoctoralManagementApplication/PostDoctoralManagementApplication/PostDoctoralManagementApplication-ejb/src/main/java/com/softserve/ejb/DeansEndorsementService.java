@@ -152,7 +152,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         
         endorsementJpaController.create(endorsementReport);
         
-        application.setEndorsementID(endorsementReport);        
+        application.setEndorsement(endorsementReport);        
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         
         try

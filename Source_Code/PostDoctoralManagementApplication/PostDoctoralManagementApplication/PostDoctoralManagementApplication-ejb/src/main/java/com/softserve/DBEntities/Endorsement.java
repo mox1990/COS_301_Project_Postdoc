@@ -8,7 +8,6 @@ package com.softserve.DBEntities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,14 +17,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,7 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Endorsement.findAll", query = "SELECT e FROM Endorsement e"),
     @NamedQuery(name = "Endorsement.findByEndorsementID", query = "SELECT e FROM Endorsement e WHERE e.endorsementID = :endorsementID"),
     @NamedQuery(name = "Endorsement.findByTimestamp", query = "SELECT e FROM Endorsement e WHERE e.timestamp = :timestamp"),
-    @NamedQuery(name = "Endorsement.findByTimestampBetweenRange", query = "SELECT e FROM Endorsement e WHERE e.timestamp BETWEEN :start AND :end"),
     @NamedQuery(name = "Endorsement.findByRank", query = "SELECT e FROM Endorsement e WHERE e.rank = :rank")})
 public class Endorsement implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -63,11 +60,12 @@ public class Endorsement implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "_motivation")
     private String motivation;
+    @JoinColumn(name = "_endorsementID", referencedColumnName = "_applicationID", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Application application;
     @JoinColumn(name = "_deanID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person deanID;
-    @OneToMany(mappedBy = "endorsementID")
-    private List<Application> applicationList;
 
     public Endorsement() {
     }
@@ -115,21 +113,20 @@ public class Endorsement implements Serializable {
         this.motivation = motivation;
     }
 
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
     public Person getDeanID() {
         return deanID;
     }
 
     public void setDeanID(Person deanID) {
         this.deanID = deanID;
-    }
-
-    @XmlTransient
-    public List<Application> getApplicationList() {
-        return applicationList;
-    }
-
-    public void setApplicationList(List<Application> applicationList) {
-        this.applicationList = applicationList;
     }
 
     @Override

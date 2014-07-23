@@ -6,11 +6,8 @@
 
 package com.softserve.DBEntities;
 
-import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
-import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,15 +17,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,8 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "RecommendationReport.findAll", query = "SELECT r FROM RecommendationReport r"),
     @NamedQuery(name = "RecommendationReport.findByReportID", query = "SELECT r FROM RecommendationReport r WHERE r.reportID = :reportID"),
-    @NamedQuery(name = "RecommendationReport.findByTimestamp", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp = :timestamp"),
-    @NamedQuery(name = "RecommendationReport.findByTimestampBetweenRange", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp BETWEEN :start AND :end")})
+    @NamedQuery(name = "RecommendationReport.findByTimestamp", query = "SELECT r FROM RecommendationReport r WHERE r.timestamp = :timestamp")})
 public class RecommendationReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,11 +55,12 @@ public class RecommendationReport implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "_content")
     private String content;
+    @JoinColumn(name = "_reportID", referencedColumnName = "_applicationID", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Application application;
     @JoinColumn(name = "_hodID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person hodID;
-    @OneToMany(mappedBy = "recommendationReportID")
-    private List<Application> applicationList;
 
     public RecommendationReport() {
     }
@@ -103,19 +98,13 @@ public class RecommendationReport implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-    
-    public RecommendationReportContent getContentXMLEntity()
-    {
-        XMLUnmarshaller xmlu = new XMLUnmarshaller();
-        
-        try 
-        {        
-            return xmlu.unmarshalRecommendationReportContentString(getContent());
-        } 
-        catch (JAXBException ex) 
-        {
-            return null;
-        }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
     public Person getHodID() {
@@ -124,15 +113,6 @@ public class RecommendationReport implements Serializable {
 
     public void setHodID(Person hodID) {
         this.hodID = hodID;
-    }
-
-    @XmlTransient
-    public List<Application> getApplicationList() {
-        return applicationList;
-    }
-
-    public void setApplicationList(List<Application> applicationList) {
-        this.applicationList = applicationList;
     }
 
     @Override

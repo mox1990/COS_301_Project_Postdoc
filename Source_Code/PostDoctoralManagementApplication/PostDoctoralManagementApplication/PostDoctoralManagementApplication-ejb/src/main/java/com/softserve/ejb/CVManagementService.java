@@ -59,13 +59,13 @@ public class CVManagementService implements CVManagementServiceLocal {
     
     protected boolean hasCV(Session session)
     {
-        return (!session.getUser().getCvList().isEmpty());
+        return (session.getUser().getCv() != null);
     }
     
     @Override
     public void createCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
-        getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getOwnerID());
+        getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getPerson());
         
         if(hasCV(session))
         {
@@ -76,7 +76,7 @@ public class CVManagementService implements CVManagementServiceLocal {
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        cv.setOwnerID(session.getUser());
+        cv.setPerson(session.getUser());
         cvJpaController.create(cv);
         
         
@@ -87,7 +87,7 @@ public class CVManagementService implements CVManagementServiceLocal {
     @Override
     public void updateCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
-        getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getOwnerID());
+        getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getPerson());
         
         CvJpaController cvJpaController = getCVDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();

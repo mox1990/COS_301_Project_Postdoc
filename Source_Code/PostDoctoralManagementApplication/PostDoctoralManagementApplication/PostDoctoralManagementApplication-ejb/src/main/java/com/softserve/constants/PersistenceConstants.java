@@ -79,6 +79,11 @@ public class PersistenceConstants {
     public final static String PERSON_TITLE_DR = "Dr";
     public final static String PERSON_TITLE_PROF = "Prof";
     
+    //Notification email status
+    public final static String NOTIFICATION_EMAIL_STATUS_SENT = "sent";
+    public final static String NOTIFICATION_EMAIL_STATUS_SENDING = "sending";
+    public final static String NOTIFICATION_EMAIL_STATUS_DISABLED = "disabled";
+    
     public static UserTransaction getUserTransaction()
     {
         try 

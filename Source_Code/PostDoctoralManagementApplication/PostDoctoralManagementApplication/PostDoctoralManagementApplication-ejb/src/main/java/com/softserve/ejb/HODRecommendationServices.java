@@ -248,7 +248,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         
         recommendationReportJpaController.create(recommendationReport);
         
-        application.setRecommendationReportID(recommendationReport);
+        application.setRecommendationReport(recommendationReport);
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
         
         try

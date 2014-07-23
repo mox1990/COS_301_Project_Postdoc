@@ -47,7 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Person.findByWorkNumber", query = "SELECT p FROM Person p WHERE p.workNumber = :workNumber"),
     @NamedQuery(name = "Person.findByFaxNumber", query = "SELECT p FROM Person p WHERE p.faxNumber = :faxNumber"),
     @NamedQuery(name = "Person.findByCellphoneNumber", query = "SELECT p FROM Person p WHERE p.cellphoneNumber = :cellphoneNumber"),
-    @NamedQuery(name = "Person.findByUpEmployee", query = "SELECT p FROM Person p WHERE p.upEmployee = :upEmployee")})
+    @NamedQuery(name = "Person.findByUpEmployee", query = "SELECT p FROM Person p WHERE p.upEmployee = :upEmployee"),
+    @NamedQuery(name = "Person.findByAccountStatus", query = "SELECT p FROM Person p WHERE p.accountStatus = :accountStatus")})
 public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -98,7 +99,7 @@ public class Person implements Serializable {
     @NotNull
     @Column(name = "_upEmployee")
     private boolean upEmployee;
-    @Basic(optional = false)
+    @Size(max = 8)
     @Column(name = "_accountStatus")
     private String accountStatus;
     @ManyToMany(mappedBy = "personList")
@@ -129,8 +130,8 @@ public class Person implements Serializable {
     private List<Notification> notificationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recieverID")
     private List<Notification> notificationList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerID")
-    private List<Cv> cvList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+    private Cv cv;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
     private List<Application> applicationList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
@@ -256,7 +257,7 @@ public class Person implements Serializable {
     public void setAccountStatus(String accountStatus) {
         this.accountStatus = accountStatus;
     }
-    
+
     public String getCompleteName()
     {
         return getTitle() + ". " + getFullName() + " " + getSurname();
@@ -360,25 +361,12 @@ public class Person implements Serializable {
         this.notificationList1 = notificationList1;
     }
 
-    @XmlTransient
-    public List<Cv> getCvList() {
-        return cvList;
+    public Cv getCv() {
+        return cv;
     }
 
-    public void setCvList(List<Cv> cvList) {
-        this.cvList = cvList;
-    }
-    
-    public Cv getFirstCv()
-    {
-        if(cvList != null  && cvList.size() > 0)
-        {
-            return cvList.get(0);
-        }
-        else
-        {
-            return new Cv();
-        }
+    public void setCv(Cv cv) {
+        this.cv = cv;
     }
 
     @XmlTransient

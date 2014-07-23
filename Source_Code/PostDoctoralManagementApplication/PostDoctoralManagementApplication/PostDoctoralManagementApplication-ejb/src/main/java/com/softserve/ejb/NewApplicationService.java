@@ -163,7 +163,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         //Link referee to application
-        application.getRefereeList().add(referee);
+        application.getPersonList().add(referee);
         applicationJpaController.edit(application);
         
         //Log action

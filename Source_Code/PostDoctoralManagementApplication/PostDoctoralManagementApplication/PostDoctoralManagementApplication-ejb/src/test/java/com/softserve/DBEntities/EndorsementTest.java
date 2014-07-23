@@ -73,14 +73,12 @@ public class EndorsementTest {
     }
 
     @Test
-    public void testSetAndGetApplicationList() 
+    public void testSetAndGetApplication() 
     {
         Endorsement instance = new Endorsement();
-        instance.setApplicationList(new ArrayList<Application>());
-        Application a = new Application(new Long(1));
-        instance.getApplicationList().add(a);
-        assertEquals(a, instance.getApplicationList().get(0));
-        assertTrue((instance.getApplicationList().size() == 1));
+        Application application = new Application((long) 1);
+        instance.setApplication(application);
+        assertEquals(application, instance.getApplication());
     }
 
     @Test

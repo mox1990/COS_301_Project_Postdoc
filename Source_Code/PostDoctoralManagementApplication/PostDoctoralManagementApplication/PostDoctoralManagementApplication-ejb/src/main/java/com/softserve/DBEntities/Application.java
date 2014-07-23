@@ -6,8 +6,6 @@
 
 package com.softserve.DBEntities;
 
-import auto.softserve.XMLEntities.application.ApplicationInformation;
-import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -25,12 +23,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -48,13 +46,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByType", query = "SELECT a FROM Application a WHERE a.type = :type"),
     @NamedQuery(name = "Application.findByStatus", query = "SELECT a FROM Application a WHERE a.status = :status"),
     @NamedQuery(name = "Application.findByTimestamp", query = "SELECT a FROM Application a WHERE a.timestamp = :timestamp"),
-    @NamedQuery(name = "Application.findByTimestampBetweenRange", query = "SELECT a FROM Application a WHERE a.timestamp BETWEEN :start AND :end"),
-    @NamedQuery(name = "Application.findByFinalisationDateDate", query = "SELECT a FROM Application a WHERE a.finalisationDate = :awardDate"),
-    @NamedQuery(name = "Application.findByFinalisationDateBetweenRange", query = "SELECT a FROM Application a WHERE a.finalisationDate BETWEEN :start AND :end"),
+    @NamedQuery(name = "Application.findByFinalisationDate", query = "SELECT a FROM Application a WHERE a.finalisationDate = :finalisationDate"),
+    @NamedQuery(name = "Application.findByEligiblityCheckDate", query = "SELECT a FROM Application a WHERE a.eligiblityCheckDate = :eligiblityCheckDate"),
     @NamedQuery(name = "Application.findByStartDate", query = "SELECT a FROM Application a WHERE a.startDate = :startDate"),
-    @NamedQuery(name = "Application.findByStartDateBetweenRange", query = "SELECT a FROM Application a WHERE a.startDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
-    @NamedQuery(name = "Application.findByEndDateBetweenRange", query = "SELECT a FROM Application a WHERE a.endDate BETWEEN :start AND :end"),
     @NamedQuery(name = "Application.findByProjectTitle", query = "SELECT a FROM Application a WHERE a.projectTitle = :projectTitle")})
 public class Application implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -94,26 +89,23 @@ public class Application implements Serializable {
     @Column(name = "_information")
     private String information;
     @ManyToMany(mappedBy = "applicationList")
-    private List<Person> refereeList;
+    private List<Person> personList;
     @ManyToMany(mappedBy = "applicationList")
     private List<CommitteeMeeting> committeeMeetingList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private Endorsement endorsement;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private RecommendationReport recommendationReport;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
     private List<RefereeReport> refereeReportList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private FundingReport fundingReport;
     @JoinColumn(name = "_fellow", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person fellow;
     @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person grantHolderID;
-    @JoinColumn(name = "_recommendationReportID", referencedColumnName = "_reportID")
-    @ManyToOne
-    private RecommendationReport recommendationReportID;
-    @JoinColumn(name = "_endorsementID", referencedColumnName = "_endorsementID")
-    @ManyToOne
-    private Endorsement endorsementID;
-    @JoinColumn(name = "_fundingReportID", referencedColumnName = "_reportID")
-    @ManyToOne
-    private FundingReport fundingReportID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
     private List<ProgressReport> progressReportList;
 
@@ -208,27 +200,14 @@ public class Application implements Serializable {
     public void setInformation(String information) {
         this.information = information;
     }
-    
-    public ApplicationInformation getInformationXMLEntity()
-    {
-        XMLUnmarshaller xmlu = new XMLUnmarshaller();        
-        try 
-        {        
-            return xmlu.unmarshalApplicationInformationString(getInformation());
-        } 
-        catch (JAXBException ex) 
-        {
-            return null;
-        }
-    }
 
     @XmlTransient
-    public List<Person> getRefereeList() {
-        return refereeList;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setRefereeList(List<Person> personList) {
-        this.refereeList = personList;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 
     @XmlTransient
@@ -240,6 +219,22 @@ public class Application implements Serializable {
         this.committeeMeetingList = committeeMeetingList;
     }
 
+    public Endorsement getEndorsement() {
+        return endorsement;
+    }
+
+    public void setEndorsement(Endorsement endorsement) {
+        this.endorsement = endorsement;
+    }
+
+    public RecommendationReport getRecommendationReport() {
+        return recommendationReport;
+    }
+
+    public void setRecommendationReport(RecommendationReport recommendationReport) {
+        this.recommendationReport = recommendationReport;
+    }
+
     @XmlTransient
     public List<RefereeReport> getRefereeReportList() {
         return refereeReportList;
@@ -247,6 +242,14 @@ public class Application implements Serializable {
 
     public void setRefereeReportList(List<RefereeReport> refereeReportList) {
         this.refereeReportList = refereeReportList;
+    }
+
+    public FundingReport getFundingReport() {
+        return fundingReport;
+    }
+
+    public void setFundingReport(FundingReport fundingReport) {
+        this.fundingReport = fundingReport;
     }
 
     public Person getFellow() {
@@ -263,30 +266,6 @@ public class Application implements Serializable {
 
     public void setGrantHolderID(Person grantHolderID) {
         this.grantHolderID = grantHolderID;
-    }
-
-    public RecommendationReport getRecommendationReportID() {
-        return recommendationReportID;
-    }
-
-    public void setRecommendationReportID(RecommendationReport recommendationReportID) {
-        this.recommendationReportID = recommendationReportID;
-    }
-
-    public Endorsement getEndorsementID() {
-        return endorsementID;
-    }
-
-    public void setEndorsementID(Endorsement endorsementID) {
-        this.endorsementID = endorsementID;
-    }
-
-    public FundingReport getFundingReportID() {
-        return fundingReportID;
-    }
-
-    public void setFundingReportID(FundingReport fundingReportID) {
-        this.fundingReportID = fundingReportID;
     }
 
     @XmlTransient

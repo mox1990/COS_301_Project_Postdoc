@@ -6,34 +6,25 @@
 
 package com.softserve.DBEntities;
 
-import auto.softserve.XMLEntities.CV.AdditionalInformation;
-import auto.softserve.XMLEntities.CV.OtherContributions;
-import auto.softserve.XMLEntities.CV.ResearchOutput;
-import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -58,10 +49,11 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Cv implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 9)
     @Column(name = "_cvID")
-    private Long cvID;
+    private String cvID;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -101,30 +93,30 @@ public class Cv implements Serializable {
     private String additionalInformation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
     private List<Experience> experienceList;
-    @JoinColumn(name = "_ownerID", referencedColumnName = "_systemID")
-    @ManyToOne(optional = false)
-    private Person ownerID;
+    @JoinColumn(name = "_cvID", referencedColumnName = "_systemID", insertable = false, updatable = false)
+    @OneToOne(optional = false)
+    private Person person;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
     private List<AcademicQualification> academicQualificationList;
 
     public Cv() {
     }
 
-    public Cv(Long cvID) {
+    public Cv(String cvID) {
         this.cvID = cvID;
     }
 
-    public Cv(Long cvID, String idNumber, Date dateOfBirth) {
+    public Cv(String cvID, String idNumber, Date dateOfBirth) {
         this.cvID = cvID;
         this.idNumber = idNumber;
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Long getCvID() {
+    public String getCvID() {
         return cvID;
     }
 
-    public void setCvID(Long cvID) {
+    public void setCvID(String cvID) {
         this.cvID = cvID;
     }
 
@@ -191,41 +183,13 @@ public class Cv implements Serializable {
     public void setResearchOutput(String researchOutput) {
         this.researchOutput = researchOutput;
     }
-    
-    public ResearchOutput getResearchOutputXMLEntity()
-    {
-        XMLUnmarshaller xmlu = new XMLUnmarshaller();
-        
-        try 
-        {        
-            return xmlu.unmarshalResearchOutputString(getResearchOutput());
-        } 
-        catch (JAXBException ex) 
-        {
-            return null;
-        }
-    }
-    
+
     public String getOtherContributions() {
         return otherContributions;
     }
 
     public void setOtherContributions(String otherContributions) {
         this.otherContributions = otherContributions;
-    }
-    
-    public OtherContributions getOtherContributionsXMLEntity()
-    {
-        XMLUnmarshaller xmlu = new XMLUnmarshaller();
-        
-        try 
-        {        
-            return xmlu.unmarshalOtherContributionsString(getOtherContributions());
-        } 
-        catch (JAXBException ex) 
-        {
-            return null;
-        }
     }
 
     public String getAdditionalInformation() {
@@ -234,20 +198,6 @@ public class Cv implements Serializable {
 
     public void setAdditionalInformation(String additionalInformation) {
         this.additionalInformation = additionalInformation;
-    }
-    
-    public AdditionalInformation getAdditionalInformationXMLEntity()
-    {
-        XMLUnmarshaller xmlu = new XMLUnmarshaller();
-        
-        try 
-        {        
-            return xmlu.unmarshalAdditionalInformationString(getAdditionalInformation());
-        } 
-        catch (JAXBException ex) 
-        {
-            return null;
-        }
     }
 
     @XmlTransient
@@ -259,12 +209,12 @@ public class Cv implements Serializable {
         this.experienceList = experienceList;
     }
 
-    public Person getOwnerID() {
-        return ownerID;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setOwnerID(Person ownerID) {
-        this.ownerID = ownerID;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @XmlTransient

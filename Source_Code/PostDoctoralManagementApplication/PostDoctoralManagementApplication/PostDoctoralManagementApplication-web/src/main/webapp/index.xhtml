@@ -7,9 +7,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPage_Template.xhtml">
         <ui:param name="pageTitle" value="Portal"/>
+        
         <ui:define name="pageEvents">
             <f:event type="preRenderView" listener="#{indexBean.setupIndexPage()}"/>
         </ui:define>
+        
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/loginScreenLayout.css"/>
         </ui:define>

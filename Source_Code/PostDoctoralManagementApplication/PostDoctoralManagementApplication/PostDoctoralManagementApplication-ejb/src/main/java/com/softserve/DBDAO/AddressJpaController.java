@@ -1,14 +1,13 @@
 /*
- * This file is licensed to the authors stated below
- * Any unauthrised changes are prohibited.
- * and open the template in the editor.
+ * This file is copyrighted to the authors stated below.
+ * Any duplication or modifications or usage of the file's contents               
+ * that is not approved by the stated authors is prohibited.
  */
 
 package com.softserve.DBDAO;
 
 import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import java.io.Serializable;
@@ -22,7 +21,6 @@ import java.util.List;
 import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
 import javax.transaction.UserTransaction;
 
 /**
@@ -43,7 +41,7 @@ public class AddressJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Address address) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(Address address) throws RollbackFailureException, Exception {
         if (address.getUpEmployeeInformationList() == null) {
             address.setUpEmployeeInformationList(new ArrayList<UpEmployeeInformation>());
         }
@@ -84,21 +82,18 @@ public class AddressJpaController implements Serializable {
                     oldAddressLine1OfPersonListPerson.getPersonList().remove(personListPerson);
                     oldAddressLine1OfPersonListPerson = em.merge(oldAddressLine1OfPersonListPerson);
                 }
-            }            
-            utx.commit(); 
+            }
+            utx.commit();
         } catch (Exception ex) {
             try {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findAddress(address.getAddressID()) != null) {
-                throw new PreexistingEntityException("Address " + address + " already exists.", ex);
-            }
             throw ex;
         } finally {
             if (em != null) {
-                em.close();                
+                em.close();
             }
         }
     }
