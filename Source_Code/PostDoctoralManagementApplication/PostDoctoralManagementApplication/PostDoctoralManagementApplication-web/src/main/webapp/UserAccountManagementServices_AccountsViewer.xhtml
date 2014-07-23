@@ -32,8 +32,8 @@
                             <h:outputText value="#{account.upEmployee}"/>
                         </h:panelGrid>
                         <h:form>
-                            <p:commandButton value="Edit user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.editUserAccount(account)}"/>
-                            <p:commandButton value="Remove user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.removeUserAccount(account)}" rendered="#{!userAccountsViewerRequestBean.isUserAccountDisabled(account)}"/>
+                            <p:commandButton value="Edit user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.editUserAccount(account)}" rendered="#{!userAccountsViewerRequestBean.isOwnerOfAccount(account)}"/>
+                            <p:commandButton value="Remove user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.removeUserAccount(account)}" rendered="#{(!userAccountsViewerRequestBean.isUserAccountDisabled(account))}"/>
                         </h:form>
                     </p:tab>
                 </p:accordionPanel>

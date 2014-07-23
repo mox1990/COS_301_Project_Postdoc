@@ -7,6 +7,7 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
@@ -94,5 +95,33 @@ public class UserAccountsViewerRequestBean {
     public boolean isUserAccountDisabled(Person account)
     {
         return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+    }
+    
+    public boolean isOwnerOfAccount(Person account)
+    {
+        try 
+        {
+            return sessionManagerBean.getSession().getUser().equals(account);
+        } 
+        catch (AuthenticationException ex) 
+        {
+            ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+            return false;
+        }
+    }
+    
+    public boolean isSystemAdmin()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (AuthenticationException ex) 
+        {
+            return false;
+        }  
     }
 }

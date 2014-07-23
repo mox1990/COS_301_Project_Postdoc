@@ -33,7 +33,7 @@
                 </ui:decorate>
 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{welcomeBean.reportServicesDisplayable}"/>
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
                     <ui:param name="showFunction" value="showInfoDiv(2)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
                     <ui:param name="buttonName" value="Create a new user account"/>
@@ -46,7 +46,7 @@
                 </ui:decorate>
 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{true}"/>
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
                     <ui:param name="showFunction" value="showInfoDiv(3)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
                     <ui:param name="buttonName" value="View all user accounts"/>

@@ -343,10 +343,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
         else
         {
-            if(upEmployeeInformationJpaController.findUpEmployeeInformation(userUPInfo.getEmployeeID()) != null)
+            if(upEmployeeInformationJpaController.findUpEmployeeInformation(user.getSystemID()) != null)
             {
                 user.setUpEmployee(false);
                 user.setUpEmployeeInformation(null);
+                addressJpaController.destroy(userUPInfo.getPhysicalAddress().getAddressID());
                 upEmployeeInformationJpaController.destroy(userUPInfo.getEmployeeID());                
             }
         }

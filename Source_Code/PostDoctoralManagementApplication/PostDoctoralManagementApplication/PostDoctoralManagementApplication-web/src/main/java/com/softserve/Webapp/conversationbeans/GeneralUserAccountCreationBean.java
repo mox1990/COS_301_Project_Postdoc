@@ -161,11 +161,11 @@ public class GeneralUserAccountCreationBean implements Serializable{
             if(person.getUpEmployee())
             {
                 person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, employeeInformation, upAddress);               
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), false, person, address, employeeInformation, upAddress);               
             }
             else
             {
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);            
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), false, person, address, null, null);            
             }
             
             sessionManagerBean.clearSessionStroage();

@@ -195,7 +195,7 @@ public class UserGateway implements UserGatewayLocal
 
     @Override
     public void authenticateUserAsOwner(Session session, Person person) throws AuthenticationException, Exception {
-        if(!session.getUser().equals(person))
+        if(session.getUser() == null || !session.getUser().equals(person))
         {
             throw new AuthenticationException("User is not the owner");
         }

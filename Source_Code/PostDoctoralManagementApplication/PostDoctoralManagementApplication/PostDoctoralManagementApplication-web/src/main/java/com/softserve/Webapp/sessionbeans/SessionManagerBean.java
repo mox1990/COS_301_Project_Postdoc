@@ -114,7 +114,10 @@ public class SessionManagerBean implements Serializable {
         }
         else
         {
-            logout(component);
+            if(httpSession.getAttribute("status") != null && httpSession.getAttribute("status").equals(Boolean.TRUE))
+            {
+                logout(component);
+            }            
         }
         
     }
@@ -129,6 +132,13 @@ public class SessionManagerBean implements Serializable {
     public Session getSystemLevelSession()
     {
         return new Session(null, null, Boolean.TRUE);
+    }
+    
+    public Session getSystemLevelSessionForCurrentSession() throws AuthenticationException
+    {        
+        Session session = getSession();
+        
+        return new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE);
     }
     
     public void authoriseUserViewAccess(List<SecurityRole> allowedRoles) throws IOException
