@@ -6,6 +6,10 @@
 
 package com.softserve.DBEntities;
 
+import auto.softserve.XMLEntities.CV.AdditionalInformation;
+import auto.softserve.XMLEntities.CV.OtherContributions;
+import auto.softserve.XMLEntities.CV.ResearchOutput;
+import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +29,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -184,6 +189,20 @@ public class Cv implements Serializable {
         this.researchOutput = researchOutput;
     }
 
+    public ResearchOutput getResearchOutputXMLEntity()
+    {
+        XMLUnmarshaller xmlu = new XMLUnmarshaller();
+        
+        try 
+        {        
+            return xmlu.unmarshalResearchOutputString(getResearchOutput());
+        } 
+        catch (JAXBException ex) 
+        {
+            return null;
+        }
+    }
+    
     public String getOtherContributions() {
         return otherContributions;
     }
@@ -192,12 +211,40 @@ public class Cv implements Serializable {
         this.otherContributions = otherContributions;
     }
 
+    public OtherContributions getOtherContributionsXMLEntity()
+    {
+        XMLUnmarshaller xmlu = new XMLUnmarshaller();
+        
+        try 
+        {        
+            return xmlu.unmarshalOtherContributionsString(getOtherContributions());
+        } 
+        catch (JAXBException ex) 
+        {
+            return null;
+        }
+    }
+
     public String getAdditionalInformation() {
         return additionalInformation;
     }
 
     public void setAdditionalInformation(String additionalInformation) {
         this.additionalInformation = additionalInformation;
+    }
+
+    public AdditionalInformation getAdditionalInformationXMLEntity()
+    {
+        XMLUnmarshaller xmlu = new XMLUnmarshaller();
+        
+        try 
+        {        
+            return xmlu.unmarshalAdditionalInformationString(getAdditionalInformation());
+        } 
+        catch (JAXBException ex) 
+        {
+            return null;
+        }
     }
 
     @XmlTransient
