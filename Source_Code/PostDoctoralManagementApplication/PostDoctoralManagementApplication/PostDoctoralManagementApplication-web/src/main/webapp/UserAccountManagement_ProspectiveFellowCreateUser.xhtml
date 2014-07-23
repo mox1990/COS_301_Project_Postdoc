@@ -4,12 +4,28 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:composition template="templates/generalPage_Template.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/useraccountCreationScreen.css"/>
+        </ui:define>
+        
+        <ui:define name="pageBreadBrumb">
+            <div class="containerNavBar"> 
+                <h:form>
+                    <div class="breadCrumbs">
+                        <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
+                            <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>                                      
+                            <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
+                                <span class="breadCrumb-Splitter">></span>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                </h:form>
+            </div>
         </ui:define>
 
         <ui:define name="pageBody">

@@ -10,6 +10,7 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -19,6 +20,8 @@ import javax.inject.Named;
 import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -64,21 +67,30 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     @PostConstruct
     public void init()
     {
-        conversationManagerBean.registerConversation(conversation);
-        conversationManagerBean.startConversation(conversation);
-        
-        person = sessionManagerBean.getObjectFromSessionStroage(0, Person.class);  
-        address = person.getAddressLine1();
-        
-        if(person.getUpEmployee())
+        try 
         {
-            employeeInformation = person.getUpEmployeeInformation();
-            upAddress = person.getUpEmployeeInformation().getPhysicalAddress();
-        }
-        else
+            conversationManagerBean.registerConversation(conversation);
+            conversationManagerBean.startConversation(conversation);
+            
+            person = sessionManagerBean.getSession().getUser();
+            
+            address = person.getAddressLine1();
+            
+            if(person.getUpEmployee())
+            {
+                employeeInformation = person.getUpEmployeeInformation();
+                upAddress = person.getUpEmployeeInformation().getPhysicalAddress();
+            }
+            else
+            {
+                employeeInformation = new UpEmployeeInformation();
+                upAddress = new Address();
+            }
+        } 
+        catch (AuthenticationException ex) 
         {
-            employeeInformation = new UpEmployeeInformation();
-            upAddress = new Address();
+            ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
         }
     }
 
@@ -128,14 +140,14 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         try 
         {
             
-            if(employeeInformation.getEmployeeID().equals(""))
+            if(person.getUpEmployee())
             {
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, null, null);
+                person.setSystemID(employeeInformation.getEmployeeID());
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, employeeInformation, upAddress);               
             }
             else
             {
-                person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, employeeInformation, upAddress);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, null, null);
             }
             
             conversationManagerBean.deregisterConversation(conversation);

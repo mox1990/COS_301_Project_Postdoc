@@ -74,7 +74,15 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        person = sessionManagerBean.getObjectFromSessionStroage(0, Person.class);  
+        person = sessionManagerBean.getObjectFromSessionStroage(0, Person.class); 
+        if(person == null)
+        {
+            System.out.println("==========Is null");
+        }
+        else
+        {
+            System.out.println("==========Is not null");
+        }
         address = person.getAddressLine1();
         
         if(person.getUpEmployee())
@@ -91,7 +99,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();        
         sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         
-        targetRoles.addAll(person.getSecurityRoleList());
+        targetRoles = person.getSecurityRoleList();
         sourceRoles.removeAll(targetRoles);
 
         securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles); 
@@ -172,21 +180,23 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
             
             person.setSecurityRoleList(targetRoles);
             
-            if(employeeInformation.getEmployeeID().equals(""))
+            if(person.getUpEmployee())
             {
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, null, null);
+                person.setSystemID(employeeInformation.getEmployeeID());
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, employeeInformation, upAddress);               
             }
             else
             {
-                person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, employeeInformation, upAddress);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, null, null);
             }
             
+            sessionManagerBean.clearSessionStroage();
             conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToPreviousBreadCrumb();
         } 
         catch (Exception ex) 
         {
+            ExceptionUtil.logException(UserAccountsGeneralAccountEditBean.class, ex);
             ExceptionUtil.handleException(errorContainer, ex);
             return "";
         }

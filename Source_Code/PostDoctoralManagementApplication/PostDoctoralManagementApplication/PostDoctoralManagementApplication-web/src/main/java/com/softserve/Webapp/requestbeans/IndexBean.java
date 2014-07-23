@@ -6,6 +6,7 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -23,6 +24,8 @@ public class IndexBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
+    @Inject
+    private NavigationManagerBean navigationManagerBean;
     
     private UIComponent errorContainer;
     private String usernameOrEmail = "";
@@ -32,6 +35,12 @@ public class IndexBean {
      * Creates a new instance of indexBean
      */
     public IndexBean() {
+    }
+    
+    public void setupIndexPage()
+    {
+        sessionManagerBean.resetSession(errorContainer);
+        navigationManagerBean.clearBreadCrumbsTo(0);
     }
 
     public UIComponent getErrorContainer() {

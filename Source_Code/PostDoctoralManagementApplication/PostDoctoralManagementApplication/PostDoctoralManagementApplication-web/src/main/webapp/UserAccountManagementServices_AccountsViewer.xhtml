@@ -5,7 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="User account viewer"/>
+        <ui:param name="pageTitle" value="Accounts listing"/>
         
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/loginScreenLayout.css"/>
@@ -32,7 +32,7 @@
                             <h:outputText value="#{account.upEmployee}"/>
                         </h:panelGrid>
                         <h:form>
-                            <p:commandButton value="Edit user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.editUserAccount(person)}"/>
+                            <p:commandButton value="Edit user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.editUserAccount(account)}"/>
                             <p:commandButton value="Remove user account" styleClass="button-fill" action="#{userAccountsViewerRequestBean.removeUserAccount(account)}" rendered="#{!userAccountsViewerRequestBean.isUserAccountDisabled(account)}"/>
                         </h:form>
                     </p:tab>

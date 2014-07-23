@@ -5,7 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="Welcome"/>
+        <ui:param name="pageTitle" value="Account viewer"/>
         
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/useraccountCreationScreen.css"/>
@@ -65,10 +65,10 @@
                             </ui:decorate>                            
                         </p:outputPanel>
                         
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{userAccountsGeneralAccountEditBean.errorContainer}" action="#{userAccountsGeneralAccountEditBean.performGeneralUserAccountEditRequest()}" ajax="false"/>
+                        <p:commandButton styleClass="button" value="Save changes" id="saveChanges" binding="#{userAccountsGeneralAccountEditBean.errorContainer}" action="#{userAccountsGeneralAccountEditBean.performGeneralUserAccountEditRequest()}" ajax="false"/>
                         
                         <div class="errorContainer">
-                            <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>
+                            <h:message styleClass="errorSpan" id="saveChangesErrors" for="saveChanges"/>
                         </div>
                     </center>
                 </h:form>

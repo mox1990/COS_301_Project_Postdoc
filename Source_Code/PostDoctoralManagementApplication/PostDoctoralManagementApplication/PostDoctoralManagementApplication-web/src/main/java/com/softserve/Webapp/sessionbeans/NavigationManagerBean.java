@@ -41,7 +41,7 @@ public class NavigationManagerBean implements Serializable {
     @PostConstruct
     public void init()
     {
-        
+        goToPortalView();
     }
     
     public List<BreadCrumb> getBreadCrumbs() {
@@ -148,8 +148,9 @@ public class NavigationManagerBean implements Serializable {
     }
     public String goToPortalView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("index", "Portal");
+        BreadCrumb breadCrumb = new BreadCrumb("index", "Portal Login");
         clearBreadCrumbsTo(-1);
+        addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
     }
@@ -157,6 +158,7 @@ public class NavigationManagerBean implements Serializable {
     public String goToUserAccountCreationForProspectiveFellowView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagement_ProspectiveFellowCreateUser", "Prospective Fellow account creation view");
+        addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
     }
@@ -164,7 +166,7 @@ public class NavigationManagerBean implements Serializable {
     public String goToWelcomeView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("welcome", "Home");
-        clearBreadCrumbsTo(-1);
+        clearBreadCrumbsTo(0);
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -260,7 +262,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountManagementAccountsViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountsViewer", "Account viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountsViewer", "Accounts list");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);

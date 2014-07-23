@@ -156,16 +156,19 @@ public class GeneralUserAccountCreationBean implements Serializable{
             
             person.setSecurityRoleList(targetRoles);
             
-            if(employeeInformation.getEmployeeID().equals(""))
+            person.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+            
+            if(person.getUpEmployee())
             {
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, null, null);
+                person.setSystemID(employeeInformation.getEmployeeID());
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, employeeInformation, upAddress);               
             }
             else
             {
-                person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), person.getUpEmployee(), person, address, employeeInformation, upAddress);
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);            
             }
             
+            sessionManagerBean.clearSessionStroage();
             conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToPreviousBreadCrumb();
         } 

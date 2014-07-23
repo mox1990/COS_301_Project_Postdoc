@@ -11,12 +11,12 @@
         <div>
             <h:panelGrid columns="2">
                 <p:outputLabel value="Make system administrator" styleClass="text-label"/>
-                <p:selectBooleanButton onLabel="Yes" offLabel="No" value="#{booleanValue}">
+                <p:selectBooleanButton onLabel="Yes" offLabel="No" value="#{booleanValue}" styleClass="button">
                     <p:ajax update="securityRoles"/>
                 </p:selectBooleanButton>
             </h:panelGrid>
         </div>
-        <div>
+        <div class="security-picklist">
             <p:pickList id="securityRoles" value="#{securityRoles}" var="role" itemLabel="#{role.name}" itemValue="#{role}" disabled="#{disabledAttribute}"/>
         </div>
     </ui:component>

@@ -99,7 +99,23 @@ public class SessionManagerBean implements Serializable {
             ExceptionUtil.handleException(errorMessageComponent, ex);
             return navigationManagerBean.goToPortalView();
         }
+    }
+    
+    public void resetSession(UIComponent component)
+    {
+        HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
+        if(httpSession == null)
+        {
+            httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(true));
+            httpSession.setAttribute("username","");
+            httpSession.setAttribute("password","");
+            httpSession.setAttribute("status", Boolean.FALSE);
+        }
+        else
+        {
+            logout(component);
+        }
         
     }
     
@@ -131,17 +147,41 @@ public class SessionManagerBean implements Serializable {
     {
         try
         {
-            return objectClass.cast(sessionStroage.get(index));
+            if(sessionStroage.get(index) == null)
+            {
+                System.out.println("==========Object in storage is null");
+            }
+            T temp = objectClass.cast(sessionStroage.get(index));
+            if(temp == null)
+            {
+                System.out.println("==========Casted is null");
+            }
+            else
+            {
+                System.out.println("==========Casted is not null");
+            }
+            return temp;
         }
         catch(ClassCastException ex)
         {
+            System.out.println("==========Cast exception");
+            ExceptionUtil.logException(SessionManagerBean.class, ex);
             return null;
         }
     }
     
     public int addObjectToSessionStroage(Object object)
     {
+        if(object == null)
+        {
+            System.out.println("==========Object in is null");
+        }
         sessionStroage.add(object);
+        if(sessionStroage.get(sessionStroage.size() - 1) == null)
+        {
+            System.out.println("==========Added Object in storage is null");
+        }
+        System.out.println("================Added to storage");
         return sessionStroage.size() - 1;
     }
     

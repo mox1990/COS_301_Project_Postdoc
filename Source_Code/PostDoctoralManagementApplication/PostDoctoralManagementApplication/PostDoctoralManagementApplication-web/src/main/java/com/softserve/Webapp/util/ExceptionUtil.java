@@ -6,6 +6,8 @@
 
 package com.softserve.Webapp.util;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -18,6 +20,11 @@ import javax.faces.context.FacesContext;
 public class ExceptionUtil {
 
     public ExceptionUtil() {
+    }
+    
+    public static void logException(Class c, Exception ex)
+    {
+        Logger.getLogger(c.getName()).log(Level.SEVERE, null, ex);
     }
     
     public static void handleException(UIComponent errorDisplayer, Exception ex)

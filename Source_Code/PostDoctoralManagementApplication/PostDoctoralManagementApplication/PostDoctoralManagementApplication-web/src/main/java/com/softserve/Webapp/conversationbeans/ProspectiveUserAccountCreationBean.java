@@ -10,12 +10,15 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -38,6 +41,8 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     @Inject 
     private NavigationManagerBean navigationManagerBean;
     @Inject
+    private ConversationManagerBean conversationManagerBean;
+    @Inject
     private Conversation conversation;
     
     @EJB
@@ -59,7 +64,8 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     @PostConstruct
     public void init()
     {
-        conversation.begin();
+        conversationManagerBean.registerConversation(conversation);
+        conversationManagerBean.startConversation(conversation);
         
         person = new Person();
         
@@ -115,23 +121,27 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
         {
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
             person.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-            if(employeeInformation.getEmployeeID().equals(""))
+            
+            person.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+                        
+            if(person.getUpEmployee())
             {
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);
+                person.setSystemID(employeeInformation.getEmployeeID());
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, employeeInformation, upAddress);               
             }
             else
             {
-                person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), true, person, address, employeeInformation, upAddress);
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);            
             }
-            conversation.end();
+            
+            conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToPortalView();
-        } 
+        }
         catch (Exception ex) 
         {
+            ExceptionUtil.logException(ProspectiveUserAccountCreationBean.class, ex);
             ExceptionUtil.handleException(errorContainer, ex);
             return "";
         }
-    }
-    
+    } 
 }

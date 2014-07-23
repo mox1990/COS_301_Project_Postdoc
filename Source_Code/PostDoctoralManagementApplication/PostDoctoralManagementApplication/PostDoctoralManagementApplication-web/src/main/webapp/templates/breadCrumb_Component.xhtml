@@ -11,9 +11,14 @@
                 <p:commandLink styleClass="breadCrumb" value="Logout" binding="#{logoutRequestBean.errorContainer}" action="#{logoutRequestBean.performLogoutRequest()}"/>
                 <span>   </span>
                 <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
-                    <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>
+                    <c:if test="#{(counter.count == 1)}">
+                        <p:commandLink styleClass="breadCrumb-disabled" value="#{crumb.viewName}"/>
+                    </c:if>
+                    <c:if test="#{(counter.count > 1)}">
+                        <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>
+                    </c:if>                    
                     <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
-                        >
+                        <span class="breadCrumb-Splitter">></span>
                     </c:if>
                 </c:forEach>
             </div>

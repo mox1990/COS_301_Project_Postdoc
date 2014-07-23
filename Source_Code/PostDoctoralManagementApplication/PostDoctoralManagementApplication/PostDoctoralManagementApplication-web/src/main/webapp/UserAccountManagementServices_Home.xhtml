@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="Welcome"/>
+        <ui:param name="pageTitle" value="User accounts management services"/>
         
         <ui:define name="JSScripts">
             <script type="text/javascript" src="JS/generalFunctions.js"></script>
@@ -25,7 +25,7 @@
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
                     <ui:param name="buttonName" value="Upadate personal user account"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToUserAccountManagementPersonalAccountView"/>
+                    <ui:param name="buttonAction" value="goToUserAccountManagementPersonalAccountViewer"/>
                     <ui:param name="infoContainerID" value="info1"/>
                     <ui:define name="informationContent">
                         This will allow you to review your own user account an update it accordingly if you so wish.  
