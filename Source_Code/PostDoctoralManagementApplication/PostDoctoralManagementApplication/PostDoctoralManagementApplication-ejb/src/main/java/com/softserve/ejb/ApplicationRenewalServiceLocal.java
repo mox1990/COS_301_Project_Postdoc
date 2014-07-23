@@ -6,11 +6,10 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Person;
-import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
-import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -20,8 +19,8 @@ import javax.ejb.Local;
 @Local
 public interface ApplicationRenewalServiceLocal
 {
-    public List<Application> getRenewableApplicationsFor(Session session, Person fellow) throws AuthenticationException, Exception;
-    public void doesApplicationHaveFinalProgressReport(Session session, Application application) throws AuthenticationException, Exception;
-    public void createFinalProgressReportFor(Session session, Application application, String report) throws AuthenticationException, Exception;
-    public void createRenewalApplication(Session session, Application application) throws AuthenticationException, Exception;
+    public void createProgressReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
+    public void submitProgressReport(Session session, Application application, String report) throws NonexistentEntityException, RollbackFailureException, Exception;
+    
+   
 }
