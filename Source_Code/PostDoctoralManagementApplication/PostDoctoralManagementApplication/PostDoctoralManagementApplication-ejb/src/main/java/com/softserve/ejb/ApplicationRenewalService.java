@@ -7,9 +7,6 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
@@ -18,15 +15,12 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
 /**
@@ -36,9 +30,6 @@ import javax.persistence.PersistenceUnit;
 @Stateless
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
 
-    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
-    private EntityManager em;
-    
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
@@ -128,11 +119,6 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         endDate.add(GregorianCalendar.DAY_OF_YEAR, NUMBER_OF_DAYS);
         
         return applicationJpaController.getAllApplicationsForFellowWithEndDateInBetween(fellow, startDate.getTime(), endDate.getTime());
-    }
-    
-    public List<AuditLog> findByTimestamp(Timestamp tStamp)
-    {
-        return em.createNamedQuery("AuditLog.findByTimestamp", AuditLog.class).setParameter("timestamp", tStamp).getResultList();
     }
     
     @Override
