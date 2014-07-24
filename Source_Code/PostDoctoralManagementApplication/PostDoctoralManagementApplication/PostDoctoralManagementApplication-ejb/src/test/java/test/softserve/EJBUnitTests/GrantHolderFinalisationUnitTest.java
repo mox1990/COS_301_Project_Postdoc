@@ -191,7 +191,7 @@ public class GrantHolderFinalisationUnitTest {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
-        
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         try
         {
             instance.countTotalPendingApplications(mockSession);
