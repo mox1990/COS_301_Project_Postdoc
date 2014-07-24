@@ -35,6 +35,9 @@ import javax.persistence.PersistenceUnit;
  */
 @Stateless
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
+
+    @PersistenceContext(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    private EntityManager em;
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
@@ -127,6 +130,10 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return applicationJpaController.getAllApplicationsForFellowWithEndDateInBetween(fellow, startDate.getTime(), endDate.getTime());
     }
     
+    public List<AuditLog> findByTimestamp(Timestamp tStamp)
+    {
+        return em.createNamedQuery("AuditLog.findByTimestamp", AuditLog.class).setParameter("timestamp", tStamp).getResultList();
+    }
     
     @Override
     public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws AuthenticationException, Exception
