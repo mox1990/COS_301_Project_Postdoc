@@ -17,8 +17,13 @@
                             type="xs:string"/>
                 <xs:element name="researchWorkPlan"
                             type="xs:string"/>
-                <xs:element name="expectedOutcomes"
-                            type="xs:string"/>
+                <xs:element name="expectedOutcomes">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="outcome" maxOccurs="unbounded" minOccurs="1" type="xs:string"/>                            
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="projectInfrastructureFunding"
                             type="xs:string"/>
                 <xs:element name="teamMembers">

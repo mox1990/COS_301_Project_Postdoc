@@ -58,8 +58,8 @@ public class AcademicQualificationTest {
     public void testSetAndGetInstituation() 
     {
         AcademicQualification instance = new AcademicQualification();
-        instance.setInstituation("University of Pretoria");
-        assertEquals("University of Pretoria", instance.getInstituation());
+        instance.setInstitution("University of Pretoria");
+        assertEquals("University of Pretoria", instance.getInstitution());
     }
 
     @Test

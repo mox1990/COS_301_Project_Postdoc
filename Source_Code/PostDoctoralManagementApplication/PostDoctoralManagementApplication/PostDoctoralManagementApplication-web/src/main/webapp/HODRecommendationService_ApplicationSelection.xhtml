@@ -2,37 +2,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>HOD approval service - Pending application Selection</title>
-        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
-    </h:head>
-    <h:body>
-        <div class="background">
-            <div class="sideNavBar"></div>
-            <div class="container">
-                <div class="containerHeader"></div>
-                <div class="containerNavBar">
-                    
-                </div>
-                <div class="containerBody">
-                    <p:accordionPanel dynamic="true" cache="true" value="#{hodServicesBean.pendingApplications}" var="pendingApp">
-                        <p:tab title="Application #{pendingApp.applicationID} - #{pendingApp.projectTitle}">
-                            <h:panelGrid columns="2" cellpadding="10px">
-                                <h:outputText value="Fellow:"/>
-                                <h:outputText value="#{pendingApp.fellow.completeName}"/>
-                                <h:outputText value="Grant holder:"/>
-                                <h:outputText value="#{pendingApp.grantHolderID.completeName}"/>                                
-                                <p:commandButton rendered="#{sessionManagerBean.session.doesUserHaveSecurityRole(1)}"value="Click for more information" action="#{hodServicesBean.setCurrentlySelectedApplication(pendingApp)}"/> 
-                                #{hodApplicationViewerRequestBean.application.fellow.firstCv.researchOutputXMLEntity.journalPublications.references}
-                            </h:panelGrid>                            
-                        </p:tab>
-                    </p:accordionPanel> 
-                </div>
-                <div class="containerFooter"></div>
-            </div>            
-        </div>
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Pending applications"/>
         
-    </h:body>
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Applications pending for recommendation</h1>
+                <h2>Click on the application for more details</h2>
+            </div>
+            <ui:decorate template="pendingApplications_Comoponent">
+                <ui:param name="pendingApplications" value="#{hodApplicationSelectionRequestBean.pendingApplications}"/>
+                <ui:define name="commandButtons">
+                    <p:commandButton value="View application for consideration" styleClass="button-fill" action="#{hodApplicationSelectionRequestBean.viewApplication(app)}"/> 
+                </ui:define>
+            </ui:decorate>
+        </ui:define>
+    </ui:composition>
 </html>
 

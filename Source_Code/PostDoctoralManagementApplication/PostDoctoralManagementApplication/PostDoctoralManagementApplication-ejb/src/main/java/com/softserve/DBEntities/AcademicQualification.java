@@ -54,8 +54,8 @@ public class AcademicQualification implements Serializable {
     @Column(name = "_fieldOfStudy")
     private String fieldOfStudy;
     @Size(max = 100)
-    @Column(name = "_instituation")
-    private String instituation;
+    @Column(name = "_institution")
+    private String institution;
     @Column(name = "_yearObtained")
     @Temporal(TemporalType.DATE)
     private Date yearObtained;
@@ -96,12 +96,12 @@ public class AcademicQualification implements Serializable {
         this.fieldOfStudy = fieldOfStudy;
     }
 
-    public String getInstituation() {
-        return instituation;
+    public String getInstitution() {
+        return institution;
     }
 
-    public void setInstituation(String instituation) {
-        this.instituation = instituation;
+    public void setInstitution(String institution) {
+        this.institution = institution;
     }
 
     public Date getYearObtained() {
