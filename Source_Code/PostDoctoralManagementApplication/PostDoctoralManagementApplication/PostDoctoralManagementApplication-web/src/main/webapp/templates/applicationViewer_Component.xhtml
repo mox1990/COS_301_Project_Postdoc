@@ -10,15 +10,22 @@
             <p:panel header="Application #{hodApplicationViewerRequestBean.selectedApplication.applicationID} - #{hodApplicationViewerRequestBean.selectedApplication.projectTitle}">
                 <h:panelGrid columns="2" cellpadding="10px">
                     <h:outputText styleClass="text-label" value="Application type:"/>
-                    <h:outputText value="#{app.type}"/>
+                    <h:outputText value="#{selectedApplication.type}"/>
                     <h:outputText styleClass="text-label" value="Application Status:"/>
-                    <h:outputText value="#{app.status}"/>
+                    <h:outputText value="#{selectedApplication.status}"/>
                     <h:outputText styleClass="text-label" value="Application creation date"/>
-                    <h:outputText value="#{app.timestamp}"/>
+                    <h:outputText value="#{selectedApplication.timestamp}"/>
                     <h:outputText styleClass="text-label" value="Fellow name:"/>
-                    <h:outputText value="#{app.fellow.completeName}"/>
+                    <h:outputText value="#{selectedApplication.fellow.completeName}"/>
                     <h:outputText styleClass="text-label" value="Grant holder name:"/>
-                    <h:outputText value="#{app.grantHolderID.completeName}"/>
+                    <h:outputText value="#{selectedApplication.grantHolderID.completeName}"/>
+                    <h:outputText styleClass="text-label" value="Finalisation date of application" rendered="#{selectedApplication.finalisationDate != null}"/>
+                    <h:outputText value="#{selectedApplication.finalisationDate}"/>
+                    <h:outputText styleClass="text-label" value="Application commencement date:" rendered="#{selectedApplication.startDate != null}"/>
+                    <h:outputText value="#{selectedApplication.startDate}"/>
+                    <h:outputText styleClass="text-label" value="Application expiry date:" rendered="#{selectedApplication.endDate != null}"/>
+                    <h:outputText value="#{selectedApplication.endDate}"/>
+                    
                 </h:panelGrid>
                 <p:tabView>
                     <p:tab title="Project information" rendered="#{(hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity != null)}">
@@ -61,27 +68,45 @@
                             <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.projectMotivation}"/> 
                         </h:panelGrid>
                     </p:tab>
+                    
                     <p:tab title="Fellow cv" rendered="#{hodApplicationViewerRequestBean.selectedApplication.grantHolderID.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
                             <ui:param name="cv" value="#{hodApplicationViewerRequestBean.selectedApplication.grantHolderID.cv}"/>
                         </ui:decorate>
                     </p:tab>
+                    
                     <p:tab title="Grant holder cv" rendered="#{hodApplicationViewerRequestBean.selectedApplication.fellow.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
                             <ui:param name="cv" value="#{hodApplicationViewerRequestBean.selectedApplication.fellow.cv}"/>
                         </ui:decorate>
                     </p:tab>
+                    
                     <p:tab title="Refaral reports" rendered="#{hodApplicationViewerRequestBean.selectedApplication.fellow.refereeReportList.size() > 0}">
-                        
+                        <p:accordionPanel value="#{hodApplicationViewerRequestBean.selectedApplication.refereeReportList}" var="report">
+                            <p:tab title="Referal report from - #{report.refereeID.completeName}">
+                                <ui:decorate template="referalReportViewer_Component.xhtml">
+                                    <ui:param name="report" value="#{report}"/>
+                                </ui:decorate>
+                            </p:tab>
+                        </p:accordionPanel>
                     </p:tab>
+                    
                     <p:tab title="HOD Recommendation report" rendered="#{hodApplicationViewerRequestBean.selectedApplication.recommendationReport != null}">
-                        
+                        <ui:decorate template="recommendationReportViewer_Component.xhtml">
+                            <ui:param name="recommendationReport" value="#{hodApplicationViewerRequestBean.selectedApplication.recommendationReport}"/>
+                        </ui:decorate>
                     </p:tab>
+                    
                     <p:tab title="Dean Endorsement" rendered="#{hodApplicationViewerRequestBean.selectedApplication.endorsement != null}">
-                        
+                        <ui:decorate template="endorsementViewer_Component.xhtml">
+                            <ui:param name="endorsement" value="#{hodApplicationViewerRequestBean.selectedApplication.endorsement}"/>
+                        </ui:decorate>
                     </p:tab>
+                    
                     <p:tab title="DRIS Funding report" rendered="#{hodApplicationViewerRequestBean.selectedApplication.fundingReport != null}">
-                        
+                        <ui:decorate template="fundingReportViewer_Component.xhtml">
+                            <ui:param name="fundingReport" value="#{hodApplicationViewerRequestBean.selectedApplication.fundingReport}"/>
+                        </ui:decorate>
                     </p:tab>
                 </p:tabView>
             </p:panel>
