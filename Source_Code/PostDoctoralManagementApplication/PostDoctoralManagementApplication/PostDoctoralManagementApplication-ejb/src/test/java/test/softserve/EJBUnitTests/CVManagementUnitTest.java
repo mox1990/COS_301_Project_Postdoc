@@ -6,16 +6,27 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Person;
+import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.CVManagementServiceLocal;
+import com.softserve.ejb.UserGateway;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import test.softserve.MockEJBClasses.CVManagementServiceMockUnit;
 
 /**
  *
@@ -47,7 +58,38 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testCreateCV() throws Exception {
+        CVManagementServiceMockUnit instance = new CVManagementServiceMockUnit();
         
+        CvJpaController mockCvJpaController =  mock(CvJpaController.class);
+        UserGateway mockUserGateway =  mock(UserGateway.class);
+        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
+        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
+        
+        instance.setcVDAO(mockCvJpaController);
+        instance.setuEJB(mockUserGateway);
+        instance.setaTEJB(mockAuditTrailService);
+        instance.setdBEntities(mockDBEntitiesFactory);
+        
+        Cv mockCV = mock(Cv.class);  
+        when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
+        try
+        {
+            instance.createCV(mockSession, mockCV);
+            
+            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
+            verify(mockCvJpaController).create(mockCV);          
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created user cv", new Person("u12236731"));
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -55,7 +97,38 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testUpdateCV() throws Exception {
+        CVManagementServiceMockUnit instance = new CVManagementServiceMockUnit();
         
+        CvJpaController mockCvJpaController =  mock(CvJpaController.class);
+        UserGateway mockUserGateway =  mock(UserGateway.class);
+        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
+        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
+        
+        instance.setcVDAO(mockCvJpaController);
+        instance.setuEJB(mockUserGateway);
+        instance.setaTEJB(mockAuditTrailService);
+        instance.setdBEntities(mockDBEntitiesFactory);
+        
+        Cv mockCV = mock(Cv.class);  
+        when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
+        try
+        {
+            instance.updateCV(mockSession, mockCV);
+            
+            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
+            verify(mockCvJpaController).edit(mockCV);          
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Updated user cv", new Person("u12236731"));
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
     
 }

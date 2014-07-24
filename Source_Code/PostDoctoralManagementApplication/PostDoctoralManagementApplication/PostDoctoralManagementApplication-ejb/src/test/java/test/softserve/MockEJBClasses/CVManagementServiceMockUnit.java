@@ -62,10 +62,6 @@ public class CVManagementServiceMockUnit extends CVManagementService {
         return dBEntities;
     }
     
-    @Override
-    protected boolean hasCV(Session session)
-    {
-        return true; // TODO: Fix this
-    }
+    
     
 }
