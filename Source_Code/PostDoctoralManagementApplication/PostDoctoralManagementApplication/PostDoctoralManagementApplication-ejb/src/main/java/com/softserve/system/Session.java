@@ -120,6 +120,20 @@ public class Session {
     
     public boolean isUserAccountDisabled()
     {
-        return user.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+        if(isSystem())
+        {
+            return true;
+        }
+        else
+        {
+            if(user == null || user.getAccountStatus() == null)
+            {
+                return false;
+            }
+            
+            return user.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+        }
+                
+        
     }
 }

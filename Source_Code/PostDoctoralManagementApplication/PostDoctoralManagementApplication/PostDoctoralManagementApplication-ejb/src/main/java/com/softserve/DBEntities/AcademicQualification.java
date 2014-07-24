@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AcademicQualification.findByQualificationID", query = "SELECT a FROM AcademicQualification a WHERE a.qualificationID = :qualificationID"),
     @NamedQuery(name = "AcademicQualification.findByName", query = "SELECT a FROM AcademicQualification a WHERE a.name = :name"),
     @NamedQuery(name = "AcademicQualification.findByFieldOfStudy", query = "SELECT a FROM AcademicQualification a WHERE a.fieldOfStudy = :fieldOfStudy"),
-    @NamedQuery(name = "AcademicQualification.findByInstituation", query = "SELECT a FROM AcademicQualification a WHERE a.instituation = :instituation"),
+    @NamedQuery(name = "AcademicQualification.findByInstitution", query = "SELECT a FROM AcademicQualification a WHERE a.institution = :institution"),
     @NamedQuery(name = "AcademicQualification.findByYearObtained", query = "SELECT a FROM AcademicQualification a WHERE a.yearObtained = :yearObtained"),
     @NamedQuery(name = "AcademicQualification.findByDistinctions", query = "SELECT a FROM AcademicQualification a WHERE a.distinctions = :distinctions")})
 public class AcademicQualification implements Serializable {

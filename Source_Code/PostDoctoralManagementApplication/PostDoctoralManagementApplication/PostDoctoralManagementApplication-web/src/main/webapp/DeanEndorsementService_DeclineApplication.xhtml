@@ -16,10 +16,10 @@
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Reason for declining:" for="reason"/>                                
-                        <p:inputTextarea id="reason" value="#{hodDeclineRequestBean.reason}"/>
+                        <p:inputTextarea id="reason" value="#{deanDeclineRequestBean.reason}"/>
                         <h:message for="reason" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>    
-                    <p:commandButton value="Decline application" action="#{hodDeclineRequestBean.preformDeclineRequest()}" ajax="false"/>
+                    <p:commandButton value="Decline application" action="#{deanDeclineRequestBean.preformDeclineRequest()}" ajax="false"/>
                 </h:form>
             </div>
         </ui:define>

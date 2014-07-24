@@ -7,7 +7,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:component>
         <div>
-            <p:panel header="Application #{hodApplicationViewerRequestBean.selectedApplication.applicationID} - #{hodApplicationViewerRequestBean.selectedApplication.projectTitle}">
+            <p:panel header="Application #{selectedApplication.applicationID} - #{selectedApplication.projectTitle}">
                 <h:panelGrid columns="2" cellpadding="10px">
                     <h:outputText styleClass="text-label" value="Application type:"/>
                     <h:outputText value="#{selectedApplication.type}"/>
@@ -28,13 +28,13 @@
                     
                 </h:panelGrid>
                 <p:tabView>
-                    <p:tab title="Project information" rendered="#{(hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity != null)}">
+                    <p:tab title="Project information" rendered="#{(selectedApplication.informationXMLEntity != null)}">
                         <h:panelGrid columns="2" cellpadding="10px">
                             <h:outputText styleClass="text-label" value="Project title:"/>
-                            <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.projectTitle}"/>
+                            <h:outputText value="#{selectedApplication.projectTitle}"/>
                             <h:outputText styleClass="text-label" value="Project team members:"/>
                             <li>
-                                <c:forEach items="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.teamMembers.member}" var="member">
+                                <c:forEach items="#{selectedApplication.informationXMLEntity.teamMembers.member}" var="member">
                                     <li>
                                         
                                     </li>
@@ -42,7 +42,7 @@
                             </li>
                             <h:outputText styleClass="text-label" value="Project aims:"/>
                             <li>
-                                <c:forEach items="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.projectAims.aim}" var="aim">
+                                <c:forEach items="#{selectedApplication.informationXMLEntity.projectAims.aim}" var="aim">
                                     <li>
                                         <h:outputText value="#{aim}"/>
                                     </li>
@@ -50,39 +50,39 @@
                             </li>
                             <h:outputText styleClass="text-label" value="Project expected outcomes:"/>
                             <li>
-                                <c:forEach items="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.expectedOutcomes.outcome}" var="outcome">
+                                <c:forEach items="#{selectedApplication.informationXMLEntity.expectedOutcomes.outcome}" var="outcome">
                                     <li>
                                         <h:outputText value="#{outcome}"/>
                                     </li>
                                 </c:forEach>
                             </li>      
                             <h:outputText styleClass="text-label" value="Research Methodology:"/>
-                            <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.researchMethodology}"/>
+                            <h:outputText value="#{selectedApplication.informationXMLEntity.researchMethodology}"/>
                             <h:outputText styleClass="text-label" value="Research work plan:"/>
-                            <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.researchWorkPlan}"/>
+                            <h:outputText value="#{selectedApplication.informationXMLEntity.researchWorkPlan}"/>
                             <h:outputText styleClass="text-label" value="Infrastructure and funding support motivation:"/>
-                            <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.projectInfrastructureFunding}"/>
+                            <h:outputText value="#{selectedApplication.informationXMLEntity.projectInfrastructureFunding}"/>
                             <h:outputText styleClass="text-label" value="Self evaluation:"/>
-                            <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.selfEvaluation}"/>
+                            <h:outputText value="#{selectedApplication.informationXMLEntity.selfEvaluation}"/>
                             <h:outputText styleClass="text-label" value="Project motivation:"/>
-                            <h:outputText value="#{hodApplicationViewerRequestBean.selectedApplication.informationXMLEntity.projectMotivation}"/> 
+                            <h:outputText value="#{selectedApplication.informationXMLEntity.projectMotivation}"/> 
                         </h:panelGrid>
                     </p:tab>
                     
-                    <p:tab title="Fellow cv" rendered="#{hodApplicationViewerRequestBean.selectedApplication.grantHolderID.cv != null}">
+                    <p:tab title="Fellow cv" rendered="#{selectedApplication.grantHolderID.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
-                            <ui:param name="cv" value="#{hodApplicationViewerRequestBean.selectedApplication.grantHolderID.cv}"/>
+                            <ui:param name="cv" value="#{selectedApplication.grantHolderID.cv}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Grant holder cv" rendered="#{hodApplicationViewerRequestBean.selectedApplication.fellow.cv != null}">
+                    <p:tab title="Grant holder cv" rendered="#{selectedApplication.fellow.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
-                            <ui:param name="cv" value="#{hodApplicationViewerRequestBean.selectedApplication.fellow.cv}"/>
+                            <ui:param name="cv" value="#{selectedApplication.fellow.cv}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Refaral reports" rendered="#{hodApplicationViewerRequestBean.selectedApplication.fellow.refereeReportList.size() > 0}">
-                        <p:accordionPanel value="#{hodApplicationViewerRequestBean.selectedApplication.refereeReportList}" var="report">
+                    <p:tab title="Refaral reports" rendered="#{selectedApplication.fellow.refereeReportList.size() > 0}">
+                        <p:accordionPanel value="#{selectedApplication.refereeReportList}" var="report">
                             <p:tab title="Referal report from - #{report.refereeID.completeName}">
                                 <ui:decorate template="referalReportViewer_Component.xhtml">
                                     <ui:param name="report" value="#{report}"/>
@@ -91,21 +91,21 @@
                         </p:accordionPanel>
                     </p:tab>
                     
-                    <p:tab title="HOD Recommendation report" rendered="#{hodApplicationViewerRequestBean.selectedApplication.recommendationReport != null}">
+                    <p:tab title="HOD Recommendation report" rendered="#{selectedApplication.recommendationReport != null}">
                         <ui:decorate template="recommendationReportViewer_Component.xhtml">
-                            <ui:param name="recommendationReport" value="#{hodApplicationViewerRequestBean.selectedApplication.recommendationReport}"/>
+                            <ui:param name="recommendationReport" value="#{selectedApplication.recommendationReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Dean Endorsement" rendered="#{hodApplicationViewerRequestBean.selectedApplication.endorsement != null}">
+                    <p:tab title="Dean Endorsement" rendered="#{selectedApplication.endorsement != null}">
                         <ui:decorate template="endorsementViewer_Component.xhtml">
-                            <ui:param name="endorsement" value="#{hodApplicationViewerRequestBean.selectedApplication.endorsement}"/>
+                            <ui:param name="endorsement" value="#{selectedApplication.endorsement}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="DRIS Funding report" rendered="#{hodApplicationViewerRequestBean.selectedApplication.fundingReport != null}">
+                    <p:tab title="DRIS Funding report" rendered="#{selectedApplication.fundingReport != null}">
                         <ui:decorate template="fundingReportViewer_Component.xhtml">
-                            <ui:param name="fundingReport" value="#{hodApplicationViewerRequestBean.selectedApplication.fundingReport}"/>
+                            <ui:param name="fundingReport" value="#{selectedApplication.fundingReport}"/>
                         </ui:decorate>
                     </p:tab>
                 </p:tabView>

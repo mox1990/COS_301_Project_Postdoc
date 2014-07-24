@@ -9,6 +9,7 @@ package com.softserve.DBEntities;
 import auto.softserve.XMLEntities.CV.AdditionalInformation;
 import auto.softserve.XMLEntities.CV.OtherContributions;
 import auto.softserve.XMLEntities.CV.ResearchOutput;
+import com.softserve.XMLUtils.XMLMarshaller;
 import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
@@ -203,6 +204,13 @@ public class Cv implements Serializable {
         }
     }
     
+    public void setResearchOutputXMLEntity(ResearchOutput researchOutput) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setResearchOutput(xmlm.marshalResearchOutputObject(researchOutput));
+    }
+    
     public String getOtherContributions() {
         return otherContributions;
     }
@@ -223,6 +231,13 @@ public class Cv implements Serializable {
         {
             return null;
         }
+    }
+    
+    public void setOtherContributionsXMLEntity(OtherContributions otherContributions) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setOtherContributions(xmlm.marshalOtherContributionsObject(otherContributions));
     }
 
     public String getAdditionalInformation() {
@@ -246,7 +261,14 @@ public class Cv implements Serializable {
             return null;
         }
     }
-
+    
+    public void setAdditionalInformationXMLEntity(AdditionalInformation additionalInformation) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setOtherContributions(xmlm.marshalAdditionalInformationObject(additionalInformation));
+    }
+    
     @XmlTransient
     public List<Experience> getExperienceList() {
         return experienceList;

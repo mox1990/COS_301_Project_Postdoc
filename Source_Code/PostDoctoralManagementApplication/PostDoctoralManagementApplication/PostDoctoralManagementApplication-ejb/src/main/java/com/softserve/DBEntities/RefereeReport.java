@@ -6,7 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
 import auto.softserve.XMLEntities.referee.ReferalReport;
+import com.softserve.XMLUtils.XMLMarshaller;
 import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
@@ -115,6 +117,13 @@ public class RefereeReport implements Serializable {
         {
             return null;
         }
+    }
+    
+    public void setContentXMLEntity(ReferalReport referalReport) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setContent(xmlm.marshalReferalReportObject(referalReport));
     }
 
     public Application getApplicationID() {

@@ -24,9 +24,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodApplicationViewerRequestBean")
+@Named(value = "applicationViewerRequestBean")
 @RequestScoped
-public class HODApplicationViewerRequestBean {
+public class ApplicationViewerRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -41,7 +41,7 @@ public class HODApplicationViewerRequestBean {
     /**
      * Creates a new instance of HODApplicationViewerRequestBean
      */
-    public HODApplicationViewerRequestBean() {
+    public ApplicationViewerRequestBean() {
     }
     
     public Application getSelectedApplication()
