@@ -58,8 +58,14 @@ public class HODApplicationSelectionRequestBean {
         }
     }
     
-    public void markApplicationAsSelected(Application application)
+    public void selectApplication(Application application)
     {
         sessionManagerBean.addObjectToSessionStroage(application);
+    }
+    
+    public String viewApplication(Application application)
+    {
+        selectApplication(application);
+        return navigationManagerBean.goToHODApplicationViewer();
     }
 }

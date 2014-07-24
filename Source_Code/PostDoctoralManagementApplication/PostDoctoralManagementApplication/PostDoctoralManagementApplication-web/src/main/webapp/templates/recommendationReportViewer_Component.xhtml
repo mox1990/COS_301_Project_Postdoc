@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:component>
+        <h:panelGrid columns="2" cellpadding="10px">
+            <h:outputText styleClass="text-label" value="Report creation date:"/>
+            <h:outputText value="#{recommendationReport.timestamp}"/> 
+            <h:outputText styleClass="text-label" value="HOD name:"/>
+            <h:outputText value="#{recommendationReport.hodID.completeName}"/>
+            
+            <h:outputText styleClass="text-label" value="Is candidate suitable for project:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.doesCandidateFit}"/> 
+            <h:outputText styleClass="text-label" value="Does candidate meet age requirement:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.candidateMeetsAgeRequirment}"/> 
+            <h:outputText styleClass="text-label" value="Has the candidate obtained their PhD in the last five years:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.candidateMeetsPhDAgeRequirement}"/> 
+            
+            <h:outputText styleClass="text-label" value="Candidate academic merit and suitability:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.academicMeritAndSuitablityOfCandidate}"/>             
+            <h:outputText styleClass="text-label" value="Candidate age motivation:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.candidateAgeMotivation}"/> 
+            
+            
+            <h:outputText styleClass="text-label" value="Is Research leader a full time staff member:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.fulltimeAcademicStaffMember}"/> 
+            <h:outputText styleClass="text-label" value="Research leader academic merit and suitability:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.academicMeritOfResearchLeader}"/> 
+            
+            <h:outputText styleClass="text-label" value="Scientific merit of application:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.scientificMeritOfApplication}"/> 
+            <h:outputText styleClass="text-label" value="Infrastructure availablility for project:"/>
+            <h:outputText value="#{recommendationReport.contentXMLEntity.infrastructureAvailability}"/> 
+        </h:panelGrid>
+    </ui:component>
+</html>
+

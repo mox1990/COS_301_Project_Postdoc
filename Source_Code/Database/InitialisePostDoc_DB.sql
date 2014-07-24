@@ -284,7 +284,7 @@ CREATE TABLE academic_qualification (
 	_cvID CHAR(9) NOT NULL,
 	_name VARCHAR(100),
 	_fieldOfStudy VARCHAR(100),
-	_instituation VARCHAR(100),
+	_institution VARCHAR(100),
 	_yearObtained DATE,
 	_distinctions TINYINT UNSIGNED,
 

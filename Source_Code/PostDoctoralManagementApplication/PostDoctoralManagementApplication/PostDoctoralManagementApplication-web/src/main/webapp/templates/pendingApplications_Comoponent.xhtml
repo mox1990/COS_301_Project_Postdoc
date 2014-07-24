@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:component>
+        <div>
+            <p:accordionPanel dynamic="true" cache="true" value="#{pendingApplications}" var="app" styleClass="box-round">
+                <p:tab title="Application - #{app.applicationID} - #{app.projectTitle}" >
+                    <h:panelGrid columns="2">
+                        <h:outputText styleClass="text-label" value="Application type:"/>
+                        <h:outputText value="#{app.type}"/>
+                        <h:outputText styleClass="text-label" value="Application Status:"/>
+                        <h:outputText value="#{app.status}"/>
+                        <h:outputText styleClass="text-label" value="Application creation date"/>
+                        <h:outputText value="#{app.timestamp}"/>
+                        <h:outputText styleClass="text-label" value="Fellow name:"/>
+                        <h:outputText value="#{app.fellow.completeName}"/>
+                        <h:outputText styleClass="text-label" value="Grant holder name:"/>
+                        <h:outputText value="#{app.grantHolderID.completeName}"/>
+                    </h:panelGrid>
+                    <h:form>
+                        <ui:insert name="commandButtons"/>                            
+                    </h:form>
+                </p:tab>
+            </p:accordionPanel>
+        </div>
+    </ui:component>
+</html>
+
