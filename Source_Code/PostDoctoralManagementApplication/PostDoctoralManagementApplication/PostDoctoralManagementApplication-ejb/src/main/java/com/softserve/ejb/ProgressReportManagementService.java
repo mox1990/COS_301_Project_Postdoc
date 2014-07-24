@@ -15,6 +15,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -60,6 +61,11 @@ public class ProgressReportManagementService implements ProgressReportManagement
         return new DBEntitiesFactory();
     }
     
+     protected GregorianCalendar getGregorianCalendarUTIL()
+    {
+        return new GregorianCalendar();
+    }
+    
     public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
     {
         UserGateway userGateway = getUserGatewayServiceEJB();
@@ -81,6 +87,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         progressReport.setApplicationID(application);
+        progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
         progressReportJpaController.create(progressReport);
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created progress report", session.getUser());

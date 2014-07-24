@@ -7,6 +7,7 @@
 package com.softserve.system;
 
 import com.softserve.DBEntities.*;
+import java.util.Date;
 
 /**
  *
@@ -63,5 +64,15 @@ public class DBEntitiesFactory {
         return securityRole;
     }
     
+    public ProgressReport bulidProgressReportEntity(Application applicationId, String content, Date timestamp)
+    {
+        ProgressReport progressReport = new ProgressReport();
+        
+        progressReport.setApplicationID(applicationId);
+        progressReport.setContent(content);
+        progressReport.setTimestamp(timestamp);
+        
+        return progressReport;
+    }
     //Rest of entities: Add as required
 }

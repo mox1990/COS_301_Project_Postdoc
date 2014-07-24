@@ -10,23 +10,24 @@ import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Person;
-import java.util.ArrayList;
-import java.util.List;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.ProgressReport;
+import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.DBEntities.RefereeReport;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -671,5 +672,13 @@ public class ApplicationJpaController implements Serializable {
         
         TypedQuery<Integer> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolderID.locationID.faculty = :fac", Integer.class).setParameter("status", applicationStatus).setParameter("fac", faculty);
         return q.getSingleResult();
+    }
+    
+    public List<Application> getAllApplicationsForFellowWithEndDateInBetween(Person fellow, Date rangeStart, Date rangeEnd)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE (a.fellow = :fellow) AND (a.endDate BETWEEN :rangeStart AND :rangeEnd)", Application.class).setParameter("rangeStart", rangeStart).setParameter("rangeEnd", rangeEnd).setParameter("fellow", fellow);
+        return q.getResultList();
     }
 }
