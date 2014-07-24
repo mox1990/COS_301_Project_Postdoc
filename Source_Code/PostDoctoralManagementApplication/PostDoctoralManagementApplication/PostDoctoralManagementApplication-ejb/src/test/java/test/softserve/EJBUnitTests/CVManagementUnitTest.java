@@ -64,6 +64,7 @@ public class CVManagementUnitTest {
         UserGateway mockUserGateway =  mock(UserGateway.class);
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         instance.setcVDAO(mockCvJpaController);
         instance.setuEJB(mockUserGateway);
@@ -75,6 +76,7 @@ public class CVManagementUnitTest {
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        
         try
         {
             instance.createCV(mockSession, mockCV);
@@ -83,7 +85,7 @@ public class CVManagementUnitTest {
             verify(mockCvJpaController).create(mockCV);          
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created user cv", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
         }
         catch (Exception ex)
         {
@@ -103,6 +105,7 @@ public class CVManagementUnitTest {
         UserGateway mockUserGateway =  mock(UserGateway.class);
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         instance.setcVDAO(mockCvJpaController);
         instance.setuEJB(mockUserGateway);
@@ -122,7 +125,7 @@ public class CVManagementUnitTest {
             verify(mockCvJpaController).edit(mockCV);          
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Updated user cv", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
         }
         catch (Exception ex)
         {
