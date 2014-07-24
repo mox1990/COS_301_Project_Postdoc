@@ -9,15 +9,16 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Notification;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Person;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -218,4 +219,21 @@ public class NotificationJpaController implements Serializable {
         }
     }
     
+    public List<Notification> findAllNotificationsWhosRecieverIs(Person person)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.recieverID = :person", Notification.class).setParameter("person", person);
+        
+        return q.getResultList();
+    }
+    
+    public List<Notification> findAllNotificationsWhosSenderIs(Person person)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.senderID = :person", Notification.class).setParameter("person", person);
+        
+        return q.getResultList();
+    }
 }

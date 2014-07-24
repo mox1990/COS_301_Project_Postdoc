@@ -8,7 +8,11 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -21,6 +25,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManagerFactory;
@@ -49,6 +54,55 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     {
         return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
+    
+    /**
+     *
+     * @return
+     */
+    protected UserGateway getUserGatewayServiceEJB()
+    {
+        return new UserGateway(emf);
+    }
+    
+    
+    protected Properties getPropertiesJMAIL()
+    {
+        return new Properties();
+    }
+    
+    protected Session getSessionJMAIL(Properties properties, javax.mail.Authenticator authenticator)
+    {
+        return Session.getInstance(properties, authenticator);
+    }
+    
+    protected javax.mail.Authenticator getAuthenticatorJMAIL()
+    {
+        javax.mail.Authenticator authenticator = new javax.mail.Authenticator()
+                                                {
+                                                  @Override
+                                                  protected PasswordAuthentication getPasswordAuthentication() 
+                                                  {
+                                                          return new PasswordAuthentication(com.softserve.constants.SystemConstants.MAIL_USERNAME, com.softserve.constants.SystemConstants.MAIL_PASSWORD);
+                                                  }
+                                                };
+        return authenticator;        
+    }
+    
+    protected InternetAddress getInternetAddressJMAIL(String email) throws AddressException
+    {
+        return new InternetAddress(email);
+    }
+    
+    protected MimeMessage getMimeMessageJMAIL(Session session)
+    {
+        return new MimeMessage(session);
+    }
+    
+    protected void sendMessageJMAIL(Message message) throws MessagingException
+    {
+        Transport.send(message);
+    }
+    
     
     public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception
     {
@@ -82,34 +136,73 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         }
     }
     
+    
+    
     protected void sendEmail(Notification notification) throws MessagingException
     {
-        Properties props = new Properties();
+        Properties props = getPropertiesJMAIL();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true"); 
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        Session session = Session.getInstance(props,
-          new javax.mail.Authenticator() 
-          {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() 
-            {
-                    return new PasswordAuthentication(com.softserve.constants.SystemConstants.MAIL_USERNAME, com.softserve.constants.SystemConstants.MAIL_PASSWORD);
-            }
-          });
+        Session session = getSessionJMAIL(props, getAuthenticatorJMAIL());
+          
 
         Address[] addresses = new Address[1];
-        addresses[0] = new InternetAddress(notification.getRecieverID().getEmail());
+        addresses[0] = getInternetAddressJMAIL(notification.getRecieverID().getEmail());
 
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(notification.getSenderID().getEmail()));
+        Message message = getMimeMessageJMAIL(session);
+        message.setFrom(getInternetAddressJMAIL(notification.getSenderID().getEmail()));
         message.setSubject(notification.getSubject());
         message.setRecipients(Message.RecipientType.TO, addresses);
         message.setText(notification.getMessage());
 
-        Transport.send(message);        
+        sendMessageJMAIL(message);        
+    }
+    
+    @Override
+    public List<Notification> getAllNotificationsForPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception
+    {
+        UserGateway userGateway = getUserGatewayServiceEJB();
+        try
+        {
+            //Authenticate user ownership of account
+            userGateway.authenticateUserAsOwner(session, person);
+        } 
+        catch(AuthenticationException ex)
+        {
+            //Authenticate user privliges
+            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            userGateway.authenticateUser(session, roles);
+        } 
+        
+        NotificationJpaController notificationJpaController = getNotificationDAO();
+        
+        return notificationJpaController.findAllNotificationsWhosRecieverIs(person);
+    }
+    
+    @Override
+    public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception
+    {
+        UserGateway userGateway = getUserGatewayServiceEJB();
+        try
+        {
+            //Authenticate user ownership of account
+            userGateway.authenticateUserAsOwner(session, person);
+        } 
+        catch(AuthenticationException ex)
+        {
+            //Authenticate user privliges
+            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            userGateway.authenticateUser(session, roles);
+        } 
+        
+        NotificationJpaController notificationJpaController = getNotificationDAO();
+        
+        return notificationJpaController.findAllNotificationsWhosSenderIs(person);
     }
     
     //Note this function is not percisly to the spec. It should be that a notification sends a notification plus an email or not

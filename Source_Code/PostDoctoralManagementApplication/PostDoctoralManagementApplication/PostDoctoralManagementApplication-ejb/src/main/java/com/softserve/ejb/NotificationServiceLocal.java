@@ -8,6 +8,8 @@ package com.softserve.ejb;
 
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
+import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Local;
@@ -21,7 +23,9 @@ import javax.mail.MessagingException;
 @Local
 public interface NotificationServiceLocal {
     public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception;
-    public void sendNotification(Notification notification, boolean sendEmail) throws Exception; 
+    public void sendNotification(Notification notification, boolean sendEmail) throws Exception;
+    public List<Notification> getAllNotificationsForPerson(Session session, Person person) throws AuthenticationException, Exception;
+    public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception;
     //public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception;
     //public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception;
     //public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException;
