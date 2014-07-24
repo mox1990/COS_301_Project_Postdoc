@@ -7,6 +7,7 @@
 package com.softserve.DBEntities;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
+import com.softserve.XMLUtils.XMLMarshaller;
 import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
@@ -215,6 +216,13 @@ public class Application implements Serializable {
         {
             return null;
         }
+    }
+    
+    public void setInformationXMLEntity(ApplicationInformation applicationInformation) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setInformation(xmlm.marshalApplicationInformationObject(applicationInformation));
     }
 
     @XmlTransient

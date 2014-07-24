@@ -1,12 +1,27 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Application viewer"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Applications pending for recommendation</h1>
+                <h2>Click on the application for more details</h2>
+            </div>
+            <ui:decorate template="applicationViewer_Comoponent">
+                <ui:param name="selectedApplication" value="#{hodApplicationViewerRequestBean.selectedApplication}"/>
+            </ui:decorate>
+            <h:form>
+                <p:commandButton value="Recommend application" styleClass="button-fill" action="#{navigationManagerBean.goToHODRecommendView()}" ajax="false"/> 
+                <p:commandButton value="Request application to be ammended" styleClass="button-fill" action="#{navigationManagerBean.goToHODAmmendView()}" ajax="false"/> 
+                <p:commandButton value="Decline application" styleClass="button-fill" action="#{navigationManagerBean.goToHODDeclineView()}" ajax="false"/>
+            </h:form>
+            
+        </ui:define>
+    </ui:composition>
 </html>
 

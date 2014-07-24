@@ -1,12 +1,28 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Application viewer"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Application decline menu</h1>
+                <h2>Fill in the details for to complete the declining for the application</h2>
+            </div>
+            <div>
+                <h:form>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Reason for declining:" for="reason"/>                                
+                        <p:inputTextarea id="reason" value="#{hodDeclineRequestBean.reason}"/>
+                        <h:message for="reason" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>    
+                    <p:commandButton value="Decline application" action="#{hodDeclineRequestBean.preformDeclineRequest()}" ajax="false"/>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

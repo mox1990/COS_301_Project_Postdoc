@@ -6,6 +6,7 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
@@ -40,6 +41,7 @@ public class HODRecommendRequestBean {
     private UIComponent errorContainer; 
     
     private RecommendationReport recommendationReport = null;
+    private RecommendationReportContent recommendationReportContent = null;
     
     /**
      * Creates a new instance of HODRecommendBean
@@ -52,6 +54,7 @@ public class HODRecommendRequestBean {
     public void init()
     {
         recommendationReport = new RecommendationReport();
+        recommendationReportContent = new RecommendationReportContent();
     }
     
     public Application getSelectedApplication()
@@ -74,11 +77,20 @@ public class HODRecommendRequestBean {
     public void setRecommendationReport(RecommendationReport recommendationReport) {
         this.recommendationReport = recommendationReport;
     }
-    
+
+    public RecommendationReportContent getRecommendationReportContent() {
+        return recommendationReportContent;
+    }
+
+    public void setRecommendationReportContent(RecommendationReportContent recommendationReportContent) {
+        this.recommendationReportContent = recommendationReportContent;
+    }
+            
     public String preformRecommendRequest()
     {
         try
         {
+            recommendationReport.setContentXMLEntity(recommendationReportContent);
             hodRecommendationServices.approveApplication(sessionManagerBean.getSession(), getSelectedApplication(), recommendationReport);
             return navigationManagerBean.goToPreviousBreadCrumb();
         }

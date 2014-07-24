@@ -66,7 +66,7 @@ public class HODDeclineRequestBean {
         this.reason = reason;
     }
     
-    public String preformAmmendRequest()
+    public String preformDeclineRequest()
     {
         try
         {
