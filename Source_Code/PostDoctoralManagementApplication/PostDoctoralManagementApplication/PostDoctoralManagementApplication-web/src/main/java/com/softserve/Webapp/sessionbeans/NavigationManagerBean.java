@@ -324,4 +324,39 @@ public class NavigationManagerBean implements Serializable {
         
         return goToLink(breadCrumb);
     }
+    
+    public String goToNewApplicationWizardView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("newApplicationService_Wizard", "New application wizard");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToApplicationProgressViewerApplicationSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationProgressViewerService_ApplicationSelection", "Application selection view");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToRefereeReportServiceApplicationSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("RefereeReportService_ApplicationSelection", "Application selection view");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToDRISApprovalServiceApplicationSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationSelection", "Application selection view");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    
+    
 }

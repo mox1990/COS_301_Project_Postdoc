@@ -6,12 +6,13 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:outputPanel id="#{prefix}researchoutput">
-            <ui:decorate template="referenceDataList_Component.xhtml">
-                <ui:param name="header" value="Research output"/>
-                <ui:param name="references" value="#{references}"
-            </ui:decorate>
-            <div>
+        <h:form>
+            <p:outputPanel id="#{prefix}researchoutput">
+                <ui:decorate template="referenceDataList_Component.xhtml">
+                    <ui:param name="header" value="Research output"/>
+                    <ui:param name="references" value="#{references}"/>
+                </ui:decorate>
+                <div>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Publication Name:" for="#{prefix}refpublicationName"/>                                
                         <p:inputText id="#{prefix}refpublicationName" value="#{currentReference.publicationName}"/>
@@ -28,15 +29,16 @@
                         <p:outputLabel value="Publication ISBN:" for="#{prefix}refpublicationISBN"/>                                
                         <p:inputText id="#{prefix}refpublicationISBN" value="#{currentReference.publicationISBN}"/>
                         <p:message for="#{prefix}refpublicationISBN"/>
-                        
+
                         <p:outputLabel value="Page Location:" for="#{prefix}refpublicationPageLocation"/>                                
                         <p:inputText id="#{prefix}refpublicationPageLocation" value="#{currentReference.publicationPageLocation}"/>
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
 
-                <p:commandButton ajax="true" update="#{prefix}researchoutput" action="#{bean[beanAction]}"
-            </div>
-        </p:outputPanel>
+                    <p:commandButton value="Add reference" actionListener="#{bean[beanAction]}" update="#{prefix}researchoutput"/>
+                </div>
+            </p:outputPanel>
+        </h:form>
     </ui:component>
 </html>
 

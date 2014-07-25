@@ -6,11 +6,11 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:dataList value="#{academicQualificationList}" var="qualification">
+        <p:dataList value="#{members}" var="member">
             <f:facet name="header">
                 #{header}
             </f:facet>
-            Name: #{qualification.name}, Year obtained: #{qualification.yearObtained}, Institution: #{qualification.institution}, Number of distinctions: #{qualification.distinctions}               
+            Name: #{member.title} #{member.fullName} #{member.surname}, Degree type: #{member.degreeType}, Institution: #{member.institution}, Position: #{member.position}                
         </p:dataList>
     </ui:component>
 </html>
