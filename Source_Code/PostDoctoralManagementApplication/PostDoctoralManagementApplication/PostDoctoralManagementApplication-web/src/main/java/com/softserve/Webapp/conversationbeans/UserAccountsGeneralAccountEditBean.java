@@ -88,13 +88,14 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         if(person.getUpEmployee())
         {
             employeeInformation = person.getUpEmployeeInformation();
-            upAddress = person.getUpEmployeeInformation().getPhysicalAddress();
+            upAddress = person.getUpEmployeeInformation().getPhysicalAddress();            
         }
         else
         {
             employeeInformation = new UpEmployeeInformation();
             upAddress = new Address();
         }
+        employeeInformation.setEmployeeID(person.getSystemID());
         
         sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();        
         sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -182,7 +183,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
             
             if(person.getUpEmployee())
             {
-                person.setSystemID(employeeInformation.getEmployeeID());
+                employeeInformation.setEmployeeID(person.getSystemID());
                 userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person, address, employeeInformation, upAddress);               
             }
             else

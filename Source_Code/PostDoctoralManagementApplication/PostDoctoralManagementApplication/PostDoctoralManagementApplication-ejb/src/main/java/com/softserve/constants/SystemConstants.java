@@ -14,6 +14,6 @@ package com.softserve.constants;
 public class SystemConstants {
     
     //Java mail constants
-    public final static String MAIL_USERNAME = "iterativeKak@gmail.com";
-    public final static String MAIL_PASSWORD = "********";
+    public final static String MAIL_USERNAME = "uppostdoctoralsystem@gmail.com";
+    public final static String MAIL_PASSWORD = "UPSystem";
 }

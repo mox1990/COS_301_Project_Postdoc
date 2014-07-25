@@ -232,6 +232,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
         AddressJpaController addressJpaController = getAddressDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
         
         //Check if automatic systemID generation is required
         if(!useManualSystemIDSpecification)
@@ -281,6 +282,8 @@ public class UserAccountManagementService implements UserAccountManagementServic
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created new user account", (session.getUser() == null && session.isSystem())  ? user : session.getUser()); //This is a isolated instance when a prospective fellow creates a new account
         auditTrailService.logAction(auditLog);
         
+        Notification notification = dBEntitiesFactory.buildNotificationEntity(user, user, "Created account", "Account has been created for you");
+        notificationService.sendNotification(notification, true);
     }
     
     /**
@@ -347,8 +350,10 @@ public class UserAccountManagementService implements UserAccountManagementServic
             {
                 user.setUpEmployee(false);
                 user.setUpEmployeeInformation(null);
-                addressJpaController.destroy(userUPInfo.getPhysicalAddress().getAddressID());
-                upEmployeeInformationJpaController.destroy(userUPInfo.getEmployeeID());                
+                userUPInfo = upEmployeeInformationJpaController.findUpEmployeeInformation(user.getSystemID());
+                Long id = userUPInfo.getPhysicalAddress().getAddressID();
+                upEmployeeInformationJpaController.destroy(userUPInfo.getEmployeeID());
+                addressJpaController.destroy(id);
             }
         }
         

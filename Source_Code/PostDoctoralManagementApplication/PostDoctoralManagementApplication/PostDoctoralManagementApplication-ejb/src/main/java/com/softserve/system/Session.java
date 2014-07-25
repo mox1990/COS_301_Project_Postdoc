@@ -132,8 +132,41 @@ public class Session {
             }
             
             return user.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
-        }
-                
+        }               
         
+    }
+    
+    public boolean isUserAccountDorment()
+    {
+        if(isSystem())
+        {
+            return false;
+        }
+        else
+        {
+            if(user == null || user.getAccountStatus() == null)
+            {
+                return false;
+            }
+            
+            return user.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        } 
+    }
+    
+    public boolean isUserAccountActive()
+    {
+        if(isSystem())
+        {
+            return true;
+        }
+        else
+        {
+            if(user == null || user.getAccountStatus() == null)
+            {
+                return false;
+            }
+            
+            return user.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        } 
     }
 }

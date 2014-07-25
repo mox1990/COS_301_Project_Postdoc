@@ -80,12 +80,14 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             {
                 employeeInformation = person.getUpEmployeeInformation();
                 upAddress = person.getUpEmployeeInformation().getPhysicalAddress();
+                
             }
             else
             {
                 employeeInformation = new UpEmployeeInformation();
                 upAddress = new Address();
             }
+            employeeInformation.setEmployeeID(person.getSystemID());
         } 
         catch (AuthenticationException ex) 
         {
@@ -142,12 +144,12 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             
             if(person.getUpEmployee())
             {
-                person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, employeeInformation, upAddress);               
+                employeeInformation.setEmployeeID(person.getSystemID());
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person, address, employeeInformation, upAddress);               
             }
             else
             {
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSession(), person, address, null, null);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person, address, null, null);
             }
             
             conversationManagerBean.deregisterConversation(conversation);
@@ -155,6 +157,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         } 
         catch (Exception ex) 
         {
+            ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
             ExceptionUtil.handleException(errorContainer, ex);
             return "";
         }

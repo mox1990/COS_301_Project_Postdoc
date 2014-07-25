@@ -150,10 +150,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
           
 
         Address[] addresses = new Address[1];
-        addresses[0] = getInternetAddressJMAIL(notification.getRecieverID().getEmail());
+        addresses[0] = getInternetAddressJMAIL(com.softserve.constants.SystemConstants.MAIL_USERNAME);
 
         Message message = getMimeMessageJMAIL(session);
-        message.setFrom(getInternetAddressJMAIL(notification.getSenderID().getEmail()));
+        message.setFrom(getInternetAddressJMAIL(com.softserve.constants.SystemConstants.MAIL_USERNAME));
         message.setSubject(notification.getSubject());
         message.setRecipients(Message.RecipientType.TO, addresses);
         message.setText(notification.getMessage());
