@@ -27,6 +27,34 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
     private ApplicationServices aSEJB;
+
+    public void setaDAO(ApplicationJpaController aDAO) {
+        this.aDAO = aDAO;
+    }
+
+    public void setrRDAO(RecommendationReportJpaController rRDAO) {
+        this.rRDAO = rRDAO;
+    }
+
+    public void setdBEntities(DBEntitiesFactory dBEntities) {
+        this.dBEntities = dBEntities;
+    }
+
+    public void setuEJB(UserGateway uEJB) {
+        this.uEJB = uEJB;
+    }
+
+    public void setnEJB(NotificationService nEJB) {
+        this.nEJB = nEJB;
+    }
+
+    public void setaTEJB(AuditTrailService aTEJB) {
+        this.aTEJB = aTEJB;
+    }
+
+    public void setaSEJB(ApplicationServices aSEJB) {
+        this.aSEJB = aSEJB;
+    }
     
     @Override
     protected ApplicationJpaController getApplicationDAO()

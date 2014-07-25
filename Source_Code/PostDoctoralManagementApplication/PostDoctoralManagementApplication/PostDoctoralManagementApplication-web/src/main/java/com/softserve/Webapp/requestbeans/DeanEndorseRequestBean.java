@@ -8,11 +8,13 @@ package com.softserve.Webapp.requestbeans;
 
 import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Endorsement;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.DeansEndorsementServiceLocal;
 import com.softserve.ejb.HODRecommendationServices;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,9 +28,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodRecommendRequestBean")
+@Named(value = "deanEndorseRequestBean")
 @RequestScoped
-public class HODRecommendRequestBean {
+public class DeanEndorseRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -36,25 +38,23 @@ public class HODRecommendRequestBean {
     private NavigationManagerBean navigationManagerBean;
     
     @EJB
-    private HODRecommendationServices hodRecommendationServices;
+    private DeansEndorsementServiceLocal deansEndorsementServiceLocal;
     
     private UIComponent errorContainer; 
     
-    private RecommendationReport recommendationReport = null;
-    private RecommendationReportContent recommendationReportContent = null;
+    private Endorsement endorsement = null;
     
     /**
      * Creates a new instance of HODRecommendBean
      */
-    public HODRecommendRequestBean() 
+    public DeanEndorseRequestBean() 
     {        
     }
     
     @PostConstruct
     public void init()
     {
-        recommendationReport = new RecommendationReport();
-        recommendationReportContent = new RecommendationReportContent();
+        endorsement = new Endorsement();
     }
     
     public Application getSelectedApplication()
@@ -70,29 +70,20 @@ public class HODRecommendRequestBean {
         this.errorContainer = errorContainer;
     }
 
-    public RecommendationReport getRecommendationReport() {
-        return recommendationReport;
+    public Endorsement getEndorsement() {
+        return endorsement;
     }
 
-    public void setRecommendationReport(RecommendationReport recommendationReport) {
-        this.recommendationReport = recommendationReport;
+    public void setEndorsement(Endorsement endorsement) {
+        this.endorsement = endorsement;
     }
-
-    public RecommendationReportContent getRecommendationReportContent() {
-        return recommendationReportContent;
-    }
-
-    public void setRecommendationReportContent(RecommendationReportContent recommendationReportContent) {
-        this.recommendationReportContent = recommendationReportContent;
-    }
-            
-    public String preformRecommendRequest()
+                
+    public String preformEndorseRequest()
     {
         try
         {
-            recommendationReport.setContentXMLEntity(recommendationReportContent);
-            hodRecommendationServices.approveApplication(sessionManagerBean.getSession(), getSelectedApplication(), recommendationReport);
-            return navigationManagerBean.goToHODApplicationSelectionView();
+            deansEndorsementServiceLocal.endorseApplication(sessionManagerBean.getSession(), getSelectedApplication(), endorsement);
+            return navigationManagerBean.goToDeanApplicationSelectionView();
         }
         catch(Exception ex)
         {

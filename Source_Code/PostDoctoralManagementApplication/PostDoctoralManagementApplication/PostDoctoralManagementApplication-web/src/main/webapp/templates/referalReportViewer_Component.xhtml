@@ -1,12 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:component>
+            
+            <h:panelGrid columns="2" cellpadding="10px">
+                <h:outputText styleClass="text-label" value="Report creation date:"/>
+                <h:outputText value="#{report.timestamp}"/> 
+                <h:outputText styleClass="text-label" value="Referee name:"/>
+                <h:outputText value="#{report.refereeID.completeName}"/> 
+                <h:outputText styleClass="text-label" value="Referee email:"/>
+                <h:outputText value="#{report.refereeID.email}"/>
+                <h:outputText styleClass="text-label" value="Referee and candidate association:"/>
+                <h:outputText value="#{report.contentXMLEntity.refereeAndCandidateAssociation}"/>
+                <h:outputText styleClass="text-label" value="Candidate project title under referee:"/>
+                <h:outputText value="#{report.contentXMLEntity.projectTitle}"/>
+                <h:outputText styleClass="text-label" value="Candidate project summary under referee:"/>
+                <h:outputText value="#{report.contentXMLEntity.projectSummary}"/>
+                <h:outputText styleClass="text-label" value="Candidate evaluation by referee:"/>
+                <h:outputText value="#{report.contentXMLEntity.evaluationOfCandidateSelf}"/>
+                <h:outputText styleClass="text-label" value="Candidate evaluation towards proposed project by referee:"/>
+                <h:outputText value="#{report.contentXMLEntity.evaluationOfCandidateTowardsProposedProject}"/>
+            </h:panelGrid>
+            
+    </ui:component>
 </html>
 

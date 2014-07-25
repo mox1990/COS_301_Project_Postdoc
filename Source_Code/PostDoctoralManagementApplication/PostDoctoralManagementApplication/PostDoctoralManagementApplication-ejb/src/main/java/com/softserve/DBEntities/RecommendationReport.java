@@ -6,7 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import auto.softserve.XMLEntities.CV.AdditionalInformation;
 import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
+import com.softserve.XMLUtils.XMLMarshaller;
 import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
@@ -122,6 +124,13 @@ public class RecommendationReport implements Serializable {
         {
             return null;
         }
+    }
+    
+    public void setContentXMLEntity(RecommendationReportContent recommendationReportContent) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setContent(xmlm.marshalRecommendationReportContentObject(recommendationReportContent));
     }
 
     public Person getHodID() {

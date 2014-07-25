@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Application endorsement"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Application endorsement</h1>
+                <h2>Fill in the details for to complete the endorsement</h2>
+            </div>
+            <div>
+                <h:form>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Score the application from 1 to 10: " for="rank"/>                                
+                        <p:spinner max="10" min="1" id="doesCandidateFit" value="#{deanEndorseRequestBean.endorsement.rank}"/>
+                        <h:message for="rank" styleClass="fieldErrorMessage"/>
+                                                
+                        <p:outputLabel value="Endorsement motivation:" for="motivation"/>                                
+                        <p:inputTextarea id="motivation" value="#{deanEndorseRequestBean.endorsement.motivation}"/>
+                        <h:message for="motivation" styleClass="fieldErrorMessage"/>
+                                                                 
+                    </h:panelGrid>
+                    <p:commandButton value="Endorse application" action="#{deanEndorseRequestBean.preformEndorseRequest()}" ajax="false"/>
+                </h:form>
+            </div>
+            
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

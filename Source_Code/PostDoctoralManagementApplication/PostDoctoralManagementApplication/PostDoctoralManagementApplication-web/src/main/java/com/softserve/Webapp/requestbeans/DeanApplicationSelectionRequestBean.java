@@ -11,73 +11,62 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.DeansEndorsementServiceLocal;
 import com.softserve.ejb.HODRecommendationServices;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodDeclineRequestBean")
+@Named(value = "deanApplicationSelectionRequestBean")
 @RequestScoped
-public class HODDeclineRequestBean {
+public class DeanApplicationSelectionRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    
+
     @EJB
-    private HODRecommendationServices hodRecommendationServices;
+    private DeansEndorsementServiceLocal deansEndorsementServiceLocal;
     
     private UIComponent errorContainer;
     
-    private String reason = "";
-    
     /**
-     * Creates a new instance of HODRecommendBean
+     * Creates a new instance of HODApplicationSelectionRequestBean
      */
-    public HODDeclineRequestBean() {
+    public DeanApplicationSelectionRequestBean() {
     }
     
-    public Application getSelectedApplication()
-    {
-        return sessionManagerBean.getObjectFromSessionStroage(0, Application.class);
-    }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    }
-            
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-    
-    public String preformDeclineRequest()
-    {
+    public List<Application> getPendingApplications()
+    {   
         try
         {
-            hodRecommendationServices.denyAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
-            return navigationManagerBean.goToPreviousBreadCrumb();
+            return deansEndorsementServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, deansEndorsementServiceLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
         }
         catch(Exception ex)
         {
             ExceptionUtil.handleException(errorContainer, ex);
-            return "";
+            return new ArrayList<Application>();
         }
     }
     
+    public void selectApplication(Application application)
+    {
+        sessionManagerBean.addObjectToSessionStroage(application);
+    }
+    
+    public String viewApplication(Application application)
+    {
+        selectApplication(application);
+        return navigationManagerBean.goToDeanApplicationViewer();
+    }
 }
