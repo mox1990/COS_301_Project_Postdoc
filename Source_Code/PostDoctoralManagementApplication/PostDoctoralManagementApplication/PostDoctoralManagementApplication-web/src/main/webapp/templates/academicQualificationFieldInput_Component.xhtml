@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <h:form>
+            <p:outputPanel id="qualifications">
+                <ui:decorate template="academicQualificationDataList_Component.xhtml">
+                    <ui:param name="header" value="Academic qualifications"/>
+                    <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
+                </ui:decorate>
+                <div>
+
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Name" for="qname"/>                                
+                            <p:inputText id="qname" value="#{currentQualification.name}" required="false"/>
+                            <p:message for="qname" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Year Obtained" for="qyearObtained"/>                                
+                            <p:calendar id="qyearObtained" value="#{currentQualification.yearObtained}" required="false"/>
+                            <p:message for="qyearObtained" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="institution" for="qinstitution"/>                                
+                            <p:inputText id="qinstitution" value="#{currentQualification.institution}" required="false"/>
+                            <p:message for="qinstitution" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Number of distinctions" for="qdistinctions"/>                                
+                            <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}" required="false"/>
+                            <p:message for="qdistinctions" styleClass="fieldErrorMessage"/>
+                        </h:panelGrid>
+
+                        <p:commandButton ajax="true" update="qualifications" actionListener="#{bean.addToAcademicQualificationList()}" value="Add qualification"/>
+                </div>
+            </p:outputPanel>
+        </h:form>
+    </ui:component>
+</html>
+

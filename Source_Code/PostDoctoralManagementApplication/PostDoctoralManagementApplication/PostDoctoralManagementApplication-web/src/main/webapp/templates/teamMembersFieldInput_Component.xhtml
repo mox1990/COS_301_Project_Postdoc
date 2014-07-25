@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <p:outputPanel id="teamMembers">
+            <ui:decorate template="teamMembersDataList_Component.xhtml">
+                <ui:param name="header" value="Team members"/>
+                <ui:param name="members" value="#{members}"/>
+            </ui:decorate>
+            <div>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel value="Title" for="ttitle"/>                                
+                    <p:inputText id="ttitle" value="#{currentMember.title}"/>
+                    <p:message for="ttitle" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Full name" for="tfullName"/>                                
+                    <p:inputText id="tfullName" value="#{currentMember.fullName}"/>
+                    <p:message for="tfullName" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Surname:" for="tsurname"/>                                
+                    <p:inputText id="tsurname" value="#{currentMember.surname}"/>
+                    <p:message for="tsurname" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Degree type:" for="tdegreeType"/>                                
+                    <p:inputText id="tdegreeType" value="#{currentMember.degreeType}"/>
+                    <p:message for="tdegreeType" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Institution:" for="tinstitution"/>                                
+                    <p:inputText id="tinstitution" value="#{currentMember.institution}"/>
+                    <p:message for="tinstitution" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Position:" for="tposition"/>                                
+                    <p:inputText id="tposition" value="#{currentMember.position}"/>
+                    <p:message for="tposition" styleClass="fieldErrorMessage"/>
+                </h:panelGrid>
+
+                <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanAction]}"
+            </div>
+        </p:outputPanel>
+    </ui:component>
+</html>
+

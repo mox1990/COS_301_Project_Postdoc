@@ -6,40 +6,41 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-    <ui:composition template="templates/generalPage_Template.xhtml">
-        <ui:param name="pageTitle" value="New Application"/>
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="New application wizard"/>
         
-        <ui:define name="CSSStyleSheets">
-            <link rel="stylesheet" type="text/css" href="CSS/useraccountCreationScreen.css"/>
-        </ui:define>
-        
-        <ui:define name="pageBreadBrumb">
-            <div class="containerNavBar"> 
-                <h:form>
-                    <div class="breadCrumbs">
-                        <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
-                            <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>                                      
-                            <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
-                                <span class="breadCrumb-Splitter">></span>
-                            </c:if>
-                        </c:forEach>
-                    </div>
-                </h:form>
-            </div>
+        <ui:define name="JSScripts">
+            <script type="text/javascript" src="JS/generalFunctions.js"></script>
         </ui:define>
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">Prospective fellow user account creation</h1>
-                 <h2>Please complete the fields below</h2>
+                 <h1 class="header1">Open new application wizard</h1>
+                 <h2>Please complete follow the below wizard to open a new application</h2>
             </div>
-
+            
             <div>
-                <h:form>
-                    <p:wizard>
-                        
-                    </p:wizard>
-                </h:form>
+                
+                <p:tabView>
+                    <p:tab title="Create or update CV">
+                        <p:outputPanel>
+                            <ui:decorate template="templates/cvFieldInput_Component.xhtml">
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                            </ui:decorate>
+                        </p:outputPanel>
+                    </p:tab>
+                    <p:tab title="Complete application form">
+
+                    </p:tab>
+                    <p:tab title="Specify grant holder">
+
+                    </p:tab>
+                    <p:tab title="Specify referees">
+
+                    </p:tab>                        
+                </p:tabView>
+                
             </div>
         </ui:define>
     </ui:composition>

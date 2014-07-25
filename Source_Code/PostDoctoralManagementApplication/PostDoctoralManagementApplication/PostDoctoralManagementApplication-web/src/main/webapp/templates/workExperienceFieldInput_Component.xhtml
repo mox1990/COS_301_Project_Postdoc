@@ -6,34 +6,37 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:outputPanel id="experiences">
-            <ui:decorate template="workExpericenceDataList_Component.xhtml">
-                <ui:param name="header" value="Work experience"/>
-                <ui:param name="experienceList" value="#{experienceList}"/>
-            </ui:decorate>
-            <div>
+        <h:form>
+            <p:outputPanel id="experiences">
+                <ui:decorate template="workExpericenceDataList_Component.xhtml">
+                    <ui:param name="header" value="Work experience"/>
+                    <ui:param name="experienceList" value="#{experienceList}"/>
+                </ui:decorate>
+                <div>
 
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Capacity:" for="ecapacity"/>                                
-                        <p:inputText id="ecapacity" value="#{currentExperience.capacity}"/>
+                        <p:inputText id="ecapacity" value="#{currentExperience.capacity}" required="false"/>
                         <p:message for="ecapacity" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Organisation:" for="eorganisation"/>                                
-                        <p:inputText id="eorganisation" value="#{currentExperience.organisation}"/>
+                        <p:inputText id="eorganisation" value="#{currentExperience.organisation}" required="false"/>
                         <p:message for="eorganisation" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Start date:" for="estartDate"/>                                
-                        <p:calendar id="estartDate" value="#{currentExperience.startDate}"/>
+                        <p:calendar id="estartDate" value="#{currentExperience.startDate}" required="false"/>
                         <p:message for="estartDate" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="End date:" for="eendDate"/>                                
-                        <p:calendar id="eendDate" value="#{currentExperience.endDate}"/>
+                        <p:calendar id="eendDate" value="#{currentExperience.endDate}" required="false"/>
                         <p:message for="eendDate" styleClass="eendDate"/>
                     </h:panelGrid>
 
-                <p:commandButton ajax="true" update="exepriences" action="#{bean[beanAction]}"
-            </div>
-        </p:outputPanel>
+                    <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanAction]}" value="Add work experience"/>
+
+                </div>
+            </p:outputPanel>
+        </h:form>    
     </ui:component>
 </html>
 

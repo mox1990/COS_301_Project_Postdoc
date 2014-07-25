@@ -7,8 +7,127 @@
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
-        <ui:define name="CSSStyleSheets">
-            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        <ui:define name="JSScripts">
+            <script type="text/javascript" src="JS/generalFunctions.js"></script>
+        </ui:define> 
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Application services menu</h1>
+                <h2>Please select the service you wish to use</h2>
+            </div>
+            <div>
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{true}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(1)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
+                    <ui:param name="buttonName" value="New application service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToNewApplicationWizardView"/>
+                    <ui:param name="infoContainerID" value="info1"/>
+                    <ui:define name="informationContent">
+                        This will allow you to open a new application.  
+                    </ui:define>
+                </ui:decorate>
+
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(2)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
+                    <ui:param name="buttonName" value="Application renewal"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToRenewalApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info2"/>
+                    <ui:define name="informationContent">
+                        This will allow you to renew your currently active application.
+                    </ui:define>
+                </ui:decorate>
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(3)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
+                    <ui:param name="buttonName" value="Application progress viewer service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToApplicationProgressViewerApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info3"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view any applications progress that you are the fellow or grant holder of.
+                        If you are a DRIS member you will be allowed to view the progress of all applications.
+                    </ui:define>
+                </ui:decorate>
+
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(4)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
+                    <ui:param name="buttonName" value="Referee report service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToRefereeReportServiceApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info4"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view all applications that are pending for you to write a referal report.
+                        Also it will allow you to create a referal report for those pending.
+                    </ui:define>
+                </ui:decorate>  
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(5)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
+                    <ui:param name="buttonName" value="HOD recommendation service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToHODApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info5"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view all applications that are pending for your review.
+                        Also it will allow you to decline, recommend or request for ammendment on any of pending applications.
+                    </ui:define>
+                </ui:decorate> 
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(6)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
+                    <ui:param name="buttonName" value="Dean endorsement service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToDeanApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info6"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view all applications that are pending for your review.
+                        Also it will allow you to decline or endorse any of pending applications.
+                    </ui:define>
+                </ui:decorate> 
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(7)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(7)"/>
+                    <ui:param name="buttonName" value="DRIS approval service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToDRISApprovalServiceApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info7"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view all applications that are pending for your review.
+                        Also it will allow you to check for eligibility of any pending applications.
+                        Further this service will allow you to decline or approve the funding of applications.
+                    </ui:define>
+                </ui:decorate> 
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(8)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
+                    <ui:param name="buttonName" value="Meeting management service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToDRISApprovalServiceApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info8"/>
+                    <ui:define name="informationContent">
+                        This will allow you to create post doctoral committee meetings and manage them.
+                        Further this will allow you access active meetings and take minutes for them.
+                    </ui:define>
+                </ui:decorate>
+            </div>
         </ui:define>
     </ui:composition>
 </html>
