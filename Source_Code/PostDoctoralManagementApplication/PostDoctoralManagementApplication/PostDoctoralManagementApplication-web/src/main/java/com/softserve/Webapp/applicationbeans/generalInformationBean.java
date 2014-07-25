@@ -23,6 +23,9 @@ import javax.inject.Named;
 public class generalInformationBean {
     
     private List<SelectItem> titleSelectItems;
+    private List<SelectItem> referenceTypeItems;
+    private List<SelectItem> contributionTypeItems;
+    
     
     /**
      * Creates a new instance of generalInformationBean
@@ -42,6 +45,19 @@ public class generalInformationBean {
         titleSelectItems.add(new SelectItem("Prof","Prof."));
         titleSelectItems.add(new SelectItem("Dr","Dr."));
         
+        referenceTypeItems = new ArrayList<SelectItem>();
+        referenceTypeItems.add(new SelectItem("Publications in peer-reviewed/refereed journals","Publications in peer-reviewed/refereed journals"));
+        referenceTypeItems.add(new SelectItem("Books and/or chapters in books","Books and/or chapters in books"));
+        referenceTypeItems.add(new SelectItem("Published full-length conference papers/keynote addresses","Published full-length conference papers/keynote addresses"));
+        referenceTypeItems.add(new SelectItem("Non-refereed scientific publications or popular scientific articles","Non-refereed scientific publications or popular scientific articles"));
+        referenceTypeItems.add(new SelectItem("Technical/Policy reports","Technical/Policy reports"));
+        referenceTypeItems.add(new SelectItem("Patents","Patents"));
+        
+        contributionTypeItems = new ArrayList<SelectItem>();
+        contributionTypeItems.add(new SelectItem("Participation in conferences, workshops and short courses","Participation in conferences, workshops and short courses"));
+        contributionTypeItems.add(new SelectItem("Teamwork and collaboration with others","Teamwork and collaboration with others"));
+        contributionTypeItems.add(new SelectItem("Membership of national and international bodies","Membership of national and international bodies"));
+        contributionTypeItems.add(new SelectItem("Visits as a researcher to universities or research institutes","Visits as a researcher to universities or research institutes"));        
     }
 
     public List<SelectItem> getTitleSelectItems() {

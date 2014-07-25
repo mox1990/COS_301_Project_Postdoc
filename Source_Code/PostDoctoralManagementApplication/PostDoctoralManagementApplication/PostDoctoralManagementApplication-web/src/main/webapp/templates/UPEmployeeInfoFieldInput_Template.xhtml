@@ -12,19 +12,19 @@
             </f:facet>
             <p:outputLabel value="Empoyee ID:" for="systemID"/>                                
             <p:inputText id="systemID" value="#{employeeInformation.employeeID}" />
-            <h:message for="systemID" styleClass="fieldErrorMessage"/>
+            <p:message for="systemID" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Date of employeement" for="dateOfAppointment"/>                                
             <p:calendar id="dateOfAppointment" value="#{employeeInformation.dateOfAppointment}" navigator="true" pattern="yyyy-mm-dd"/>
-            <h:message for="dateOfAppointment" styleClass="fieldErrorMessage"/>
+            <p:message for="dateOfAppointment" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Appointment status:" for="appointmentStatus"/>                                
             <p:inputText id="appointmentStatus" value="#{employeeInformation.appointmentStatus}"/>
-            <h:message for="appointmentStatus" styleClass="fieldErrorMessage"/>
+            <p:message for="appointmentStatus" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Position:" for="position"/>                                
             <p:inputText id="position" value="#{employeeInformation.position}"/>
-            <h:message for="position" styleClass="fieldErrorMessage"/>
+            <p:message for="position" styleClass="fieldErrorMessage"/>
         </h:panelGrid>
     </ui:component>
 </html>

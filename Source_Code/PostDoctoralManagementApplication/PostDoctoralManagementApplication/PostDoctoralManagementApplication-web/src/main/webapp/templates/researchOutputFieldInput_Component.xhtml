@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <p:outputPanel id="#{prefix}researchoutput">
+            <ui:decorate template="referenceDataList_Component.xhtml">
+                <ui:param name="header" value="Research output"/>
+                <ui:param name="references" value="#{references}"
+            </ui:decorate>
+            <div>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Publication Name:" for="#{prefix}refpublicationName"/>                                
+                        <p:inputText id="#{prefix}refpublicationName" value="#{currentReference.publicationName}"/>
+                        <p:message for="#{prefix}refpublicationName" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Publisher:" for="#{prefix}refpublisher"/>                                
+                        <p:inputText id="#{prefix}refpublisher" value="#{currentReference.publisher}"/>
+                        <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate"/>                                
+                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}"/>
+                        <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Publication ISBN:" for="#{prefix}refpublicationISBN"/>                                
+                        <p:inputText id="#{prefix}refpublicationISBN" value="#{currentReference.publicationISBN}"/>
+                        <p:message for="#{prefix}refpublicationISBN"/>
+                        
+                        <p:outputLabel value="Page Location:" for="#{prefix}refpublicationPageLocation"/>                                
+                        <p:inputText id="#{prefix}refpublicationPageLocation" value="#{currentReference.publicationPageLocation}"/>
+                        <p:message for="#{prefix}refpublicationPageLocation"/>
+                    </h:panelGrid>
+
+                <p:commandButton ajax="true" update="#{prefix}researchoutput" action="#{bean[beanAction]}"
+            </div>
+        </p:outputPanel>
+    </ui:component>
+</html>
+

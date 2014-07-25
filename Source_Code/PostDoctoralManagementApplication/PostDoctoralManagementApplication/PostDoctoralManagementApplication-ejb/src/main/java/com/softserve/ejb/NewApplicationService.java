@@ -195,7 +195,39 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         auditTrailService.logAction(auditLog);
     }
     
-
+    @Override
+    public boolean canFellowOpenANewApplication(Person fellow)
+    {
+        for(Application application: fellow.getApplicationList())
+        {
+            if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }   
     
+    
+    @Override
+    public Application getOpenApplication(Session session) throws AuthenticationException, Exception
+    {
+        //Authenticate user privliges
+        UserGateway userGateway = getUserGatewayServiceEJB();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+        userGateway.authenticateUser(session, roles);
+        
+        for(Application application: session.getUser().getApplicationList())
+        {
+            if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+            {
+                return application;
+            }
+        }
+        
+        return null;
+    }
     
 }

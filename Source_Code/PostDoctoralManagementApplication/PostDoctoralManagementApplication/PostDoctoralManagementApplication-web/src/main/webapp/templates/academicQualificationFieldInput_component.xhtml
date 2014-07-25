@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <p:outputPanel id="qualifications">
+            <ui:decorate template="academicQualificationDataList_Component.xhtml">
+                <ui:param name="header" value="Academic qualifications"/>
+                <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
+            </ui:decorate>
+            <div>
+
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Name" for="qname"/>                                
+                        <p:inputText id="qname" value="#{currentQualification.name}"/>
+                        <p:message for="qname" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Year Obtained" for="qyearObtained"/>                                
+                        <p:calendar id="qyearObtained" value="#{currentQualification.yearObtained}"/>
+                        <p:message for="qyearObtained" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Instituation" for="qinstituation"/>                                
+                        <p:inputText id="qinstituation" value="#{currentQualification.instituation}"/>
+                        <p:message for="qinstituation" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Number of distinctions" for="qdistinctions"/>                                
+                        <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}"/>
+                        <p:message for="qdistinctions" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>
+
+                <p:commandButton ajax="true" update="qualifications" action="#{bean[beanAction]}"
+            </div>
+        </p:outputPanel>
+    </ui:component>
+</html>
+

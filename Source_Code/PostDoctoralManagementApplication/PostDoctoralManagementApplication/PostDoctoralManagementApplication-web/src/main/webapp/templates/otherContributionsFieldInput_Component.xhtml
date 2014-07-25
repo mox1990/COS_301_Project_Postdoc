@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <p:outputPanel id="#{prefix}items">
+            <ui:decorate template="itemsDataList_Component.xhtml">
+                <ui:param name="header" value="Other contributions"/>
+                <ui:param name="items" value="#{items}"
+            </ui:decorate>
+            <div>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel value="Item name:" for="#{prefix}refpublicationName"/>                                
+                    <p:inputText id="#{prefix}refpublicationName" value="#{currentItem.publicationName}"/>
+                    <p:message for="#{prefix}refpublicationName" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Item location:" for="#{prefix}itemlocation"/>                                
+                    <p:inputText id="#{prefix}itemlocation" value="#{currentItem.location}"/>
+                    <p:message for="#{prefix}itemlocation" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Item date:" for="#{prefix}itemdate"/>                                
+                    <p:calendar id="#{prefix}itemdate" value="#{currentItem.date}"/>
+                    <p:message for="#{prefix}itemdate" styleClass="fieldErrorMessage"/>
+
+                    <p:outputLabel value="Item desciption:" for="#{prefix}itemdesciption"/>                                
+                    <p:inputText id="#{prefix}itemdesciption" value="#{currentItem.desciption}"/>
+                    <p:message for="#{prefix}itemdesciption"/>
+                </h:panelGrid>
+
+                <p:commandButton ajax="true" update="#{prefix}items" action="#{bean[beanAction]}"
+            </div>
+        </p:outputPanel>
+    </ui:component>
+</html>
+

@@ -14,7 +14,7 @@
                     <h:outputText value="#{cv.dateOfBirth}"/>
                     <h:outputText styleClass="text-label" value="Citizenship:"/>
                     <h:outputText value="#{cv.citizenship}"/>
-                    <h:outputText styleClass="text-label" value="Race"/>
+                    <h:outputText styleClass="text-label" value="Race:"/>
                     <h:outputText value="#{cv.race}"/>
                     <h:outputText styleClass="text-label" value="Gender:"/>
                     <h:outputText value="#{cv.gender}"/>
@@ -24,64 +24,31 @@
                     <h:outputText value="#{cv.additionalInformationXMLEntity.information}"/>                    
             </h:panelGrid>
             
-            <p:dataList value="#{cv.academicQualificationList}" var="qualification">
-                <f:facet name="header">
-                    Academic qualifications
-                </f:facet>
-                Name: #{qualification.name}, Year obtained: #{qualification.yearObtained}, Institution: #{qualification.instituation}, Number of distinctions: #{qualification.distinctions}                
-            </p:dataList>
-            
-            <p:dataList value="#{cv.experienceList}" var="experience">
-                <f:facet name="header">
-                    Work experience
-                </f:facet>
-                Capacity: #{experience.capacity}, Organisation: #{experience.organisation}, Start date: #{experience.startDate}, End date: #{experience.endDate}                
-            </p:dataList>
-            <p:panel>                
-                <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Book and chapter publications"/>
-                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.bookChapterPublications.references}"/>
-                </ui:decorate>
-
-                <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Conference paper Publications"/>
-                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.conferencePaperPublications.references}"/>
-                </ui:decorate>
-
-                <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Journal publications"/>
-                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.journalPublications.references}"/>
-                </ui:decorate>
-                
-                <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Patents"/>
-                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.patents.references}"/>
-                </ui:decorate>
-                
-                <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Scientific publications and articles"/>
-                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.scientificPublicationsArticles.references}"/>
+            <p:panel>
+                <ui:decorate template="academicQualificationDataList_Component.xhtml">
+                    <ui:param name="header" value="Academic qualifications"/>
+                    <ui:param name="academicQualificationList" value="#{cv.academicQualificationList}"/>
                 </ui:decorate>
             </p:panel>
+            
+            <p:panel>
+                <ui:decorate template="workExpericenceDataList_Component.xhtml">
+                    <ui:param name="header" value="Work experience"/>
+                    <ui:param name="experienceList" value="#{cv.experienceList}"/>
+                </ui:decorate>
+            </p:panel>            
+            
+            <p:panel>
+                <ui:decorate template="referenceDataList_Component.xhtml">
+                    <ui:param name="header" value="Research output"/>
+                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.references}"/>
+                </ui:decorate>
+            </p:panel>
+            
             <p:panel>                
                 <ui:decorate template="itemsDataList_Component.xhtml">
-                    <ui:param name="header" value="Conferences, Workshops and Courses attended"/>
-                    <ui:param name="items" value="#{cv.otherContributionsXMLEntity.conferencesWorkshopsCourses.item}"/>
-                </ui:decorate>
-
-                <ui:decorate template="itemsDataList_Component.xhtml">
-                    <ui:param name="header" value="Teamwork collaboration"/>
-                    <ui:param name="items" value="#{cv.otherContributionsXMLEntity.teamworkCollaboration.item}"/>
-                </ui:decorate>
-
-                <ui:decorate template="itemsDataList_Component.xhtml">
-                    <ui:param name="header" value="Memberships"/>
-                    <ui:param name="items" value="#{cv.otherContributionsXMLEntity.memberships.item}"/>
-                </ui:decorate>
-                
-                <ui:decorate template="itemsDataList_Component.xhtml">
-                    <ui:param name="header" value="Vists to insitutions"/>
-                    <ui:param name="items" value="#{cv.otherContributionsXMLEntity.vistsToInsitutions.item}"/>
+                    <ui:param name="header" value="Other contributions"/>
+                    <ui:param name="items" value="#{cv.otherContributionsXMLEntity.items}"/>
                 </ui:decorate>
             </p:panel>
         </div>

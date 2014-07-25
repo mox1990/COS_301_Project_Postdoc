@@ -29,4 +29,6 @@ public interface NewApplicationServiceLocal
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception;
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception;
     public void submitApplication(Session session, Application application) throws Exception;
+    public boolean canFellowOpenANewApplication(Person fellow);
+    public Application getOpenApplication(Session session) throws AuthenticationException, Exception;
 }

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <p:outputPanel id="experiences">
+            <ui:decorate template="workExpericenceDataList_Component.xhtml">
+                <ui:param name="header" value="Work experience"/>
+                <ui:param name="experienceList" value="#{experienceList}"/>
+            </ui:decorate>
+            <div>
+
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Capacity:" for="ecapacity"/>                                
+                        <p:inputText id="ecapacity" value="#{currentExperience.capacity}"/>
+                        <p:message for="ecapacity" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Organisation:" for="eorganisation"/>                                
+                        <p:inputText id="eorganisation" value="#{currentExperience.organisation}"/>
+                        <p:message for="eorganisation" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Start date:" for="estartDate"/>                                
+                        <p:calendar id="estartDate" value="#{currentExperience.startDate}"/>
+                        <p:message for="estartDate" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="End date:" for="eendDate"/>                                
+                        <p:calendar id="eendDate" value="#{currentExperience.endDate}"/>
+                        <p:message for="eendDate" styleClass="eendDate"/>
+                    </h:panelGrid>
+
+                <p:commandButton ajax="true" update="exepriences" action="#{bean[beanAction]}"
+            </div>
+        </p:outputPanel>
+    </ui:component>
+</html>
+

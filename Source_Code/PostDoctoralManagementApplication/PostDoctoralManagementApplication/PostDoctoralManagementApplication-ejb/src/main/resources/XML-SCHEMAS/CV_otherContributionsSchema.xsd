@@ -3,6 +3,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">    
     <xs:complexType name="item">
         <xs:sequence>
+            <xs:element name="type"
+                        type="xs:string"/> 
             <xs:element name="name"
                         type="xs:string"/>
             <xs:element name="desciption"
@@ -14,25 +16,11 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="items">
-        <xs:sequence>
-            <xs:element name="item"
-                        type="item"
-                        maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:element name="otherContributions">
         <xs:complexType>
             <xs:sequence>
-               <xs:element name="conferencesWorkshopsCourses"
-                           type="items"/>
-               <xs:element name="teamworkCollaboration"
-                           type="items"/>
-               <xs:element name="memberships"
-                           type="items"/>
-               <xs:element name="vistsToInsitutions"
-                           type="items"/>
+               <xs:element name="items"
+                           type="item"  maxOccurs="unbounded"/>               
             </xs:sequence>
         </xs:complexType>
     </xs:element>

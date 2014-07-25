@@ -5,6 +5,8 @@
     
     <xs:complexType name="reference">
         <xs:sequence>
+            <xs:element name="type"
+                        type="xs:string"/>  
             <xs:element name="publicationName"
                         type="xs:string"/>            
             <xs:element name="publicationDate"
@@ -22,29 +24,11 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="references">
-        <xs:sequence>
-            <xs:element name="references"
-                        type="reference"
-                        maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:element name="researchOutput">
         <xs:complexType>
             <xs:sequence>
-               <xs:element name="journalPublications"
-                           type="references"/>
-               <xs:element name="bookChapterPublications"
-                           type="references"/>
-               <xs:element name="conferencePaperPublications"
-                           type="references"/>
-               <xs:element name="scientificPublicationsArticles"
-                           type="references"/>
-               <xs:element name="technicalPolicyReports"
-                           type="references"/>
-               <xs:element name="patents"
-                           type="references"/>
+               <xs:element name="references"
+                           type="reference" maxOccurs="unbounded"/>               
             </xs:sequence>
         </xs:complexType>
     </xs:element>

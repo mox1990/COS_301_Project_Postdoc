@@ -3,14 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:dataList value="#{references}" var="reference">
+        <p:dataList value="#{academicQualificationList}" var="qualification">
             <f:facet name="header">
                 #{header}
             </f:facet>
-            Type: #{reference.type}, Name: #{reference.publicationName}, Published date: #{reference.publicationDate} Publisher: #{reference.publisher}, ISBN: #{reference.publicationISBN}, Page location: #{reference.publicationPageLocation}                
+            Name: #{qualification.name}, Year obtained: #{qualification.yearObtained}, Institution: #{qualification.instituation}, Number of distinctions: #{qualification.distinctions}               
         </p:dataList>
     </ui:component>
 </html>
