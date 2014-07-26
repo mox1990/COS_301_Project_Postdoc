@@ -6,68 +6,85 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
+                 
         <h:form>
-            <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
+            <p:panel id="cvInfo" header="CV information" toggleable="true">   
+                <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
+                    <p:outputLabel value="ID number:" for="idNumber"/>                                
+                    <p:inputText id="idNumber" value="#{bean.cv.idNumber}" required="true"/>
+                    <p:message for="idNumber" styleClass="fieldErrorMessage"/>
 
-                <p:outputLabel value="ID number:" for="idNumber"/>                                
-                <p:inputText id="idNumber" value="#{bean.cv.idNumber}"/>
-                <p:message for="idNumber" styleClass="fieldErrorMessage"/>
+                    <p:outputLabel value="Date of birth:" for="dateOfBirth"/>                                
+                    <p:calendar id="dateOfBirth" value="#{bean.cv.dateOfBirth}" pattern="yyyy-mm-dd" required="true"/>
+                    <p:message for="dateOfBirth" styleClass="fieldErrorMessage"/>
 
-                <p:outputLabel value="Date of birth:" for="dateOfBirth"/>                                
-                <p:inputText id="dateOfBirth" value="#{bean.cv.dateOfBirth}"/>
-                <p:message for="dateOfBirth" styleClass="fieldErrorMessage"/>
+                    <p:outputLabel value="Citizenship:" for="citizenship"/>                                
+                    <p:inputText id="citizenship" value="#{bean.cv.citizenship}" required="true"/>
+                    <p:message for="citizenship" styleClass="fieldErrorMessage"/>
 
-                <p:outputLabel value="Citizenship:" for="citizenship"/>                                
-                <p:inputText id="citizenship" value="#{bean.cv.citizenship}"/>
-                <p:message for="citizenship" styleClass="fieldErrorMessage"/>
+                    <p:outputLabel value="Race:" for="race"/>                                
+                    <p:inputText id="race" value="#{bean.cv.race}" required="true"/>
+                    <p:message for="race" styleClass="fieldErrorMessage"/>
 
-                <p:outputLabel value="Race:" for="race"/>                                
-                <p:inputText id="race" value="#{bean.cv.race}"/>
-                <p:message for="race" styleClass="fieldErrorMessage"/>
+                    <p:outputLabel value="Gender:" for="gender"/>                                
+                    <p:selectOneMenu id="gender" value="#{bean.cv.gender}" required="true">
+                        <f:selectItems value="#{generalInformationBean.genderItems}"/>
+                    </p:selectOneMenu> 
+                    <p:message for="gender" styleClass="gender"/>
 
-                <p:outputLabel value="Gender:" for="gender"/>                                
-                <p:inputText id="gender" value="#{bean.cv.gender}"/>
-                <p:message for="gender" styleClass="gender"/>
+                    <p:outputLabel value="NRF Rating:" for="nrfRating"/>                                
+                    <p:inputText id="nrfRating" value="#{bean.cv.nrfRating}"/>
+                    <p:message for="nrfRating" styleClass="fieldErrorMessage"/>
 
-                <p:outputLabel value="NRF Rating:" for="nrfRating"/>                                
-                <p:inputText id="nrfRating" value="#{bean.cv.nrfRating}"/>
-                <p:message for="nrfRating" styleClass="fieldErrorMessage"/>
-
-                <p:outputLabel value="" for="additionalInformationXMLEntity"/>                               
-                <p:inputTextarea id="additionalInformationXMLEntity" value="#{bean.additionalInformationXMLEntity.information}"/>
-                <p:message for="additionalInformationXMLEntity" styleClass="fieldErrorMessage"/>
-            </h:panelGrid>
+                    <p:outputLabel value="Additional information:" for="additionalInformationXMLEntity"/>                               
+                    <p:inputTextarea id="additionalInformationXMLEntity" value="#{bean.additionalInformationXMLEntity.information}" required="true"/>
+                    <p:message for="additionalInformationXMLEntity" styleClass="fieldErrorMessage"/>
+                </h:panelGrid> 
+                <p:commandButton value="Add infomration to CV" update="cvInfo" styleClass="button button-fill"/>
+            </p:panel>
         </h:form>
         
-        <ui:decorate template="academicQualificationFieldInput_Component.xhtml">
-            <ui:param name="academicQualificationList" value="#{bean.academicQualificationList}"/>
-            <ui:param name="currentQualification" value="#{bean.currentQualification}"/>
-            <ui:param name="bean" value="#{bean}"/>
-            <ui:param name="beanAction" value="addToAcademicQualificationList"/>            
-        </ui:decorate>
+        <p:panel header="Academic qualifications" toggleable="true" collapsed="true">   
+            <ui:decorate template="academicQualificationFieldInput_Component.xhtml">
+                <ui:param name="academicQualificationList" value="#{bean.academicQualificationList}"/>
+                <ui:param name="currentQualification" value="#{bean.currentQualification}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToAcademicQualificationList"/>            
+            </ui:decorate>
+        </p:panel>
         
-        <ui:decorate template="workExperienceFieldInput_Component.xhtml">
-            <ui:param name="experienceList" value="#{bean.experienceList}"/>
-            <ui:param name="currentExperience" value="#{bean.currentExperience}"/>
-            <ui:param name="bean" value="#{bean}"/>
-            <ui:param name="beanAction" value="addToExperienceList"/>
-        </ui:decorate>
+        <p:panel header="Work experiance" toggleable="true" collapsed="true"> 
+            <ui:decorate template="workExperienceFieldInput_Component.xhtml">
+                <ui:param name="experienceList" value="#{bean.experienceList}"/>
+                <ui:param name="currentExperience" value="#{bean.currentExperience}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToExperienceList"/>
+            </ui:decorate>
+        </p:panel>
         
-        <ui:decorate template="researchOutputFieldInput_Component.xhtml">
-            <ui:param name="references" value="#{bean.researchOutputXMLEntity.references}"/>
-            <ui:param name="currentReference" value="#{bean.currentReference}"/>
-            <ui:param name="bean" value="#{bean}"/>
-            <ui:param name="beanAction" value="addToResearchOutputReferences"/>
-            <ui:param name="prefix" value="res"/>
-        </ui:decorate>
+        <p:panel header="Research output" toggleable="true" collapsed="true"> 
+            <ui:decorate template="researchOutputFieldInput_Component.xhtml">
+                <ui:param name="references" value="#{bean.researchOutputXMLEntity.references}"/>
+                <ui:param name="currentReference" value="#{bean.currentReference}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToResearchOutputReferences"/>
+                <ui:param name="prefix" value="res"/>
+            </ui:decorate>
+        </p:panel>
         
-        <ui:decorate template="otherContributionsFieldInput_Component.xhtml">
-            <ui:param name="items" value="#{bean.otherContributionsXMLEntity.items}"/>
-            <ui:param name="currentItem" value="#{bean.currentItem}"/>
-            <ui:param name="bean" value="#{bean}"/>
-            <ui:param name="beanAction" value="addToOtherContributionItems"/>
-            <ui:param name="prefix" value="con"/>
-        </ui:decorate>               
+        <p:panel header="Other contributions" toggleable="true" collapsed="true"> 
+            <ui:decorate template="otherContributionsFieldInput_Component.xhtml">
+                <ui:param name="items" value="#{bean.otherContributionsXMLEntity.items}"/>
+                <ui:param name="currentItem" value="#{bean.currentItem}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToOtherContributionItems"/>
+                <ui:param name="prefix" value="con"/>
+            </ui:decorate>    
+        </p:panel>
+        
+        
+        
+        
     </ui:component>
 </html>
 

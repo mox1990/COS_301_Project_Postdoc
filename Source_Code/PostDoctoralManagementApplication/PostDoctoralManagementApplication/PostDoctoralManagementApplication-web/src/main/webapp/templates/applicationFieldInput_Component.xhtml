@@ -7,53 +7,64 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:component>
         <div>
-            <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
+            <h:form>
+                <p:panel id="applicationInfo" header="Application information" toggleable="true"> 
+                    <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
 
-                <p:outputLabel value="Project title:" for="projectTitle"/>                                
-                <p:inputText id="projectTitle" value="#{bean.openApplication.projectTitle}"/>
-                <p:message for="projectTitle" styleClass="fieldErrorMessage"/>
-                
-                <p:outputLabel value="Research Methodology:" for="researchMethodology"/>                                
-                <p:inputTextarea id="researchMethodology" value="#{bean.informationXMLEntity.researchMethodology}"/>
-                <p:message for="researchMethodology" styleClass="fieldErrorMessage"/>
-                
-                <p:outputLabel value="Research work plan:" for="researchWorkPlan"/>                                
-                <p:inputTextarea id="researchWorkPlan" value="#{bean.informationXMLEntity.researchWorkPlan}"/>
-                <p:message for="researchWorkPlan" styleClass="fieldErrorMessage"/>
-                
-                <p:outputLabel value="Infrastructure and funding support motivation:" for="projectInfrastructureFunding"/>                                
-                <p:inputTextarea id="projectInfrastructureFunding" value="#{bean.informationXMLEntity.projectInfrastructureFunding}"/>
-                <p:message for="projectInfrastructureFunding" styleClass="fieldErrorMessage"/>
-                
-                <p:outputLabel value="Self evaluation:" for="selfEvaluation"/>                                
-                <p:inputTextarea id="selfEvaluation" value="#{bean.informationXMLEntity.selfEvaluation}"/>
-                <p:message for="selfEvaluation" styleClass="fieldErrorMessage"/>
-                
-                <p:outputLabel value="Project motivation:" for="projectMotivation"/>                                
-                <p:inputTextarea id="projectMotivation" value="#{bean.informationXMLEntity.projectMotivation}"/>
-                <p:message for="projectMotivation" styleClass="fieldErrorMessage"/>
-            </h:panelGrid>
+                        <p:outputLabel value="Project title:" for="projectTitle"/>                                
+                        <p:inputText id="projectTitle" value="#{bean.openApplication.projectTitle}" required="true"/>
+                        <p:message for="projectTitle" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Research Methodology:" for="researchMethodology"/>                                
+                        <p:inputTextarea id="researchMethodology" value="#{bean.informationXMLEntity.researchMethodology}" required="true"/>
+                        <p:message for="researchMethodology" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Research work plan:" for="researchWorkPlan"/>                                
+                        <p:inputTextarea id="researchWorkPlan" value="#{bean.informationXMLEntity.researchWorkPlan}" required="true"/>
+                        <p:message for="researchWorkPlan" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Infrastructure and funding support motivation:" for="projectInfrastructureFunding"/>                                
+                        <p:inputTextarea id="projectInfrastructureFunding" value="#{bean.informationXMLEntity.projectInfrastructureFunding}" required="true"/>
+                        <p:message for="projectInfrastructureFunding" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Self evaluation:" for="selfEvaluation"/>                                
+                        <p:inputTextarea id="selfEvaluation" value="#{bean.informationXMLEntity.selfEvaluation}" required="true"/>
+                        <p:message for="selfEvaluation" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="Project motivation:" for="projectMotivation"/>                                
+                        <p:inputTextarea id="projectMotivation" value="#{bean.informationXMLEntity.projectMotivation}" required="true"/>
+                        <p:message for="projectMotivation" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Add infomration to application" update="applicationInfo" styleClass="button button-fill"/>
+                </p:panel>
+            </h:form>
             
-            <ui:decorate template="teamMembersFieldInput_Component.xhtml">
-                <ui:param name="members" value="#{bean.informationXMLEntity.teamMembers.member}"/>
-                <ui:param name="currentMember" value="#{bean.currentMember}"/>
-                <ui:param name="bean" value="#{bean}"/>
-                <ui:param name="beanAction" value="addToTeamMembersList"/>
-            </ui:decorate>
-
-            <ui:decorate template="projectAimsFieldInput_Component.xhtml">
-                <ui:param name="aims" value="#{bean.informationXMLEntity.projectAims.aim}"/>
-                <ui:param name="currentAim" value="#{bean.currentAim}"/>
-                <ui:param name="bean" value="#{bean}"/>
-                <ui:param name="beanAction" value="addToProjectAimsList"/>
-            </ui:decorate>
-
-            <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
-                <ui:param name="expectedOutcomes" value="#{bean.informationXMLEntity.expectedOutcomes.outcome}"/>
-                <ui:param name="currentExpectedOutcome" value="#{bean.currentExpectedOutcome}"/>
-                <ui:param name="bean" value="#{bean}"/>
-                <ui:param name="beanAction" value="addToExpectedOutcomesList"/>
-            </ui:decorate>
+            <p:panel header="Team members" toggleable="true" collapsed="true">
+                <ui:decorate template="teamMembersFieldInput_Component.xhtml">
+                    <ui:param name="members" value="#{bean.informationXMLEntity.teamMembers.member}"/>
+                    <ui:param name="currentMember" value="#{bean.currentMember}"/>
+                    <ui:param name="bean" value="#{bean}"/>
+                    <ui:param name="beanAction" value="addToTeamMembersList"/>
+                </ui:decorate>
+            </p:panel>
+            
+            <p:panel header="Project aims" toggleable="true" collapsed="true">
+                <ui:decorate template="projectAimsFieldInput_Component.xhtml">
+                    <ui:param name="aims" value="#{bean.informationXMLEntity.projectAims.aim}"/>
+                    <ui:param name="currentAim" value="#{bean.currentAim}"/>
+                    <ui:param name="bean" value="#{bean}"/>
+                    <ui:param name="beanAction" value="addToProjectAimsList"/>
+                </ui:decorate>
+            </p:panel>
+            
+            <p:panel header="Expected outcomes" toggleable="true" collapsed="true">
+                <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
+                    <ui:param name="expectedOutcomes" value="#{bean.informationXMLEntity.expectedOutcomes.outcome}"/>
+                    <ui:param name="currentExpectedOutcome" value="#{bean.currentExpectedOutcome}"/>
+                    <ui:param name="bean" value="#{bean}"/>
+                    <ui:param name="beanAction" value="addToExpectedOutcomesList"/>
+                </ui:decorate>
+            </p:panel>
         </div>
     </ui:component>
 </html>

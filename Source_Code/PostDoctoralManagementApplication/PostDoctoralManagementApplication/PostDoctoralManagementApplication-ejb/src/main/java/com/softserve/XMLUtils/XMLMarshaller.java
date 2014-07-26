@@ -26,7 +26,7 @@ public class XMLMarshaller {
     
     public String marshalApplicationInformationObject(ApplicationInformation applicationInformation) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.application.ApplicationInformation");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.application");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();
@@ -37,7 +37,7 @@ public class XMLMarshaller {
     
     public String marshalRecommendationReportContentObject(RecommendationReportContent recommendationReportContent) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.HOD.RecommendationReport");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.HOD");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();
@@ -48,7 +48,7 @@ public class XMLMarshaller {
     
     public String marshalReferalReportObject(ReferalReport referalReport) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.referee.ReferalReport");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.referee");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();
@@ -59,7 +59,7 @@ public class XMLMarshaller {
     
     public String marshalProgressReportContentObject(ProgressReportContent progressReportContent) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow.ProgressReport");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();
@@ -70,7 +70,7 @@ public class XMLMarshaller {
     
     public String marshalResearchOutputObject(ResearchOutput researchOutput) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV.ResearchOutput");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();
@@ -81,7 +81,7 @@ public class XMLMarshaller {
     
     public String marshalOtherContributionsObject(OtherContributions otherContributions) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV.OtherContributions");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();
@@ -92,7 +92,7 @@ public class XMLMarshaller {
     
     public String marshalAdditionalInformationObject(AdditionalInformation additionalInformation) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV.AdditionalInformation");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();

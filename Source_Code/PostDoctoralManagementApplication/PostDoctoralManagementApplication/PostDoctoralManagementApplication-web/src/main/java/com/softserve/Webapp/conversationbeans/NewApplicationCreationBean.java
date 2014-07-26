@@ -22,7 +22,9 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.NewApplicationServiceLocal;
+import com.softserve.system.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,8 @@ public class NewApplicationCreationBean implements Serializable {
     
     private UIComponent errorContainer;
     
+    private int wizardActiveTab;
+    
     private Application openApplication;
     private Cv cv;
     
@@ -82,6 +86,11 @@ public class NewApplicationCreationBean implements Serializable {
     private Member currentMember;
     private String currentAim;
     private String currentExpectedOutcome;
+    
+    private Person grantHolder;
+    
+    private List<Person> referees;
+    private Person currentReferee;
    
    
     
@@ -95,27 +104,92 @@ public class NewApplicationCreationBean implements Serializable {
     public void init()
     {
         conversationManagerBean.registerConversation(conversation);
-        conversation.begin();
+        conversationManagerBean.startConversation(conversation);
+        Session session = null;
+        try 
+        {        
+            session = sessionManagerBean.getSession();
+            openApplication = newApplicationServiceLocal.getOpenApplication(session);
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
+            return;
+        }
         
-        openApplication = new Application();
-        cv = new Cv();
+        cv = session.getUser().getCv();
         
-        additionalInformationXMLEntity = new AdditionalInformation();
-        otherContributionsXMLEntity = new OtherContributions();
-        researchOutputXMLEntity = new ResearchOutput();
-        informationXMLEntity = new ApplicationInformation();        
-        
-        academicQualificationList = new ArrayList<AcademicQualification>();
-        experienceList = new ArrayList<Experience>();
+        if(cv == null)
+        {
+            cv = new Cv();
+
+            additionalInformationXMLEntity = new AdditionalInformation();
+            otherContributionsXMLEntity = new OtherContributions();
+            researchOutputXMLEntity = new ResearchOutput();
+
+
+            academicQualificationList = new ArrayList<AcademicQualification>();
+            experienceList = new ArrayList<Experience>();
+        }
+        else
+        {
+            additionalInformationXMLEntity = cv.getAdditionalInformationXMLEntity();
+            otherContributionsXMLEntity = cv.getOtherContributionsXMLEntity();
+            researchOutputXMLEntity = cv.getResearchOutputXMLEntity();
+            
+            academicQualificationList = cv.getAcademicQualificationList();
+            experienceList = cv.getExperienceList();
+        }
         
         currentQualification = new AcademicQualification();
         currentExperience = new Experience();
         currentItem = new Item();
         currentReference = new Reference();
+        
+        
+        
+        if(openApplication == null)
+        {
+            openApplication = new Application();
+            informationXMLEntity = new ApplicationInformation();           
+        }
+        else
+        {
+            informationXMLEntity = openApplication.getInformationXMLEntity();
+            referees = openApplication.getPersonList();
+            grantHolder = openApplication.getGrantHolderID();
+        }
+        
+        if(informationXMLEntity.getTeamMembers() == null)
+        {
+            informationXMLEntity.setTeamMembers(new ApplicationInformation.TeamMembers());
+        }
+        
+        if(informationXMLEntity.getProjectAims()== null)
+        {
+            informationXMLEntity.setProjectAims(new ApplicationInformation.ProjectAims());
+        }
+        
+        if(informationXMLEntity.getExpectedOutcomes()== null)
+        {
+            informationXMLEntity.setExpectedOutcomes(new ApplicationInformation.ExpectedOutcomes());
+        }
+        
+        if(grantHolder == null)
+        {
+            grantHolder = new Person();
+        }
+        
+        if(referees == null)
+        {
+            referees = new ArrayList<Person>();
+        }
+        
         currentMember = new Member();
         currentAim = "";
         currentExpectedOutcome = "";
-        
+        currentReferee = new Person();
     }
 
     public List<AcademicQualification> getAcademicQualificationList() {
@@ -245,7 +319,39 @@ public class NewApplicationCreationBean implements Serializable {
     public void setResearchOutputXMLEntity(ResearchOutput researchOutputXMLEntity) {
         this.researchOutputXMLEntity = researchOutputXMLEntity;
     }
-    
+
+    public int getWizardActiveTab() {
+        return wizardActiveTab;
+    }
+
+    public void setWizardActiveTab(int wizardActiveTab) {
+        this.wizardActiveTab = wizardActiveTab;
+    }
+
+    public Person getCurrentReferee() {
+        return currentReferee;
+    }
+
+    public void setCurrentReferee(Person currentReferee) {
+        this.currentReferee = currentReferee;
+    }
+
+    public Person getGrantHolder() {
+        return grantHolder;
+    }
+
+    public void setGrantHolder(Person grantHolder) {
+        this.grantHolder = grantHolder;
+    }
+
+    public List<Person> getReferees() {
+        return referees;
+    }
+
+    public void setReferees(List<Person> referees) {
+        this.referees = referees;
+    }
+        
     public void addToAcademicQualificationList()
     {
         academicQualificationList.add(currentQualification);
@@ -254,14 +360,12 @@ public class NewApplicationCreationBean implements Serializable {
     
     public void addToExperienceList()
     {
-        System.out.println("==============updated work experience references");
         experienceList.add(currentExperience);
         currentExperience = new Experience();
     }
     
     public void addToResearchOutputReferences()
     {
-        System.out.println("==============updated research references");
         researchOutputXMLEntity.getReferences().add(currentReference);
         currentReference = new Reference();
         
@@ -271,7 +375,6 @@ public class NewApplicationCreationBean implements Serializable {
     {
         otherContributionsXMLEntity.getItems().add(currentItem);
         currentItem = new Item();
-        System.out.println("==============updated Contributions");
     }
     
     public void addToTeamMembersList()
@@ -290,6 +393,88 @@ public class NewApplicationCreationBean implements Serializable {
     {
         informationXMLEntity.getExpectedOutcomes().getOutcome().add(currentExpectedOutcome);
         currentExpectedOutcome = "";
-        System.out.println("==============updated experience");
+    }
+    
+    public void addToRefereesList()
+    {
+        referees.add(currentReferee);
+        currentReferee = new Person();
+    }
+    
+    public void completeCV()
+    {
+        try
+        {
+            if(academicQualificationList.size() < 1)
+            {
+               throw new Exception("Need to have at least one academic qualification");
+            }
+            if(experienceList.size() < 1)
+            {
+                throw new Exception("Need to have at least one work experience");
+            }
+            if(otherContributionsXMLEntity.getItems().size() < 1)
+            {
+                throw new Exception("Need to have at least one other conttribution");
+            }            
+            if(researchOutputXMLEntity.getReferences().size() < 1)
+            {
+                throw new Exception("Need to have at least one reference");
+            }
+            
+            
+            cv.setAcademicQualificationList(academicQualificationList);
+            cv.setExperienceList(experienceList);
+            cv.setResearchOutputXMLEntity(researchOutputXMLEntity);
+            cv.setOtherContributionsXMLEntity(otherContributionsXMLEntity);
+            wizardActiveTab++;
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+        }        
+    }
+    
+    public void completeApplication()
+    {
+        try
+        {
+            openApplication.setInformationXMLEntity(informationXMLEntity);
+            wizardActiveTab++;
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+        }
+        
+    }
+    
+    public void completeGrantHolderSpecification()
+    {
+        openApplication.setGrantHolderID(grantHolder);
+        wizardActiveTab++;
+    }
+    
+    public void completeRefereeSpecification()
+    {
+        openApplication.setPersonList(referees);
+        wizardActiveTab++;
+    }
+    
+    public String submitApplication()
+    {
+        try 
+        {
+            newApplicationServiceLocal.submitApplication(sessionManagerBean.getSession(), openApplication);
+            return navigationManagerBean.goToApplicationServicesHomeView();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+            return "";
+        } 
     }
 }

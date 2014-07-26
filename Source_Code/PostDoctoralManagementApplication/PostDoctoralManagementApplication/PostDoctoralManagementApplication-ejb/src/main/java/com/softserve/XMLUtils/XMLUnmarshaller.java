@@ -30,49 +30,49 @@ public class XMLUnmarshaller {
     
     public ApplicationInformation unmarshalApplicationInformationString(String applicationInformation) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.application.ApplicationInformation");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.application");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (ApplicationInformation) unmarshaller.unmarshal(new StreamSource(new StringReader(applicationInformation)));        
     }
     
     public RecommendationReportContent unmarshalRecommendationReportContentString(String recommendationReportContent) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.HOD.RecommendationReport");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.HOD");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (RecommendationReportContent) unmarshaller.unmarshal(new StreamSource(new StringReader(recommendationReportContent)));        
     }
     
     public ReferalReport unmarshalReferalReportString(String referalReport) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.referee.ReferalReport");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.referee");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (ReferalReport) unmarshaller.unmarshal(new StreamSource(new StringReader(referalReport)));        
     }
     
     public ProgressReportContent unmarshalProgressReportContentString(String progressReportContent) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow.ProgressReport");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (ProgressReportContent) unmarshaller.unmarshal(new StreamSource(new StringReader(progressReportContent)));        
     }
     
     public OtherContributions unmarshalOtherContributionsString(String otherContributions) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV.OtherContributions");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (OtherContributions) unmarshaller.unmarshal(new StreamSource(new StringReader(otherContributions)));        
     }
     
     public ResearchOutput unmarshalResearchOutputString(String researchOutput) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV.ResearchOutput");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (ResearchOutput) unmarshaller.unmarshal(new StreamSource(new StringReader(researchOutput)));        
     }
     
     public AdditionalInformation unmarshalAdditionalInformationString(String additionalInformation) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV.AdditionalInformation");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (AdditionalInformation) unmarshaller.unmarshal(new StreamSource(new StringReader(additionalInformation)));        
     }

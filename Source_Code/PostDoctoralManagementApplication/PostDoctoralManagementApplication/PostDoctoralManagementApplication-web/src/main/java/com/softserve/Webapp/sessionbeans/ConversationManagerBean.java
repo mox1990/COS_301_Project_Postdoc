@@ -54,7 +54,10 @@ public class ConversationManagerBean implements Serializable {
     {
         if(index > -1 && index < trackedConversations.size())
         {
-            trackedConversations.get(index).begin();
+            if(!isConversationActive(index))
+            {
+                trackedConversations.get(index).begin();
+            }
         }
         else
         {
@@ -71,7 +74,10 @@ public class ConversationManagerBean implements Serializable {
     {
         if(index > -1 && index < trackedConversations.size())
         {
-            trackedConversations.get(index).end();
+            if(isConversationActive(index))
+            {
+                trackedConversations.get(index).end();
+            }
         }
         else
         {

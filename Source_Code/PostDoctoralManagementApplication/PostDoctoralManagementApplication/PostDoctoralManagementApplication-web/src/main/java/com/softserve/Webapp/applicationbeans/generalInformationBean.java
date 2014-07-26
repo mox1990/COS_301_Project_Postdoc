@@ -25,6 +25,8 @@ public class generalInformationBean {
     private List<SelectItem> titleSelectItems;
     private List<SelectItem> referenceTypeItems;
     private List<SelectItem> contributionTypeItems;
+    private List<SelectItem> degreeTypeItems;
+    private List<SelectItem> genderItems;
     
     
     /**
@@ -57,16 +59,38 @@ public class generalInformationBean {
         contributionTypeItems.add(new SelectItem("Participation in conferences, workshops and short courses","Participation in conferences, workshops and short courses"));
         contributionTypeItems.add(new SelectItem("Teamwork and collaboration with others","Teamwork and collaboration with others"));
         contributionTypeItems.add(new SelectItem("Membership of national and international bodies","Membership of national and international bodies"));
-        contributionTypeItems.add(new SelectItem("Visits as a researcher to universities or research institutes","Visits as a researcher to universities or research institutes"));        
+        contributionTypeItems.add(new SelectItem("Visits as a researcher to universities or research institutes","Visits as a researcher to universities or research institutes"));
+        
+        degreeTypeItems = new ArrayList<SelectItem>();
+        degreeTypeItems.add(new SelectItem("Doctoral (PhD)","Doctoral (PhD)"));
+        degreeTypeItems.add(new SelectItem("Masters (M)","Masters (M)"));
+        degreeTypeItems.add(new SelectItem("Honours (Hon)","Honours (Hon)"));
+        
+        genderItems = new ArrayList<SelectItem>();
+        genderItems.add(new SelectItem("Male","Male"));
+        genderItems.add(new SelectItem("Female","Female"));
+        genderItems.add(new SelectItem("Other","Other"));
     }
 
     public List<SelectItem> getTitleSelectItems() {
         return titleSelectItems;
     }
-   
 
-    
-    
+    public List<SelectItem> getContributionTypeItems() {
+        return contributionTypeItems;
+    }
+
+    public List<SelectItem> getDegreeTypeItems() {
+        return degreeTypeItems;
+    }
+
+    public List<SelectItem> getReferenceTypeItems() {
+        return referenceTypeItems;
+    }
+
+    public List<SelectItem> getGenderItems() {
+        return genderItems;
+    }
     
     
 }

@@ -351,6 +351,16 @@ form select
     margin-bottom: 4px;
 }
 
+form textarea
+{
+    width: 400px;
+    font-size: 16pt;
+    color: black;
+    border: solid gray;
+    border-radius: 5px;
+    margin-bottom: 4px;
+}
+
 form select[disabled]
 {
     background-color: lightgray;

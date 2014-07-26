@@ -9,21 +9,29 @@
         <h:form>
             <p:outputPanel id="#{prefix}researchoutput">
                 <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Research output"/>
+                    <ui:param name="header" value="Research output already added"/>
                     <ui:param name="references" value="#{references}"/>
                 </ui:decorate>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Reference type" for="#{prefix}reftype"/>                                
+                        <p:selectOneMenu id="#{prefix}reftype" value="#{currentReference.type}" required="true">
+                            <f:selectItems value="#{generalInformationBean.referenceTypeItems}"/>
+                        </p:selectOneMenu>                        
+                        <p:message for="#{prefix}reftype" styleClass="fieldErrorMessage"/>
+                        
                         <p:outputLabel value="Publication Name:" for="#{prefix}refpublicationName"/>                                
-                        <p:inputText id="#{prefix}refpublicationName" value="#{currentReference.publicationName}"/>
+                        <p:inputText id="#{prefix}refpublicationName" value="#{currentReference.publicationName}" required="true"/>
                         <p:message for="#{prefix}refpublicationName" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Publisher:" for="#{prefix}refpublisher"/>                                
-                        <p:inputText id="#{prefix}refpublisher" value="#{currentReference.publisher}"/>
+                        <p:inputText id="#{prefix}refpublisher" value="#{currentReference.publisher}" required="true"/>
                         <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate"/>                                
-                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}"/>
+                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}" pattern="yyyy-mm-dd" required="true">
+                            <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
+                        </p:calendar>
                         <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Publication ISBN:" for="#{prefix}refpublicationISBN"/>                                
@@ -35,7 +43,7 @@
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
 
-                    <p:commandButton value="Add reference" actionListener="#{bean[beanAction]}" update="#{prefix}researchoutput"/>
+                    <p:commandButton value="Add reference" actionListener="#{bean[beanAction]}" update="#{prefix}researchoutput" styleClass="button button-fill"/>
                 </div>
             </p:outputPanel>
         </h:form>

@@ -6,21 +6,23 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:outputPanel id="projectAims">
-            <ui:decorate template="projectAimsDataList_Component.xhtml">
-                <ui:param name="header" value="Project aims"/>
-                <ui:param name="aims" value="#{aims}"/>
-            </ui:decorate>
-            <div>
-                <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel value="Aim" for="taim"/>                                
-                    <p:inputTextarea id="taim" value="#{currentAim}"/>
-                    <p:message for="taim" styleClass="fieldErrorMessage"/>
-                </h:panelGrid>
+        <h:form>
+            <p:outputPanel id="projectAims">
+                <ui:decorate template="projectAimsDataList_Component.xhtml">
+                    <ui:param name="header" value="Project aims already added"/>
+                    <ui:param name="aims" value="#{aims}"/>
+                </ui:decorate>
+                <div>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Aim" for="taim"/>                                
+                        <p:inputTextarea id="taim" value="#{currentAim}" required="true"/>
+                        <p:message for="taim" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>
 
-                <p:commandButton ajax="true" update="projectAims" action="#{bean[beanAction]}"
-            </div>
-        </p:outputPanel>
+                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanAction]}" value="Add project aim" styleClass="button button-fill"/>
+                </div>
+            </p:outputPanel>
+        </h:form>
     </ui:component>
 </html>
 

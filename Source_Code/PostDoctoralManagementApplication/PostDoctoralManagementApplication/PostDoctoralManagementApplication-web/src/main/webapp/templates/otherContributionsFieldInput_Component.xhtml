@@ -9,29 +9,37 @@
         <h:form>
             <p:outputPanel id="#{prefix}items">
                 <ui:decorate template="itemsDataList_Component.xhtml">
-                    <ui:param name="header" value="Other contributions"/>
+                    <ui:param name="header" value="Other contributions already added"/>
                     <ui:param name="items" value="#{items}"/>
                 </ui:decorate>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Contribution type" for="#{prefix}itemtype"/>                                
+                        <p:selectOneMenu id="#{prefix}itemtype" value="#{currentItem.type}" required="true">
+                            <f:selectItems value="#{generalInformationBean.contributionTypeItems}"/>
+                        </p:selectOneMenu>                        
+                        <p:message for="#{prefix}itemtype" styleClass="fieldErrorMessage"/>
+                        
                         <p:outputLabel value="Item name:" for="#{prefix}itemName"/>                                
-                        <p:inputText id="#{prefix}itemName" value="#{currentItem.name}"/>
+                        <p:inputText id="#{prefix}itemName" value="#{currentItem.name}" required="true"/>
                         <p:message for="#{prefix}itemName" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Item location:" for="#{prefix}itemlocation"/>                                
-                        <p:inputText id="#{prefix}itemlocation" value="#{currentItem.location}"/>
+                        <p:inputText id="#{prefix}itemlocation" value="#{currentItem.location}" required="true"/>
                         <p:message for="#{prefix}itemlocation" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Item date:" for="#{prefix}itemdate"/>                                
-                        <p:calendar id="#{prefix}itemdate" value="#{currentItem.date}"/>
+                        <p:calendar id="#{prefix}itemdate" value="#{currentItem.date}" pattern="yyyy-mm-dd" required="true">
+                            <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
+                        </p:calendar>
                         <p:message for="#{prefix}itemdate" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Item desciption:" for="#{prefix}itemdesciption"/>                                
-                        <p:inputText id="#{prefix}itemdesciption" value="#{currentItem.desciption}"/>
+                        <p:inputText id="#{prefix}itemdesciption" value="#{currentItem.desciption}" required="true"/>
                         <p:message for="#{prefix}itemdesciption"/>
                     </h:panelGrid>
 
-                    <p:commandButton ajax="true" update="#{prefix}items" actionListener="#{bean[beanAction]}" value="Add item"/>                    
+                    <p:commandButton ajax="true" update="#{prefix}items" actionListener="#{bean[beanAction]}" value="Add contribution item" styleClass="button button-fill"/>                    
                 </div>
             </p:outputPanel>
         </h:form>

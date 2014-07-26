@@ -9,30 +9,30 @@
         <h:form>
             <p:outputPanel id="qualifications">
                 <ui:decorate template="academicQualificationDataList_Component.xhtml">
-                    <ui:param name="header" value="Academic qualifications"/>
+                    <ui:param name="header" value="Academic qualifications already added"/>
                     <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
                 </ui:decorate>
                 <div>
 
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Name" for="qname"/>                                
-                            <p:inputText id="qname" value="#{currentQualification.name}" required="false"/>
+                            <p:inputText id="qname" value="#{currentQualification.name}" required="true"/>
                             <p:message for="qname" styleClass="fieldErrorMessage"/>
 
                             <p:outputLabel value="Year Obtained" for="qyearObtained"/>                                
-                            <p:calendar id="qyearObtained" value="#{currentQualification.yearObtained}" required="false"/>
+                            <p:calendar id="qyearObtained" value="#{currentQualification.yearObtained}" required="true" pattern="yyyy-mm-dd"/>
                             <p:message for="qyearObtained" styleClass="fieldErrorMessage"/>
 
                             <p:outputLabel value="institution" for="qinstitution"/>                                
-                            <p:inputText id="qinstitution" value="#{currentQualification.institution}" required="false"/>
+                            <p:inputText id="qinstitution" value="#{currentQualification.institution}" required="true"/>
                             <p:message for="qinstitution" styleClass="fieldErrorMessage"/>
 
                             <p:outputLabel value="Number of distinctions" for="qdistinctions"/>                                
-                            <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}" required="false"/>
+                            <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}" required="true"/>
                             <p:message for="qdistinctions" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
 
-                        <p:commandButton ajax="true" update="qualifications" actionListener="#{bean.addToAcademicQualificationList()}" value="Add qualification"/>
+                        <p:commandButton ajax="true" update="qualifications" actionListener="#{bean.addToAcademicQualificationList()}" value="Add qualification" styleClass="button button-fill"/>
                 </div>
             </p:outputPanel>
         </h:form>

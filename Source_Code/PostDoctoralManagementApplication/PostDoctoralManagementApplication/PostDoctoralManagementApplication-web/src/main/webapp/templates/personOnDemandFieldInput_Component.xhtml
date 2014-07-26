@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
+            <f:facet name="header"> 
+                <ui:insert name="header"/>                
+            </f:facet>
+            <p:outputLabel value="Title:" for="title"/>                                    
+            <p:selectOneMenu id="title" value="#{person.title}" required="true">
+                <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
+            </p:selectOneMenu>
+            <p:message for="title" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Full name:" for="fname"/>                                
+            <p:inputText id="fname" value="#{person.fullName}" required="true"/>
+            <p:message for="fname" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Surname:" for="sname"/>                                
+            <p:inputText id="sname" value="#{person.surname}" required="true"/>
+            <p:message for="sname" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Email:" for="email"/>                                
+            <p:inputText id="email" value="#{person.email}" required="true"/>
+            <p:message for="email" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Is person an UP empolyee:" for="upEmployee"/>                                
+            <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}">
+                <p:ajax event="click" update="upEmployeeInfoPanel"/>
+            </p:selectBooleanCheckbox>
+            <p:message for="upEmployee" styleClass="fieldErrorMessage"/>
+            
+            <p:outputPanel id="upEmployeeInfoPanel" rendered="#{person.upEmployee}">
+                <p:outputLabel value="Employee ID:" for="sysID"/>                                
+                <p:inputText id="sysID" value="#{person.systemID}" required="true"/>
+                <p:message for="sysID" styleClass="fieldErrorMessage"/>
+            </p:outputPanel>
+        </h:panelGrid>        
+    </ui:component>
+</html>
+

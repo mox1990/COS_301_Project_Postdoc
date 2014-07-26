@@ -6,21 +6,23 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:outputPanel id="expectedOutcomes">
-            <ui:decorate template="expectedOutcomeDataList_Component.xhtml">
-                <ui:param name="header" value="Project expected outcomes"/>
-                <ui:param name="expectedOutcomes" value="#{expectedOutcomes}"/>
-            </ui:decorate>
-            <div>
-                <h:panelGrid columns="3" cellpadding="5">
-                    <p:outputLabel value="Expected outcome" for="tExpectedOutcome"/>                                
-                    <p:inputTextarea id="tExpectedOutcome" value="#{currentExpectedOutcome}"/>
-                    <p:message for="tExpectedOutcome" styleClass="fieldErrorMessage"/>
-                </h:panelGrid>
+        <h:form>
+            <p:outputPanel id="expectedOutcomes">
+                <ui:decorate template="expectedOutcomesDataList_Component.xhtml">
+                    <ui:param name="header" value="Project expected outcomes already added"/>
+                    <ui:param name="expectedOutcomes" value="#{expectedOutcomes}"/>
+                </ui:decorate>
+                <div>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Expected outcome" for="tExpectedOutcome"/>                                
+                        <p:inputTextarea id="tExpectedOutcome" value="#{currentExpectedOutcome}" required="true"/>
+                        <p:message for="tExpectedOutcome" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>
 
-                <p:commandButton ajax="true" update="expectedOutcomes" action="#{bean[beanAction]}"
-            </div>
-        </p:outputPanel>
+                    <p:commandButton ajax="true" update="expectedOutcomes" action="#{bean[beanAction]}" value="Add expected outcome" styleClass="button button-fill"/>
+                </div>
+            </p:outputPanel>
+        </h:form>
     </ui:component>
 </html>
 

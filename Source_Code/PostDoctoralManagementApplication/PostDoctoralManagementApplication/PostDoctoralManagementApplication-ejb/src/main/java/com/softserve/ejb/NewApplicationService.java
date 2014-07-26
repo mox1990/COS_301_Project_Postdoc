@@ -85,7 +85,15 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        getCVManagementServiceEJB().createCV(session, cv);
+        CVManagementService cVManagementService = getCVManagementServiceEJB();
+        if(cVManagementService.hasCV(session))
+        {
+            cVManagementService.updateCV(session, cv);
+        }
+        else
+        {
+            cVManagementService.createCV(session, cv);
+        }
     }
     
     @Override
@@ -113,6 +121,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
                 
     }
     
+    @Override
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
         //Authenticate user privliges
@@ -142,6 +151,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         auditTrailService.logAction(auditLog);
     }
     
+    @Override
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
         //Authenticate user privliges
@@ -171,6 +181,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         auditTrailService.logAction(auditLog);
     }
     
+    @Override
     public void submitApplication(Session session, Application application) throws Exception
     {
         //Authenticate user privliges
@@ -188,7 +199,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
         //Set application status
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
-        applicationJpaController.create(application);
+        applicationJpaController.edit(application);
         
         //Log action
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Submitted new application", session.getUser());
