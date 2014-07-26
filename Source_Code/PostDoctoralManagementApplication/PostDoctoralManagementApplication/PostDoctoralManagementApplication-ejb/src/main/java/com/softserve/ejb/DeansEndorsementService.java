@@ -167,7 +167,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         }
         
         //Log action  
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Endorsed application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
 
         //Send notification to DRIS member(s)

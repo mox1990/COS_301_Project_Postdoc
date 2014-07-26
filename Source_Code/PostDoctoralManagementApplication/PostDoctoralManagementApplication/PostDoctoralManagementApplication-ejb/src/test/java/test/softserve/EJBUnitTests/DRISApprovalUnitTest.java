@@ -23,6 +23,7 @@ import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -372,7 +373,7 @@ public class DRISApprovalUnitTest {
      */
     @Test
     public void testApproveFunding() throws Exception {
-        /*DRISApprovalServiceMockUnit instance = new DRISApprovalServiceMockUnit();
+        DRISApprovalServiceMockUnit instance = new DRISApprovalServiceMockUnit();
         
         ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
         FundingReportJpaController mockFundingReportJpaController = mock(FundingReportJpaController.class);
@@ -435,13 +436,13 @@ public class DRISApprovalUnitTest {
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            verify(mockNotificationService).sendBatchNotifications(null, true);
+            verify(mockNotificationService).sendBatchNotifications(Arrays.asList(new Notification(new Long(1)),new Notification(new Long(2)),new Notification(new Long(3)),new Notification(new Long(4))), true);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
             fail("An exception occured");
-        }*/
+        }
     }
     
 }

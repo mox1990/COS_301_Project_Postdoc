@@ -200,7 +200,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         @Override
     public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception 
     {
-        //Authenticate user privliges
+        //Authenticate user priviliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
