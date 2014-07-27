@@ -137,6 +137,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             if(aq.getName().toUpperCase().contains("PHD"))
             {
                 obtainCal.setTimeInMillis(aq.getYearObtained().getTime());
+                obtainCal.set(aq.getYearObtained().getYear(), aq.getYearObtained().getMonth() + 1, aq.getYearObtained().getDay());
                 if(curCal.get(GregorianCalendar.YEAR) - obtainCal.get(GregorianCalendar.YEAR) <= 5)
                 {
                     return true;
@@ -247,7 +248,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         Date dobDate = application.getFellow().getCv().getDateOfBirth();
         GregorianCalendar curCal = new GregorianCalendar();
         GregorianCalendar dobCal = new GregorianCalendar();
-        dobCal.setTime(dobDate);
+        dobCal.set(dobDate.getYear(), dobDate.getMonth() + 1, dobDate.getDay());
         
         application.setEligiblityCheckDate(new Date());
         if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
