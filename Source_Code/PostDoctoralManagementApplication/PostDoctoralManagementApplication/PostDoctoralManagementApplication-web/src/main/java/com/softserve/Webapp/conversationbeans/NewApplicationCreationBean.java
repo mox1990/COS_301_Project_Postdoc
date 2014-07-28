@@ -19,10 +19,12 @@ import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.Exceptions.UserAlreadyExistsException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.ejb.NewApplicationServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
@@ -34,6 +36,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
@@ -351,23 +354,36 @@ public class NewApplicationCreationBean implements Serializable {
     public void setReferees(List<Person> referees) {
         this.referees = referees;
     }
-        
+    
+    public void addInfromationToCV()
+    {
+        MessageUtil.CreateGlobalFacesMessage("Information added!","The information has been added to CV.", FacesMessage.SEVERITY_INFO);
+    }
+    
+    public void addInfromationToApplication()
+    {
+        MessageUtil.CreateGlobalFacesMessage("Information added!","The information has been added to the application.", FacesMessage.SEVERITY_INFO);
+    }
+    
     public void addToAcademicQualificationList()
     {
         academicQualificationList.add(currentQualification);
         currentQualification = new AcademicQualification();
+        MessageUtil.CreateGlobalFacesMessage("Item added!","The academic qualfication has been added to the list.", FacesMessage.SEVERITY_INFO);
     }
     
     public void addToExperienceList()
     {
         experienceList.add(currentExperience);
         currentExperience = new Experience();
+        MessageUtil.CreateGlobalFacesMessage("Item added!","The work experience item has been added to the list.", FacesMessage.SEVERITY_INFO);
     }
     
     public void addToResearchOutputReferences()
     {
         researchOutputXMLEntity.getReferences().add(currentReference);
         currentReference = new Reference();
+        MessageUtil.CreateGlobalFacesMessage("Reference added!", "The research output reference has been added to the list!", FacesMessage.SEVERITY_INFO);
         
     }
     
@@ -375,30 +391,35 @@ public class NewApplicationCreationBean implements Serializable {
     {
         otherContributionsXMLEntity.getItems().add(currentItem);
         currentItem = new Item();
+        MessageUtil.CreateGlobalFacesMessage("Contribution added!", "The other contribution item has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
     public void addToTeamMembersList()
     {
         informationXMLEntity.getTeamMembers().getMember().add(currentMember);
         currentMember = new Member();
+        MessageUtil.CreateGlobalFacesMessage("Team member added!", "The team member has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
     public void addToProjectAimsList()
     {
         informationXMLEntity.getProjectAims().getAim().add(currentAim);
         currentAim = "";
+        MessageUtil.CreateGlobalFacesMessage("Project aim added!", "The project aim has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
     public void addToExpectedOutcomesList()
     {
         informationXMLEntity.getExpectedOutcomes().getOutcome().add(currentExpectedOutcome);
         currentExpectedOutcome = "";
+        MessageUtil.CreateGlobalFacesMessage("Expected outcome added!", "The expected outcome has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
     public void addToRefereesList()
     {
         referees.add(currentReferee);
         currentReferee = new Person();
+        MessageUtil.CreateGlobalFacesMessage("Referee added!", "The referee has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
     public void completeCV()
@@ -456,8 +477,15 @@ public class NewApplicationCreationBean implements Serializable {
                 throw new Exception("You need at least one expected project outcome.");
             }
             
+            Session session = sessionManagerBean.getSession();
+            
             openApplication.setInformationXMLEntity(informationXMLEntity);
+            openApplication.setFellow(session.getUser());
+            
+            newApplicationServiceLocal.createNewApplication(session, openApplication);
             wizardActiveTab++;
+            
+            
         }
         catch(Exception ex)
         {
@@ -469,14 +497,37 @@ public class NewApplicationCreationBean implements Serializable {
     
     public void completeGrantHolderSpecification()
     {
-        openApplication.setGrantHolderID(grantHolder);
-        wizardActiveTab++;
+        try 
+        {
+            newApplicationServiceLocal.linkGrantHolderToApplication(sessionManagerBean.getSession(), openApplication, grantHolder);
+            wizardActiveTab++;
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+        }
+        
+        
     }
     
     public void completeRefereeSpecification()
     {
-        openApplication.setPersonList(referees);
-        wizardActiveTab++;
+        openApplication.setPersonList(referees);        
+        try 
+        {
+            for(Person referee: referees)
+            {
+                newApplicationServiceLocal.linkRefereeToApplication(sessionManagerBean.getSession(), openApplication, referee);
+                wizardActiveTab++;
+            }            
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+        }
+        
     }
     
     public String submitApplication()

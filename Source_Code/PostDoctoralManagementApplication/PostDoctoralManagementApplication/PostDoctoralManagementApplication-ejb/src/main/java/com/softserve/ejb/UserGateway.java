@@ -197,7 +197,7 @@ public class UserGateway implements UserGatewayLocal
     public void authenticateUserAsOwner(Session session, Person person) throws AuthenticationException, Exception {
         if(session.getUser() == null || !session.getUser().equals(person))
         {
-            throw new AuthenticationException("User is not the owner");
+            throw new AuthenticationException("You are not the owner of this item");
         }
     } 
     

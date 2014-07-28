@@ -6,40 +6,45 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
-            <f:facet name="header"> 
-                <ui:insert name="header"/>                
-            </f:facet>
-            <p:outputLabel value="Title:" for="title"/>                                    
-            <p:selectOneMenu id="title" value="#{person.title}" required="true">
-                <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
-            </p:selectOneMenu>
-            <p:message for="title" styleClass="fieldErrorMessage"/>
+        <p:outputPanel id="OnDemand">
+            <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+            <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
+                <f:facet name="header"> 
+                    <ui:insert name="header"/>                
+                </f:facet>
+                
+                <p:outputLabel value="Email:" for="email"/>                                
+                <p:inputText id="email" value="#{person.email}" required="true">
+                    <p:ajax event="change" listener="#{bean[beanAction](ondemandUserAccountRequestBean.findUserAccount(person.email, person))}" update="OnDemand"/>
+                </p:inputText>
 
-            <p:outputLabel value="Full name:" for="fname"/>                                
-            <p:inputText id="fname" value="#{person.fullName}" required="true"/>
-            <p:message for="fname" styleClass="fieldErrorMessage"/>
+                <p:message for="email" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Surname:" for="sname"/>                                
-            <p:inputText id="sname" value="#{person.surname}" required="true"/>
-            <p:message for="sname" styleClass="fieldErrorMessage"/>
+                <p:outputLabel value="Title:" for="title"/>            
+                <p:selectOneMenu id="title" value="#{person.title}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}">
+                    <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
+                </p:selectOneMenu>
+                <p:message for="title" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Email:" for="email"/>                                
-            <p:inputText id="email" value="#{person.email}" required="true"/>
-            <p:message for="email" styleClass="fieldErrorMessage"/>
+                <p:outputLabel value="Full name:" for="fname"/>                                
+                <p:inputText id="fname" value="#{person.fullName}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}"/>
+                <p:message for="fname" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Is person an UP empolyee:" for="upEmployee"/>                                
-            <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}">
-                <p:ajax event="click" update="upEmployeeInfoPanel"/>
-            </p:selectBooleanCheckbox>
-            <p:message for="upEmployee" styleClass="fieldErrorMessage"/>
-            
-            <p:outputPanel id="upEmployeeInfoPanel" rendered="#{person.upEmployee}">
+                <p:outputLabel value="Surname:" for="sname"/>                                
+                <p:inputText id="sname" value="#{person.surname}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}"/>
+                <p:message for="sname" styleClass="fieldErrorMessage"/>
+                
+                <p:outputLabel value="Is person an UP empolyee:" for="upEmployee"/>                                
+                <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}">
+                    <p:ajax update="OnDemand"/>
+                </p:selectBooleanCheckbox>
+                <p:message for="upEmployee" styleClass="fieldErrorMessage"/>
+                
                 <p:outputLabel value="Employee ID:" for="sysID"/>                                
-                <p:inputText id="sysID" value="#{person.systemID}" required="true"/>
-                <p:message for="sysID" styleClass="fieldErrorMessage"/>
-            </p:outputPanel>
-        </h:panelGrid>        
+                <p:inputText id="sysID" value="#{person.systemID}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()?true:!person.upEmployee}" />
+                <p:message for="sysID" styleClass="fieldErrorMessage"/>                
+            </h:panelGrid>    
+        </p:outputPanel>
     </ui:component>
 </html>
 

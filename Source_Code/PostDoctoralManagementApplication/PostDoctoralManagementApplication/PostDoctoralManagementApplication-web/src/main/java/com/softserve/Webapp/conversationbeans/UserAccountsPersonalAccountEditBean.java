@@ -141,15 +141,17 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     {
         try 
         {
-            
+            person.setAddressLine1(address);
             if(person.getUpEmployee())
             {
                 employeeInformation.setEmployeeID(person.getSystemID());
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person, address, employeeInformation, upAddress);               
+                employeeInformation.setPhysicalAddress(address);
+                person.setUpEmployeeInformation(employeeInformation);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);               
             }
             else
             {
-                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person, address, null, null);
+                userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);
             }
             
             conversationManagerBean.deregisterConversation(conversation);

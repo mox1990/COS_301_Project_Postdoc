@@ -23,6 +23,7 @@
                         <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
                             <ui:param name="person" value="#{userAccountsPersonalAccountEditBean.person}"/>
                             <ui:param name="renderAttribute" value="#{true}"/>
+                            <ui:param name="emailEditable" value="#{false}"/>
                             <ui:define name="header">
                                 <h:outputText styleClass="header2" value="Person information"/>
                             </ui:define>
@@ -41,6 +42,7 @@
                             <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
                                 <ui:param name="employeeInformation" value="#{userAccountsPersonalAccountEditBean.employeeInformation}"/>
                                 <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
+                                <ui:param name="employeeIDEditable" value="#{false}"/>
                                 <ui:define name="header">
                                     <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
                                 </ui:define>

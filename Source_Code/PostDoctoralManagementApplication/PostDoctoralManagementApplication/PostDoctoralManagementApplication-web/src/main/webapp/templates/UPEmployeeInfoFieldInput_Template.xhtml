@@ -11,7 +11,7 @@
                 <ui:insert name="header"/>
             </f:facet>
             <p:outputLabel value="Empoyee ID:" for="systemID"/>                                
-            <p:inputText id="systemID" value="#{employeeInformation.employeeID}" />
+            <p:inputText id="systemID" value="#{employeeInformation.employeeID}" disabled="#{!employeeIDEditable}"/>
             <p:message for="systemID" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Date of employeement" for="dateOfAppointment"/>                                

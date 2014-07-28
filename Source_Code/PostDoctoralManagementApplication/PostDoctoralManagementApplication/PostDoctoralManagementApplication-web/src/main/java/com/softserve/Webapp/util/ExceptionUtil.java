@@ -29,14 +29,13 @@ public class ExceptionUtil {
     
     public static void handleException(UIComponent errorDisplayer, Exception ex)
     {        
-        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error occured!",ex.getMessage());
-        if(errorDisplayer == null)
+        if(errorDisplayer != null)
         {
-            FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+            MessageUtil.CreateFacesMessageForComponent(errorDisplayer, "Error occured!", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
         else
         {
-            FacesContext.getCurrentInstance().addMessage(errorDisplayer.getClientId(), facesMessage);
+            MessageUtil.CreateGlobalFacesMessage("Error occured!", ex.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
     }
 }

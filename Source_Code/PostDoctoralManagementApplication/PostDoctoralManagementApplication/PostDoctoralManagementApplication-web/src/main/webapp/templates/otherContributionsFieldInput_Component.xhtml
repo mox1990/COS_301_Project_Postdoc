@@ -38,7 +38,7 @@
                         <p:inputText id="#{prefix}itemdesciption" value="#{currentItem.desciption}" required="true"/>
                         <p:message for="#{prefix}itemdesciption"/>
                     </h:panelGrid>
-
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     <p:commandButton ajax="true" update="#{prefix}items" actionListener="#{bean[beanAction]}" value="Add contribution item" styleClass="button button-fill"/>                    
                 </div>
             </p:outputPanel>

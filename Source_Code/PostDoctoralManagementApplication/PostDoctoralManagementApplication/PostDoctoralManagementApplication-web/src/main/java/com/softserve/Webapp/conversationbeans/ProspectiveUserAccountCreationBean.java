@@ -123,15 +123,18 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
             person.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
             
             person.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-                        
+            person.setAddressLine1(address);
+            
             if(person.getUpEmployee())
             {
                 person.setSystemID(employeeInformation.getEmployeeID());
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, employeeInformation, upAddress);               
+                employeeInformation.setPhysicalAddress(address);
+                person.setUpEmployeeInformation(employeeInformation);
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);               
             }
             else
             {
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person, address, null, null);            
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);            
             }
             
             conversationManagerBean.deregisterConversation(conversation);

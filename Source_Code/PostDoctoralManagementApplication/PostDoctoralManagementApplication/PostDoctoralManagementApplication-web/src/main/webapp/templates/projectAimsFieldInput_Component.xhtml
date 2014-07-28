@@ -18,7 +18,7 @@
                         <p:inputTextarea id="taim" value="#{currentAim}" required="true"/>
                         <p:message for="taim" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
-
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     <p:commandButton ajax="true" update="projectAims" action="#{bean[beanAction]}" value="Add project aim" styleClass="button button-fill"/>
                 </div>
             </p:outputPanel>

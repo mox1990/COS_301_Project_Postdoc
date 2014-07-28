@@ -40,12 +40,12 @@ public class generalInformationBean {
     {
         
         titleSelectItems = new ArrayList<SelectItem>();
-        titleSelectItems.add(new SelectItem("Mr","Mr."));
-        titleSelectItems.add(new SelectItem("Ms","Ms."));
-        titleSelectItems.add(new SelectItem("Miss","Miss."));
-        titleSelectItems.add(new SelectItem("Mrs","Mrs."));
-        titleSelectItems.add(new SelectItem("Prof","Prof."));
-        titleSelectItems.add(new SelectItem("Dr","Dr."));
+        titleSelectItems.add(new SelectItem("Mr.","Mr."));
+        titleSelectItems.add(new SelectItem("Ms.","Ms."));
+        titleSelectItems.add(new SelectItem("Miss.","Miss."));
+        titleSelectItems.add(new SelectItem("Mrs.","Mrs."));
+        titleSelectItems.add(new SelectItem("Prof.","Prof."));
+        titleSelectItems.add(new SelectItem("Dr.","Dr."));
         
         referenceTypeItems = new ArrayList<SelectItem>();
         referenceTypeItems.add(new SelectItem("Publications in peer-reviewed/refereed journals","Publications in peer-reviewed/refereed journals"));

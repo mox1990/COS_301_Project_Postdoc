@@ -49,10 +49,10 @@ CREATE TABLE person (
 
 CREATE TABLE up_employee_information (
 	_employeeID CHAR(9) NOT NULL,	
-	_physicalAddress BIGINT UNSIGNED NOT NULL,
-	_position VARCHAR(50) NOT NULL,
-	_dateOfAppointment DATE NOT NULL,
-	_appointmentStatus VARCHAR(50) NOT NULL,
+	_physicalAddress BIGINT UNSIGNED,
+	_position VARCHAR(50),
+	_dateOfAppointment DATE,
+	_appointmentStatus VARCHAR(50),
 	
 	PRIMARY KEY (_employeeID),
 	FOREIGN KEY (_employeeID) REFERENCES person(_systemID),
@@ -104,7 +104,7 @@ CREATE TABLE application (
     _projectTitle VARCHAR(250),
     _information TEXT,
     _fellow CHAR(9) NOT NULL,
-    _grantHolderID CHAR(9) NOT NULL,
+    _grantHolderID CHAR(9),
     PRIMARY KEY (_applicationID),
     FOREIGN KEY (_fellow) REFERENCES person (_systemID),
     FOREIGN KEY (_grantHolderID) REFERENCES person (_systemID)
@@ -327,8 +327,10 @@ INSERT INTO postdoc_db.person_security_role (_personID, _roleID) VALUES ('u12019
 																		('u12019837',8),
 																		('u12019837',9);
 
-
-
+INSERT INTO postdoc_db.location (_institution, _faculty, _department) VALUES ('University of Pretoria', 'EBIT', 'Computer Science'),
+																			('University of Pretoria', 'EBIT', 'Informatics'),
+																			('University of Pretoria', 'EBIT', 'Computer and Electronic Engineers'),
+																			('University of Pretoria', 'Humanities', 'Philosophy');
 
 
 

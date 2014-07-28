@@ -107,8 +107,8 @@ public class Application implements Serializable {
     @JoinColumn(name = "_fellow", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person fellow;
-    @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID")
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID", nullable = true)
+    @ManyToOne(optional = true)
     private Person grantHolderID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
     private List<ProgressReport> progressReportList;

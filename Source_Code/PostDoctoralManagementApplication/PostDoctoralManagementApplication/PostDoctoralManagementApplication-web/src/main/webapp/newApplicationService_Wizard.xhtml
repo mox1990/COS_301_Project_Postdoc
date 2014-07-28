@@ -59,8 +59,10 @@
                                     <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
                                         <ui:param name="renderAttribute" value="#{true}"/>
                                         <ui:param name="person" value="#{newApplicationCreationBean.grantHolder}"/>
+                                        <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                        <ui:param name="beanAction" value="setGrantHolder"/>
                                     </ui:decorate>
-                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>                                    
                                     <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill"/>
                                 </h:form>
                             </center>                        
@@ -87,7 +89,7 @@
                                     </p:outputPanel>
                                 </h:form>
                                 <h:form>
-                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill"/>
+                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeRefereeSpecification()}" value="Next" styleClass="button button-fill"/>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>    

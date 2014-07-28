@@ -143,11 +143,11 @@ public class ApplicationJpaController implements Serializable {
                 fundingReport = em.merge(fundingReport);
             }
             if (fellow != null) {
-                fellow.getApplicationList().add(application);
+                fellow.getApplicationList1().add(application);
                 fellow = em.merge(fellow);
             }
             if (grantHolderID != null) {
-                grantHolderID.getApplicationList().add(application);
+                grantHolderID.getApplicationList2().add(application);
                 grantHolderID = em.merge(grantHolderID);
             }
             for (Person personListPerson : application.getPersonList()) {
@@ -330,19 +330,19 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportNew = em.merge(fundingReportNew);
             }
             if (fellowOld != null && !fellowOld.equals(fellowNew)) {
-                fellowOld.getApplicationList().remove(application);
+                fellowOld.getApplicationList1().remove(application);
                 fellowOld = em.merge(fellowOld);
             }
             if (fellowNew != null && !fellowNew.equals(fellowOld)) {
-                fellowNew.getApplicationList().add(application);
+                fellowNew.getApplicationList1().add(application);
                 fellowNew = em.merge(fellowNew);
             }
             if (grantHolderIDOld != null && !grantHolderIDOld.equals(grantHolderIDNew)) {
-                grantHolderIDOld.getApplicationList().remove(application);
+                grantHolderIDOld.getApplicationList2().remove(application);
                 grantHolderIDOld = em.merge(grantHolderIDOld);
             }
             if (grantHolderIDNew != null && !grantHolderIDNew.equals(grantHolderIDOld)) {
-                grantHolderIDNew.getApplicationList().add(application);
+                grantHolderIDNew.getApplicationList2().add(application);
                 grantHolderIDNew = em.merge(grantHolderIDNew);
             }
             for (Person personListOldPerson : personListOld) {
@@ -466,12 +466,12 @@ public class ApplicationJpaController implements Serializable {
             }
             Person fellow = application.getFellow();
             if (fellow != null) {
-                fellow.getApplicationList().remove(application);
+                fellow.getApplicationList1().remove(application);
                 fellow = em.merge(fellow);
             }
             Person grantHolderID = application.getGrantHolderID();
             if (grantHolderID != null) {
-                grantHolderID.getApplicationList().remove(application);
+                grantHolderID.getApplicationList2().remove(application);
                 grantHolderID = em.merge(grantHolderID);
             }
             List<Person> personList = application.getPersonList();

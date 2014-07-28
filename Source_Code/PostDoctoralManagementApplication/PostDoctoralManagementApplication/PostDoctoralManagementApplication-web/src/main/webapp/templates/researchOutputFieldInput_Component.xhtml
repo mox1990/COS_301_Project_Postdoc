@@ -42,7 +42,7 @@
                         <p:inputText id="#{prefix}refpublicationPageLocation" value="#{currentReference.publicationPageLocation}"/>
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
-
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     <p:commandButton value="Add reference" actionListener="#{bean[beanAction]}" update="#{prefix}researchoutput" styleClass="button button-fill"/>
                 </div>
             </p:outputPanel>

@@ -217,14 +217,23 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address upAddress) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
+    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {     
         //Authenticate user privliges
         UserGateway userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         userGateway.authenticateUser(session, roles);
+        /* NB DISABLED FOR TESTING PURPOSE
+        if(getUserBySystemIDOrEmail(user.getEmail()) != null)
+        {
+            throw new UserAlreadyExistsException("This email is already in use by a user account");
+        }*/
         
+        if(useManualSystemIDSpecification && getUserBySystemIDOrEmail(user.getSystemID()) != null)
+        {
+            throw new UserAlreadyExistsException("This employee ID is already in use by a user account");
+        }
         
         //Prep the DAOs
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();  
@@ -233,6 +242,10 @@ public class UserAccountManagementService implements UserAccountManagementServic
         AddressJpaController addressJpaController = getAddressDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
+        
+        Address userAddress = user.getAddressLine1(); 
+        UpEmployeeInformation userUPInfo = user.getUpEmployeeInformation();
+        Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
         
         //Check if automatic systemID generation is required
         if(!useManualSystemIDSpecification)
@@ -300,7 +313,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws Exception Is thrown if an unknown error has occurred
      */
     @Override
-    public void updateUserAccount(Session session, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address upAddress) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void updateUserAccount(Session session, Person user) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         
         UserGateway userGateway = getUserGatewayServiceEJB();
@@ -322,6 +335,20 @@ public class UserAccountManagementService implements UserAccountManagementServic
         UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        
+        Address userAddress = user.getAddressLine1(); 
+        UpEmployeeInformation userUPInfo = user.getUpEmployeeInformation();
+        Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
+        
+        if(!getUserBySystemIDOrEmail(user.getEmail()).equals(user))
+        {
+            throw new UserAlreadyExistsException("This email is already in use by a user account");
+        }
+        
+        if(getUserBySystemIDOrEmail(user.getSystemID()) == null)
+        {
+            throw new Exception("There is no user account for the specified user.");
+        }
         
         if(userAddress != null)
         {
@@ -425,7 +452,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws Exception
      */
     @Override
-    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user, Address userAddress, UpEmployeeInformation userUPInfo, Address UpAddress) throws Exception
+    public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user) throws Exception
     {
         //Use this to create a new account
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
@@ -443,7 +470,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         user.setPassword(getGeneratorUTIL().generateRandomHexString());
         
         //Create a user account using a system level system authentication
-        createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user, userAddress, userUPInfo, UpAddress);
+        createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user);
         
         //Notify the new user
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
@@ -467,7 +494,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-        updateUserAccount(session, user, null, null, null);
+        updateUserAccount(session, user);
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Activated on demand account", session.getUser());
         auditTrailService.logAction(auditLog);
@@ -497,6 +524,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param intput
      * @return
      */
+    @Override
     public Person getUserBySystemIDOrEmail(String intput)
     {
         PersonJpaController personJpaController = getPersonDAO();

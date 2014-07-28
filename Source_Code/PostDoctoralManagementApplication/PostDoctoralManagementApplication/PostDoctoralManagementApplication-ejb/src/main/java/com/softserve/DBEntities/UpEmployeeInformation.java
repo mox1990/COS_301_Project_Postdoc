@@ -46,18 +46,15 @@ public class UpEmployeeInformation implements Serializable {
     @Size(min = 1, max = 9)
     @Column(name = "_employeeID")
     private String employeeID;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = true)
     @Size(min = 1, max = 50)
     @Column(name = "_position")
     private String position;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = true)
     @Column(name = "_dateOfAppointment")
     @Temporal(TemporalType.DATE)
     private Date dateOfAppointment;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = true)
     @Size(min = 1, max = 50)
     @Column(name = "_appointmentStatus")
     private String appointmentStatus;
@@ -65,7 +62,7 @@ public class UpEmployeeInformation implements Serializable {
     @OneToOne(optional = false)
     private Person person;
     @JoinColumn(name = "_physicalAddress", referencedColumnName = "_addressID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Address physicalAddress;
 
     public UpEmployeeInformation() {

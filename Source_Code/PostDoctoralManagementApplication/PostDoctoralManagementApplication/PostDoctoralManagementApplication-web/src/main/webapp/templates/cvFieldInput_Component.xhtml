@@ -40,7 +40,8 @@
                     <p:inputTextarea id="additionalInformationXMLEntity" value="#{bean.additionalInformationXMLEntity.information}" required="true"/>
                     <p:message for="additionalInformationXMLEntity" styleClass="fieldErrorMessage"/>
                 </h:panelGrid> 
-                <p:commandButton value="Add infomration to CV" update="cvInfo" styleClass="button button-fill"/>
+                <p:growl id="message" globalOnly="true" showDetail="true" showSummary="true"/>
+                <p:commandButton value="Add infomration to CV" update="cvInfo" styleClass="button button-fill" actionListener="#{bean.addInfromationToCV()}"/>
             </p:panel>
         </h:form>
         

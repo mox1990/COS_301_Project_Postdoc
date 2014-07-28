@@ -31,7 +31,7 @@
                             <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}" required="true"/>
                             <p:message for="qdistinctions" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
-
+                        <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                         <p:commandButton ajax="true" update="qualifications" actionListener="#{bean.addToAcademicQualificationList()}" value="Add qualification" styleClass="button button-fill"/>
                 </div>
             </p:outputPanel>

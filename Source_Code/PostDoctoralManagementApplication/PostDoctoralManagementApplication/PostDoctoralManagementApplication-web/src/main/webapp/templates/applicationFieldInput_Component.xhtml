@@ -35,7 +35,8 @@
                         <p:inputTextarea id="projectMotivation" value="#{bean.informationXMLEntity.projectMotivation}" required="true"/>
                         <p:message for="projectMotivation" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
-                    <p:commandButton value="Add infomration to application" update="applicationInfo" styleClass="button button-fill"/>
+                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>  
+                    <p:commandButton value="Add infomration to application" update="applicationInfo" styleClass="button button-fill"  actionListener="#{bean.addInfromationToApplication()}"/>
                 </p:panel>
             </h:form>
             

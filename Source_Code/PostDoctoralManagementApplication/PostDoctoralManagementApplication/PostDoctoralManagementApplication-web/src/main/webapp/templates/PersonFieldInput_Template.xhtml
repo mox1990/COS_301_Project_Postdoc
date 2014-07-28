@@ -25,7 +25,7 @@
             <p:message for="sname" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Email:" for="email"/>                                
-            <p:inputText id="email" value="#{person.email}"/>
+            <p:inputText id="email" value="#{person.email}" disabled="#{!emailEditable}"/>
             <p:message for="email" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Password:" for="password"/>                                
