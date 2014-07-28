@@ -13,6 +13,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.HODRecommendationServices;
+import com.softserve.ejb.HODRecommendationServicesLocal;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -35,7 +36,7 @@ public class HODAmmendRequestBean {
     private NavigationManagerBean navigationManagerBean;
     
     @EJB
-    private HODRecommendationServices hodRecommendationServices;
+    private HODRecommendationServicesLocal hodRecommendationServicesLocal;
     
     private UIComponent errorContainer;
     
@@ -72,7 +73,7 @@ public class HODAmmendRequestBean {
     {
         try
         {
-            hodRecommendationServices.ammendAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
+            hodRecommendationServicesLocal.ammendAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
             return navigationManagerBean.goToPreviousBreadCrumb();
         }
         catch(Exception ex)

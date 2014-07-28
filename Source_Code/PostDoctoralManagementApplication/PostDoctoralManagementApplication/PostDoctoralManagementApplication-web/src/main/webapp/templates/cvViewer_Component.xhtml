@@ -24,33 +24,27 @@
                     <h:outputText value="#{cv.additionalInformationXMLEntity.information}"/>                    
             </h:panelGrid>
             
-            <p:panel>
-                <ui:decorate template="academicQualificationDataList_Component.xhtml">
-                    <ui:param name="header" value="Academic qualifications"/>
-                    <ui:param name="academicQualificationList" value="#{cv.academicQualificationList}"/>
-                </ui:decorate>
-            </p:panel>
             
-            <p:panel>
-                <ui:decorate template="workExpericenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Work experience"/>
-                    <ui:param name="experienceList" value="#{cv.experienceList}"/>
-                </ui:decorate>
-            </p:panel>            
+            <ui:decorate template="academicQualificationDataList_Component.xhtml">
+                <ui:param name="header" value="Academic qualifications"/>
+                <ui:param name="academicQualificationList" value="#{cv.academicQualificationList}"/>
+            </ui:decorate>
+                                    
+            <ui:decorate template="workExpericenceDataList_Component.xhtml">
+                <ui:param name="header" value="Work experience"/>
+                <ui:param name="experienceList" value="#{cv.experienceList}"/>
+            </ui:decorate>
+             
+            <ui:decorate template="referenceDataList_Component.xhtml">
+                <ui:param name="header" value="Research output"/>
+                <ui:param name="references" value="#{cv.researchOutputXMLEntity.references}"/>
+            </ui:decorate>
+                          
+            <ui:decorate template="itemsDataList_Component.xhtml">
+                <ui:param name="header" value="Other contributions"/>
+                <ui:param name="items" value="#{cv.otherContributionsXMLEntity.items}"/>
+            </ui:decorate>
             
-            <p:panel>
-                <ui:decorate template="referenceDataList_Component.xhtml">
-                    <ui:param name="header" value="Research output"/>
-                    <ui:param name="references" value="#{cv.researchOutputXMLEntity.references}"/>
-                </ui:decorate>
-            </p:panel>
-            
-            <p:panel>                
-                <ui:decorate template="itemsDataList_Component.xhtml">
-                    <ui:param name="header" value="Other contributions"/>
-                    <ui:param name="items" value="#{cv.otherContributionsXMLEntity.items}"/>
-                </ui:decorate>
-            </p:panel>
         </div>
     </ui:component>
 </html>

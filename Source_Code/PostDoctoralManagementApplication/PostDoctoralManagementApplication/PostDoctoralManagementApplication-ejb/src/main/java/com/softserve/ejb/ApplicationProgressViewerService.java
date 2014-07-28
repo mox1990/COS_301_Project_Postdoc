@@ -56,19 +56,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
     }
     
     @Override
-    public List<Application> getAllApplicationsWithFellow(Session session) throws AuthenticationException, Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        return getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
-    }
-    
-    @Override
-    public List<Application> getAllApplicationsWithGrantHolder(Session session) throws AuthenticationException, Exception
-    {
+    public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -76,6 +64,8 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         
         return getApplicationDAO().findAllApplicationsWhosGrantHolderIs(session.getUser());
     }
+    
+    
     
     @Override
     public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception

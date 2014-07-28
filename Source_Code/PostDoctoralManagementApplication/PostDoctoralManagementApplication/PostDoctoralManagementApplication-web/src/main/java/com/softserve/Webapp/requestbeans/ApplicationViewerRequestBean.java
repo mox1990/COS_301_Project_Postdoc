@@ -32,10 +32,7 @@ public class ApplicationViewerRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    
-    @EJB
-    private HODRecommendationServices hodRecommendationServices;
-    
+        
     private UIComponent errorContainer;
     
     /**

@@ -12,7 +12,7 @@
                 <h1 class="header1">Applications pending for Endorsement</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <ui:decorate template="pendingApplications_Comoponent">
+            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                 <ui:param name="pendingApplications" value="#{deanApplicationSelectionRequestBean.pendingApplications}"/>
                 <ui:define name="commandButtons">
                     <p:commandButton value="View application for consideration" styleClass="button-fill" action="#{deanApplicationSelectionRequestBean.viewApplication(app)}"/> 

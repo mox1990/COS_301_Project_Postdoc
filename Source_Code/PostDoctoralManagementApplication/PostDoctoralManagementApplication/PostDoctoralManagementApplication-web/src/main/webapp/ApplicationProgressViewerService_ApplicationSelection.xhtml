@@ -1,12 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Pending applications"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Applications Progress viewer</h1>
+                <h2>Click on the application for more details</h2>
+            </div>
+            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.fellowApplicationDisplayable}">
+                <h1 class="header1">Applications for which you are the fellow</h1>
+                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                    <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.fellowApplications}"/>
+                    <ui:define name="commandButtons">
+                        <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
+                    </ui:define>
+                </ui:decorate>
+            </p:outputPanel>
+            
+            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.grantHolderApplicationDisplayable}">
+                <h1 class="header1">Applications for which you are the Grant holder</h1>
+                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                    <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.grantHolderApplications}"/>
+                    <ui:define name="commandButtons">
+                        <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
+                    </ui:define>
+                </ui:decorate>
+            </p:outputPanel>
+            
+            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.allApplicationDisplayable}">
+                <h1 class="header1">All applications</h1>
+                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                    <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.allApplications}"/>
+                    <ui:define name="commandButtons">
+                        <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
+                    </ui:define>
+                </ui:decorate>
+            </p:outputPanel>
+        </ui:define>
+    </ui:composition>
 </html>
-

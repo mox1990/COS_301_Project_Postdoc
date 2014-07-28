@@ -20,7 +20,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface ApplicationProgressViewerServiceLocal {
-    public List<Application> getAllApplicationsWithFellow(Session session) throws AuthenticationException, Exception;
-    public List<Application> getAllApplicationsWithGrantHolder(Session session) throws AuthenticationException, Exception;
+    public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception;
     public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception;
 }

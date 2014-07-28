@@ -12,11 +12,12 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.HODRecommendationServices;
+import com.softserve.ejb.HODRecommendationServicesLocal;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
@@ -33,7 +34,7 @@ public class HODDeclineRequestBean {
     private NavigationManagerBean navigationManagerBean;
     
     @EJB
-    private HODRecommendationServices hodRecommendationServices;
+    private HODRecommendationServicesLocal hodRecommendationServicesLocal;
     
     private UIComponent errorContainer;
     
@@ -70,7 +71,7 @@ public class HODDeclineRequestBean {
     {
         try
         {
-            hodRecommendationServices.denyAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
+            hodRecommendationServicesLocal.denyAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
             return navigationManagerBean.goToPreviousBreadCrumb();
         }
         catch(Exception ex)

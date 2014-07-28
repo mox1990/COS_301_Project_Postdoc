@@ -34,17 +34,20 @@
                             <h:outputText value="#{selectedApplication.projectTitle}"/>
                             
                             <h:outputText styleClass="text-label" value="Project team members:"/>
-                            <ui:decorate template="teamMemberDataList_Component.xhtml">
+                            <ui:decorate template="teamMembersDataList_Component.xhtml">
+                                <ui:param name="header" value="Team members list"/>
                                 <ui:param name="members" value="#{selectedApplication.informationXMLEntity.teamMembers.member}" />
                             </ui:decorate>
                             
                             <h:outputText styleClass="text-label" value="Project aims:"/>
                             <ui:decorate template="projectAimsDataList_Component.xhtml">
+                                <ui:param name="header" value="Project aims list"/>
                                 <ui:param name="aims" value="#{selectedApplication.informationXMLEntity.projectAims.aim}" />
                             </ui:decorate>
          
                             <h:outputText styleClass="text-label" value="Project expected outcomes:"/>
                             <ui:decorate template="expectedOutcomesDataList_Component.xhtml">
+                                <ui:param name="header" value="Expected project outcomes list"/>
                                 <ui:param name="expectedOutcomes" value="#{selectedApplication.informationXMLEntity.expectedOutcomes.outcome}" />
                             </ui:decorate>
                             
