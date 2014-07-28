@@ -72,12 +72,8 @@
                                 </ui:define>
                             </ui:decorate>                            
                         </p:outputPanel>
-                        
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{prospectiveUserAccountCreationBean.errorContainer}" action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" ajax="false"/>
-                        
-                        <div class="errorContainer">
-                            <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>
-                        </div>
+                        <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                        <p:commandButton styleClass="button" value="Create user account" id="createUser"  action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" ajax="false"/>
                     </center>
                 </h:form>
             </div>

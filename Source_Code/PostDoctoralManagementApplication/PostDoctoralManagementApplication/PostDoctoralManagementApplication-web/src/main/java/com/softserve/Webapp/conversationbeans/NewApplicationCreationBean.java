@@ -407,26 +407,32 @@ public class NewApplicationCreationBean implements Serializable {
         {
             if(academicQualificationList.size() < 1)
             {
-               throw new Exception("Need to have at least one academic qualification");
+               throw new Exception("You need to have at least one academic qualification.");
             }
             if(experienceList.size() < 1)
             {
-                throw new Exception("Need to have at least one work experience");
+                throw new Exception("You need to have at least one work experience.");
             }
             if(otherContributionsXMLEntity.getItems().size() < 1)
             {
-                throw new Exception("Need to have at least one other conttribution");
+                throw new Exception("You need to have at least one other conttribution.");
             }            
             if(researchOutputXMLEntity.getReferences().size() < 1)
             {
-                throw new Exception("Need to have at least one reference");
+                throw new Exception("You need to have at least one reference.");
             }
             
+            Session session = sessionManagerBean.getSession();
             
             cv.setAcademicQualificationList(academicQualificationList);
             cv.setExperienceList(experienceList);
             cv.setResearchOutputXMLEntity(researchOutputXMLEntity);
             cv.setOtherContributionsXMLEntity(otherContributionsXMLEntity);
+            cv.setAdditionalInformationXMLEntity(additionalInformationXMLEntity);
+            cv.setCvID(session.getUser().getSystemID());
+            cv.setPerson(session.getUser());
+            newApplicationServiceLocal.createProspectiveFellowCV(sessionManagerBean.getSession(), cv);
+            
             wizardActiveTab++;
         }
         catch(Exception ex)
@@ -440,6 +446,16 @@ public class NewApplicationCreationBean implements Serializable {
     {
         try
         {
+            if(informationXMLEntity.getExpectedOutcomes().getOutcome().size() < 1)
+            {
+                throw new Exception("You need at least one project aim.");
+            }
+            
+            if(informationXMLEntity.getExpectedOutcomes().getOutcome().size() < 1)
+            {
+                throw new Exception("You need at least one expected project outcome.");
+            }
+            
             openApplication.setInformationXMLEntity(informationXMLEntity);
             wizardActiveTab++;
         }

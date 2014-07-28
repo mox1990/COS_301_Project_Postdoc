@@ -20,78 +20,90 @@
             </div>
             
             <div>
-                <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 0}">
-                    <center>
-                        <h2 class="header2">Create or update your CV</h2>
-                        <ui:decorate template="templates/cvFieldInput_Component.xhtml">
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="bean" value="#{newApplicationCreationBean}"/>
-                        </ui:decorate>                        
-                        <h:form>
-                            <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeCV()}" value="Next" styleClass="button-fill"/>
-                        </h:form>
-                    </center>                        
-                </p:outputPanel>
-                
-                <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 1}">
-                    <center>
-                        <h2 class="header2">Complete application form</h2>
-                        <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="bean" value="#{newApplicationCreationBean}"/>
-                        </ui:decorate>
-                        <h:form>
-                            <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeApplication()}" value="Next" styleClass="button-fill"/>
-                        </h:form>
-                    </center>                        
-                </p:outputPanel>
-                
-                <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 2}">
-                    <center>
-                        <h2 class="header2">Specify grant holder</h2>
-                        <h:form>
-                            <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
-                                <ui:param name="renderAttribute" value="#{true}"/>
-                                <ui:param name="person" value="#{newApplicationCreationBean.grantHolder}"/>
-                            </ui:decorate>                        
-                            <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button-fill"/>
-                        </h:form>
-                    </center>                        
-                </p:outputPanel>
-                
-                <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 3}">
-                    <center>
-                        <h2 class="header2">Specify referees</h2>
-                        <h:form>
-                            <p:outputPanel id="referees">
-                                <ui:decorate template="templates/PersonDataList_Component.xhtml">
+                <p:tabView activeIndex="#{newApplicationCreationBean.wizardActiveTab}">
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 0}" title="Step 1: CV details">
+                        <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 0}">
+                            <center>
+                                <h2 class="header2">Create or update your CV</h2>
+                                <ui:decorate template="templates/cvFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="header" value="Already added Referees"/>
-                                    <ui:param name="persons" value="#{newApplicationCreationBean.referees}"/>
-                                </ui:decorate>
-                                
-                                <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
+                                    <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                </ui:decorate>                        
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeCV()}" value="Next" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 1}" title="Step 2: Application details">
+                        <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 1}">
+                            <center>
+                                <h2 class="header2">Complete application form</h2>
+                                <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="person" value="#{newApplicationCreationBean.currentReferee}"/>
+                                    <ui:param name="bean" value="#{newApplicationCreationBean}"/>
                                 </ui:decorate>
-                                
-                                <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill"/>
-                            </p:outputPanel>
-                        </h:form>
-                        <h:form>
-                            <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill"/>
-                        </h:form>
-                    </center>                        
-                </p:outputPanel>    
-                
-                <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 4}">
-                    <center>
-                        <h2 class="header2">Submit application</h2>
-                        <h:form>
-                            <p:commandButton ajax="false" action="#{newApplicationCreationBean.submitApplication()}" value="Confirm application submission" styleClass="button-fill"/>
-                        </h:form>
-                    </center>                        
-                </p:outputPanel>                 
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeApplication()}" value="Next" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 2}" title="Step 3: Grant holder details">
+                        <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 2}">
+                            <center>
+                                <h2 class="header2">Specify grant holder</h2>
+                                <h:form>
+                                    <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
+                                        <ui:param name="renderAttribute" value="#{true}"/>
+                                        <ui:param name="person" value="#{newApplicationCreationBean.grantHolder}"/>
+                                    </ui:decorate>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 3}" title="Step 4: Referees details">
+                        <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 3}">
+                            <center>
+                                <h2 class="header2">Specify referees</h2>
+                                <h:form>
+                                    <p:outputPanel id="referees">
+                                        <ui:decorate template="templates/PersonDataList_Component.xhtml">
+                                            <ui:param name="renderAttribute" value="#{true}"/>
+                                            <ui:param name="header" value="Already added Referees"/>
+                                            <ui:param name="persons" value="#{newApplicationCreationBean.referees}"/>
+                                        </ui:decorate>
+
+                                        <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
+                                            <ui:param name="renderAttribute" value="#{true}"/>
+                                            <ui:param name="person" value="#{newApplicationCreationBean.currentReferee}"/>
+                                        </ui:decorate>
+                                        <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                        <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill"/>
+                                    </p:outputPanel>
+                                </h:form>
+                                <h:form>
+                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>    
+                    </p:tab>
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 4}" title="Step 5: Sumbit new application">
+                        <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 4}">
+                            <center>
+                                <h2 class="header2">Submit application</h2>
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.submitApplication()}" value="Confirm application submission" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>  
+                    </p:tab>
+                </p:tabView>
             </div>
         </ui:define>
     </ui:composition>

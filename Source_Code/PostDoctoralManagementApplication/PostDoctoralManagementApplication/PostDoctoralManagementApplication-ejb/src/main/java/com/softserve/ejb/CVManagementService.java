@@ -6,12 +6,17 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.AcademicQualificationJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.ExperienceJpaController;
+import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Experience;
 import com.softserve.Exceptions.*;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -40,7 +45,17 @@ public class CVManagementService implements CVManagementServiceLocal {
     protected CvJpaController getCVDAO()
     {
         return new CvJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }    
+    } 
+    
+    protected AcademicQualificationJpaController getAcademicQualificationDAO()
+    {
+        return new AcademicQualificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected ExperienceJpaController getExperienceDAO()
+    {
+        return new ExperienceJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
     
     protected UserGateway getUserGatewayServiceEJB()
     {
@@ -72,13 +87,33 @@ public class CVManagementService implements CVManagementServiceLocal {
             throw new CVAlreadExistsException("The user already has a cv");
         }
         
+        AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
+        ExperienceJpaController experienceJpaController = getExperienceDAO();
         CvJpaController cvJpaController = getCVDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
+        List<Experience> experienceList = cv.getExperienceList();
+        List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
+        
+        cv.setAcademicQualificationList(null);
+        cv.setExperienceList(null);
+        
         cv.setCvID(session.getUser().getSystemID());
         cv.setPerson(session.getUser());
         cvJpaController.create(cv);
+        
+        for(Experience experience : experienceList)
+        {
+            experience.setCvID(cv);
+            experienceJpaController.create(experience);
+        }
+        
+        for(AcademicQualification academicQualification : academicQualificationsList)
+        {
+            academicQualification.setCvID(cv);
+            academicQualificationJpaController.create(academicQualification);
+        }
         
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created user cv", session.getUser());
@@ -90,9 +125,41 @@ public class CVManagementService implements CVManagementServiceLocal {
     {
         getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getPerson());
         
+        AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
+        ExperienceJpaController experienceJpaController = getExperienceDAO();
+        
         CvJpaController cvJpaController = getCVDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+        List<Experience> experienceList = cv.getExperienceList();
+        List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
+
+        for(Experience experience : cv.getExperienceList())
+        {
+            try
+            {
+                experienceJpaController.findExperience(experience.getExperienceID());
+            }
+            catch(Exception ex)
+            {
+                experience.setCvID(cv);
+                experienceJpaController.create(experience);
+            }
+        }
+        
+        for(AcademicQualification academicQualification : cv.getAcademicQualificationList())
+        {
+            try
+            {
+                academicQualificationJpaController.findAcademicQualification(academicQualification.getQualificationID());
+            }
+            catch(Exception ex)
+            {
+                academicQualification.setCvID(cv);
+                academicQualificationJpaController.create(academicQualification);
+            }
+        }
         
         cv.setCvID(session.getUser().getSystemID());
         cvJpaController.edit(cv);

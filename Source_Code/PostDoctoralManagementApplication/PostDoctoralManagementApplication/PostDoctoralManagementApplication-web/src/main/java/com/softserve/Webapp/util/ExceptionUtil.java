@@ -29,7 +29,7 @@ public class ExceptionUtil {
     
     public static void handleException(UIComponent errorDisplayer, Exception ex)
     {        
-        FacesMessage facesMessage = new FacesMessage(ex.getMessage());
+        FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error occured!",ex.getMessage());
         if(errorDisplayer == null)
         {
             FacesContext.getCurrentInstance().addMessage(null, facesMessage);

@@ -291,10 +291,10 @@ body
     width: auto;
     font-size: 16pt;
     color: black;
-    border: solid gray;
-    border-radius: 5px;
+    border: solid gray!important;
+    border-radius: 5px!important;
     margin: 2px;
-    text-align: center;  
+    text-align: center!important;  
     margin-top: 5px;
 }
 
@@ -302,8 +302,8 @@ body
 
 .button:hover
 {
-    box-shadow: 0px 0px 5px 0px darkblue;
-    border-color: black;
+    box-shadow: 0px 0px 5px 0px darkblue!important;
+    border-color: black!important;
     background: #deefff; /* Old browsers */
     background: -moz-linear-gradient(top,  #deefff 0%, #98bede 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede)); /* Chrome,Safari4+ */

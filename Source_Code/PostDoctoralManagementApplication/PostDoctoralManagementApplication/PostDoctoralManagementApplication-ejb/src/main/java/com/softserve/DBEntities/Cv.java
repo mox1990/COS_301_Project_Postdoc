@@ -266,7 +266,7 @@ public class Cv implements Serializable {
     {
         XMLMarshaller xmlm = new XMLMarshaller();
              
-        setOtherContributions(xmlm.marshalAdditionalInformationObject(additionalInformation));
+        setAdditionalInformation(xmlm.marshalAdditionalInformationObject(additionalInformation));
     }
     
     @XmlTransient

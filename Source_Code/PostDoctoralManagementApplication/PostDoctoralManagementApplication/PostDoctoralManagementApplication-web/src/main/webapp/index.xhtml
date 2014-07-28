@@ -36,7 +36,8 @@
                         <br/>
                         <p:inputText value="#{indexBean.password}"/>
                         <br/>
-                        <p:commandButton id="loginButton" styleClass="button" value="Login" binding="#{indexBean.errorContainer}" action="#{indexBean.performLoginRequest()}" ajax="false"></p:commandButton>
+                        <p:growl sticky="true" showSummary="true" showDetail="true"/>
+                        <p:commandButton id="loginButton" styleClass="button" value="Login" binding="#{indexBean.errorContainer}" action="#{indexBean.performLoginRequest()}" ajax="false"/>
                         <br/>
                         <div class="errorContainer">
                             <h:message styleClass="errorSpan" id="loginErrors" for="loginButton" />
