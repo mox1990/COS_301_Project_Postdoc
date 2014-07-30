@@ -16,7 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.DeclineReport;
+import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.Person;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +29,9 @@ import javax.transaction.UserTransaction;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class DeclineReportJpaController implements Serializable {
+public class EligiblityReportJpaController implements Serializable {
 
-    public DeclineReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
+    public EligiblityReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
@@ -42,16 +42,16 @@ public class DeclineReportJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(DeclineReport declineReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EligiblityReport eligiblityReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
-        Application applicationOrphanCheck = declineReport.getApplication();
+        Application applicationOrphanCheck = eligiblityReport.getApplication();
         if (applicationOrphanCheck != null) {
-            DeclineReport oldDeclineReportOfApplication = applicationOrphanCheck.getDeclineReport();
-            if (oldDeclineReportOfApplication != null) {
+            EligiblityReport oldEligiblityReportOfApplication = applicationOrphanCheck.getEligiblityReport();
+            if (oldEligiblityReportOfApplication != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("The Application " + applicationOrphanCheck + " already has an item of type DeclineReport whose application column cannot be null. Please make another selection for the application field.");
+                illegalOrphanMessages.add("The Application " + applicationOrphanCheck + " already has an item of type EligiblityReport whose application column cannot be null. Please make another selection for the application field.");
             }
         }
         if (illegalOrphanMessages != null) {
@@ -61,24 +61,24 @@ public class DeclineReportJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Application application = declineReport.getApplication();
+            Application application = eligiblityReport.getApplication();
             if (application != null) {
                 application = em.getReference(application.getClass(), application.getApplicationID());
-                declineReport.setApplication(application);
+                eligiblityReport.setApplication(application);
             }
-            Person creator = declineReport.getCreator();
-            if (creator != null) {
-                creator = em.getReference(creator.getClass(), creator.getSystemID());
-                declineReport.setCreator(creator);
+            Person eligiblityChecker = eligiblityReport.getEligiblityChecker();
+            if (eligiblityChecker != null) {
+                eligiblityChecker = em.getReference(eligiblityChecker.getClass(), eligiblityChecker.getSystemID());
+                eligiblityReport.setEligiblityChecker(eligiblityChecker);
             }
-            em.persist(declineReport);
+            em.persist(eligiblityReport);
             if (application != null) {
-                application.setDeclineReport(declineReport);
+                application.setEligiblityReport(eligiblityReport);
                 application = em.merge(application);
             }
-            if (creator != null) {
-                creator.getDeclineReportList().add(declineReport);
-                creator = em.merge(creator);
+            if (eligiblityChecker != null) {
+                eligiblityChecker.getEligiblityReportList().add(eligiblityReport);
+                eligiblityChecker = em.merge(eligiblityChecker);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -87,8 +87,8 @@ public class DeclineReportJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findDeclineReport(declineReport.getReportID()) != null) {
-                throw new PreexistingEntityException("DeclineReport " + declineReport + " already exists.", ex);
+            if (findEligiblityReport(eligiblityReport.getReportID()) != null) {
+                throw new PreexistingEntityException("EligiblityReport " + eligiblityReport + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -98,24 +98,24 @@ public class DeclineReportJpaController implements Serializable {
         }
     }
 
-    public void edit(DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            DeclineReport persistentDeclineReport = em.find(DeclineReport.class, declineReport.getReportID());
-            Application applicationOld = persistentDeclineReport.getApplication();
-            Application applicationNew = declineReport.getApplication();
-            Person creatorOld = persistentDeclineReport.getCreator();
-            Person creatorNew = declineReport.getCreator();
+            EligiblityReport persistentEligiblityReport = em.find(EligiblityReport.class, eligiblityReport.getReportID());
+            Application applicationOld = persistentEligiblityReport.getApplication();
+            Application applicationNew = eligiblityReport.getApplication();
+            Person eligiblityCheckerOld = persistentEligiblityReport.getEligiblityChecker();
+            Person eligiblityCheckerNew = eligiblityReport.getEligiblityChecker();
             List<String> illegalOrphanMessages = null;
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                DeclineReport oldDeclineReportOfApplication = applicationNew.getDeclineReport();
-                if (oldDeclineReportOfApplication != null) {
+                EligiblityReport oldEligiblityReportOfApplication = applicationNew.getEligiblityReport();
+                if (oldEligiblityReportOfApplication != null) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type DeclineReport whose application column cannot be null. Please make another selection for the application field.");
+                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type EligiblityReport whose application column cannot be null. Please make another selection for the application field.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -123,28 +123,28 @@ public class DeclineReportJpaController implements Serializable {
             }
             if (applicationNew != null) {
                 applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                declineReport.setApplication(applicationNew);
+                eligiblityReport.setApplication(applicationNew);
             }
-            if (creatorNew != null) {
-                creatorNew = em.getReference(creatorNew.getClass(), creatorNew.getSystemID());
-                declineReport.setCreator(creatorNew);
+            if (eligiblityCheckerNew != null) {
+                eligiblityCheckerNew = em.getReference(eligiblityCheckerNew.getClass(), eligiblityCheckerNew.getSystemID());
+                eligiblityReport.setEligiblityChecker(eligiblityCheckerNew);
             }
-            declineReport = em.merge(declineReport);
+            eligiblityReport = em.merge(eligiblityReport);
             if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.setDeclineReport(null);
+                applicationOld.setEligiblityReport(null);
                 applicationOld = em.merge(applicationOld);
             }
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.setDeclineReport(declineReport);
+                applicationNew.setEligiblityReport(eligiblityReport);
                 applicationNew = em.merge(applicationNew);
             }
-            if (creatorOld != null && !creatorOld.equals(creatorNew)) {
-                creatorOld.getDeclineReportList().remove(declineReport);
-                creatorOld = em.merge(creatorOld);
+            if (eligiblityCheckerOld != null && !eligiblityCheckerOld.equals(eligiblityCheckerNew)) {
+                eligiblityCheckerOld.getEligiblityReportList().remove(eligiblityReport);
+                eligiblityCheckerOld = em.merge(eligiblityCheckerOld);
             }
-            if (creatorNew != null && !creatorNew.equals(creatorOld)) {
-                creatorNew.getDeclineReportList().add(declineReport);
-                creatorNew = em.merge(creatorNew);
+            if (eligiblityCheckerNew != null && !eligiblityCheckerNew.equals(eligiblityCheckerOld)) {
+                eligiblityCheckerNew.getEligiblityReportList().add(eligiblityReport);
+                eligiblityCheckerNew = em.merge(eligiblityCheckerNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -155,9 +155,9 @@ public class DeclineReportJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = declineReport.getReportID();
-                if (findDeclineReport(id) == null) {
-                    throw new NonexistentEntityException("The declineReport with id " + id + " no longer exists.");
+                Long id = eligiblityReport.getReportID();
+                if (findEligiblityReport(id) == null) {
+                    throw new NonexistentEntityException("The eligiblityReport with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -173,24 +173,24 @@ public class DeclineReportJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            DeclineReport declineReport;
+            EligiblityReport eligiblityReport;
             try {
-                declineReport = em.getReference(DeclineReport.class, id);
-                declineReport.getReportID();
+                eligiblityReport = em.getReference(EligiblityReport.class, id);
+                eligiblityReport.getReportID();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The declineReport with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The eligiblityReport with id " + id + " no longer exists.", enfe);
             }
-            Application application = declineReport.getApplication();
+            Application application = eligiblityReport.getApplication();
             if (application != null) {
-                application.setDeclineReport(null);
+                application.setEligiblityReport(null);
                 application = em.merge(application);
             }
-            Person creator = declineReport.getCreator();
-            if (creator != null) {
-                creator.getDeclineReportList().remove(declineReport);
-                creator = em.merge(creator);
+            Person eligiblityChecker = eligiblityReport.getEligiblityChecker();
+            if (eligiblityChecker != null) {
+                eligiblityChecker.getEligiblityReportList().remove(eligiblityReport);
+                eligiblityChecker = em.merge(eligiblityChecker);
             }
-            em.remove(declineReport);
+            em.remove(eligiblityReport);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -206,19 +206,19 @@ public class DeclineReportJpaController implements Serializable {
         }
     }
 
-    public List<DeclineReport> findDeclineReportEntities() {
-        return findDeclineReportEntities(true, -1, -1);
+    public List<EligiblityReport> findEligiblityReportEntities() {
+        return findEligiblityReportEntities(true, -1, -1);
     }
 
-    public List<DeclineReport> findDeclineReportEntities(int maxResults, int firstResult) {
-        return findDeclineReportEntities(false, maxResults, firstResult);
+    public List<EligiblityReport> findEligiblityReportEntities(int maxResults, int firstResult) {
+        return findEligiblityReportEntities(false, maxResults, firstResult);
     }
 
-    private List<DeclineReport> findDeclineReportEntities(boolean all, int maxResults, int firstResult) {
+    private List<EligiblityReport> findEligiblityReportEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(DeclineReport.class));
+            cq.select(cq.from(EligiblityReport.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -230,20 +230,20 @@ public class DeclineReportJpaController implements Serializable {
         }
     }
 
-    public DeclineReport findDeclineReport(Long id) {
+    public EligiblityReport findEligiblityReport(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(DeclineReport.class, id);
+            return em.find(EligiblityReport.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getDeclineReportCount() {
+    public int getEligiblityReportCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<DeclineReport> rt = cq.from(DeclineReport.class);
+            Root<EligiblityReport> rt = cq.from(EligiblityReport.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

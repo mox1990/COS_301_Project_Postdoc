@@ -72,13 +72,13 @@ public class ApplicationTest {
     }
     
     @Test
-    public void testSetAndGetAndGetEligiblityCheckDate() 
+    public void testSetAndGetAndGetSubmissionDate() 
     {
         Application instance = new Application();
-        instance.setEligiblityCheckDate(new Date(2014, 06, 11));
-        assertEquals(new Date(2014, 06, 11), instance.getEligiblityCheckDate());
+        instance.setSubmissionDate(new Date(2014, 06, 11));
+        assertEquals(new Date(2014, 06, 11), instance.getSubmissionDate());
     }
-
+    
     @Test
     public void testSetAndGetAndGetStartDate() 
     {

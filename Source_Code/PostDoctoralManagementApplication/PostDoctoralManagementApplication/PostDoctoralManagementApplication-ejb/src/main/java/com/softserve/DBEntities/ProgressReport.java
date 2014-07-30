@@ -103,7 +103,7 @@ public class ProgressReport implements Serializable {
     public Application getApplication() {
         return application;
     }
-    
+
     public ProgressReportContent getContentXMLEntity()
     {
         XMLUnmarshaller xmlu = new XMLUnmarshaller();

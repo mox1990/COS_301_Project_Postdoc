@@ -16,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -49,10 +50,19 @@ public class AmmendRequestJpaController implements Serializable {
                 application = em.getReference(application.getClass(), application.getApplicationID());
                 ammendRequest.setApplication(application);
             }
+            Person creator = ammendRequest.getCreator();
+            if (creator != null) {
+                creator = em.getReference(creator.getClass(), creator.getSystemID());
+                ammendRequest.setCreator(creator);
+            }
             em.persist(ammendRequest);
             if (application != null) {
                 application.getAmmendRequestList().add(ammendRequest);
                 application = em.merge(application);
+            }
+            if (creator != null) {
+                creator.getAmmendRequestList().add(ammendRequest);
+                creator = em.merge(creator);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -80,9 +90,15 @@ public class AmmendRequestJpaController implements Serializable {
             AmmendRequest persistentAmmendRequest = em.find(AmmendRequest.class, ammendRequest.getRequestID());
             Application applicationOld = persistentAmmendRequest.getApplication();
             Application applicationNew = ammendRequest.getApplication();
+            Person creatorOld = persistentAmmendRequest.getCreator();
+            Person creatorNew = ammendRequest.getCreator();
             if (applicationNew != null) {
                 applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
                 ammendRequest.setApplication(applicationNew);
+            }
+            if (creatorNew != null) {
+                creatorNew = em.getReference(creatorNew.getClass(), creatorNew.getSystemID());
+                ammendRequest.setCreator(creatorNew);
             }
             ammendRequest = em.merge(ammendRequest);
             if (applicationOld != null && !applicationOld.equals(applicationNew)) {
@@ -92,6 +108,14 @@ public class AmmendRequestJpaController implements Serializable {
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
                 applicationNew.getAmmendRequestList().add(ammendRequest);
                 applicationNew = em.merge(applicationNew);
+            }
+            if (creatorOld != null && !creatorOld.equals(creatorNew)) {
+                creatorOld.getAmmendRequestList().remove(ammendRequest);
+                creatorOld = em.merge(creatorOld);
+            }
+            if (creatorNew != null && !creatorNew.equals(creatorOld)) {
+                creatorNew.getAmmendRequestList().add(ammendRequest);
+                creatorNew = em.merge(creatorNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -131,6 +155,11 @@ public class AmmendRequestJpaController implements Serializable {
             if (application != null) {
                 application.getAmmendRequestList().remove(ammendRequest);
                 application = em.merge(application);
+            }
+            Person creator = ammendRequest.getCreator();
+            if (creator != null) {
+                creator.getAmmendRequestList().remove(ammendRequest);
+                creator = em.merge(creator);
             }
             em.remove(ammendRequest);
             utx.commit();

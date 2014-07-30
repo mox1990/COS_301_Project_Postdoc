@@ -70,6 +70,15 @@ public class EmployeeInformationTest {
         instance.setPerson(person);
         assertEquals(person, instance.getPerson());
     }
+    
+    @Test
+    public void testSetAndGetLocation() 
+    {
+        EmployeeInformation instance = new EmployeeInformation();
+        Location location = new Location(Long.MAX_VALUE);
+        instance.setLocation(location);
+        assertEquals(location, instance.getLocation());
+    }
 
     @Test
     public void testSetAndGetPhysicalAddress() 

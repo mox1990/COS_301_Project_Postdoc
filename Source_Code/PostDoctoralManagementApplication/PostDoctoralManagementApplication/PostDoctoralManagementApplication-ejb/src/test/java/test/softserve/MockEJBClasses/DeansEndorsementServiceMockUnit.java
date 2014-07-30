@@ -6,7 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.ejb.AuditTrailService;
@@ -26,7 +26,7 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
     private UserGateway uEJB;
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
-    private ApplicationServices aSEJB;
+    private ApplicationServicesUtil aSEJB;
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
@@ -52,7 +52,7 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
         this.aTEJB = aTEJB;
     }
 
-    public void setaSEJB(ApplicationServices aSEJB) {
+    public void setaSEJB(ApplicationServicesUtil aSEJB) {
         this.aSEJB = aSEJB;
     }
     
@@ -93,7 +93,7 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
     }
     
     @Override
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
     }

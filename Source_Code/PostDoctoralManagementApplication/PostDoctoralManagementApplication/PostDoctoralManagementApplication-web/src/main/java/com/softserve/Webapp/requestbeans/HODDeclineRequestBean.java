@@ -71,7 +71,7 @@ public class HODDeclineRequestBean {
     {
         try
         {
-            hodRecommendationServicesLocal.denyAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
+            hodRecommendationServicesLocal.declineAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
             return navigationManagerBean.goToPreviousBreadCrumb();
         }
         catch(Exception ex)

@@ -19,6 +19,7 @@ import com.softserve.DBEntities.Endorsement;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.EligiblityReport;
 import java.util.ArrayList;
 import java.util.List;
 import com.softserve.DBEntities.CommitteeMeeting;
@@ -100,6 +101,11 @@ public class ApplicationJpaController implements Serializable {
                 grantHolder = em.getReference(grantHolder.getClass(), grantHolder.getSystemID());
                 application.setGrantHolder(grantHolder);
             }
+            EligiblityReport eligiblityReport = application.getEligiblityReport();
+            if (eligiblityReport != null) {
+                eligiblityReport = em.getReference(eligiblityReport.getClass(), eligiblityReport.getReportID());
+                application.setEligiblityReport(eligiblityReport);
+            }
             List<Person> attachedPersonList = new ArrayList<Person>();
             for (Person personListPersonToAttach : application.getPersonList()) {
                 personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
@@ -175,6 +181,15 @@ public class ApplicationJpaController implements Serializable {
                 grantHolder.getApplicationList2().add(application);
                 grantHolder = em.merge(grantHolder);
             }
+            if (eligiblityReport != null) {
+                Application oldApplicationOfEligiblityReport = eligiblityReport.getApplication();
+                if (oldApplicationOfEligiblityReport != null) {
+                    oldApplicationOfEligiblityReport.setEligiblityReport(null);
+                    oldApplicationOfEligiblityReport = em.merge(oldApplicationOfEligiblityReport);
+                }
+                eligiblityReport.setApplication(application);
+                eligiblityReport = em.merge(eligiblityReport);
+            }
             for (Person personListPerson : application.getPersonList()) {
                 personListPerson.getApplicationList().add(application);
                 personListPerson = em.merge(personListPerson);
@@ -243,6 +258,8 @@ public class ApplicationJpaController implements Serializable {
             Person fellowNew = application.getFellow();
             Person grantHolderOld = persistentApplication.getGrantHolder();
             Person grantHolderNew = application.getGrantHolder();
+            EligiblityReport eligiblityReportOld = persistentApplication.getEligiblityReport();
+            EligiblityReport eligiblityReportNew = application.getEligiblityReport();
             List<Person> personListOld = persistentApplication.getPersonList();
             List<Person> personListNew = application.getPersonList();
             List<CommitteeMeeting> committeeMeetingListOld = persistentApplication.getCommitteeMeetingList();
@@ -277,6 +294,12 @@ public class ApplicationJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("You must retain FundingReport " + fundingReportOld + " since its application field is not nullable.");
+            }
+            if (eligiblityReportOld != null && !eligiblityReportOld.equals(eligiblityReportNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain EligiblityReport " + eligiblityReportOld + " since its application field is not nullable.");
             }
             for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
                 if (!refereeReportListNew.contains(refereeReportListOldRefereeReport)) {
@@ -328,6 +351,10 @@ public class ApplicationJpaController implements Serializable {
             if (grantHolderNew != null) {
                 grantHolderNew = em.getReference(grantHolderNew.getClass(), grantHolderNew.getSystemID());
                 application.setGrantHolder(grantHolderNew);
+            }
+            if (eligiblityReportNew != null) {
+                eligiblityReportNew = em.getReference(eligiblityReportNew.getClass(), eligiblityReportNew.getReportID());
+                application.setEligiblityReport(eligiblityReportNew);
             }
             List<Person> attachedPersonListNew = new ArrayList<Person>();
             for (Person personListNewPersonToAttach : personListNew) {
@@ -416,6 +443,15 @@ public class ApplicationJpaController implements Serializable {
             if (grantHolderNew != null && !grantHolderNew.equals(grantHolderOld)) {
                 grantHolderNew.getApplicationList2().add(application);
                 grantHolderNew = em.merge(grantHolderNew);
+            }
+            if (eligiblityReportNew != null && !eligiblityReportNew.equals(eligiblityReportOld)) {
+                Application oldApplicationOfEligiblityReport = eligiblityReportNew.getApplication();
+                if (oldApplicationOfEligiblityReport != null) {
+                    oldApplicationOfEligiblityReport.setEligiblityReport(null);
+                    oldApplicationOfEligiblityReport = em.merge(oldApplicationOfEligiblityReport);
+                }
+                eligiblityReportNew.setApplication(application);
+                eligiblityReportNew = em.merge(eligiblityReportNew);
             }
             for (Person personListOldPerson : personListOld) {
                 if (!personListNew.contains(personListOldPerson)) {
@@ -536,6 +572,13 @@ public class ApplicationJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the FundingReport " + fundingReportOrphanCheck + " in its fundingReport field has a non-nullable application field.");
+            }
+            EligiblityReport eligiblityReportOrphanCheck = application.getEligiblityReport();
+            if (eligiblityReportOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the EligiblityReport " + eligiblityReportOrphanCheck + " in its eligiblityReport field has a non-nullable application field.");
             }
             List<RefereeReport> refereeReportListOrphanCheck = application.getRefereeReportList();
             for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {

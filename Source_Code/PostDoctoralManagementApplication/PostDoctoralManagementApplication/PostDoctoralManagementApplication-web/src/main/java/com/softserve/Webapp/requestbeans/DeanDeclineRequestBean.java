@@ -71,7 +71,7 @@ public class DeanDeclineRequestBean {
     {
         try
         {
-            deansEndorsementServiceLocal.denyApplication(sessionManagerBean.getSession(), getSelectedApplication(), reason);
+            deansEndorsementServiceLocal.declineApplication(sessionManagerBean.getSession(), getSelectedApplication(), reason);
             return navigationManagerBean.goToPreviousBreadCrumb();
         }
         catch(Exception ex)

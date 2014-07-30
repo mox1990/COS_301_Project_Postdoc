@@ -98,8 +98,8 @@ CREATE TABLE application (
     _type ENUM('new', 'renewal'),
     _status ENUM('open', 'submitted', 'declined', 'refereed', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
     _timestamp DATETIME NOT NULL,
-    _finalisationDate DATETIME,
-    _eligiblityCheckDate DATETIME,
+	_submissionDate DATETIME,
+    _finalisationDate DATETIME,    
     _startDate DATE,
     _endDate DATE,
     _projectTitle VARCHAR(250),
@@ -111,21 +111,34 @@ CREATE TABLE application (
     FOREIGN KEY (_grantHolder) REFERENCES person (_systemID)
 )  ENGINE=InnoDB;
 
+CREATE TABLE eligiblity_report (
+	_reportID BIGINT UNSIGNED NOT NULL,
+	_eligiblityCheckDate DATETIME,
+	_eligiblityChecker CHAR(9) NOT NULL,
+	PRIMARY KEY (_reportID),
+	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
+	FOREIGN KEY (_eligiblityChecker) REFERENCES person (_systemID)
+)  ENGINE=InnoDB;
+
 CREATE TABLE decline_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
+	_creator CHAR(9) NOT NULL,
 	_timestamp DATETIME,
 	_reason TEXT,
 	PRIMARY KEY (_reportID),
-	FOREIGN KEY (_reportID) REFERENCES application(_applicationID)
+	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
+	FOREIGN KEY (_creator) REFERENCES person (_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE ammend_request (
 	_requestID BIGINT UNSIGNED NOT NULL,
 	_application BIGINT UNSIGNED NOT NULL,
+	_creator CHAR(9) NOT NULL,
 	_timestamp DATETIME,
 	_request TEXT,
 	PRIMARY KEY (_requestID),
-	FOREIGN KEY (_application) REFERENCES application(_applicationID)
+	FOREIGN KEY (_application) REFERENCES application(_applicationID),
+	FOREIGN KEY (_creator) REFERENCES person (_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE recommendation_report (

@@ -6,7 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.PersonJpaController;
@@ -77,7 +77,7 @@ public class GrantHolderFinalisationUnitTest {
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -125,7 +125,7 @@ public class GrantHolderFinalisationUnitTest {
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -174,7 +174,7 @@ public class GrantHolderFinalisationUnitTest {
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -222,7 +222,7 @@ public class GrantHolderFinalisationUnitTest {
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);

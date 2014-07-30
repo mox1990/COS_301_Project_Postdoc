@@ -13,7 +13,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,7 +21,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -31,37 +29,33 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "decline_report")
+@Table(name = "eligiblity_report")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "DeclineReport.findAll", query = "SELECT d FROM DeclineReport d"),
-    @NamedQuery(name = "DeclineReport.findByReportID", query = "SELECT d FROM DeclineReport d WHERE d.reportID = :reportID"),
-    @NamedQuery(name = "DeclineReport.findByTimestamp", query = "SELECT d FROM DeclineReport d WHERE d.timestamp = :timestamp")})
-public class DeclineReport implements Serializable {
+    @NamedQuery(name = "EligiblityReport.findAll", query = "SELECT e FROM EligiblityReport e"),
+    @NamedQuery(name = "EligiblityReport.findByReportID", query = "SELECT e FROM EligiblityReport e WHERE e.reportID = :reportID"),
+    @NamedQuery(name = "EligiblityReport.findByEligiblityCheckDate", query = "SELECT e FROM EligiblityReport e WHERE e.eligiblityCheckDate = :eligiblityCheckDate")})
+public class EligiblityReport implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "_reportID")
     private Long reportID;
-    @Column(name = "_timestamp")
+    @Column(name = "_eligiblityCheckDate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "_reason")
-    private String reason;
+    private Date eligiblityCheckDate;
     @JoinColumn(name = "_reportID", referencedColumnName = "_applicationID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Application application;
-    @JoinColumn(name = "_creator", referencedColumnName = "_systemID")
+    @JoinColumn(name = "_eligiblityChecker", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person creator;
+    private Person eligiblityChecker;
 
-    public DeclineReport() {
+    public EligiblityReport() {
     }
 
-    public DeclineReport(Long reportID) {
+    public EligiblityReport(Long reportID) {
         this.reportID = reportID;
     }
 
@@ -73,20 +67,12 @@ public class DeclineReport implements Serializable {
         this.reportID = reportID;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getEligiblityCheckDate() {
+        return eligiblityCheckDate;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setEligiblityCheckDate(Date eligiblityCheckDate) {
+        this.eligiblityCheckDate = eligiblityCheckDate;
     }
 
     public Application getApplication() {
@@ -97,12 +83,12 @@ public class DeclineReport implements Serializable {
         this.application = application;
     }
 
-    public Person getCreator() {
-        return creator;
+    public Person getEligiblityChecker() {
+        return eligiblityChecker;
     }
 
-    public void setCreator(Person creator) {
-        this.creator = creator;
+    public void setEligiblityChecker(Person eligiblityChecker) {
+        this.eligiblityChecker = eligiblityChecker;
     }
 
     @Override
@@ -115,10 +101,10 @@ public class DeclineReport implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DeclineReport)) {
+        if (!(object instanceof EligiblityReport)) {
             return false;
         }
-        DeclineReport other = (DeclineReport) object;
+        EligiblityReport other = (EligiblityReport) object;
         if ((this.reportID == null && other.reportID != null) || (this.reportID != null && !this.reportID.equals(other.reportID))) {
             return false;
         }
@@ -127,7 +113,7 @@ public class DeclineReport implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEntities.DeclineReport[ reportID=" + reportID + " ]";
+        return "com.softserve.DBEntities.EligiblityReport[ reportID=" + reportID + " ]";
     }
     
 }

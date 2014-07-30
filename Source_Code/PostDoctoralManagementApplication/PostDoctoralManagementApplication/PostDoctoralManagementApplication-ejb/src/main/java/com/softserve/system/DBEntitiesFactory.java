@@ -74,5 +74,38 @@ public class DBEntitiesFactory {
         
         return progressReport;
     }
+    
+    public AmmendRequest bulidAmmendRequestEntity(Application application, String request, Date timestamp)
+    {
+        AmmendRequest ammendRequest = new AmmendRequest();
+        
+        ammendRequest.setApplication(application);
+        ammendRequest.setTimestamp(timestamp);
+        ammendRequest.setRequest(request);
+        
+        return ammendRequest;        
+    }
+    
+    public DeclineReport bulidDeclineReportEntity(Application application, String reason, Date timestamp)
+    {
+        DeclineReport declineReport = new DeclineReport();
+        
+        declineReport.setApplication(application);
+        declineReport.setTimestamp(timestamp);
+        declineReport.setReason(reason);
+        
+        return declineReport;        
+    }
+    
+    public EligiblityReport bulidEligiblityReportEntity(Application application, Person checker, Date timestamp)
+    {
+        EligiblityReport eligiblityReport = new EligiblityReport();
+        
+        eligiblityReport.setApplication(application);
+        eligiblityReport.setEligiblityCheckDate(timestamp);
+        eligiblityReport.setEligiblityChecker(checker);
+        
+        return eligiblityReport;        
+    }
     //Rest of entities: Add as required
 }

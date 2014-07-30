@@ -6,7 +6,7 @@
 
 package com.softserve.ejb;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.PersonJpaController;
@@ -125,9 +125,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      *
      * @return
      */
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServices(emf);
+        return new ApplicationServicesUtil(emf);
     }
     
     /**
@@ -167,7 +167,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED, StartIndex, maxNumberOfRecords);
     }
@@ -180,7 +180,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
     }

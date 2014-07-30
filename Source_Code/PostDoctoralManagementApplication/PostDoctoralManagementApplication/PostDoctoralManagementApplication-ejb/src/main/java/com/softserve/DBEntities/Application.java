@@ -50,8 +50,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByType", query = "SELECT a FROM Application a WHERE a.type = :type"),
     @NamedQuery(name = "Application.findByStatus", query = "SELECT a FROM Application a WHERE a.status = :status"),
     @NamedQuery(name = "Application.findByTimestamp", query = "SELECT a FROM Application a WHERE a.timestamp = :timestamp"),
+    @NamedQuery(name = "Application.findBySubmissionDate", query = "SELECT a FROM Application a WHERE a.submissionDate = :submissionDate"),
     @NamedQuery(name = "Application.findByFinalisationDate", query = "SELECT a FROM Application a WHERE a.finalisationDate = :finalisationDate"),
-    @NamedQuery(name = "Application.findByEligiblityCheckDate", query = "SELECT a FROM Application a WHERE a.eligiblityCheckDate = :eligiblityCheckDate"),
     @NamedQuery(name = "Application.findByStartDate", query = "SELECT a FROM Application a WHERE a.startDate = :startDate"),
     @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
     @NamedQuery(name = "Application.findByProjectTitle", query = "SELECT a FROM Application a WHERE a.projectTitle = :projectTitle")})
@@ -73,12 +73,12 @@ public class Application implements Serializable {
     @Column(name = "_timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
+    @Column(name = "_submissionDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date submissionDate;
     @Column(name = "_finalisationDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date finalisationDate;
-    @Column(name = "_eligiblityCheckDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date eligiblityCheckDate;
     @Column(name = "_startDate")
     @Temporal(TemporalType.DATE)
     private Date startDate;
@@ -116,6 +116,8 @@ public class Application implements Serializable {
     private Person grantHolder;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
     private List<ProgressReport> progressReportList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private EligiblityReport eligiblityReport;
 
     public Application() {
     }
@@ -161,20 +163,20 @@ public class Application implements Serializable {
         this.timestamp = timestamp;
     }
 
+    public Date getSubmissionDate() {
+        return submissionDate;
+    }
+
+    public void setSubmissionDate(Date submissionDate) {
+        this.submissionDate = submissionDate;
+    }
+
     public Date getFinalisationDate() {
         return finalisationDate;
     }
 
     public void setFinalisationDate(Date finalisationDate) {
         this.finalisationDate = finalisationDate;
-    }
-
-    public Date getEligiblityCheckDate() {
-        return eligiblityCheckDate;
-    }
-
-    public void setEligiblityCheckDate(Date eligiblityCheckDate) {
-        this.eligiblityCheckDate = eligiblityCheckDate;
     }
 
     public Date getStartDate() {
@@ -320,6 +322,14 @@ public class Application implements Serializable {
 
     public void setProgressReportList(List<ProgressReport> progressReportList) {
         this.progressReportList = progressReportList;
+    }
+
+    public EligiblityReport getEligiblityReport() {
+        return eligiblityReport;
+    }
+
+    public void setEligiblityReport(EligiblityReport eligiblityReport) {
+        this.eligiblityReport = eligiblityReport;
     }
 
     @Override

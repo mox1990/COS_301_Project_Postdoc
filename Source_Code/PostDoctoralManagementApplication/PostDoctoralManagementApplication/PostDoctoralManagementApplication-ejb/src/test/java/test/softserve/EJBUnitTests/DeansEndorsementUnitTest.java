@@ -6,7 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
@@ -80,7 +80,7 @@ public class DeansEndorsementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -123,7 +123,7 @@ public class DeansEndorsementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -153,7 +153,7 @@ public class DeansEndorsementUnitTest {
     }
 
     /**
-     * Test of denyApplication method, of class DeansEndorsementService.
+     * Test of declineApplication method, of class DeansEndorsementService.
      */
     @Test
     public void testDenyApplication() throws Exception {
@@ -166,7 +166,7 @@ public class DeansEndorsementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -196,18 +196,10 @@ public class DeansEndorsementUnitTest {
 
         try
         {
-            instance.denyApplication(mockSession, mockApplication, reason);
+            instance.declineApplication(mockSession, mockApplication, reason);
             // Declined Application...
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"));
             
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            verify(mockNotificationService).sendNotification(new Notification(Long.MAX_VALUE), true);
-            verify(mockNotificationService).sendNotification(new Notification(Long.MIN_VALUE), true);
         }
         catch (Exception ex)
         {
@@ -230,7 +222,7 @@ public class DeansEndorsementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);

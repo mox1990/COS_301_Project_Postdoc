@@ -6,14 +6,16 @@
 
 package com.softserve.ejb;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.SecurityRole;
@@ -67,6 +69,11 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         return new FundingReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected EligiblityReportJpaController getEligiblityReportDAO()
+    {
+        return new EligiblityReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     /**
      *
      * @return
@@ -103,9 +110,14 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         return new AuditTrailService(emf);
     }
     
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServices(emf);
+        return new ApplicationServicesUtil(emf);
+    }
+    
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
     }
     
     protected boolean hasPhD(Application application)
@@ -165,7 +177,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,StartIndex,maxNumberOfRecords);
     }
@@ -179,7 +191,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
     }
@@ -203,7 +215,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, StartIndex, maxNumberOfRecords);
     }
@@ -217,7 +229,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
     }
@@ -243,40 +255,43 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        EligiblityReportJpaController eligiblityReportJpaController = getEligiblityReportDAO();
         NotificationService notificationService = getNotificationServiceEJB();
         
         Date dobDate = application.getFellow().getCv().getDateOfBirth();
-        GregorianCalendar curCal = new GregorianCalendar();
-        GregorianCalendar dobCal = new GregorianCalendar();
-        dobCal.set(dobDate.getYear(), dobDate.getMonth() + 1, dobDate.getDay());
+        GregorianCalendar curCal = getGregorianCalendar();
+        GregorianCalendar dobCal = getGregorianCalendar();
+        dobCal.setTime(dobDate);
+        dobCal.add(GregorianCalendar.MONTH, 1);
         
-        application.setEligiblityCheckDate(new Date());
-        if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
+        if(application.getEligiblityReport() != null)
         {
-            
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
-            applicationJpaController.edit(application);
-            
-            //Log action  
-            AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application made eligible" + application.getApplicationID(), session.getUser());
-            auditTrailService.logAction(auditLog);
+        
+            if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
+            {
+
+                application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+                applicationJpaController.edit(application);
+
+                //Log action  
+                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application made eligible" + application.getApplicationID(), session.getUser());
+                auditTrailService.logAction(auditLog);
+            }
+            else
+            {
+                //Send notification to grant holder and applicatantD
+                String reason = "Prospective fellow does not meet the eligiblity requirement";
+
+                ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+                applicationServices.declineAppliction(session, application, reason);
+            }
+
+            EligiblityReport eligiblityReport = dBEntitiesFactory.bulidEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
+            eligiblityReportJpaController.create(eligiblityReport);
         }
         else
         {
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-            applicationJpaController.edit(application);
-            
-            //Log action  
-            AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
-            auditTrailService.logAction(auditLog);
-        
-            //Send notification to grant holder and applicatantD
-            String reason = "Prospective fellow does not meet the eligiblity requirement";
-            Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(notification, true);
-        
-            notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(notification, true);
+            throw new Exception("Application already checked for eligiblity.");
         }
     }
     
@@ -299,25 +314,8 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
-        
-        //Set application status to declined
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-        applicationJpaController.edit(application);
-        
-        //Log action  
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
-
-        //Send notification to grant holder and applicatantD
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
-
-        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        applicationServices.declineAppliction(session, application, reason);   
     }
     
     /**

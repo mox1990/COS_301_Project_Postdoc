@@ -6,13 +6,17 @@
 
 package com.softserve.ejb;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
+import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
@@ -21,6 +25,8 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -65,6 +71,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         return new RecommendationReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected AmmendRequestJpaController getAmmendRequestDAO()
+    {
+        return new AmmendRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     /**
      *
      * @return
@@ -105,9 +116,14 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      *
      * @return
      */
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServices(emf);
+        return new ApplicationServicesUtil(emf);
+    }
+    
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
     }
     
     /**
@@ -126,7 +142,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
     }
@@ -139,7 +155,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
     }
@@ -155,32 +171,15 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws Exception
      */
     @Override
-    public void denyAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    public void declineAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
-        
-        //Deny application
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);        
-        applicationJpaController.edit(application);
-        
-        //Log action  
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
-        
-        //Send notification to grant holder and applicatantD
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
-        
-        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        applicationServices.declineAppliction(session, application, reason);               
     }
     
     /**
@@ -202,6 +201,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
@@ -209,6 +209,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         //Ammend application
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);        
         applicationJpaController.edit(application);
+        
+        AmmendRequest ammendRequest = dBEntitiesFactory.bulidAmmendRequestEntity(application, reason, getGregorianCalendar().getTime());
+        ammendRequestJpaController.create(ammendRequest);
         
         //Log action        
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + application.getApplicationID(), session.getUser());
@@ -233,7 +236,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws Exception
      */
     @Override
-    public void approveApplication(Session session, Application application, RecommendationReport recommendationReport) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();

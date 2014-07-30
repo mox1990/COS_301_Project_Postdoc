@@ -6,7 +6,7 @@
 
 package com.softserve.ejb;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
@@ -77,9 +77,9 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new AuditTrailService(emf);
     }
     
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServices(emf);
+        return new ApplicationServicesUtil(emf);
     }
     
     @Override
@@ -90,7 +90,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, StartIndex, maxNumberOfRecords);
     }
@@ -103,37 +103,21 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServices applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
     }
     
     @Override
-    public void denyApplication(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    public void declineApplication(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
-        
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
-        applicationJpaController.edit(application);
-        
-        //Log action  
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
-
-        //Send notification to grant holder and applicatantD
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
-
-        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        applicationServices.declineAppliction(session, application, reason);   
     }
     
     @Override

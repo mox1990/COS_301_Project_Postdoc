@@ -6,7 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBEntities.AcademicQualification;
@@ -30,7 +30,7 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     private UserGateway uEJB;
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
-    private ApplicationServices aSEJB;
+    private ApplicationServicesUtil aSEJB;
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
@@ -56,7 +56,7 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
         this.aTEJB = aTEJB;
     }
 
-    public void setaSEJB(ApplicationServices aSEJB) {
+    public void setaSEJB(ApplicationServicesUtil aSEJB) {
         this.aSEJB = aSEJB;
     }
     
@@ -91,7 +91,7 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
         return aTEJB;
     }
     
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
     }

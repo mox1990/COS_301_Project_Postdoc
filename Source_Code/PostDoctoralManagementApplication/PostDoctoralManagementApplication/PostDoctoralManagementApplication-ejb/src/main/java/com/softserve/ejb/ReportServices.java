@@ -123,8 +123,6 @@ public class ReportServices implements ReportServicesLocal
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getStatus());
             
-            cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getEligiblityCheckDate());
             
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getEndorsement().getDean().getCompleteName() + ": " + application.getEndorsement().getMotivation());

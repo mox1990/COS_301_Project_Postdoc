@@ -101,9 +101,9 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         return -1;
     }
     
-    private boolean hasApplicationPassedThisStatus(Application application, String status)
+    private boolean hasApplicationAchivedThisStatus(Application application, String status)
     {
-        return getOrderIndexOfApplicationStatus(application.getStatus()) > getOrderIndexOfApplicationStatus(status);
+        return getOrderIndexOfApplicationStatus(application.getStatus()) >= getOrderIndexOfApplicationStatus(status);
     }
     
     
@@ -141,15 +141,18 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         //Opening information
         stageStatuses.add(new ApplicationStageStatus(application.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, application.getFellow()));
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
+            stageStatuses.add(new ApplicationStageStatus(application.getSubmissionDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, application.getFellow()));
+            
             //Add referee information
             for(RefereeReport rr : application.getRefereeReportList())
             {
                 stageStatuses.add(new ApplicationStageStatus(rr.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, rr.getReferee()));
             }
         }
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
+        
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
         {
             if(application.getRefereeReportList().size() == application.getPersonList().size())
             {
@@ -157,7 +160,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             }
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
             //Still need to sort out date issue
             if(application.getFinalisationDate() != null)
@@ -166,7 +169,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             }
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
             //HOD recommendation information
             if(application.getRecommendationReport()!= null)
@@ -175,7 +178,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             }
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
         {
             //Deans endorsement information
             if(application.getEndorsement()!= null)
@@ -184,16 +187,25 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             }
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
         {
             //Eligiblity information information
-            if(application.getEndorsement()!= null)
+            if(application.getEligiblityReport() != null)
             {
-                stageStatuses.add(new ApplicationStageStatus(application.getEligiblityCheckDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, null));
+                stageStatuses.add(new ApplicationStageStatus(application.getEligiblityReport().getEligiblityCheckDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, application.getEligiblityReport().getEligiblityChecker()));
             }
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED))
+        {
+            //Eligiblity information information
+            if(application.getDeclineReport()!= null)
+            {
+                stageStatuses.add(new ApplicationStageStatus(application.getDeclineReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, application.getDeclineReport().getCreator()));
+            }
+        }
+        
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED))
         {
             //Funding information information
             if(application.getFundingReport()!= null)
@@ -202,13 +214,13 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             }
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED))
         {
             stageStatuses.add(new ApplicationStageStatus(application.getEndDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED, application.getFundingReport().getDris()));
 
         }
         
-        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED))
         {
             stageStatuses.add(new ApplicationStageStatus(application.getEndDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED, application.getFundingReport().getDris()));
 

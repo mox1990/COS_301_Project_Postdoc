@@ -53,6 +53,9 @@ public class AmmendRequest implements Serializable {
     @JoinColumn(name = "_application", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
     private Application application;
+    @JoinColumn(name = "_creator", referencedColumnName = "_systemID")
+    @ManyToOne(optional = false)
+    private Person creator;
 
     public AmmendRequest() {
     }
@@ -91,6 +94,14 @@ public class AmmendRequest implements Serializable {
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public Person getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Person creator) {
+        this.creator = creator;
     }
 
     @Override

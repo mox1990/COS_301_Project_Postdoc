@@ -102,8 +102,6 @@ public class Person implements Serializable {
     @Size(max = 8)
     @Column(name = "_accountStatus")
     private String accountStatus;
-    @ManyToMany(mappedBy = "personList")
-    private List<CommitteeMeeting> committeeMeetingList;
     @JoinTable(name = "person_security_role", joinColumns = {
         @JoinColumn(name = "_personID", referencedColumnName = "_systemID")}, inverseJoinColumns = {
         @JoinColumn(name = "_roleID", referencedColumnName = "_roleID")})
@@ -114,22 +112,28 @@ public class Person implements Serializable {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany
     private List<Application> applicationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-    private List<AuditLog> auditLogList;
+    @ManyToMany(mappedBy = "personList")
+    private List<CommitteeMeeting> committeeMeetingList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private List<DeclineReport> declineReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dean")
     private List<Endorsement> endorsementList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    private List<AuditLog> auditLogList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
     private List<RecommendationReport> recommendationReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee")
     private List<RefereeReport> refereeReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private EmployeeInformation employeeInformation;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
-    private List<FundingReport> fundingReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
     private List<Notification> notificationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reciever")
     private List<Notification> notificationList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
+    private List<FundingReport> fundingReportList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private List<AmmendRequest> ammendRequestList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Cv cv;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
@@ -141,6 +145,8 @@ public class Person implements Serializable {
     private Address addressLine1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendee")
     private List<MinuteComment> minuteCommentList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eligiblityChecker")
+    private List<EligiblityReport> eligiblityReportList;
 
     public Person() {
     }
@@ -261,15 +267,6 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public List<CommitteeMeeting> getCommitteeMeetingList() {
-        return committeeMeetingList;
-    }
-
-    public void setCommitteeMeetingList(List<CommitteeMeeting> committeeMeetingList) {
-        this.committeeMeetingList = committeeMeetingList;
-    }
-
-    @XmlTransient
     public List<SecurityRole> getSecurityRoleList() {
         return securityRoleList;
     }
@@ -288,12 +285,21 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public List<AuditLog> getAuditLogList() {
-        return auditLogList;
+    public List<CommitteeMeeting> getCommitteeMeetingList() {
+        return committeeMeetingList;
     }
 
-    public void setAuditLogList(List<AuditLog> auditLogList) {
-        this.auditLogList = auditLogList;
+    public void setCommitteeMeetingList(List<CommitteeMeeting> committeeMeetingList) {
+        this.committeeMeetingList = committeeMeetingList;
+    }
+
+    @XmlTransient
+    public List<DeclineReport> getDeclineReportList() {
+        return declineReportList;
+    }
+
+    public void setDeclineReportList(List<DeclineReport> declineReportList) {
+        this.declineReportList = declineReportList;
     }
 
     @XmlTransient
@@ -303,6 +309,15 @@ public class Person implements Serializable {
 
     public void setEndorsementList(List<Endorsement> endorsementList) {
         this.endorsementList = endorsementList;
+    }
+
+    @XmlTransient
+    public List<AuditLog> getAuditLogList() {
+        return auditLogList;
+    }
+
+    public void setAuditLogList(List<AuditLog> auditLogList) {
+        this.auditLogList = auditLogList;
     }
 
     @XmlTransient
@@ -332,15 +347,6 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public List<FundingReport> getFundingReportList() {
-        return fundingReportList;
-    }
-
-    public void setFundingReportList(List<FundingReport> fundingReportList) {
-        this.fundingReportList = fundingReportList;
-    }
-
-    @XmlTransient
     public List<Notification> getNotificationList() {
         return notificationList;
     }
@@ -356,6 +362,24 @@ public class Person implements Serializable {
 
     public void setNotificationList1(List<Notification> notificationList1) {
         this.notificationList1 = notificationList1;
+    }
+
+    @XmlTransient
+    public List<FundingReport> getFundingReportList() {
+        return fundingReportList;
+    }
+
+    public void setFundingReportList(List<FundingReport> fundingReportList) {
+        this.fundingReportList = fundingReportList;
+    }
+
+    @XmlTransient
+    public List<AmmendRequest> getAmmendRequestList() {
+        return ammendRequestList;
+    }
+
+    public void setAmmendRequestList(List<AmmendRequest> ammendRequestList) {
+        this.ammendRequestList = ammendRequestList;
     }
 
     public Cv getCv() {
@@ -399,6 +423,15 @@ public class Person implements Serializable {
 
     public void setMinuteCommentList(List<MinuteComment> minuteCommentList) {
         this.minuteCommentList = minuteCommentList;
+    }
+
+    @XmlTransient
+    public List<EligiblityReport> getEligiblityReportList() {
+        return eligiblityReportList;
+    }
+
+    public void setEligiblityReportList(List<EligiblityReport> eligiblityReportList) {
+        this.eligiblityReportList = eligiblityReportList;
     }
 
     @Override

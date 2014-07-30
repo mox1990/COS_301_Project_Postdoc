@@ -92,7 +92,7 @@ public class HODRecommendRequestBean {
         try
         {
             recommendationReport.setContentXMLEntity(recommendationReportContent);
-            hodRecommendationServicesLocal.approveApplication(sessionManagerBean.getSession(), getSelectedApplication(), recommendationReport);
+            hodRecommendationServicesLocal.recommendApplication(sessionManagerBean.getSession(), getSelectedApplication(), recommendationReport);
             return navigationManagerBean.goToHODApplicationSelectionView();
         }
         catch(Exception ex)

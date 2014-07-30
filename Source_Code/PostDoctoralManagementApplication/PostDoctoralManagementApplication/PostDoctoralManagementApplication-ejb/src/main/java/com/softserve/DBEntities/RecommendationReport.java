@@ -103,7 +103,7 @@ public class RecommendationReport implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-    
+
     public RecommendationReportContent getContentXMLEntity()
     {
         XMLUnmarshaller xmlu = new XMLUnmarshaller();
