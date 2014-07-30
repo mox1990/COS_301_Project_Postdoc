@@ -97,7 +97,10 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         stageStatuses.get(stageStatuses.size() - 1).setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
         
         //Still need to sort out date issue
-        stageStatuses.add(new ApplicationStageStatus(application.getFinalisationDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, application.getGrantHolderID()));
+        if(application.getFinalisationDate() != null)
+        {
+            stageStatuses.add(new ApplicationStageStatus(application.getFinalisationDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, application.getGrantHolderID()));
+        }
         
         //HOD recommendation information
         if(application.getRecommendationReport()!= null)

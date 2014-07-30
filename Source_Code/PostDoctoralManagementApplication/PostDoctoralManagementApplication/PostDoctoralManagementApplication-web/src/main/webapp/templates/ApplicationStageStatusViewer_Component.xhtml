@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:component>
+        <p:carousel  value="#{applicationStageStatusViewerRequestBean.applicationStageStatuses}" var="applicationStage" circular="true" numVisible="1">
+            <p:tab title="Application status change to #{applicationStage.status}" >
+                <h:panelGrid columns="2" cellpadding="10px">
+                    <h:outputText styleClass="text-label" value="Status:"/>
+                    <h:outputText value="#{applicationStage.status}"/>
+                    <h:outputText styleClass="text-label" value="Changed by:"/>
+                    <h:outputText value="#{applicationStage.authority.completeName} (#{applicationStage.authority.systemID})" />
+                    <h:outputText styleClass="text-label" value="Changed at:"/>
+                    <h:outputText value="#{applicationStage.timestamp}"/>
+                </h:panelGrid>
+            </p:tab>
+        </p:carousel>         
+    </ui:component>        
+</html>
+
