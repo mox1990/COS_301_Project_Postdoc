@@ -68,7 +68,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
         conversationManagerBean.startConversation(conversation);
         
         person = new Person();
-        
+        person.setTitle("Mr.");        
         address = new Address();
         employeeInformation = new EmployeeInformation();
         upAddress = new Address();

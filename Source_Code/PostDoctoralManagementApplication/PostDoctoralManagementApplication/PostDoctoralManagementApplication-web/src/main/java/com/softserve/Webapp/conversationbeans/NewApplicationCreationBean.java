@@ -95,7 +95,6 @@ public class NewApplicationCreationBean implements Serializable {
     private List<Person> referees;
     private Person currentReferee;
    
-   
     
     /**
      * Creates a new instance of NewApplicationCreationBean
@@ -182,6 +181,7 @@ public class NewApplicationCreationBean implements Serializable {
         if(grantHolder == null)
         {
             grantHolder = new Person();
+            grantHolder.setTitle("Mr");
         }
         
         if(referees == null)
@@ -193,6 +193,7 @@ public class NewApplicationCreationBean implements Serializable {
         currentAim = "";
         currentExpectedOutcome = "";
         currentReferee = new Person();
+        currentReferee.setTitle("Mr");
     }
 
     public List<AcademicQualification> getAcademicQualificationList() {
@@ -483,8 +484,12 @@ public class NewApplicationCreationBean implements Serializable {
             openApplication.setFellow(session.getUser());
             
             newApplicationServiceLocal.createNewApplication(session, openApplication);
+            if(openApplication.getGrantHolder() != null)
+            {
+                wizardActiveTab++;
+            }
             wizardActiveTab++;
-            
+            sessionManagerBean.clearSessionStroage();
             
         }
         catch(Exception ex)
@@ -499,8 +504,10 @@ public class NewApplicationCreationBean implements Serializable {
     {
         try 
         {
+            
             newApplicationServiceLocal.linkGrantHolderToApplication(sessionManagerBean.getSession(), openApplication, grantHolder);
             wizardActiveTab++;
+            sessionManagerBean.clearSessionStroage();
         } 
         catch (Exception ex) 
         {
@@ -518,6 +525,10 @@ public class NewApplicationCreationBean implements Serializable {
         {
             for(Person referee: referees)
             {
+                if(referee == null)
+                {
+                    System.out.println("Null ref===============================");
+                }
                 newApplicationServiceLocal.linkRefereeToApplication(sessionManagerBean.getSession(), openApplication, referee);
                 wizardActiveTab++;
             }            

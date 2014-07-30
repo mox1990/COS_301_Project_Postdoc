@@ -53,6 +53,7 @@ public class ApplicationStageStatusViewerRequestBean {
         {
             ExceptionUtil.logException(ApplicationStageStatusViewerRequestBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            
             return new ArrayList<ApplicationStageStatus>();
         }
     }

@@ -18,7 +18,7 @@
                     <h:outputText styleClass="text-label" value="Fellow name:"/>
                     <h:outputText value="#{selectedApplication.fellow.completeName}"/>
                     <h:outputText styleClass="text-label" value="Grant holder name:"/>
-                    <h:outputText value="#{selectedApplication.grantHolderID.completeName}"/>
+                    <h:outputText value="#{selectedApplication.grantHolder.completeName}"/>
                     <h:outputText styleClass="text-label" value="Finalisation date of application" rendered="#{selectedApplication.finalisationDate != null}"/>
                     <h:outputText value="#{selectedApplication.finalisationDate}"/>
                     <h:outputText styleClass="text-label" value="Application commencement date:" rendered="#{selectedApplication.startDate != null}"/>
@@ -33,23 +33,8 @@
                             <h:outputText styleClass="text-label" value="Project title:"/>
                             <h:outputText value="#{selectedApplication.projectTitle}"/>
                             
-                            <h:outputText styleClass="text-label" value="Project team members:"/>
-                            <ui:decorate template="teamMembersDataList_Component.xhtml">
-                                <ui:param name="header" value="Team members list"/>
-                                <ui:param name="members" value="#{selectedApplication.informationXMLEntity.teamMembers.member}" />
-                            </ui:decorate>
                             
-                            <h:outputText styleClass="text-label" value="Project aims:"/>
-                            <ui:decorate template="projectAimsDataList_Component.xhtml">
-                                <ui:param name="header" value="Project aims list"/>
-                                <ui:param name="aims" value="#{selectedApplication.informationXMLEntity.projectAims.aim}" />
-                            </ui:decorate>
-         
-                            <h:outputText styleClass="text-label" value="Project expected outcomes:"/>
-                            <ui:decorate template="expectedOutcomesDataList_Component.xhtml">
-                                <ui:param name="header" value="Expected project outcomes list"/>
-                                <ui:param name="expectedOutcomes" value="#{selectedApplication.informationXMLEntity.expectedOutcomes.outcome}" />
-                            </ui:decorate>
+                           
                             
                             <h:outputText styleClass="text-label" value="Research Methodology:"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.researchMethodology}"/>
@@ -62,17 +47,33 @@
                             <h:outputText styleClass="text-label" value="Project motivation:"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.projectMotivation}"/> 
                         </h:panelGrid>
-                    </p:tab>
-                    
-                    <p:tab title="Fellow cv" rendered="#{selectedApplication.grantHolderID.cv != null}">
-                        <ui:decorate template="cvViewer_Component.xhtml">
-                            <ui:param name="cv" value="#{selectedApplication.grantHolderID.cv}"/>
+                         <ui:decorate template="teamMembersDataList_Component.xhtml">
+                            <ui:param name="header" value="Team members list"/>
+                            <ui:param name="members" value="#{selectedApplication.informationXMLEntity.teamMembers.member}" />
+                        </ui:decorate>
+
+
+                        <ui:decorate template="projectAimsDataList_Component.xhtml">
+                            <ui:param name="header" value="Project aims list"/>
+                            <ui:param name="aims" value="#{selectedApplication.informationXMLEntity.projectAims.aim}" />
+                        </ui:decorate>
+
+
+                        <ui:decorate template="expectedOutcomesDataList_Component.xhtml">
+                            <ui:param name="header" value="Expected project outcomes list"/>
+                            <ui:param name="expectedOutcomes" value="#{selectedApplication.informationXMLEntity.expectedOutcomes.outcome}" />
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Grant holder cv" rendered="#{selectedApplication.fellow.cv != null}">
+                    <p:tab title="Fellow cv" rendered="#{selectedApplication.fellow.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
                             <ui:param name="cv" value="#{selectedApplication.fellow.cv}"/>
+                        </ui:decorate>
+                    </p:tab>
+                    
+                    <p:tab title="Grant holder cv" rendered="#{selectedApplication.grantHolder.cv != null}">
+                        <ui:decorate template="cvViewer_Component.xhtml">
+                            <ui:param name="cv" value="#{selectedApplication.grantHolder.cv}"/>
                         </ui:decorate>
                     </p:tab>
                     

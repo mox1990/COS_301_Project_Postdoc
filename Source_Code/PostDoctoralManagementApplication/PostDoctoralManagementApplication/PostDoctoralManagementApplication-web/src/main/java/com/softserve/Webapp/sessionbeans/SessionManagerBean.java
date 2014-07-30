@@ -204,4 +204,17 @@ public class SessionManagerBean implements Serializable {
     {
         sessionStroage.clear();
     }
+    
+    public void updateObjectInSessionStroageAt(int index, Object object)
+    {
+        if(index > -1 && sessionStroage.size() < index)
+        {
+            sessionStroage.set(index, object);
+        }
+    }
+    
+    public int countObjectsInSessionStroage()
+    {
+        return sessionStroage.size();
+    }
 }

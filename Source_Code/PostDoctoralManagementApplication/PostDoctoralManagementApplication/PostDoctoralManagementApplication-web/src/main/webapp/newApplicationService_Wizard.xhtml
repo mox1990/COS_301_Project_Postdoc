@@ -83,6 +83,8 @@
                                         <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
                                             <ui:param name="renderAttribute" value="#{true}"/>
                                             <ui:param name="person" value="#{newApplicationCreationBean.currentReferee}"/>
+                                            <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                            <ui:param name="beanAction" value="setCurrentReferee"/>
                                         </ui:decorate>
                                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                                         <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill"/>

@@ -21,9 +21,9 @@
                 <p:message for="email" styleClass="fieldErrorMessage"/>
 
                 <p:outputLabel value="Title:" for="title"/>            
-                <p:selectOneMenu id="title" value="#{person.title}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}">
+                <p:selectOneButton id="title" value="#{person.title}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}">
                     <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
-                </p:selectOneMenu>
+                </p:selectOneButton>
                 <p:message for="title" styleClass="fieldErrorMessage"/>
 
                 <p:outputLabel value="Full name:" for="fname"/>                                

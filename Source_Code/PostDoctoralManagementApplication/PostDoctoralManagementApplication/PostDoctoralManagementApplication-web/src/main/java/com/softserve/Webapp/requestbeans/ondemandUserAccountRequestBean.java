@@ -36,26 +36,41 @@ public class ondemandUserAccountRequestBean {
     /**
      * Creates a new instance of ondemandUserAccountRequestBean
      */
-    public ondemandUserAccountRequestBean() {
+    public ondemandUserAccountRequestBean() 
+    {
     }
     
     public boolean doesUserAccountExist()
     {
-        return userAccountFound != null; 
+        if(sessionManagerBean.countObjectsInSessionStroage() == 0)
+        {
+            return false;
+        }
+        
+        return sessionManagerBean.getObjectFromSessionStroage(0, Boolean.class); 
     }
     
     public Person findUserAccount(String email, Person updatablePerson)
     {
         userAccountFound = userAccountManagementServiceLocal.getUserBySystemIDOrEmail(email);
         
-        if(doesUserAccountExist())
+        if(userAccountFound != null)
         {
             MessageUtil.CreateGlobalFacesMessage("User account found!", "The user account with specified email has been found in our databases.", FacesMessage.SEVERITY_INFO);
+            sessionManagerBean.clearSessionStroage();
+            sessionManagerBean.addObjectToSessionStroage(true);
             return userAccountFound;
         }
         else
         {
-            return new Person();
+            sessionManagerBean.clearSessionStroage();
+            sessionManagerBean.addObjectToSessionStroage(false);
+            updatablePerson.setSystemID("");
+            if(updatablePerson.getTitle() == null || updatablePerson.getTitle().equals(""))
+            {
+                updatablePerson.setTitle("Mr.");
+            }
+            return updatablePerson;
         }
     }
 }

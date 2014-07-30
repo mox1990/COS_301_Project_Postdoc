@@ -1170,9 +1170,10 @@ public class PersonJpaController implements Serializable {
     public boolean doesPersonHaveSecurityRole(Person person, long roleID)
     {
         boolean isFound = false;
-        
+        System.out.println(person.getSecurityRoleList().toString());
         for(SecurityRole sr : person.getSecurityRoleList())
         {
+            System.out.println(sr.toString());
             if(sr.getRoleID() == roleID)
             {
                 isFound = true;

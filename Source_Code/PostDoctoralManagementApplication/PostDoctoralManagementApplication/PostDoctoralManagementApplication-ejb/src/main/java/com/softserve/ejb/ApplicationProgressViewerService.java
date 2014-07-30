@@ -97,8 +97,12 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         {
             return 9;
         }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED))
+        {
+            return 9;
+        }
         
-        return -1;
+        return 20;
     }
     
     private boolean hasApplicationAchivedThisStatus(Application application, String status)

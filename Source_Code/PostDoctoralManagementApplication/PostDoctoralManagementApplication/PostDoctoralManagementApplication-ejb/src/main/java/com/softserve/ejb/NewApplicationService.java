@@ -196,7 +196,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         //Check if referee already exists
-        if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
+        if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()) != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
         {
             referee.setAddressLine1(new Address());
               

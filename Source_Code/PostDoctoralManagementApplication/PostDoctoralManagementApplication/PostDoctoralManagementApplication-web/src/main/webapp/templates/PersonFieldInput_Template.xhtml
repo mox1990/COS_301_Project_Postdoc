@@ -11,9 +11,9 @@
                 <ui:insert name="header"/>                
             </f:facet>
             <p:outputLabel value="Title:" for="title"/>                                    
-            <p:selectOneMenu id="title" value="#{person.title}">
+            <p:selectOneButton id="title" value="#{person.title}">
                 <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
-            </p:selectOneMenu>
+            </p:selectOneButton>
             <p:message for="title" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Full name:" for="fname"/>                                

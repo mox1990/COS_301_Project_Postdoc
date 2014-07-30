@@ -72,9 +72,10 @@ public class GeneralUserAccountCreationBean implements Serializable{
     public void init()
     {
         conversationManagerBean.registerConversation(conversation);
-        conversation.begin();
+        conversationManagerBean.startConversation(conversation);
         
         person = new Person();  
+        person.setTitle("Mr.");
         address = new Address();
         employeeInformation = new EmployeeInformation();
         upAddress = new Address();
@@ -150,11 +151,18 @@ public class GeneralUserAccountCreationBean implements Serializable{
         {
             if(isSystemAdmin)
             {
-                targetRoles.addAll(sourceRoles);
-                targetRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+                securityRoles.getTarget().addAll(securityRoles.getSource());
+                
+                
+                securityRoles.getTarget().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
+            System.out.println(securityRoles.getSource().toString());
+            System.out.println(securityRoles.getTarget().toString());
+
+            person.setSecurityRoleList(new ArrayList<SecurityRole>());
+            person.getSecurityRoleList().addAll(securityRoles.getTarget());
             
-            person.setSecurityRoleList(targetRoles);
+            System.out.println(person.getSecurityRoleList().toString());
             
             person.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
             person.setAddressLine1(address);
@@ -165,19 +173,20 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);
-                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), false, person);               
+                userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), true, person);               
             }
             else
             {
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), false, person);            
             }
-            
+            System.out.println("================================= about to clear");
             sessionManagerBean.clearSessionStroage();
             conversationManagerBean.deregisterConversation(conversation);
-            return navigationManagerBean.goToPreviousBreadCrumb();
+            return navigationManagerBean.goToUserAccountManagementServicesHomeView();
         } 
         catch (Exception ex) 
         {
+            ExceptionUtil.logException(GeneralUserAccountCreationBean.class, ex);
             ExceptionUtil.handleException(errorContainer, ex);
             return "";
         }
