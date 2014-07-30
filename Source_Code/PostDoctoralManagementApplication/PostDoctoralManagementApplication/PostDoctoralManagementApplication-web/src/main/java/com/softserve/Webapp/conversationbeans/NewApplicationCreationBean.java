@@ -161,7 +161,7 @@ public class NewApplicationCreationBean implements Serializable {
         {
             informationXMLEntity = openApplication.getInformationXMLEntity();
             referees = openApplication.getPersonList();
-            grantHolder = openApplication.getGrantHolderID();
+            grantHolder = openApplication.getGrantHolder();
         }
         
         if(informationXMLEntity.getTeamMembers() == null)

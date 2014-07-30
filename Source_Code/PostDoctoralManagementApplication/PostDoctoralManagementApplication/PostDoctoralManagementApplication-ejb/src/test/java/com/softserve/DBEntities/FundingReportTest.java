@@ -96,12 +96,12 @@ public class FundingReportTest {
     }
 
     @Test
-    public void testSetAndGetDrisID() 
+    public void testSetAndGetDris() 
     {
         FundingReport instance = new FundingReport();
         Person person = new Person("r12019837");
-        instance.setDrisID(person);
-        assertEquals(person, instance.getDrisID());
+        instance.setDris(person);
+        assertEquals(person, instance.getDris());
     }
 
     @Test

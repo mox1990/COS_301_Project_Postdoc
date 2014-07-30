@@ -64,12 +64,12 @@ public class EndorsementTest {
     }
 
     @Test
-    public void testSetAndGetDeanID() 
+    public void testSetAndGetDean() 
     {
         Endorsement instance = new Endorsement();
         Person person = new Person("r12019837");
-        instance.setDeanID(person);
-        assertEquals(person, instance.getDeanID());
+        instance.setDean(person);
+        assertEquals(person, instance.getDean());
     }
 
     @Test

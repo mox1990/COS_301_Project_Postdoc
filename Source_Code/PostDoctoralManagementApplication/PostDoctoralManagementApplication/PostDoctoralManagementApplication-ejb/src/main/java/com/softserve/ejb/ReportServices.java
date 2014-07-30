@@ -106,7 +106,7 @@ public class ReportServices implements ReportServicesLocal
             cell.setCellValue(application.getFellow().getCompleteName());
             
             cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getGrantHolderID().getCompleteName());
+            cell.setCellValue(application.getGrantHolder().getCompleteName());
             
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getProjectTitle());
@@ -127,7 +127,7 @@ public class ReportServices implements ReportServicesLocal
             cell.setCellValue(application.getEligiblityCheckDate());
             
             cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getEndorsement().getDeanID().getCompleteName() + ": " + application.getEndorsement().getMotivation());
+            cell.setCellValue(application.getEndorsement().getDean().getCompleteName() + ": " + application.getEndorsement().getMotivation());
             
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getFinalisationDate());
@@ -136,7 +136,7 @@ public class ReportServices implements ReportServicesLocal
             cell.setCellValue(application.getFundingReport().toString());
             
             cell = row.createCell(cIndex++);
-            cell.setCellValue(application.getRecommendationReport().getHodID().getCompleteName() + ": " + application.getRecommendationReport().getContent());
+            cell.setCellValue(application.getRecommendationReport().getHod().getCompleteName() + ": " + application.getRecommendationReport().getContent());
             
             cell = row.createCell(cIndex++);
             cell.setCellValue(application.getType());

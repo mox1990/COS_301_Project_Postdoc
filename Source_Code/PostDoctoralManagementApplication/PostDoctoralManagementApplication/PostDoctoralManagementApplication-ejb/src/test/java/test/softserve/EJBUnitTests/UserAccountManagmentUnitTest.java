@@ -8,11 +8,11 @@ package test.softserve.EJBUnitTests;
 
 import com.softserve.DBDAO.AddressJpaController;
 import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.UpEmployeeInformationJpaController;
+import com.softserve.DBDAO.EmployeeInformationJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;

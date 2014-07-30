@@ -43,15 +43,15 @@ public class AcademicQualificationJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Cv cvID = academicQualification.getCvID();
-            if (cvID != null) {
-                cvID = em.getReference(cvID.getClass(), cvID.getCvID());
-                academicQualification.setCvID(cvID);
+            Cv cv = academicQualification.getCv();
+            if (cv != null) {
+                cv = em.getReference(cv.getClass(), cv.getCvID());
+                academicQualification.setCv(cv);
             }
             em.persist(academicQualification);
-            if (cvID != null) {
-                cvID.getAcademicQualificationList().add(academicQualification);
-                cvID = em.merge(cvID);
+            if (cv != null) {
+                cv.getAcademicQualificationList().add(academicQualification);
+                cv = em.merge(cv);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -74,20 +74,20 @@ public class AcademicQualificationJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             AcademicQualification persistentAcademicQualification = em.find(AcademicQualification.class, academicQualification.getQualificationID());
-            Cv cvIDOld = persistentAcademicQualification.getCvID();
-            Cv cvIDNew = academicQualification.getCvID();
-            if (cvIDNew != null) {
-                cvIDNew = em.getReference(cvIDNew.getClass(), cvIDNew.getCvID());
-                academicQualification.setCvID(cvIDNew);
+            Cv cvOld = persistentAcademicQualification.getCv();
+            Cv cvNew = academicQualification.getCv();
+            if (cvNew != null) {
+                cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
+                academicQualification.setCv(cvNew);
             }
             academicQualification = em.merge(academicQualification);
-            if (cvIDOld != null && !cvIDOld.equals(cvIDNew)) {
-                cvIDOld.getAcademicQualificationList().remove(academicQualification);
-                cvIDOld = em.merge(cvIDOld);
+            if (cvOld != null && !cvOld.equals(cvNew)) {
+                cvOld.getAcademicQualificationList().remove(academicQualification);
+                cvOld = em.merge(cvOld);
             }
-            if (cvIDNew != null && !cvIDNew.equals(cvIDOld)) {
-                cvIDNew.getAcademicQualificationList().add(academicQualification);
-                cvIDNew = em.merge(cvIDNew);
+            if (cvNew != null && !cvNew.equals(cvOld)) {
+                cvNew.getAcademicQualificationList().add(academicQualification);
+                cvNew = em.merge(cvNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -123,10 +123,10 @@ public class AcademicQualificationJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.", enfe);
             }
-            Cv cvID = academicQualification.getCvID();
-            if (cvID != null) {
-                cvID.getAcademicQualificationList().remove(academicQualification);
-                cvID = em.merge(cvID);
+            Cv cv = academicQualification.getCv();
+            if (cv != null) {
+                cv.getAcademicQualificationList().remove(academicQualification);
+                cv = em.merge(cv);
             }
             em.remove(academicQualification);
             utx.commit();

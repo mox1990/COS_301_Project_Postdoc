@@ -43,15 +43,15 @@ public class AuditLogJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Person personID = auditLog.getPersonID();
-            if (personID != null) {
-                personID = em.getReference(personID.getClass(), personID.getSystemID());
-                auditLog.setPersonID(personID);
+            Person person = auditLog.getPerson();
+            if (person != null) {
+                person = em.getReference(person.getClass(), person.getSystemID());
+                auditLog.setPerson(person);
             }
             em.persist(auditLog);
-            if (personID != null) {
-                personID.getAuditLogList().add(auditLog);
-                personID = em.merge(personID);
+            if (person != null) {
+                person.getAuditLogList().add(auditLog);
+                person = em.merge(person);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -74,20 +74,20 @@ public class AuditLogJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             AuditLog persistentAuditLog = em.find(AuditLog.class, auditLog.getEntryID());
-            Person personIDOld = persistentAuditLog.getPersonID();
-            Person personIDNew = auditLog.getPersonID();
-            if (personIDNew != null) {
-                personIDNew = em.getReference(personIDNew.getClass(), personIDNew.getSystemID());
-                auditLog.setPersonID(personIDNew);
+            Person personOld = persistentAuditLog.getPerson();
+            Person personNew = auditLog.getPerson();
+            if (personNew != null) {
+                personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
+                auditLog.setPerson(personNew);
             }
             auditLog = em.merge(auditLog);
-            if (personIDOld != null && !personIDOld.equals(personIDNew)) {
-                personIDOld.getAuditLogList().remove(auditLog);
-                personIDOld = em.merge(personIDOld);
+            if (personOld != null && !personOld.equals(personNew)) {
+                personOld.getAuditLogList().remove(auditLog);
+                personOld = em.merge(personOld);
             }
-            if (personIDNew != null && !personIDNew.equals(personIDOld)) {
-                personIDNew.getAuditLogList().add(auditLog);
-                personIDNew = em.merge(personIDNew);
+            if (personNew != null && !personNew.equals(personOld)) {
+                personNew.getAuditLogList().add(auditLog);
+                personNew = em.merge(personNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -123,10 +123,10 @@ public class AuditLogJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.", enfe);
             }
-            Person personID = auditLog.getPersonID();
-            if (personID != null) {
-                personID.getAuditLogList().remove(auditLog);
-                personID = em.merge(personID);
+            Person person = auditLog.getPerson();
+            if (person != null) {
+                person.getAuditLogList().remove(auditLog);
+                person = em.merge(person);
             }
             em.remove(auditLog);
             utx.commit();

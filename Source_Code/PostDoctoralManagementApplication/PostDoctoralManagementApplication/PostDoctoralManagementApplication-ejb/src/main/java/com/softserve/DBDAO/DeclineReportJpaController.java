@@ -16,8 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.DeclineReport;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,9 +28,9 @@ import javax.transaction.UserTransaction;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class EndorsementJpaController implements Serializable {
+public class DeclineReportJpaController implements Serializable {
 
-    public EndorsementJpaController(UserTransaction utx, EntityManagerFactory emf) {
+    public DeclineReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
@@ -42,16 +41,16 @@ public class EndorsementJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Endorsement endorsement) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(DeclineReport declineReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
-        Application applicationOrphanCheck = endorsement.getApplication();
+        Application applicationOrphanCheck = declineReport.getApplication();
         if (applicationOrphanCheck != null) {
-            Endorsement oldEndorsementOfApplication = applicationOrphanCheck.getEndorsement();
-            if (oldEndorsementOfApplication != null) {
+            DeclineReport oldDeclineReportOfApplication = applicationOrphanCheck.getDeclineReport();
+            if (oldDeclineReportOfApplication != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("The Application " + applicationOrphanCheck + " already has an item of type Endorsement whose application column cannot be null. Please make another selection for the application field.");
+                illegalOrphanMessages.add("The Application " + applicationOrphanCheck + " already has an item of type DeclineReport whose application column cannot be null. Please make another selection for the application field.");
             }
         }
         if (illegalOrphanMessages != null) {
@@ -61,24 +60,15 @@ public class EndorsementJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Application application = endorsement.getApplication();
+            Application application = declineReport.getApplication();
             if (application != null) {
                 application = em.getReference(application.getClass(), application.getApplicationID());
-                endorsement.setApplication(application);
+                declineReport.setApplication(application);
             }
-            Person dean = endorsement.getDean();
-            if (dean != null) {
-                dean = em.getReference(dean.getClass(), dean.getSystemID());
-                endorsement.setDean(dean);
-            }
-            em.persist(endorsement);
+            em.persist(declineReport);
             if (application != null) {
-                application.setEndorsement(endorsement);
+                application.setDeclineReport(declineReport);
                 application = em.merge(application);
-            }
-            if (dean != null) {
-                dean.getEndorsementList().add(endorsement);
-                dean = em.merge(dean);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -87,8 +77,8 @@ public class EndorsementJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findEndorsement(endorsement.getEndorsementID()) != null) {
-                throw new PreexistingEntityException("Endorsement " + endorsement + " already exists.", ex);
+            if (findDeclineReport(declineReport.getReportID()) != null) {
+                throw new PreexistingEntityException("DeclineReport " + declineReport + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -98,24 +88,22 @@ public class EndorsementJpaController implements Serializable {
         }
     }
 
-    public void edit(Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            Endorsement persistentEndorsement = em.find(Endorsement.class, endorsement.getEndorsementID());
-            Application applicationOld = persistentEndorsement.getApplication();
-            Application applicationNew = endorsement.getApplication();
-            Person deanOld = persistentEndorsement.getDean();
-            Person deanNew = endorsement.getDean();
+            DeclineReport persistentDeclineReport = em.find(DeclineReport.class, declineReport.getReportID());
+            Application applicationOld = persistentDeclineReport.getApplication();
+            Application applicationNew = declineReport.getApplication();
             List<String> illegalOrphanMessages = null;
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                Endorsement oldEndorsementOfApplication = applicationNew.getEndorsement();
-                if (oldEndorsementOfApplication != null) {
+                DeclineReport oldDeclineReportOfApplication = applicationNew.getDeclineReport();
+                if (oldDeclineReportOfApplication != null) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type Endorsement whose application column cannot be null. Please make another selection for the application field.");
+                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type DeclineReport whose application column cannot be null. Please make another selection for the application field.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -123,28 +111,16 @@ public class EndorsementJpaController implements Serializable {
             }
             if (applicationNew != null) {
                 applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                endorsement.setApplication(applicationNew);
+                declineReport.setApplication(applicationNew);
             }
-            if (deanNew != null) {
-                deanNew = em.getReference(deanNew.getClass(), deanNew.getSystemID());
-                endorsement.setDean(deanNew);
-            }
-            endorsement = em.merge(endorsement);
+            declineReport = em.merge(declineReport);
             if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.setEndorsement(null);
+                applicationOld.setDeclineReport(null);
                 applicationOld = em.merge(applicationOld);
             }
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.setEndorsement(endorsement);
+                applicationNew.setDeclineReport(declineReport);
                 applicationNew = em.merge(applicationNew);
-            }
-            if (deanOld != null && !deanOld.equals(deanNew)) {
-                deanOld.getEndorsementList().remove(endorsement);
-                deanOld = em.merge(deanOld);
-            }
-            if (deanNew != null && !deanNew.equals(deanOld)) {
-                deanNew.getEndorsementList().add(endorsement);
-                deanNew = em.merge(deanNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -155,9 +131,9 @@ public class EndorsementJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = endorsement.getEndorsementID();
-                if (findEndorsement(id) == null) {
-                    throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.");
+                Long id = declineReport.getReportID();
+                if (findDeclineReport(id) == null) {
+                    throw new NonexistentEntityException("The declineReport with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -173,24 +149,19 @@ public class EndorsementJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Endorsement endorsement;
+            DeclineReport declineReport;
             try {
-                endorsement = em.getReference(Endorsement.class, id);
-                endorsement.getEndorsementID();
+                declineReport = em.getReference(DeclineReport.class, id);
+                declineReport.getReportID();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The declineReport with id " + id + " no longer exists.", enfe);
             }
-            Application application = endorsement.getApplication();
+            Application application = declineReport.getApplication();
             if (application != null) {
-                application.setEndorsement(null);
+                application.setDeclineReport(null);
                 application = em.merge(application);
             }
-            Person dean = endorsement.getDean();
-            if (dean != null) {
-                dean.getEndorsementList().remove(endorsement);
-                dean = em.merge(dean);
-            }
-            em.remove(endorsement);
+            em.remove(declineReport);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -206,19 +177,19 @@ public class EndorsementJpaController implements Serializable {
         }
     }
 
-    public List<Endorsement> findEndorsementEntities() {
-        return findEndorsementEntities(true, -1, -1);
+    public List<DeclineReport> findDeclineReportEntities() {
+        return findDeclineReportEntities(true, -1, -1);
     }
 
-    public List<Endorsement> findEndorsementEntities(int maxResults, int firstResult) {
-        return findEndorsementEntities(false, maxResults, firstResult);
+    public List<DeclineReport> findDeclineReportEntities(int maxResults, int firstResult) {
+        return findDeclineReportEntities(false, maxResults, firstResult);
     }
 
-    private List<Endorsement> findEndorsementEntities(boolean all, int maxResults, int firstResult) {
+    private List<DeclineReport> findDeclineReportEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Endorsement.class));
+            cq.select(cq.from(DeclineReport.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -230,20 +201,20 @@ public class EndorsementJpaController implements Serializable {
         }
     }
 
-    public Endorsement findEndorsement(Long id) {
+    public DeclineReport findDeclineReport(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Endorsement.class, id);
+            return em.find(DeclineReport.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getEndorsementCount() {
+    public int getDeclineReportCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Endorsement> rt = cq.from(Endorsement.class);
+            Root<DeclineReport> rt = cq.from(DeclineReport.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

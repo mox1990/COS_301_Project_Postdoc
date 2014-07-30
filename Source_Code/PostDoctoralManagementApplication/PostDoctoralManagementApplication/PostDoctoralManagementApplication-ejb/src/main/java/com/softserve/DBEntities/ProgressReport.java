@@ -59,9 +59,9 @@ public class ProgressReport implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "_content")
     private String content;
-    @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")
+    @JoinColumn(name = "_application", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
-    private Application applicationID;
+    private Application application;
 
     public ProgressReport() {
     }
@@ -100,6 +100,10 @@ public class ProgressReport implements Serializable {
         this.content = content;
     }
 
+    public Application getApplication() {
+        return application;
+    }
+    
     public ProgressReportContent getContentXMLEntity()
     {
         XMLUnmarshaller xmlu = new XMLUnmarshaller();
@@ -107,19 +111,15 @@ public class ProgressReport implements Serializable {
         try 
         {        
             return xmlu.unmarshalProgressReportContentString(getContent());
-        } 
+        }
         catch (JAXBException ex) 
         {
             return null;
         }
     }
 
-    public Application getApplicationID() {
-        return applicationID;
-    }
-
-    public void setApplicationID(Application applicationID) {
-        this.applicationID = applicationID;
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
     @Override

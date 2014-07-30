@@ -159,7 +159,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         
         application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
         application.setFellow(oldApplication.getFellow());
-        application.setGrantHolderID(oldApplication.getGrantHolderID());
+        application.setGrantHolder(oldApplication.getGrantHolder());
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
         
         applicationJpaController.create(application);

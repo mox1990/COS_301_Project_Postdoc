@@ -12,10 +12,10 @@ import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
 import com.softserve.Exceptions.UserAlreadyExistsException;
@@ -95,9 +95,9 @@ public class UserAccountManagementService implements UserAccountManagementServic
  of the UserAccountManagementService in the unit testing 
      * @return An instance of UpEmployeeInformationJpaController
      */
-    protected UpEmployeeInformationJpaController getUPEmployeeInfoDAO()
+    protected EmployeeInformationJpaController getEmployeeInfoDAO()
     {
-        return new UpEmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new EmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     protected SecurityRoleJpaController getSecurityRoleDAO()
@@ -238,14 +238,14 @@ public class UserAccountManagementService implements UserAccountManagementServic
         //Prep the DAOs
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();  
         PersonJpaController personJpaController = getPersonDAO();
-        UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
+        EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
         AddressJpaController addressJpaController = getAddressDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
         Address userAddress = user.getAddressLine1(); 
-        UpEmployeeInformation userUPInfo = user.getUpEmployeeInformation();
-        Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
+        EmployeeInformation userEmployeeInfo = user.getEmployeeInformation();
+        Address upAddress = (userEmployeeInfo != null)?userEmployeeInfo.getPhysicalAddress():null;
         
         //Check if automatic systemID generation is required
         if(!useManualSystemIDSpecification)
@@ -268,9 +268,9 @@ public class UserAccountManagementService implements UserAccountManagementServic
                 throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");
             }
             
-            if(userUPInfo != null)
+            if(userEmployeeInfo != null)
             {
-                userUPInfo.setEmployeeID(user.getSystemID());
+                userEmployeeInfo.setEmployeeID(user.getSystemID());
             }
         }
         
@@ -283,12 +283,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
         //******Possible concurrency issue if multiple automaic System IDs are generated******
         personJpaController.create(user);        
         
-        if(userUPInfo != null)
+        if(userEmployeeInfo != null)
         {
             addressJpaController.create(upAddress);
-            userUPInfo.setPhysicalAddress(upAddress);
-            userUPInfo.setPerson(user);
-            upEmployeeInformationJpaController.create(userUPInfo);
+            userEmployeeInfo.setPhysicalAddress(upAddress);
+            userEmployeeInfo.setPerson(user);
+            employeeInformationJpaController.create(userEmployeeInfo);
         }
         
         //Log action
@@ -332,12 +332,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
-        UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
+        EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         Address userAddress = user.getAddressLine1(); 
-        UpEmployeeInformation userUPInfo = user.getUpEmployeeInformation();
+        EmployeeInformation userUPInfo = user.getEmployeeInformation();
         Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
         
         if(!getUserBySystemIDOrEmail(user.getEmail()).equals(user))
@@ -358,28 +358,28 @@ public class UserAccountManagementService implements UserAccountManagementServic
         if(userUPInfo != null)
         {   
             
-            if(upEmployeeInformationJpaController.findUpEmployeeInformation(userUPInfo.getEmployeeID()) != null)
+            if(employeeInformationJpaController.findEmployeeInformation(userUPInfo.getEmployeeID()) != null)
             {
                 userUPInfo.setPhysicalAddress(upAddress);
-                upEmployeeInformationJpaController.edit(userUPInfo);
+                employeeInformationJpaController.edit(userUPInfo);
             }
             else
             {
                 addressJpaController.create(upAddress);
                 userUPInfo.setPhysicalAddress(upAddress);
-                upEmployeeInformationJpaController.create(userUPInfo);
-                user.setUpEmployeeInformation(userUPInfo);
+                employeeInformationJpaController.create(userUPInfo);
+                user.setEmployeeInformation(userUPInfo);
             }
         }
         else
         {
-            if(upEmployeeInformationJpaController.findUpEmployeeInformation(user.getSystemID()) != null)
+            if(employeeInformationJpaController.findEmployeeInformation(user.getSystemID()) != null)
             {
                 user.setUpEmployee(false);
-                user.setUpEmployeeInformation(null);
-                userUPInfo = upEmployeeInformationJpaController.findUpEmployeeInformation(user.getSystemID());
+                user.setEmployeeInformation(null);
+                userUPInfo = employeeInformationJpaController.findEmployeeInformation(user.getSystemID());
                 Long id = userUPInfo.getPhysicalAddress().getAddressID();
-                upEmployeeInformationJpaController.destroy(userUPInfo.getEmployeeID());
+                employeeInformationJpaController.destroy(userUPInfo.getEmployeeID());
                 addressJpaController.destroy(id);
             }
         }
@@ -412,26 +412,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
         
         PersonJpaController personJpaController = getPersonDAO();
-        AddressJpaController addressJpaController = getAddressDAO();
-        UpEmployeeInformationJpaController upEmployeeInformationJpaController = getUPEmployeeInfoDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Find person object
         Person user = personJpaController.findPerson(systemID);
-        /*
-        //Remove primary address line
-        addressJpaController.destroy(user.getAddressLine1().getAddressID());        
-        
-        //Check if is UP employee if is then remove
-        if(user.getUpEmployee())
-        {
-            upEmployeeInformationJpaController.destroy(user.getUpEmployeeInformation().getEmployeeID());
-        }
-        
-        //Remove person from database
-        personJpaController.destroy(user.getSystemID());
-        */
         
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
         personJpaController.edit(user);

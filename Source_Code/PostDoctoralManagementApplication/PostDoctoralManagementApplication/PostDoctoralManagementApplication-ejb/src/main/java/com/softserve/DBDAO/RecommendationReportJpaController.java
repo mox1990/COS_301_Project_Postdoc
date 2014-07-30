@@ -66,19 +66,19 @@ public class RecommendationReportJpaController implements Serializable {
                 application = em.getReference(application.getClass(), application.getApplicationID());
                 recommendationReport.setApplication(application);
             }
-            Person hodID = recommendationReport.getHodID();
-            if (hodID != null) {
-                hodID = em.getReference(hodID.getClass(), hodID.getSystemID());
-                recommendationReport.setHodID(hodID);
+            Person hod = recommendationReport.getHod();
+            if (hod != null) {
+                hod = em.getReference(hod.getClass(), hod.getSystemID());
+                recommendationReport.setHod(hod);
             }
             em.persist(recommendationReport);
             if (application != null) {
                 application.setRecommendationReport(recommendationReport);
                 application = em.merge(application);
             }
-            if (hodID != null) {
-                hodID.getRecommendationReportList().add(recommendationReport);
-                hodID = em.merge(hodID);
+            if (hod != null) {
+                hod.getRecommendationReportList().add(recommendationReport);
+                hod = em.merge(hod);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -106,8 +106,8 @@ public class RecommendationReportJpaController implements Serializable {
             RecommendationReport persistentRecommendationReport = em.find(RecommendationReport.class, recommendationReport.getReportID());
             Application applicationOld = persistentRecommendationReport.getApplication();
             Application applicationNew = recommendationReport.getApplication();
-            Person hodIDOld = persistentRecommendationReport.getHodID();
-            Person hodIDNew = recommendationReport.getHodID();
+            Person hodOld = persistentRecommendationReport.getHod();
+            Person hodNew = recommendationReport.getHod();
             List<String> illegalOrphanMessages = null;
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
                 RecommendationReport oldRecommendationReportOfApplication = applicationNew.getRecommendationReport();
@@ -125,9 +125,9 @@ public class RecommendationReportJpaController implements Serializable {
                 applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
                 recommendationReport.setApplication(applicationNew);
             }
-            if (hodIDNew != null) {
-                hodIDNew = em.getReference(hodIDNew.getClass(), hodIDNew.getSystemID());
-                recommendationReport.setHodID(hodIDNew);
+            if (hodNew != null) {
+                hodNew = em.getReference(hodNew.getClass(), hodNew.getSystemID());
+                recommendationReport.setHod(hodNew);
             }
             recommendationReport = em.merge(recommendationReport);
             if (applicationOld != null && !applicationOld.equals(applicationNew)) {
@@ -138,13 +138,13 @@ public class RecommendationReportJpaController implements Serializable {
                 applicationNew.setRecommendationReport(recommendationReport);
                 applicationNew = em.merge(applicationNew);
             }
-            if (hodIDOld != null && !hodIDOld.equals(hodIDNew)) {
-                hodIDOld.getRecommendationReportList().remove(recommendationReport);
-                hodIDOld = em.merge(hodIDOld);
+            if (hodOld != null && !hodOld.equals(hodNew)) {
+                hodOld.getRecommendationReportList().remove(recommendationReport);
+                hodOld = em.merge(hodOld);
             }
-            if (hodIDNew != null && !hodIDNew.equals(hodIDOld)) {
-                hodIDNew.getRecommendationReportList().add(recommendationReport);
-                hodIDNew = em.merge(hodIDNew);
+            if (hodNew != null && !hodNew.equals(hodOld)) {
+                hodNew.getRecommendationReportList().add(recommendationReport);
+                hodNew = em.merge(hodNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -185,10 +185,10 @@ public class RecommendationReportJpaController implements Serializable {
                 application.setRecommendationReport(null);
                 application = em.merge(application);
             }
-            Person hodID = recommendationReport.getHodID();
-            if (hodID != null) {
-                hodID.getRecommendationReportList().remove(recommendationReport);
-                hodID = em.merge(hodID);
+            Person hod = recommendationReport.getHod();
+            if (hod != null) {
+                hod.getRecommendationReportList().remove(recommendationReport);
+                hod = em.merge(hod);
             }
             em.remove(recommendationReport);
             utx.commit();

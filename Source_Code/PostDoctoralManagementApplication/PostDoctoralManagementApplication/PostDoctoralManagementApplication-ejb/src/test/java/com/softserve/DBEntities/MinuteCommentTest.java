@@ -59,8 +59,8 @@ public class MinuteCommentTest {
     {
         MinuteComment instance = new MinuteComment();
         CommitteeMeeting meeting = new CommitteeMeeting(Long.MAX_VALUE);
-        instance.setMeetingID(meeting);
-        assertEquals(meeting, instance.getMeetingID());
+        instance.setMeeting(meeting);
+        assertEquals(meeting, instance.getMeeting());
     }
 
     @Test
@@ -68,8 +68,8 @@ public class MinuteCommentTest {
     {
         MinuteComment instance = new MinuteComment();
         Person person = new Person("r12019837");
-        instance.setAttendeeID(person);
-        assertEquals(person, instance.getAttendeeID());
+        instance.setAttendee(person);
+        assertEquals(person, instance.getAttendee());
     }
 
     @Test

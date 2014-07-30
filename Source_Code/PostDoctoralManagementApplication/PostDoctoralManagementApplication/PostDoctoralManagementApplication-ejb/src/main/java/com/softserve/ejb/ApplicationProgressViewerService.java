@@ -55,6 +55,58 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         return new UserGateway(emf);
     }
     
+    private int getOrderIndexOfApplicationStatus(String status)
+    {
+        if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+        {
+            return 0;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
+        {
+            return 1;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
+        {
+            return 2;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+        {
+            return 3;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+        {
+            return 4;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
+        {
+            return 5;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
+        {
+            return 6;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED))
+        {
+            return 7;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED))
+        {
+            return 8;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED))
+        {
+            return 9;
+        }
+        
+        return -1;
+    }
+    
+    private boolean hasApplicationPassedThisStatus(Application application, String status)
+    {
+        return getOrderIndexOfApplicationStatus(application.getStatus()) > getOrderIndexOfApplicationStatus(status);
+    }
+    
+    
     @Override
     public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception {
         //Authenticate user privliges
@@ -89,46 +141,77 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         //Opening information
         stageStatuses.add(new ApplicationStageStatus(application.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, application.getFellow()));
         
-        //Add referee information
-        for(RefereeReport rr : application.getRefereeReportList())
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
-            stageStatuses.add(new ApplicationStageStatus(rr.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, rr.getRefereeID()));
+            //Add referee information
+            for(RefereeReport rr : application.getRefereeReportList())
+            {
+                stageStatuses.add(new ApplicationStageStatus(rr.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, rr.getReferee()));
+            }
         }
-        stageStatuses.get(stageStatuses.size() - 1).setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
-        
-        //Still need to sort out date issue
-        if(application.getFinalisationDate() != null)
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getFinalisationDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, application.getGrantHolderID()));
-        }
-        
-        //HOD recommendation information
-        if(application.getRecommendationReport()!= null)
-        {
-            stageStatuses.add(new ApplicationStageStatus(application.getRecommendationReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, application.getRecommendationReport().getHodID()));
+            if(application.getRefereeReportList().size() == application.getPersonList().size())
+            {
+                stageStatuses.get(stageStatuses.size() - 1).setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+            }
         }
         
-        //Deans endorsement information
-        if(application.getEndorsement()!= null)
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getEndorsement().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, application.getEndorsement().getDeanID()));
+            //Still need to sort out date issue
+            if(application.getFinalisationDate() != null)
+            {
+                stageStatuses.add(new ApplicationStageStatus(application.getFinalisationDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, application.getGrantHolder()));
+            }
         }
         
-        //Eligiblity information information
-        if(application.getEndorsement()!= null)
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getEligiblityCheckDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, null));
+            //HOD recommendation information
+            if(application.getRecommendationReport()!= null)
+            {
+                stageStatuses.add(new ApplicationStageStatus(application.getRecommendationReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, application.getRecommendationReport().getHod()));
+            }
         }
         
-        //Funding information information
-        if(application.getFundingReport()!= null)
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getFundingReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, application.getFundingReport().getDrisID()));
+            //Deans endorsement information
+            if(application.getEndorsement()!= null)
+            {
+                stageStatuses.add(new ApplicationStageStatus(application.getEndorsement().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, application.getEndorsement().getDean()));
+            }
         }
         
-        if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED))
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
         {
-            stageStatuses.add(new ApplicationStageStatus(application.getFundingReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, application.getFundingReport().getDrisID()));
+            //Eligiblity information information
+            if(application.getEndorsement()!= null)
+            {
+                stageStatuses.add(new ApplicationStageStatus(application.getEligiblityCheckDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, null));
+            }
+        }
+        
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED))
+        {
+            //Funding information information
+            if(application.getFundingReport()!= null)
+            {
+                stageStatuses.add(new ApplicationStageStatus(application.getFundingReport().getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, application.getFundingReport().getDris()));
+            }
+        }
+        
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED))
+        {
+            stageStatuses.add(new ApplicationStageStatus(application.getEndDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED, application.getFundingReport().getDris()));
+
+        }
+        
+        if(hasApplicationPassedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED))
+        {
+            stageStatuses.add(new ApplicationStageStatus(application.getEndDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED, application.getFundingReport().getDris()));
+
         }
 
         

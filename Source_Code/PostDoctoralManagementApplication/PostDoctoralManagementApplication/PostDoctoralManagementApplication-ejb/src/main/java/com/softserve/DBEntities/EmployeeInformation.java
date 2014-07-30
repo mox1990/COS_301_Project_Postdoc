@@ -30,15 +30,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Entity
-@Table(name = "up_employee_information")
+@Table(name = "employee_information")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UpEmployeeInformation.findAll", query = "SELECT u FROM UpEmployeeInformation u"),
-    @NamedQuery(name = "UpEmployeeInformation.findByEmployeeID", query = "SELECT u FROM UpEmployeeInformation u WHERE u.employeeID = :employeeID"),
-    @NamedQuery(name = "UpEmployeeInformation.findByPosition", query = "SELECT u FROM UpEmployeeInformation u WHERE u.position = :position"),
-    @NamedQuery(name = "UpEmployeeInformation.findByDateOfAppointment", query = "SELECT u FROM UpEmployeeInformation u WHERE u.dateOfAppointment = :dateOfAppointment"),
-    @NamedQuery(name = "UpEmployeeInformation.findByAppointmentStatus", query = "SELECT u FROM UpEmployeeInformation u WHERE u.appointmentStatus = :appointmentStatus")})
-public class UpEmployeeInformation implements Serializable {
+    @NamedQuery(name = "EmployeeInformation.findAll", query = "SELECT e FROM EmployeeInformation e"),
+    @NamedQuery(name = "EmployeeInformation.findByEmployeeID", query = "SELECT e FROM EmployeeInformation e WHERE e.employeeID = :employeeID"),
+    @NamedQuery(name = "EmployeeInformation.findByPosition", query = "SELECT e FROM EmployeeInformation e WHERE e.position = :position"),
+    @NamedQuery(name = "EmployeeInformation.findByDateOfAppointment", query = "SELECT e FROM EmployeeInformation e WHERE e.dateOfAppointment = :dateOfAppointment"),
+    @NamedQuery(name = "EmployeeInformation.findByAppointmentStatus", query = "SELECT e FROM EmployeeInformation e WHERE e.appointmentStatus = :appointmentStatus")})
+public class EmployeeInformation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,37 +46,30 @@ public class UpEmployeeInformation implements Serializable {
     @Size(min = 1, max = 9)
     @Column(name = "_employeeID")
     private String employeeID;
-    @Basic(optional = true)
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     @Column(name = "_position")
     private String position;
-    @Basic(optional = true)
     @Column(name = "_dateOfAppointment")
     @Temporal(TemporalType.DATE)
     private Date dateOfAppointment;
-    @Basic(optional = true)
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     @Column(name = "_appointmentStatus")
     private String appointmentStatus;
     @JoinColumn(name = "_employeeID", referencedColumnName = "_systemID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Person person;
+    @JoinColumn(name = "_location", referencedColumnName = "_locationID")
+    @ManyToOne
+    private Location location;
     @JoinColumn(name = "_physicalAddress", referencedColumnName = "_addressID")
-    @ManyToOne(optional = true)
+    @ManyToOne
     private Address physicalAddress;
 
-    public UpEmployeeInformation() {
+    public EmployeeInformation() {
     }
 
-    public UpEmployeeInformation(String employeeID) {
+    public EmployeeInformation(String employeeID) {
         this.employeeID = employeeID;
-    }
-
-    public UpEmployeeInformation(String employeeID, String position, Date dateOfAppointment, String appointmentStatus) {
-        this.employeeID = employeeID;
-        this.position = position;
-        this.dateOfAppointment = dateOfAppointment;
-        this.appointmentStatus = appointmentStatus;
     }
 
     public String getEmployeeID() {
@@ -119,6 +112,14 @@ public class UpEmployeeInformation implements Serializable {
         this.person = person;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public Address getPhysicalAddress() {
         return physicalAddress;
     }
@@ -137,10 +138,10 @@ public class UpEmployeeInformation implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UpEmployeeInformation)) {
+        if (!(object instanceof EmployeeInformation)) {
             return false;
         }
-        UpEmployeeInformation other = (UpEmployeeInformation) object;
+        EmployeeInformation other = (EmployeeInformation) object;
         if ((this.employeeID == null && other.employeeID != null) || (this.employeeID != null && !this.employeeID.equals(other.employeeID))) {
             return false;
         }
@@ -149,7 +150,7 @@ public class UpEmployeeInformation implements Serializable {
 
     @Override
     public String toString() {
-        return "com.softserve.DBEntities.UpEmployeeInformation[ employeeID=" + employeeID + " ]";
+        return "com.softserve.DBEntities.EmployeeInformation[ employeeID=" + employeeID + " ]";
     }
     
 }

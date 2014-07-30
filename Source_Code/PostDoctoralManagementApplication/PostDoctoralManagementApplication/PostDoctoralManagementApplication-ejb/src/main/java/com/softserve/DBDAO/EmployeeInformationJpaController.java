@@ -16,8 +16,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.DBEntities.EmployeeInformation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,9 +30,9 @@ import javax.transaction.UserTransaction;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class UpEmployeeInformationJpaController implements Serializable {
+public class EmployeeInformationJpaController implements Serializable {
 
-    public UpEmployeeInformationJpaController(UserTransaction utx, EntityManagerFactory emf) {
+    public EmployeeInformationJpaController(UserTransaction utx, EntityManagerFactory emf) {
         this.utx = utx;
         this.emf = emf;
     }
@@ -42,16 +43,16 @@ public class UpEmployeeInformationJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(UpEmployeeInformation upEmployeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EmployeeInformation employeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
-        Person personOrphanCheck = upEmployeeInformation.getPerson();
+        Person personOrphanCheck = employeeInformation.getPerson();
         if (personOrphanCheck != null) {
-            UpEmployeeInformation oldUpEmployeeInformationOfPerson = personOrphanCheck.getUpEmployeeInformation();
-            if (oldUpEmployeeInformationOfPerson != null) {
+            EmployeeInformation oldEmployeeInformationOfPerson = personOrphanCheck.getEmployeeInformation();
+            if (oldEmployeeInformationOfPerson != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("The Person " + personOrphanCheck + " already has an item of type UpEmployeeInformation whose person column cannot be null. Please make another selection for the person field.");
+                illegalOrphanMessages.add("The Person " + personOrphanCheck + " already has an item of type EmployeeInformation whose person column cannot be null. Please make another selection for the person field.");
             }
         }
         if (illegalOrphanMessages != null) {
@@ -61,23 +62,32 @@ public class UpEmployeeInformationJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Person person = upEmployeeInformation.getPerson();
+            Person person = employeeInformation.getPerson();
             if (person != null) {
                 person = em.getReference(person.getClass(), person.getSystemID());
-                upEmployeeInformation.setPerson(person);
+                employeeInformation.setPerson(person);
             }
-            Address physicalAddress = upEmployeeInformation.getPhysicalAddress();
+            Location location = employeeInformation.getLocation();
+            if (location != null) {
+                location = em.getReference(location.getClass(), location.getLocationID());
+                employeeInformation.setLocation(location);
+            }
+            Address physicalAddress = employeeInformation.getPhysicalAddress();
             if (physicalAddress != null) {
                 physicalAddress = em.getReference(physicalAddress.getClass(), physicalAddress.getAddressID());
-                upEmployeeInformation.setPhysicalAddress(physicalAddress);
+                employeeInformation.setPhysicalAddress(physicalAddress);
             }
-            em.persist(upEmployeeInformation);
+            em.persist(employeeInformation);
             if (person != null) {
-                person.setUpEmployeeInformation(upEmployeeInformation);
+                person.setEmployeeInformation(employeeInformation);
                 person = em.merge(person);
             }
+            if (location != null) {
+                location.getEmployeeInformationList().add(employeeInformation);
+                location = em.merge(location);
+            }
             if (physicalAddress != null) {
-                physicalAddress.getUpEmployeeInformationList().add(upEmployeeInformation);
+                physicalAddress.getEmployeeInformationList().add(employeeInformation);
                 physicalAddress = em.merge(physicalAddress);
             }
             utx.commit();
@@ -87,8 +97,8 @@ public class UpEmployeeInformationJpaController implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
-            if (findUpEmployeeInformation(upEmployeeInformation.getEmployeeID()) != null) {
-                throw new PreexistingEntityException("UpEmployeeInformation " + upEmployeeInformation + " already exists.", ex);
+            if (findEmployeeInformation(employeeInformation.getEmployeeID()) != null) {
+                throw new PreexistingEntityException("EmployeeInformation " + employeeInformation + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -98,24 +108,26 @@ public class UpEmployeeInformationJpaController implements Serializable {
         }
     }
 
-    public void edit(UpEmployeeInformation upEmployeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            UpEmployeeInformation persistentUpEmployeeInformation = em.find(UpEmployeeInformation.class, upEmployeeInformation.getEmployeeID());
-            Person personOld = persistentUpEmployeeInformation.getPerson();
-            Person personNew = upEmployeeInformation.getPerson();
-            Address physicalAddressOld = persistentUpEmployeeInformation.getPhysicalAddress();
-            Address physicalAddressNew = upEmployeeInformation.getPhysicalAddress();
+            EmployeeInformation persistentEmployeeInformation = em.find(EmployeeInformation.class, employeeInformation.getEmployeeID());
+            Person personOld = persistentEmployeeInformation.getPerson();
+            Person personNew = employeeInformation.getPerson();
+            Location locationOld = persistentEmployeeInformation.getLocation();
+            Location locationNew = employeeInformation.getLocation();
+            Address physicalAddressOld = persistentEmployeeInformation.getPhysicalAddress();
+            Address physicalAddressNew = employeeInformation.getPhysicalAddress();
             List<String> illegalOrphanMessages = null;
             if (personNew != null && !personNew.equals(personOld)) {
-                UpEmployeeInformation oldUpEmployeeInformationOfPerson = personNew.getUpEmployeeInformation();
-                if (oldUpEmployeeInformationOfPerson != null) {
+                EmployeeInformation oldEmployeeInformationOfPerson = personNew.getEmployeeInformation();
+                if (oldEmployeeInformationOfPerson != null) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("The Person " + personNew + " already has an item of type UpEmployeeInformation whose person column cannot be null. Please make another selection for the person field.");
+                    illegalOrphanMessages.add("The Person " + personNew + " already has an item of type EmployeeInformation whose person column cannot be null. Please make another selection for the person field.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -123,27 +135,39 @@ public class UpEmployeeInformationJpaController implements Serializable {
             }
             if (personNew != null) {
                 personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-                upEmployeeInformation.setPerson(personNew);
+                employeeInformation.setPerson(personNew);
+            }
+            if (locationNew != null) {
+                locationNew = em.getReference(locationNew.getClass(), locationNew.getLocationID());
+                employeeInformation.setLocation(locationNew);
             }
             if (physicalAddressNew != null) {
                 physicalAddressNew = em.getReference(physicalAddressNew.getClass(), physicalAddressNew.getAddressID());
-                upEmployeeInformation.setPhysicalAddress(physicalAddressNew);
+                employeeInformation.setPhysicalAddress(physicalAddressNew);
             }
-            upEmployeeInformation = em.merge(upEmployeeInformation);
+            employeeInformation = em.merge(employeeInformation);
             if (personOld != null && !personOld.equals(personNew)) {
-                personOld.setUpEmployeeInformation(null);
+                personOld.setEmployeeInformation(null);
                 personOld = em.merge(personOld);
             }
             if (personNew != null && !personNew.equals(personOld)) {
-                personNew.setUpEmployeeInformation(upEmployeeInformation);
+                personNew.setEmployeeInformation(employeeInformation);
                 personNew = em.merge(personNew);
             }
+            if (locationOld != null && !locationOld.equals(locationNew)) {
+                locationOld.getEmployeeInformationList().remove(employeeInformation);
+                locationOld = em.merge(locationOld);
+            }
+            if (locationNew != null && !locationNew.equals(locationOld)) {
+                locationNew.getEmployeeInformationList().add(employeeInformation);
+                locationNew = em.merge(locationNew);
+            }
             if (physicalAddressOld != null && !physicalAddressOld.equals(physicalAddressNew)) {
-                physicalAddressOld.getUpEmployeeInformationList().remove(upEmployeeInformation);
+                physicalAddressOld.getEmployeeInformationList().remove(employeeInformation);
                 physicalAddressOld = em.merge(physicalAddressOld);
             }
             if (physicalAddressNew != null && !physicalAddressNew.equals(physicalAddressOld)) {
-                physicalAddressNew.getUpEmployeeInformationList().add(upEmployeeInformation);
+                physicalAddressNew.getEmployeeInformationList().add(employeeInformation);
                 physicalAddressNew = em.merge(physicalAddressNew);
             }
             utx.commit();
@@ -155,9 +179,9 @@ public class UpEmployeeInformationJpaController implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = upEmployeeInformation.getEmployeeID();
-                if (findUpEmployeeInformation(id) == null) {
-                    throw new NonexistentEntityException("The upEmployeeInformation with id " + id + " no longer exists.");
+                String id = employeeInformation.getEmployeeID();
+                if (findEmployeeInformation(id) == null) {
+                    throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -173,24 +197,29 @@ public class UpEmployeeInformationJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            UpEmployeeInformation upEmployeeInformation;
+            EmployeeInformation employeeInformation;
             try {
-                upEmployeeInformation = em.getReference(UpEmployeeInformation.class, id);
-                upEmployeeInformation.getEmployeeID();
+                employeeInformation = em.getReference(EmployeeInformation.class, id);
+                employeeInformation.getEmployeeID();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The upEmployeeInformation with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.", enfe);
             }
-            Person person = upEmployeeInformation.getPerson();
+            Person person = employeeInformation.getPerson();
             if (person != null) {
-                person.setUpEmployeeInformation(null);
+                person.setEmployeeInformation(null);
                 person = em.merge(person);
             }
-            Address physicalAddress = upEmployeeInformation.getPhysicalAddress();
+            Location location = employeeInformation.getLocation();
+            if (location != null) {
+                location.getEmployeeInformationList().remove(employeeInformation);
+                location = em.merge(location);
+            }
+            Address physicalAddress = employeeInformation.getPhysicalAddress();
             if (physicalAddress != null) {
-                physicalAddress.getUpEmployeeInformationList().remove(upEmployeeInformation);
+                physicalAddress.getEmployeeInformationList().remove(employeeInformation);
                 physicalAddress = em.merge(physicalAddress);
             }
-            em.remove(upEmployeeInformation);
+            em.remove(employeeInformation);
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -206,19 +235,19 @@ public class UpEmployeeInformationJpaController implements Serializable {
         }
     }
 
-    public List<UpEmployeeInformation> findUpEmployeeInformationEntities() {
-        return findUpEmployeeInformationEntities(true, -1, -1);
+    public List<EmployeeInformation> findEmployeeInformationEntities() {
+        return findEmployeeInformationEntities(true, -1, -1);
     }
 
-    public List<UpEmployeeInformation> findUpEmployeeInformationEntities(int maxResults, int firstResult) {
-        return findUpEmployeeInformationEntities(false, maxResults, firstResult);
+    public List<EmployeeInformation> findEmployeeInformationEntities(int maxResults, int firstResult) {
+        return findEmployeeInformationEntities(false, maxResults, firstResult);
     }
 
-    private List<UpEmployeeInformation> findUpEmployeeInformationEntities(boolean all, int maxResults, int firstResult) {
+    private List<EmployeeInformation> findEmployeeInformationEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(UpEmployeeInformation.class));
+            cq.select(cq.from(EmployeeInformation.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -230,20 +259,20 @@ public class UpEmployeeInformationJpaController implements Serializable {
         }
     }
 
-    public UpEmployeeInformation findUpEmployeeInformation(String id) {
+    public EmployeeInformation findEmployeeInformation(String id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(UpEmployeeInformation.class, id);
+            return em.find(EmployeeInformation.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getUpEmployeeInformationCount() {
+    public int getEmployeeInformationCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<UpEmployeeInformation> rt = cq.from(UpEmployeeInformation.class);
+            Root<EmployeeInformation> rt = cq.from(EmployeeInformation.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

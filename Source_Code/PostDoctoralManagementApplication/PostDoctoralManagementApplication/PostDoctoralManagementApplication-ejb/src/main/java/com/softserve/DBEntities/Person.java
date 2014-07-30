@@ -114,35 +114,32 @@ public class Person implements Serializable {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany
     private List<Application> applicationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<AuditLog> auditLogList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "deanID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dean")
     private List<Endorsement> endorsementList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
-    private UpEmployeeInformation upEmployeeInformation;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hodID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
     private List<RecommendationReport> recommendationReportList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "refereeID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee")
     private List<RefereeReport> refereeReportList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "drisID")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+    private EmployeeInformation employeeInformation;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
     private List<FundingReport> fundingReportList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "senderID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
     private List<Notification> notificationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recieverID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reciever")
     private List<Notification> notificationList1;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Cv cv;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
     private List<Application> applicationList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grantHolderID")
+    @OneToMany(mappedBy = "grantHolder")
     private List<Application> applicationList2;
-    @JoinColumn(name = "_locationID", referencedColumnName = "_locationID")
-    @ManyToOne
-    private Location locationID;
     @JoinColumn(name = "_addressLine1", referencedColumnName = "_addressID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Address addressLine1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendeeID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendee")
     private List<MinuteComment> minuteCommentList;
 
     public Person() {
@@ -308,14 +305,6 @@ public class Person implements Serializable {
         this.endorsementList = endorsementList;
     }
 
-    public UpEmployeeInformation getUpEmployeeInformation() {
-        return upEmployeeInformation;
-    }
-
-    public void setUpEmployeeInformation(UpEmployeeInformation upEmployeeInformation) {
-        this.upEmployeeInformation = upEmployeeInformation;
-    }
-
     @XmlTransient
     public List<RecommendationReport> getRecommendationReportList() {
         return recommendationReportList;
@@ -332,6 +321,14 @@ public class Person implements Serializable {
 
     public void setRefereeReportList(List<RefereeReport> refereeReportList) {
         this.refereeReportList = refereeReportList;
+    }
+
+    public EmployeeInformation getEmployeeInformation() {
+        return employeeInformation;
+    }
+
+    public void setEmployeeInformation(EmployeeInformation employeeInformation) {
+        this.employeeInformation = employeeInformation;
     }
 
     @XmlTransient
@@ -385,14 +382,6 @@ public class Person implements Serializable {
 
     public void setApplicationList2(List<Application> applicationList2) {
         this.applicationList2 = applicationList2;
-    }
-
-    public Location getLocationID() {
-        return locationID;
-    }
-
-    public void setLocationID(Location locationID) {
-        this.locationID = locationID;
     }
 
     public Address getAddressLine1() {

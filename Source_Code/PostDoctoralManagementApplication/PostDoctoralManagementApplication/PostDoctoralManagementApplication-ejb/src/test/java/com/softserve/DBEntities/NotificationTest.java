@@ -63,21 +63,21 @@ public class NotificationTest {
     }
 
     @Test
-    public void testSetAndGetSenderID() 
+    public void testSetAndGetSender() 
     {
         Notification instance = new Notification();
         Person person = new Person("r12019837");
-        instance.setSenderID(person);
-        assertEquals(person, instance.getSenderID());
+        instance.setSender(person);
+        assertEquals(person, instance.getSender());
     }
 
     @Test
-    public void testSetAndGetRecieverID() 
+    public void testSetAndGetReciever() 
     {
         Notification instance = new Notification();
         Person person = new Person("r12019837");
-        instance.setRecieverID(person);
-        assertEquals(person, instance.getRecieverID());
+        instance.setReciever(person);
+        assertEquals(person, instance.getReciever());
     }
 
     @Test

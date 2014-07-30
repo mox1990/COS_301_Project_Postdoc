@@ -68,8 +68,8 @@ public class RefereeReportTest {
     {
         RefereeReport instance = new RefereeReport();
         Person person = new Person("r12019837");
-        instance.setRefereeID(person);
-        assertEquals(person, instance.getRefereeID());
+        instance.setReferee(person);
+        assertEquals(person, instance.getReferee());
     }
 
     @Test

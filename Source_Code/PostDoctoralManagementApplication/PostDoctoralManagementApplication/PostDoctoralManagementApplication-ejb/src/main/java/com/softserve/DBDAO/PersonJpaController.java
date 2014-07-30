@@ -15,9 +15,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.CommitteeMeeting;
 import java.util.ArrayList;
@@ -99,20 +98,15 @@ public class PersonJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            UpEmployeeInformation upEmployeeInformation = person.getUpEmployeeInformation();
-            if (upEmployeeInformation != null) {
-                upEmployeeInformation = em.getReference(upEmployeeInformation.getClass(), upEmployeeInformation.getEmployeeID());
-                person.setUpEmployeeInformation(upEmployeeInformation);
+            EmployeeInformation employeeInformation = person.getEmployeeInformation();
+            if (employeeInformation != null) {
+                employeeInformation = em.getReference(employeeInformation.getClass(), employeeInformation.getEmployeeID());
+                person.setEmployeeInformation(employeeInformation);
             }
             Cv cv = person.getCv();
             if (cv != null) {
                 cv = em.getReference(cv.getClass(), cv.getCvID());
                 person.setCv(cv);
-            }
-            Location locationID = person.getLocationID();
-            if (locationID != null) {
-                locationID = em.getReference(locationID.getClass(), locationID.getLocationID());
-                person.setLocationID(locationID);
             }
             Address addressLine1 = person.getAddressLine1();
             if (addressLine1 != null) {
@@ -198,14 +192,14 @@ public class PersonJpaController implements Serializable {
             }
             person.setMinuteCommentList(attachedMinuteCommentList);
             em.persist(person);
-            if (upEmployeeInformation != null) {
-                Person oldPersonOfUpEmployeeInformation = upEmployeeInformation.getPerson();
-                if (oldPersonOfUpEmployeeInformation != null) {
-                    oldPersonOfUpEmployeeInformation.setUpEmployeeInformation(null);
-                    oldPersonOfUpEmployeeInformation = em.merge(oldPersonOfUpEmployeeInformation);
+            if (employeeInformation != null) {
+                Person oldPersonOfEmployeeInformation = employeeInformation.getPerson();
+                if (oldPersonOfEmployeeInformation != null) {
+                    oldPersonOfEmployeeInformation.setEmployeeInformation(null);
+                    oldPersonOfEmployeeInformation = em.merge(oldPersonOfEmployeeInformation);
                 }
-                upEmployeeInformation.setPerson(person);
-                upEmployeeInformation = em.merge(upEmployeeInformation);
+                employeeInformation.setPerson(person);
+                employeeInformation = em.merge(employeeInformation);
             }
             if (cv != null) {
                 Person oldPersonOfCv = cv.getPerson();
@@ -215,10 +209,6 @@ public class PersonJpaController implements Serializable {
                 }
                 cv.setPerson(person);
                 cv = em.merge(cv);
-            }
-            if (locationID != null) {
-                locationID.getPersonList().add(person);
-                locationID = em.merge(locationID);
             }
             if (addressLine1 != null) {
                 addressLine1.getPersonList().add(person);
@@ -237,66 +227,66 @@ public class PersonJpaController implements Serializable {
                 applicationListApplication = em.merge(applicationListApplication);
             }
             for (AuditLog auditLogListAuditLog : person.getAuditLogList()) {
-                Person oldPersonIDOfAuditLogListAuditLog = auditLogListAuditLog.getPersonID();
-                auditLogListAuditLog.setPersonID(person);
+                Person oldPersonOfAuditLogListAuditLog = auditLogListAuditLog.getPerson();
+                auditLogListAuditLog.setPerson(person);
                 auditLogListAuditLog = em.merge(auditLogListAuditLog);
-                if (oldPersonIDOfAuditLogListAuditLog != null) {
-                    oldPersonIDOfAuditLogListAuditLog.getAuditLogList().remove(auditLogListAuditLog);
-                    oldPersonIDOfAuditLogListAuditLog = em.merge(oldPersonIDOfAuditLogListAuditLog);
+                if (oldPersonOfAuditLogListAuditLog != null) {
+                    oldPersonOfAuditLogListAuditLog.getAuditLogList().remove(auditLogListAuditLog);
+                    oldPersonOfAuditLogListAuditLog = em.merge(oldPersonOfAuditLogListAuditLog);
                 }
             }
             for (Endorsement endorsementListEndorsement : person.getEndorsementList()) {
-                Person oldDeanIDOfEndorsementListEndorsement = endorsementListEndorsement.getDeanID();
-                endorsementListEndorsement.setDeanID(person);
+                Person oldDeanOfEndorsementListEndorsement = endorsementListEndorsement.getDean();
+                endorsementListEndorsement.setDean(person);
                 endorsementListEndorsement = em.merge(endorsementListEndorsement);
-                if (oldDeanIDOfEndorsementListEndorsement != null) {
-                    oldDeanIDOfEndorsementListEndorsement.getEndorsementList().remove(endorsementListEndorsement);
-                    oldDeanIDOfEndorsementListEndorsement = em.merge(oldDeanIDOfEndorsementListEndorsement);
+                if (oldDeanOfEndorsementListEndorsement != null) {
+                    oldDeanOfEndorsementListEndorsement.getEndorsementList().remove(endorsementListEndorsement);
+                    oldDeanOfEndorsementListEndorsement = em.merge(oldDeanOfEndorsementListEndorsement);
                 }
             }
             for (RecommendationReport recommendationReportListRecommendationReport : person.getRecommendationReportList()) {
-                Person oldHodIDOfRecommendationReportListRecommendationReport = recommendationReportListRecommendationReport.getHodID();
-                recommendationReportListRecommendationReport.setHodID(person);
+                Person oldHodOfRecommendationReportListRecommendationReport = recommendationReportListRecommendationReport.getHod();
+                recommendationReportListRecommendationReport.setHod(person);
                 recommendationReportListRecommendationReport = em.merge(recommendationReportListRecommendationReport);
-                if (oldHodIDOfRecommendationReportListRecommendationReport != null) {
-                    oldHodIDOfRecommendationReportListRecommendationReport.getRecommendationReportList().remove(recommendationReportListRecommendationReport);
-                    oldHodIDOfRecommendationReportListRecommendationReport = em.merge(oldHodIDOfRecommendationReportListRecommendationReport);
+                if (oldHodOfRecommendationReportListRecommendationReport != null) {
+                    oldHodOfRecommendationReportListRecommendationReport.getRecommendationReportList().remove(recommendationReportListRecommendationReport);
+                    oldHodOfRecommendationReportListRecommendationReport = em.merge(oldHodOfRecommendationReportListRecommendationReport);
                 }
             }
             for (RefereeReport refereeReportListRefereeReport : person.getRefereeReportList()) {
-                Person oldRefereeIDOfRefereeReportListRefereeReport = refereeReportListRefereeReport.getRefereeID();
-                refereeReportListRefereeReport.setRefereeID(person);
+                Person oldRefereeOfRefereeReportListRefereeReport = refereeReportListRefereeReport.getReferee();
+                refereeReportListRefereeReport.setReferee(person);
                 refereeReportListRefereeReport = em.merge(refereeReportListRefereeReport);
-                if (oldRefereeIDOfRefereeReportListRefereeReport != null) {
-                    oldRefereeIDOfRefereeReportListRefereeReport.getRefereeReportList().remove(refereeReportListRefereeReport);
-                    oldRefereeIDOfRefereeReportListRefereeReport = em.merge(oldRefereeIDOfRefereeReportListRefereeReport);
+                if (oldRefereeOfRefereeReportListRefereeReport != null) {
+                    oldRefereeOfRefereeReportListRefereeReport.getRefereeReportList().remove(refereeReportListRefereeReport);
+                    oldRefereeOfRefereeReportListRefereeReport = em.merge(oldRefereeOfRefereeReportListRefereeReport);
                 }
             }
             for (FundingReport fundingReportListFundingReport : person.getFundingReportList()) {
-                Person oldDrisIDOfFundingReportListFundingReport = fundingReportListFundingReport.getDrisID();
-                fundingReportListFundingReport.setDrisID(person);
+                Person oldDrisOfFundingReportListFundingReport = fundingReportListFundingReport.getDris();
+                fundingReportListFundingReport.setDris(person);
                 fundingReportListFundingReport = em.merge(fundingReportListFundingReport);
-                if (oldDrisIDOfFundingReportListFundingReport != null) {
-                    oldDrisIDOfFundingReportListFundingReport.getFundingReportList().remove(fundingReportListFundingReport);
-                    oldDrisIDOfFundingReportListFundingReport = em.merge(oldDrisIDOfFundingReportListFundingReport);
+                if (oldDrisOfFundingReportListFundingReport != null) {
+                    oldDrisOfFundingReportListFundingReport.getFundingReportList().remove(fundingReportListFundingReport);
+                    oldDrisOfFundingReportListFundingReport = em.merge(oldDrisOfFundingReportListFundingReport);
                 }
             }
             for (Notification notificationListNotification : person.getNotificationList()) {
-                Person oldSenderIDOfNotificationListNotification = notificationListNotification.getSenderID();
-                notificationListNotification.setSenderID(person);
+                Person oldSenderOfNotificationListNotification = notificationListNotification.getSender();
+                notificationListNotification.setSender(person);
                 notificationListNotification = em.merge(notificationListNotification);
-                if (oldSenderIDOfNotificationListNotification != null) {
-                    oldSenderIDOfNotificationListNotification.getNotificationList().remove(notificationListNotification);
-                    oldSenderIDOfNotificationListNotification = em.merge(oldSenderIDOfNotificationListNotification);
+                if (oldSenderOfNotificationListNotification != null) {
+                    oldSenderOfNotificationListNotification.getNotificationList().remove(notificationListNotification);
+                    oldSenderOfNotificationListNotification = em.merge(oldSenderOfNotificationListNotification);
                 }
             }
             for (Notification notificationList1Notification : person.getNotificationList1()) {
-                Person oldRecieverIDOfNotificationList1Notification = notificationList1Notification.getRecieverID();
-                notificationList1Notification.setRecieverID(person);
+                Person oldRecieverOfNotificationList1Notification = notificationList1Notification.getReciever();
+                notificationList1Notification.setReciever(person);
                 notificationList1Notification = em.merge(notificationList1Notification);
-                if (oldRecieverIDOfNotificationList1Notification != null) {
-                    oldRecieverIDOfNotificationList1Notification.getNotificationList1().remove(notificationList1Notification);
-                    oldRecieverIDOfNotificationList1Notification = em.merge(oldRecieverIDOfNotificationList1Notification);
+                if (oldRecieverOfNotificationList1Notification != null) {
+                    oldRecieverOfNotificationList1Notification.getNotificationList1().remove(notificationList1Notification);
+                    oldRecieverOfNotificationList1Notification = em.merge(oldRecieverOfNotificationList1Notification);
                 }
             }
             for (Application applicationList1Application : person.getApplicationList1()) {
@@ -309,21 +299,21 @@ public class PersonJpaController implements Serializable {
                 }
             }
             for (Application applicationList2Application : person.getApplicationList2()) {
-                Person oldGrantHolderIDOfApplicationList2Application = applicationList2Application.getGrantHolderID();
-                applicationList2Application.setGrantHolderID(person);
+                Person oldGrantHolderOfApplicationList2Application = applicationList2Application.getGrantHolder();
+                applicationList2Application.setGrantHolder(person);
                 applicationList2Application = em.merge(applicationList2Application);
-                if (oldGrantHolderIDOfApplicationList2Application != null) {
-                    oldGrantHolderIDOfApplicationList2Application.getApplicationList2().remove(applicationList2Application);
-                    oldGrantHolderIDOfApplicationList2Application = em.merge(oldGrantHolderIDOfApplicationList2Application);
+                if (oldGrantHolderOfApplicationList2Application != null) {
+                    oldGrantHolderOfApplicationList2Application.getApplicationList2().remove(applicationList2Application);
+                    oldGrantHolderOfApplicationList2Application = em.merge(oldGrantHolderOfApplicationList2Application);
                 }
             }
             for (MinuteComment minuteCommentListMinuteComment : person.getMinuteCommentList()) {
-                Person oldAttendeeIDOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getAttendeeID();
-                minuteCommentListMinuteComment.setAttendeeID(person);
+                Person oldAttendeeOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getAttendee();
+                minuteCommentListMinuteComment.setAttendee(person);
                 minuteCommentListMinuteComment = em.merge(minuteCommentListMinuteComment);
-                if (oldAttendeeIDOfMinuteCommentListMinuteComment != null) {
-                    oldAttendeeIDOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
-                    oldAttendeeIDOfMinuteCommentListMinuteComment = em.merge(oldAttendeeIDOfMinuteCommentListMinuteComment);
+                if (oldAttendeeOfMinuteCommentListMinuteComment != null) {
+                    oldAttendeeOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
+                    oldAttendeeOfMinuteCommentListMinuteComment = em.merge(oldAttendeeOfMinuteCommentListMinuteComment);
                 }
             }
             utx.commit();
@@ -350,12 +340,10 @@ public class PersonJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Person persistentPerson = em.find(Person.class, person.getSystemID());
-            UpEmployeeInformation upEmployeeInformationOld = persistentPerson.getUpEmployeeInformation();
-            UpEmployeeInformation upEmployeeInformationNew = person.getUpEmployeeInformation();
+            EmployeeInformation employeeInformationOld = persistentPerson.getEmployeeInformation();
+            EmployeeInformation employeeInformationNew = person.getEmployeeInformation();
             Cv cvOld = persistentPerson.getCv();
             Cv cvNew = person.getCv();
-            Location locationIDOld = persistentPerson.getLocationID();
-            Location locationIDNew = person.getLocationID();
             Address addressLine1Old = persistentPerson.getAddressLine1();
             Address addressLine1New = person.getAddressLine1();
             List<CommitteeMeeting> committeeMeetingListOld = persistentPerson.getCommitteeMeetingList();
@@ -385,11 +373,11 @@ public class PersonJpaController implements Serializable {
             List<MinuteComment> minuteCommentListOld = persistentPerson.getMinuteCommentList();
             List<MinuteComment> minuteCommentListNew = person.getMinuteCommentList();
             List<String> illegalOrphanMessages = null;
-            if (upEmployeeInformationOld != null && !upEmployeeInformationOld.equals(upEmployeeInformationNew)) {
+            if (employeeInformationOld != null && !employeeInformationOld.equals(employeeInformationNew)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("You must retain UpEmployeeInformation " + upEmployeeInformationOld + " since its person field is not nullable.");
+                illegalOrphanMessages.add("You must retain EmployeeInformation " + employeeInformationOld + " since its person field is not nullable.");
             }
             if (cvOld != null && !cvOld.equals(cvNew)) {
                 if (illegalOrphanMessages == null) {
@@ -402,7 +390,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain AuditLog " + auditLogListOldAuditLog + " since its personID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain AuditLog " + auditLogListOldAuditLog + " since its person field is not nullable.");
                 }
             }
             for (Endorsement endorsementListOldEndorsement : endorsementListOld) {
@@ -410,7 +398,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Endorsement " + endorsementListOldEndorsement + " since its deanID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Endorsement " + endorsementListOldEndorsement + " since its dean field is not nullable.");
                 }
             }
             for (RecommendationReport recommendationReportListOldRecommendationReport : recommendationReportListOld) {
@@ -418,7 +406,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportListOldRecommendationReport + " since its hodID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportListOldRecommendationReport + " since its hod field is not nullable.");
                 }
             }
             for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
@@ -426,7 +414,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain RefereeReport " + refereeReportListOldRefereeReport + " since its refereeID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain RefereeReport " + refereeReportListOldRefereeReport + " since its referee field is not nullable.");
                 }
             }
             for (FundingReport fundingReportListOldFundingReport : fundingReportListOld) {
@@ -434,7 +422,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain FundingReport " + fundingReportListOldFundingReport + " since its drisID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain FundingReport " + fundingReportListOldFundingReport + " since its dris field is not nullable.");
                 }
             }
             for (Notification notificationListOldNotification : notificationListOld) {
@@ -442,7 +430,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Notification " + notificationListOldNotification + " since its senderID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Notification " + notificationListOldNotification + " since its sender field is not nullable.");
                 }
             }
             for (Notification notificationList1OldNotification : notificationList1Old) {
@@ -450,7 +438,7 @@ public class PersonJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Notification " + notificationList1OldNotification + " since its recieverID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Notification " + notificationList1OldNotification + " since its reciever field is not nullable.");
                 }
             }
             for (Application applicationList1OldApplication : applicationList1Old) {
@@ -461,36 +449,24 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Application " + applicationList1OldApplication + " since its fellow field is not nullable.");
                 }
             }
-            for (Application applicationList2OldApplication : applicationList2Old) {
-                if (!applicationList2New.contains(applicationList2OldApplication)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Application " + applicationList2OldApplication + " since its grantHolderID field is not nullable.");
-                }
-            }
             for (MinuteComment minuteCommentListOldMinuteComment : minuteCommentListOld) {
                 if (!minuteCommentListNew.contains(minuteCommentListOldMinuteComment)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its attendeeID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its attendee field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (upEmployeeInformationNew != null) {
-                upEmployeeInformationNew = em.getReference(upEmployeeInformationNew.getClass(), upEmployeeInformationNew.getEmployeeID());
-                person.setUpEmployeeInformation(upEmployeeInformationNew);
+            if (employeeInformationNew != null) {
+                employeeInformationNew = em.getReference(employeeInformationNew.getClass(), employeeInformationNew.getEmployeeID());
+                person.setEmployeeInformation(employeeInformationNew);
             }
             if (cvNew != null) {
                 cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
                 person.setCv(cvNew);
-            }
-            if (locationIDNew != null) {
-                locationIDNew = em.getReference(locationIDNew.getClass(), locationIDNew.getLocationID());
-                person.setLocationID(locationIDNew);
             }
             if (addressLine1New != null) {
                 addressLine1New = em.getReference(addressLine1New.getClass(), addressLine1New.getAddressID());
@@ -588,14 +564,14 @@ public class PersonJpaController implements Serializable {
             minuteCommentListNew = attachedMinuteCommentListNew;
             person.setMinuteCommentList(minuteCommentListNew);
             person = em.merge(person);
-            if (upEmployeeInformationNew != null && !upEmployeeInformationNew.equals(upEmployeeInformationOld)) {
-                Person oldPersonOfUpEmployeeInformation = upEmployeeInformationNew.getPerson();
-                if (oldPersonOfUpEmployeeInformation != null) {
-                    oldPersonOfUpEmployeeInformation.setUpEmployeeInformation(null);
-                    oldPersonOfUpEmployeeInformation = em.merge(oldPersonOfUpEmployeeInformation);
+            if (employeeInformationNew != null && !employeeInformationNew.equals(employeeInformationOld)) {
+                Person oldPersonOfEmployeeInformation = employeeInformationNew.getPerson();
+                if (oldPersonOfEmployeeInformation != null) {
+                    oldPersonOfEmployeeInformation.setEmployeeInformation(null);
+                    oldPersonOfEmployeeInformation = em.merge(oldPersonOfEmployeeInformation);
                 }
-                upEmployeeInformationNew.setPerson(person);
-                upEmployeeInformationNew = em.merge(upEmployeeInformationNew);
+                employeeInformationNew.setPerson(person);
+                employeeInformationNew = em.merge(employeeInformationNew);
             }
             if (cvNew != null && !cvNew.equals(cvOld)) {
                 Person oldPersonOfCv = cvNew.getPerson();
@@ -605,14 +581,6 @@ public class PersonJpaController implements Serializable {
                 }
                 cvNew.setPerson(person);
                 cvNew = em.merge(cvNew);
-            }
-            if (locationIDOld != null && !locationIDOld.equals(locationIDNew)) {
-                locationIDOld.getPersonList().remove(person);
-                locationIDOld = em.merge(locationIDOld);
-            }
-            if (locationIDNew != null && !locationIDNew.equals(locationIDOld)) {
-                locationIDNew.getPersonList().add(person);
-                locationIDNew = em.merge(locationIDNew);
             }
             if (addressLine1Old != null && !addressLine1Old.equals(addressLine1New)) {
                 addressLine1Old.getPersonList().remove(person);
@@ -660,78 +628,78 @@ public class PersonJpaController implements Serializable {
             }
             for (AuditLog auditLogListNewAuditLog : auditLogListNew) {
                 if (!auditLogListOld.contains(auditLogListNewAuditLog)) {
-                    Person oldPersonIDOfAuditLogListNewAuditLog = auditLogListNewAuditLog.getPersonID();
-                    auditLogListNewAuditLog.setPersonID(person);
+                    Person oldPersonOfAuditLogListNewAuditLog = auditLogListNewAuditLog.getPerson();
+                    auditLogListNewAuditLog.setPerson(person);
                     auditLogListNewAuditLog = em.merge(auditLogListNewAuditLog);
-                    if (oldPersonIDOfAuditLogListNewAuditLog != null && !oldPersonIDOfAuditLogListNewAuditLog.equals(person)) {
-                        oldPersonIDOfAuditLogListNewAuditLog.getAuditLogList().remove(auditLogListNewAuditLog);
-                        oldPersonIDOfAuditLogListNewAuditLog = em.merge(oldPersonIDOfAuditLogListNewAuditLog);
+                    if (oldPersonOfAuditLogListNewAuditLog != null && !oldPersonOfAuditLogListNewAuditLog.equals(person)) {
+                        oldPersonOfAuditLogListNewAuditLog.getAuditLogList().remove(auditLogListNewAuditLog);
+                        oldPersonOfAuditLogListNewAuditLog = em.merge(oldPersonOfAuditLogListNewAuditLog);
                     }
                 }
             }
             for (Endorsement endorsementListNewEndorsement : endorsementListNew) {
                 if (!endorsementListOld.contains(endorsementListNewEndorsement)) {
-                    Person oldDeanIDOfEndorsementListNewEndorsement = endorsementListNewEndorsement.getDeanID();
-                    endorsementListNewEndorsement.setDeanID(person);
+                    Person oldDeanOfEndorsementListNewEndorsement = endorsementListNewEndorsement.getDean();
+                    endorsementListNewEndorsement.setDean(person);
                     endorsementListNewEndorsement = em.merge(endorsementListNewEndorsement);
-                    if (oldDeanIDOfEndorsementListNewEndorsement != null && !oldDeanIDOfEndorsementListNewEndorsement.equals(person)) {
-                        oldDeanIDOfEndorsementListNewEndorsement.getEndorsementList().remove(endorsementListNewEndorsement);
-                        oldDeanIDOfEndorsementListNewEndorsement = em.merge(oldDeanIDOfEndorsementListNewEndorsement);
+                    if (oldDeanOfEndorsementListNewEndorsement != null && !oldDeanOfEndorsementListNewEndorsement.equals(person)) {
+                        oldDeanOfEndorsementListNewEndorsement.getEndorsementList().remove(endorsementListNewEndorsement);
+                        oldDeanOfEndorsementListNewEndorsement = em.merge(oldDeanOfEndorsementListNewEndorsement);
                     }
                 }
             }
             for (RecommendationReport recommendationReportListNewRecommendationReport : recommendationReportListNew) {
                 if (!recommendationReportListOld.contains(recommendationReportListNewRecommendationReport)) {
-                    Person oldHodIDOfRecommendationReportListNewRecommendationReport = recommendationReportListNewRecommendationReport.getHodID();
-                    recommendationReportListNewRecommendationReport.setHodID(person);
+                    Person oldHodOfRecommendationReportListNewRecommendationReport = recommendationReportListNewRecommendationReport.getHod();
+                    recommendationReportListNewRecommendationReport.setHod(person);
                     recommendationReportListNewRecommendationReport = em.merge(recommendationReportListNewRecommendationReport);
-                    if (oldHodIDOfRecommendationReportListNewRecommendationReport != null && !oldHodIDOfRecommendationReportListNewRecommendationReport.equals(person)) {
-                        oldHodIDOfRecommendationReportListNewRecommendationReport.getRecommendationReportList().remove(recommendationReportListNewRecommendationReport);
-                        oldHodIDOfRecommendationReportListNewRecommendationReport = em.merge(oldHodIDOfRecommendationReportListNewRecommendationReport);
+                    if (oldHodOfRecommendationReportListNewRecommendationReport != null && !oldHodOfRecommendationReportListNewRecommendationReport.equals(person)) {
+                        oldHodOfRecommendationReportListNewRecommendationReport.getRecommendationReportList().remove(recommendationReportListNewRecommendationReport);
+                        oldHodOfRecommendationReportListNewRecommendationReport = em.merge(oldHodOfRecommendationReportListNewRecommendationReport);
                     }
                 }
             }
             for (RefereeReport refereeReportListNewRefereeReport : refereeReportListNew) {
                 if (!refereeReportListOld.contains(refereeReportListNewRefereeReport)) {
-                    Person oldRefereeIDOfRefereeReportListNewRefereeReport = refereeReportListNewRefereeReport.getRefereeID();
-                    refereeReportListNewRefereeReport.setRefereeID(person);
+                    Person oldRefereeOfRefereeReportListNewRefereeReport = refereeReportListNewRefereeReport.getReferee();
+                    refereeReportListNewRefereeReport.setReferee(person);
                     refereeReportListNewRefereeReport = em.merge(refereeReportListNewRefereeReport);
-                    if (oldRefereeIDOfRefereeReportListNewRefereeReport != null && !oldRefereeIDOfRefereeReportListNewRefereeReport.equals(person)) {
-                        oldRefereeIDOfRefereeReportListNewRefereeReport.getRefereeReportList().remove(refereeReportListNewRefereeReport);
-                        oldRefereeIDOfRefereeReportListNewRefereeReport = em.merge(oldRefereeIDOfRefereeReportListNewRefereeReport);
+                    if (oldRefereeOfRefereeReportListNewRefereeReport != null && !oldRefereeOfRefereeReportListNewRefereeReport.equals(person)) {
+                        oldRefereeOfRefereeReportListNewRefereeReport.getRefereeReportList().remove(refereeReportListNewRefereeReport);
+                        oldRefereeOfRefereeReportListNewRefereeReport = em.merge(oldRefereeOfRefereeReportListNewRefereeReport);
                     }
                 }
             }
             for (FundingReport fundingReportListNewFundingReport : fundingReportListNew) {
                 if (!fundingReportListOld.contains(fundingReportListNewFundingReport)) {
-                    Person oldDrisIDOfFundingReportListNewFundingReport = fundingReportListNewFundingReport.getDrisID();
-                    fundingReportListNewFundingReport.setDrisID(person);
+                    Person oldDrisOfFundingReportListNewFundingReport = fundingReportListNewFundingReport.getDris();
+                    fundingReportListNewFundingReport.setDris(person);
                     fundingReportListNewFundingReport = em.merge(fundingReportListNewFundingReport);
-                    if (oldDrisIDOfFundingReportListNewFundingReport != null && !oldDrisIDOfFundingReportListNewFundingReport.equals(person)) {
-                        oldDrisIDOfFundingReportListNewFundingReport.getFundingReportList().remove(fundingReportListNewFundingReport);
-                        oldDrisIDOfFundingReportListNewFundingReport = em.merge(oldDrisIDOfFundingReportListNewFundingReport);
+                    if (oldDrisOfFundingReportListNewFundingReport != null && !oldDrisOfFundingReportListNewFundingReport.equals(person)) {
+                        oldDrisOfFundingReportListNewFundingReport.getFundingReportList().remove(fundingReportListNewFundingReport);
+                        oldDrisOfFundingReportListNewFundingReport = em.merge(oldDrisOfFundingReportListNewFundingReport);
                     }
                 }
             }
             for (Notification notificationListNewNotification : notificationListNew) {
                 if (!notificationListOld.contains(notificationListNewNotification)) {
-                    Person oldSenderIDOfNotificationListNewNotification = notificationListNewNotification.getSenderID();
-                    notificationListNewNotification.setSenderID(person);
+                    Person oldSenderOfNotificationListNewNotification = notificationListNewNotification.getSender();
+                    notificationListNewNotification.setSender(person);
                     notificationListNewNotification = em.merge(notificationListNewNotification);
-                    if (oldSenderIDOfNotificationListNewNotification != null && !oldSenderIDOfNotificationListNewNotification.equals(person)) {
-                        oldSenderIDOfNotificationListNewNotification.getNotificationList().remove(notificationListNewNotification);
-                        oldSenderIDOfNotificationListNewNotification = em.merge(oldSenderIDOfNotificationListNewNotification);
+                    if (oldSenderOfNotificationListNewNotification != null && !oldSenderOfNotificationListNewNotification.equals(person)) {
+                        oldSenderOfNotificationListNewNotification.getNotificationList().remove(notificationListNewNotification);
+                        oldSenderOfNotificationListNewNotification = em.merge(oldSenderOfNotificationListNewNotification);
                     }
                 }
             }
             for (Notification notificationList1NewNotification : notificationList1New) {
                 if (!notificationList1Old.contains(notificationList1NewNotification)) {
-                    Person oldRecieverIDOfNotificationList1NewNotification = notificationList1NewNotification.getRecieverID();
-                    notificationList1NewNotification.setRecieverID(person);
+                    Person oldRecieverOfNotificationList1NewNotification = notificationList1NewNotification.getReciever();
+                    notificationList1NewNotification.setReciever(person);
                     notificationList1NewNotification = em.merge(notificationList1NewNotification);
-                    if (oldRecieverIDOfNotificationList1NewNotification != null && !oldRecieverIDOfNotificationList1NewNotification.equals(person)) {
-                        oldRecieverIDOfNotificationList1NewNotification.getNotificationList1().remove(notificationList1NewNotification);
-                        oldRecieverIDOfNotificationList1NewNotification = em.merge(oldRecieverIDOfNotificationList1NewNotification);
+                    if (oldRecieverOfNotificationList1NewNotification != null && !oldRecieverOfNotificationList1NewNotification.equals(person)) {
+                        oldRecieverOfNotificationList1NewNotification.getNotificationList1().remove(notificationList1NewNotification);
+                        oldRecieverOfNotificationList1NewNotification = em.merge(oldRecieverOfNotificationList1NewNotification);
                     }
                 }
             }
@@ -746,25 +714,31 @@ public class PersonJpaController implements Serializable {
                     }
                 }
             }
+            for (Application applicationList2OldApplication : applicationList2Old) {
+                if (!applicationList2New.contains(applicationList2OldApplication)) {
+                    applicationList2OldApplication.setGrantHolder(null);
+                    applicationList2OldApplication = em.merge(applicationList2OldApplication);
+                }
+            }
             for (Application applicationList2NewApplication : applicationList2New) {
                 if (!applicationList2Old.contains(applicationList2NewApplication)) {
-                    Person oldGrantHolderIDOfApplicationList2NewApplication = applicationList2NewApplication.getGrantHolderID();
-                    applicationList2NewApplication.setGrantHolderID(person);
+                    Person oldGrantHolderOfApplicationList2NewApplication = applicationList2NewApplication.getGrantHolder();
+                    applicationList2NewApplication.setGrantHolder(person);
                     applicationList2NewApplication = em.merge(applicationList2NewApplication);
-                    if (oldGrantHolderIDOfApplicationList2NewApplication != null && !oldGrantHolderIDOfApplicationList2NewApplication.equals(person)) {
-                        oldGrantHolderIDOfApplicationList2NewApplication.getApplicationList2().remove(applicationList2NewApplication);
-                        oldGrantHolderIDOfApplicationList2NewApplication = em.merge(oldGrantHolderIDOfApplicationList2NewApplication);
+                    if (oldGrantHolderOfApplicationList2NewApplication != null && !oldGrantHolderOfApplicationList2NewApplication.equals(person)) {
+                        oldGrantHolderOfApplicationList2NewApplication.getApplicationList2().remove(applicationList2NewApplication);
+                        oldGrantHolderOfApplicationList2NewApplication = em.merge(oldGrantHolderOfApplicationList2NewApplication);
                     }
                 }
             }
             for (MinuteComment minuteCommentListNewMinuteComment : minuteCommentListNew) {
                 if (!minuteCommentListOld.contains(minuteCommentListNewMinuteComment)) {
-                    Person oldAttendeeIDOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getAttendeeID();
-                    minuteCommentListNewMinuteComment.setAttendeeID(person);
+                    Person oldAttendeeOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getAttendee();
+                    minuteCommentListNewMinuteComment.setAttendee(person);
                     minuteCommentListNewMinuteComment = em.merge(minuteCommentListNewMinuteComment);
-                    if (oldAttendeeIDOfMinuteCommentListNewMinuteComment != null && !oldAttendeeIDOfMinuteCommentListNewMinuteComment.equals(person)) {
-                        oldAttendeeIDOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
-                        oldAttendeeIDOfMinuteCommentListNewMinuteComment = em.merge(oldAttendeeIDOfMinuteCommentListNewMinuteComment);
+                    if (oldAttendeeOfMinuteCommentListNewMinuteComment != null && !oldAttendeeOfMinuteCommentListNewMinuteComment.equals(person)) {
+                        oldAttendeeOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
+                        oldAttendeeOfMinuteCommentListNewMinuteComment = em.merge(oldAttendeeOfMinuteCommentListNewMinuteComment);
                     }
                 }
             }
@@ -803,12 +777,12 @@ public class PersonJpaController implements Serializable {
                 throw new NonexistentEntityException("The person with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            UpEmployeeInformation upEmployeeInformationOrphanCheck = person.getUpEmployeeInformation();
-            if (upEmployeeInformationOrphanCheck != null) {
+            EmployeeInformation employeeInformationOrphanCheck = person.getEmployeeInformation();
+            if (employeeInformationOrphanCheck != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the UpEmployeeInformation " + upEmployeeInformationOrphanCheck + " in its upEmployeeInformation field has a non-nullable person field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the EmployeeInformation " + employeeInformationOrphanCheck + " in its employeeInformation field has a non-nullable person field.");
             }
             Cv cvOrphanCheck = person.getCv();
             if (cvOrphanCheck != null) {
@@ -822,49 +796,49 @@ public class PersonJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AuditLog " + auditLogListOrphanCheckAuditLog + " in its auditLogList field has a non-nullable personID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AuditLog " + auditLogListOrphanCheckAuditLog + " in its auditLogList field has a non-nullable person field.");
             }
             List<Endorsement> endorsementListOrphanCheck = person.getEndorsementList();
             for (Endorsement endorsementListOrphanCheckEndorsement : endorsementListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Endorsement " + endorsementListOrphanCheckEndorsement + " in its endorsementList field has a non-nullable deanID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Endorsement " + endorsementListOrphanCheckEndorsement + " in its endorsementList field has a non-nullable dean field.");
             }
             List<RecommendationReport> recommendationReportListOrphanCheck = person.getRecommendationReportList();
             for (RecommendationReport recommendationReportListOrphanCheckRecommendationReport : recommendationReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RecommendationReport " + recommendationReportListOrphanCheckRecommendationReport + " in its recommendationReportList field has a non-nullable hodID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RecommendationReport " + recommendationReportListOrphanCheckRecommendationReport + " in its recommendationReportList field has a non-nullable hod field.");
             }
             List<RefereeReport> refereeReportListOrphanCheck = person.getRefereeReportList();
             for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RefereeReport " + refereeReportListOrphanCheckRefereeReport + " in its refereeReportList field has a non-nullable refereeID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RefereeReport " + refereeReportListOrphanCheckRefereeReport + " in its refereeReportList field has a non-nullable referee field.");
             }
             List<FundingReport> fundingReportListOrphanCheck = person.getFundingReportList();
             for (FundingReport fundingReportListOrphanCheckFundingReport : fundingReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the FundingReport " + fundingReportListOrphanCheckFundingReport + " in its fundingReportList field has a non-nullable drisID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the FundingReport " + fundingReportListOrphanCheckFundingReport + " in its fundingReportList field has a non-nullable dris field.");
             }
             List<Notification> notificationListOrphanCheck = person.getNotificationList();
             for (Notification notificationListOrphanCheckNotification : notificationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationListOrphanCheckNotification + " in its notificationList field has a non-nullable senderID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationListOrphanCheckNotification + " in its notificationList field has a non-nullable sender field.");
             }
             List<Notification> notificationList1OrphanCheck = person.getNotificationList1();
             for (Notification notificationList1OrphanCheckNotification : notificationList1OrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationList1OrphanCheckNotification + " in its notificationList1 field has a non-nullable recieverID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationList1OrphanCheckNotification + " in its notificationList1 field has a non-nullable reciever field.");
             }
             List<Application> applicationList1OrphanCheck = person.getApplicationList1();
             for (Application applicationList1OrphanCheckApplication : applicationList1OrphanCheck) {
@@ -873,27 +847,15 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationList1OrphanCheckApplication + " in its applicationList1 field has a non-nullable fellow field.");
             }
-            List<Application> applicationList2OrphanCheck = person.getApplicationList2();
-            for (Application applicationList2OrphanCheckApplication : applicationList2OrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Application " + applicationList2OrphanCheckApplication + " in its applicationList2 field has a non-nullable grantHolderID field.");
-            }
             List<MinuteComment> minuteCommentListOrphanCheck = person.getMinuteCommentList();
             for (MinuteComment minuteCommentListOrphanCheckMinuteComment : minuteCommentListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable attendeeID field.");
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable attendee field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Location locationID = person.getLocationID();
-            if (locationID != null) {
-                locationID.getPersonList().remove(person);
-                locationID = em.merge(locationID);
             }
             Address addressLine1 = person.getAddressLine1();
             if (addressLine1 != null) {
@@ -914,6 +876,11 @@ public class PersonJpaController implements Serializable {
             for (Application applicationListApplication : applicationList) {
                 applicationListApplication.getPersonList().remove(person);
                 applicationListApplication = em.merge(applicationListApplication);
+            }
+            List<Application> applicationList2 = person.getApplicationList2();
+            for (Application applicationList2Application : applicationList2) {
+                applicationList2Application.setGrantHolder(null);
+                applicationList2Application = em.merge(applicationList2Application);
             }
             em.remove(person);
             utx.commit();

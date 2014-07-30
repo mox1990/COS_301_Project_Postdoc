@@ -91,21 +91,21 @@ public class CvJpaController implements Serializable {
                 person = em.merge(person);
             }
             for (Experience experienceListExperience : cv.getExperienceList()) {
-                Cv oldCvIDOfExperienceListExperience = experienceListExperience.getCvID();
-                experienceListExperience.setCvID(cv);
+                Cv oldCvOfExperienceListExperience = experienceListExperience.getCv();
+                experienceListExperience.setCv(cv);
                 experienceListExperience = em.merge(experienceListExperience);
-                if (oldCvIDOfExperienceListExperience != null) {
-                    oldCvIDOfExperienceListExperience.getExperienceList().remove(experienceListExperience);
-                    oldCvIDOfExperienceListExperience = em.merge(oldCvIDOfExperienceListExperience);
+                if (oldCvOfExperienceListExperience != null) {
+                    oldCvOfExperienceListExperience.getExperienceList().remove(experienceListExperience);
+                    oldCvOfExperienceListExperience = em.merge(oldCvOfExperienceListExperience);
                 }
             }
             for (AcademicQualification academicQualificationListAcademicQualification : cv.getAcademicQualificationList()) {
-                Cv oldCvIDOfAcademicQualificationListAcademicQualification = academicQualificationListAcademicQualification.getCvID();
-                academicQualificationListAcademicQualification.setCvID(cv);
+                Cv oldCvOfAcademicQualificationListAcademicQualification = academicQualificationListAcademicQualification.getCv();
+                academicQualificationListAcademicQualification.setCv(cv);
                 academicQualificationListAcademicQualification = em.merge(academicQualificationListAcademicQualification);
-                if (oldCvIDOfAcademicQualificationListAcademicQualification != null) {
-                    oldCvIDOfAcademicQualificationListAcademicQualification.getAcademicQualificationList().remove(academicQualificationListAcademicQualification);
-                    oldCvIDOfAcademicQualificationListAcademicQualification = em.merge(oldCvIDOfAcademicQualificationListAcademicQualification);
+                if (oldCvOfAcademicQualificationListAcademicQualification != null) {
+                    oldCvOfAcademicQualificationListAcademicQualification.getAcademicQualificationList().remove(academicQualificationListAcademicQualification);
+                    oldCvOfAcademicQualificationListAcademicQualification = em.merge(oldCvOfAcademicQualificationListAcademicQualification);
                 }
             }
             utx.commit();
@@ -153,7 +153,7 @@ public class CvJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Experience " + experienceListOldExperience + " since its cvID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Experience " + experienceListOldExperience + " since its cv field is not nullable.");
                 }
             }
             for (AcademicQualification academicQualificationListOldAcademicQualification : academicQualificationListOld) {
@@ -161,7 +161,7 @@ public class CvJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain AcademicQualification " + academicQualificationListOldAcademicQualification + " since its cvID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain AcademicQualification " + academicQualificationListOldAcademicQualification + " since its cv field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -196,23 +196,23 @@ public class CvJpaController implements Serializable {
             }
             for (Experience experienceListNewExperience : experienceListNew) {
                 if (!experienceListOld.contains(experienceListNewExperience)) {
-                    Cv oldCvIDOfExperienceListNewExperience = experienceListNewExperience.getCvID();
-                    experienceListNewExperience.setCvID(cv);
+                    Cv oldCvOfExperienceListNewExperience = experienceListNewExperience.getCv();
+                    experienceListNewExperience.setCv(cv);
                     experienceListNewExperience = em.merge(experienceListNewExperience);
-                    if (oldCvIDOfExperienceListNewExperience != null && !oldCvIDOfExperienceListNewExperience.equals(cv)) {
-                        oldCvIDOfExperienceListNewExperience.getExperienceList().remove(experienceListNewExperience);
-                        oldCvIDOfExperienceListNewExperience = em.merge(oldCvIDOfExperienceListNewExperience);
+                    if (oldCvOfExperienceListNewExperience != null && !oldCvOfExperienceListNewExperience.equals(cv)) {
+                        oldCvOfExperienceListNewExperience.getExperienceList().remove(experienceListNewExperience);
+                        oldCvOfExperienceListNewExperience = em.merge(oldCvOfExperienceListNewExperience);
                     }
                 }
             }
             for (AcademicQualification academicQualificationListNewAcademicQualification : academicQualificationListNew) {
                 if (!academicQualificationListOld.contains(academicQualificationListNewAcademicQualification)) {
-                    Cv oldCvIDOfAcademicQualificationListNewAcademicQualification = academicQualificationListNewAcademicQualification.getCvID();
-                    academicQualificationListNewAcademicQualification.setCvID(cv);
+                    Cv oldCvOfAcademicQualificationListNewAcademicQualification = academicQualificationListNewAcademicQualification.getCv();
+                    academicQualificationListNewAcademicQualification.setCv(cv);
                     academicQualificationListNewAcademicQualification = em.merge(academicQualificationListNewAcademicQualification);
-                    if (oldCvIDOfAcademicQualificationListNewAcademicQualification != null && !oldCvIDOfAcademicQualificationListNewAcademicQualification.equals(cv)) {
-                        oldCvIDOfAcademicQualificationListNewAcademicQualification.getAcademicQualificationList().remove(academicQualificationListNewAcademicQualification);
-                        oldCvIDOfAcademicQualificationListNewAcademicQualification = em.merge(oldCvIDOfAcademicQualificationListNewAcademicQualification);
+                    if (oldCvOfAcademicQualificationListNewAcademicQualification != null && !oldCvOfAcademicQualificationListNewAcademicQualification.equals(cv)) {
+                        oldCvOfAcademicQualificationListNewAcademicQualification.getAcademicQualificationList().remove(academicQualificationListNewAcademicQualification);
+                        oldCvOfAcademicQualificationListNewAcademicQualification = em.merge(oldCvOfAcademicQualificationListNewAcademicQualification);
                     }
                 }
             }
@@ -256,14 +256,14 @@ public class CvJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the Experience " + experienceListOrphanCheckExperience + " in its experienceList field has a non-nullable cvID field.");
+                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the Experience " + experienceListOrphanCheckExperience + " in its experienceList field has a non-nullable cv field.");
             }
             List<AcademicQualification> academicQualificationListOrphanCheck = cv.getAcademicQualificationList();
             for (AcademicQualification academicQualificationListOrphanCheckAcademicQualification : academicQualificationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the AcademicQualification " + academicQualificationListOrphanCheckAcademicQualification + " in its academicQualificationList field has a non-nullable cvID field.");
+                illegalOrphanMessages.add("This Cv (" + cv + ") cannot be destroyed since the AcademicQualification " + academicQualificationListOrphanCheckAcademicQualification + " in its academicQualificationList field has a non-nullable cv field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

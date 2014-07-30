@@ -55,12 +55,12 @@ public class ProgressReportTest {
     }
 
     @Test
-    public void testSetAndGetApplicationID() 
+    public void testSetAndGetApplication() 
     {
         ProgressReport instance = new ProgressReport();
         Application app = new Application(Long.MIN_VALUE);
-        instance.setApplicationID(app);
-        assertEquals(app, instance.getApplicationID());
+        instance.setApplication(app);
+        assertEquals(app, instance.getApplication());
     }
 
     @Test

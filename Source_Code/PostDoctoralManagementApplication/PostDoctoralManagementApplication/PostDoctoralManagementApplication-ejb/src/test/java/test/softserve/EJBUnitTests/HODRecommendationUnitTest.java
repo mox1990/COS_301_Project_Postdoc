@@ -186,12 +186,12 @@ public class HODRecommendationUnitTest {
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolderID()).thenReturn(new Person("s25030403"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolderID(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
@@ -205,7 +205,7 @@ public class HODRecommendationUnitTest {
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"));
             
             verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolderID(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             verify(mockNotificationService).sendNotification(new Notification(Long.MAX_VALUE), true);
@@ -250,12 +250,12 @@ public class HODRecommendationUnitTest {
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolderID()).thenReturn(new Person("s25030403"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolderID(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
@@ -269,7 +269,7 @@ public class HODRecommendationUnitTest {
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
             
             verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolderID(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             verify(mockNotificationService).sendNotification(new Notification(Long.MAX_VALUE), true);
@@ -314,13 +314,13 @@ public class HODRecommendationUnitTest {
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolderID()).thenReturn(new Person("s25030403"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         RecommendationReport mockRecommendationReport = mock(RecommendationReport.class);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolderID(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);

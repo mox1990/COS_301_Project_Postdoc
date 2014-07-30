@@ -40,22 +40,23 @@ CREATE TABLE person (
 	_addressLine1 BIGINT UNSIGNED,
 	_upEmployee BOOLEAN NOT NULL,
 	_accountStatus ENUM('active','disabled','dorment'),
-	_locationID BIGINT UNSIGNED,
 	
-	PRIMARY KEY (_systemID),
-	FOREIGN KEY (_locationID) REFERENCES location(_locationID),
+	
+	PRIMARY KEY (_systemID),	
 	FOREIGN KEY (_addressLine1) REFERENCES address(_addressID)
 ) ENGINE=InnoDB;
 
-CREATE TABLE up_employee_information (
+CREATE TABLE employee_information (
 	_employeeID CHAR(9) NOT NULL,	
 	_physicalAddress BIGINT UNSIGNED,
 	_position VARCHAR(50),
 	_dateOfAppointment DATE,
 	_appointmentStatus VARCHAR(50),
+	_location BIGINT UNSIGNED,
 	
 	PRIMARY KEY (_employeeID),
 	FOREIGN KEY (_employeeID) REFERENCES person(_systemID),
+	FOREIGN KEY (_location) REFERENCES location(_locationID),
 	FOREIGN KEY (_physicalAddress) REFERENCES address(_addressID)
 ) ENGINE=InnoDB;
 
@@ -82,12 +83,12 @@ CREATE TABLE notification (
 	_message TEXT,
 	_emailStatus ENUM('sent', 'sending', 'disabled'),
 	_timestamp DATETIME NOT NULL,
-	_senderID CHAR(9) NOT NULL,
-	_recieverID	CHAR(9) NOT NULL,
+	_sender CHAR(9) NOT NULL,
+	_reciever	CHAR(9) NOT NULL,
 	
 	PRIMARY KEY (_notificationID),
-	FOREIGN KEY (_senderID) REFERENCES person(_systemID),
-	FOREIGN KEY (_recieverID) REFERENCES person(_systemID)
+	FOREIGN KEY (_sender) REFERENCES person(_systemID),
+	FOREIGN KEY (_reciever) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 
@@ -104,40 +105,55 @@ CREATE TABLE application (
     _projectTitle VARCHAR(250),
     _information TEXT,
     _fellow CHAR(9) NOT NULL,
-    _grantHolderID CHAR(9),
+    _grantHolder CHAR(9),
     PRIMARY KEY (_applicationID),
     FOREIGN KEY (_fellow) REFERENCES person (_systemID),
-    FOREIGN KEY (_grantHolderID) REFERENCES person (_systemID)
+    FOREIGN KEY (_grantHolder) REFERENCES person (_systemID)
 )  ENGINE=InnoDB;
 
+CREATE TABLE decline_report (
+	_reportID BIGINT UNSIGNED NOT NULL,
+	_timestamp DATETIME,
+	_reason TEXT,
+	PRIMARY KEY (_reportID),
+	FOREIGN KEY (_reportID) REFERENCES application(_applicationID)
+) ENGINE=InnoDB;
 
+CREATE TABLE ammend_request (
+	_requestID BIGINT UNSIGNED NOT NULL,
+	_application BIGINT UNSIGNED NOT NULL,
+	_timestamp DATETIME,
+	_request TEXT,
+	PRIMARY KEY (_requestID),
+	FOREIGN KEY (_application) REFERENCES application(_applicationID)
+) ENGINE=InnoDB;
 
 CREATE TABLE recommendation_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
-	_hodID CHAR(9) NOT NULL,
+	_hod CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_content TEXT NOT NULL,
 
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
-	FOREIGN KEY (_hodID) REFERENCES person(_systemID)
+	FOREIGN KEY (_hod) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE endorsement (
 	_endorsementID BIGINT UNSIGNED NOT NULL,
-	_deanID CHAR(9) NOT NULL,
+	_dean CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_rank INT UNSIGNED NOT NULL,
 	_motivation TEXT NOT NULL,
 
 	PRIMARY KEY (_endorsementID),
 	FOREIGN KEY (_endorsementID) REFERENCES application(_applicationID),
-	FOREIGN KEY (_deanID) REFERENCES person(_systemID)
+	FOREIGN KEY (_dean) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE funding_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
-	_drisID CHAR(9) NOT NULL,
+	_dris CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_fellowshipCost FLOAT,
 	_travelCost FLOAT,
@@ -148,7 +164,7 @@ CREATE TABLE funding_report (
 
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
-	FOREIGN KEY (_drisID) REFERENCES person(_systemID)
+	FOREIGN KEY (_dris) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 
@@ -169,24 +185,24 @@ CREATE TABLE referee_application (
 
 CREATE TABLE referee_report (
 	_reportID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_refereeID CHAR(9) NOT NULL,
+	_referee CHAR(9) NOT NULL,
 	_applicationID BIGINT UNSIGNED NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_content TEXT NOT NULL,
 	
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_applicationID) REFERENCES application(_applicationID),
-	FOREIGN KEY (_refereeID) REFERENCES person(_systemID)
+	FOREIGN KEY (_referee) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE progress_report (
 	_reportID BIGINT UNSIGNED AUTO_INCREMENT,
-	_applicationID BIGINT UNSIGNED NOT NULL,
+	_application BIGINT UNSIGNED NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_content TEXT NOT NULL,
 	
 	PRIMARY KEY (_reportID),
-	FOREIGN KEY (_applicationID) REFERENCES application(_applicationID)
+	FOREIGN KEY (_application) REFERENCES application(_applicationID)
 ) ENGINE=InnoDB;
 
 #CREATE TABLE RENEWAL_applicationS (
@@ -205,14 +221,14 @@ CREATE TABLE committee_meeting (
 
 CREATE TABLE minute_comment (
 	_commentID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_meetingID BIGINT UNSIGNED NOT NULL,
+	_meeting BIGINT UNSIGNED NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_attendeeID CHAR(9) NOT NULL,
+	_attendee CHAR(9) NOT NULL,
 	_comment VARCHAR(500) NOT NULL,
 	
 	PRIMARY KEY (_commentID),
-	FOREIGN KEY (_meetingID) REFERENCES committee_meeting(_meetingID),
-	FOREIGN KEY (_attendeeID) REFERENCES person(_systemID)
+	FOREIGN KEY (_meeting) REFERENCES committee_meeting(_meetingID),
+	FOREIGN KEY (_attendee) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 #CREATE TABLE NEW_applicationS_COMMITT_MEETINGS (
@@ -254,12 +270,12 @@ CREATE TABLE committee_meetings_applications (
 
 CREATE TABLE audit_log (
 	_entryID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_personID CHAR(9) NOT NULL,
+	_person CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
 	_action VARCHAR(100) NOT NULL,
 	
 	PRIMARY KEY (_entryID),
-	FOREIGN KEY (_personID) REFERENCES person(_systemID)
+	FOREIGN KEY (_person) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE cv (
@@ -281,7 +297,7 @@ CREATE TABLE cv (
 
 CREATE TABLE academic_qualification (
 	_qualificationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_cvID CHAR(9) NOT NULL,
+	_cv CHAR(9) NOT NULL,
 	_name VARCHAR(100),
 	_fieldOfStudy VARCHAR(100),
 	_institution VARCHAR(100),
@@ -289,19 +305,19 @@ CREATE TABLE academic_qualification (
 	_distinctions TINYINT UNSIGNED,
 
 	PRIMARY KEY (_qualificationID),
-	FOREIGN KEY (_cvID) REFERENCES cv(_cvID)
+	FOREIGN KEY (_cv) REFERENCES cv(_cvID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE experience (
 	_experienceID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_cvID CHAR(9) NOT NULL,
+	_cv CHAR(9) NOT NULL,
 	_capacity VARCHAR(100),
 	_organisation VARCHAR(100),
 	_startDate DATETIME NOT NULL,
 	_endDate DATETIME NOT NULL,
 	
 	PRIMARY KEY (_experienceID),
-	FOREIGN KEY (_cvID) REFERENCES cv(_cvID)
+	FOREIGN KEY (_cv) REFERENCES cv(_cvID)
 ) ENGINE=InnoDB;
 
 

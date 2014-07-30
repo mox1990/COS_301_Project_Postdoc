@@ -63,9 +63,9 @@ public class Experience implements Serializable {
     @Column(name = "_endDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
-    @JoinColumn(name = "_cvID", referencedColumnName = "_cvID")
+    @JoinColumn(name = "_cv", referencedColumnName = "_cvID")
     @ManyToOne(optional = false)
-    private Cv cvID;
+    private Cv cv;
 
     public Experience() {
     }
@@ -120,12 +120,12 @@ public class Experience implements Serializable {
         this.endDate = endDate;
     }
 
-    public Cv getCvID() {
-        return cvID;
+    public Cv getCv() {
+        return cv;
     }
 
-    public void setCvID(Cv cvID) {
-        this.cvID = cvID;
+    public void setCv(Cv cv) {
+        this.cv = cv;
     }
 
     @Override

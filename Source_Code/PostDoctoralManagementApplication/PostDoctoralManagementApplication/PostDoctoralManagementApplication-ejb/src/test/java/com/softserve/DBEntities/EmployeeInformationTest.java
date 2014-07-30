@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class UpEmployeeInformationTest {
+public class EmployeeInformationTest {
     
-    public UpEmployeeInformationTest() {
+    public EmployeeInformationTest() {
     }
     
     @Before
@@ -33,7 +33,7 @@ public class UpEmployeeInformationTest {
     @Test
     public void testSetAndGetEmployeeID() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation();
+        EmployeeInformation instance = new EmployeeInformation();
         instance.setEmployeeID("p12019838");
         assertEquals("p12019838",instance.getEmployeeID());
     }
@@ -41,7 +41,7 @@ public class UpEmployeeInformationTest {
     @Test
     public void testSetAndGetPosition() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation();
+        EmployeeInformation instance = new EmployeeInformation();
         instance.setPosition("Important");
         assertEquals("Important",instance.getPosition());
     }
@@ -49,7 +49,7 @@ public class UpEmployeeInformationTest {
     @Test
     public void testSetAndGetDateOfAppointment() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation();
+        EmployeeInformation instance = new EmployeeInformation();
         instance.setDateOfAppointment(new Date(2014, 06, 11));
         assertEquals(new Date(2014, 06, 11),instance.getDateOfAppointment());
     }
@@ -57,7 +57,7 @@ public class UpEmployeeInformationTest {
     @Test
     public void testSetAndGetAppointmentStatus() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation();
+        EmployeeInformation instance = new EmployeeInformation();
         instance.setAppointmentStatus("Employeed");
         assertEquals("Employeed",instance.getAppointmentStatus());
     }
@@ -65,7 +65,7 @@ public class UpEmployeeInformationTest {
     @Test
     public void testSetAndGetPerson() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation();
+        EmployeeInformation instance = new EmployeeInformation();
         Person person = new Person("r12019837");
         instance.setPerson(person);
         assertEquals(person, instance.getPerson());
@@ -74,7 +74,7 @@ public class UpEmployeeInformationTest {
     @Test
     public void testSetAndGetPhysicalAddress() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation();
+        EmployeeInformation instance = new EmployeeInformation();
         Address address = new Address(new Long(1));
         instance.setPhysicalAddress(address);
         assertEquals(address, instance.getPhysicalAddress());
@@ -83,16 +83,16 @@ public class UpEmployeeInformationTest {
     @Test
     public void testEquals() 
     {
-        UpEmployeeInformation instance1 = new UpEmployeeInformation("p12019838");
-        UpEmployeeInformation instance2 = new UpEmployeeInformation("p12019838");
+        EmployeeInformation instance1 = new EmployeeInformation("p12019838");
+        EmployeeInformation instance2 = new EmployeeInformation("p12019838");
         assertTrue(instance1.equals(instance2));
     }
 
     @Test
     public void testToString() 
     {
-        UpEmployeeInformation instance = new UpEmployeeInformation("p12019838");
-        assertEquals("com.softserve.DBEntities.UpEmployeeInformation[ employeeID=" + "p12019838" + " ]", instance.toString());  
+        EmployeeInformation instance = new EmployeeInformation("p12019838");
+        assertEquals("com.softserve.DBEntities.EmployeeInformation[ employeeID=" + "p12019838" + " ]", instance.toString());  
     }
     
 }

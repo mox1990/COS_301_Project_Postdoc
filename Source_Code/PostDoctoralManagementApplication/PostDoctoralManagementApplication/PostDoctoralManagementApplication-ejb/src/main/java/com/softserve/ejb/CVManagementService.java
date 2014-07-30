@@ -105,13 +105,13 @@ public class CVManagementService implements CVManagementServiceLocal {
         
         for(Experience experience : experienceList)
         {
-            experience.setCvID(cv);
+            experience.setCv(cv);
             experienceJpaController.create(experience);
         }
         
         for(AcademicQualification academicQualification : academicQualificationsList)
         {
-            academicQualification.setCvID(cv);
+            academicQualification.setCv(cv);
             academicQualificationJpaController.create(academicQualification);
         }
         
@@ -143,7 +143,7 @@ public class CVManagementService implements CVManagementServiceLocal {
             }
             catch(Exception ex)
             {
-                experience.setCvID(cv);
+                experience.setCv(cv);
                 experienceJpaController.create(experience);
             }
         }
@@ -156,7 +156,7 @@ public class CVManagementService implements CVManagementServiceLocal {
             }
             catch(Exception ex)
             {
-                academicQualification.setCvID(cv);
+                academicQualification.setCv(cv);
                 academicQualificationJpaController.create(academicQualification);
             }
         }

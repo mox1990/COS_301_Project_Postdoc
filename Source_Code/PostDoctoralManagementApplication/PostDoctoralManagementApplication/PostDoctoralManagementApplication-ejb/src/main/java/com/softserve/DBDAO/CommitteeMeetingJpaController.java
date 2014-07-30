@@ -86,12 +86,12 @@ public class CommitteeMeetingJpaController implements Serializable {
                 applicationListApplication = em.merge(applicationListApplication);
             }
             for (MinuteComment minuteCommentListMinuteComment : committeeMeeting.getMinuteCommentList()) {
-                CommitteeMeeting oldMeetingIDOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getMeetingID();
-                minuteCommentListMinuteComment.setMeetingID(committeeMeeting);
+                CommitteeMeeting oldMeetingOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getMeeting();
+                minuteCommentListMinuteComment.setMeeting(committeeMeeting);
                 minuteCommentListMinuteComment = em.merge(minuteCommentListMinuteComment);
-                if (oldMeetingIDOfMinuteCommentListMinuteComment != null) {
-                    oldMeetingIDOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
-                    oldMeetingIDOfMinuteCommentListMinuteComment = em.merge(oldMeetingIDOfMinuteCommentListMinuteComment);
+                if (oldMeetingOfMinuteCommentListMinuteComment != null) {
+                    oldMeetingOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
+                    oldMeetingOfMinuteCommentListMinuteComment = em.merge(oldMeetingOfMinuteCommentListMinuteComment);
                 }
             }
             utx.commit();
@@ -127,7 +127,7 @@ public class CommitteeMeetingJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its meetingID field is not nullable.");
+                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its meeting field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -181,12 +181,12 @@ public class CommitteeMeetingJpaController implements Serializable {
             }
             for (MinuteComment minuteCommentListNewMinuteComment : minuteCommentListNew) {
                 if (!minuteCommentListOld.contains(minuteCommentListNewMinuteComment)) {
-                    CommitteeMeeting oldMeetingIDOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getMeetingID();
-                    minuteCommentListNewMinuteComment.setMeetingID(committeeMeeting);
+                    CommitteeMeeting oldMeetingOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getMeeting();
+                    minuteCommentListNewMinuteComment.setMeeting(committeeMeeting);
                     minuteCommentListNewMinuteComment = em.merge(minuteCommentListNewMinuteComment);
-                    if (oldMeetingIDOfMinuteCommentListNewMinuteComment != null && !oldMeetingIDOfMinuteCommentListNewMinuteComment.equals(committeeMeeting)) {
-                        oldMeetingIDOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
-                        oldMeetingIDOfMinuteCommentListNewMinuteComment = em.merge(oldMeetingIDOfMinuteCommentListNewMinuteComment);
+                    if (oldMeetingOfMinuteCommentListNewMinuteComment != null && !oldMeetingOfMinuteCommentListNewMinuteComment.equals(committeeMeeting)) {
+                        oldMeetingOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
+                        oldMeetingOfMinuteCommentListNewMinuteComment = em.merge(oldMeetingOfMinuteCommentListNewMinuteComment);
                     }
                 }
             }
@@ -230,7 +230,7 @@ public class CommitteeMeetingJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This CommitteeMeeting (" + committeeMeeting + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable meetingID field.");
+                illegalOrphanMessages.add("This CommitteeMeeting (" + committeeMeeting + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable meeting field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

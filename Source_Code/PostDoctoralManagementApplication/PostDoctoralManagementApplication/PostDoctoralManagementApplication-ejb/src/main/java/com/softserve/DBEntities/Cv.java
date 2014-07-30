@@ -97,12 +97,12 @@ public class Cv implements Serializable {
     @Size(max = 65535)
     @Column(name = "_additionalInformation")
     private String additionalInformation;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
     private List<Experience> experienceList;
     @JoinColumn(name = "_cvID", referencedColumnName = "_systemID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Person person;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cvID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
     private List<AcademicQualification> academicQualificationList;
 
     public Cv() {

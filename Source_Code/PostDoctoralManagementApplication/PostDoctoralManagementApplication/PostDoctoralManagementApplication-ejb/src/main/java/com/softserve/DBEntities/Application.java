@@ -97,6 +97,8 @@ public class Application implements Serializable {
     @ManyToMany(mappedBy = "applicationList")
     private List<CommitteeMeeting> committeeMeetingList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private DeclineReport declineReport;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
     private Endorsement endorsement;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
     private RecommendationReport recommendationReport;
@@ -104,13 +106,15 @@ public class Application implements Serializable {
     private List<RefereeReport> refereeReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
     private FundingReport fundingReport;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
+    private List<AmmendRequest> ammendRequestList;
     @JoinColumn(name = "_fellow", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person fellow;
-    @JoinColumn(name = "_grantHolderID", referencedColumnName = "_systemID", nullable = true)
-    @ManyToOne(optional = true)
-    private Person grantHolderID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
+    @JoinColumn(name = "_grantHolder", referencedColumnName = "_systemID")
+    @ManyToOne
+    private Person grantHolder;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
     private List<ProgressReport> progressReportList;
 
     public Application() {
@@ -243,6 +247,14 @@ public class Application implements Serializable {
         this.committeeMeetingList = committeeMeetingList;
     }
 
+    public DeclineReport getDeclineReport() {
+        return declineReport;
+    }
+
+    public void setDeclineReport(DeclineReport declineReport) {
+        this.declineReport = declineReport;
+    }
+
     public Endorsement getEndorsement() {
         return endorsement;
     }
@@ -276,6 +288,15 @@ public class Application implements Serializable {
         this.fundingReport = fundingReport;
     }
 
+    @XmlTransient
+    public List<AmmendRequest> getAmmendRequestList() {
+        return ammendRequestList;
+    }
+
+    public void setAmmendRequestList(List<AmmendRequest> ammendRequestList) {
+        this.ammendRequestList = ammendRequestList;
+    }
+
     public Person getFellow() {
         return fellow;
     }
@@ -284,12 +305,12 @@ public class Application implements Serializable {
         this.fellow = fellow;
     }
 
-    public Person getGrantHolderID() {
-        return grantHolderID;
+    public Person getGrantHolder() {
+        return grantHolder;
     }
 
-    public void setGrantHolderID(Person grantHolderID) {
-        this.grantHolderID = grantHolderID;
+    public void setGrantHolder(Person grantHolder) {
+        this.grantHolder = grantHolder;
     }
 
     @XmlTransient

@@ -188,7 +188,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
             }
             
             //Send notification to Grant holder
-            notificationService.sendNotification(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
+            notificationService.sendNotification(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
         }
     }
     

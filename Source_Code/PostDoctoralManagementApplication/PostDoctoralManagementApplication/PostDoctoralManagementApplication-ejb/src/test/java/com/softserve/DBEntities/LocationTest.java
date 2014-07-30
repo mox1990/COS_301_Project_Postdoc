@@ -63,14 +63,14 @@ public class LocationTest {
     }
 
     @Test
-    public void testSetAndGetPersonList() 
+    public void testSetAndGetEmployeeInformationList() 
     {
         Location instance = new Location();
-        instance.setPersonList(new ArrayList<Person>());
-        Person person = new Person("r12019837");
-        instance.getPersonList().add(person);
-        assertEquals(person, instance.getPersonList().get(0));
-        assertTrue((instance.getPersonList().size() == 1));
+        instance.setEmployeeInformationList(new ArrayList<EmployeeInformation>());
+        EmployeeInformation employeeInformation = new EmployeeInformation("r12019837");
+        instance.getEmployeeInformationList().add(employeeInformation);
+        assertEquals(employeeInformation, instance.getEmployeeInformationList().get(0));
+        assertTrue((instance.getEmployeeInformationList().size() == 1));
     }
 
     @Test

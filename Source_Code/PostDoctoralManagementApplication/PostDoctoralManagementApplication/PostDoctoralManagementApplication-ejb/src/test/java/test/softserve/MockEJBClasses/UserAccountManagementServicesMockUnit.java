@@ -22,7 +22,7 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
     
     private PersonJpaController pDAO = null;
     private AddressJpaController aDAO = null;
-    private UpEmployeeInformationJpaController uDAO = null;
+    private EmployeeInformationJpaController uDAO = null;
     private DBEntitiesFactory dbFactory = null;
     private AuditTrailService atsEJB = null;
     private GregorianCalendar cal = null;
@@ -35,7 +35,7 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
         this.aDAO = aDAO;
     }
 
-    public void setuDAO(UpEmployeeInformationJpaController uDAO) {
+    public void setuDAO(EmployeeInformationJpaController uDAO) {
         this.uDAO = uDAO;
     }
 
@@ -87,7 +87,7 @@ public class UserAccountManagementServicesMockUnit extends UserAccountManagement
      * @return An instance of UpEmployeeInformationJpaController
      */
     @Override
-    protected UpEmployeeInformationJpaController getUPEmployeeInfoDAO()
+    protected EmployeeInformationJpaController getEmployeeInfoDAO()
     {
         return uDAO;
     }

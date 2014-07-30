@@ -79,11 +79,11 @@ public class AcademicQualificationTest {
     }
 
     @Test
-    public void testSetAndGetCvID() 
+    public void testSetAndGetCv() 
     {
         AcademicQualification instance = new AcademicQualification();
-        instance.setCvID(new Cv("u12019837"));
-        assertEquals(new Cv("u12019837"), instance.getCvID());
+        instance.setCv(new Cv("u12019837"));
+        assertEquals(new Cv("u12019837"), instance.getCv());
     }
 
     @Test

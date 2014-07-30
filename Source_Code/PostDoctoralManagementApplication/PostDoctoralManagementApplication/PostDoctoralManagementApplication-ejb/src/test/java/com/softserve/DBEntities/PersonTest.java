@@ -173,12 +173,12 @@ public class PersonTest {
     }
 
     @Test
-    public void testSetAndGetUpEmployeeInformation() 
+    public void testSetAndGetEmployeeInformation() 
     {
         Person instance = new Person();
-        UpEmployeeInformation upinfo = new UpEmployeeInformation("r12019837");
-        instance.setUpEmployeeInformation(upinfo);
-        assertEquals(upinfo, instance.getUpEmployeeInformation());
+        EmployeeInformation upinfo = new EmployeeInformation("r12019837");
+        instance.setEmployeeInformation(upinfo);
+        assertEquals(upinfo, instance.getEmployeeInformation());
     }
     
     @Test
@@ -274,15 +274,6 @@ public class PersonTest {
         instance.getApplicationList1().add(a);
         assertEquals(a, instance.getApplicationList1().get(0));
         assertTrue((instance.getApplicationList1().size() == 1));
-    }
-
-    @Test
-    public void testSetAndGetLocationID() 
-    {
-        Person instance = new Person();
-        Location loc = new Location(Long.MAX_VALUE);
-        instance.setLocationID(loc);
-        assertEquals(loc, instance.getLocationID());
     }
 
     @Test

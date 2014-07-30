@@ -59,8 +59,8 @@ public class Location implements Serializable {
     @Size(min = 1, max = 250)
     @Column(name = "_department")
     private String department;
-    @OneToMany(mappedBy = "locationID")
-    private List<Person> personList;
+    @OneToMany(mappedBy = "location")
+    private List<EmployeeInformation> employeeInformationList;
 
     public Location() {
     }
@@ -109,12 +109,12 @@ public class Location implements Serializable {
     }
 
     @XmlTransient
-    public List<Person> getPersonList() {
-        return personList;
+    public List<EmployeeInformation> getEmployeeInformationList() {
+        return employeeInformationList;
     }
 
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
+    public void setEmployeeInformationList(List<EmployeeInformation> employeeInformationList) {
+        this.employeeInformationList = employeeInformationList;
     }
 
     @Override

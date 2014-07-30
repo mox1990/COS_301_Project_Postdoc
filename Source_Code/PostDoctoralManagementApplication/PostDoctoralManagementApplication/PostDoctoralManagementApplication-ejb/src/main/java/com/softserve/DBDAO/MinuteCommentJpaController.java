@@ -44,24 +44,24 @@ public class MinuteCommentJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            CommitteeMeeting meetingID = minuteComment.getMeetingID();
-            if (meetingID != null) {
-                meetingID = em.getReference(meetingID.getClass(), meetingID.getMeetingID());
-                minuteComment.setMeetingID(meetingID);
+            CommitteeMeeting meeting = minuteComment.getMeeting();
+            if (meeting != null) {
+                meeting = em.getReference(meeting.getClass(), meeting.getMeetingID());
+                minuteComment.setMeeting(meeting);
             }
-            Person attendeeID = minuteComment.getAttendeeID();
-            if (attendeeID != null) {
-                attendeeID = em.getReference(attendeeID.getClass(), attendeeID.getSystemID());
-                minuteComment.setAttendeeID(attendeeID);
+            Person attendee = minuteComment.getAttendee();
+            if (attendee != null) {
+                attendee = em.getReference(attendee.getClass(), attendee.getSystemID());
+                minuteComment.setAttendee(attendee);
             }
             em.persist(minuteComment);
-            if (meetingID != null) {
-                meetingID.getMinuteCommentList().add(minuteComment);
-                meetingID = em.merge(meetingID);
+            if (meeting != null) {
+                meeting.getMinuteCommentList().add(minuteComment);
+                meeting = em.merge(meeting);
             }
-            if (attendeeID != null) {
-                attendeeID.getMinuteCommentList().add(minuteComment);
-                attendeeID = em.merge(attendeeID);
+            if (attendee != null) {
+                attendee.getMinuteCommentList().add(minuteComment);
+                attendee = em.merge(attendee);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -84,34 +84,34 @@ public class MinuteCommentJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             MinuteComment persistentMinuteComment = em.find(MinuteComment.class, minuteComment.getCommentID());
-            CommitteeMeeting meetingIDOld = persistentMinuteComment.getMeetingID();
-            CommitteeMeeting meetingIDNew = minuteComment.getMeetingID();
-            Person attendeeIDOld = persistentMinuteComment.getAttendeeID();
-            Person attendeeIDNew = minuteComment.getAttendeeID();
-            if (meetingIDNew != null) {
-                meetingIDNew = em.getReference(meetingIDNew.getClass(), meetingIDNew.getMeetingID());
-                minuteComment.setMeetingID(meetingIDNew);
+            CommitteeMeeting meetingOld = persistentMinuteComment.getMeeting();
+            CommitteeMeeting meetingNew = minuteComment.getMeeting();
+            Person attendeeOld = persistentMinuteComment.getAttendee();
+            Person attendeeNew = minuteComment.getAttendee();
+            if (meetingNew != null) {
+                meetingNew = em.getReference(meetingNew.getClass(), meetingNew.getMeetingID());
+                minuteComment.setMeeting(meetingNew);
             }
-            if (attendeeIDNew != null) {
-                attendeeIDNew = em.getReference(attendeeIDNew.getClass(), attendeeIDNew.getSystemID());
-                minuteComment.setAttendeeID(attendeeIDNew);
+            if (attendeeNew != null) {
+                attendeeNew = em.getReference(attendeeNew.getClass(), attendeeNew.getSystemID());
+                minuteComment.setAttendee(attendeeNew);
             }
             minuteComment = em.merge(minuteComment);
-            if (meetingIDOld != null && !meetingIDOld.equals(meetingIDNew)) {
-                meetingIDOld.getMinuteCommentList().remove(minuteComment);
-                meetingIDOld = em.merge(meetingIDOld);
+            if (meetingOld != null && !meetingOld.equals(meetingNew)) {
+                meetingOld.getMinuteCommentList().remove(minuteComment);
+                meetingOld = em.merge(meetingOld);
             }
-            if (meetingIDNew != null && !meetingIDNew.equals(meetingIDOld)) {
-                meetingIDNew.getMinuteCommentList().add(minuteComment);
-                meetingIDNew = em.merge(meetingIDNew);
+            if (meetingNew != null && !meetingNew.equals(meetingOld)) {
+                meetingNew.getMinuteCommentList().add(minuteComment);
+                meetingNew = em.merge(meetingNew);
             }
-            if (attendeeIDOld != null && !attendeeIDOld.equals(attendeeIDNew)) {
-                attendeeIDOld.getMinuteCommentList().remove(minuteComment);
-                attendeeIDOld = em.merge(attendeeIDOld);
+            if (attendeeOld != null && !attendeeOld.equals(attendeeNew)) {
+                attendeeOld.getMinuteCommentList().remove(minuteComment);
+                attendeeOld = em.merge(attendeeOld);
             }
-            if (attendeeIDNew != null && !attendeeIDNew.equals(attendeeIDOld)) {
-                attendeeIDNew.getMinuteCommentList().add(minuteComment);
-                attendeeIDNew = em.merge(attendeeIDNew);
+            if (attendeeNew != null && !attendeeNew.equals(attendeeOld)) {
+                attendeeNew.getMinuteCommentList().add(minuteComment);
+                attendeeNew = em.merge(attendeeNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -147,15 +147,15 @@ public class MinuteCommentJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The minuteComment with id " + id + " no longer exists.", enfe);
             }
-            CommitteeMeeting meetingID = minuteComment.getMeetingID();
-            if (meetingID != null) {
-                meetingID.getMinuteCommentList().remove(minuteComment);
-                meetingID = em.merge(meetingID);
+            CommitteeMeeting meeting = minuteComment.getMeeting();
+            if (meeting != null) {
+                meeting.getMinuteCommentList().remove(minuteComment);
+                meeting = em.merge(meeting);
             }
-            Person attendeeID = minuteComment.getAttendeeID();
-            if (attendeeID != null) {
-                attendeeID.getMinuteCommentList().remove(minuteComment);
-                attendeeID = em.merge(attendeeID);
+            Person attendee = minuteComment.getAttendee();
+            if (attendee != null) {
+                attendee.getMinuteCommentList().remove(minuteComment);
+                attendee = em.merge(attendee);
             }
             em.remove(minuteComment);
             utx.commit();

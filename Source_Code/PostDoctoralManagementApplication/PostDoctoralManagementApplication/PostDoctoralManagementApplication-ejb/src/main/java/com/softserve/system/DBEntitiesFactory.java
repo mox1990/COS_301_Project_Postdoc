@@ -36,7 +36,7 @@ public class DBEntitiesFactory {
         AuditLog auditLog = new AuditLog();
         
         auditLog.setAction(action);
-        auditLog.setPersonID(person);
+        auditLog.setPerson(person);
         
         return auditLog;
     }
@@ -45,8 +45,8 @@ public class DBEntitiesFactory {
     {
         Notification notification = new Notification();
         
-        notification.setSenderID(sender);
-        notification.setRecieverID(reciever);
+        notification.setSender(sender);
+        notification.setReciever(reciever);
         notification.setMessage(message);
         notification.setSubject(subject);
         
@@ -64,11 +64,11 @@ public class DBEntitiesFactory {
         return securityRole;
     }
     
-    public ProgressReport bulidProgressReportEntity(Application applicationId, String content, Date timestamp)
+    public ProgressReport bulidProgressReportEntity(Application application, String content, Date timestamp)
     {
         ProgressReport progressReport = new ProgressReport();
         
-        progressReport.setApplicationID(applicationId);
+        progressReport.setApplication(application);
         progressReport.setContent(content);
         progressReport.setTimestamp(timestamp);
         

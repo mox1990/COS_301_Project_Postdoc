@@ -9,7 +9,6 @@ package com.softserve.DBEntities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,9 +67,9 @@ public class Address implements Serializable {
     @Size(max = 6)
     @Column(name = "_zip_postalCode")
     private String zippostalCode;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "physicalAddress")
-    private List<UpEmployeeInformation> upEmployeeInformationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "addressLine1")
+    @OneToMany(mappedBy = "physicalAddress")
+    private List<EmployeeInformation> employeeInformationList;
+    @OneToMany(mappedBy = "addressLine1")
     private List<Person> personList;
 
     public Address() {
@@ -145,12 +144,12 @@ public class Address implements Serializable {
     }
 
     @XmlTransient
-    public List<UpEmployeeInformation> getUpEmployeeInformationList() {
-        return upEmployeeInformationList;
+    public List<EmployeeInformation> getEmployeeInformationList() {
+        return employeeInformationList;
     }
 
-    public void setUpEmployeeInformationList(List<UpEmployeeInformation> upEmployeeInformationList) {
-        this.upEmployeeInformationList = upEmployeeInformationList;
+    public void setEmployeeInformationList(List<EmployeeInformation> employeeInformationList) {
+        this.employeeInformationList = employeeInformationList;
     }
 
     @XmlTransient

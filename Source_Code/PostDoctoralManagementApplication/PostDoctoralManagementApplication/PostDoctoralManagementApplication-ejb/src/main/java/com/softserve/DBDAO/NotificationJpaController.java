@@ -9,16 +9,16 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import com.softserve.DBEntities.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -44,24 +44,24 @@ public class NotificationJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Person senderID = notification.getSenderID();
-            if (senderID != null) {
-                senderID = em.getReference(senderID.getClass(), senderID.getSystemID());
-                notification.setSenderID(senderID);
+            Person sender = notification.getSender();
+            if (sender != null) {
+                sender = em.getReference(sender.getClass(), sender.getSystemID());
+                notification.setSender(sender);
             }
-            Person recieverID = notification.getRecieverID();
-            if (recieverID != null) {
-                recieverID = em.getReference(recieverID.getClass(), recieverID.getSystemID());
-                notification.setRecieverID(recieverID);
+            Person reciever = notification.getReciever();
+            if (reciever != null) {
+                reciever = em.getReference(reciever.getClass(), reciever.getSystemID());
+                notification.setReciever(reciever);
             }
             em.persist(notification);
-            if (senderID != null) {
-                senderID.getNotificationList().add(notification);
-                senderID = em.merge(senderID);
+            if (sender != null) {
+                sender.getNotificationList().add(notification);
+                sender = em.merge(sender);
             }
-            if (recieverID != null) {
-                recieverID.getNotificationList().add(notification);
-                recieverID = em.merge(recieverID);
+            if (reciever != null) {
+                reciever.getNotificationList1().add(notification);
+                reciever = em.merge(reciever);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -84,34 +84,34 @@ public class NotificationJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Notification persistentNotification = em.find(Notification.class, notification.getNotificationID());
-            Person senderIDOld = persistentNotification.getSenderID();
-            Person senderIDNew = notification.getSenderID();
-            Person recieverIDOld = persistentNotification.getRecieverID();
-            Person recieverIDNew = notification.getRecieverID();
-            if (senderIDNew != null) {
-                senderIDNew = em.getReference(senderIDNew.getClass(), senderIDNew.getSystemID());
-                notification.setSenderID(senderIDNew);
+            Person senderOld = persistentNotification.getSender();
+            Person senderNew = notification.getSender();
+            Person recieverOld = persistentNotification.getReciever();
+            Person recieverNew = notification.getReciever();
+            if (senderNew != null) {
+                senderNew = em.getReference(senderNew.getClass(), senderNew.getSystemID());
+                notification.setSender(senderNew);
             }
-            if (recieverIDNew != null) {
-                recieverIDNew = em.getReference(recieverIDNew.getClass(), recieverIDNew.getSystemID());
-                notification.setRecieverID(recieverIDNew);
+            if (recieverNew != null) {
+                recieverNew = em.getReference(recieverNew.getClass(), recieverNew.getSystemID());
+                notification.setReciever(recieverNew);
             }
             notification = em.merge(notification);
-            if (senderIDOld != null && !senderIDOld.equals(senderIDNew)) {
-                senderIDOld.getNotificationList().remove(notification);
-                senderIDOld = em.merge(senderIDOld);
+            if (senderOld != null && !senderOld.equals(senderNew)) {
+                senderOld.getNotificationList().remove(notification);
+                senderOld = em.merge(senderOld);
             }
-            if (senderIDNew != null && !senderIDNew.equals(senderIDOld)) {
-                senderIDNew.getNotificationList().add(notification);
-                senderIDNew = em.merge(senderIDNew);
+            if (senderNew != null && !senderNew.equals(senderOld)) {
+                senderNew.getNotificationList().add(notification);
+                senderNew = em.merge(senderNew);
             }
-            if (recieverIDOld != null && !recieverIDOld.equals(recieverIDNew)) {
-                recieverIDOld.getNotificationList().remove(notification);
-                recieverIDOld = em.merge(recieverIDOld);
+            if (recieverOld != null && !recieverOld.equals(recieverNew)) {
+                recieverOld.getNotificationList1().remove(notification);
+                recieverOld = em.merge(recieverOld);
             }
-            if (recieverIDNew != null && !recieverIDNew.equals(recieverIDOld)) {
-                recieverIDNew.getNotificationList().add(notification);
-                recieverIDNew = em.merge(recieverIDNew);
+            if (recieverNew != null && !recieverNew.equals(recieverOld)) {
+                recieverNew.getNotificationList1().add(notification);
+                recieverNew = em.merge(recieverNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -147,15 +147,15 @@ public class NotificationJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The notification with id " + id + " no longer exists.", enfe);
             }
-            Person senderID = notification.getSenderID();
-            if (senderID != null) {
-                senderID.getNotificationList().remove(notification);
-                senderID = em.merge(senderID);
+            Person sender = notification.getSender();
+            if (sender != null) {
+                sender.getNotificationList().remove(notification);
+                sender = em.merge(sender);
             }
-            Person recieverID = notification.getRecieverID();
-            if (recieverID != null) {
-                recieverID.getNotificationList().remove(notification);
-                recieverID = em.merge(recieverID);
+            Person reciever = notification.getReciever();
+            if (reciever != null) {
+                reciever.getNotificationList1().remove(notification);
+                reciever = em.merge(reciever);
             }
             em.remove(notification);
             utx.commit();

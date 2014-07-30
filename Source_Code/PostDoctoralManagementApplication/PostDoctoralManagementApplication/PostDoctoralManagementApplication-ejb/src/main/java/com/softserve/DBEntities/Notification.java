@@ -62,12 +62,12 @@ public class Notification implements Serializable {
     @Column(name = "_timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
-    @JoinColumn(name = "_senderID", referencedColumnName = "_systemID")
+    @JoinColumn(name = "_sender", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person senderID;
-    @JoinColumn(name = "_recieverID", referencedColumnName = "_systemID")
+    private Person sender;
+    @JoinColumn(name = "_reciever", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person recieverID;
+    private Person reciever;
 
     public Notification() {
     }
@@ -121,20 +121,20 @@ public class Notification implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Person getSenderID() {
-        return senderID;
+    public Person getSender() {
+        return sender;
     }
 
-    public void setSenderID(Person senderID) {
-        this.senderID = senderID;
+    public void setSender(Person sender) {
+        this.sender = sender;
     }
 
-    public Person getRecieverID() {
-        return recieverID;
+    public Person getReciever() {
+        return reciever;
     }
 
-    public void setRecieverID(Person recieverID) {
-        this.recieverID = recieverID;
+    public void setReciever(Person reciever) {
+        this.reciever = reciever;
     }
 
     @Override

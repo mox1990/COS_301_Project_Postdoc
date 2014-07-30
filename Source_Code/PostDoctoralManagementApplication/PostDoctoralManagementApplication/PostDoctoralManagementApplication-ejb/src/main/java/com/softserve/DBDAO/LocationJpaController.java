@@ -8,13 +8,13 @@ package com.softserve.DBDAO;
 
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Location;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Location;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -40,27 +40,27 @@ public class LocationJpaController implements Serializable {
     }
 
     public void create(Location location) throws RollbackFailureException, Exception {
-        if (location.getPersonList() == null) {
-            location.setPersonList(new ArrayList<Person>());
+        if (location.getEmployeeInformationList() == null) {
+            location.setEmployeeInformationList(new ArrayList<EmployeeInformation>());
         }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
-            List<Person> attachedPersonList = new ArrayList<Person>();
-            for (Person personListPersonToAttach : location.getPersonList()) {
-                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
-                attachedPersonList.add(personListPersonToAttach);
+            List<EmployeeInformation> attachedEmployeeInformationList = new ArrayList<EmployeeInformation>();
+            for (EmployeeInformation employeeInformationListEmployeeInformationToAttach : location.getEmployeeInformationList()) {
+                employeeInformationListEmployeeInformationToAttach = em.getReference(employeeInformationListEmployeeInformationToAttach.getClass(), employeeInformationListEmployeeInformationToAttach.getEmployeeID());
+                attachedEmployeeInformationList.add(employeeInformationListEmployeeInformationToAttach);
             }
-            location.setPersonList(attachedPersonList);
+            location.setEmployeeInformationList(attachedEmployeeInformationList);
             em.persist(location);
-            for (Person personListPerson : location.getPersonList()) {
-                Location oldLocationIDOfPersonListPerson = personListPerson.getLocationID();
-                personListPerson.setLocationID(location);
-                personListPerson = em.merge(personListPerson);
-                if (oldLocationIDOfPersonListPerson != null) {
-                    oldLocationIDOfPersonListPerson.getPersonList().remove(personListPerson);
-                    oldLocationIDOfPersonListPerson = em.merge(oldLocationIDOfPersonListPerson);
+            for (EmployeeInformation employeeInformationListEmployeeInformation : location.getEmployeeInformationList()) {
+                Location oldLocationOfEmployeeInformationListEmployeeInformation = employeeInformationListEmployeeInformation.getLocation();
+                employeeInformationListEmployeeInformation.setLocation(location);
+                employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
+                if (oldLocationOfEmployeeInformationListEmployeeInformation != null) {
+                    oldLocationOfEmployeeInformationListEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListEmployeeInformation);
+                    oldLocationOfEmployeeInformationListEmployeeInformation = em.merge(oldLocationOfEmployeeInformationListEmployeeInformation);
                 }
             }
             utx.commit();
@@ -84,30 +84,30 @@ public class LocationJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Location persistentLocation = em.find(Location.class, location.getLocationID());
-            List<Person> personListOld = persistentLocation.getPersonList();
-            List<Person> personListNew = location.getPersonList();
-            List<Person> attachedPersonListNew = new ArrayList<Person>();
-            for (Person personListNewPersonToAttach : personListNew) {
-                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
-                attachedPersonListNew.add(personListNewPersonToAttach);
+            List<EmployeeInformation> employeeInformationListOld = persistentLocation.getEmployeeInformationList();
+            List<EmployeeInformation> employeeInformationListNew = location.getEmployeeInformationList();
+            List<EmployeeInformation> attachedEmployeeInformationListNew = new ArrayList<EmployeeInformation>();
+            for (EmployeeInformation employeeInformationListNewEmployeeInformationToAttach : employeeInformationListNew) {
+                employeeInformationListNewEmployeeInformationToAttach = em.getReference(employeeInformationListNewEmployeeInformationToAttach.getClass(), employeeInformationListNewEmployeeInformationToAttach.getEmployeeID());
+                attachedEmployeeInformationListNew.add(employeeInformationListNewEmployeeInformationToAttach);
             }
-            personListNew = attachedPersonListNew;
-            location.setPersonList(personListNew);
+            employeeInformationListNew = attachedEmployeeInformationListNew;
+            location.setEmployeeInformationList(employeeInformationListNew);
             location = em.merge(location);
-            for (Person personListOldPerson : personListOld) {
-                if (!personListNew.contains(personListOldPerson)) {
-                    personListOldPerson.setLocationID(null);
-                    personListOldPerson = em.merge(personListOldPerson);
+            for (EmployeeInformation employeeInformationListOldEmployeeInformation : employeeInformationListOld) {
+                if (!employeeInformationListNew.contains(employeeInformationListOldEmployeeInformation)) {
+                    employeeInformationListOldEmployeeInformation.setLocation(null);
+                    employeeInformationListOldEmployeeInformation = em.merge(employeeInformationListOldEmployeeInformation);
                 }
             }
-            for (Person personListNewPerson : personListNew) {
-                if (!personListOld.contains(personListNewPerson)) {
-                    Location oldLocationIDOfPersonListNewPerson = personListNewPerson.getLocationID();
-                    personListNewPerson.setLocationID(location);
-                    personListNewPerson = em.merge(personListNewPerson);
-                    if (oldLocationIDOfPersonListNewPerson != null && !oldLocationIDOfPersonListNewPerson.equals(location)) {
-                        oldLocationIDOfPersonListNewPerson.getPersonList().remove(personListNewPerson);
-                        oldLocationIDOfPersonListNewPerson = em.merge(oldLocationIDOfPersonListNewPerson);
+            for (EmployeeInformation employeeInformationListNewEmployeeInformation : employeeInformationListNew) {
+                if (!employeeInformationListOld.contains(employeeInformationListNewEmployeeInformation)) {
+                    Location oldLocationOfEmployeeInformationListNewEmployeeInformation = employeeInformationListNewEmployeeInformation.getLocation();
+                    employeeInformationListNewEmployeeInformation.setLocation(location);
+                    employeeInformationListNewEmployeeInformation = em.merge(employeeInformationListNewEmployeeInformation);
+                    if (oldLocationOfEmployeeInformationListNewEmployeeInformation != null && !oldLocationOfEmployeeInformationListNewEmployeeInformation.equals(location)) {
+                        oldLocationOfEmployeeInformationListNewEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListNewEmployeeInformation);
+                        oldLocationOfEmployeeInformationListNewEmployeeInformation = em.merge(oldLocationOfEmployeeInformationListNewEmployeeInformation);
                     }
                 }
             }
@@ -145,10 +145,10 @@ public class LocationJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The location with id " + id + " no longer exists.", enfe);
             }
-            List<Person> personList = location.getPersonList();
-            for (Person personListPerson : personList) {
-                personListPerson.setLocationID(null);
-                personListPerson = em.merge(personListPerson);
+            List<EmployeeInformation> employeeInformationList = location.getEmployeeInformationList();
+            for (EmployeeInformation employeeInformationListEmployeeInformation : employeeInformationList) {
+                employeeInformationListEmployeeInformation.setLocation(null);
+                employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
             }
             em.remove(location);
             utx.commit();

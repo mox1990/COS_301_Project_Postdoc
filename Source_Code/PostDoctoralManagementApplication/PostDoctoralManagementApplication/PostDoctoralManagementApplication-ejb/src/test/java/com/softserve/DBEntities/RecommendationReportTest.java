@@ -59,8 +59,8 @@ public class RecommendationReportTest {
     {
         RecommendationReport instance = new RecommendationReport();
         Person person = new Person("r12019837");
-        instance.setHodID(person);
-        assertEquals(person, instance.getHodID());
+        instance.setHod(person);
+        assertEquals(person, instance.getHod());
     }
 
     @Test

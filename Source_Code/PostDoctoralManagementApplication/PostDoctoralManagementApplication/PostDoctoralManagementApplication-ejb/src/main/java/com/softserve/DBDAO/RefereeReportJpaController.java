@@ -49,19 +49,19 @@ public class RefereeReportJpaController implements Serializable {
                 applicationID = em.getReference(applicationID.getClass(), applicationID.getApplicationID());
                 refereeReport.setApplicationID(applicationID);
             }
-            Person refereeID = refereeReport.getRefereeID();
-            if (refereeID != null) {
-                refereeID = em.getReference(refereeID.getClass(), refereeID.getSystemID());
-                refereeReport.setRefereeID(refereeID);
+            Person referee = refereeReport.getReferee();
+            if (referee != null) {
+                referee = em.getReference(referee.getClass(), referee.getSystemID());
+                refereeReport.setReferee(referee);
             }
             em.persist(refereeReport);
             if (applicationID != null) {
                 applicationID.getRefereeReportList().add(refereeReport);
                 applicationID = em.merge(applicationID);
             }
-            if (refereeID != null) {
-                refereeID.getRefereeReportList().add(refereeReport);
-                refereeID = em.merge(refereeID);
+            if (referee != null) {
+                referee.getRefereeReportList().add(refereeReport);
+                referee = em.merge(referee);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -86,15 +86,15 @@ public class RefereeReportJpaController implements Serializable {
             RefereeReport persistentRefereeReport = em.find(RefereeReport.class, refereeReport.getReportID());
             Application applicationIDOld = persistentRefereeReport.getApplicationID();
             Application applicationIDNew = refereeReport.getApplicationID();
-            Person refereeIDOld = persistentRefereeReport.getRefereeID();
-            Person refereeIDNew = refereeReport.getRefereeID();
+            Person refereeOld = persistentRefereeReport.getReferee();
+            Person refereeNew = refereeReport.getReferee();
             if (applicationIDNew != null) {
                 applicationIDNew = em.getReference(applicationIDNew.getClass(), applicationIDNew.getApplicationID());
                 refereeReport.setApplicationID(applicationIDNew);
             }
-            if (refereeIDNew != null) {
-                refereeIDNew = em.getReference(refereeIDNew.getClass(), refereeIDNew.getSystemID());
-                refereeReport.setRefereeID(refereeIDNew);
+            if (refereeNew != null) {
+                refereeNew = em.getReference(refereeNew.getClass(), refereeNew.getSystemID());
+                refereeReport.setReferee(refereeNew);
             }
             refereeReport = em.merge(refereeReport);
             if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
@@ -105,13 +105,13 @@ public class RefereeReportJpaController implements Serializable {
                 applicationIDNew.getRefereeReportList().add(refereeReport);
                 applicationIDNew = em.merge(applicationIDNew);
             }
-            if (refereeIDOld != null && !refereeIDOld.equals(refereeIDNew)) {
-                refereeIDOld.getRefereeReportList().remove(refereeReport);
-                refereeIDOld = em.merge(refereeIDOld);
+            if (refereeOld != null && !refereeOld.equals(refereeNew)) {
+                refereeOld.getRefereeReportList().remove(refereeReport);
+                refereeOld = em.merge(refereeOld);
             }
-            if (refereeIDNew != null && !refereeIDNew.equals(refereeIDOld)) {
-                refereeIDNew.getRefereeReportList().add(refereeReport);
-                refereeIDNew = em.merge(refereeIDNew);
+            if (refereeNew != null && !refereeNew.equals(refereeOld)) {
+                refereeNew.getRefereeReportList().add(refereeReport);
+                refereeNew = em.merge(refereeNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -152,10 +152,10 @@ public class RefereeReportJpaController implements Serializable {
                 applicationID.getRefereeReportList().remove(refereeReport);
                 applicationID = em.merge(applicationID);
             }
-            Person refereeID = refereeReport.getRefereeID();
-            if (refereeID != null) {
-                refereeID.getRefereeReportList().remove(refereeReport);
-                refereeID = em.merge(refereeID);
+            Person referee = refereeReport.getReferee();
+            if (referee != null) {
+                referee.getRefereeReportList().remove(refereeReport);
+                referee = em.merge(referee);
             }
             em.remove(refereeReport);
             utx.commit();

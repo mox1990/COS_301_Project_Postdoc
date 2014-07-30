@@ -72,7 +72,7 @@ public class ApplicationServices {
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
-            String userDepartment = user.getLocationID().getDepartment();
+            String userDepartment = user.getEmployeeInformation().getLocation().getDepartment();
             
             output = applicationJpaController.findAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment,StartIndex,maxNumberOfRecords);
             
@@ -87,7 +87,7 @@ public class ApplicationServices {
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
-            String userFaculty = user.getLocationID().getFaculty();
+            String userFaculty = user.getEmployeeInformation().getLocation().getFaculty();
             output = applicationJpaController.findAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty,StartIndex,maxNumberOfRecords);
             /*for(int i = 0; i < output.size(); i++)
             {
@@ -124,12 +124,12 @@ public class ApplicationServices {
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
-            String userDepartment = user.getLocationID().getDepartment();            
+            String userDepartment = user.getEmployeeInformation().getLocation().getDepartment();            
             output = applicationJpaController.countAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment);
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
-            String userFaculty = user.getLocationID().getFaculty();
+            String userFaculty = user.getEmployeeInformation().getLocation().getFaculty();
             output = applicationJpaController.countAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty);
         }
         else

@@ -66,19 +66,19 @@ public class FundingReportJpaController implements Serializable {
                 application = em.getReference(application.getClass(), application.getApplicationID());
                 fundingReport.setApplication(application);
             }
-            Person drisID = fundingReport.getDrisID();
-            if (drisID != null) {
-                drisID = em.getReference(drisID.getClass(), drisID.getSystemID());
-                fundingReport.setDrisID(drisID);
+            Person dris = fundingReport.getDris();
+            if (dris != null) {
+                dris = em.getReference(dris.getClass(), dris.getSystemID());
+                fundingReport.setDris(dris);
             }
             em.persist(fundingReport);
             if (application != null) {
                 application.setFundingReport(fundingReport);
                 application = em.merge(application);
             }
-            if (drisID != null) {
-                drisID.getFundingReportList().add(fundingReport);
-                drisID = em.merge(drisID);
+            if (dris != null) {
+                dris.getFundingReportList().add(fundingReport);
+                dris = em.merge(dris);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -106,8 +106,8 @@ public class FundingReportJpaController implements Serializable {
             FundingReport persistentFundingReport = em.find(FundingReport.class, fundingReport.getReportID());
             Application applicationOld = persistentFundingReport.getApplication();
             Application applicationNew = fundingReport.getApplication();
-            Person drisIDOld = persistentFundingReport.getDrisID();
-            Person drisIDNew = fundingReport.getDrisID();
+            Person drisOld = persistentFundingReport.getDris();
+            Person drisNew = fundingReport.getDris();
             List<String> illegalOrphanMessages = null;
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
                 FundingReport oldFundingReportOfApplication = applicationNew.getFundingReport();
@@ -125,9 +125,9 @@ public class FundingReportJpaController implements Serializable {
                 applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
                 fundingReport.setApplication(applicationNew);
             }
-            if (drisIDNew != null) {
-                drisIDNew = em.getReference(drisIDNew.getClass(), drisIDNew.getSystemID());
-                fundingReport.setDrisID(drisIDNew);
+            if (drisNew != null) {
+                drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
+                fundingReport.setDris(drisNew);
             }
             fundingReport = em.merge(fundingReport);
             if (applicationOld != null && !applicationOld.equals(applicationNew)) {
@@ -138,13 +138,13 @@ public class FundingReportJpaController implements Serializable {
                 applicationNew.setFundingReport(fundingReport);
                 applicationNew = em.merge(applicationNew);
             }
-            if (drisIDOld != null && !drisIDOld.equals(drisIDNew)) {
-                drisIDOld.getFundingReportList().remove(fundingReport);
-                drisIDOld = em.merge(drisIDOld);
+            if (drisOld != null && !drisOld.equals(drisNew)) {
+                drisOld.getFundingReportList().remove(fundingReport);
+                drisOld = em.merge(drisOld);
             }
-            if (drisIDNew != null && !drisIDNew.equals(drisIDOld)) {
-                drisIDNew.getFundingReportList().add(fundingReport);
-                drisIDNew = em.merge(drisIDNew);
+            if (drisNew != null && !drisNew.equals(drisOld)) {
+                drisNew.getFundingReportList().add(fundingReport);
+                drisNew = em.merge(drisNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -185,10 +185,10 @@ public class FundingReportJpaController implements Serializable {
                 application.setFundingReport(null);
                 application = em.merge(application);
             }
-            Person drisID = fundingReport.getDrisID();
-            if (drisID != null) {
-                drisID.getFundingReportList().remove(fundingReport);
-                drisID = em.merge(drisID);
+            Person dris = fundingReport.getDris();
+            if (dris != null) {
+                dris.getFundingReportList().remove(fundingReport);
+                dris = em.merge(dris);
             }
             em.remove(fundingReport);
             utx.commit();

@@ -69,7 +69,7 @@ public class CommitteeMeeting implements Serializable {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany
     private List<Application> applicationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "meetingID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "meeting")
     private List<MinuteComment> minuteCommentList;
 
     public CommitteeMeeting() {

@@ -86,7 +86,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        progressReport.setApplicationID(application);
+        progressReport.setApplication(application);
         progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
         progressReportJpaController.create(progressReport);
         
@@ -100,7 +100,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         try
         {
             //Authenticate user ownership of account
-            userGateway.authenticateUserAsOwner(session, progressReport.getApplicationID().getFellow());
+            userGateway.authenticateUserAsOwner(session, progressReport.getApplication().getFellow());
         } 
         catch(AuthenticationException ex)
         {

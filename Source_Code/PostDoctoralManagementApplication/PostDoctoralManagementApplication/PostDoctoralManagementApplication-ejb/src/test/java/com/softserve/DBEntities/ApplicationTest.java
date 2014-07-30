@@ -158,8 +158,8 @@ public class ApplicationTest {
     {
         Application instance = new Application();
         Person person = new Person("p12019837");
-        instance.setGrantHolderID(person);
-        assertEquals(person, instance.getGrantHolderID());
+        instance.setGrantHolder(person);
+        assertEquals(person, instance.getGrantHolder());
     }
 
     @Test

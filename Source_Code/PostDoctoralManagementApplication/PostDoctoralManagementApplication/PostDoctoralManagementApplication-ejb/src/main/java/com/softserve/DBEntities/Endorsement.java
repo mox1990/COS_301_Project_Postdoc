@@ -63,9 +63,9 @@ public class Endorsement implements Serializable {
     @JoinColumn(name = "_endorsementID", referencedColumnName = "_applicationID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Application application;
-    @JoinColumn(name = "_deanID", referencedColumnName = "_systemID")
+    @JoinColumn(name = "_dean", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person deanID;
+    private Person dean;
 
     public Endorsement() {
     }
@@ -121,12 +121,12 @@ public class Endorsement implements Serializable {
         this.application = application;
     }
 
-    public Person getDeanID() {
-        return deanID;
+    public Person getDean() {
+        return dean;
     }
 
-    public void setDeanID(Person deanID) {
-        this.deanID = deanID;
+    public void setDean(Person dean) {
+        this.dean = dean;
     }
 
     @Override

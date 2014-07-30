@@ -95,14 +95,14 @@ public class AddressTest {
     }
 
     @Test
-    public void testSetAndGetUpEmployeeInformationList() 
+    public void testSetAndGetEmployeeInformationList() 
     {
         Address instance = new Address();
-        instance.setUpEmployeeInformationList(new ArrayList<UpEmployeeInformation>());
-        UpEmployeeInformation employeeInformation = new UpEmployeeInformation("u12019837");
-        instance.getUpEmployeeInformationList().add(employeeInformation);
-        assertEquals(employeeInformation, instance.getUpEmployeeInformationList().get(0));
-        assertTrue((instance.getUpEmployeeInformationList().size() == 1));
+        instance.setEmployeeInformationList(new ArrayList<EmployeeInformation>());
+        EmployeeInformation employeeInformation = new EmployeeInformation("u12019837");
+        instance.getEmployeeInformationList().add(employeeInformation);
+        assertEquals(employeeInformation, instance.getEmployeeInformationList().get(0));
+        assertTrue((instance.getEmployeeInformationList().size() == 1));
     }
 
     @Test

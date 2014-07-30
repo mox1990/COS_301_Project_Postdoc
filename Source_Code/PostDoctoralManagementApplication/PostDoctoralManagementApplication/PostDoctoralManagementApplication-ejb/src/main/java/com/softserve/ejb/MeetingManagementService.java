@@ -246,7 +246,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        minuteComment.setAttendeeID(session.getUser());
+        minuteComment.setAttendee(session.getUser());
         
         getMinuteCommentDAO().create(minuteComment);
         

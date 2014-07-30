@@ -61,9 +61,9 @@ public class AcademicQualification implements Serializable {
     private Date yearObtained;
     @Column(name = "_distinctions")
     private Short distinctions;
-    @JoinColumn(name = "_cvID", referencedColumnName = "_cvID")
+    @JoinColumn(name = "_cv", referencedColumnName = "_cvID")
     @ManyToOne(optional = false)
-    private Cv cvID;
+    private Cv cv;
 
     public AcademicQualification() {
     }
@@ -120,12 +120,12 @@ public class AcademicQualification implements Serializable {
         this.distinctions = distinctions;
     }
 
-    public Cv getCvID() {
-        return cvID;
+    public Cv getCv() {
+        return cv;
     }
 
-    public void setCvID(Cv cvID) {
-        this.cvID = cvID;
+    public void setCv(Cv cv) {
+        this.cv = cv;
     }
 
     @Override

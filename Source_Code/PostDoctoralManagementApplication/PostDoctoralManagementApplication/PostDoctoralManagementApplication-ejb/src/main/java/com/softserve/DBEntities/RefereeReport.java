@@ -64,9 +64,9 @@ public class RefereeReport implements Serializable {
     @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
     private Application applicationID;
-    @JoinColumn(name = "_refereeID", referencedColumnName = "_systemID")
+    @JoinColumn(name = "_referee", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person refereeID;
+    private Person referee;
 
     public RefereeReport() {
     }
@@ -134,12 +134,12 @@ public class RefereeReport implements Serializable {
         this.applicationID = applicationID;
     }
 
-    public Person getRefereeID() {
-        return refereeID;
+    public Person getReferee() {
+        return referee;
     }
 
-    public void setRefereeID(Person refereeID) {
-        this.refereeID = refereeID;
+    public void setReferee(Person referee) {
+        this.referee = referee;
     }
 
     @Override

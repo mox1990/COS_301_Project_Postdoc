@@ -60,8 +60,8 @@ public class AuditLogTest {
     {
         AuditLog instance = new AuditLog();
         Person person = new Person("r12019837");
-        instance.setPersonID(person);
-        assertEquals(person, instance.getPersonID());
+        instance.setPerson(person);
+        assertEquals(person, instance.getPerson());
     }
 
     @Test

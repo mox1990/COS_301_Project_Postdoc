@@ -71,12 +71,12 @@ public class ExperienceTest {
     }
 
     @Test
-    public void testSetAndGetCvID() 
+    public void testSetAndGetCv() 
     {
         Experience instance = new Experience();
         Cv cv = new Cv("u12019837");
-        instance.setCvID(cv);
-        assertEquals(cv, instance.getCvID());
+        instance.setCv(cv);
+        assertEquals(cv, instance.getCv());
     }
 
     @Test

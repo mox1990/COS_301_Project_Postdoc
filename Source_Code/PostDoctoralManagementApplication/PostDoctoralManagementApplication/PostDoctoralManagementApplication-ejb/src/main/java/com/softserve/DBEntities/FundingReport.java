@@ -69,9 +69,9 @@ public class FundingReport implements Serializable {
     @JoinColumn(name = "_reportID", referencedColumnName = "_applicationID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Application application;
-    @JoinColumn(name = "_drisID", referencedColumnName = "_systemID")
+    @JoinColumn(name = "_dris", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person drisID;
+    private Person dris;
 
     public FundingReport() {
     }
@@ -157,12 +157,12 @@ public class FundingReport implements Serializable {
         this.application = application;
     }
 
-    public Person getDrisID() {
-        return drisID;
+    public Person getDris() {
+        return dris;
     }
 
-    public void setDrisID(Person drisID) {
-        this.drisID = drisID;
+    public void setDris(Person dris) {
+        this.dris = dris;
     }
 
     @Override

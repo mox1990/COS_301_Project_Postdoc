@@ -55,12 +55,12 @@ public class MinuteComment implements Serializable {
     @Size(min = 1, max = 500)
     @Column(name = "_comment")
     private String comment;
-    @JoinColumn(name = "_meetingID", referencedColumnName = "_meetingID")
+    @JoinColumn(name = "_meeting", referencedColumnName = "_meetingID")
     @ManyToOne(optional = false)
-    private CommitteeMeeting meetingID;
-    @JoinColumn(name = "_attendeeID", referencedColumnName = "_systemID")
+    private CommitteeMeeting meeting;
+    @JoinColumn(name = "_attendee", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
-    private Person attendeeID;
+    private Person attendee;
 
     public MinuteComment() {
     }
@@ -99,20 +99,20 @@ public class MinuteComment implements Serializable {
         this.comment = comment;
     }
 
-    public CommitteeMeeting getMeetingID() {
-        return meetingID;
+    public CommitteeMeeting getMeeting() {
+        return meeting;
     }
 
-    public void setMeetingID(CommitteeMeeting meetingID) {
-        this.meetingID = meetingID;
+    public void setMeeting(CommitteeMeeting meeting) {
+        this.meeting = meeting;
     }
 
-    public Person getAttendeeID() {
-        return attendeeID;
+    public Person getAttendee() {
+        return attendee;
     }
 
-    public void setAttendeeID(Person attendeeID) {
-        this.attendeeID = attendeeID;
+    public void setAttendee(Person attendee) {
+        this.attendee = attendee;
     }
 
     @Override

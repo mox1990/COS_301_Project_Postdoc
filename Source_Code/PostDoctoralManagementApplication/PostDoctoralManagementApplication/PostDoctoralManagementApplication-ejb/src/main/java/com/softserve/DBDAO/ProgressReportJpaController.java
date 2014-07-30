@@ -43,15 +43,15 @@ public class ProgressReportJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
-            Application applicationID = progressReport.getApplicationID();
-            if (applicationID != null) {
-                applicationID = em.getReference(applicationID.getClass(), applicationID.getApplicationID());
-                progressReport.setApplicationID(applicationID);
+            Application application = progressReport.getApplication();
+            if (application != null) {
+                application = em.getReference(application.getClass(), application.getApplicationID());
+                progressReport.setApplication(application);
             }
             em.persist(progressReport);
-            if (applicationID != null) {
-                applicationID.getProgressReportList().add(progressReport);
-                applicationID = em.merge(applicationID);
+            if (application != null) {
+                application.getProgressReportList().add(progressReport);
+                application = em.merge(application);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -74,20 +74,20 @@ public class ProgressReportJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             ProgressReport persistentProgressReport = em.find(ProgressReport.class, progressReport.getReportID());
-            Application applicationIDOld = persistentProgressReport.getApplicationID();
-            Application applicationIDNew = progressReport.getApplicationID();
-            if (applicationIDNew != null) {
-                applicationIDNew = em.getReference(applicationIDNew.getClass(), applicationIDNew.getApplicationID());
-                progressReport.setApplicationID(applicationIDNew);
+            Application applicationOld = persistentProgressReport.getApplication();
+            Application applicationNew = progressReport.getApplication();
+            if (applicationNew != null) {
+                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+                progressReport.setApplication(applicationNew);
             }
             progressReport = em.merge(progressReport);
-            if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
-                applicationIDOld.getProgressReportList().remove(progressReport);
-                applicationIDOld = em.merge(applicationIDOld);
+            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+                applicationOld.getProgressReportList().remove(progressReport);
+                applicationOld = em.merge(applicationOld);
             }
-            if (applicationIDNew != null && !applicationIDNew.equals(applicationIDOld)) {
-                applicationIDNew.getProgressReportList().add(progressReport);
-                applicationIDNew = em.merge(applicationIDNew);
+            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+                applicationNew.getProgressReportList().add(progressReport);
+                applicationNew = em.merge(applicationNew);
             }
             utx.commit();
         } catch (Exception ex) {
@@ -123,10 +123,10 @@ public class ProgressReportJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.", enfe);
             }
-            Application applicationID = progressReport.getApplicationID();
-            if (applicationID != null) {
-                applicationID.getProgressReportList().remove(progressReport);
-                applicationID = em.merge(applicationID);
+            Application application = progressReport.getApplication();
+            if (application != null) {
+                application.getProgressReportList().remove(progressReport);
+                application = em.merge(application);
             }
             em.remove(progressReport);
             utx.commit();

@@ -172,7 +172,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         //Link grant holder to application
-        application.setGrantHolderID(grantHolder);
+        application.setGrantHolder(grantHolder);
         applicationJpaController.edit(application);
         
         //Log action

@@ -9,7 +9,7 @@ package com.softserve.Webapp.conversationbeans;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.UpEmployeeInformation;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -53,7 +53,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
     
     private Person person;
     private Address address;
-    private UpEmployeeInformation employeeInformation;
+    private EmployeeInformation employeeInformation;
     private Address upAddress;
     
     private boolean isSystemAdmin;
@@ -76,7 +76,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
         
         person = new Person();  
         address = new Address();
-        employeeInformation = new UpEmployeeInformation();
+        employeeInformation = new EmployeeInformation();
         upAddress = new Address();
         
         sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
@@ -103,11 +103,11 @@ public class GeneralUserAccountCreationBean implements Serializable{
         this.address = address;
     }
 
-    public UpEmployeeInformation getEmployeeInformation() {
+    public EmployeeInformation getEmployeeInformation() {
         return employeeInformation;
     }
 
-    public void setEmployeeInformation(UpEmployeeInformation employeeInformation) {
+    public void setEmployeeInformation(EmployeeInformation employeeInformation) {
         this.employeeInformation = employeeInformation;
     }
 
@@ -164,7 +164,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
             {
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
-                person.setUpEmployeeInformation(employeeInformation);
+                person.setEmployeeInformation(employeeInformation);
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), false, person);               
             }
             else

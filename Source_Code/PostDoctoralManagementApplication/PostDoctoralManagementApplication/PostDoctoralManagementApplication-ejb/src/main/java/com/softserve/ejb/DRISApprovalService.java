@@ -275,7 +275,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
             notificationService.sendNotification(notification, true);
         
-            notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
             notificationService.sendNotification(notification, true);
         }
     }
@@ -316,7 +316,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
         notificationService.sendNotification(notification, true);
 
-        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
         notificationService.sendNotification(notification, true);
     }
     
@@ -372,10 +372,10 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         //Send notification to CSC, Finance, grant holder and applicatant
         ArrayList<Notification> notifications = new ArrayList<Notification>();        
         notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
         //CSC and finance person
         notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + cscMesssage));
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolderID(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + finaceMessage));
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + finaceMessage));
         notificationService.sendBatchNotifications(notifications, true);
         
         
