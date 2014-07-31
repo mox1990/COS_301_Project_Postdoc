@@ -18,7 +18,21 @@
             </div>
             <div>
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{true}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.applicationProgressViewerServiceDisplayable}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(3)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
+                    <ui:param name="buttonName" value="Application progress viewer service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToApplicationProgressViewerApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info3"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view any applications progress that you are the fellow or grant holder of.
+                        If you are a DRIS member you will be allowed to view the progress of all applications.
+                    </ui:define>
+                </ui:decorate>
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.newApplicationServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(1)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
                     <ui:param name="buttonName" value="New application service"/>
@@ -31,7 +45,7 @@
                 </ui:decorate>
 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.renewalApplicationServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(2)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
                     <ui:param name="buttonName" value="Application renewal"/>
@@ -42,23 +56,9 @@
                         This will allow you to renew your currently active application.
                     </ui:define>
                 </ui:decorate>
-                
-                <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(3)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
-                    <ui:param name="buttonName" value="Application progress viewer service"/>
-                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToApplicationProgressViewerApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info3"/>
-                    <ui:define name="informationContent">
-                        This will allow you to view any applications progress that you are the fellow or grant holder of.
-                        If you are a DRIS member you will be allowed to view the progress of all applications.
-                    </ui:define>
-                </ui:decorate>
 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.refereeReportServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(4)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
                     <ui:param name="buttonName" value="Referee report service"/>
@@ -69,10 +69,23 @@
                         This will allow you to view all applications that are pending for you to write a referal report.
                         Also it will allow you to create a referal report for those pending.
                     </ui:define>
-                </ui:decorate>  
+                </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.grantHolderFinalisationServiceDisplayable}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(8)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
+                    <ui:param name="buttonName" value="Application progress viewer service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToApplicationProgressViewerApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info8"/>
+                    <ui:define name="informationContent">
+                        This will allow you to view any applications pending for finalisation that you are the grant holder of.                        
+                    </ui:define>
+                </ui:decorate>
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.HODRecommendationServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(5)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
                     <ui:param name="buttonName" value="HOD recommendation service"/>
@@ -86,7 +99,7 @@
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.deanEndorsementServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(6)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
                     <ui:param name="buttonName" value="Dean endorsement service"/>
@@ -100,7 +113,7 @@
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.DRISApprovalServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(7)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(7)"/>
                     <ui:param name="buttonName" value="DRIS approval service"/>
@@ -115,7 +128,7 @@
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{userAccountsViewerRequestBean.systemAdmin}"/>
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.meetingManagementServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(8)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
                     <ui:param name="buttonName" value="Meeting management service"/>

@@ -9,6 +9,7 @@ package com.softserve.Webapp.sessionbeans;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.Webapp.util.StorageItem;
 import com.softserve.ejb.*;
 import com.softserve.system.Session;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class SessionManagerBean implements Serializable {
     @EJB
     private UserGatewayLocal userGateway;
     
-    private ArrayList<Object> sessionStroage;
+    private ArrayList<StorageItem> sessionStorage;
     
     /**
      * Creates a new instance of LoginManagedBean
@@ -51,7 +52,7 @@ public class SessionManagerBean implements Serializable {
     @PostConstruct
     public void init()
     {
-        sessionStroage = new ArrayList<Object>();
+        sessionStorage = new ArrayList<StorageItem>();
     }
     
     public String login(UIComponent errorMessageComponent, String username, String password)
@@ -153,15 +154,22 @@ public class SessionManagerBean implements Serializable {
         }
     }    
     
-    public <T> T getObjectFromSessionStroage(int index, Class<T> objectClass)
+    public <T> T getObjectFromSessionStorage(int index, Class<T> objectClass)
     {
         try
         {
-            if(sessionStroage.get(index) == null)
+            T temp = null;
+            
+            if(index > -1 && index < sessionStorage.size())
             {
-                System.out.println("==========Object in storage is null");
+                if(sessionStorage.get(index).getObject() == null)
+                {
+                    System.out.println("==========Object in storage is null");
+                }
+                
+                temp = objectClass.cast(sessionStorage.get(index).getObject());
             }
-            T temp = objectClass.cast(sessionStroage.get(index));
+            
             if(temp == null)
             {
                 System.out.println("==========Casted is null");
@@ -180,41 +188,76 @@ public class SessionManagerBean implements Serializable {
         }
     }
     
-    public int addObjectToSessionStroage(Object object)
+    public <T> T getObjectFromSessionStorage(String key, Class<T> objectClass)
+    {
+        int index = sessionStorage.indexOf(new StorageItem(key, null));
+
+        return getObjectFromSessionStorage(index, objectClass);        
+    }
+    
+    public boolean doesKeyExistInSessionStorage(String key)
+    {
+        return sessionStorage.contains(new StorageItem(key, null));
+    }
+    
+    public int addObjectToSessionStorage(String key, Object object)
     {
         if(object == null)
         {
             System.out.println("==========Object in is null");
         }
-        sessionStroage.add(object);
-        if(sessionStroage.get(sessionStroage.size() - 1) == null)
+        
+        sessionStorage.add(new StorageItem(key, object));
+        
+        if(sessionStorage.get(sessionStorage.size() - 1) == null)
         {
             System.out.println("==========Added Object in storage is null");
         }
+        
         System.out.println("================Added to storage");
-        return sessionStroage.size() - 1;
+        
+        return sessionStorage.size() - 1;
     }
     
-    public void removeObjectFromSessionStroageAt(int index)
+    public void removeObjectFromSessionStorageAt(int index)
     {
-        sessionStroage.remove(index);
-    }
-    
-    public void clearSessionStroage()
-    {
-        sessionStroage.clear();
-    }
-    
-    public void updateObjectInSessionStroageAt(int index, Object object)
-    {
-        if(index > -1 && sessionStroage.size() < index)
+        if(index > -1 && index < sessionStorage.size())
         {
-            sessionStroage.set(index, object);
+            sessionStorage.remove(index);
         }
+        else
+        {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+    
+    public void clearSessionStorage()
+    {
+        sessionStorage.clear();
+    }
+    
+    public void updateObjectInSessionStorageAt(int index, Object object)
+    {
+        if(index > -1 && index < sessionStorage.size())
+        {
+
+            StorageItem storageItem = sessionStorage.get(index);
+            storageItem.setObject(object);
+            
+            sessionStorage.set(index, storageItem);
+            System.out.println("=============Object updated with index " + index);
+        }
+    }
+    
+    public void updateObjectInSessionStorageAt(String key, Object object)
+    {
+        int index = sessionStorage.indexOf(new StorageItem(key, null));
+        
+        updateObjectInSessionStorageAt(index, object);
     }
     
     public int countObjectsInSessionStroage()
     {
-        return sessionStroage.size();
+        return sessionStorage.size();
     }
 }

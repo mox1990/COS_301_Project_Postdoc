@@ -74,7 +74,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        person = sessionManagerBean.getObjectFromSessionStroage(0, Person.class); 
+        person = sessionManagerBean.getObjectFromSessionStorage(0, Person.class); 
         if(person == null)
         {
             System.out.println("==========Is null");
@@ -193,7 +193,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
                 userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);
             }
             
-            sessionManagerBean.clearSessionStroage();
+            sessionManagerBean.clearSessionStorage();
             conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToPreviousBreadCrumb();
         } 

@@ -43,7 +43,7 @@ public class ApplicationViewerRequestBean {
     
     public Application getSelectedApplication()
     {
-        return sessionManagerBean.getObjectFromSessionStroage(0, Application.class);
+        return sessionManagerBean.getObjectFromSessionStorage(0, Application.class);
     }
 
     public UIComponent getErrorContainer() {

@@ -61,7 +61,7 @@ public class DeanApplicationSelectionRequestBean {
     
     public void selectApplication(Application application)
     {
-        sessionManagerBean.addObjectToSessionStroage(application);
+        sessionManagerBean.addObjectToSessionStorage("APPLICATION",application);
     }
     
     public String viewApplication(Application application)

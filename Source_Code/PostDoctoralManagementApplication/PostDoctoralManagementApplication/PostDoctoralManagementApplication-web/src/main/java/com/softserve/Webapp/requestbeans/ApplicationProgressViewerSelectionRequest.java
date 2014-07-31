@@ -81,8 +81,8 @@ public class ApplicationProgressViewerSelectionRequest {
     
     public String viewApplication(Application application)
     {
-        sessionManagerBean.clearSessionStroage();
-        sessionManagerBean.addObjectToSessionStroage(application);
+        sessionManagerBean.clearSessionStorage();
+        sessionManagerBean.addObjectToSessionStorage("APPLICATION",application);
         
         return navigationManagerBean.goToApplicationProgressViewerApplicationProgressView();
     }

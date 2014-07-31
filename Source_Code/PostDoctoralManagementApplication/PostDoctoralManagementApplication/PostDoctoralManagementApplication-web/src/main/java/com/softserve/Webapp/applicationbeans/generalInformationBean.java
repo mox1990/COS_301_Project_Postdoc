@@ -22,7 +22,7 @@ import javax.inject.Named;
 @ApplicationScoped
 public class generalInformationBean {
     
-    private List<SelectItem> titleSelectItems;
+    private List<String> titleSelectItems;
     private List<SelectItem> referenceTypeItems;
     private List<SelectItem> contributionTypeItems;
     private List<SelectItem> degreeTypeItems;
@@ -39,13 +39,22 @@ public class generalInformationBean {
     public void init()
     {
         
-        titleSelectItems = new ArrayList<SelectItem>();
+        /*titleSelectItems = new ArrayList<SelectItem>();
         titleSelectItems.add(new SelectItem("Mr.","Mr."));
         titleSelectItems.add(new SelectItem("Ms.","Ms."));
         titleSelectItems.add(new SelectItem("Miss.","Miss."));
         titleSelectItems.add(new SelectItem("Mrs.","Mrs."));
         titleSelectItems.add(new SelectItem("Prof.","Prof."));
-        titleSelectItems.add(new SelectItem("Dr.","Dr."));
+        titleSelectItems.add(new SelectItem("Dr.","Dr."));*/
+        
+        titleSelectItems = new ArrayList<String>();
+        titleSelectItems.add("Mr.");
+        titleSelectItems.add("Ms.");
+        titleSelectItems.add("Miss.");
+        titleSelectItems.add("Mrs.");
+        titleSelectItems.add("Prof.");
+        titleSelectItems.add("Dr.");
+        
         
         referenceTypeItems = new ArrayList<SelectItem>();
         referenceTypeItems.add(new SelectItem("Publications in peer-reviewed/refereed journals","Publications in peer-reviewed/refereed journals"));
@@ -72,7 +81,7 @@ public class generalInformationBean {
         genderItems.add(new SelectItem("Other","Other"));
     }
 
-    public List<SelectItem> getTitleSelectItems() {
+    public List<String> getTitleSelectItems() {
         return titleSelectItems;
     }
 

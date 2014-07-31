@@ -92,6 +92,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
+        if(cv == null)
+        {
+            throw new Exception("CV is not valid");
+        }
+        
         CVManagementService cVManagementService = getCVManagementServiceEJB();
         if(cVManagementService.hasCV(session))
         {
@@ -113,6 +118,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
+        
+        if(application == null)
+        {
+            throw new Exception("Application is not valid");
+        }
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
@@ -139,6 +149,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
+        
         //Authenticate user privliges
         UserGateway userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -147,12 +158,17 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
+        if(grantHolder == null)
+        {
+            throw new Exception("Grant holder is not valid");
+        }
+        
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         UserAccountManagementService accountManagementServices = getUserAccountManagementServiceEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         
         //Check if grant holder already exists
-        if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
+        if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()) != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
         {
             grantHolder.setAddressLine1(new Address());
                             
@@ -171,9 +187,14 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             }            
         }
         
-        //Link grant holder to application
-        application.setGrantHolder(grantHolder);
-        applicationJpaController.edit(application);
+        application = applicationJpaController.findApplication(application.getApplicationID());
+        
+        if(!application.getGrantHolder().equals(grantHolder))
+        {
+            //Link grant holder to application
+            application.setGrantHolder(grantHolder);
+            applicationJpaController.edit(application);
+        }
         
         //Log action
         AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Linked grant holder to new application", session.getUser());
@@ -190,6 +211,12 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
+        
+        if(referee == null)
+        {
+            throw new Exception("Referee is not valid");
+        }        
+        
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         UserAccountManagementService accountManagementServices = getUserAccountManagementServiceEJB();
@@ -215,10 +242,23 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             }            
         }
         
-        //Link referee to application
-        application.getPersonList().add(referee);
-        applicationJpaController.edit(application);
+        application = applicationJpaController.findApplication(application.getApplicationID());
         
+        if(application.getPersonList() == null)
+        {
+            application.setPersonList(new ArrayList<Person>());
+        }
+        
+        System.out.println(referee.toString());
+        System.out.println("=======Contains: " + application.getPersonList().contains(referee));
+        
+        if(!application.getPersonList().contains(referee))
+        {
+            System.out.println("=======Linking referee");
+            //Link referee to application
+            application.getPersonList().add(referee);
+            applicationJpaController.edit(application);
+        }
         //Log action
         AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Linked referee to new application", session.getUser());
         auditTrailService.logAction(auditLog);
@@ -234,6 +274,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
+        
+        if(application == null)
+        {
+            throw new Exception("Application is not valid");
+        }
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         NotificationService notificationService = getNotificationServiceEJB();

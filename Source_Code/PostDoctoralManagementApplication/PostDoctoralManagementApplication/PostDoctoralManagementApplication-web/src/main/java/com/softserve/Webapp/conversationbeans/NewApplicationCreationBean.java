@@ -489,7 +489,7 @@ public class NewApplicationCreationBean implements Serializable {
                 wizardActiveTab++;
             }
             wizardActiveTab++;
-            sessionManagerBean.clearSessionStroage();
+            sessionManagerBean.clearSessionStorage();
             
         }
         catch(Exception ex)
@@ -503,11 +503,10 @@ public class NewApplicationCreationBean implements Serializable {
     public void completeGrantHolderSpecification()
     {
         try 
-        {
-            
+        {            
             newApplicationServiceLocal.linkGrantHolderToApplication(sessionManagerBean.getSession(), openApplication, grantHolder);
             wizardActiveTab++;
-            sessionManagerBean.clearSessionStroage();
+            sessionManagerBean.clearSessionStorage();
         } 
         catch (Exception ex) 
         {
@@ -519,19 +518,15 @@ public class NewApplicationCreationBean implements Serializable {
     }
     
     public void completeRefereeSpecification()
-    {
-        openApplication.setPersonList(referees);        
+    {        
         try 
         {
             for(Person referee: referees)
             {
-                if(referee == null)
-                {
-                    System.out.println("Null ref===============================");
-                }
-                newApplicationServiceLocal.linkRefereeToApplication(sessionManagerBean.getSession(), openApplication, referee);
-                wizardActiveTab++;
-            }            
+                System.out.println("ref :" + referee.toString());
+                newApplicationServiceLocal.linkRefereeToApplication(sessionManagerBean.getSession(), openApplication, referee);                
+            }   
+            wizardActiveTab++;
         } 
         catch (Exception ex) 
         {

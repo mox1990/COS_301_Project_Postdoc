@@ -180,7 +180,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), false, person);            
             }
             System.out.println("================================= about to clear");
-            sessionManagerBean.clearSessionStroage();
+            sessionManagerBean.clearSessionStorage();
             conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToUserAccountManagementServicesHomeView();
         } 

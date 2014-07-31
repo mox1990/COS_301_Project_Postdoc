@@ -12,7 +12,7 @@
             </f:facet>
             <p:outputLabel value="Title:" for="title"/>                                    
             <p:selectOneButton id="title" value="#{person.title}">
-                <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
+                <f:selectItems value="#{generalInformationBean.titleSelectItems}" var="t" itemLabel="#{t}" itemValue="#{t}"/>
             </p:selectOneButton>
             <p:message for="title" styleClass="fieldErrorMessage"/>
 

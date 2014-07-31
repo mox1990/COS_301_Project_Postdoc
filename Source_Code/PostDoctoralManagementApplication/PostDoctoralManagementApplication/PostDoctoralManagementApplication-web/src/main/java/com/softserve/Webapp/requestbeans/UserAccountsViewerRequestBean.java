@@ -68,8 +68,8 @@ public class UserAccountsViewerRequestBean {
     
     public void selectUserAccount(Person person)
     {
-        sessionManagerBean.clearSessionStroage();
-        sessionManagerBean.addObjectToSessionStroage(person);        
+        sessionManagerBean.clearSessionStorage();
+        sessionManagerBean.addObjectToSessionStorage("ACCOUNT",person);        
     }
     
     public String editUserAccount(Person person)

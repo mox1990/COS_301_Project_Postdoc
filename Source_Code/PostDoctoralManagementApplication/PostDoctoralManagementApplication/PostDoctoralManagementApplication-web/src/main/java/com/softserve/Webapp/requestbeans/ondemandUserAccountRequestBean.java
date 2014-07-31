@@ -10,6 +10,7 @@ import com.softserve.DBEntities.Person;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -40,14 +41,27 @@ public class ondemandUserAccountRequestBean {
     {
     }
     
-    public boolean doesUserAccountExist()
+    @PostConstruct
+    public void init()
     {
-        if(sessionManagerBean.countObjectsInSessionStroage() == 0)
+        if(!sessionManagerBean.doesKeyExistInSessionStorage("USER_EXIST"))
+        {
+            sessionManagerBean.addObjectToSessionStorage("USER_EXIST", Boolean.FALSE);
+        }
+    }
+    
+    public boolean doesUserAccountExist()
+    {   
+        Boolean b = sessionManagerBean.getObjectFromSessionStorage("USER_EXIST", Boolean.class); 
+        
+        if(b == null)
         {
             return false;
         }
-        
-        return sessionManagerBean.getObjectFromSessionStroage(0, Boolean.class); 
+        else
+        {
+            return b;
+        }
     }
     
     public Person findUserAccount(String email, Person updatablePerson)
@@ -56,21 +70,27 @@ public class ondemandUserAccountRequestBean {
         
         if(userAccountFound != null)
         {
+            System.out.println("=========User found");
             MessageUtil.CreateGlobalFacesMessage("User account found!", "The user account with specified email has been found in our databases.", FacesMessage.SEVERITY_INFO);
-            sessionManagerBean.clearSessionStroage();
-            sessionManagerBean.addObjectToSessionStroage(true);
+            sessionManagerBean.updateObjectInSessionStorageAt("USER_EXIST", Boolean.TRUE);
             return userAccountFound;
         }
         else
         {
-            sessionManagerBean.clearSessionStroage();
-            sessionManagerBean.addObjectToSessionStroage(false);
-            updatablePerson.setSystemID("");
-            if(updatablePerson.getTitle() == null || updatablePerson.getTitle().equals(""))
-            {
-                updatablePerson.setTitle("Mr.");
-            }
-            return updatablePerson;
+            System.out.println("=========User not found");
+            sessionManagerBean.updateObjectInSessionStorageAt("USER_EXIST", Boolean.FALSE);
+            
+            Person person = new Person();
+            
+            person.setEmail(updatablePerson.getEmail());
+            person.setFullName(updatablePerson.getFullName());
+            person.setSurname(updatablePerson.getSurname());
+            person.setTitle(updatablePerson.getTitle());
+            person.setSystemID("");
+            person.setUpEmployee(false);
+            System.out.println("person title " + person.getTitle());
+            
+            return person;
         }
     }
 }
