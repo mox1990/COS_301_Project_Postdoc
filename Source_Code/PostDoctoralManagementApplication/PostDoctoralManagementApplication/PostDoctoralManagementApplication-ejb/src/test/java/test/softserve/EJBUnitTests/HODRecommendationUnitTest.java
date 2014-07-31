@@ -6,10 +6,12 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
+import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
@@ -26,6 +28,7 @@ import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
@@ -224,7 +227,11 @@ public class HODRecommendationUnitTest {
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
+        AmmendRequestJpaController mockAmmendRequestJpaController = mock(AmmendRequestJpaController.class);
+        GregorianCalendar mockCal = mock(GregorianCalendar.class);
         
+        
+        instance.setaRDAO(mockAmmendRequestJpaController);
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
         instance.setaTEJB(mockAuditTrailService);
@@ -232,6 +239,7 @@ public class HODRecommendationUnitTest {
         instance.setrRDAO(mockRecommendationReportJpaController);
         instance.setnEJB(mockNotificationService);
         instance.setuEJB(mockUserGateway);
+        instance.setgCal(mockCal);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -247,6 +255,7 @@ public class HODRecommendationUnitTest {
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.bulidAmmendRequestEntity(mockApplication, reason, mockCal.getTime())).thenReturn(new AmmendRequest(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
@@ -257,8 +266,9 @@ public class HODRecommendationUnitTest {
             // Declined Application...
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
             
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).bulidAmmendRequestEntity(mockApplication, reason, mockCal.getTime());
             verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
@@ -269,7 +279,7 @@ public class HODRecommendationUnitTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
