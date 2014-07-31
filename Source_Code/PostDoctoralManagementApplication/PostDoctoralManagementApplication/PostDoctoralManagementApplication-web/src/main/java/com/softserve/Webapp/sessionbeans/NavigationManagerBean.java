@@ -365,6 +365,13 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToUserAccountManagementServicesOnDemandUserActivationView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_OnDemandUserActivation", "On demand user activation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
     
     
 }

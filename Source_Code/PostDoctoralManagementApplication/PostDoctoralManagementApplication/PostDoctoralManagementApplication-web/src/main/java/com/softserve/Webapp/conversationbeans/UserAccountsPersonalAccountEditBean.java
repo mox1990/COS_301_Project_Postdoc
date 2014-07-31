@@ -165,4 +165,32 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         }
     }
     
+    public String performUserAccountActivation()
+    {
+        try 
+        {
+            person.setAddressLine1(address);
+            if(person.getUpEmployee())
+            {
+                employeeInformation.setEmployeeID(person.getSystemID());
+                employeeInformation.setPhysicalAddress(address);
+                person.setEmployeeInformation(employeeInformation);
+                userAccountManagementServiceLocal.activateOnDemandAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);               
+            }
+            else
+            {
+                userAccountManagementServiceLocal.activateOnDemandAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);
+            }
+            
+            conversationManagerBean.deregisterConversation(conversation);
+            return navigationManagerBean.goToWelcomeView();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+            return "";
+        }
+    }
+    
 }
