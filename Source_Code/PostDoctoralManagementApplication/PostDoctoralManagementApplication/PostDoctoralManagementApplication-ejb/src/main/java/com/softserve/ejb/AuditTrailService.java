@@ -54,7 +54,7 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     @Override
     public List<AuditLog> findAll()
     {
-        return emf.createEntityManager().createNamedQuery("AuditLog.findAll", AuditLog.class).getResultList();
+        return getAuditLogDAO().findAuditLogEntities();
     }
     
     @Override
