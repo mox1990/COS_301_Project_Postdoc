@@ -6,6 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
+import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
@@ -14,6 +15,7 @@ import com.softserve.ejb.HODRecommendationServices;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -27,6 +29,16 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
     private ApplicationServicesUtil aSEJB;
+    private AmmendRequestJpaController aRDAO;
+    private GregorianCalendar gCal;
+
+    public void setgCal(GregorianCalendar gCal) {
+        this.gCal = gCal;
+    }
+
+    public void setaRDAO(AmmendRequestJpaController aRDAO) {
+        this.aRDAO = aRDAO;
+    }
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
@@ -96,5 +108,17 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
+    }
+    
+    @Override
+    protected AmmendRequestJpaController getAmmendRequestDAO()
+    {
+        return aRDAO;
+    }
+    
+    @Override
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return gCal;
     }
 }
