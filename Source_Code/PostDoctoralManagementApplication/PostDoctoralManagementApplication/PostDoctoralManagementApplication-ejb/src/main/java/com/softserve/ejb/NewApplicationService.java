@@ -286,6 +286,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         //Set application status
+        application.setSubmissionDate(getGregorianCalendar().getTime());
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
         applicationJpaController.edit(application);
         
