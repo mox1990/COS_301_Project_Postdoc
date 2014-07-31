@@ -6,7 +6,6 @@
 
 package com.softserve.ejb;
 
-import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.RefereeReportJpaController;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -15,9 +14,11 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -108,6 +109,11 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         return new ApplicationServicesUtil(emf);
     }
     
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
+    }
+    
     /**
      *This function loads all the applications that need to approved/declined by the 
      * specified HOD
@@ -165,12 +171,15 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
+        refereeReport.setTimestamp(getGregorianCalendar().getTime());
         refereeReport.setApplicationID(application);
         refereeReportJpaController.create(refereeReport);
         
         //Log action        
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application refereed" + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
+        
+        application = applicationJpaController.findApplication(application.getApplicationID());
         
         if(application.getPersonList().size() == application.getRefereeReportList().size())
         {

@@ -14,6 +14,7 @@ import com.softserve.ejb.UserGateway;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -27,6 +28,14 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
     private AuditTrailService aTEJB;
     private DeclineReportJpaController dRDAO;
     private GregorianCalendar gCal;
+
+    public ApplicationServicesUtilMockUnit() {
+        super(null);
+    }
+
+    public ApplicationServicesUtilMockUnit(EntityManagerFactory emf) {
+        super(emf);
+    }
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;

@@ -3,28 +3,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:component>
         <div>
-            <p:accordionPanel dynamic="true" cache="true" value="#{pendingApplications}" var="app" styleClass="box-round">
-                <p:tab title="Application - #{app.applicationID} - #{app.projectTitle}" >
-                    <h:panelGrid columns="2">
-                        <h:outputText styleClass="text-label" value="Application type:"/>
-                        <h:outputText value="#{app.type}"/>
-                        <h:outputText styleClass="text-label" value="Application Status:"/>
-                        <h:outputText value="#{app.status}"/>
-                        <h:outputText styleClass="text-label" value="Application creation date"/>
-                        <h:outputText value="#{app.timestamp}"/>
-                        <h:outputText styleClass="text-label" value="Fellow name:"/>
-                        <h:outputText value="#{app.fellow.completeName}"/>
-                        <h:outputText styleClass="text-label" value="Grant holder name:"/>
-                        <h:outputText value="#{app.grantHolder.completeName}"/>
-                    </h:panelGrid>
-                    <h:form>
-                        <ui:insert name="commandButtons"/>                            
-                    </h:form>
-                </p:tab>
-            </p:accordionPanel>
+            <c:if test="#{pendingApplications.size() == 0}">
+                <div>
+                    <h:outputText styleClass="text-label" value="No pending applications found"/>
+                </div>
+            </c:if>
+            <c:if test="#{pendingApplications.size() > 0}">                
+                <p:accordionPanel dynamic="true" cache="true" value="#{pendingApplications}" var="app" styleClass="box-round">
+                    <p:tab title="Application - #{app.applicationID} - #{app.projectTitle}" >
+                        <h:panelGrid columns="2">
+                            <h:outputText styleClass="text-label" value="Application type:"/>
+                            <h:outputText value="#{app.type}"/>
+                            <h:outputText styleClass="text-label" value="Application Status:"/>
+                            <h:outputText value="#{app.status}"/>
+                            <h:outputText styleClass="text-label" value="Application creation date"/>
+                            <h:outputText value="#{app.timestamp}"/>
+                            <h:outputText styleClass="text-label" value="Fellow name:"/>
+                            <h:outputText value="#{app.fellow.completeName}"/>
+                            <h:outputText styleClass="text-label" value="Grant holder name:"/>
+                            <h:outputText value="#{app.grantHolder.completeName}"/>
+                            <h:outputText styleClass="text-label" value="Project title:"/>
+                            <h:outputText value="#{app.projectTitle}"/>
+                        </h:panelGrid>
+                        <h:form>
+                            <ui:insert name="commandButtons"/>                            
+                        </h:form>
+                    </p:tab>
+                </p:accordionPanel>
+            </c:if>
         </div>
     </ui:component>
 </html>

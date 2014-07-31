@@ -703,7 +703,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND :ref MEMBER OF a.refereeList", Application.class).setParameter("status", applicationStatus).setParameter("ref", referee).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND :ref MEMBER OF a.personList", Application.class).setParameter("status", applicationStatus).setParameter("ref", referee).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
@@ -711,7 +711,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolderID = :grantHolder", Application.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder = :grantHolder", Application.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
@@ -719,7 +719,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolderID.locationID.department = :dep", Application.class).setParameter("status", applicationStatus).setParameter("dep", deparment).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.department = :dep", Application.class).setParameter("status", applicationStatus).setParameter("dep", deparment).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
@@ -727,7 +727,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolderID.locationID.faculty = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.department = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
@@ -736,7 +736,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.locationID = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.department = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getDepartment()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD);
         return q.getResultList();
     }
     
@@ -744,7 +744,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.locationID.faculty = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.faculty = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER);
         return q.getResultList();
     }
     
@@ -768,49 +768,47 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.grantHolderID = :gh", Application.class).setParameter("gh", grantHolder);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.grantHolder = :gh", Application.class).setParameter("gh", grantHolder);
         return q.getResultList();
     }
     
-    
-    
-    public int countAllApplicationsWithStatus(String applicationStatus)
+    public long countAllApplicationsWithStatus(String applicationStatus)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Integer> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status", Integer.class).setParameter("status", applicationStatus);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status", Long.class).setParameter("status", applicationStatus);
         return q.getSingleResult();
     }
     
-    public int countAllApplicationsWithStatusAndReferee(String applicationStatus, Person referee)
+    public long countAllApplicationsWithStatusAndReferee(String applicationStatus, Person referee)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Integer> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND :ref MEMBER OF a.refereeList", Integer.class).setParameter("status", applicationStatus).setParameter("ref", referee);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND :ref MEMBER OF a.personList", Long.class).setParameter("status", applicationStatus).setParameter("ref", referee);
         return q.getSingleResult();
     }
     
-    public int countAllApplicationsWithStatusAndGrantHolder(String applicationStatus, Person grantHolder)
+    public long countAllApplicationsWithStatusAndGrantHolder(String applicationStatus, Person grantHolder)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Integer> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolderID = :grantHolder", Integer.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder = :grantHolder", Long.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder);
         return q.getSingleResult();
     }
     
-    public int countAllApplicationsWithStatusAndDepartment(String applicationStatus, String deparment)
+    public long countAllApplicationsWithStatusAndDepartment(String applicationStatus, String deparment)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Integer> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolderID.locationID.department = :dep", Integer.class).setParameter("status", applicationStatus).setParameter("dep", deparment);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.department = :dep", Long.class).setParameter("status", applicationStatus).setParameter("dep", deparment);
         return q.getSingleResult();
     }
     
-    public int countAllApplicationsWithStatusAndFaculty(String applicationStatus, String faculty)
+    public long countAllApplicationsWithStatusAndFaculty(String applicationStatus, String faculty)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Integer> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolderID.locationID.faculty = :fac", Integer.class).setParameter("status", applicationStatus).setParameter("fac", faculty);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.faculty = :fac", Long.class).setParameter("status", applicationStatus).setParameter("fac", faculty);
         return q.getSingleResult();
     }
     
