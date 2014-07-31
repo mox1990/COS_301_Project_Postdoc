@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -210,6 +211,42 @@ public class LocationJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<String> getAllDepartmentsInFacultyInInstitution(String institution, String faculty) throws Exception
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<String> q = em.createQuery("SELECT l.department FROM Location l WHERE l.institution = :inst AND l.faculty = :fac", String.class).setParameter("inst", institution).setParameter("fac", faculty);
+        
+        return q.getResultList();
+    }
+    
+    public List<String> getAllFacultiesInInstitution(String institution) throws Exception
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<String> q = em.createQuery("SELECT DISTINCT l.faculty FROM Location l WHERE l.institution = :inst", String.class).setParameter("inst", institution);
+        
+        return q.getResultList();
+    }
+    
+    public List<String> getAllInstitutions() throws Exception
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<String> q = em.createQuery("SELECT DISTINCT l.institution FROM Location l", String.class);
+        
+        return q.getResultList();
+    }
+    
+    public Location getLocationFromComponents(String institution, String faculty, String department) throws Exception
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Location> q = em.createQuery("SELECT l.department FROM Location l WHERE l.institution = :inst AND l.faculty = :fac AND l.department = :dep", Location.class).setParameter("inst", institution).setParameter("fac", faculty).setParameter("dep", department);
+        
+        return q.getSingleResult();
     }
     
 }
