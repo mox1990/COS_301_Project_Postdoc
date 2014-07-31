@@ -2,11 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="User account creation"/>
+        <ui:param name="pageTitle" value="Personal account viewer"/>
         
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/useraccountCreationScreen.css"/>
@@ -14,53 +13,44 @@
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">User account creation</h1>
-                 <h2>Please complete the fields below</h2>
+                <h1 class="header1">On demand user account activation #{userAccountsPersonalAccountEditBean.person.completeName}</h1>
+                 <h2>Please update the fields below to activate</h2>
             </div>
 
             <div>
                 <h:form>
                     <center>
                         <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
-                            <ui:param name="person" value="#{generalUserAccountCreationBean.person}"/>
+                            <ui:param name="person" value="#{userAccountsPersonalAccountEditBean.person}"/>
                             <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="emailEditable" value="#{true}"/>
+                            <ui:param name="emailEditable" value="#{false}"/>
                             <ui:define name="header">
                                 <h:outputText styleClass="header2" value="Person information"/>
                             </ui:define>
                         </ui:decorate>
 
                         <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                            <ui:param name="address" value="#{generalUserAccountCreationBean.address}"/>
+                            <ui:param name="address" value="#{userAccountsPersonalAccountEditBean.address}"/>
                             <ui:param name="renderAttribute" value="#{true}"/>
                             <ui:param name="prefix" value="r"/>
                             <ui:define name="header">
                                 <h:outputText styleClass="header2" value="Residential address"/>
                             </ui:define>
                         </ui:decorate>                        
-                        
-                        <ui:decorate template="templates/securityFieldInput_Template.xhtml">
-                            <ui:param name="securityRoles" value="#{generalUserAccountCreationBean.securityRoles}"/>
-                            <ui:param name="booleanValue" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
-                            <ui:param name="disabledAttribute" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Select Security roles"/>
-                            </ui:define>
-                        </ui:decorate> 
-                        
+                                                
                         <p:outputPanel id="upEmployeeInfoPanel">
                             <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
-                                <ui:param name="employeeInformation" value="#{generalUserAccountCreationBean.employeeInformation}"/>
-                                <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
-                                <ui:param name="employeeIDEditable" value="#{true}"/>
+                                <ui:param name="employeeInformation" value="#{userAccountsPersonalAccountEditBean.employeeInformation}"/>
+                                <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
+                                <ui:param name="employeeIDEditable" value="#{false}"/>
                                 <ui:define name="header">
                                     <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
                                 </ui:define>
                             </ui:decorate>
                             
                             <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                                <ui:param name="address" value="#{generalUserAccountCreationBean.upAddress}"/>
-                                <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
+                                <ui:param name="address" value="#{userAccountsPersonalAccountEditBean.upAddress}"/>
+                                <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
                                 <ui:param name="prefix" value="e"/>
                                 <ui:define name="header">
                                     <h:outputText styleClass="header2" value="UP office address"/>
@@ -68,10 +58,10 @@
                             </ui:decorate>                            
                         </p:outputPanel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{generalUserAccountCreationBean.errorContainer}" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" ajax="false"/>
+                        <p:commandButton styleClass="button" value="Activate account" id="Activate" binding="#{userAccountsPersonalAccountEditBean.errorContainer}" action="#{userAccountsPersonalAccountEditBean.performUserAccountActivation()}" ajax="false"/>
                         
                         <div class="errorContainer">
-                            <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>
+                            <h:message styleClass="errorSpan" id="saveChangesErrors" for="Activate"/>
                         </div>
                     </center>
                 </h:form>
@@ -79,4 +69,6 @@
         </ui:define>
     </ui:composition>
 </html>
+
+
 

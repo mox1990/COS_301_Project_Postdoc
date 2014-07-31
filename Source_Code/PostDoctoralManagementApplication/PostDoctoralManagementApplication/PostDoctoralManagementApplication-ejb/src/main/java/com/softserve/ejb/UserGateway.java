@@ -159,6 +159,11 @@ public class UserGateway implements UserGatewayLocal
             throw new AuthenticationException("The user is no longer logged in");
         }
         
+        if(!session.isUserAccountActive())
+        {
+            throw new AuthenticationException("The user is not a active user");
+        }
+        
         //Check if httpsession systemID still the same as the entities systemID or email address
         if (session.doesHttpSessionUsernameMatchUserUsername() || session.doesHttpSessionUsernameMatchUserEmail())
         {

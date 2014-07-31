@@ -75,8 +75,14 @@ public class SessionManagerBean implements Serializable {
             System.out.println("Test " + httpSession.getAttribute("username"));
             
             userGateway.login(session);
-            
-            return navigationManagerBean.goToWelcomeView();
+            if(session.isUserAccountDorment())
+            {
+                return navigationManagerBean.goToUserAccountManagementServicesOnDemandUserActivationView();
+            }
+            else
+            {
+                return navigationManagerBean.goToWelcomeView();
+            }
         }
         catch(Exception ex)
         {

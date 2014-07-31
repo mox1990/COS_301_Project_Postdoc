@@ -6,22 +6,18 @@ package com.softserve.Webapp;
  * and open the template in the editor.
  */
 
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Person;
-import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.UserAccountManagementServiceLocal;
-import com.softserve.system.Session;
+import com.softserve.DBDAO.*;
+import com.softserve.DBEntities.*;
+import com.softserve.XMLUtils.*;
+import com.softserve.system.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.ManagedBean;
-import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
+
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
+import org.fluttercode.datafactory.impl.DataFactory;
+
 
 /**
  *
@@ -29,13 +25,10 @@ import javax.servlet.http.HttpSession;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Named(value = "testingJSFManagedBean")
-@SessionScoped
+@RequestScoped
 public class testingJSFManagedBean implements Serializable {
     
     
-    @EJB
-    private UserAccountManagementServiceLocal management;
-    private String systemID;
     
     /**
      * Creates a new instance of testingJSFManagedBean
@@ -44,44 +37,16 @@ public class testingJSFManagedBean implements Serializable {
         
     }
     
-    public String getSystemID()
+    public void createTestData()
     {
-        return systemID;
-    }
-    public void setSystemID(String val)
-    {
-       systemID = val;
-    }
-    
-    public void createAddressessTest()
-    {
-
-        management.testAddresses();
-        
-    }
-    
-    
-    public void createPerson()
-    {
-        Person person = new Person(systemID, "Check", "Mr", "Mathys", "Ellis", "mox.1990@gmail.vom", false);
-        person.setCellphoneNumber("08370348568");
-        
-        Address address = new Address();        
-        address.setCountry("South Africa");
-        address.setProvince("MP");
-        address.setZippostalCode("1200");        
-        
-        try 
-        {
-            Session session = new Session((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false), person,true);
-            session.setLoggedInStatus(Boolean.TRUE);
-            
-            //management.createUserAccount(session, true, person, address, null, null);
-            
-        } catch (Exception ex) {
-            Logger.getLogger(testingJSFManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        ArrayList<Person> users = new ArrayList<Person>();
+        ArrayList<EmployeeInformation> employeeInformation = new ArrayList<EmployeeInformation>();
+        ArrayList<Address> addresses = new ArrayList<Address>();
+        ArrayList<Cv> cvs = new ArrayList<Cv>();
+        ArrayList<Location> locations = new ArrayList<Location>();
+        ArrayList<Application> Applications = new ArrayList<Application>();
+        DataFactory dataFactory = new DataFactory();
+        DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
         
     }
     

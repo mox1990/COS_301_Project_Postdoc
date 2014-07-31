@@ -122,7 +122,7 @@ public class PersonTest {
     public void testGetCompleteName()
     {
         Person instance = new Person();
-        instance.setTitle("Mr");
+        instance.setTitle("Mr.");
         instance.setFullName("John Bobby");
         instance.setSurname("Gates");
         assertEquals("Mr. John Bobby Gates", instance.getCompleteName());

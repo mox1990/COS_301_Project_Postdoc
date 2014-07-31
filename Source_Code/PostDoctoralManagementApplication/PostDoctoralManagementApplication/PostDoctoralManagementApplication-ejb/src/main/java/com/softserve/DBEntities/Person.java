@@ -263,7 +263,7 @@ public class Person implements Serializable {
 
     public String getCompleteName()
     {
-        return getTitle() + ". " + getFullName() + " " + getSurname();
+        return getTitle() + " " + getFullName() + " " + getSurname();
     }
 
     @XmlTransient
