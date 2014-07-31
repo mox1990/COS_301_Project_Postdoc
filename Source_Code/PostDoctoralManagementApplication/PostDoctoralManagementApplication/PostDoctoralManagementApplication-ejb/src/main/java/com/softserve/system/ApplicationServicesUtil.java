@@ -94,22 +94,35 @@ public class ApplicationServicesUtil {
     {
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         
-        List<Application> output = new ArrayList<Application>();
-        
+        List<Application> output = new ArrayList<Application>();        
         
         if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {   
-            output = applicationJpaController.findAllApplicationsWithStatusAndReferee(applicationStatusGroup,user,StartIndex,maxNumberOfRecords);
-
+            output = applicationJpaController.findAllApplicationsWithStatusAndReferee(applicationStatusGroup,user,StartIndex,maxNumberOfRecords);            
+            System.out.println("===============" + output.toString());
+            System.out.println("===============" + user.toString());
+            List<Application> temp = new ArrayList<Application>();
 //Possible optimization. Can use user.getApplicationListX() to get list
-            /*for(int i = 0; i < output.size(); i++)
+            for(int i = 0; i < output.size(); i++)
             {
-                if(!output.get(i).getRefereeList().contains(user))
+                boolean found = false;
+                
+                for(int j = 0; j < output.get(i).getRefereeReportList().size(); j++)
                 {
-                    output.remove(i);
-                    i--;
+                    System.out.println("===============" + output.get(i).getRefereeReportList().get(j).getReferee());
+                    if(output.get(i).getRefereeReportList().get(j).getReferee().equals(user))
+                    {
+                        found = true;
+                    }                               
                 }
-            }*/
+                
+                if(!found)
+                {
+                    temp.add(output.get(i));
+                }
+            }
+            
+            output = temp;
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
         {
@@ -163,7 +176,7 @@ public class ApplicationServicesUtil {
     {
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         
-        int output = 0;
+        long output = 0;
         
         
         if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
@@ -190,7 +203,7 @@ public class ApplicationServicesUtil {
             output = applicationJpaController.countAllApplicationsWithStatus(applicationStatusGroup);
         }
         
-        return output;
+        return (int) output;
     }
     
     public void declineAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception

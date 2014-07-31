@@ -7,12 +7,10 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Application;
-import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.DeansEndorsementServiceLocal;
-import com.softserve.ejb.HODRecommendationServices;
+import com.softserve.ejb.RefereeReportServiceLocal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -26,24 +24,24 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "deanApplicationSelectionRequestBean")
+@Named(value = "refereeApplicationSelectionRequestBean")
 @RequestScoped
-public class DeanApplicationSelectionRequestBean {
+public class refereeApplicationSelectionRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-
+    
     @EJB
-    private DeansEndorsementServiceLocal deansEndorsementServiceLocal;
+    private RefereeReportServiceLocal refereeReportServiceLocal;
     
     private UIComponent errorContainer;
     
     /**
-     * Creates a new instance of HODApplicationSelectionRequestBean
+     * Creates a new instance of refereeApplicationSelectionRequestBean
      */
-    public DeanApplicationSelectionRequestBean() {
+    public refereeApplicationSelectionRequestBean() {
     }
 
     public UIComponent getErrorContainer() {
@@ -58,7 +56,7 @@ public class DeanApplicationSelectionRequestBean {
     {   
         try
         {
-            return deansEndorsementServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, deansEndorsementServiceLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
+            return refereeReportServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, refereeReportServiceLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
         }
         catch(Exception ex)
         {
@@ -75,6 +73,6 @@ public class DeanApplicationSelectionRequestBean {
     public String viewApplication(Application application)
     {
         selectApplication(application);
-        return navigationManagerBean.goToDeanApplicationViewer();
+        return navigationManagerBean.goToRefereeReportServiceReportCreationView();
     }
 }

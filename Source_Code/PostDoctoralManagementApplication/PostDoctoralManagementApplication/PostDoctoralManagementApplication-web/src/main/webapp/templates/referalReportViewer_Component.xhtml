@@ -4,15 +4,14 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <ui:component>
-            
+    <ui:component>            
             <h:panelGrid columns="2" cellpadding="10px">
                 <h:outputText styleClass="text-label" value="Report creation date:"/>
                 <h:outputText value="#{report.timestamp}"/> 
                 <h:outputText styleClass="text-label" value="Referee name:"/>
-                <h:outputText value="#{report.refereeID.completeName}"/> 
+                <h:outputText value="#{report.referee.completeName}"/> 
                 <h:outputText styleClass="text-label" value="Referee email:"/>
-                <h:outputText value="#{report.refereeID.email}"/>
+                <h:outputText value="#{report.referee.email}"/>
                 <h:outputText styleClass="text-label" value="Referee and candidate association:"/>
                 <h:outputText value="#{report.contentXMLEntity.refereeAndCandidateAssociation}"/>
                 <h:outputText styleClass="text-label" value="Candidate project title under referee:"/>
@@ -23,8 +22,7 @@
                 <h:outputText value="#{report.contentXMLEntity.evaluationOfCandidateSelf}"/>
                 <h:outputText styleClass="text-label" value="Candidate evaluation towards proposed project by referee:"/>
                 <h:outputText value="#{report.contentXMLEntity.evaluationOfCandidateTowardsProposedProject}"/>
-            </h:panelGrid>
-            
+            </h:panelGrid>            
     </ui:component>
 </html>
 

@@ -118,7 +118,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        return getApplicationDAO().findAllApplicationsWhosGrantHolderIs(session.getUser());
+        return getApplicationDAO().findApplicationEntities();
     }
     
     
