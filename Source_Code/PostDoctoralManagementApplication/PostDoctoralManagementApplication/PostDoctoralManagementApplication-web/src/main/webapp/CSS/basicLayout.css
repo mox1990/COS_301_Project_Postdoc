@@ -286,6 +286,16 @@ body
     overflow: hidden;
 }
 
+.negate-from-input
+{
+    width: inherit!important;
+}
+
+.negate-from-input input
+{
+    width: inherit!important;
+}
+
 .button
 {
     width: auto;
@@ -297,7 +307,6 @@ body
     text-align: center!important;  
     margin-top: 5px;
 }
-
 
 
 .button:hover

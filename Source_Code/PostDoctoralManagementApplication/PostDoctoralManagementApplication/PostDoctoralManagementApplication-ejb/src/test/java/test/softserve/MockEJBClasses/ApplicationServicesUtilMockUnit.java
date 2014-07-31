@@ -6,14 +6,12 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.AmmendRequestJpaController;
-import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
+import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.ejb.AuditTrailService;
-import com.softserve.ejb.HODRecommendationServices;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 
@@ -21,31 +19,17 @@ import java.util.GregorianCalendar;
  *
  * @author kgothatso
  */
-public class HODRecommendationServicesMockUnit extends HODRecommendationServices {
+public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
     private ApplicationJpaController aDAO;
-    private RecommendationReportJpaController rRDAO;
     private DBEntitiesFactory dBEntities;
     private UserGateway uEJB;
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
-    private ApplicationServicesUtil aSEJB;
-    private AmmendRequestJpaController aRDAO;
+    private DeclineReportJpaController dRDAO;
     private GregorianCalendar gCal;
-
-    public void setgCal(GregorianCalendar gCal) {
-        this.gCal = gCal;
-    }
-
-    public void setaRDAO(AmmendRequestJpaController aRDAO) {
-        this.aRDAO = aRDAO;
-    }
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
-    }
-
-    public void setrRDAO(RecommendationReportJpaController rRDAO) {
-        this.rRDAO = rRDAO;
     }
 
     public void setdBEntities(DBEntitiesFactory dBEntities) {
@@ -64,8 +48,12 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
         this.aTEJB = aTEJB;
     }
 
-    public void setaSEJB(ApplicationServicesUtil aSEJB) {
-        this.aSEJB = aSEJB;
+    public void setdRDAO(DeclineReportJpaController dRDAO) {
+        this.dRDAO = dRDAO;
+    }
+
+    public void setgCal(GregorianCalendar gCal) {
+        this.gCal = gCal;
     }
     
     @Override
@@ -74,30 +62,40 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
         return aDAO;
     }
     
-    @Override
-    protected RecommendationReportJpaController getRecommmendationReportDAO()
-    {
-        return rRDAO;
-    }
-    
+    /**
+     *
+     * @return
+     */
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntities;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     protected UserGateway getUserGatewayServiceEJB()
     {
         return uEJB;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     protected AuditTrailService getAuditTrailServiceEJB()
     {
@@ -105,15 +103,9 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     }
     
     @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    protected DeclineReportJpaController getDeclineReportDAO()
     {
-        return aSEJB;
-    }
-    
-    @Override
-    protected AmmendRequestJpaController getAmmendRequestDAO()
-    {
-        return aRDAO;
+        return dRDAO;
     }
     
     @Override

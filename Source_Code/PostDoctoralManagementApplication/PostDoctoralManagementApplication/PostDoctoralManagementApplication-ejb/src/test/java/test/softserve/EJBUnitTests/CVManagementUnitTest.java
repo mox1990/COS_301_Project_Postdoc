@@ -6,7 +6,9 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.DBDAO.AcademicQualificationJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.ExperienceJpaController;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
@@ -63,6 +65,8 @@ public class CVManagementUnitTest {
         CvJpaController mockCvJpaController =  mock(CvJpaController.class);
         UserGateway mockUserGateway =  mock(UserGateway.class);
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
+        AcademicQualificationJpaController mockAcademicQualificationJpaController = mock(AcademicQualificationJpaController.class);
+        ExperienceJpaController mockExperienceJpaController = mock(ExperienceJpaController.class);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
@@ -70,6 +74,8 @@ public class CVManagementUnitTest {
         instance.setuEJB(mockUserGateway);
         instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntities(mockDBEntitiesFactory);
+        instance.setaQDAO(mockAcademicQualificationJpaController);
+        instance.seteDAO(mockExperienceJpaController);
         
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));

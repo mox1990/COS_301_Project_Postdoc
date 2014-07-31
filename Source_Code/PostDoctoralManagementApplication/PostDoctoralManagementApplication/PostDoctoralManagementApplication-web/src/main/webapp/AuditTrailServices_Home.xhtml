@@ -3,12 +3,58 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <ui:composition template="templates/generalPageTemplate.xhtml">
-        <ui:param name="pageTitle" value="Welcome"/>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Audit trail"/>
         
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
         </ui:define>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Audit log viewer</h1>
+                <h2></h2>
+            </div>
+            <div>
+                
+                <p:outputPanel>
+                    <h:form>
+                        <p:dataTable id="AuditLog" value="#{auditTrailTableBean.entries}"  var="entry" widgetVar="AuditLogTable" filteredValue="#{auditTrailTableBean.filteredEntries}" rowKey="#{entry.entryID}" emptyMessage="No records in audit log that match the current filters">
+                            <f:facet name="header">
+                                Audit log
+                            </f:facet>
+                            
+                            <p:column headerText="Entry ID" filterBy="#{entry.entryID}" filterMatchMode="exact"  >
+                                <h:outputText value="#{entry.entryID}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Action" filterBy="#{entry.action}" filterMatchMode="contains">
+                                <h:outputText value="#{entry.action}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Time stamp" filterBy="#{entry.timestamp}" filterMatchMode="contains">
+                                <f:facet name="filter">
+                                    <p:calendar onmouseup="PF('AuditLogTable').filter()" onchange="PF('AuditLogTable').filter()" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false" styleClass="negate-from-input"/>
+                                </f:facet>
+                                <h:outputText value="#{entry.timestamp}">
+                                    <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
+                                </h:outputText>
+                            </p:column>
+                            
+                            <p:column headerText="Person system ID" filterBy="#{entry.person.systemID}" filterMatchMode="contains">
+                                <h:outputText value="#{entry.person.systemID}"/>
+                            </p:column>
+                            <p:column headerText="Person name" filterBy="#{entry.person.completeName}" filterMatchMode="contains">
+                                <h:outputText value="#{entry.person.completeName}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:outputPanel>
+            </div>
+            
+        </ui:define>
+        
     </ui:composition>
 </html>

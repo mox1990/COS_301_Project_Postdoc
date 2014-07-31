@@ -8,6 +8,7 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
@@ -31,7 +32,17 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
     private ApplicationServicesUtil aSEJB;
+    private EligiblityReportJpaController eDAO;
+    private GregorianCalendar gCal;
 
+    public void setgCal(GregorianCalendar gCal) {
+        this.gCal = gCal;
+    }
+    
+    public void seteDAO(EligiblityReportJpaController eDAO) {
+        this.eDAO = eDAO;
+    }
+    
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
     }
@@ -61,39 +72,58 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     }
     
     
+    @Override
     protected ApplicationJpaController getApplicationDAO()
     {
         return aDAO;
     }
     
+    @Override
     protected FundingReportJpaController getFundingReportDAO()
     {
         return fRDAO;
     }
     
+    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntities;
     }
     
+    @Override
     protected UserGateway getUserGatewayServiceEJB()
     {
         return uEJB;
     }
     
+    @Override
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
     }
     
+    @Override
     protected AuditTrailService getAuditTrailServiceEJB()
     {
         return aTEJB;
     }
     
+    @Override
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
+    }
+    
+    @Override
+    protected EligiblityReportJpaController getEligiblityReportDAO()
+    {
+        return eDAO;
+    }
+    
+    @Override
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return gCal;
     }
     
     /** TODO: Implement work around...

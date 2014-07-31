@@ -6,13 +6,15 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBEntities.AcademicQualification;
+import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
@@ -21,11 +23,13 @@ import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.DRISApprovalServiceLocal;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
@@ -254,6 +258,7 @@ public class DRISApprovalUnitTest {
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
+        EligiblityReportJpaController mockEligiblityReportJpaController = mock(EligiblityReportJpaController.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -262,6 +267,7 @@ public class DRISApprovalUnitTest {
         instance.setfRDAO(mockFundingReportJpaController);
         instance.setnEJB(mockNotificationService);
         instance.setuEJB(mockUserGateway);
+        instance.seteDAO(mockEligiblityReportJpaController);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -278,9 +284,12 @@ public class DRISApprovalUnitTest {
         
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        EligiblityReport mockEligiblityReport = mock(EligiblityReport.class);
+        
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
@@ -307,7 +316,7 @@ public class DRISApprovalUnitTest {
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             //fail("An exception occured");
         }
     }
@@ -327,6 +336,8 @@ public class DRISApprovalUnitTest {
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
+        EligiblityReportJpaController mockEligiblityReportJpaController = mock(EligiblityReportJpaController.class);
+        GregorianCalendar mockCal = mock(GregorianCalendar.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -335,6 +346,8 @@ public class DRISApprovalUnitTest {
         instance.setfRDAO(mockFundingReportJpaController);
         instance.setnEJB(mockNotificationService);
         instance.setuEJB(mockUserGateway);
+        instance.seteDAO(mockEligiblityReportJpaController);
+        instance.setgCal(mockCal);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -349,15 +362,19 @@ public class DRISApprovalUnitTest {
         when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
         when(mockCv.getAcademicQualificationList()).thenReturn(Arrays.asList(mockAcademicQualification));
         
+        EligiblityReport mockEligiblityReport = mock(EligiblityReport.class);
         Person mockPerson = mock(Person.class);
+        
         when(mockPerson.getCv()).thenReturn(mockCv);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.bulidEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime())).thenReturn(new EligiblityReport(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -370,13 +387,14 @@ public class DRISApprovalUnitTest {
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).bulidEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime());
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
