@@ -8,11 +8,11 @@ package test.softserve.EJBUnitTests;
 
 import com.softserve.DBDAO.AddressJpaController;
 import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.EmployeeInformationJpaController;
+import com.softserve.DBDAO.UpEmployeeInformationJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.UpEmployeeInformation;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -64,10 +64,7 @@ public class UserAccountManagmentUnitTest {
         
     }
     
-    //==========================================================================
-    //createUserAccount function unit test cases
-    //==========================================================================
-    /*@Test
+    @Test
     public void createUserAccount_Manual_IsUpEmployee_UnitTest() 
     {        
         UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
@@ -599,5 +596,29 @@ public class UserAccountManagmentUnitTest {
         {
             assertTrue(true);
         }
-    }*/
+    }
+
+    private void fail(String automaticSystemIDGenerationException_expe) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void assertTrue(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Object verify(AuditTrailService mockAuditTrailService) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void verifyNoMoreInteractions(DBEntitiesFactory mockDBEntitiesFactory) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Object verify(PersonJpaController mockPersonJpaController) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Object when(int get) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
