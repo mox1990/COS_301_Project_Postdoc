@@ -710,7 +710,7 @@ public class ApplicationJpaController implements Serializable {
     public List<Application> findAllApplicationsWithStatusAndGrantHolder(String applicationStatus, Person grantHolder, int startRecord, int maxRecords)
     {
         EntityManager em = getEntityManager();
-        
+        System.out.println("===calling2 ");
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder = :grantHolder", Application.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
@@ -727,7 +727,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.department = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.faculty = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
@@ -736,7 +736,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.department = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getDepartment()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.department = :loc AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getDepartment()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         return q.getResultList();
     }
     
@@ -744,7 +744,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.faculty = :loc AND p.securityRoleList.roleID = :secRole", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.faculty = :loc AND :secRole MEMBER OF p.securityRoleList ", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         return q.getResultList();
     }
     
@@ -752,7 +752,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.securityRoleList.roleID = :secRole", Person.class).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         return q.getResultList();
     }
     
@@ -791,7 +791,7 @@ public class ApplicationJpaController implements Serializable {
     public long countAllApplicationsWithStatusAndGrantHolder(String applicationStatus, Person grantHolder)
     {
         EntityManager em = getEntityManager();
-        
+        System.out.println("===calling3 ");
         TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder = :grantHolder", Long.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder);
         return q.getSingleResult();
     }

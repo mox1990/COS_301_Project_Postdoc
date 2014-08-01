@@ -381,5 +381,21 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToGrantHolderFinalisationServiceApplicationSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationSelection", "Application selection view");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToGrantHolderFinalisationServiceFinalisationWizardView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_FinalisationWizard", "Finalisation wizard");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
     
 }

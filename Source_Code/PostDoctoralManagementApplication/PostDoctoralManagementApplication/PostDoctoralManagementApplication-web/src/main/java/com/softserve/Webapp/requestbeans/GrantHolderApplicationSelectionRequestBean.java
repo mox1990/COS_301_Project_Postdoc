@@ -10,7 +10,7 @@ import com.softserve.DBEntities.Application;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.RefereeReportServiceLocal;
+import com.softserve.ejb.GrantHolderFinalisationServiceLocal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -24,9 +24,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "refereeApplicationSelectionRequestBean")
+@Named(value = "grantHolderApplicationSelectionRequestBean")
 @RequestScoped
-public class refereeApplicationSelectionRequestBean {
+public class GrantHolderApplicationSelectionRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -34,14 +34,14 @@ public class refereeApplicationSelectionRequestBean {
     private NavigationManagerBean navigationManagerBean;
     
     @EJB
-    private RefereeReportServiceLocal refereeReportServiceLocal;
+    private GrantHolderFinalisationServiceLocal grantHolderFinalisationServiceLocal;
     
     private UIComponent errorContainer;
     
     /**
-     * Creates a new instance of refereeApplicationSelectionRequestBean
+     * Creates a new instance of GrantHolderApplicationSelectionRequestBean
      */
-    public refereeApplicationSelectionRequestBean() {
+    public GrantHolderApplicationSelectionRequestBean() {
     }
 
     public UIComponent getErrorContainer() {
@@ -56,7 +56,7 @@ public class refereeApplicationSelectionRequestBean {
     {   
         try
         {
-            return refereeReportServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, refereeReportServiceLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
+            return grantHolderFinalisationServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, grantHolderFinalisationServiceLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
         }
         catch(Exception ex)
         {
@@ -73,6 +73,6 @@ public class refereeApplicationSelectionRequestBean {
     public String viewApplication(Application application)
     {
         selectApplication(application);
-        return navigationManagerBean.goToRefereeReportServiceReportCreationView();
-    }
+        return navigationManagerBean.goToGrantHolderFinalisationServiceFinalisationWizardView();
+    }    
 }

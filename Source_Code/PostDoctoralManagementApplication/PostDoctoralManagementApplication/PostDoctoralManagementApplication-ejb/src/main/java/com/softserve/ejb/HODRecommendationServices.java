@@ -249,6 +249,10 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
+        recommendationReport.setReportID(application.getApplicationID());
+        recommendationReport.setHod(session.getUser());
+        recommendationReport.setTimestamp(getGregorianCalendar().getTime());
+        recommendationReport.setApplication(application);
         recommendationReportJpaController.create(recommendationReport);
         
         application.setRecommendationReport(recommendationReport);

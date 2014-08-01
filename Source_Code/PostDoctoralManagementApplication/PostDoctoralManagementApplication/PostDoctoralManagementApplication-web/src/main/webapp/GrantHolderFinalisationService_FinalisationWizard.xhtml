@@ -1,12 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="New application wizard"/>
+        
+        <ui:define name="JSScripts">
+            <script type="text/javascript" src="JS/generalFunctions.js"></script>
+        </ui:define>
+
+        <ui:define name="pageBody">
+            <div>
+                 <h1 class="header1">Finalise application wizard</h1>
+                 <h2>Please review and updated the information inorder to finalise the application</h2>
+            </div>
+            
+            <div>
+                <p:tabView activeIndex="#{grantHolderFinalisationWizardBean.wizardActiveTab}">
+                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 0}" title="Step 1: CV details">
+                        <p:outputPanel rendered="#{grantHolderFinalisationWizardBean.wizardActiveTab == 0}">
+                            <center>
+                                <h2 class="header2">Create or update your CV</h2>
+                                <ui:decorate template="templates/cvFieldInput_Component.xhtml">
+                                    <ui:param name="renderAttribute" value="#{true}"/>
+                                    <ui:param name="bean" value="#{grantHolderFinalisationWizardBean}"/>
+                                </ui:decorate>                        
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{grantHolderFinalisationWizardBean.completeCV()}" value="Next" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 1}" title="Step 2: Application details">
+                        <p:outputPanel rendered="#{grantHolderFinalisationWizardBean.wizardActiveTab == 1}">
+                            <center>
+                                <h2 class="header2">Complete application form</h2>
+                                <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
+                                    <ui:param name="renderAttribute" value="#{true}"/>
+                                    <ui:param name="bean" value="#{grantHolderFinalisationWizardBean}"/>
+                                </ui:decorate>
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{grantHolderFinalisationWizardBean.completeApplication()}" value="Next" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    
+                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 2}" title="Step 3: Finalise application">
+                        <p:outputPanel rendered="#{grantHolderFinalisationWizardBean.wizardActiveTab == 2}">
+                            <center>
+                                <h2 class="header2">Finalise application</h2>
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton ajax="false" action="#{grantHolderFinalisationWizardBean.finaliseApplication()}" value="Confirm application finalisation" styleClass="button button-fill"/>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>  
+                    </p:tab>
+                </p:tabView>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

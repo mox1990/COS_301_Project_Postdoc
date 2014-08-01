@@ -21,6 +21,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -82,6 +83,11 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new ApplicationServicesUtil(emf);
     }
     
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
+    }
+    
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
@@ -134,6 +140,10 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
+        endorsementReport.setEndorsementID(application.getApplicationID());
+        endorsementReport.setDean(session.getUser());
+        endorsementReport.setTimestamp(getGregorianCalendar().getTime());
+        endorsementReport.setApplication(application);
         endorsementJpaController.create(endorsementReport);
         
         application.setEndorsement(endorsementReport);        

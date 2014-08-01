@@ -180,7 +180,8 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         auditTrailService.logAction(auditLog);
         
         application = applicationJpaController.findApplication(application.getApplicationID());
-        
+        System.out.println("====Number of referees: " + application.getPersonList().size());
+        System.out.println("====Number of reports: " + application.getRefereeReportList().size());
         if(application.getPersonList().size() == application.getRefereeReportList().size())
         {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);

@@ -147,7 +147,20 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        getCVManagementServiceEJB().createCV(session, cv);
+        if(cv == null)
+        {
+            throw new Exception("CV is not valid");
+        }
+        
+        CVManagementService cVManagementService = getCVManagementServiceEJB();
+        if(cVManagementService.hasCV(session))
+        {
+            cVManagementService.updateCV(session, cv);
+        }
+        else
+        {
+            cVManagementService.createCV(session, cv);
+        }
     }
     
     /**

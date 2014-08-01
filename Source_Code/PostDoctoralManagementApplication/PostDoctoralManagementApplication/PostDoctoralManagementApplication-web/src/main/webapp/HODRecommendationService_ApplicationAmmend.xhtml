@@ -15,11 +15,11 @@
             <div>
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Reason for declining:" for="reason"/>                                
+                        <p:outputLabel value="Reason for ammendment" for="reason"/>                                
                         <p:inputTextarea id="reason" value="#{hodAmmendRequestBean.reason}"/>
                         <p:message for="reason" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>    
-                    <p:commandButton value="Decline application" action="#{hodAmmendRequestBean.preformAmmendRequest()}" ajax="false"/>
+                    <p:commandButton value="Request application ammendment" action="#{hodAmmendRequestBean.preformAmmendRequest()}" ajax="false" styleClass="button button-fill"/>
                 </h:form>
             </div>
         </ui:define>
