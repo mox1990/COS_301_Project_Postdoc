@@ -303,7 +303,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDeanDeclineView()
     {        
-        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_ApplicationDecline", "Decline application");
+        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_DeclineApplication", "Decline application");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -311,7 +311,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDeanEndorseView()
     {        
-        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_ApplicationEndorse", "Endorse application");
+        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_EndorseApplication", "Endorse application");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);

@@ -24,6 +24,7 @@ import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -130,6 +131,11 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         return new ApplicationServicesUtil(emf);
     }
     
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
+    }
+    
     /**
      *This function is used to create a CV for a grant holder
      * @param session The session which is used to authenticate the user
@@ -221,7 +227,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         NotificationService notificationService = getNotificationServiceEJB();
         
         //Finalise application
-        application.setFinalisationDate(new Date());
+        application.setFinalisationDate(getGregorianCalendar().getTime());
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);        
         applicationJpaController.edit(application);
         

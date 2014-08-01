@@ -434,6 +434,7 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
         try 
         {            
             Session session = sessionManagerBean.getSession();
+            System.out.println(openApplication.getRefereeReportList().toString());
             grantHolderFinalisationServiceLocal.finaliseApplication(session, openApplication);
             
             return navigationManagerBean.goToGrantHolderFinalisationServiceApplicationSelectionView();
