@@ -27,9 +27,9 @@
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="candidateMeetsPhDAgeRequirement" value="#{hodRecommendRequestBean.recommendationReportContent.candidateMeetsPhDAgeRequirement}"/>
                         <p:message for="candidateMeetsPhDAgeRequirement" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Candidate academic merit and suitability:" for="doesCandidateFit"/>                                
-                        <p:inputText id="doesCandidateFit" value="#{hodRecommendRequestBean.recommendationReportContent.academicMeritAndSuitablityOfCandidate}"/>
-                        <p:message for="doesCandidateFit" styleClass="fieldErrorMessage"/>
+                        <p:outputLabel value="Candidate academic merit and suitability:" for="academicMeritAndSuitablityOfCandidate"/>                                
+                        <p:inputText id="academicMeritAndSuitablityOfCandidate" value="#{hodRecommendRequestBean.recommendationReportContent.academicMeritAndSuitablityOfCandidate}"/>
+                        <p:message for="academicMeritAndSuitablityOfCandidate" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="Candidate age motivation:" for="candidateAgeMotivation"/>                                
                         <p:inputTextarea id="candidateAgeMotivation" value="#{hodRecommendRequestBean.recommendationReportContent.candidateAgeMotivation}"/>
@@ -37,7 +37,7 @@
                         
                         <p:outputLabel value="Is Research leader a full time staff member:" for="fulltimeAcademicStaffMember"/>                                
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="fulltimeAcademicStaffMember" value="#{hodRecommendRequestBean.recommendationReportContent.fulltimeAcademicStaffMember}"/>
-                        <p:message for="doesCandidateFit" styleClass="fieldErrorMessage"/>
+                        <p:message for="fulltimeAcademicStaffMember" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="Research leader academic merit and suitability:" for="academicMeritOfResearchLeader"/>                                
                         <p:inputTextarea id="academicMeritOfResearchLeader" value="#{hodRecommendRequestBean.recommendationReportContent.academicMeritOfResearchLeader}"/>
@@ -51,7 +51,7 @@
                         <p:inputTextarea id="infrastructureAvailability" value="#{hodRecommendRequestBean.recommendationReportContent.infrastructureAvailability}"/>
                         <p:message for="infrastructureAvailability" styleClass="fieldErrorMessage"/>                                                
                     </h:panelGrid>
-                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" ajax="false"/>
+                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" ajax="false" styleClass="button button-fill"/>
                 </h:form>
             </div>
             

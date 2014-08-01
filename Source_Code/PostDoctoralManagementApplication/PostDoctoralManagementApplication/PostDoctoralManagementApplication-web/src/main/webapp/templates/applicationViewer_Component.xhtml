@@ -77,9 +77,9 @@
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Refaral reports" rendered="#{selectedApplication.fellow.refereeReportList.size() > 0}">
+                    <p:tab title="Refaral reports" rendered="#{selectedApplication.refereeReportList.size() > 0}">
                         <p:accordionPanel value="#{selectedApplication.refereeReportList}" var="report">
-                            <p:tab title="Referal report from - #{report.refereeID.completeName}">
+                            <p:tab title="Referal report from - #{report.referee.completeName}">
                                 <ui:decorate template="referalReportViewer_Component.xhtml">
                                     <ui:param name="report" value="#{report}"/>
                                 </ui:decorate>

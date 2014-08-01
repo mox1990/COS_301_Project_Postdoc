@@ -187,13 +187,15 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             }            
         }
         
-        application = applicationJpaController.findApplication(application.getApplicationID());
+        Application a = applicationJpaController.findApplication(application.getApplicationID());
         
-        if(!application.getGrantHolder().equals(grantHolder))
+        if(a.getGrantHolder() == null || !a.getGrantHolder().equals(grantHolder))
         {
             //Link grant holder to application
-            application.setGrantHolder(grantHolder);
-            applicationJpaController.edit(application);
+            a.setGrantHolder(grantHolder);
+            System.out.println("===========Linking " + a.getGrantHolder().toString());
+            System.out.println("===========Linking to" + a.toString());
+            applicationJpaController.edit(a);
         }
         
         //Log action
@@ -231,7 +233,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
             referee.setSecurityRoleList(securityRoles);
             
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee);
+            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", true, referee);
         }
         else if(referee.getSystemID() != null)
         {
@@ -242,22 +244,23 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             }            
         }
         
-        application = applicationJpaController.findApplication(application.getApplicationID());
+        Application a = applicationJpaController.findApplication(application.getApplicationID());
         
-        if(application.getPersonList() == null)
+        if(a.getPersonList() == null)
         {
-            application.setPersonList(new ArrayList<Person>());
+            a.setPersonList(new ArrayList<Person>());
         }
         
         System.out.println(referee.toString());
         System.out.println("=======Contains: " + application.getPersonList().contains(referee));
         
-        if(!application.getPersonList().contains(referee))
+        if(!a.getPersonList().contains(referee))
         {
-            System.out.println("=======Linking referee");
+            System.out.println("=======Linking referee " + referee.toString());
+            System.out.println("=======Linking referee to " + a.toString());
             //Link referee to application
-            application.getPersonList().add(referee);
-            applicationJpaController.edit(application);
+            a.getPersonList().add(referee);
+            applicationJpaController.edit(a);
         }
         //Log action
         AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Linked referee to new application", session.getUser());
@@ -284,6 +287,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         NotificationService notificationService = getNotificationServiceEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+        application = applicationJpaController.findApplication(application.getApplicationID());
         
         //Set application status
         application.setSubmissionDate(getGregorianCalendar().getTime());

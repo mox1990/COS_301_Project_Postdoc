@@ -10,10 +10,12 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Location;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.LocationManagementServiceLocal;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class GeneralUserAccountCreationBean implements Serializable{
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
+    @EJB
+    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -79,6 +83,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
         address = new Address();
         employeeInformation = new EmployeeInformation();
         upAddress = new Address();
+        employeeInformation.setLocation(new Location());
         
         sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
         sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -173,6 +178,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);
+                employeeInformation.setLocation(locationManagementServiceLocal.getLocationIDForLocation(employeeInformation.getLocation()));
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), true, person);               
             }
             else

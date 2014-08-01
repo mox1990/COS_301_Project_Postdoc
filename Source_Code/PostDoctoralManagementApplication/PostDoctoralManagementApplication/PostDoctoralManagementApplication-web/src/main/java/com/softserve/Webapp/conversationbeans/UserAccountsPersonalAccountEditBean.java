@@ -10,11 +10,13 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Location;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.LocationManagementServiceLocal;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import javax.inject.Named;
 import javax.enterprise.context.ConversationScoped;
@@ -50,6 +52,8 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
+    @EJB
+    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -86,6 +90,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             {
                 employeeInformation = new EmployeeInformation();
                 upAddress = new Address();
+                employeeInformation.setLocation(new Location());
             }
             employeeInformation.setEmployeeID(person.getSystemID());
         } 
@@ -156,6 +161,35 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             
             conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToPreviousBreadCrumb();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
+            ExceptionUtil.handleException(errorContainer, ex);
+            return "";
+        }
+    }
+    
+    public String performUserAccountActivation()
+    {
+        try 
+        {
+            person.setAddressLine1(address);
+            if(person.getUpEmployee())
+            {
+                employeeInformation.setEmployeeID(person.getSystemID());
+                employeeInformation.setPhysicalAddress(address);
+                person.setEmployeeInformation(employeeInformation);
+                employeeInformation.setLocation(locationManagementServiceLocal.getLocationIDForLocation(employeeInformation.getLocation()));
+                userAccountManagementServiceLocal.activateOnDemandAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);               
+            }
+            else
+            {
+                userAccountManagementServiceLocal.activateOnDemandAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);
+            }
+            
+            conversationManagerBean.deregisterConversation(conversation);
+            return navigationManagerBean.goToWelcomeView();
         } 
         catch (Exception ex) 
         {

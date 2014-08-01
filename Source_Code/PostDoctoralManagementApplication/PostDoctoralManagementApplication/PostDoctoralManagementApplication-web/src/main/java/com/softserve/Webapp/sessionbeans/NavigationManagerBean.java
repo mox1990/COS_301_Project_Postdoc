@@ -357,6 +357,14 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToRefereeReportServiceReportCreationView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("RefereeReportService_ReportCreation", "Referral report creation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
     public String goToDRISApprovalServiceApplicationSelectionView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationSelection", "Application selection view");
@@ -365,6 +373,29 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToUserAccountManagementServicesOnDemandUserActivationView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_OnDemandUserActivation", "On demand user activation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToGrantHolderFinalisationServiceApplicationSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationSelection", "Application selection view");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToGrantHolderFinalisationServiceFinalisationWizardView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_FinalisationWizard", "Finalisation wizard");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
     
     
 }

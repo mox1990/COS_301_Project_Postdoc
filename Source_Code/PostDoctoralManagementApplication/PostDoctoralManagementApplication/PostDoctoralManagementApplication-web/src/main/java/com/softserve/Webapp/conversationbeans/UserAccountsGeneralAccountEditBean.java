@@ -7,24 +7,26 @@
 package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.LocationManagementServiceLocal;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
-import javax.inject.Named;
-import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -48,6 +50,8 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
+    @EJB
+    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -94,6 +98,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         {
             employeeInformation = new EmployeeInformation();
             upAddress = new Address();
+            employeeInformation.setLocation(new Location());
         }
         employeeInformation.setEmployeeID(person.getSystemID());
         
@@ -186,6 +191,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
                 employeeInformation.setEmployeeID(person.getSystemID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);
+                employeeInformation.setLocation(locationManagementServiceLocal.getLocationIDForLocation(employeeInformation.getLocation()));
                 userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);               
             }
             else

@@ -14,6 +14,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.LocationManagementServiceLocal;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
+    @EJB
+    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -130,6 +133,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);
+                employeeInformation.setLocation(locationManagementServiceLocal.getLocationIDForLocation(employeeInformation.getLocation()));
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);               
             }
             else

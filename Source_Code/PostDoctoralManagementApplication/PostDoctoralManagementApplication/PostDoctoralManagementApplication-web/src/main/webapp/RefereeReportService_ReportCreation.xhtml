@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Referral report creation"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Referral report creation</h1>
+                <h2>Fill in the details for to complete the referral report</h2>
+            </div>
+            <div>
+                <h:form>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        
+                        <p:outputLabel value="Referee and candidate association:" for="rassociation"/>                                
+                        <p:inputText id="rassociation" value="#{refereeReportCreationRequestBean.referalReport.refereeAndCandidateAssociation}" required="true"/>
+                        <p:message for="rassociation" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Candidate project title under referee:" for="rtitle"/>                                
+                        <p:inputText id="rtitle" value="#{refereeReportCreationRequestBean.referalReport.projectTitle}" required="true"/>
+                        <p:message for="rtitle" styleClass="fieldErrorMessage"/>
+                                                
+                        <p:outputLabel value="Candidate project summary under referee:" for="rsummary"/>                                
+                        <p:inputTextarea id="rsummary" value="#{refereeReportCreationRequestBean.referalReport.projectSummary}" required="true"/>
+                        <p:message for="rsummary" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Candidate evaluation" for="rcevaluation"/>                                
+                        <p:inputTextarea id="rcevaluation" value="#{refereeReportCreationRequestBean.referalReport.evaluationOfCandidateSelf}" required="true"/>
+                        <p:message for="rcevaluation" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Candidate evaluation towards proposed project" for="rctevaluation"/>                                
+                        <p:inputTextarea id="rctevaluation" value="#{refereeReportCreationRequestBean.referalReport.evaluationOfCandidateTowardsProposedProject}" required="true"/>
+                        <p:message for="rctevaluation" styleClass="fieldErrorMessage"/>
+                                                                 
+                    </h:panelGrid>
+                    <p:commandButton value="Refer application" action="#{refereeReportCreationRequestBean.preformRefereeReportCreationRequest()}" styleClass="button button-fill" ajax="false"/>
+                </h:form>
+            </div>
+            
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

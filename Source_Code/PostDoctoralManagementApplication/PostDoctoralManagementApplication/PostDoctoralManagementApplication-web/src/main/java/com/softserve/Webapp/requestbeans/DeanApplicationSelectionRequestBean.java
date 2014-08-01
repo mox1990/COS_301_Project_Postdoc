@@ -45,7 +45,15 @@ public class DeanApplicationSelectionRequestBean {
      */
     public DeanApplicationSelectionRequestBean() {
     }
-    
+
+    public UIComponent getErrorContainer() {
+        return errorContainer;
+    }
+
+    public void setErrorContainer(UIComponent errorContainer) {
+        this.errorContainer = errorContainer;
+    }
+            
     public List<Application> getPendingApplications()
     {   
         try

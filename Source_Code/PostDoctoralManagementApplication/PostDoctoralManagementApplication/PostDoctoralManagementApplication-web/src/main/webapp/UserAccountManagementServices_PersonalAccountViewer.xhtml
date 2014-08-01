@@ -57,7 +57,7 @@
                                 </ui:define>
                             </ui:decorate>                            
                         </p:outputPanel>
-                        
+                        <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
                         <p:commandButton styleClass="button" value="Save changes" id="saveChanges" binding="#{userAccountsPersonalAccountEditBean.errorContainer}" action="#{userAccountsPersonalAccountEditBean.performPersonalUserAccountEditRequest()}" ajax="false"/>
                         
                         <div class="errorContainer">
