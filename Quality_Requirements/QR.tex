@@ -22,7 +22,7 @@ This type of user will have no training with regard to the system. Their compute
 
 \end{itemize}
 
-In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. 
+In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. A further quantification of this requirement can be seen as finding the least number of clicks a user has to perform in order to perform any operation. Thus to meet this requirement it should be considered local tasks should take a maximum of five clicks and distant tasks should take up to a maximum of 8 clicks. Where local refers to tasks that are related to the current section begin accessed with in the system. These clicks should not include the clicks need to enter various lengthy form data.
 
 \end{flushleft}
 
@@ -39,6 +39,8 @@ The system administrator should be able to access all the sections in the system
 Another security requirement is that the audit trail must not be allowed to be modified by any human user and only allow the system to be able to insert data into the audit log. Further the audit table should only allow be query-able by a user with the correct security role.\\
 To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. \\
 Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days.
+\vspace{0.1in}
+This requirement will influence the usability requirement negativity as there will be need for more user forms and interaction. But the impact of this requirement must be minimized as much as possible. Further this requirement will also negativity impact performance as it will result on more code command execution per action that needs to be secured.  
 
 \end{flushleft}
 
@@ -51,6 +53,9 @@ Any form of account retrieval token or on-demand user account creation tokens mu
 This is seen as the third most important requirement according to the client. The system needs to provide some form of an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action as well as any operation by a user that leads to a change in the data stored by the system. The Audit trail will be in the form of a read-only table stored in the database as stipulated in the security requirements above.\\
 
 To quantify this requirement, the system will need to have an active audit log that can capture all the actions, that meet the list of critical actions, of each user that uses the system. With regards to usability, the feature needs to run in the background and not be noticeable by any user while they are using the system except if it is deliberately queried.
+
+\vspace{0.1in}
+This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. Though the audit logging action should be made as light weight as possible. Also adequate storage will be need since such entries can easily grow exponentially which can lead availability and other performance issues.  
 
 \vspace{0.1in}
 
@@ -87,6 +92,9 @@ Nra = Number of renewal applications a year\\
 The system will need to support at least 100+/- concurrent users efficient and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
 
 \end{itemize}
+
+This requirement will require that the code undergo optimization and as well as certain functionality which can reduce the maintain-ability of the code itself also it can lead to reduction in terms of system robustness.
+
 \end{flushleft}
 \vspace{0.1in}
 
@@ -94,7 +102,7 @@ The system will need to support at least 100+/- concurrent users efficient and e
 
 \begin{flushleft}
 
-The system's availability on designated networks will depend on the availability of the University of Pretoria's servers or whatever hosting service that will used to host the system. It should be noted that the former will only be possible if the project is considered acceptable by the UP's IT department.\\
+The system's availability on designated networks will depend on the availability of the University of Pretoria's servers or which ever hosting service's server that will used to host the system. It should be noted that the former will only be possible if the project is considered acceptable by the UP's IT department.\\
 In order to quantify this it should be seen as follows: If the hosting service's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. Where the designated networks are defined as the internet and/or the local network where in the server of the hosting service is located.
 
 \end{flushleft}
@@ -119,7 +127,8 @@ These four aspects of robustness are quantified as follow:
 
 \begin{flushleft}
 
-The system must be testable in order to show that the system is meets the clients expectations. This will be done using user acceptance testing, integration testing and unit testing. The test plan will be laid out in the Non-Functional and Functional testing documents of this project. Each of which will provide a set of tests to be performed in order to verify the systems compliance. Therefore each non-functional and functional requirement needs to be quantified in a manner that allows the SoftServe group to test for it in the system. Below are the suggested methods quantifying the tests for each type of test:\\
+The system must be testable in order to show that the system is meets the clients expectations. This will be done using user acceptance testing, integration testing and unit testing. The test plan will be laid out in the Non-Functional and Functional testing documents of this project. Each of which will provide a set of tests to be performed in order to verify the systems compliance. Therefore each non-functional and functional requirement needs to be quantified in a manner that allows the SoftServe group to test for it in the system. This requirement will help ensure the other requirements are met and all in all improve the system as a whole. Below are the suggested methods quantifying the tests for each type of test:\\
+
 
 \vspace{0.1in}
 

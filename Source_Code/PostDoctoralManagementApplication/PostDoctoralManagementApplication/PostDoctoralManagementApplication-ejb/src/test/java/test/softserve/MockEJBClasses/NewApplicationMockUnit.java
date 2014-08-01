@@ -7,7 +7,7 @@
 package test.softserve.MockEJBClasses;
 
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.PersonJpaController;
@@ -32,7 +32,7 @@ public class NewApplicationMockUnit extends NewApplicationService
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
     private CVManagementService cVEJB;
-    private ApplicationServices aSEJB;
+    private ApplicationServicesUtil aSEJB;
 
     public void setpDAO(PersonJpaController pDAO) {
         this.pDAO = pDAO;
@@ -66,7 +66,7 @@ public class NewApplicationMockUnit extends NewApplicationService
         this.cVEJB = cVEJB;
     }
 
-    public void setaSEJB(ApplicationServices aSEJB) {
+    public void setaSEJB(ApplicationServicesUtil aSEJB) {
         this.aSEJB = aSEJB;
     }
     
@@ -115,10 +115,5 @@ public class NewApplicationMockUnit extends NewApplicationService
     {
         return cVEJB;
     }
-    
-    @Override
-    protected ApplicationServices getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
+
 }

@@ -6,7 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Application;
@@ -27,15 +27,15 @@ public class ProgressReportManagementMockUnit extends ProgressReportManagementSe
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
     private DBEntitiesFactory dBEntitities;
-    private ApplicationServices aSEJB;
-    private Application aDAO;
+    private ApplicationServicesUtil aSEJB;
+    private ApplicationJpaController aDAO;
        
-    public void setaDAO(Application aDAO)
+    public void setaDAO(ApplicationJpaController aDAO)
     {
         this.aDAO = aDAO;
     }
     
-    public void setaSEJB(ApplicationServices aSEJB) 
+    public void setaSEJB(ApplicationServicesUtil aSEJB) 
     {
         this.aSEJB = aSEJB;
     }
@@ -65,7 +65,7 @@ public class ProgressReportManagementMockUnit extends ProgressReportManagementSe
         this.aTEJB = aTEJB;
      }
    
-    protected Application getApplicationDAO()
+    protected ApplicationJpaController getApplicationDAO()
     {
         return aDAO;
     }
@@ -99,7 +99,7 @@ public class ProgressReportManagementMockUnit extends ProgressReportManagementSe
     }
     
    
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
     }

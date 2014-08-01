@@ -14,6 +14,9 @@ import com.softserve.system.Session;
 import java.util.List;
 import test.softserve.MockEJBClasses.UserGatewayMockUnit;
 import javax.servlet.http.HttpSession;
+import org.junit.*;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 /**
  *
@@ -49,7 +52,6 @@ public class UserGatewayUnitTests {
         try
         {
             instance.authenticateUser(session, allowedRoles);
-            verify
         }
         catch(Exception ex)
         {
@@ -60,15 +62,16 @@ public class UserGatewayUnitTests {
     }
     
     @Test
-    public void testAuthenticateUserAsOwner(Session session, Person person)
+    public void testAuthenticateUserAsOwner()
     {
         UserGatewayMockUnit instance = new UserGatewayMockUnit();
-        HttpSession httpsession = new HttpSession();
-        Session mockSession = new Session(httpsession, person);
+        HttpSession mockHttpSession = mock(HttpSession.class);
+        Person mockPerson = mock(Person.class);
+        Session mockSession = mock(Session.class);
         
         try
         {
-            instance.authenticateUserAsOwner(session, person);
+            instance.authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockSession).doesHttpSessionUsernameMatchUserUsername();
             verify(mockSession).doesHttpSessionPasswordMatchUserPassword();
         }
@@ -80,16 +83,16 @@ public class UserGatewayUnitTests {
     }
     
     @Test
-    public void testLogin(Session httpSession) 
+    public void testLogin() 
     {
         UserGatewayMockUnit instance = new UserGatewayMockUnit();
-        HttpSession httpsession = new HttpSession();
+        HttpSession mockHttpSession = mock(HttpSession.class);
         Person person = new Person();
-        Session mockSession = new Session(httpsession, person);
+        Session mockSession = mock(Session.class);
         
         try
         {
-            instance.login(httpSession);
+            instance.login(mockSession);
             verify(mockSession).getHttpSessionUsername();
             verify(mockSession).getHttpSessionPassword();
             verify(mockSession).getLoggedInStatus();
@@ -103,17 +106,17 @@ public class UserGatewayUnitTests {
             fail("An exception occured");
         }
     }
-    public void testLogout(Session session) throws Exception
+    public void testLogout() throws Exception
     {
         UserGatewayMockUnit instance = new UserGatewayMockUnit();
-        HttpSession httpsession = new HttpSession();
+         HttpSession mockHttpSession = mock(HttpSession.class);
         Person person = new Person();
-        Session mockSession = new Session(httpsession, person);
+        Session mockSession = new Session(mockHttpSession, person);
         
         try
         {
-            instance.logout(session);
-            verify(session).getLoggedInStatus();
+            instance.logout(mockSession);
+            verify(mockSession).getLoggedInStatus();
         }
         catch(Exception ex)
         {
@@ -126,13 +129,15 @@ public class UserGatewayUnitTests {
      *
      * @param httpSession
      */
-    public void testGetSessionFromHttpSession(HttpSession httpSession)
+    public void testGetSessionFromHttpSession()
     {
         UserGatewayMockUnit instance = new UserGatewayMockUnit();
-        Session mockSession = new Session(httpsession, person);
+        HttpSession mockHttpSession = mock(HttpSession.class);
+        Person mockPerson = mock(Person.class);
+        Session mockSession = new Session(mockHttpSession, mockPerson);
         try
         {
-            instance.getSessionFromHttpSession(httpSession);
+            instance.getSessionFromHttpSession(mockHttpSession);
             
             verify(mockSession).getHttpSession();
         }

@@ -176,10 +176,10 @@ The only two access channel requirements specified by the client are as follows:
 
 
 \item \textbf{All stakeholders:}
-Users of the system will access the system through a HTML 5 web browser client that is locally installed on a user's computer system or mobile platform. Support for HTML 4.0.1 will also be implemented due to the clients request for compatibility of the system with a older internet enabled systems. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts. 
+Users of the system will access the system through a HTTP and HTTPS web browser client that is locally installed on a user's computer system or mobile platform. Support for mark up language HTML 4.0.1 and 5 will be enabled through this. This will improve availability and usability of the system due it making it more compatible with older internet enabled systems. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts. 
 
 \item\textbf{System Administrator:}
-The system administrator will require the same as the above but will need to be able to conduct any administration duties through some form of web portal. Above this the system administrator will need to have access to the MySQL database employed by the system. This is mainly for maintenance reasons but also as an alternative if certain unexpected system failures or system generated errors occur.
+The system administrator will require the same as the above but will need to be able to conduct any administration duties through some form of web portal using the HTTP and HTTPS protocols. Above this the system administrator will need to have access to the MySQL database employed by the system. This is mainly for maintenance reasons but also as an alternative if certain unexpected system failures or system generated errors occur. This will be accessible through the use of software which uses the appropriate technologies.
 
 \end{itemize}
 \vspace{0.2in}
@@ -223,7 +223,7 @@ The following architecture constraints have been selected by SoftServe group as 
 \item System architecture: Java-EE
 \item Architectural frameworks: JSF, PAM, Java Persistence API, JAX-RS
 \item Architectural pattern: MVC, Layered (Multi-tiered)
-\item Development technologies: EJB, JSP, Expression Language, JDBC, JTA, Java EE Connector Architecture, JAF, JavaMail, JNDI, JAAS, Concurrency Utilities for Java EE
+\item Development technologies: EJB, JSP, Expression Language, JDBC, JTA, Java EE Connector Architecture, JAF, JavaMail, JNDI, JAAS, Concurrency Utilities for Java EE, JAXB, PrimeFaces
 \item IDE: Netbeans 8.0
 \item Build environment: Apache Maven 3
 \item Web server software: GlassFish 4.0 server

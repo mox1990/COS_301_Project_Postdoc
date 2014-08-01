@@ -7,9 +7,10 @@
 package test.softserve.EJBUnitTests;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
-import com.softserve.ApplicationServices.ApplicationServices;
+import auto.softserve.XMLEntities.referee.ReferalReport;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
@@ -17,14 +18,20 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
-import auto.softserve.XMLEntities.referee.ReferalReport;
-import com.softserve.DBDAO.PersonJpaController;
+import static com.softserve.DBEntities.RefereeReport_.referee;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import org.junit.*;
+import org.junit.AfterClass;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import test.softserve.MockEJBClasses.NewApplicationMockUnit;
 
 /**
@@ -63,7 +70,6 @@ public class NewApplicationUnitTest {
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
@@ -92,11 +98,11 @@ public class NewApplicationUnitTest {
         Application mockApplication =  mock(Application.class);
         ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
         instance.setaDAO(mockApplicationController);
-         ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
           instance.setaSEJB(mockApplicationServices);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        
+        Session mockSession = mock(Session.class);
         UserGateway mockUserGateway =  mock(UserGateway.class);
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
         
@@ -125,13 +131,13 @@ public class NewApplicationUnitTest {
         }
     }
     
-    public void testLinkGrantHolderToApplication(Session session, Application application, Person grantHolder)
+    public void testLinkGrantHolderToApplication()
     {
         NewApplicationMockUnit instance = new NewApplicationMockUnit();
         UserGateway mockUserGateway = mock(UserGateway.class);
          ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
          PersonJpaController mockPersonController = mock(PersonJpaController.class);
         
@@ -141,12 +147,15 @@ public class NewApplicationUnitTest {
         instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntitities(mockDBEntitiesFactory);
         instance.setuEJB(mockUserGateway);
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
+        Person mockPerson = mock(Person.class);
         
         try
         {
-            instance.linkGrantHolderToApplication(session, application, grantHolder);
-            verify(mockUserGateway).authenticateUserAsOwner(session,application.getFellow());
-            verify(mockPersonController).findPerson(referee.getFullName());
+            instance.linkGrantHolderToApplication(mockSession, mockApplication, mockPerson);
+            verify(mockUserGateway).authenticateUserAsOwner(mockSession,mockApplication.getFellow());
+            verify(mockPersonController).findPerson(mockPerson.getFullName());
             
         }
         catch (Exception ex)
@@ -163,7 +172,7 @@ public class NewApplicationUnitTest {
         ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
         PersonJpaController mockPersonController = mock(PersonJpaController.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         instance.setaDAO(mockApplicationController);
@@ -194,7 +203,7 @@ public class NewApplicationUnitTest {
         ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
         PersonJpaController mockPersonController = mock(PersonJpaController.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         instance.setaDAO(mockApplicationController);
@@ -208,7 +217,7 @@ public class NewApplicationUnitTest {
         {
             instance.submitApplication(session, application);
             verify(mockUserGateway).authenticateUserAsOwner(session,application.getFellow());
-            verify(mockApplicationServices).getApplicationDAO();
+            
         }
         catch (Exception ex)
         {

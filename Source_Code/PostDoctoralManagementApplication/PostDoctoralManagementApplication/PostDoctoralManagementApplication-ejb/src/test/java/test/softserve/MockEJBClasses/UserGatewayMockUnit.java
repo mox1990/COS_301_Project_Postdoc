@@ -8,7 +8,7 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.AddressJpaController;
 import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.UpEmployeeInformationJpaController;
+import com.softserve.DBDAO.EmployeeInformationJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
@@ -22,7 +22,7 @@ public class UserGatewayMockUnit extends UserGateway
 {
     private PersonJpaController pDAO = null;
     private AddressJpaController aDAO = null;
-    private UpEmployeeInformationJpaController uDAO = null;
+    private EmployeeInformationJpaController uDAO = null;
     private DBEntitiesFactory dbFactory = null;
     private AuditTrailService atsEJB = null;
     private GregorianCalendar cal = null;
@@ -35,7 +35,7 @@ public class UserGatewayMockUnit extends UserGateway
         this.aDAO = aDAO;
     }
 
-    public void setuDAO(UpEmployeeInformationJpaController uDAO) {
+    public void setuDAO(EmployeeInformationJpaController uDAO) {
         this.uDAO = uDAO;
     }
 
@@ -51,31 +51,12 @@ public class UserGatewayMockUnit extends UserGateway
         this.cal = cal;
     }
     
-    @Override
-    protected GregorianCalendar getGregorianCalendar() {
-        return cal;
-    }
+    
     
 
-    @Override
-    protected PersonJpaController getPersonDAO()
-    {
-        return pDAO;
-    }
     
-    @Override
-    protected AddressJpaController getAddressDAO()
-    {
-        return aDAO;
-    }
     
-  
-    @Override
-    protected UpEmployeeInformationJpaController getUPEmployeeInfoDAO()
-    {
-        return uDAO;
-    }
-
+    
     @Override
     protected AuditTrailService getAuditTrailServiceEJB() 
     {

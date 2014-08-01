@@ -6,7 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.ApplicationServices.ApplicationServices;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.ejb.AuditTrailService;
@@ -29,9 +29,9 @@ public class RefereesReportMockUnit extends RefereeReportService
     private NotificationService nEJB;
     private AuditTrailService aTEJB;
     private DBEntitiesFactory dBEntitities;
-    private ApplicationServices aSEJB;
+    private ApplicationServicesUtil aSEJB;
     
-    public void setaSEJB(ApplicationServices aSEJB)
+    public void setaSEJB(ApplicationServicesUtil aSEJB)
     {
         this.aSEJB = aSEJB;
     }
@@ -98,7 +98,7 @@ public class RefereesReportMockUnit extends RefereeReportService
     }
     
     @Override
-    protected ApplicationServices getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
     }

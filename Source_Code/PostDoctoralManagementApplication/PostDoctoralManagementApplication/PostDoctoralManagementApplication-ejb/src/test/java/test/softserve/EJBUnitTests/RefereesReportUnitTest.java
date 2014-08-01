@@ -8,7 +8,6 @@ package test.softserve.EJBUnitTests;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
 import auto.softserve.XMLEntities.referee.ReferalReport;
-import com.softserve.ApplicationServices.ApplicationServices;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.PersonJpaController;
@@ -26,10 +25,15 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
-import test.softserve.MockEJBClasses.NewApplicationMockUnit;
+import org.junit.*;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+
 import test.softserve.MockEJBClasses.RefereesReportMockUnit;
 
 /**
@@ -61,7 +65,7 @@ public class RefereesReportUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         Session mockSession = mock(Session.class);
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -90,7 +94,7 @@ public class RefereesReportUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         Session mockSession = mock(Session.class);
         
         instance.setaDAO(mockApplicationJpaController);
@@ -119,17 +123,21 @@ public class RefereesReportUnitTest {
     public void testSubmitReferralReport(Session session, Application application, RefereeReport refereeReport)
     {
         RefereesReportMockUnit instance = new RefereesReportMockUnit();
-        RefereeReportJpaController refereeReportJpaController = getRefereeReportDAO();
-         ApplicationJpaController applicationJpaController = getApplicationDAO();
-         NotificationService mockNotificationService = mock(NotificationService.class);
+        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
+        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        UserGateway mockUserGateway = mock(UserGateway.class);
+        NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         Session mockSession = mock(Session.class);
+        
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         try
         {
             instance.submitReferralReport(session, application, refereeReport);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-           .
+           
         }
         catch(Exception ex)
         {

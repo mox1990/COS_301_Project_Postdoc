@@ -6,20 +6,31 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.ApplicationServices.ApplicationServices;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.ProgressReportJpaController;
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.ProgressReportManagementService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import test.softserve.MockEJBClasses.ProgressReportManagementMockUnit;
 
 /**
@@ -46,20 +57,21 @@ public class ProgressReportManagementUnitTest
     @After
     public void tearDown() {
     }
-    
+    /*
     @Test
     void testCreateProgressReport() throws Exception
     {
         ProgressReportManagementMockUnit instance = new ProgressReportManagementMockUnit();
         
         Application mockApplication = mock(Application.class);
+        ApplicationJpaController mockApplicationDAO = mock(ApplicationJpaController.class);
         UserGateway mockUserGateway = mock(UserGateway.class); 
         //ApplicationInformation mockApplicationInformation = mock(ApplicationInformation.class);
         PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         ProgressReport mockProgress = mock(ProgressReport.class);
         ProgressReportJpaController mockProgressReportController = mock(ProgressReportJpaController.class);
       //  ApplicationJpaController mockApplication = mock(ApplicationJpaController.class);
@@ -68,7 +80,7 @@ public class ProgressReportManagementUnitTest
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
-        instance.setaDAO(mockApplication);
+        instance.setaDAO(mockApplicationDAO);
         instance.setnEJB(mockNotificationService);
         instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntitities(mockDBEntitiesFactory);
@@ -95,13 +107,15 @@ public class ProgressReportManagementUnitTest
     @Test
     void testUpdateProgressReport() throws Exception
     {
+        ProgressReportManagementMockUnit instance = new ProgressReportManagementMockUnit();
+        
         UserGateway mockUserGateway = mock(UserGateway.class); 
         PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServices mockApplicationServices = mock(ApplicationServices.class);
-        ProgressReportManagementService mockProgress = mock(ProgressReport.class);
+        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
+        ProgressReport mockProgress = mock(ProgressReport.class);
         ProgressReportJpaController mockProgressReportController = mock(ProgressReportJpaController.class);
         ApplicationJpaController mockApplication = mock(ApplicationJpaController.class);
         
@@ -134,5 +148,5 @@ public class ProgressReportManagementUnitTest
         
     }
 
-
+*/
 }
