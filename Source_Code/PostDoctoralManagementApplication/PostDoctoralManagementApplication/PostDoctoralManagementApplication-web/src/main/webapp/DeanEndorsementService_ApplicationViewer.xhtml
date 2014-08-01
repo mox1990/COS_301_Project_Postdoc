@@ -12,12 +12,12 @@
                 <h1 class="header1">Viewing application - #{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle} </h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <ui:decorate template="applicationViewer_Comoponent">
+            <ui:decorate template="templates/applicationViewer_Component.xhtml">
                 <ui:param name="selectedApplication" value="#{applicationViewerRequestBean.selectedApplication}"/>
             </ui:decorate>
             <h:form>
-                <p:commandButton value="Recommend application" styleClass="button-fill" action="#{navigationManagerBean.goToDeanEndorseView()}" ajax="false" styleClass="button button-fill"/> 
-                <p:commandButton value="Decline application" styleClass="button-fill" action="#{navigationManagerBean.goToDeanDeclineView()}" ajax="false" styleClass="button button-fill"/>
+                <p:commandButton value="Recommend application" styleClass="button-fill" action="#{navigationManagerBean.goToDeanEndorseView()}" ajax="false"/> 
+                <p:commandButton value="Decline application" styleClass="button-fill" action="#{navigationManagerBean.goToDeanDeclineView()}" ajax="false"/>
             </h:form>            
         </ui:define>
     </ui:composition>

@@ -16,7 +16,7 @@
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Score the application from 1 to 10: " for="rank"/>                                
-                        <p:spinner max="10" min="1" id="doesCandidateFit" value="#{deanEndorseRequestBean.endorsement.rank}"/>
+                        <p:spinner max="10" min="1" id="rank" value="#{deanEndorseRequestBean.endorsement.rank}"/>
                         <p:message for="rank" styleClass="fieldErrorMessage"/>
                                                 
                         <p:outputLabel value="Endorsement motivation:" for="motivation"/>                                

@@ -176,7 +176,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
             grantHolder.setSecurityRoleList(securityRoles);
             
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", false, grantHolder);
+            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", true, grantHolder);
         }
         else if(grantHolder.getSystemID() != null)
         {
@@ -233,7 +233,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
             referee.setSecurityRoleList(securityRoles);
             
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", true, referee);
+            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee);
         }
         else if(referee.getSystemID() != null)
         {
