@@ -13,6 +13,7 @@ import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
@@ -22,6 +23,7 @@ import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -120,6 +122,26 @@ public class GrantHolderFinalisationUnitTest {
         }
     }
 
+    @Test
+    public void testCreateGrantHolderCVNotValid() throws Exception {
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        
+        Session mockSession = mock(Session.class);
+        
+        try
+        {
+            instance.createGrantHolderCV(mockSession, null);
+            
+            verify(mockUserGateway).authenticateUser(mockSession, roles);
+        }
+        catch (Exception ex)
+        {
+            if(!ex.getMessage().equals("CV is not valid"))
+                fail("An exception occured");
+        }
+    }
+    
     /**
      * Test of loadPendingApplications method, of class GrantHolderFinalisationService.
      */
@@ -193,8 +215,50 @@ public class GrantHolderFinalisationUnitTest {
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
-            //verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
             // TODO: ADD list verfication...
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testFinaliseApplicationWithNotifications() throws Exception {
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
+        Application mockApplication = mock(Application.class);
+        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        
+        Person mockPersonA = mock(Person.class);
+        Person mockPersonB = mock(Person.class);
+        
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPersonA, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.")).thenReturn(new Notification(new Long(1)));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPersonB, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.")).thenReturn(new Notification(new Long(2)));
+        
+        when(mockApplicationJpaController.findAllHODsWhoCanRecommendApplication(mockApplication)).thenReturn(Arrays.asList(mockPersonA, mockPersonB));
+        try
+        {
+            instance.finaliseApplication(mockSession, mockApplication);
+            
+            verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockApplicationJpaController).edit(mockApplication);
+            
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
+            
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPersonA, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPersonB, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            
+            verify(mockNotificationService).sendBatchNotifications(Arrays.asList(new Notification(new Long(1)),new Notification(new Long(2))), true);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
         catch (Exception ex)

@@ -38,6 +38,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -257,6 +258,7 @@ public class DRISApprovalUnitTest {
      */
     @Test
     public void testCheckApplicationForEligiblity() throws Exception {
+        GregorianCalendar date = new GregorianCalendar();
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -264,20 +266,22 @@ public class DRISApprovalUnitTest {
         
         AcademicQualification mockAcademicQualification = mock(AcademicQualification.class);
         when(mockAcademicQualification.getName()).thenReturn("PHD");
+        date.set(2013, 9, 17);
         when(mockAcademicQualification.getYearObtained()).thenReturn(new Date(2013, 5, 12));
         
         Cv mockCv = mock(Cv.class);
-        when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
+        date.set(1993, 9, 17);
+        when(mockCv.getDateOfBirth()).thenReturn(date.getTime());
         when(mockCv.getAcademicQualificationList()).thenReturn(Arrays.asList(mockAcademicQualification));
         
-        EligiblityReport mockEligiblityReport = mock(EligiblityReport.class);
+        //EligiblityReport mockEligiblityReport = mock(EligiblityReport.class);
         Person mockPerson = mock(Person.class);
         
         when(mockPerson.getCv()).thenReturn(mockCv);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
-        when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
+        //when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
         
         when(mockDBEntitiesFactory.bulidEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime())).thenReturn(new EligiblityReport(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
@@ -290,7 +294,7 @@ public class DRISApprovalUnitTest {
         {
             instance.checkApplicationForEligiblity(mockSession, mockApplication);
             // Declined Application...
-            verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"));
             verify(mockDBEntitiesFactory).bulidEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime());
@@ -300,7 +304,7 @@ public class DRISApprovalUnitTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-           // fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
@@ -349,7 +353,7 @@ public class DRISApprovalUnitTest {
     /**
      * Test of approveFunding method, of class DRISApprovalService.
      */
-    /*@Test
+    @Test
     public void testApproveFunding() throws Exception {
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -366,13 +370,13 @@ public class DRISApprovalUnitTest {
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
-        String applicantMessage = "appMSG", cscMesssage = "cscMSG", finaceMessage = "fMSG";
+        String applicantMessage = "appMSG";
         
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(1)));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(2)));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(1)));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(2)));
         
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + cscMesssage)).thenReturn(new Notification(new Long(3)));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + finaceMessage)).thenReturn(new Notification(new Long(4)));
+        Notification mockCscNotification = mock(Notification.class);
+        Notification mockFinanceNotification = mock(Notification.class);
         
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
@@ -385,7 +389,7 @@ public class DRISApprovalUnitTest {
 
         try
         {
-            instance.approveFunding(mockSession, mockApplication, mockFundingReport, applicantMessage, cscMesssage, finaceMessage);
+            instance.approveFunding(mockSession, mockApplication, mockFundingReport, applicantMessage, mockCscNotification, mockFinanceNotification);
             // Declined Application...
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             
@@ -393,21 +397,22 @@ public class DRISApprovalUnitTest {
             verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"));
             
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
-            
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + cscMesssage);
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + finaceMessage);
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            verify(mockNotificationService).sendBatchNotifications(Arrays.asList(new Notification(new Long(1)),new Notification(new Long(2)),new Notification(new Long(3)),new Notification(new Long(4))), true);
+            
+            verify(mockNotificationService).sendBatchNotifications(Arrays.asList(new Notification(new Long(1)),new Notification(new Long(2))), true);
+            verify(mockNotificationService).sendOnlyEmail(mockCscNotification);
+            verify(mockNotificationService).sendOnlyEmail(mockFinanceNotification);
+            
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
             fail("An exception occured");
         }
-    }*/
+    }
     
 }

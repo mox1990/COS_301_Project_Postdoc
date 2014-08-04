@@ -26,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import test.softserve.MockEJBClasses.ApplicationProgressViewerServiceMockUnit;
 
@@ -35,9 +36,10 @@ import test.softserve.MockEJBClasses.ApplicationProgressViewerServiceMockUnit;
  */
 public class ApplicationProgressViewerUnitTest {
     private ApplicationProgressViewerServiceMockUnit instance;
+    
     private ApplicationJpaController mockApplicationJpaController;
     private UserGateway mockUserGateway;
-        
+    private List<ApplicationStageStatus> mockApplicationStageStatusList;    
     
     public ApplicationProgressViewerUnitTest() {
     }
@@ -58,11 +60,12 @@ public class ApplicationProgressViewerUnitTest {
         //Setup dependices mocks
         mockApplicationJpaController = mock(ApplicationJpaController.class);
         mockUserGateway = mock(UserGateway.class);
-        
+        mockApplicationStageStatusList = mock(List.class);
         
         //Load dependices mocks' into instance
         instance.setaDAO(mockApplicationJpaController);
         instance.setuEJB(mockUserGateway);
+        instance.setlASS(mockApplicationStageStatusList);
     }
     
     @After
@@ -73,7 +76,7 @@ public class ApplicationProgressViewerUnitTest {
      * Test of getApplicationProgress method, of class ApplicationProgressViewerService.
      */
     @Test
-    public void testGetApplicationProgress() throws Exception {
+    public void testGetApplicationProgressWithUserAsOwnerAndApplicationOpen() throws Exception {
         //Setup parameter mocks
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12019837"));
@@ -85,28 +88,31 @@ public class ApplicationProgressViewerUnitTest {
         RefereeReport rr = mock(RefereeReport.class);
         when(rr.getReferee()).thenReturn(new Person("u12019837"));
         
+        ApplicationStageStatus mockApplicationStageStatus = mock(ApplicationStageStatus.class);
+        
         //rrList.add(rr);
         when(mockApplication.getRefereeReportList()).thenReturn(rrList);
         when(mockApplication.getRecommendationReport()).thenReturn(null);
         when(mockApplication.getEndorsement()).thenReturn(null);
         when(mockApplication.getStatus()).thenReturn(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
         
+        //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
         try
         {
             //Execute function
             instance.getApplicationProgress(mockSession, mockApplication);
             
             //Verify correct function behaviour
-            
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow());
-            
+            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow());
+            //verify(mockApplicationStageStatusList).add(mockApplicationStageStatus);
+            //verifyNoMoreInteractions(mockApplicationStageStatusList);
             // TODO: ADD more of the logic...
             
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
         }
     }
     

@@ -14,6 +14,8 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.EligiblityReport;
+import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Location;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
@@ -104,8 +106,111 @@ public class ApplicationServicesUtilUnitTest {
      * Test of getTotalNumberOfPendingApplications method, of class ApplicationServicesUtil.
      */
     @Test
-    public void testGetTotalNumberOfPendingApplications() {
+    public void testGetTotalNumberOfPendingApplicationsWithStatusAndReferre() {
+        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
         
+        try
+        {
+            instance.getTotalNumberOfPendingApplications(new Person("u12236731"), applicationStatusGroup);
+           
+            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndReferee(applicationStatusGroup, new Person("u12236731"));
+            verifyNoMoreInteractions(mockApplicationJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testGetTotalNumberOfPendingApplicationsWithStatusAndGrantholder() {
+        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED;
+        
+        try
+        {
+            instance.getTotalNumberOfPendingApplications(new Person("u12236731"), applicationStatusGroup);
+           
+            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndGrantHolder(applicationStatusGroup, new Person("u12236731"));
+            verifyNoMoreInteractions(mockApplicationJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testGetTotalNumberOfPendingApplicationsWithStatusAndDepartment() {
+        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
+        
+        Location mockLocation = mock(Location.class);
+        when(mockLocation.getDepartment()).thenReturn("TEST");
+        
+        EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
+        when(mockEmployeeInformation.getLocation()).thenReturn(mockLocation);
+        
+        Person mockPerson = mock(Person.class);
+        when(mockPerson.getEmployeeInformation()).thenReturn(mockEmployeeInformation);
+        
+        try
+        {
+            instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
+           
+            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndDepartment(applicationStatusGroup, "TEST");
+            verifyNoMoreInteractions(mockApplicationJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testGetTotalNumberOfPendingApplicationsWithStatusAndFaculty() {
+        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
+        
+        Location mockLocation = mock(Location.class);
+        when(mockLocation.getFaculty()).thenReturn("TEST");
+        
+        EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
+        when(mockEmployeeInformation.getLocation()).thenReturn(mockLocation);
+        
+        Person mockPerson = mock(Person.class);
+        when(mockPerson.getEmployeeInformation()).thenReturn(mockEmployeeInformation);
+        
+        try
+        {
+            instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
+           
+            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndFaculty(applicationStatusGroup, "TEST");
+            verifyNoMoreInteractions(mockApplicationJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testGetTotalNumberOfPendingApplications() {
+        String applicationStatusGroup = "WhatElseIsTHERE?";
+        
+        try
+        {
+            instance.getTotalNumberOfPendingApplications(new Person("u12236731"), applicationStatusGroup);
+           
+            verify(mockApplicationJpaController).countAllApplicationsWithStatus(applicationStatusGroup);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -148,4 +253,42 @@ public class ApplicationServicesUtilUnitTest {
         }
     }
     
+    @Test
+    public void testDeclineApplictionAlreadyDeclined() throws Exception {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
+        Application mockApplication = mock(Application.class);
+        
+        when(mockApplication.getFellow()).thenReturn(new Person("u12236731"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
+        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getStatus()).thenReturn(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
+        
+        String reason = "Prospective fellow does not meet the requirement";
+        
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), new Person("u12236731"), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.bulidDeclineReportEntity(mockApplication,mockSession.getUser(), reason, mockGregorianCalendar.getTime())).thenReturn(new DeclineReport(Long.MAX_VALUE));
+        
+        try
+        {
+            instance.declineAppliction(mockSession, mockApplication, reason);
+            
+            verify(mockDBEntitiesFactory).bulidDeclineReportEntity(mockApplication, mockSession.getUser() ,reason, mockGregorianCalendar.getTime());
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Declined application "+ Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), new Person("u12236731"), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+        }
+        catch (Exception ex)
+        {
+            if(!ex.getMessage().equals("Application has already been declined"))
+            {
+                fail("An exception occured");
+            }
+        }
+    }
 }

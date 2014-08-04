@@ -107,6 +107,34 @@ public class CVManagementUnitTest {
             fail("An exception occured");
         }
     }
+    
+    @Test
+    public void testCreateCVButHasCV() throws Exception {
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+                
+        Person mockPerson = mock(Person.class);
+        
+        Cv mockCV = mock(Cv.class);  
+        when(mockCV.getPerson()).thenReturn(mockPerson);
+        when(mockPerson.getCv()).thenReturn(mockCV);
+        
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        
+        
+        try
+        {
+            instance.createCV(mockSession, mockCV);
+            
+            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+        }
+        catch (Exception ex)
+        {
+            if(!ex.getMessage().equals("The user already has a cv"))
+                fail("An exception occured");
+        }
+    }
 
     /**
      * Test of updateCV method, of class CVManagementService.

@@ -19,8 +19,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import org.mockito.runners.MockitoJUnitRunner;
 import test.softserve.MockEJBClasses.AuditTrailServiceMockUnit;
 
@@ -64,11 +66,12 @@ public class AuditTrailUnitTest {
      */
     @Test
     public void testLogAction() throws Exception {        
-        AuditLog mockAuditLog = mock(AuditLog.class);        
+        AuditLog mockAuditLog = mock(AuditLog.class);
         try
         {
             instance.logAction(mockAuditLog);
             verify(mockAuditLogJpaController).create(mockAuditLog);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
         }
         catch (Exception ex)
         {
