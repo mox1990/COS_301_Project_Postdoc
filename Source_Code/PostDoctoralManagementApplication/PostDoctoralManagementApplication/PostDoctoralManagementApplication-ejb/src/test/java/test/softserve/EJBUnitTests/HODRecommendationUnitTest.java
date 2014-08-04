@@ -218,7 +218,7 @@ public class HODRecommendationUnitTest {
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
-        when(mockDBEntitiesFactory.bulidAmmendRequestEntity(mockApplication, reason, mockCal.getTime())).thenReturn(new AmmendRequest(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.bulidAmmendRequestEntity(mockApplication, mockSession.getUser(),reason, mockCal.getTime())).thenReturn(new AmmendRequest(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
@@ -231,7 +231,7 @@ public class HODRecommendationUnitTest {
             verify(mockApplicationJpaController).edit(mockApplication);
             
             verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
-            verify(mockDBEntitiesFactory).bulidAmmendRequestEntity(mockApplication, reason, mockCal.getTime());
+            verify(mockDBEntitiesFactory).bulidAmmendRequestEntity(mockApplication, mockSession.getUser(),reason, mockCal.getTime());
             verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verifyNoMoreInteractions(mockDBEntitiesFactory);

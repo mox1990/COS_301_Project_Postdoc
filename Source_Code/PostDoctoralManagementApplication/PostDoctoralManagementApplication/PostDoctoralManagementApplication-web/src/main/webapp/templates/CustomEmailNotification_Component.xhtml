@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <h:panelGrid columns="3" cellpadding="5">
+            <p:outputLabel value="Reciever title:" for="#{prefix}title"/>                                
+            <p:selectOneButton id="#{prefix}title" value="#{notification.reciever.title}" required="true">
+                <f:selectItems value="#{generalInformationBean.titleSelectItems}" var="t" itemLabel="#{t}" itemValue="#{t}"/>
+            </p:selectOneButton>
+            <p:message for="#{prefix}title" styleClass="fieldErrorMessage"/>
+            
+            <p:outputLabel value="Full name:" for="#{prefix}fname" />                                
+            <p:inputText id="#{prefix}fname" value="#{notification.reciever.fullName}" required="true"/>
+            <p:message for="#{prefix}fname" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Surname:" for="#{prefix}sname"/>                                
+            <p:inputText id="#{prefix}sname" value="#{notification.reciever.surname}" required="true"/>
+            <p:message for="#{prefix}sname" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Email:" for="#{prefix}email"/>                                
+            <p:inputText id="#{prefix}email" value="#{notification.reciever.email}" required="true"/>
+            <p:message for="#{prefix}email" styleClass="fieldErrorMessage"/>
+            
+            <p:outputLabel value="Email subject" for="#{prefix}subject"/>                                
+            <p:inputText id="#{prefix}subject" value="#{notification.subject}" required="true"/>
+            <p:message for="#{prefix}subject" styleClass="fieldErrorMessage"/>
+            
+            <p:outputLabel value="Email message body only:" for="#{prefix}message"/>  
+            <p:inputTextarea id="#{prefix}message" value="#{notification.message}" required="true"/>
+            <p:message for="#{prefix}message" styleClass="fieldErrorMessage"/>
+        </h:panelGrid>
+    </ui:component>
+</html>
+

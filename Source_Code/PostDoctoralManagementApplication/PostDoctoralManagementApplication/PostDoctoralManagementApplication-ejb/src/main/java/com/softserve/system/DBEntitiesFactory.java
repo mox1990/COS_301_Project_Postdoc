@@ -75,10 +75,10 @@ public class DBEntitiesFactory {
         return progressReport;
     }
     
-    public AmmendRequest bulidAmmendRequestEntity(Application application, String request, Date timestamp)
+    public AmmendRequest bulidAmmendRequestEntity(Application application, Person creator, String request, Date timestamp)
     {
         AmmendRequest ammendRequest = new AmmendRequest();
-        
+        ammendRequest.setCreator(creator);
         ammendRequest.setApplication(application);
         ammendRequest.setTimestamp(timestamp);
         ammendRequest.setRequest(request);
@@ -86,11 +86,13 @@ public class DBEntitiesFactory {
         return ammendRequest;        
     }
     
-    public DeclineReport bulidDeclineReportEntity(Application application, String reason, Date timestamp)
+    public DeclineReport bulidDeclineReportEntity(Application application, Person creator, String reason, Date timestamp)
     {
         DeclineReport declineReport = new DeclineReport();
         
+        declineReport.setReportID(application.getApplicationID());
         declineReport.setApplication(application);
+        declineReport.setCreator(creator);
         declineReport.setTimestamp(timestamp);
         declineReport.setReason(reason);
         
@@ -101,6 +103,7 @@ public class DBEntitiesFactory {
     {
         EligiblityReport eligiblityReport = new EligiblityReport();
         
+        eligiblityReport.setReportID(application.getApplicationID());
         eligiblityReport.setApplication(application);
         eligiblityReport.setEligiblityCheckDate(timestamp);
         eligiblityReport.setEligiblityChecker(checker);

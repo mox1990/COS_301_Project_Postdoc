@@ -1,12 +1,85 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Application funding approval"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Application funding approval menu</h1>
+                <h2>Fill in the details to complete the funding approval for the application</h2>
+            </div>
+            <div>
+                <h:form>
+                    <p:panel header="Funding report email">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Fellowship cost (ZAR):" for="fellowshipCost"/>                                
+                            <p:inputText id="fellowshipCost" value="#{drisApproveFundingBean.fundingReport.fellowshipCost}" required="true">
+                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+                                <f:validateDoubleRange minimum="0.00" />
+                            </p:inputText>
+                            <p:message for="fellowshipCost" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Running cost (ZAR):" for="runningCost"/>                                
+                            <p:inputText id="runningCost" value="#{drisApproveFundingBean.fundingReport.runningCost}">
+                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+                                <f:validateDoubleRange minimum="0.00" />
+                            </p:inputText>
+                            <p:message for="runningCost" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Travel cost (ZAR):" for="travelCost"/>                                
+                            <p:inputText id="travelCost" value="#{drisApproveFundingBean.fundingReport.travelCost}">
+                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+                                <f:validateDoubleRange minimum="0.00" />
+                            </p:inputText>
+                            <p:message for="travelCost" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Operating cost (ZAR):" for="operatingCost"/>                                
+                            <p:inputText id="operatingCost" value="#{drisApproveFundingBean.fundingReport.operatingCost}">
+                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+                                <f:validateDoubleRange minimum="0.00" />
+                            </p:inputText>
+                            <p:message for="operatingCost" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Conference cost (ZAR):" for="conferenceCost"/>                                
+                            <p:inputText id="conferenceCost" value="#{drisApproveFundingBean.fundingReport.conferenceCost}">
+                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+                                <f:validateDoubleRange minimum="0.00" />
+                            </p:inputText>
+                            <p:message for="conferenceCost" styleClass="fieldErrorMessage"/>
+
+                            <p:outputLabel value="Equipment cost (ZAR):" for="equipmentCost"/>                                
+                            <p:inputText id="equipmentCost" value="#{drisApproveFundingBean.fundingReport.equipmentCost}">
+                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
+                                <f:validateDoubleRange minimum="0.00" />
+                            </p:inputText>
+                            <p:message for="equipmentCost" styleClass="fieldErrorMessage"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:panel header="CSC department Email">
+                        <ui:decorate template="templates/CustomEmailNotification_Component.xhtml">
+                            <ui:param name="notification" value="#{drisApproveFundingBean.cscMessage}"/>
+                            <ui:param name="prefix" value="csc"/>
+                        </ui:decorate>
+                    </p:panel>
+                    
+                    <p:panel header="Finance department Email">
+                        <ui:decorate template="templates/CustomEmailNotification_Component.xhtml">
+                            <ui:param name="notification" value="#{drisApproveFundingBean.financeMessage}"/>
+                            <ui:param name="prefix" value="finace"/>
+                        </ui:decorate>
+                    </p:panel>
+                    
+                    <p:growl sticky="true" globalOnly="true" showDetail="true" showSummary="true"/>
+                    <p:commandButton value="Approve application funding" action="#{drisApproveFundingBean.preformFundingApprovalRequest()}" ajax="false" styleClass="button button-fill"/>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

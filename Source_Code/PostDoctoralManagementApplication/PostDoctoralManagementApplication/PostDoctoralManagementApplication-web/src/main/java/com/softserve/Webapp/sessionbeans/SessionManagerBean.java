@@ -97,8 +97,9 @@ public class SessionManagerBean implements Serializable {
     {
         try 
         {   
-            userGateway.logout(getSession());
-            
+            Session session = getSession();            
+            userGateway.logout(session);            
+            session.getHttpSession().invalidate();
             return navigationManagerBean.goToPortalView();
         } 
         catch (Exception ex) 

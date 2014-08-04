@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verify;
 import test.softserve.MockEJBClasses.NotificationServiceMockUnit;
 
@@ -61,12 +63,8 @@ public class NotificationUnitTest {
         
         try
         {
-            instance.sendBatchNotifications(mockNotifications, true);
-            
-            for(Notification aMockNotification: mockNotifications)
-            {
-                verify(mockNotificationJpaController).create(aMockNotification);
-            }
+            instance.sendBatchNotifications(mockNotifications, true);            
+            verify(mockNotificationJpaController, times(3)).create(mockNotification);
         }
         catch (Exception ex)
         {

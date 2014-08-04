@@ -262,12 +262,39 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         GregorianCalendar curCal = getGregorianCalendar();
         GregorianCalendar dobCal = getGregorianCalendar();
         dobCal.setTime(dobDate);
-        dobCal.add(GregorianCalendar.MONTH, 1);
+        dobCal.add(GregorianCalendar.MONTH, 1);       
         
-        if(application.getEligiblityReport() != null)
+        
+        if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
         {
+
+            setApplicationEligibleStatus(session, application, true);
+        }
+        else
+        {
+            setApplicationEligibleStatus(session, application, false);
+        }
         
-            if((curCal.get(GregorianCalendar.YEAR) - dobCal.get(GregorianCalendar.YEAR) <= 40 && hasPhD(application)) || (hasObtainedPhDInLast5Years(application)))
+    }
+    
+    @Override
+    public void setApplicationEligibleStatus(Session session, Application application, boolean isElgible) throws Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        EligiblityReportJpaController eligiblityReportJpaController = getEligiblityReportDAO();
+        NotificationService notificationService = getNotificationServiceEJB();
+        
+        if(application.getEligiblityReport() == null)
+        {
+            if(isElgible)
             {
 
                 application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
@@ -285,7 +312,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
                 ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
                 applicationServices.declineAppliction(session, application, reason);
             }
-
+            
             EligiblityReport eligiblityReport = dBEntitiesFactory.bulidEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
             eligiblityReportJpaController.create(eligiblityReport);
         }
@@ -331,7 +358,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @throws Exception
      */
     @Override
-    public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, String cscMesssage, String finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
+    public void approveFunding(Session session, Application application, FundingReport fundingReport, String applicantMessage, Notification cscMesssage, Notification finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -346,6 +373,10 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         NotificationService notificationService = getNotificationServiceEJB();
         
         //Create funding report
+        fundingReport.setApplication(application);
+        fundingReport.setReportID(application.getApplicationID());
+        fundingReport.setDris(session.getUser());
+        fundingReport.setTimestamp(getGregorianCalendar().getTime());
         fundingReportJpaController.create(fundingReport);
         
         //Set application status to funded
@@ -369,12 +400,16 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
 
         //Send notification to CSC, Finance, grant holder and applicatant
         ArrayList<Notification> notifications = new ArrayList<Notification>();        
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
-        //CSC and finance person
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + cscMesssage));
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + finaceMessage));
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
+        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
+        
         notificationService.sendBatchNotifications(notifications, true);
+        
+        //CSC and finance person
+        cscMesssage.setSubject("Application funding approved");
+        finaceMessage.setSubject(cscMesssage.getSubject());
+        notificationService.sendOnlyEmail(cscMesssage);
+        notificationService.sendOnlyEmail(finaceMessage);
         
         
     }

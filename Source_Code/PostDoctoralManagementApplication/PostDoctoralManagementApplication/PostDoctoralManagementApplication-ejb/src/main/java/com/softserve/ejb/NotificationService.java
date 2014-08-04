@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -30,6 +34,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.validation.constraints.Future;
 
 /**
  * This EJB handles the notification services
@@ -104,6 +109,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     }
     
     
+    @Override
     public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception
     {
         for(Notification n : notifications)
@@ -113,32 +119,60 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     }
     
     @Override
-    public void sendNotification(Notification notification, boolean sendEmail) throws Exception
+    @Asynchronous
+    public void sendNotification(Notification notification, boolean sendEmail)
     {   
-        NotificationJpaController notificationJpaController = getNotificationDAO();
-        
-        //Set as current time
-        notification.setTimestamp(new Timestamp(new Date().getTime()));
-        //Send system notification        
-        notificationJpaController.create(notification);
-        
-        if(sendEmail)
+        try 
         {
-            try
+            NotificationJpaController notificationJpaController = getNotificationDAO();
+            
+            //Set as current time
+            notification.setTimestamp(new Timestamp(new Date().getTime()));
+            
+            //Send system notification
+            notificationJpaController.create(notification);
+            
+            if(sendEmail)
             {
-                sendEmail(notification);
+                try
+                {
+                    sendEmail(notification);
+                    notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_SENT);
+                }
+                catch(MessagingException ex)
+                {
+                    notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_SENDING);
+                }
             }
-            catch(MessagingException ex)
+            else
             {
-                notificationJpaController.destroy(notification.getNotificationID());
-                throw ex;
+                notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_DISABLED);
             }
+            
+            notificationJpaController.edit(notification);            
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(NotificationService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    @Override
+    @Asynchronous
+    public void sendOnlyEmail(Notification notification)
+    {        
+        try
+        {
+            sendEmail(notification);
+        }
+        catch(MessagingException ex)
+        {
+
+        }
+    }    
     
-    
-    protected void sendEmail(Notification notification) throws MessagingException
+    @Asynchronous
+    public void sendEmail(Notification notification) throws MessagingException
     {
         Properties props = getPropertiesJMAIL();
         props.put("mail.smtp.auth", "true");
@@ -147,18 +181,21 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         props.put("mail.smtp.port", "587");
 
         Session session = getSessionJMAIL(props, getAuthenticatorJMAIL());
-          
-
+        
+        String subjectText = "UP Postdoc Notification: ";
+        String headerText = "Dear " + notification.getReciever().getCompleteName() + "\n\n";
+        String footerText = "\n\n" + "This message is an email sent from the UP Post Doctoral Management System. Please do not reply to this email.";
+        
         Address[] addresses = new Address[1];
         addresses[0] = getInternetAddressJMAIL(com.softserve.constants.SystemConstants.MAIL_USERNAME);
 
         Message message = getMimeMessageJMAIL(session);
         message.setFrom(getInternetAddressJMAIL(com.softserve.constants.SystemConstants.MAIL_USERNAME));
-        message.setSubject(notification.getSubject());
+        message.setSubject(subjectText + notification.getSubject());
         message.setRecipients(Message.RecipientType.TO, addresses);
-        message.setText(notification.getMessage());
+        message.setText(headerText + notification.getMessage() + footerText);
+        sendMessageJMAIL(message);     
 
-        sendMessageJMAIL(message);        
     }
     
     @Override
