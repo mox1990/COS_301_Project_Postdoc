@@ -20,6 +20,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface ReportServicesLocal {
-    public ByteArrayOutputStream exportApplicationSpreadsheetReport(Session session, List<Application> applications) throws IOException;
-    public ByteArrayOutputStream exportPDFReport(Session session, List<Class<?>> entities) throws DocumentException;
+    
 }
