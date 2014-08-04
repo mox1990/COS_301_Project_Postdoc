@@ -34,6 +34,10 @@ import test.softserve.MockEJBClasses.ApplicationProgressViewerServiceMockUnit;
  * @author kgothatso
  */
 public class ApplicationProgressViewerUnitTest {
+    private ApplicationProgressViewerServiceMockUnit instance;
+    private ApplicationJpaController mockApplicationJpaController;
+    private UserGateway mockUserGateway;
+        
     
     public ApplicationProgressViewerUnitTest() {
     }
@@ -47,7 +51,18 @@ public class ApplicationProgressViewerUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() 
+    {
+        instance = new ApplicationProgressViewerServiceMockUnit();
+        
+        //Setup dependices mocks
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockUserGateway = mock(UserGateway.class);
+        
+        
+        //Load dependices mocks' into instance
+        instance.setaDAO(mockApplicationJpaController);
+        instance.setuEJB(mockUserGateway);
     }
     
     @After
@@ -59,26 +74,17 @@ public class ApplicationProgressViewerUnitTest {
      */
     @Test
     public void testGetApplicationProgress() throws Exception {
-        ApplicationProgressViewerServiceMockUnit instance = new ApplicationProgressViewerServiceMockUnit();
-        
-        //Setup dependices mocks
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setuEJB(mockUserGateway);
-        
         //Setup parameter mocks
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12019837"));
+        
         Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(new Person("u12019837"));
         
         List<RefereeReport> rrList = new ArrayList<>();
         RefereeReport rr = mock(RefereeReport.class);
         when(rr.getReferee()).thenReturn(new Person("u12019837"));
+        
         //rrList.add(rr);
         when(mockApplication.getRefereeReportList()).thenReturn(rrList);
         when(mockApplication.getRecommendationReport()).thenReturn(null);

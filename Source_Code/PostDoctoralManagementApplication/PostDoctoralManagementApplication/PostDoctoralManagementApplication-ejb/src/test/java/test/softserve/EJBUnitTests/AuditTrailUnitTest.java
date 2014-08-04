@@ -31,6 +31,9 @@ import test.softserve.MockEJBClasses.AuditTrailServiceMockUnit;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AuditTrailUnitTest {
+    private AuditTrailServiceMockUnit instance;
+    
+    private AuditLogJpaController mockAuditLogJpaController;
     
     public AuditTrailUnitTest() {
     }
@@ -45,6 +48,11 @@ public class AuditTrailUnitTest {
     
     @Before
     public void setUp() {
+        instance = new AuditTrailServiceMockUnit();
+        
+        mockAuditLogJpaController = mock(AuditLogJpaController.class);
+        
+        instance.setADAO(mockAuditLogJpaController);
     }
     
     @After
@@ -55,13 +63,7 @@ public class AuditTrailUnitTest {
      * Test of logAction method, of class AuditTrailService.
      */
     @Test
-    public void testLogAction() throws Exception {
-        AuditTrailServiceMockUnit instance = new AuditTrailServiceMockUnit();
-        
-        AuditLogJpaController mockAuditLogJpaController = mock(AuditLogJpaController.class);
-        
-        instance.setADAO(mockAuditLogJpaController);
-        
+    public void testLogAction() throws Exception {        
         AuditLog mockAuditLog = mock(AuditLog.class);        
         try
         {
@@ -70,6 +72,7 @@ public class AuditTrailUnitTest {
         }
         catch (Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }

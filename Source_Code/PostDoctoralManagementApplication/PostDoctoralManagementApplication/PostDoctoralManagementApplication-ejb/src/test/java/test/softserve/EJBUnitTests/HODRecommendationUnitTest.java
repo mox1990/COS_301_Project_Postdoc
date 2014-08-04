@@ -49,7 +49,18 @@ import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
  * @author kgothatso
  */
 public class HODRecommendationUnitTest {
-    
+    private HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
+        
+    private ApplicationJpaController mockApplicationJpaController;
+    private RecommendationReportJpaController mockRecommendationReportJpaController;
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private UserGateway mockUserGateway;
+    private NotificationService mockNotificationService;
+    private AuditTrailService mockAuditTrailService;
+    private ApplicationServicesUtil mockApplicationServices;
+    private AmmendRequestJpaController mockAmmendRequestJpaController;
+    private GregorianCalendar mockCal;
+        
     public HODRecommendationUnitTest() {
     }
     
@@ -63,6 +74,27 @@ public class HODRecommendationUnitTest {
     
     @Before
     public void setUp() {
+        instance = new HODRecommendationServicesMockUnit();
+        
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
+        mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockUserGateway = mock(UserGateway.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockAuditTrailService = mock(AuditTrailService.class);
+        mockApplicationServices = mock(ApplicationServicesUtil.class);
+        mockAmmendRequestJpaController = mock(AmmendRequestJpaController.class);
+        mockCal = mock(GregorianCalendar.class);
+
+        instance.setaRDAO(mockAmmendRequestJpaController);
+        instance.setaDAO(mockApplicationJpaController);
+        instance.setaSEJB(mockApplicationServices);
+        instance.setaTEJB(mockAuditTrailService);
+        instance.setdBEntities(mockDBEntitiesFactory);
+        instance.setrRDAO(mockRecommendationReportJpaController);
+        instance.setnEJB(mockNotificationService);
+        instance.setuEJB(mockUserGateway);
+        instance.setgCal(mockCal);
     }
     
     @After
@@ -73,25 +105,7 @@ public class HODRecommendationUnitTest {
      * Test of loadPendingApplications method, of class HODRecommendationServices.
      */
     @Test
-    public void testLoadPendingApplications() throws Exception {
-        HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        RecommendationReportJpaController mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setrRDAO(mockRecommendationReportJpaController);
-        instance.setuEJB(mockUserGateway);
-        
+    public void testLoadPendingApplications() throws Exception {                
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -119,24 +133,6 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testCountTotalPendingApplications() throws Exception {
-        HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        RecommendationReportJpaController mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setrRDAO(mockRecommendationReportJpaController);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -162,37 +158,22 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testDenyAppliction() throws Exception {
-        HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        RecommendationReportJpaController mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setrRDAO(mockRecommendationReportJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        Application mockApplication = mock(Application.class);
+        
         Cv mockCv = mock(Cv.class);
         when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
+        
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        
+        Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
@@ -217,42 +198,24 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testAmmendAppliction() throws Exception {
-        HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        RecommendationReportJpaController mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AmmendRequestJpaController mockAmmendRequestJpaController = mock(AmmendRequestJpaController.class);
-        GregorianCalendar mockCal = mock(GregorianCalendar.class);
-        
-        
-        instance.setaRDAO(mockAmmendRequestJpaController);
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setrRDAO(mockRecommendationReportJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        instance.setgCal(mockCal);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        Application mockApplication = mock(Application.class);
+        
         Cv mockCv = mock(Cv.class);
         when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
+        
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        
+        Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
+        
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         when(mockDBEntitiesFactory.bulidAmmendRequestEntity(mockApplication, reason, mockCal.getTime())).thenReturn(new AmmendRequest(Long.MAX_VALUE));
@@ -288,38 +251,25 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testApproveApplicationWithoutDeansToEndorse() throws Exception {
-        HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        RecommendationReportJpaController mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setrRDAO(mockRecommendationReportJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        Application mockApplication = mock(Application.class);
+        
         Cv mockCv = mock(Cv.class);
         when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
+        
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        
+        Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        
         RecommendationReport mockRecommendationReport = mock(RecommendationReport.class);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
+        
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
@@ -340,7 +290,7 @@ public class HODRecommendationUnitTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-           // fail("An exception occured");
+           fail("An exception occured");
         }
     }
     

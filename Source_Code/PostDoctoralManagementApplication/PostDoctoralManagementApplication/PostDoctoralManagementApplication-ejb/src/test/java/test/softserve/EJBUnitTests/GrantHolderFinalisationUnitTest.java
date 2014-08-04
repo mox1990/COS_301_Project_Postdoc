@@ -42,7 +42,18 @@ import test.softserve.MockEJBClasses.GrantHolderFinalisationServiceMockUnit;
  * @author kgothatso
  */
 public class GrantHolderFinalisationUnitTest {
-    
+    private GrantHolderFinalisationServiceMockUnit instance;
+         
+    private UserGateway mockUserGateway;
+    private CVManagementService mockCVManagementService;
+    private PersonJpaController mockPersonJpaController;
+    private CvJpaController mockCvJpaController;
+    private ApplicationJpaController mockApplicationJpaController;
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private NotificationService mockNotificationService;
+    private AuditTrailService mockAuditTrailService;
+    private ApplicationServicesUtil mockApplicationServices;
+
     public GrantHolderFinalisationUnitTest() {
     }
     
@@ -56,28 +67,17 @@ public class GrantHolderFinalisationUnitTest {
     
     @Before
     public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of createGrantHolderCV method, of class GrantHolderFinalisationService.
-     */
-    @Test
-    public void testCreateGrantHolderCV() throws Exception {
-        GrantHolderFinalisationServiceMockUnit instance = new GrantHolderFinalisationServiceMockUnit();
+        instance = new GrantHolderFinalisationServiceMockUnit();
         
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        CVManagementService mockCVManagementService = mock(CVManagementService.class);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        CvJpaController mockCvJpaController = mock(CvJpaController.class);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
+        mockUserGateway = mock(UserGateway.class);
+        mockCVManagementService = mock(CVManagementService.class);
+        mockPersonJpaController = mock(PersonJpaController.class);
+        mockCvJpaController = mock(CvJpaController.class);
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockAuditTrailService = mock(AuditTrailService.class);
+        mockApplicationServices = mock(ApplicationServicesUtil.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -89,7 +89,17 @@ public class GrantHolderFinalisationUnitTest {
         instance.setpDAO(mockPersonJpaController);
         instance.setpDAO(mockPersonJpaController);
         instance.setuEJB(mockUserGateway);
-        
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of createGrantHolderCV method, of class GrantHolderFinalisationService.
+     */
+    @Test
+    public void testCreateGrantHolderCV() throws Exception {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
@@ -115,29 +125,6 @@ public class GrantHolderFinalisationUnitTest {
      */
     @Test
     public void testLoadPendingApplications() throws Exception {
-        GrantHolderFinalisationServiceMockUnit instance = new GrantHolderFinalisationServiceMockUnit();
-        
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        CVManagementService mockCVManagementService = mock(CVManagementService.class);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        CvJpaController mockCvJpaController = mock(CvJpaController.class);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setcVDAO(mockCvJpaController);
-        instance.setcVEJB(mockCVManagementService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuEJB(mockUserGateway);
-        
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
@@ -164,29 +151,6 @@ public class GrantHolderFinalisationUnitTest {
      */
     @Test
     public void testCountTotalPendingApplications() throws Exception {
-        GrantHolderFinalisationServiceMockUnit instance = new GrantHolderFinalisationServiceMockUnit();
-        
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        CVManagementService mockCVManagementService = mock(CVManagementService.class);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        CvJpaController mockCvJpaController = mock(CvJpaController.class);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setcVDAO(mockCvJpaController);
-        instance.setcVEJB(mockCVManagementService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuEJB(mockUserGateway);
-        
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
@@ -211,37 +175,16 @@ public class GrantHolderFinalisationUnitTest {
      */
     @Test
     public void testFinaliseApplication() throws Exception {
-        GrantHolderFinalisationServiceMockUnit instance = new GrantHolderFinalisationServiceMockUnit();
-        
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        CVManagementService mockCVManagementService = mock(CVManagementService.class);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        CvJpaController mockCvJpaController = mock(CvJpaController.class);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setcVDAO(mockCvJpaController);
-        instance.setcVEJB(mockCVManagementService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuEJB(mockUserGateway);
-        
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
         Application mockApplication = mock(Application.class);
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         try
         {

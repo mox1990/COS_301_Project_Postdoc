@@ -47,7 +47,16 @@ import test.softserve.MockEJBClasses.DeansEndorsementServiceMockUnit;
  * @author kgothatso
  */
 public class DeansEndorsementUnitTest {
-    
+    private DeansEndorsementServiceMockUnit instance;
+         
+    private ApplicationJpaController mockApplicationJpaController;
+    private EndorsementJpaController mockEndorsementJpaController;
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private UserGateway mockUserGateway;
+    private NotificationService mockNotificationService;
+    private AuditTrailService mockAuditTrailService;
+    private ApplicationServicesUtil mockApplicationServices;
+
     public DeansEndorsementUnitTest() {
     }
     
@@ -61,6 +70,23 @@ public class DeansEndorsementUnitTest {
     
     @Before
     public void setUp() {
+        instance = new DeansEndorsementServiceMockUnit();
+        
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockEndorsementJpaController = mock(EndorsementJpaController.class);
+        mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockUserGateway = mock(UserGateway.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockAuditTrailService = mock(AuditTrailService.class);
+        mockApplicationServices = mock(ApplicationServicesUtil.class);
+        
+        instance.setaDAO(mockApplicationJpaController);
+        instance.setaSEJB(mockApplicationServices);
+        instance.setaTEJB(mockAuditTrailService);
+        instance.setdBEntities(mockDBEntitiesFactory);
+        instance.seteDAO(mockEndorsementJpaController);
+        instance.setnEJB(mockNotificationService);
+        instance.setuEJB(mockUserGateway);
     }
     
     @After
@@ -72,26 +98,9 @@ public class DeansEndorsementUnitTest {
      */
     @Test
     public void testLoadPendingApplications() throws Exception {
-        DeansEndorsementServiceMockUnit instance = new DeansEndorsementServiceMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        EndorsementJpaController mockEndorsementJpaController = mock(EndorsementJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.seteDAO(mockEndorsementJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
         int startIndex = 0;
         int maxNumber = 5;
         try
@@ -115,24 +124,6 @@ public class DeansEndorsementUnitTest {
      */
     @Test
     public void testCountTotalPendingApplications() throws Exception {
-        DeansEndorsementServiceMockUnit instance = new DeansEndorsementServiceMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        EndorsementJpaController mockEndorsementJpaController = mock(EndorsementJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.seteDAO(mockEndorsementJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
 
@@ -157,39 +148,25 @@ public class DeansEndorsementUnitTest {
      */
     @Test
     public void testDenyApplication() throws Exception {
-        DeansEndorsementServiceMockUnit instance = new DeansEndorsementServiceMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        EndorsementJpaController mockEndorsementJpaController = mock(EndorsementJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.seteDAO(mockEndorsementJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        Application mockApplication = mock(Application.class);
+        
         Cv mockCv = mock(Cv.class);
         when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
+        
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        
+        Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
+        
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
@@ -213,32 +190,16 @@ public class DeansEndorsementUnitTest {
      */
     @Test
     public void testEndorseApplicationWithoutDRISMember() throws Exception {
-        DeansEndorsementServiceMockUnit instance = new DeansEndorsementServiceMockUnit();
-        
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        EndorsementJpaController mockEndorsementJpaController = mock(EndorsementJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.seteDAO(mockEndorsementJpaController);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        Application mockApplication = mock(Application.class);
+        
         Cv mockCv = mock(Cv.class);
         when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
+        
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        
+        Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
@@ -246,6 +207,8 @@ public class DeansEndorsementUnitTest {
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         String applicantMessage = "appMSG", cscMesssage = "cscMSG", finaceMessage = "fMSG";
         
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+          
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         

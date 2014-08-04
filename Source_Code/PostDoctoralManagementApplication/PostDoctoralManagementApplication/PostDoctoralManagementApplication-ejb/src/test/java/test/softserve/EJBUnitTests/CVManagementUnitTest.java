@@ -13,7 +13,6 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
 import com.softserve.ejb.AuditTrailService;
-import com.softserve.ejb.CVManagementServiceLocal;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -35,6 +34,14 @@ import test.softserve.MockEJBClasses.CVManagementServiceMockUnit;
  * @author kgothatso
  */
 public class CVManagementUnitTest {
+    private CVManagementServiceMockUnit instance;
+        
+    private CvJpaController mockCvJpaController;
+    private UserGateway mockUserGateway;
+    private AuditTrailService mockAuditTrailService;
+    private AcademicQualificationJpaController mockAcademicQualificationJpaController;
+    private ExperienceJpaController mockExperienceJpaController;
+    private DBEntitiesFactory mockDBEntitiesFactory;
     
     public CVManagementUnitTest() {
     }
@@ -49,6 +56,22 @@ public class CVManagementUnitTest {
     
     @Before
     public void setUp() {
+        instance = new CVManagementServiceMockUnit();
+        
+        mockCvJpaController =  mock(CvJpaController.class);
+        mockUserGateway =  mock(UserGateway.class);
+        mockAuditTrailService =  mock(AuditTrailService.class);
+        mockAcademicQualificationJpaController = mock(AcademicQualificationJpaController.class);
+        mockExperienceJpaController = mock(ExperienceJpaController.class);
+        mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
+        
+        
+        instance.setcVDAO(mockCvJpaController);
+        instance.setuEJB(mockUserGateway);
+        instance.setaTEJB(mockAuditTrailService);
+        instance.setdBEntities(mockDBEntitiesFactory);
+        instance.setaQDAO(mockAcademicQualificationJpaController);
+        instance.seteDAO(mockExperienceJpaController);
     }
     
     @After
@@ -60,23 +83,8 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testCreateCV() throws Exception {
-        CVManagementServiceMockUnit instance = new CVManagementServiceMockUnit();
-        
-        CvJpaController mockCvJpaController =  mock(CvJpaController.class);
-        UserGateway mockUserGateway =  mock(UserGateway.class);
-        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        AcademicQualificationJpaController mockAcademicQualificationJpaController = mock(AcademicQualificationJpaController.class);
-        ExperienceJpaController mockExperienceJpaController = mock(ExperienceJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        
-        instance.setcVDAO(mockCvJpaController);
-        instance.setuEJB(mockUserGateway);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setaQDAO(mockAcademicQualificationJpaController);
-        instance.seteDAO(mockExperienceJpaController);
-        
+                
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
         Session mockSession = mock(Session.class);
@@ -105,18 +113,7 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testUpdateCV() throws Exception {
-        CVManagementServiceMockUnit instance = new CVManagementServiceMockUnit();
-        
-        CvJpaController mockCvJpaController =  mock(CvJpaController.class);
-        UserGateway mockUserGateway =  mock(UserGateway.class);
-        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        
-        instance.setcVDAO(mockCvJpaController);
-        instance.setuEJB(mockUserGateway);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
         
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
