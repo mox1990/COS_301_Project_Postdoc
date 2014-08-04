@@ -27,6 +27,7 @@ public interface NotificationServiceLocal {
     public void sendNotification(Notification notification, boolean sendEmail) throws Exception;
     public List<Notification> getAllNotificationsForPerson(Session session, Person person) throws AuthenticationException, Exception;
     public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception;
+    public void sendOnlyEmail(Notification notification);
     //public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception;
     //public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception;
     //public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException;

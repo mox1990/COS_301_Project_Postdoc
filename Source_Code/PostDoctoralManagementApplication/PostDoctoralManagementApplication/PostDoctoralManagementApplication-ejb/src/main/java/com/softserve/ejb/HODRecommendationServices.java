@@ -210,7 +210,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);        
         applicationJpaController.edit(application);
         
-        AmmendRequest ammendRequest = dBEntitiesFactory.bulidAmmendRequestEntity(application, reason, getGregorianCalendar().getTime());
+        AmmendRequest ammendRequest = dBEntitiesFactory.bulidAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
         ammendRequestJpaController.create(ammendRequest);
         
         //Log action        

@@ -221,7 +221,7 @@ public class ApplicationServicesUtil {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);        
             applicationJpaController.edit(application);
 
-            DeclineReport declineReport = dBEntitiesFactory.bulidDeclineReportEntity(application, reason, getGregorianCalendar().getTime());
+            DeclineReport declineReport = dBEntitiesFactory.bulidDeclineReportEntity(application,session.getUser(), reason, getGregorianCalendar().getTime());
             declineReportJpaController.create(declineReport);
 
             //Log action  

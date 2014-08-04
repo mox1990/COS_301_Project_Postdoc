@@ -87,6 +87,16 @@
                         </p:accordionPanel>
                     </p:tab>
                     
+                    <p:tab title="Ammend requests" rendered="#{selectedApplication.ammendRequestList.size() > 0}">
+                        <p:accordionPanel value="#{selectedApplication.ammendRequestList}" var="report">
+                            <p:tab title="Referal report from - #{report.referee.completeName}">
+                                <ui:decorate template="ammendRequestViewer_Component.xhtml">
+                                    <ui:param name="ammendRequest" value="#{report}"/>
+                                </ui:decorate>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:tab>
+                    
                     <p:tab title="HOD Recommendation report" rendered="#{selectedApplication.recommendationReport != null}">
                         <ui:decorate template="recommendationReportViewer_Component.xhtml">
                             <ui:param name="recommendationReport" value="#{selectedApplication.recommendationReport}"/>
@@ -96,6 +106,18 @@
                     <p:tab title="Dean Endorsement" rendered="#{selectedApplication.endorsement != null}">
                         <ui:decorate template="endorsementViewer_Component.xhtml">
                             <ui:param name="endorsement" value="#{selectedApplication.endorsement}"/>
+                        </ui:decorate>
+                    </p:tab>
+                    
+                    <p:tab title="Eligiblity report" rendered="#{selectedApplication.eligiblityReport != null}">
+                        <ui:decorate template="eligibityReportViewer_Component.xhtml">
+                            <ui:param name="eligiblityReport" value="#{selectedApplication.eligiblityReport}"/>
+                        </ui:decorate>
+                    </p:tab>
+                    
+                    <p:tab title="Decline report" rendered="#{selectedApplication.declineReport != null}">
+                        <ui:decorate template="declineReportViewer_Component.xhtml">
+                            <ui:param name="declineReport" value="#{selectedApplication.declineReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
