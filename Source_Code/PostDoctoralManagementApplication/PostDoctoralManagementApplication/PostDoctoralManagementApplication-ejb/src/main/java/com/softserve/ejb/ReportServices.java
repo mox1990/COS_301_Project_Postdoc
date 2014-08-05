@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * Gives a generic implementation of the Report generationservice
@@ -33,17 +34,18 @@ public class ReportServices implements ReportServicesLocal
         // This checks to see if the MySQL driver is avaible to use
         Class.forName("com.mysql.jdbc.Driver");
          
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/PostDoc_DB?zeroDateTimeBehavior=convertToNull");
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/PostDoc_DB?zeroDateTimeBehavior=convertToNull" 
+                + "&user=root&password=root");
     }
     
     // Just for Demo purposes for now
-    public void exportPersonsToPdf(Session session) throws JRException, ClassNotFoundException, SQLException
+    public void exportPersonsToPdf(Session session) throws JRException, ClassNotFoundException, SQLException, InterruptedException
     {
         JasperReport jasperReport = JasperCompileManager.compileReport("Person.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
         createReportInPdf(jasperReport);
     }
     
-    private void createReportInPdf(JasperReport jasperReport) throws JRException, SQLException, ClassNotFoundException
+    private byte[] createReportInPdf(JasperReport jasperReport) throws JRException, SQLException, ClassNotFoundException, InterruptedException
     {
         // Create a map of parameters to pass to the report.
         Map parameters = new HashMap();
@@ -54,6 +56,10 @@ public class ReportServices implements ReportServicesLocal
         // with data. This data is transperantly accessed via a SQL statement in the XML
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, getConnection());
         // You can use JasperPrint to create PDF
-        JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
+        
+        JasperViewer.viewReport(jasperPrint); // Testing purposes
+        Thread.sleep(5000); // To allow view of the report
+        return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
+        
     }
 }
