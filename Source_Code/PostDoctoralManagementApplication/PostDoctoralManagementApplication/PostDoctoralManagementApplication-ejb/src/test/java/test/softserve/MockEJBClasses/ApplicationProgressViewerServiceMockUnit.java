@@ -34,6 +34,8 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
         this.lASS = lASS;
     }
     
+    
+    
     @Override
     protected ApplicationJpaController getApplicationDAO()
     {
