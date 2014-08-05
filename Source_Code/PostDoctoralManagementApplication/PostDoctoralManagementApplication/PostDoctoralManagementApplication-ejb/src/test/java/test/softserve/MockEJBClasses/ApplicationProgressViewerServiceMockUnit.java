@@ -9,6 +9,9 @@ package test.softserve.MockEJBClasses;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.ejb.ApplicationProgressViewerService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationStageStatus;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +20,7 @@ import com.softserve.ejb.UserGateway;
 public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgressViewerService {
     private ApplicationJpaController aDAO;
     private UserGateway uEJB;
+    private List<ApplicationStageStatus> lASS;
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
@@ -26,6 +30,9 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
         this.uEJB = uEJB;
     }
     
+    public void setlASS(List<ApplicationStageStatus> lASS) {
+        this.lASS = lASS;
+    }
     
     @Override
     protected ApplicationJpaController getApplicationDAO()
@@ -39,4 +46,9 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
         return uEJB;
     }
     
+    @Override
+    protected List<ApplicationStageStatus> getApplicationStageStatus()
+    {
+        return lASS;
+    }
 }
