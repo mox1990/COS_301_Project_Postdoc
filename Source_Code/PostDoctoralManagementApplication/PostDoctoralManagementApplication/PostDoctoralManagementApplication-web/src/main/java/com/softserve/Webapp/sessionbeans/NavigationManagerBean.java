@@ -421,6 +421,14 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToMeetingManagementServiceHomeView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_Home", "Meeting management home");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
     public String goToMeetingManagementServiceMeetingCreationView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingCreation", "Meeting creation menu");
