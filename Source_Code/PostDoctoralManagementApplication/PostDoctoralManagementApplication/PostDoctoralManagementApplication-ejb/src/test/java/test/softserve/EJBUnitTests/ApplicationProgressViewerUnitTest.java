@@ -65,7 +65,7 @@ public class ApplicationProgressViewerUnitTest {
         //Load dependices mocks' into instance
         instance.setaDAO(mockApplicationJpaController);
         instance.setuEJB(mockUserGateway);
-        //instance.setlASS(mockApplicationStageStatusList);
+        instance.setlASS(mockApplicationStageStatusList);
     }
     
     @After

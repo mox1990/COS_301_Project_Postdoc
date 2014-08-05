@@ -55,6 +55,11 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         return new UserGateway(emf);
     }
     
+    protected List<ApplicationStageStatus> getApplicationStageStatus()
+    {
+        return new ArrayList<ApplicationStageStatus>();
+    }
+    
     private int getOrderIndexOfApplicationStatus(String status)
     {
         if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
@@ -140,7 +145,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             userGateway.authenticateUser(session, roles);
         }
                 
-        List<ApplicationStageStatus> stageStatuses = new ArrayList<ApplicationStageStatus>();
+        List<ApplicationStageStatus> stageStatuses = getApplicationStageStatus();
         
         //Opening information
         stageStatuses.add(new ApplicationStageStatus(application.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, application.getFellow()));
@@ -229,7 +234,6 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             stageStatuses.add(new ApplicationStageStatus(application.getEndDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED, application.getFundingReport().getDris()));
 
         }
-
         
         return stageStatuses;
     }
