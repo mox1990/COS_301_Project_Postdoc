@@ -227,8 +227,8 @@ CREATE TABLE progress_report (
 
 CREATE TABLE committee_meeting (
 	_meetingID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_startDate DATETIME NOT NULL,
-	_endDate DATETIME NOT NULL,
+	_startDate DATETIME,
+	_endDate DATETIME,
 	PRIMARY KEY (_meetingID)
 ) ENGINE=InnoDB;
 

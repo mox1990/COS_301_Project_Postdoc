@@ -27,6 +27,8 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
     }
     
     
+    
+    
     @Override
     protected ApplicationJpaController getApplicationDAO()
     {

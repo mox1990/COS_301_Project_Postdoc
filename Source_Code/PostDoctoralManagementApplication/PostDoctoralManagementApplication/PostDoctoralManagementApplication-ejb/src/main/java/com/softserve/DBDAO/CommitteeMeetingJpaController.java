@@ -307,11 +307,27 @@ public class CommitteeMeetingJpaController implements Serializable {
         }
     }
     
+    public List<CommitteeMeeting> findAllStillToBeHeldCommitteeMeetings()
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE :curDate < c.startDate", CommitteeMeeting.class).setParameter("curDate", new Date());
+        return q.getResultList();
+    }
+    
     public List<CommitteeMeeting> findAllActiveCommitteeMeetings()
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE :curDate BETWEEN c.startDate AND c.endDate", CommitteeMeeting.class).setParameter("curDate", new Date());
+        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE (:curDate >= c.startDate AND c.endDate != NULL) OR (:curDate BETWEEN c.startDate AND c.endDate)", CommitteeMeeting.class).setParameter("curDate", new Date());
+        return q.getResultList();
+    }
+    
+    public List<CommitteeMeeting> findAllConcludedCommitteeMeetings()
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE c.endDate != NULL", CommitteeMeeting.class);
         return q.getResultList();
     }
 }

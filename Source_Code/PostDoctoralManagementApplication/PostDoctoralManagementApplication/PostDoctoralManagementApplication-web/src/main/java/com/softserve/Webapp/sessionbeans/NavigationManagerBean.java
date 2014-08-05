@@ -421,5 +421,44 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToMeetingManagementServiceMeetingCreationView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingCreation", "Meeting creation menu");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToMeetingManagementServiceMeetingCommentatorView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingCommentator", "Meeting commentator");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToMeetingManagementServiceMeetingSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingSelection", "Meeting selection");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToMeetingManagementServiceMeetingViewerView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementService_MeetingViewer", "Meeting viewer");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToMeetingManagementServiceMeetingEditorView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingEditor", "Meeting editor");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
     
 }
