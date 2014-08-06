@@ -74,8 +74,10 @@
     </columnHeader>
     
     <detail>
-    
         <band height="30">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1"/>
+            </line>
             <textField>
                 <reportElement x="0" y="0" width="70" height="24" />
                 <textFieldExpression>
