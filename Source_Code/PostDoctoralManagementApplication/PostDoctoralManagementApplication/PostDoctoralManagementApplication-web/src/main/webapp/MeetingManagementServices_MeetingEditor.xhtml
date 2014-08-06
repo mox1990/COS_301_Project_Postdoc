@@ -16,18 +16,18 @@
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Starting date and time:" for="startDate"/>                                
-                        <p:calendar id="startDate" value="" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
+                        <p:calendar id="startDate" value="#{meetingEditBean.committeeMeeting.startDate}" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
                         <p:message for="startDate" styleClass="fieldErrorMessage"/>                                                                        
                     </h:panelGrid>
                     <ui:decorate template="templates/AttendenceListInput_Component.xhtml">
-                        <ui:param name="attendenceSelectionList" value=""/>
-                        <ui:param name="selectedAttendees" value=""/>
+                        <ui:param name="attendenceSelectionList" value="#{meetingEditBean.attendeesSelectionList}"/>
+                        <ui:param name="selectedAttendees" value="#{meetingEditBean.selectedAttendeesList}"/>
                     </ui:decorate>
                     <ui:decorate template="templates/ApplicationListInput_Component.xhtml">
-                        <ui:param name="applicationsSelectionList" value=""/>
-                        <ui:param name="selectedApplications" value=""/>
+                        <ui:param name="applicationsSelectionList" value="#{meetingEditBean.appliationSelectionList}"/>
+                        <ui:param name="selectedApplications" value="#{meetingEditBean.selectedApplicationList}"/>
                     </ui:decorate>
-                    <p:commandButton value="Save changes" action="" ajax="false" styleClass="button button-fill"/>
+                    <p:commandButton value="Save changes" action="#{meetingEditBean.performMeetingUpdateRequest()}" ajax="false" styleClass="button button-fill"/>
                 </h:form>
             </div>
         </ui:define>

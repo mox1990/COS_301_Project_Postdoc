@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <h:panelGrid columns="2">
+            <h:outputText styleClass="text-label" value="Start date and time:"/>
+            <h:outputText value="#{meeting.startDate}">
+                <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
+            </h:outputText>
+            <h:outputText styleClass="text-label" value="End date and time:"/>
+            <h:outputText value="#{meeting.endDate}" rendered="#{meeting.endDate != null}">
+                <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss" />
+            </h:outputText>
+            <h:outputText value="Not yet ended" rendered="#{meeting.endDate == null}"/>                            
+        </h:panelGrid>
+        <ui:decorate template="AttendenceList_Component.xhtml">
+            <ui:param name="header" value="Attendance list"/>
+            <ui:param name="attendenceList" value="#{meeting.personList}"/>
+        </ui:decorate>
+        <ui:decorate template="ApplicationList_Component.xhtml">
+            <ui:param name="header" value="Application to be reviewed"/>
+            <ui:param name="ApplicationList" value="#{meeting.applicationList}"/>
+        </ui:decorate>
+    </ui:component>
+</html>
+

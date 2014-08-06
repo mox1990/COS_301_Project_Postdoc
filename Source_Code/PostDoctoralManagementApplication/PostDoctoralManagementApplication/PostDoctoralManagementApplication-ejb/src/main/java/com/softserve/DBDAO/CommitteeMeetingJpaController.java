@@ -311,7 +311,7 @@ public class CommitteeMeetingJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE CURRENT_TIMESTAMP > c.startDate", CommitteeMeeting.class);
+        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE CURRENT_TIMESTAMP < c.startDate", CommitteeMeeting.class);
         return q.getResultList();
     }
     
@@ -319,7 +319,7 @@ public class CommitteeMeetingJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE (CURRENT_TIMESTAMP <= c.startDate AND c.endDate IS NULL) OR (CURRENT_TIMESTAMP BETWEEN c.startDate AND c.endDate)", CommitteeMeeting.class);
+        TypedQuery<CommitteeMeeting> q = em.createQuery("SELECT c FROM CommitteeMeeting c WHERE (CURRENT_TIMESTAMP >= c.startDate AND c.endDate IS NULL) OR (CURRENT_TIMESTAMP BETWEEN c.startDate AND c.endDate)", CommitteeMeeting.class);
         return q.getResultList();
     }
     

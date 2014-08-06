@@ -298,6 +298,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         minuteComment.setAttendee(session.getUser());
+        minuteComment.setTimestamp(getGregorianCalendar().getTime());
         
         getMinuteCommentDAO().create(minuteComment);
         
@@ -376,7 +377,5 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         return getCommitteeMeetingDAO().findAllStillToBeHeldCommitteeMeetings();
     }
-    
-    
     
 }

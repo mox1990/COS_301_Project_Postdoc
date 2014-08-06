@@ -16,24 +16,8 @@
             <c:if test="#{meetingsList.size() > 0}">                
                 <p:accordionPanel dynamic="true" cache="true" value="#{meetingsList}" var="meeting" styleClass="box-round">
                     <p:tab title="Meeting - #{meeting.meetingID}" >
-                        <h:panelGrid columns="2">
-                            <h:outputText styleClass="text-label" value="Start date and time:"/>
-                            <h:outputText value="#{meeting.startDate}">
-                                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                            </h:outputText>
-                            <h:outputText styleClass="text-label" value="End date and time:"/>
-                            <h:outputText value="#{meeting.endDate}" rendered="#{meeting.endDate != null}">
-                                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                            </h:outputText>
-                            <h:outputText value="Not yet ended" rendered="#{meeting.endDate == null}"/>                            
-                        </h:panelGrid>
-                        <ui:decorate template="AttendenceList_Component.xhtml">
-                            <ui:param name="header" value="Attendance list"/>
-                            <ui:param name="attendenceList" value="#{meeting.personList}"/>
-                        </ui:decorate>
-                        <ui:decorate template="ApplicationList_Component.xhtml">
-                            <ui:param name="header" value="Application to be reviewed"/>
-                            <ui:param name="ApplicationList" value="#{meeting.applicationList}"/>
+                        <ui:decorate template="MeetingViewer_Component.xhtml">
+                            <ui:param name="meeting" value="#{meeting}"/>
                         </ui:decorate>
                         <h:form>
                             <ui:insert name="commandButtons"/>                            
