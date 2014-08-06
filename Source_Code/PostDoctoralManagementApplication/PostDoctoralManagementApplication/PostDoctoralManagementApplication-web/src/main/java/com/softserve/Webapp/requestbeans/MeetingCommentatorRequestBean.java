@@ -67,6 +67,7 @@ public class MeetingCommentatorRequestBean {
         {            
             minuteComment.setMeeting(getSelectedCommitteeMeeting());
             meetingManagementServiceLocal.addMinuteComment(sessionManagerBean.getSession(), minuteComment);
+            sessionManagerBean.updateObjectInSessionStorageAt("MEETING", minuteComment.getMeeting());
         }
         catch(Exception exception)
         {

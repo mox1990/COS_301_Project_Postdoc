@@ -132,6 +132,19 @@ public class MeetingSelectionRequestBean {
         }
     }
     
+    public void closeMeeting(CommitteeMeeting meeting)
+    {
+        try
+        {
+            meetingManagementServiceLocal.endMeeting(sessionManagerBean.getSession(), meeting);
+        }
+        catch (Exception ex)
+        {
+            ExceptionUtil.logException(MeetingSelectionRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+    }
+    
     public String commentOnMeeting(CommitteeMeeting meeting)
     {
         selectMeeting(meeting);
