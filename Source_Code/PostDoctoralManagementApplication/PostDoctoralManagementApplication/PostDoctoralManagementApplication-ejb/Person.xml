@@ -11,29 +11,67 @@
     <field name="_fullName" class="java.lang.String" />
     <field name="_surname" class="java.lang.String" />
     <field name="_email" class="java.lang.String" />
-    
-    <pageHeader>
-    
-        <band height="30">
+
+    <field name="_telephoneNumber" class="java.lang.String"/>
+    <field name="_workNumber" class="java.lang.String"/>
+    <field name="_faxNumber" class="java.lang.String"/>
+    <field name="_cellphoneNumber" class="java.lang.String"/>
+    <field name="_addressLine1" class="java.lang.String"/>
+    <field name="_upEmployee" class="java.lang.String"/>
+    <field name="_accountStatus" class="java.lang.String"/>
+
+    <columnHeader>
+        <band height="21">
+            <line>
+                <reportElement x="-20" y="20" width="595" height="1" forecolor="#666666"/>
+            </line>
             <staticText>
-                <reportElement x="0" y="0" width="70" height="24" />
-                <text>Title: </text>
+                <reportElement mode="Opaque" x="0" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>Title</text>
             </staticText>
             <staticText>
-                <reportElement x="140" y="0" width="70" height="24" />
-                <text>Full Name: </text>
+                <reportElement mode="Opaque" x="46" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>Full Name</text>
             </staticText>
             <staticText>
-                <reportElement x="280" y="0" width="70" height="24" />
-                <text>Surname: </text>
+                <reportElement mode="Opaque" x="92" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>Surname</text>
             </staticText>
             <staticText>
-                <reportElement x="420" y="0" width="70" height="24" />
-                <text>Email: </text>
+                <reportElement mode="Opaque" x="138" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>Email</text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="184" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>Telephone</text>
+            </staticText>
+
+            <staticText>
+                <reportElement  mode="Opaque" x="230" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>WorkNumber</text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="276" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>FaxNumber</text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="322" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>CellphoneNumber</text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="368" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>AddressLine</text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="414" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>UpEmployee</text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="460" y="0" width="46" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+                <text>AccountStatus</text>
             </staticText>
         </band>
-        
-    </pageHeader>
+    </columnHeader>
     
     <detail>
     
@@ -61,6 +99,49 @@
                 <reportElement x="420" y="0" width="70" height="24" />
                 <textFieldExpression>
                     <![CDATA[$F{_email}]]>
+                </textFieldExpression>
+            </textField>
+
+
+
+            <textField isStretchWithOverflow="true">
+                <reportElement x="184" y="0" width="46" height="20"/>
+                <textFieldExpression>
+                    <![CDATA[$F{_telephoneNumber}]]>
+                </textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="230" y="0" width="46" height="20"/>
+                <textFieldExpression><![CDATA[$F{_workNumber}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="276" y="0" width="46" height="20"/>
+                <textFieldExpression>
+                    <![CDATA[$F{_faxNumber}]]>
+                </textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="322" y="0" width="46" height="20"/>
+                <textFieldExpression>
+                    <![CDATA[$F{_cellphoneNumber}]]>
+                </textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="368" y="0" width="46" height="20"/>
+                <textFieldExpression>
+                    <![CDATA[$F{_addressLine1}]]>
+                </textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="414" y="0" width="46" height="20"/>
+                <textFieldExpression>
+                    <![CDATA[$F{_upEmployee}]]>
+                </textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="460" y="0" width="46" height="20"/>
+                <textFieldExpression>
+                    <![CDATA[$F{_accountStatus}]]>
                 </textFieldExpression>
             </textField>
         </band>
