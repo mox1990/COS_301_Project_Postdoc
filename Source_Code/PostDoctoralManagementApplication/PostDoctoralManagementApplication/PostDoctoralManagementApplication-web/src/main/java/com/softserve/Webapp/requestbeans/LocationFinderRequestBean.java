@@ -6,14 +6,19 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.LocationManagementServiceLocal;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,14 +29,20 @@ import javax.inject.Named;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Named(value = "locationFinderRequestBean")
-@RequestScoped
-public class LocationFinderRequestBean {
+@ConversationScoped
+public class LocationFinderRequestBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private Conversation conversation;
     
     @EJB
     private LocationManagementServiceLocal locationManagementServiceLocal;
+    
+    
     
     private List<String> AllAllFacultiesInInstitution;
     private List<String> AllAllDeparmentsInFacultyInInstitution;
@@ -40,6 +51,13 @@ public class LocationFinderRequestBean {
      * Creates a new instance of LocationFinderRequestBean
      */
     public LocationFinderRequestBean() {
+    }
+    
+    @PostConstruct
+    public void init()
+    {
+        conversationManagerBean.registerConversation(conversation);
+        conversationManagerBean.startConversation(conversation);
     }
     
     public List<String> getAllInstitutions()

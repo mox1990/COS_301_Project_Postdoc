@@ -225,7 +225,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         userGateway.authenticateUser(session, roles);
         /* NB DISABLED FOR TESTING PURPOSE
-        if(getUserBySystemIDOrEmail(user.getEmail()) != null)
+        if(findUserBySystemIDOrEmail(user.getEmail()) != null)
         {
             throw new UserAlreadyExistsException("This email is already in use by a user account");
         }*/
@@ -279,7 +279,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         addressJpaController.create(userAddress);
         //Link to unpersisted person
         user.setAddressLine1(userAddress);       
-        
+        user.setEmployeeInformation(null);
         //******Possible concurrency issue if multiple automaic System IDs are generated******
         personJpaController.create(user);        
         
@@ -288,6 +288,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
             addressJpaController.create(upAddress);
             userEmployeeInfo.setPhysicalAddress(upAddress);
             userEmployeeInfo.setPerson(user);
+            userEmployeeInfo.setEmployeeID(user.getSystemID());
             employeeInformationJpaController.create(userEmployeeInfo);
         }
         
@@ -514,7 +515,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     {
         PersonJpaController personJpaController = getPersonDAO();
         
-        return personJpaController.getUserBySystemIDOrEmail(intput);
+        return personJpaController.findUserBySystemIDOrEmail(intput);
     }
     
     /**

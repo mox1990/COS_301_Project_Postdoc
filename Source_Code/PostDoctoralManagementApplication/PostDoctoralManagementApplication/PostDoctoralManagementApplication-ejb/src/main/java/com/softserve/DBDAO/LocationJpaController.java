@@ -244,7 +244,7 @@ public class LocationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Location> q = em.createQuery("SELECT l.department FROM Location l WHERE l.institution = :inst AND l.faculty = :fac AND l.department = :dep", Location.class).setParameter("inst", institution).setParameter("fac", faculty).setParameter("dep", department);
+        TypedQuery<Location> q = em.createQuery("SELECT l FROM Location l WHERE l.institution = :inst AND l.faculty = :fac AND l.department = :dep", Location.class).setParameter("inst", institution).setParameter("fac", faculty).setParameter("dep", department);
         
         return q.getSingleResult();
     }

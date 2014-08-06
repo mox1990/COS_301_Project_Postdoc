@@ -51,7 +51,7 @@ public class DRISApplicationSelectionRequestBean {
     {   
         try
         {
-            return dRISApprovalServiceLocal.loadPendingEndorsedApplications(sessionManagerBean.getSession(), 0, dRISApprovalServiceLocal.countTotalPendingEndorsedApplications(sessionManagerBean.getSession()));
+            return dRISApprovalServiceLocal.loadPendingEndorsedApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE);
         }
         catch(Exception ex)
         {
@@ -64,7 +64,7 @@ public class DRISApplicationSelectionRequestBean {
     {   
         try
         {
-            return dRISApprovalServiceLocal.loadPendingEligibleApplications(sessionManagerBean.getSession(), 0, dRISApprovalServiceLocal.countTotalPendingEligibleApplications(sessionManagerBean.getSession()));
+            return dRISApprovalServiceLocal.loadPendingEligibleApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE);
         }
         catch(Exception ex)
         {

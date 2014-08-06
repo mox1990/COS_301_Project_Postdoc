@@ -10,28 +10,26 @@
         <ui:define name="pageBody">
             <div>
                 <h1 class="header1">Meeting creation</h1>
-                <h2>Fill in the details for to complete the recommendation</h2>
+                <h2>Complete the field details below to schedule a meeting</h2>
             </div>
             <div>
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Starting date and time:" for="startDate"/>                                
-                        <p:calendar id="startDate" value="" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
+                        <p:calendar id="startDate" value="#{meetingCreationBean.committeeMeeting.startDate}" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
                         <p:message for="startDate" styleClass="fieldErrorMessage"/>                                                                        
                     </h:panelGrid>
                     <ui:decorate template="templates/AttendenceListInput_Component.xhtml">
-                        <ui:param name="attendenceSelectionList" value=""/>
-                        <ui:param name="selectedAttendees" value=""/>
+                        <ui:param name="attendenceSelectionList" value="#{meetingCreationBean.attendeesSelectionList}"/>
+                        <ui:param name="selectedAttendees" value="#{meetingCreationBean.selectedAttendeesList}"/>
                     </ui:decorate>
                     <ui:decorate template="templates/ApplicationListInput_Component.xhtml">
-                        <ui:param name="applicationsSelectionList" value=""/>
-                        <ui:param name="selectedApplications" value=""/>
+                        <ui:param name="applicationsSelectionList" value="#{meetingCreationBean.appliationSelectionList}"/>
+                        <ui:param name="selectedApplications" value="#{meetingCreationBean.selectedApplicationList}"/>
                     </ui:decorate>
-                    <p:commandButton value="Create meeting" action="" ajax="false" styleClass="button button-fill"/>
+                    <p:commandButton value="Schedule meeting" action="#{meetingCreationBean.performMeetingCreationRequest()}" ajax="false" styleClass="button button-fill"/>
                 </h:form>
             </div>
-            
-            
         </ui:define>
     </ui:composition>
 </html>

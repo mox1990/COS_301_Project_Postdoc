@@ -54,8 +54,7 @@ public class CommitteeMeeting implements Serializable {
     @Column(name = "_startDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-    @Basic(optional = false)
-    @NotNull
+    @Basic(optional = true)
     @Column(name = "_endDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;

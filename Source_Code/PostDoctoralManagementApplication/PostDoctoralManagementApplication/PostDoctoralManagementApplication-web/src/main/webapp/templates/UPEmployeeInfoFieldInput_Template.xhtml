@@ -38,7 +38,7 @@
             <p:selectOneMenu id="faculty" value="#{employeeInformation.location.faculty}">
                 <f:selectItem itemLabel="Select a faculty" noSelectionOption="true"/>
                 <f:selectItems value="#{locationFinderRequestBean.allAllFacultiesInInstitution}" var="fac" itemLabel="#{fac}" itemValue="#{fac}"/>
-                <p:ajax event="change" update="department" listener="#{locationFinderRequestBean.getAllDeparmentsInFacultyInInstitution(employeeInformation.location.institution, employeeInformation.location.faculty)}"/>
+                <p:ajax event="change" update="department" listener="#{locationFinderRequestBean.getAllDeparmentsInFacultyInInstitution(employeeInformation.location.institution, employeeInformation.location.faculty)}" process="@this"/>
             </p:selectOneMenu>
             <p:message for="faculty" styleClass="fieldErrorMessage"/>
             
@@ -46,7 +46,6 @@
             <p:selectOneMenu id="department" value="#{employeeInformation.location.department}">
                 <f:selectItem itemLabel="Select a department" noSelectionOption="true"/>
                 <f:selectItems value="#{locationFinderRequestBean.allAllDeparmentsInFacultyInInstitution}" var="dep" itemLabel="#{dep}" itemValue="#{dep}"/>
-                <p:ajax event="change" update="department" />
             </p:selectOneMenu>
             <p:message for="department" styleClass="fieldErrorMessage"/>
         </h:panelGrid>

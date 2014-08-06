@@ -12,6 +12,7 @@ function showInfoDiv(divindex)
 function hideInfoDiv(divindex)
 {
     $('.informationContainer').stop(true, true);
-    $("#info" + divindex).slideUp({duration : 250, easing : 'linear'});
+    $("#info" + divindex).hide();
+    //$("#info" + divindex).slideUp({duration : 250, easing : 'linear'});
 }  
 

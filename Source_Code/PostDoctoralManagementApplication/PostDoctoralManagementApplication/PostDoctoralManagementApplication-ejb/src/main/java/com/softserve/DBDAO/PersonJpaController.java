@@ -37,6 +37,7 @@ import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -1184,7 +1185,7 @@ public class PersonJpaController implements Serializable {
         return isFound;        
     }
     
-    public Person getUserBySystemIDOrEmail(String input)
+    public Person findUserBySystemIDOrEmail(String input)
     {
         EntityManager em = getEntityManager();
         System.out.println("Out " + input);
@@ -1197,6 +1198,15 @@ public class PersonJpaController implements Serializable {
         {
             return null;
         }
+    }
+    
+    public List<Person> findUserBySecurityRoleWithAccountStatus(SecurityRole securityRole, String accountStatus)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.accountStatus = :status AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("status", accountStatus).setParameter("secRole", securityRole);
+        
+        return q.getResultList();
     }
     
     

@@ -12,37 +12,41 @@
                 <h1 class="header1">Meeting selection menu</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.fellowApplicationDisplayable}">
-                <h1 class="header1">Meetings that have not been held</h1>
-                <ui:decorate template="templates/MeetingLister_Component.xhtml">
-                    <ui:param name="meetingsList" value="#{applicationProgressViewerSelectionRequest.fellowApplications}"/>
-                    <ui:define name="commandButtons">
-                        <p:commandButton value="Edit meeting" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/>
-                        <p:commandButton value="Cancel meeting" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                        <p:commandButton value="Open meeting now" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                    </ui:define>
-                </ui:decorate>
-            </p:outputPanel>
-            
-            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.grantHolderApplicationDisplayable}">
-                <h1 class="header1">Meetings that are currently active</h1>
-                <ui:decorate template="templates/MeetingLister_Component.xhtml">
-                    <ui:param name="meetingsList" value="#{applicationProgressViewerSelectionRequest.grantHolderApplications}"/>
-                    <ui:define name="commandButtons">
-                        <p:commandButton value="Comment on meeting" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                    </ui:define>
-                </ui:decorate>
-            </p:outputPanel>
-            
-            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.allApplicationDisplayable}">
-                <h1 class="header1">Meetings that have been concluded</h1>
-                <ui:decorate template="templates/MeetingLister_Component.xhtml">
-                    <ui:param name="meetingsList" value="#{applicationProgressViewerSelectionRequest.allApplications}"/>
-                    <ui:define name="commandButtons">
-                        <p:commandButton value="View meeting" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                    </ui:define>
-                </ui:decorate>
-            </p:outputPanel>
+            <h:form>
+                <p:outputPanel id="List">
+                    <p:outputPanel rendered="#{meetingSelectionRequestBean.userDRIS}">
+                        <h1 class="header1">Meetings that have not been held</h1>
+                        <ui:decorate template="templates/MeetingLister_Component.xhtml">
+                            <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.stillToBeHeldMeetings}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="Edit meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.editMeeting(meeting)}"/>
+                                <p:commandButton value="Cancel meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.cancelMeeting(meeting)}"/> 
+                                <p:commandButton value="Start meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.openMeeting(meeting)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </p:outputPanel>
+
+                    <p:outputPanel rendered="#{true}">
+                        <h1 class="header1">Meetings that are currently active</h1>
+                        <ui:decorate template="templates/MeetingLister_Component.xhtml">
+                            <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.activeMeetings}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="Comment on meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.commentOnMeeting(meeting)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </p:outputPanel>
+
+                    <p:outputPanel rendered="#{meetingSelectionRequestBean.userDRIS}">
+                        <h1 class="header1">Meetings that have been concluded</h1>
+                        <ui:decorate template="templates/MeetingLister_Component.xhtml">
+                            <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.concludedMeetings}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.viewMeeting(meeting)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </h:form>
         </ui:define>
     </ui:composition>
 </html>

@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.DBDAO.MinuteCommentJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.AuditLog;
@@ -22,6 +23,7 @@ import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionManagement;
@@ -74,6 +76,11 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected PersonJpaController getPersonDAO()
+    {
+        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     /**
      *
      * @return
@@ -110,6 +117,11 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         return new AuditTrailService(emf);
     }
     
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return new GregorianCalendar();
+    }
+    
     /**
      *
      * @param session
@@ -140,6 +152,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         }
         
         //Create the meeting
+        committeeMeeting.setEndDate(null);
         committeeMeetingJpaController.create(committeeMeeting);
         
         //Send notification batch to attendees
@@ -187,6 +200,44 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
         auditTrailService.logAction(auditLog);
     }
+
+    @Override
+    public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception 
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        NotificationService notificationService = getNotificationServiceEJB();
+        
+        if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()) || committeeMeeting.getMinuteCommentList().size() > 0)
+        {
+            throw new Exception("Commitee meeting is already active or held");
+        }
+        
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+        
+        for(Person p : committeeMeeting.getPersonList())
+        {
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
+        }
+        
+        committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());
+        
+        
+        
+        notificationService.sendBatchNotifications(notifications, true);
+        
+        //Log action      
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
+        auditTrailService.logAction(auditLog);
+    }
+    
+    
     
     //This is a good idea to allow manual start and end aswell
 
@@ -292,108 +343,40 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         return getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
     }
-    
-    //A committee meeting should not be deleted from the database when a meeting ends
-    /*@Override
-    public CommitteeMeeting endMeeting(Session sess) throws Exception
-    {
-        cMeeting.setEndDate(new Timestamp(new Date().getTime()));
-        
-        getCommitteeMeetingDAO().edit(cMeeting);
-        
-        getCommitteeMeetingDAO().destroy(cMeeting.getMeetingID());
-        
-        cMeeting.setMeetingID(null);
-        cMeeting.setEndDate(null);
-        cMeeting.setStartDate(null);
-        
-        return cMeeting;
-    }*/
-    /* These functions are handled by the managed bean. The update function will handle this mainly
+
     @Override
-    public CommitteeMeeting addEndorsedApplication(Session sess) throws Exception
-    {        
-        if(cMeeting.getMeetingID() == null)
-            throw new Exception("Meeting has not been started.");
+    public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws AuthenticationException, Exception 
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        EntityManager em = emf.createEntityManager();
+        return getCommitteeMeetingDAO().findAllConcludedCommitteeMeetings();
+    }
+
+    @Override
+    public List<Person> getAllPostDocCommitteeMembers(Session session) throws AuthenticationException, Exception 
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_NEW).getResultList();
-        cMeeting.getApplicationList().addAll(a);
+        return getPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+    }
+
+    @Override
+    public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws AuthenticationException, Exception 
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        getCommitteeMeetingDAO().edit(cMeeting);
-        
-        addMinuteComment(sess, sess.getUser().getTitle() + " " + sess.getUser().getSurname() + " added endorsed Applications to the meeting(" + cMeeting.toString() +").");
-        
-        return cMeeting;
+        return getCommitteeMeetingDAO().findAllStillToBeHeldCommitteeMeetings();
     }
     
-    @Override
-    public CommitteeMeeting addEndorsedRenewals(Session sess) throws Exception
-    {
-        // TODO: Fix implementation
-        EntityManager em = emf.createEntityManager();
-        
-        if(cMeeting.getMeetingID() == null)
-            throw new Exception("Meeting has not been started.");
-        
-        List<Application> a = em.createNamedQuery("Applications.findByType", Application.class).setParameter("type", PersistenceConstants.APPLICATION_TYPE_RENEWAL).getResultList();
-        cMeeting.getApplicationList().addAll(a);
-        
-        getCommitteeMeetingDAO().edit(cMeeting);
-        
-        addMinuteComment(sess, sess.getUser().getTitle() + " " + sess.getUser().getSurname() + " added endorsed renewals to the meeting(" + cMeeting.toString() + ").");
-        
-        return cMeeting;
-    }
     
-    @Override
-    public CommitteeMeeting addMemberToMeeting(Session sess) throws Exception
-    {
-        // TODO: Fix implementation 
-        if(cMeeting.getMeetingID() == null)
-            throw new Exception("Meeting has not been started.");
-        
-        if(sess.getUser().getSecurityRoleList().contains(PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER)
-                && !cMeeting.getPersonList().contains(sess.getUser()))
-        {
-            cMeeting.getPersonList().add(sess.getUser());
-            getCommitteeMeetingDAO().edit(cMeeting);
-        }
-        
-        addMinuteComment(sess, sess.getUser().getTitle() + " " + sess.getUser().getSurname() + " entered meeting");
-        
-        return cMeeting;
-    }
-    
-    @Override
-    public CommitteeMeeting removeMemberFromMeeting(Session sess) throws Exception
-    {
-        if(cMeeting.getMeetingID() == null)
-            throw new Exception("Meeting has not been started.");
-        
-        addMinuteComment(sess, sess.getUser().getTitle() + " " + sess.getUser().getSurname() + " left meeting");
-        
-        if(cMeeting.getPersonList().contains(sess.getUser()))
-        {
-            cMeeting.getPersonList().add(sess.getUser());
-            getCommitteeMeetingDAO().edit(cMeeting);
-        }
-        
-        return cMeeting;
-    }
-    
-    @Override
-    public List<Person> getAttendants()
-    {
-        return cMeeting.getPersonList();
-    }
-    
-    @Override
-    public List<Application> getApplications()
-    {
-        return cMeeting.getApplicationList();
-    }
-    */
     
 }
