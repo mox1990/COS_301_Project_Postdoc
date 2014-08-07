@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -27,8 +29,12 @@ import net.sf.jasperreports.view.JasperViewer;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ReportServices implements ReportServicesLocal 
 {    
+    private final String fs = System.getProperty("file.separator");
+    private final String filepath = "Reports" + fs;
+    
     protected Connection getConnection() throws SQLException, ClassNotFoundException
     {
         // This checks to see if the MySQL driver is avaible to use
@@ -39,10 +45,12 @@ public class ReportServices implements ReportServicesLocal
     }
     
     // Just for Demo purposes for now
-    public void exportPersonsToPdf(Session session) throws JRException, ClassNotFoundException, SQLException, InterruptedException
+    @Override
+    public byte[] exportPersonsToPdf() throws JRException, ClassNotFoundException, SQLException, InterruptedException
     {
-        JasperReport jasperReport = JasperCompileManager.compileReport("Person.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
-        createReportInPdf(jasperReport);
+        System.out.println("Working in: " + System.getProperty("user.home") );
+        JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
+        return createReportInPdf(jasperReport);
     }
     
     private byte[] createReportInPdf(JasperReport jasperReport) throws JRException, SQLException, ClassNotFoundException, InterruptedException
@@ -50,16 +58,13 @@ public class ReportServices implements ReportServicesLocal
         // Create a map of parameters to pass to the report.
         Map parameters = new HashMap();
         
-        //parameters.put("ReportTitle", "Basic JasperReport"); // Dynamic data like user name and time goes here
+        //parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
 
         // Create JasperPrint using fillReport() method which fills the report 
         // with data. This data is transperantly accessed via a SQL statement in the XML
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, getConnection());
         // You can use JasperPrint to create PDF
-        
-        JasperViewer.viewReport(jasperPrint); // Testing purposes
-        Thread.sleep(5000); // To allow view of the report
+
         return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
-        
     }
 }

@@ -54,7 +54,7 @@ public class ReportServicesTest {
                 
         try
         {
-            instance.exportPersonsToPdf(session);
+            instance.exportPersonsToPdf();
         }
         catch (Exception ex)
         {

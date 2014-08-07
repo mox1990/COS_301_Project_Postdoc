@@ -11,8 +11,10 @@ import com.softserve.DBEntities.Application;
 import com.softserve.system.Session;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import javax.ejb.Local;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -20,5 +22,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface ReportServicesLocal {
-    
+    public byte[] exportPersonsToPdf() throws JRException, ClassNotFoundException, SQLException, InterruptedException;
 }
