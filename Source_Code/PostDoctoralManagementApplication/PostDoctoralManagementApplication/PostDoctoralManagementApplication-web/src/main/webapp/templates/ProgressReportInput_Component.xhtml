@@ -5,11 +5,14 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <ui:component>
-        <h:panelGrid columns="2" cellpadding="10px">            
-            <p:outputLabel value="Self evaluation by fellow:" for="selfE"/>                                
-            <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
-            <p:message for="selfE" styleClass="fieldErrorMessage"/>            
-        </h:panelGrid>
+        <h:form>
+            <h:panelGrid columns="2" cellpadding="10px">            
+                <p:outputLabel value="Self evaluation by fellow:" for="selfE"/>                                
+                <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
+                <p:message for="selfE" styleClass="fieldErrorMessage"/>            
+            </h:panelGrid>
+            <p:commandButton value="Add infromation to progress report" actionListener="#{bean.addInformation()}"/>
+        </h:form>
         
         <p:panel header="Research output generated" toggleable="true" collapsed="true">
             <ui:decorate template="researchOutputFieldInput_Component.xhtml">

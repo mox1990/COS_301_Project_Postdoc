@@ -5,19 +5,21 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="Applications progress reports"/>
+        <ui:param name="pageTitle" value="Progress report creation"/>
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Applications for pending a progress report</h1>
+                <h1 class="header1">Progress report creator</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                <ui:param name="pendingApplications" value="#{progressReportApplicationSelectionRequestBean.pendingApplications}"/>
-                <ui:define name="commandButtons">
-                    <p:commandButton value="Create a progress report for application" styleClass="button-fill" action="#{progressReportApplicationSelectionRequestBean.viewApplication(app)}"/> 
-                </ui:define>
-            </ui:decorate>
+            <h:form>
+                <ui:decorate template="templates/ProgressReportInput_Component.xhtml">
+                    <ui:param name="bean" value="#{progressReportCreationRequestBean}"/>
+                    <ui:define name="commandButtons">
+                        <p:commandButton value="Create progress report" styleClass="button-fill" action="#{progressReportApplicationSelectionRequestBean.viewApplication(app)}"/> 
+                    </ui:define>
+                </ui:decorate>
+            </form>
         </ui:define>
     </ui:composition>
 </html>
