@@ -29,7 +29,7 @@ import javax.inject.Named;
  */
 @Named(value = "auditTrailTableBean")
 @ConversationScoped
-public class auditTrailTableBean implements Serializable {
+public class AuditTrailTableBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -51,7 +51,7 @@ public class auditTrailTableBean implements Serializable {
     /**
      * Creates a new instance of auditTrailTableBean
      */
-    public auditTrailTableBean() {
+    public AuditTrailTableBean() {
     }
     
     @PostConstruct

@@ -12,15 +12,16 @@
                 <h1 class="header1">Meeting selection menu</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <h:form id="meetingsList">                
+            <h:form id="meetingForm" >                
+                <p:outputPanel id="meetingsList">
                     <p:outputPanel rendered="#{meetingSelectionRequestBean.userDRIS}">
                         <h1 class="header1">Meetings that have not been held</h1>
                         <ui:decorate template="templates/MeetingLister_Component.xhtml">
                             <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.stillToBeHeldMeetings}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="Edit meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.editMeeting(meeting)}" update=":meetingsList"/>
-                                <p:commandButton value="Cancel meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.cancelMeeting(meeting)}" update=":meetingsList"/> 
-                                <p:commandButton value="Start meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.openMeeting(meeting)}" update=":meetingsList"/> 
+                                <p:commandButton value="Edit meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.editMeeting(meeting)}" ajax="false"/>
+                                <p:commandButton value="Cancel meeting" styleClass="button button-fill" actionListener="#{meetingSelectionRequestBean.cancelMeeting(meeting)}" update=":meetingForm:meetingsList"/> 
+                                <p:commandButton value="Start meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.openMeeting(meeting)}" ajax="false"/> 
                             </ui:define>
                         </ui:decorate>
                     </p:outputPanel>
@@ -30,8 +31,8 @@
                         <ui:decorate template="templates/MeetingLister_Component.xhtml">
                             <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.activeMeetings}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="Comment on meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.commentOnMeeting(meeting)}" update=":meetingsList"/>
-                                <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.closeMeeting(meeting)}" update=":meetingsList"/>
+                                <p:commandButton value="Comment on meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.commentOnMeeting(meeting)}" ajax="false"/>
+                                <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.closeMeeting(meeting)}" ajax="false"/>
                             </ui:define>
                         </ui:decorate>
                     </p:outputPanel>
@@ -41,10 +42,11 @@
                         <ui:decorate template="templates/MeetingLister_Component.xhtml">
                             <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.concludedMeetings}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.viewMeeting(meeting)}" update=":meetingsList"/> 
+                                <p:commandButton value="View meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.viewMeeting(meeting)}" ajax="false"/> 
                             </ui:define>
                         </ui:decorate>
                     </p:outputPanel>
+                </p:outputPanel>
             </h:form>
         </ui:define>
     </ui:composition>

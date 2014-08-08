@@ -15,7 +15,18 @@
             </div>
             <div>
                 <h:form>
-                    <p:panel header="Funding report email">
+                    <p:panel header="Application details">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
+                            <p:calendar id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
+                            <p:message for="startDate" styleClass="fieldErrorMessage"/>
+                            
+                            <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
+                            <p:calendar id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" required="true"/>
+                            <p:message for="endDate" styleClass="fieldErrorMessage"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Funding report">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Fellowship cost (ZAR):" for="fellowshipCost"/>                                
                             <p:inputText id="fellowshipCost" value="#{drisApproveFundingBean.fundingReport.fellowshipCost}" required="true">

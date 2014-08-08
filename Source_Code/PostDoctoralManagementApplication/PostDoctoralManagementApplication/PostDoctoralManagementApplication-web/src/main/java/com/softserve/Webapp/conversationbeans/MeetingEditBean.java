@@ -73,6 +73,14 @@ public class MeetingEditBean implements Serializable {
         
         committeeMeeting = sessionManagerBean.getObjectFromSessionStorage("MEETING", CommitteeMeeting.class);
         
+        if(committeeMeeting == null)
+        {
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToMeetingManagementServiceMeetingSelectionView());
+            Exception ex = new Exception("Internal system error");
+            ExceptionUtil.logException(MeetingEditBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+        
         if(committeeMeeting.getApplicationList() == null)
         {
             selectedApplicationList = new ArrayList<Application>();
@@ -91,7 +99,6 @@ public class MeetingEditBean implements Serializable {
             selectedAttendeesList = committeeMeeting.getPersonList();
         }
         
-        committeeMeeting = new CommitteeMeeting();
         
         try 
         {

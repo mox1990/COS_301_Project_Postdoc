@@ -148,7 +148,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         //Create notifications for each attendee
         for(Person p : committeeMeeting.getPersonList())
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
         }
         
         //Create the meeting
@@ -185,13 +185,20 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         NotificationService notificationService = getNotificationServiceEJB();
         
+        CommitteeMeeting cm = committeeMeetingJpaController.findCommitteeMeeting(committeeMeeting.getMeetingID());
+        
+        if(cm.getEndDate() != null || cm.getStartDate().before(getGregorianCalendar().getTime()))
+        {
+            throw new Exception("Meeting has already started or been concluded");
+        }
+        
         committeeMeetingJpaController.edit(committeeMeeting);
         
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         
         for(Person p : committeeMeeting.getPersonList())
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
         }
         
         notificationService.sendBatchNotifications(notifications, true);
@@ -223,7 +230,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         for(Person p : committeeMeeting.getPersonList())
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
+            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
         }
         
         committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());
@@ -256,8 +263,15 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        committeeMeeting.setStartDate(new Timestamp(new Date().getTime()));
-        getCommitteeMeetingDAO().edit(committeeMeeting);
+        if(committeeMeeting.getEndDate() == null)
+        {
+            committeeMeeting.setStartDate(getGregorianCalendar().getTime());
+            getCommitteeMeetingDAO().edit(committeeMeeting);
+        }
+        else
+        {
+            throw new Exception("Meeting has already been concluded");
+        }
     }
     
     /**
@@ -275,8 +289,15 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        committeeMeeting.setEndDate(new Timestamp(new Date().getTime()));
-        getCommitteeMeetingDAO().edit(committeeMeeting);
+        if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()))
+        {
+            committeeMeeting.setEndDate(getGregorianCalendar().getTime());
+            getCommitteeMeetingDAO().edit(committeeMeeting);
+        }
+        else
+        {
+            throw new Exception("Meeting has not yet started");
+        }
     }
     
     //The changes are to make the function more inline with the specification
@@ -297,10 +318,17 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        minuteComment.setAttendee(session.getUser());
-        minuteComment.setTimestamp(getGregorianCalendar().getTime());
-        
-        getMinuteCommentDAO().create(minuteComment);
+        if(minuteComment.getMeeting().getStartDate().before(getGregorianCalendar().getTime()) && minuteComment.getMeeting().getEndDate() == null)
+        {
+            minuteComment.setAttendee(session.getUser());
+            minuteComment.setTimestamp(getGregorianCalendar().getTime());
+
+            getMinuteCommentDAO().create(minuteComment);
+        }
+        else
+        {
+            throw new Exception("Meeting is not active");
+        }
         
         //This is already handled by the DAO
         //cMeeting.getMinuteCommentList().add(min);

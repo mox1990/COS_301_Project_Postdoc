@@ -17,16 +17,19 @@
                     <ui:decorate template="templates/MeetingViewer_Component.xhtml">
                         <ui:param name="meeting" value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting}"/>
                     </ui:decorate>
-                    <ui:decorate template="templates/MeetingCommentsTable_Component.xhtml">
-                        <ui:param name="header" value="Meeting minutes/comments"/>
-                        <ui:param name="comments" value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.minuteCommentList}"/>
-                    </ui:decorate>
-                    <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Comment:" for="comment"/>                                
-                        <p:inputTextarea id="comment" value="#{meetingCommentatorRequestBean.minuteComment.comment}"/>
-                        <p:message for="comment" styleClass="fieldErrorMessage"/>                                                                        
-                    </h:panelGrid>
-                    <p:commandButton value="Save comment" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" ajax="false" styleClass="button button-fill"/>
+                    <p:outputPanel id="Commentss">
+                        <ui:decorate template="templates/MeetingCommentsTable_Component.xhtml">
+                            <ui:param name="header" value="Meeting minutes/comments"/>
+                            <ui:param name="comments" value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.minuteCommentList}"/>
+                        </ui:decorate>
+                    
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Comment:" for="comment"/>                                
+                            <p:inputTextarea id="comment" value="#{meetingCommentatorRequestBean.minuteComment.comment}"/>
+                            <p:message for="comment" styleClass="fieldErrorMessage"/>                                                                        
+                        </h:panelGrid>
+                    </p:outputPanel>
+                    <p:commandButton value="Save comment" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill"/>
                 </h:form>
             </div>
         </ui:define>

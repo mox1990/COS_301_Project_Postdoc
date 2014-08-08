@@ -14,6 +14,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.DRISApprovalServiceLocal;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -44,6 +45,8 @@ public class DRISApproveFundingBean {
     private String applicantMessage;
     private Notification cscMessage;
     private Notification financeMessage;
+    private Date startDate;
+    private Date endDate;
     
     /**
      * Creates a new instance of DRISApproveFundingBean
@@ -94,7 +97,23 @@ public class DRISApproveFundingBean {
     public void setFinanceMessage(Notification financeMessage) {
         this.financeMessage = financeMessage;
     }
-    
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+            
     public Application getSelectedApplication()
     {
         return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
@@ -104,7 +123,10 @@ public class DRISApproveFundingBean {
     {
         try
         {
-            dRISApprovalServiceLocal.approveFunding(sessionManagerBean.getSession(), getSelectedApplication(), fundingReport,applicantMessage,cscMessage,financeMessage);
+            Application application = getSelectedApplication();
+            application.setStartDate(startDate);
+            application.setEndDate(endDate);
+            dRISApprovalServiceLocal.approveFunding(sessionManagerBean.getSession(), application, fundingReport,applicantMessage,cscMessage,financeMessage);
             return navigationManagerBean.goToDeanApplicationSelectionView();
         }
         catch(Exception ex)

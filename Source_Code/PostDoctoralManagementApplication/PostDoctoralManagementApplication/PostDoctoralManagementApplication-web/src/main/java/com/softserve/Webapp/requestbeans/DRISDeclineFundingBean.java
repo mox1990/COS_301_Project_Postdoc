@@ -47,7 +47,7 @@ public class DRISDeclineFundingBean {
 
     public Application getSelectedApplication()
     {
-        return sessionManagerBean.getObjectFromSessionStorage(0, Application.class);
+        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
     }
 
     public UIComponent getErrorContainer() {
