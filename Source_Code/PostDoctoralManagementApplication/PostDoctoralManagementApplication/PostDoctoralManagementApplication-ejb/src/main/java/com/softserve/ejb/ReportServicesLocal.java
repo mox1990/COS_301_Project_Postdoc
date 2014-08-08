@@ -23,4 +23,5 @@ import net.sf.jasperreports.engine.JRException;
 @Local
 public interface ReportServicesLocal {
     public byte[] exportPersonsToPdf() throws JRException, ClassNotFoundException, SQLException, InterruptedException;
+    public byte[] exportPersonsToExcel() throws JRException, ClassNotFoundException, SQLException, InterruptedException;
 }

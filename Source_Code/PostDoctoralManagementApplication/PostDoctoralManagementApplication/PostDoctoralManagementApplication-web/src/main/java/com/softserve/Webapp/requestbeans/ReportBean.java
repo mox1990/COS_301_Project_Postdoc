@@ -36,7 +36,33 @@ public class ReportBean {
     public ReportBean() {
     }
     
-    public StreamedContent getApplicationReport() // TODO: Add report filters...
+    public StreamedContent getApplicationReportPDF() // TODO: Add report filters...
+    {
+        InputStream stream = null;
+        try 
+        {
+            stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
+            return new DefaultStreamedContent(stream, "application/pdf", "Report-About-Date.pdf");
+        } 
+        catch (JRException | ClassNotFoundException |SQLException | InterruptedException ex) 
+        {
+            Logger.getLogger(ReportBean.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        finally 
+        {
+            try 
+            {
+                if(stream!=null) stream.close();
+            } 
+            catch (IOException ex) 
+            {
+                Logger.getLogger(ReportBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public StreamedContent getApplicationReportExcel() // TODO: Add report filters...
     {
         InputStream stream = null;
         try 
