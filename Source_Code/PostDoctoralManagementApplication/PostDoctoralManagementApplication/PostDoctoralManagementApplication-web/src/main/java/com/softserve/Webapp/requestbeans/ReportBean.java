@@ -6,6 +6,10 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
+import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.ReportServicesLocal;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,6 +18,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +33,17 @@ import org.primefaces.model.StreamedContent;
 @Named(value = "reportBean")
 @RequestScoped
 public class ReportBean {
+    private String reportType = "";
+    
+    @Inject
+    private SessionManagerBean sessionManagerBean;
+    @Inject 
+    private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private Conversation conversation;
+    
     @EJB
     private ReportServicesLocal reportEJB;
     /**
@@ -35,18 +51,40 @@ public class ReportBean {
      */
     public ReportBean() {
     }
+
+    public String getReportType() {
+        return reportType;
+    }
+
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
+    }
     
-    public StreamedContent getApplicationReportPDF() // TODO: Add report filters...
+    public StreamedContent getReportPDF() // TODO: Add report filters...
     {
         InputStream stream = null;
         try 
         {
-            stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
+            switch(reportType)
+            {
+                case "application":
+                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
+                    break;
+                case "person":
+                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
+                    break;
+                default:
+                    throw new Exception("0");
+            }
+            
             return new DefaultStreamedContent(stream, "application/pdf", "Report-About-Date.pdf");
         } 
-        catch (JRException | ClassNotFoundException |SQLException | InterruptedException ex) 
+        catch (Exception ex) 
         {
-            Logger.getLogger(ReportBean.class.getName()).log(Level.SEVERE, null, ex);
+            ExceptionUtil.logException(ReportBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
         } 
         finally 
         {
@@ -56,23 +94,25 @@ public class ReportBean {
             } 
             catch (IOException ex) 
             {
-                Logger.getLogger(ReportBean.class.getName()).log(Level.SEVERE, null, ex);
+                ExceptionUtil.logException(ReportBean.class, ex);
+                ExceptionUtil.handleException(null, ex);
             }
         }
         return null;
     }
     
-    public StreamedContent getApplicationReportExcel() // TODO: Add report filters...
+    public StreamedContent getReportExcel() // TODO: Add report filters...
     {
         InputStream stream = null;
         try 
         {
-            stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
-            return new DefaultStreamedContent(stream, "application/pdf", "Report-About-Date.pdf");
+            stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel());
+            return new DefaultStreamedContent(stream, "application/vnd.ms-excel", "Report-About-Date.xls");
         } 
-        catch (JRException | ClassNotFoundException |SQLException | InterruptedException ex) 
+        catch (Exception ex) 
         {
-            Logger.getLogger(ReportBean.class.getName()).log(Level.SEVERE, null, ex);
+            ExceptionUtil.logException(ReportBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
         } 
         finally 
         {
@@ -82,9 +122,15 @@ public class ReportBean {
             } 
             catch (IOException ex) 
             {
-                Logger.getLogger(ReportBean.class.getName()).log(Level.SEVERE, null, ex);
+                ExceptionUtil.logException(ReportBean.class, ex);
+                ExceptionUtil.handleException(null, ex);
             }
         }
         return null;
+    }
+    
+    public void showReportType()
+    {
+        
     }
 }
