@@ -7,6 +7,7 @@
 package com.softserve.DBEntities;
 
 import auto.softserve.XMLEntities.fellow.ProgressReportContent;
+import com.softserve.XMLUtils.XMLMarshaller;
 import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;
 import java.util.Date;
@@ -116,6 +117,13 @@ public class ProgressReport implements Serializable {
         {
             return null;
         }
+    }
+    
+    public void setContentXMLEntity(ProgressReportContent progressReportContent) throws JAXBException
+    {
+        XMLMarshaller xmlm = new XMLMarshaller();
+             
+        setContent(xmlm.marshalProgressReportContentObject(progressReportContent));
     }
 
     public void setApplication(Application application) {

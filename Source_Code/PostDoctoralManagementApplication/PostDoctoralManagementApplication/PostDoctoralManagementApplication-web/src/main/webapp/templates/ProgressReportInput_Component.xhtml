@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:component>
+        <h:panelGrid columns="2" cellpadding="10px">            
+            <p:outputLabel value="Self evaluation by fellow:" for="selfE"/>                                
+            <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
+            <p:message for="selfE" styleClass="fieldErrorMessage"/>            
+        </h:panelGrid>
+        
+        <p:panel header="Research output generated" toggleable="true" collapsed="true">
+            <ui:decorate template="researchOutputFieldInput_Component.xhtml">
+                <ui:param name="references" value="#{bean.progressReportContent.researchOutput.references}"/>
+                <ui:param name="currentReference" value="#{bean.currentReference}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToResearchOutputList"/>
+                <ui:param name="prefix" value="res"/>
+            </ui:decorate>
+        </p:panel>
+            
+        <p:panel header="Project aims which were attained" toggleable="true" collapsed="true">
+            <ui:decorate template="projectAimsFieldInput_Component.xhtml">
+                <ui:param name="aims" value="#{bean.progressReportContent.projectAimsAttainment.aimAttainment}"/>
+                <ui:param name="currentAim" value="#{bean.currentAttainedAim}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToAttainedAimsList"/>
+            </ui:decorate>
+        </p:panel>
+
+        <p:panel header="Outcomes which were attained" toggleable="true" collapsed="true">
+            <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
+                <ui:param name="expectedOutcomes" value="#{bean.progressReportContent.projectOutcomesAttainment.outcomeAttainment}"/>
+                <ui:param name="currentExpectedOutcome" value="#{bean.currentAttainedOutcome}"/>
+                <ui:param name="bean" value="#{bean}"/>
+                <ui:param name="beanAction" value="addToAttainedOutcomesList"/>
+            </ui:decorate>
+        </p:panel>
+    </ui:component>
+</html>
+

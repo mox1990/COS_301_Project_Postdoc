@@ -9,6 +9,7 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.ProgressReportJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
@@ -16,6 +17,7 @@ import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -118,5 +120,44 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("updated progress report", session.getUser());
         auditTrailService.logAction(auditLog);
+    }
+    
+    public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
+    {
+        
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        List<Application> output = new ArrayList<Application>();
+        
+        Person user = session.getUser();
+        GregorianCalendar curCal = getGregorianCalendarUTIL();
+        
+        for(Application application : user.getApplicationList1())
+        {        
+            GregorianCalendar startCal = getGregorianCalendarUTIL();
+            startCal.setTime(application.getStartDate());
+            
+            
+            GregorianCalendar endCal = getGregorianCalendarUTIL();
+            endCal.setTime(application.getEndDate());
+            
+            if(startCal.before(curCal) && endCal.after(curCal))
+            {
+                GregorianCalendar diffCal = getGregorianCalendarUTIL();
+                diffCal.setTimeInMillis(endCal.getTimeInMillis() - curCal.getTimeInMillis());
+                int numberOfReports = diffCal.get(GregorianCalendar.YEAR);
+
+                if(numberOfReports > application.getProgressReportList().size())
+                {
+                    output.add(application);
+                }
+            }
+        }
+        
+        return output;
     }
 }

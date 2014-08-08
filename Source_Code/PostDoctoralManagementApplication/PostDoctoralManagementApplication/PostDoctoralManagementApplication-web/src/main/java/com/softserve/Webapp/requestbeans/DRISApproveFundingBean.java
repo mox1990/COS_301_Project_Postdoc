@@ -127,7 +127,7 @@ public class DRISApproveFundingBean {
             application.setStartDate(startDate);
             application.setEndDate(endDate);
             dRISApprovalServiceLocal.approveFunding(sessionManagerBean.getSession(), application, fundingReport,applicantMessage,cscMessage,financeMessage);
-            return navigationManagerBean.goToDeanApplicationSelectionView();
+            return navigationManagerBean.goToDRISApprovalServiceApplicationSelectionView();
         }
         catch(Exception ex)
         {

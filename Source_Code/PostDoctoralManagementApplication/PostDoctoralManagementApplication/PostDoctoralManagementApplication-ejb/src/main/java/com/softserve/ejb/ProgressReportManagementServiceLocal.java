@@ -6,6 +6,11 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.ProgressReport;
+import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -15,5 +20,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface ProgressReportManagementServiceLocal {
-    
+    public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception;
+    public void updateProgressReport(Session session, ProgressReport progressReport) throws AuthenticationException, Exception;
+    public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception;
 }

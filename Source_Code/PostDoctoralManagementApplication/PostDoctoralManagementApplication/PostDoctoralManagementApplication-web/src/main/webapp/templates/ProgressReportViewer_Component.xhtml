@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:component>
+        <h:panelGrid columns="2" cellpadding="10px">
+            <h:outputText styleClass="text-label" value="Self evaluation by fellow:"/>
+            <h:outputText value="#{progressReportCreationRequestBean.progressReportContent.selfEvaluation}"/>
+        </h:panelGrid>
+        
+        <ui:decorate template="referenceDataTable_Component.xhtml">
+            <ui:param name="header" value="Research output generated"/>
+            <ui:param name="members" value="#{progressReportContent.researchOutput.references}" />
+        </ui:decorate>
+        
+        <ui:decorate template="projectAimsDataTable_Component.xhtml">
+            <ui:param name="header" value="Project aims which were attained"/>
+            <ui:param name="aims" value="#{progressReportContent.projectAimsAttainment.aimAttainment}" />
+        </ui:decorate>
+
+        <ui:decorate template="expectedOutcomesDataTable_Component.xhtml">
+            <ui:param name="header" value="Outcomes which were attained"/>
+            <ui:param name="expectedOutcomes" value="#{progressReportContent.projectOutcomesAttainment.outcomeAttainment}" />
+        </ui:decorate>
+    </ui:component>
+</html>
+

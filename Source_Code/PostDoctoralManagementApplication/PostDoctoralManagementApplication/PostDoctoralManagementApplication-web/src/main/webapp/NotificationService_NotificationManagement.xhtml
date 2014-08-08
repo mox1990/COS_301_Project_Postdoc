@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Notification management"/>
+        
+        <ui:define name="CSSStyleSheets">
+            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        </ui:define>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Notification viewer</h1>
+                <h2></h2>
+            </div>
+            <div>                
+                <p:outputPanel>
+                    <h:form>
+                        <ui:decorate template="templates/NotificationTable_Component.xhtml">
+                            <ui:param name="notification" value="#{notificationViewerRequestBean.notifications}"/>
+                            <ui:param name="filteredNotifications" value="#{notificationViewerRequestBean.filteredNotifications}"/>
+                            <ui:param name="header" value="Inbox"/>
+                        </ui:decorate>
+                    </h:form>
+                </p:outputPanel>
+            </div>            
+        </ui:define>        
+    </ui:composition>
+</html>
