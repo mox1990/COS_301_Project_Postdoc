@@ -3,12 +3,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <ui:composition template="templates/generalPageTemplate.xhtml">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
-        <ui:define name="CSSStyleSheets">
-            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        <ui:define name="pageBody">
+            
+            <h:selectOneRadio id="whichReport" value="#{reportBean.reportType}">
+                <f:selectItem itemLabel="Application" itemValue="application"/>
+                <f:selectItem itemLabel="Person" itemValue="person" />
+                <!--Space for more types of reports -->
+            </h:selectOneRadio>
+
+            <h:form>
+                <p:commandButton value="DownloadPDF" ajax="false" icon="ui-icon-arrowthick-1-s">
+                    <p:fileDownload value="#{reportBean.reportPDF}" />
+                </p:commandButton>
+            </h:form>
+            
+            <h:form>
+                <p:commandButton value="DownloadExcel" ajax="false" icon="ui-icon-arrowthick-1-s">
+                    <p:fileDownload value="#{reportBean.reportExcel}" />
+                </p:commandButton>
+            </h:form>
+
         </ui:define>
     </ui:composition>
 </html>
