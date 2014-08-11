@@ -122,6 +122,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         auditTrailService.logAction(auditLog);
     }
     
+    @Override
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
     {
         
@@ -147,11 +148,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
             
             if(startCal.before(curCal) && endCal.after(curCal))
             {
-                GregorianCalendar diffCal = getGregorianCalendarUTIL();
-                diffCal.setTimeInMillis(endCal.getTimeInMillis() - curCal.getTimeInMillis());
-                int numberOfReports = diffCal.get(GregorianCalendar.YEAR);
-
-                if(numberOfReports > application.getProgressReportList().size())
+                if(getNumberOfProgressReportsRequiredByApplication(application) > application.getProgressReportList().size())
                 {
                     output.add(application);
                 }
@@ -159,5 +156,27 @@ public class ProgressReportManagementService implements ProgressReportManagement
         }
         
         return output;
+    }
+    
+    @Override
+    public boolean doesApplicationHaveFinalProgressReport(Application application)
+    {
+        return getNumberOfProgressReportsRequiredByApplication(application) == application.getProgressReportList().size();
+    }
+    
+    @Override
+    public int getNumberOfProgressReportsRequiredByApplication(Application application)
+    {
+        GregorianCalendar curCal = getGregorianCalendarUTIL();
+       
+        GregorianCalendar startCal = getGregorianCalendarUTIL();
+        startCal.setTime(application.getStartDate());
+
+        GregorianCalendar endCal = getGregorianCalendarUTIL();
+        endCal.setTime(application.getEndDate());
+        
+        GregorianCalendar diffCal = getGregorianCalendarUTIL();
+        diffCal.setTimeInMillis(endCal.getTimeInMillis() - startCal.getTimeInMillis());
+        return diffCal.get(GregorianCalendar.YEAR);
     }
 }

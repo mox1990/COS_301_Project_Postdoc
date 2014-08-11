@@ -242,4 +242,21 @@ public class ApplicationServicesUtil {
                
     }
     
+    public void submitApplication(Application application) throws Exception
+    {
+        if(application == null)
+        {
+            throw new Exception("Application is not valid");
+        }
+        
+        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        
+        application = applicationJpaController.findApplication(application.getApplicationID());
+        
+        //Set application status
+        application.setSubmissionDate(getGregorianCalendar().getTime());
+        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+        applicationJpaController.edit(application);
+    }
+    
 }

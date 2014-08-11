@@ -9,10 +9,13 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.Exceptions.CVAlreadExistsException;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -92,11 +95,22 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     protected AuditTrailService getAuditTrailServiceEJB()
     {
         return new AuditTrailService(emf);
+        
     }  
+    
+    protected ApplicationServicesUtil getApplicationServicesUtil()
+    {
+        return new ApplicationServicesUtil(emf);
+    }
     
     protected GregorianCalendar getGregorianCalendarUTIL()
     {
         return new GregorianCalendar();
+    }
+    
+    protected CVManagementService getCVManagementServiceEJB()
+    {
+        return new CVManagementService(emf);
     }
     
     @Override
@@ -122,25 +136,49 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     }
     
     @Override
-    public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws AuthenticationException, Exception
+    public boolean doesApplicationHaveFinalProgressReport(Application application)
     {
-        GregorianCalendar gregorianCalendar = getGregorianCalendarUTIL();
-        gregorianCalendar.setTimeInMillis(application.getEndDate().getTime() - application.getStartDate().getTime());
+        return getProgressReportMangementEJB().doesApplicationHaveFinalProgressReport(application);
+    }
+    
+    @Override
+    public void updateResearchFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        int noOfYears = gregorianCalendar.get(GregorianCalendar.YEAR) + 1;
+        if(cv == null)
+        {
+            throw new Exception("CV is not valid");
+        }
         
-        return (application.getProgressReportList().size() == noOfYears);
+        CVManagementService cVManagementService = getCVManagementServiceEJB();
+        if(cVManagementService.hasCV(session))
+        {
+            cVManagementService.updateCV(session, cv);
+        }
+        else
+        {
+            throw new Exception("CV does not exist valid");
+        }
     }
         
     @Override
-    public void createFinalProgressReportForApplication(Session session, Application application, String report) throws AuthenticationException, Exception
+    public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
     {
         ProgressReportManagementService progressReportManagementService = getProgressReportMangementEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        ProgressReport progressReport = dBEntitiesFactory.bulidProgressReportEntity(null, report, null);        
-        
-        progressReportManagementService.createProgressReport(session, application, progressReport);
+        if(getProgressReportMangementEJB().getNumberOfProgressReportsRequiredByApplication(application) == application.getProgressReportList().size() - 1)
+        {
+            progressReportManagementService.createProgressReport(session, application, progressReport);
+        }
+        else
+        {
+            throw new Exception("This is not the final progress report");
+        }
     }
     
     @Override
@@ -166,6 +204,27 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         
         //Log action
         AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Opened a renewal application", session.getUser());
+        auditTrailService.logAction(auditLog);
+    }
+    
+    @Override
+    public void submitApplication(Session session, Application application) throws Exception
+    {
+        //Authenticate user privliges
+        UserGateway userGateway = getUserGatewayServiceEJB();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+        userGateway.authenticateUser(session, roles);
+        //Authenticate user ownership of application
+        userGateway.authenticateUserAsOwner(session, application.getFellow());
+        
+        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+        getApplicationServicesUtil().submitApplication(application);
+        
+        //Log action
+        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Submitted renewal application", session.getUser());
         auditTrailService.logAction(auditLog);
     }
 }

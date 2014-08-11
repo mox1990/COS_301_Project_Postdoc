@@ -14,6 +14,7 @@ import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.*;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -77,6 +78,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
+    }
+    
+    protected ApplicationServicesUtil getApplicationServicesUtil()
+    {
+        return new ApplicationServicesUtil(emf);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -278,22 +284,10 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
-        if(application == null)
-        {
-            throw new Exception("Application is not valid");
-        }
-        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        NotificationService notificationService = getNotificationServiceEJB();
         AuditTrailService auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        application = applicationJpaController.findApplication(application.getApplicationID());
-        
-        //Set application status
-        application.setSubmissionDate(getGregorianCalendar().getTime());
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
-        applicationJpaController.edit(application);
+        getApplicationServicesUtil().submitApplication(application);
         
         //Log action
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Submitted new application", session.getUser());

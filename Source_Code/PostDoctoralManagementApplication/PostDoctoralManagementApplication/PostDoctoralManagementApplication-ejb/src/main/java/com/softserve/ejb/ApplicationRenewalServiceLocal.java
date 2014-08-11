@@ -7,8 +7,11 @@
 package com.softserve.ejb;
 
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.ProgressReport;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
@@ -21,7 +24,9 @@ import javax.ejb.Local;
 public interface ApplicationRenewalServiceLocal
 {
     public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws AuthenticationException, Exception;
-    public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws AuthenticationException, Exception;
-    public void createFinalProgressReportForApplication(Session session, Application application, String report) throws AuthenticationException, Exception;
+    public boolean doesApplicationHaveFinalProgressReport(Application application);
+    public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception;
     public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception;
+    public void submitApplication(Session session, Application application) throws Exception;
+    public void updateResearchFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception;
 }

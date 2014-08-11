@@ -11,6 +11,7 @@ import auto.softserve.XMLEntities.fellow.Reference;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
+import com.softserve.Webapp.depenedentbeans.ProgressReportCreationDependBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -36,16 +37,13 @@ public class ProgressReportCreationRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private ProgressReportCreationDependBean progressReportCreationDependBean;
     
     @EJB
     private ProgressReportManagementServiceLocal progressReportManagementServiceLocal;
     
-    private ProgressReport progressReport;
-    private ProgressReportContent progressReportContent;
     
-    private Reference currentReference;
-    private String currentAttainedAim;
-    private String currentAttainedOutcome;
     
     /**
      * Creates a new instance of ProgressReportCreationRequestBean
@@ -56,15 +54,7 @@ public class ProgressReportCreationRequestBean {
     @PostConstruct
     public void init()
     {
-        progressReport = new ProgressReport();
-        progressReportContent = new ProgressReportContent();
-        progressReportContent.setProjectAimsAttainment(new ProgressReportContent.ProjectAimsAttainment());
-        progressReportContent.setProjectOutcomesAttainment(new ProgressReportContent.ProjectOutcomesAttainment());
-        progressReportContent.setResearchOutput(new ProgressReportContent.ResearchOutput());
-        progressReportContent.setSelfEvaluation("");
-        
-        currentAttainedAim = "";
-        currentAttainedOutcome = "";
+        progressReportCreationDependBean.init();
     }
     
     public Application getSelectedApplication()
@@ -72,73 +62,19 @@ public class ProgressReportCreationRequestBean {
         return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
     }
 
-    public ProgressReport getProgressReport() {
-        return progressReport;
+    public ProgressReportCreationDependBean getProgressReportCreationDependBean() {
+        return progressReportCreationDependBean;
     }
 
-    public void setProgressReport(ProgressReport progressReport) {
-        this.progressReport = progressReport;
-    }
-
-    public ProgressReportContent getProgressReportContent() {
-        return progressReportContent;
-    }
-
-    public void setProgressReportContent(ProgressReportContent progressReportContent) {
-        this.progressReportContent = progressReportContent;
-    }
-
-    public String getCurrentAttainedAim() {
-        return currentAttainedAim;
-    }
-
-    public void setCurrentAttainedAim(String currentAttainedAim) {
-        this.currentAttainedAim = currentAttainedAim;
-    }
-
-    public String getCurrentAttainedOutcome() {
-        return currentAttainedOutcome;
-    }
-
-    public void setCurrentAttainedOutcome(String currentAttainedOutcome) {
-        this.currentAttainedOutcome = currentAttainedOutcome;
-    }
-
-    public Reference getCurrentReference() {
-        return currentReference;
-    }
-
-    public void setCurrentReference(Reference currentReference) {
-        this.currentReference = currentReference;
-    }
-            
-    public void addToAttainedAimsList()
-    {
-        progressReportContent.getProjectAimsAttainment().getAimAttainment().add(currentAttainedAim);
-        currentAttainedAim = "";
-        MessageUtil.CreateGlobalFacesMessage("Attained aim added!", "The project attained aim has been added to the list!", FacesMessage.SEVERITY_INFO);
-    }
-    
-    public void addToAttainedOutcomesList()
-    {
-        progressReportContent.getProjectOutcomesAttainment().getOutcomeAttainment().add(currentAttainedOutcome);
-        currentAttainedOutcome = "";
-        MessageUtil.CreateGlobalFacesMessage("Attained outcome added!", "The attained outcome has been added to the list!", FacesMessage.SEVERITY_INFO);
-    }
-    
-    public void addToResearchOutputList()
-    {
-        progressReportContent.getResearchOutput().getReferences().add(currentReference);
-        currentReference = new Reference();
-        MessageUtil.CreateGlobalFacesMessage("Reference added!", "The research output reference has been added to the list!", FacesMessage.SEVERITY_INFO);        
+    public void setProgressReportCreationDependBean(ProgressReportCreationDependBean progressReportCreationDependBean) {
+        this.progressReportCreationDependBean = progressReportCreationDependBean;
     }
     
     public String preformProgressReportCreationRequest()
     {
         try
-        {
-            progressReport.setContentXMLEntity(progressReportContent);
-            progressReportManagementServiceLocal.createProgressReport(sessionManagerBean.getSession(), getSelectedApplication(), progressReport);
+        {   
+            progressReportManagementServiceLocal.createProgressReport(sessionManagerBean.getSession(), getSelectedApplication(), progressReportCreationDependBean.getCombinedProgressReport());
             return navigationManagerBean.goToProgressReportManagementServiceApplicationSelectionView();
         }
         catch(Exception ex)
