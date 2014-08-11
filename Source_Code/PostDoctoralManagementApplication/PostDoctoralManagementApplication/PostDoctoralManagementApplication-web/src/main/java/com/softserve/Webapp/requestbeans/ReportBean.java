@@ -14,15 +14,11 @@ import com.softserve.ejb.ReportServicesLocal;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
 import javax.ejb.EJB;
-import javax.enterprise.context.Conversation;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import net.sf.jasperreports.engine.JRException;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -33,16 +29,14 @@ import org.primefaces.model.StreamedContent;
 @Named(value = "reportBean")
 @RequestScoped
 public class ReportBean {
-    private String reportType = "";
+    private String reportType;
+    private Date startDate;
+    private Date endDate;
     
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
-    @Inject
-    private ConversationManagerBean conversationManagerBean;
-    @Inject
-    private Conversation conversation;
     
     @EJB
     private ReportServicesLocal reportEJB;
@@ -53,11 +47,29 @@ public class ReportBean {
     }
 
     public String getReportType() {
+        System.out.println("Migh tbe calling this?");
         return reportType;
     }
 
     public void setReportType(String reportType) {
+        System.out.println("Is this code running?");
         this.reportType = reportType;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
     
     public StreamedContent getReportPDF() // TODO: Add report filters...
@@ -65,6 +77,7 @@ public class ReportBean {
         InputStream stream = null;
         try 
         {
+            System.out.println("We have this report type: " + reportType);
             switch(reportType)
             {
                 case "application":
