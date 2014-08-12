@@ -6,6 +6,8 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -40,6 +42,7 @@ public class ReportBean {
     
     @EJB
     private ReportServicesLocal reportEJB;
+    
     /**
      * Creates a new instance of ReportBean
      */
@@ -47,12 +50,10 @@ public class ReportBean {
     }
 
     public String getReportType() {
-        System.out.println("Migh tbe calling this?");
         return reportType;
     }
 
     public void setReportType(String reportType) {
-        System.out.println("Is this code running?");
         this.reportType = reportType;
     }
 
@@ -77,19 +78,18 @@ public class ReportBean {
         InputStream stream = null;
         try 
         {
-            System.out.println("We have this report type: " + reportType);
             switch(reportType)
             {
                 case "application":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), null));
                     break;
                 case "person":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf());
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), null));
                     break;
                 default:
-                    throw new Exception("0");
+                    throw new Exception("Didn't Specify valid report type.");
             }
             
             return new DefaultStreamedContent(stream, "application/pdf", "Report-About-Date.pdf");
@@ -119,7 +119,19 @@ public class ReportBean {
         InputStream stream = null;
         try 
         {
-            stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel());
+            switch(reportType)
+            {
+                case "application":
+                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), null));
+                    break;
+                case "person":
+                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), null));
+                    break;
+                default:
+                    throw new Exception("Didn't Specify valid report type.");
+            }
             return new DefaultStreamedContent(stream, "application/vnd.ms-excel", "Report-About-Date.xls");
         } 
         catch (Exception ex) 
@@ -140,10 +152,5 @@ public class ReportBean {
             }
         }
         return null;
-    }
-    
-    public void showReportType()
-    {
-        
     }
 }

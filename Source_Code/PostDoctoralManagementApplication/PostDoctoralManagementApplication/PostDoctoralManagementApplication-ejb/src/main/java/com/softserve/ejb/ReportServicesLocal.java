@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.itextpdf.text.DocumentException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Person;
 import com.softserve.system.Session;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,6 +23,29 @@ import net.sf.jasperreports.engine.JRException;
  */
 @Local
 public interface ReportServicesLocal {
-    public byte[] exportPersonsToPdf() throws JRException, ClassNotFoundException, SQLException, InterruptedException;
-    public byte[] exportPersonsToExcel() throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException;
+    /**
+     * Export PDF of report made up of persons
+     * @param session
+     * @param persons
+     * @return
+     * @throws JRException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InterruptedException 
+     */
+    public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws JRException, ClassNotFoundException, SQLException, InterruptedException;
+    
+    /**
+     * Export PDF of report made up of applications
+     * @param session
+     * @param applications
+     * @return
+     * @throws JRException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws InterruptedException 
+     */
+    public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws JRException, ClassNotFoundException, SQLException, InterruptedException;
+    public byte[] exportPersonsToExcel(Session session, List<Person> application) throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException;
+    public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException;
 }
