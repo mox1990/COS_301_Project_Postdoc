@@ -11,6 +11,7 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.List;
 import test.softserve.MockEJBClasses.UserGatewayMockUnit;
 import javax.servlet.http.HttpSession;
@@ -41,17 +42,21 @@ public class UserGatewayUnitTests {
     }
     
     @Test
-    public void testAuthenticateUser(Session session, List<SecurityRole> allowedRoles) 
+    public void testAuthenticateUser() 
     {
         
         UserGatewayMockUnit instance = new UserGatewayMockUnit();
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        Person mockPerson = mock(Person.class);
+        roles = (ArrayList<SecurityRole>) mockPerson.getSecurityRoleList();
         
         try
         {
-            instance.authenticateUser(session, allowedRoles);
+            instance.authenticateUser(mockSession, roles);
+            verify(mockSession).doesHttpSessionUsernameMatchUserUsername();
+            verify(mockSession).doesHttpSessionPasswordMatchUserPassword();
         }
         catch(Exception ex)
         {

@@ -8,7 +8,9 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.*;
 import com.softserve.ejb.AuditTrailService;
+import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserAccountManagementService;
+import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 
@@ -20,93 +22,56 @@ import java.util.GregorianCalendar;
 
 public class UserAccountManagementServicesMockUnit extends UserAccountManagementService {     
     
-    private PersonJpaController pDAO = null;
+     private PersonJpaController pDAO = null;
     private AddressJpaController aDAO = null;
     private EmployeeInformationJpaController uDAO = null;
-    private DBEntitiesFactory dbFactory = null;
-    private AuditTrailService atsEJB = null;
+    private DBEntitiesFactory dBEnitities = null;
+    private UserGateway uGateway = null;
+    private NotificationService nService = null;
+    private AuditTrailService aService = null;
     private GregorianCalendar cal = null;
 
-    public void setpDAO(PersonJpaController pDAO) {
-        this.pDAO = pDAO;
-    }
-
-    public void setaDAO(AddressJpaController aDAO) {
-        this.aDAO = aDAO;
-    }
-
-    public void setuDAO(EmployeeInformationJpaController uDAO) {
-        this.uDAO = uDAO;
-    }
-
-    public void setDbFactory(DBEntitiesFactory dbFactory) {
-        this.dbFactory = dbFactory;
-    }
-
-    public void setAtsEJB(AuditTrailService atsEJB) {
-        this.atsEJB = atsEJB;
-    }
-
-    public void setCal(GregorianCalendar cal) {
-        this.cal = cal;
-    }
-    
-    @Override
-    protected GregorianCalendar getGregorianCalendar() {
-        return cal;
-    }
-    
-    /**
-     *This function creates an instance of the PersonJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
- of the UserAccountManagementService in the unit testing 
-     * @return An instance of PersonJpaController
-     */
-    @Override
-    protected PersonJpaController getPersonDAO()
+    public void setDBEntitiesFactory(DBEntitiesFactory dBEntities)
     {
-        return pDAO;
+        this.dBEnitities = dBEntities;
     }
     
-    /**
-     *This function creates an instance of the AddressJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
- of the UserAccountManagementService in the unit testing 
-     * @return An instance of AddressJpaController
-     */
-    @Override
-    protected AddressJpaController getAddressDAO()
+    public void setUserGateway(UserGateway uGateway)
     {
-        return aDAO;
+        this.uGateway = uGateway;
     }
     
-    /**
-     *This function creates an instance of the UpEmployeeInformationJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
- of the UserAccountManagementService in the unit testing 
-     * @return An instance of UpEmployeeInformationJpaController
-     */
-    @Override
-    protected EmployeeInformationJpaController getEmployeeInfoDAO()
+    public void setNotificationService(NotificationService nService)
     {
-        return uDAO;
+        this.nService = nService;
+    }
+    
+    public void setAuditTrailService(AuditTrailService aService)
+    {
+        this.aService = aService;
     }
 
     @Override
-    protected AuditTrailService getAuditTrailServiceEJB() 
+    protected DBEntitiesFactory getDBEntitiesFactory()
     {
-        return atsEJB;
+        return dBEnitities;
     }
 
     @Override
-    protected DBEntitiesFactory getDBEntitiesFactory() 
+    protected UserGateway getUserGatewayServiceEJB()
     {
-        return dbFactory;
+        return uGateway;
     }
-    
-    public String Mock_generateSystemID(char prefix)
+ 
+    @Override
+    protected NotificationService getNotificationServiceEJB()
     {
-        return generateSystemID(prefix);
+        return nService;
     }
-    
+ 
+    @Override
+    protected AuditTrailService getAuditTrailServiceEJB()
+    {
+        return aService;
+    }
 }

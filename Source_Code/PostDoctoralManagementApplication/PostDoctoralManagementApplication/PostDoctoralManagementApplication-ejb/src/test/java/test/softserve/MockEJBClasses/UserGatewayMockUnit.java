@@ -51,12 +51,6 @@ public class UserGatewayMockUnit extends UserGateway
         this.cal = cal;
     }
     
-    
-    
-
-    
-    
-    
     @Override
     protected AuditTrailService getAuditTrailServiceEJB() 
     {

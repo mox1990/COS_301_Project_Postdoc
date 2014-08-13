@@ -68,7 +68,7 @@ public class NotificationUnitTest {
         }
         catch (Exception ex)
         {
-           // fail("An exception occured");
+            fail("An exception occured");
         }
     }
     @Test
@@ -109,8 +109,119 @@ public class NotificationUnitTest {
         }
         catch (Exception ex)
         {
-           // fail("An exception occured");
+           fail("An exception occured");
         }
     }
+    
+    public void testFindAll()
+    {
+         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+        
+        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
+        
+        instance.setNDAO(mockNotificationJpaController);
+        
+        Notification mockNotification = mock(Notification.class);
+        
+        try
+        {
+            instance.findAll();
+            //verify(mockNotificationJpaController).create(mockNotification);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
+    }
+    
+    
+    public void testFindByID()
+    {
+         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+        
+        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
+        
+        instance.setNDAO(mockNotificationJpaController);
+        
+        Notification mockNotification = mock(Notification.class);
+        
+        
+        try 
+        {
+            //instance.
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+    
+    
+    public void testFindBySubject()
+    {
+         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+        
+        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
+        
+        instance.setNDAO(mockNotificationJpaController);
+        
+        Notification mockNotification = mock(Notification.class);
+        
+        
+        try
+        {
+            instance.findBySubject(mockNotification.getSubject());
+         //   verify(mockNotificationJpaController).create(mockNotification);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
+    }
+    
+    
+    public void testFindByTimestamp()
+    {
+         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+        
+        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
+        
+        instance.setNDAO(mockNotificationJpaController);
+        
+        Notification mockNotification = mock(Notification.class);
+        
+        Timestamp time = mock(Timestamp.class);
+        try
+        {
+            instance.findByTimestamp(time);
+            //verify(mockNotificationJpaController).create(mockNotification);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
+    }
+    
+   public void testFindByRange()
+   {
+        NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+        
+        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
+        
+        instance.setNDAO(mockNotificationJpaController);
+        
+        Notification mockNotification = mock(Notification.class);
+        Timestamp timeS = mock(Timestamp.class);
+        Timestamp timeE = mock(Timestamp.class);
+        try
+        {
+            instance.findBetweenRange(timeS, timeE);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        } 
+    }
+    
     
 }
