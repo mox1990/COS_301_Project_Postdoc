@@ -30,18 +30,17 @@ In order to quantify the above the SoftServe group will need to provide the syst
 
 \begin{flushleft}
 
-The system will need to be fully secured since it deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever. It should be noted that this requirement conflicts with the Usability requirement above as it is known that the more secure a system becomes the less user friendly it becomes. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated.\\
+The system will need to be fully secured since it deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever.\\
 \vspace{0.1in}
 
 The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a system administrator to allow for flexibility.\\
 There will also need to be predefined roles so to allow a stakeholder from list of stakeholders in the vision and scope document, to only have the ability and access to perform the actions as defined by the vision and scope document.\\
 The system administrator should be able to access all the sections in the system and should be able to modify them except where only the system itself has that right.\\
-Another security requirement is that the audit trail must not be allowed to be modified by any human user and only allow the system to be able to insert data into the audit log. Further the audit table should only allow be query-able by a user with the correct security role.\\
+Another security requirement is that the audit trail must not be allowed to be modified by any human user and only allow the system to be able to insert data into the audit log. Further the audit table should only be query-able by a user with the correct security role.\\
 To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. \\
 Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days.
 \vspace{0.1in}
-This requirement will influence the usability requirement negativity as there will be need for more user forms and interaction. But the impact of this requirement must be minimized as much as possible. Further this requirement will also negativity impact performance as it will result on more code command execution per action that needs to be secured.  
-
+This requirement will influence the usability requirement negativity as it is known that the more secure a system becomes the less user friendly it becomes because there will be need for more user forms and interactions. But the impact of this requirement must be minimized as much as possible. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated. Further this requirement will also negatively impact performance as it will result on more code command execution per action that needs to be secured.
 \end{flushleft}
 
 \vspace{0.1in}
@@ -72,7 +71,7 @@ The system needs to be scalable in regard to the following factors:
 \begin{itemize}
 
 \item\textbf{Performance:} This aspect of the system regards the speed and responsiveness of the system.
-The system needs to be handle large report queries in less than 10 seconds. It should be able to handle any application approval service processing in less than 3 seconds. It should be able to send emails instantly from the system side. Note this may be difficult to measure due internet bandwidth and receiving mail server constraints. Login, logout and user authentication should be handled in less then a second by the system this does not  considering the transfer of data to and from the server which is depended on the network connection speed.\\
+The system needs to handle large report queries in less than 10 seconds. It should be able to handle any application approval service processing in less than 3 seconds. It should be able to send emails instantly from the system side. Note this may be difficult to measure due internet bandwidth and receiving mail server constraints. Login, logout and user authentication should be handled in less then a second by the system this does not  considering the transfer of data to and from the server which is depended on the network connection speed.\\
 
 \item\textbf{Storage:} This aspect of the system regards the growth and shrinking of the data that is stored by the system.
 The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the fact that the system will need to store a large amount of active data over a period of about 3 to 8 years before it can be archived.
@@ -89,7 +88,7 @@ Nna = Number of new applications a year\\
 Nra = Number of renewal applications a year\\
 
 \item\textbf{Concurrency:} This regarded as the amount of active users on the system at the same time.
-The system will need to support at least 100+/- concurrent users efficient and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
+The system will need to support at least 100+/- concurrent users efficiently and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
 
 \end{itemize}
 
@@ -102,9 +101,11 @@ This requirement will require that the code undergo optimization and as well as 
 
 \begin{flushleft}
 
-The system's availability on designated networks will depend on the availability of the University of Pretoria's servers or which ever hosting service's server that will used to host the system. It should be noted that the former will only be possible if the project is considered acceptable by the UP's IT department.\\
+The system's availability on designated networks will depend on the availability of the servers of the hosting service's that will be used to host the system.\\
 In order to quantify this it should be seen as follows: If the hosting service's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. Where the designated networks are defined as the internet and/or the local network where in the server of the hosting service is located.
 
+\vspace{0.1in}
+%Say something about the trade off of avaibility
 \end{flushleft}
 \newpage
 \subsubsection{Robustness:}
@@ -127,7 +128,7 @@ These four aspects of robustness are quantified as follow:
 
 \begin{flushleft}
 
-The system must be testable in order to show that the system is meets the clients expectations. This will be done using user acceptance testing, integration testing and unit testing. The test plan will be laid out in the Non-Functional and Functional testing documents of this project. Each of which will provide a set of tests to be performed in order to verify the systems compliance. Therefore each non-functional and functional requirement needs to be quantified in a manner that allows the SoftServe group to test for it in the system. This requirement will help ensure the other requirements are met and all in all improve the system as a whole. Below are the suggested methods quantifying the tests for each type of test:\\
+The system must be testable in order to show that the system meets the clients expectations. This will be done using user acceptance testing, integration testing and unit testing. The test plan will be laid out in the Non-Functional and Functional testing documents of this project. Each of which will provide a set of tests to be performed in order to verify the systems compliance. Therefore each non-functional and functional requirement needs to be quantified in a manner that allows the SoftServe group to test for it in the system. This requirement will help ensure the other requirements are met and all in all improve the system as a whole. Below are the suggested methods quantifying the tests for each type of test:\\
 
 
 \vspace{0.1in}
@@ -174,6 +175,8 @@ User acceptance testing will test the whole system in regard to:
 
 The system should be designed in such a way that adding new features can be done without extensive code restructuring or reverse engineering. The process of adding new features should require the programmer working on the system to easily create a new module for the new functionality. For this to be realised the system will should use appropriate design patterns that allow this. For example the strategy, dependency injection and command design patterns. 
 
+\vspace{0.1in}
+This requirement will lead to an increase in complexity as implementing some of the design patterns will still require satisfying the large set of requirments (including usability).
 \end{flushleft}
 
 
