@@ -195,6 +195,8 @@ The following sections will discuss the required functionality of all the major 
 \item Audit-Trail services
 \item Archival services
 \item Imports and exports services
+\item Location management service
+\item CV management service
 \end{itemize}
 
 \subsubsection{User gateway}
@@ -205,26 +207,32 @@ The following sections will discuss the required functionality of all the major 
 		\item The gateway must insure that the user is allocated a session so that the system can identify the user.
 		\item All internal stakeholders should be able to log in with their PeopleSoft account details once the system is integrated but until such time they should login with the credentials specified at the time of account creation. 
 		\item The gateway needs to facilitate user account recovery.
-		\item The gateway must facilitate the creation of accounts for prospective fellows and on-demand users which are users which don't have an account but need an account with other privileges than a prospective fellow account allows. 
+		 
 	\end{itemize}
 
 \subsubsection{Application services}
 	The application services encompasses the the entirety of the of the application process undergone by prospective fellows namely new and renewal applications.\\
-	The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage will be focused in this set of services only. \\As specified in the vision and scope document under section 7.1 the application process of each application is broken up in stages. These stages run concurrently until they reach the stage where the post-doctoral committee meeting is to take place after which all eligible applications are batch processed for the stages that follow. In order to manage this after each stage is complete the applications will be automatically forwarded to the next. Only the system administrator will have the power to move applications back through the stages. It should be noted that if the system administrator moves an application back then all the data of the stages that have been undo will be removed.
+	The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage of the system will be focused in this set of services only. \\As specified in the vision and scope document under section 7.1 the application process of each application is broken up into stages. These stages run concurrently until they reach the stage where the post-doctoral committee meeting is to take place. In this particular stage the applications are batch reviewed. After which all reviewed eligible applications are once again processed individually. In order to manage the work flow of the application pipeline a event will trigger after each stage is complete and the application(s) will be automatically forwarded to the next. Only the system administrator will have the power to forward or rewind any application through the stages. It should be noted that if the system administrator moves an application back then all the data of the stages that have been complete will be removed.
 	
 	
 	\begin{itemize}
-		\item\textbf{Application approval levels:} Each stage the application goes through requires a different type of approval or check. Thus the approval level of each stage in order of first to last, is highlighted below. Note * indicates this stage is only for new applications: 
+		\item\textbf{Application status levels:} Each stage the application goes through requires a different type of approval or check. Thus the status level of each stage in order of first to last, is highlighted below. Note * indicates this stage is only for new applications: 
 		\begin{enumerate}
 			\item \textbf{Open application} - This application is a newly created application.
+			\item \textbf{Submitted application} - This application is submitted by the fellow and awaits referral.
 			\item \textbf{*Refereed application} - This application has a completed list of referral reports from the specified referees.
 			\item \textbf{Finalised application} - This application has been finalised by the respective grant holder.
 			\item \textbf{Recommended application} - This application has been recommended by the respective HOD.
 			\item \textbf{Endorsed application} - This application has been endorsed by the respective Dean's office.
 			\item \textbf{Eligible application} - This application has been checked for eligibility by the DRIS and has been found to be eligible.
 			\item \textbf{Fund-able application} - This application has been approved for funding and is complete.
+			\item \textbf{Completed application} - This application has passed its expiry date and has been completed.			
 		\end{enumerate}
-		
+		Special application status levels are as follow:
+		\begin{enumerate}
+			\item \textbf{Declined application} - This is any application that has been declined by some authority in the process change.
+			\item \textbf{Terminated application} - This application has been completed or ended by the DRIS before its expiry date.		
+		\end{enumerate}
 		\item\textbf{ New fellowship application service:}		
 		\begin{enumerate}			
 			\item A prospective fellow should be able to open a new application.
@@ -271,10 +279,16 @@ The following sections will discuss the required functionality of all the major 
 			\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to prepare the pre-documentation thereof.
 			\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation and details thereof.				 					
 		\end{enumerate}
-		\item\textbf{ Application progress viewer service:}
+		\item\textbf{Application progress viewer service:}
 		\begin{enumerate}
 			\item A prospective fellow's application or a research fellow's renewal application status should be made available for their review if they have an application in the system.
 			\item The grant holder of an application should be able to view the status of the application.			
+		\end{enumerate}
+		\item\textbf{Progress report management service:}
+		\begin{enumerate}
+			\item A research fellow should be able see which applications of theirs have outstanding reports. 
+			\item A research fellow should be able to create any outstanding progress report for a particular application. 
+			\item The number of progress reports for a particular application is equivalent to the number of years that application is active for.			
 		\end{enumerate}
 	\end{itemize}
 
@@ -300,15 +314,20 @@ The following sections will discuss the required functionality of all the major 
 		\item A user should be able to modify their account details.
 		\item A administrator should be able to modify any user account details.
 		\item A administrator should be able to remove any user account.
+		\item Allow the creation and activation of On-demand users which are users which don't have an account but need an account with other privileges than a prospective fellow account.
 	\end{itemize}
+	
 \subsubsection{Notification services}
-	The system will need to generate automated notifications that are sent internally and to the corresponding email of the recipient. To prevent spamming the system will only allow users with the correct security roles to make use of the service.
+	The system will need to generate automated notifications that are sent internally and to the corresponding email of the recipient. To prevent spamming the system will only allow users with the correct security roles to make use of the service. It is important that this service runs asynchronously after it has been engaged since the service makes use of external systems that may be un-responsive. In case where the external systems fail this services needs to handle it. 
 	\begin{itemize}
 		\item The system must be able to create a new notification.
 		\item Stakeholders with the correct security roles must be able to create a new notification.
 		\item A notification must allow for the specification of recipient.
 		\item A notification must allow for the specification of a message.
 		\item The service must allow the notification to be sent to both the user account and recipient's email address.
+		\item The service must allow a batch of notifications to be sent.
+		\item The service must be able to send emails not associated with any internal notification.
+		\item The service must be able to see if there are any notifications that have an unsent email counterpart and attempt to resend it.
 	\end{itemize}
 
 \subsubsection{Audit-Trail services}
@@ -319,11 +338,11 @@ The following sections will discuss the required functionality of all the major 
 	\end{itemize}
 \subsubsection{Archival services}
 	The archival services of the system will be able to back up the current state of the database to a specified location. Further it should be able to remove old records from the working database that are no longer in use and store then in a location so that they can be retrieved on a on-demand basis.
-	\begin{itemize}
-		\item The system administrator needs to be able to perform a system backup.
+	\begin{itemize}		
 		\item The system administrator needs to be able to perform a automatic archival of old data.
 		\item The system administrator needs to be able to perform a backup of the current database.
 		\item The system should be able to notify the system administrator of any possible archival data.
+		\item The system administrator needs to be able to restore any backed up or archived data p.
 	\end{itemize}
 \subsubsection{Imports and exports services}
 	The imports and exports services of the system will allow the system administrator to export and import certain data. A sub-set of these services will also be made available to users of the appropriate security role.
@@ -331,6 +350,19 @@ The following sections will discuss the required functionality of all the major 
 		\item The system administrator will be able to export and import user accounts and their associated information and link to the on-demand user account creation service.
 		\item The system administrator will also be able to import information of the departments and faculties for location purposes of users.
 		\item The system administrator and authorised users will be able to import and export all the data associated with applications.
+	\end{itemize}
+\subsubsection{Location management services}
+	The system will need to manage the current locations that exist with in the institutions that are registered with the system. A location is the concatenation of a department, faculty and institution. It may also be that the department is fictional and used as a simple place holder for cross departmental applications. Also if integration with peoplesoft is to occur it will allow this service to synchronise with it. This will be a system service and not be exposed directly to users
+	\begin{itemize}		
+		\item The service must allow the creation a location via the imports.
+		\item The service needs to be able to retrieve all institutions.
+		\item The service needs to be able to retrieve all faculties in the institution.
+		\item The service needs to be able to retrieve all departments under a faculty of a particular institution.
+	\end{itemize}
+\subsubsection{CV management services}
+	Each grant holder, prospective fellow and research fellow will have a CV. Thus this service will provide the management there of. This will be a system service which will be used indirectly the users of the system. 
+	\begin{itemize}		
+		\item The service must be able to create and update a CV for a particular user.
 	\end{itemize}
 \vspace{0.2in}
 
@@ -465,11 +497,11 @@ This section states the ranking in terms of priority of the service use case per
 		\item Grant holder application finalisation service: Critical
 		\item HOD Approval service: Critical
 		\item Dean endorsement service: Critical
-		\item DRIS approval service: Critical		
+		\item DRIS approval service: Critical
+		\item Progress report management service: Critical		
 		\item Meeting management service: Important
-		\item Application progress viewer service: Important
+		\item Application progress viewer service: Important		
 	\end{itemize}
-	\item Report services: Important
 	\item Notification services: Critical
 	\item User account management services: Critical
 	\begin{itemize}
@@ -480,23 +512,25 @@ This section states the ranking in terms of priority of the service use case per
 	\end{itemize}
 	\item Audit-Trail services: Critical
 	\begin{itemize}
-		\item Log action: critical
+		\item Log action: Critical
 		\item Query audit table: Important
 	\end{itemize}
-	\item Archival services: Nice to have
-	\begin{itemize}
-		\item Retrieve archived information: Nice to have
-		\item Archive old information: Nice to have
-		\item Backup database: Important
-	\end{itemize}
+	\item CV management service: Critical
+	\item Location management service: Critical
+	\item Report services: Important
 	\item Imports and exports services: Important
 	\begin{itemize}
 		\item Import user account data: Important
 		\item Import application data: Nice to have
 		\item Import location data: Important
 		\item Export application data: Important
+	\end{itemize}	
+	\item Archival services: Nice to have
+	\begin{itemize}
+		\item Retrieve archived information: Nice to have
+		\item Archive old information: Nice to have
+		\item Backup database: Important
 	\end{itemize}
-	
 \end{itemize}
 
 
