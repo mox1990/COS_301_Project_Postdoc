@@ -15,6 +15,7 @@ import com.softserve.system.ApplicationStageStatus;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -37,6 +38,14 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
      */
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
 
     public ApplicationProgressViewerService() {
     }
@@ -48,11 +57,6 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
     }
     
     protected List<ApplicationStageStatus> getApplicationStageStatus()
@@ -131,7 +135,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
     @Override
     public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception
     {
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         try
         {
             //Authenticate user ownership of account

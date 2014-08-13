@@ -223,7 +223,7 @@ public class NotificationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.recieverID = :person", Notification.class).setParameter("person", person);
+        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.reciever = :person", Notification.class).setParameter("person", person);
         
         return q.getResultList();
     }
@@ -232,7 +232,7 @@ public class NotificationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.senderID = :person", Notification.class).setParameter("person", person);
+        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.sender = :person", Notification.class).setParameter("person", person);
         
         return q.getResultList();
     }

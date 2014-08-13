@@ -11,7 +11,8 @@
                 <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
                 <p:message for="selfE" styleClass="fieldErrorMessage"/>            
             </h:panelGrid>
-            <p:commandButton value="Add infromation to progress report" actionListener="#{bean.addInformation()}"/>
+            <p:growl id="growler" sticky="true" globalOnly="true" showDetail="true"/>
+            <p:commandButton value="Add infromation to progress report" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" update="growler"/>
         </h:form>
         
         <p:panel header="Research output generated" toggleable="true" collapsed="true">

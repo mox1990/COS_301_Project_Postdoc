@@ -10,22 +10,31 @@
         
         <ui:define name="pageBody">
             
-            <h:selectOneRadio id="whichReport" value="#{reportBean.reportType}">
-                <f:selectItem itemLabel="Application" itemValue="application"/>
-                <f:selectItem itemLabel="Person" itemValue="person" />
-                <!--Space for more types of reports -->
-            </h:selectOneRadio>
+            <h:form>
+                <p:panel id="cvInfo" header="Report Generation">  
+                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                        <p:selectOneRadio id="applicationType" value="#{reportBean.reportType}" layout="grid" columns="4">
+                            <f:selectItem itemLabel="Application" itemValue="application"/>
+                            <f:selectItem itemLabel="Person" itemValue="person" />
+                        </p:selectOneRadio>
+                        
+                        <p:outputLabel value="Start Date:" for="startDate"/>                                
+                        <p:calendar id="startDate" value="#{reportBean.startDate}" pattern="yyyy-mm-dd" required="true"/>
+                        <p:message for="startDate" styleClass="fieldErrorMessage"/>
 
-            <h:form>
-                <p:commandButton value="DownloadPDF" ajax="false" icon="ui-icon-arrowthick-1-s">
-                    <p:fileDownload value="#{reportBean.reportPDF}" />
-                </p:commandButton>
-            </h:form>
-            
-            <h:form>
-                <p:commandButton value="DownloadExcel" ajax="false" icon="ui-icon-arrowthick-1-s">
-                    <p:fileDownload value="#{reportBean.reportExcel}" />
-                </p:commandButton>
+                        <p:outputLabel value="End Date:" for="endDate"/>                                
+                        <p:calendar id="endDate" value="#{reportBean.endDate}" pattern="yyyy-mm-dd" required="true"/>
+                        <p:message for="endDate" styleClass="fieldErrorMessage"/>
+
+                    </h:panelGrid>
+
+                    <p:commandButton value="DownloadPDF" ajax="false" styleClass="button button-fill">
+                        <p:fileDownload value="#{reportBean.reportPDF}" />
+                    </p:commandButton>
+                    <p:commandButton value="DownloadExcel" ajax="false" styleClass="button button-fill">
+                        <p:fileDownload value="#{reportBean.reportExcel}" />
+                    </p:commandButton>
+                </p:panel>
             </h:form>
 
         </ui:define>

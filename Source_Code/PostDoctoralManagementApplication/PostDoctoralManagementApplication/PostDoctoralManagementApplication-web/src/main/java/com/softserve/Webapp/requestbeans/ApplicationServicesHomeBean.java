@@ -172,4 +172,19 @@ public class ApplicationServicesHomeBean {
             return false;
         }
     }
+    
+    public boolean isProgressReportMangementServiceDisplayable()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (AuthenticationException ex) 
+        {
+            return false;
+        }
+    }
 }

@@ -8,10 +8,6 @@
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Notification management"/>
         
-        <ui:define name="CSSStyleSheets">
-            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
-        </ui:define>
-        
         <ui:define name="pageBody">
             <div>
                 <h1 class="header1">Notification viewer</h1>
@@ -21,7 +17,7 @@
                 <p:outputPanel>
                     <h:form>
                         <ui:decorate template="templates/NotificationTable_Component.xhtml">
-                            <ui:param name="notification" value="#{notificationViewerRequestBean.notifications}"/>
+                            <ui:param name="notifications" value="#{notificationViewerRequestBean.notifications}"/>
                             <ui:param name="filteredNotifications" value="#{notificationViewerRequestBean.filteredNotifications}"/>
                             <ui:param name="header" value="Inbox"/>
                         </ui:decorate>

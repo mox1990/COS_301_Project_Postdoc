@@ -13,6 +13,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -31,6 +32,27 @@ public class UserGateway implements UserGatewayLocal
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    
+
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
+     protected UserAccountManagementServiceLocal getUserAccountManagementServicesEJB()
+    {
+        return new UserAccountManagementService(emf);
+    }
 
     public UserGateway() {
     }
@@ -39,20 +61,7 @@ public class UserGateway implements UserGatewayLocal
         this.emf = emf;
     }
     
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
-    
-    protected UserAccountManagementService getUserAccountManagementServicesEJB()
-    {
-        return new UserAccountManagementService(emf);
-    }
-    
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
+   
     
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
@@ -74,8 +83,7 @@ public class UserGateway implements UserGatewayLocal
             throw new AuthenticationException("User account disabled");
         }
         
-        UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
         //Check if httpsession systemID has the same as the entities systemID or email address
         if (session.doesHttpSessionUsernameMatchUserUsername() || session.doesHttpSessionUsernameMatchUserEmail())
@@ -105,7 +113,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public void logout(Session session) throws Exception
     {
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         session.setLoggedInStatus(Boolean.FALSE);
@@ -120,7 +128,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException
     {
-        UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
+        UserAccountManagementServiceLocal accounts = getUserAccountManagementServicesEJB();
         Person user = accounts.getUserBySystemIDOrEmail((String) httpSession.getAttribute("username"));
         
         if(user != null)
@@ -144,8 +152,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception
     {
-        UserAccountManagementService accounts = getUserAccountManagementServicesEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         //Check if user session has been given temporal system level access

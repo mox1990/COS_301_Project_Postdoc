@@ -15,6 +15,7 @@ import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.DRISApprovalServiceLocal;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -47,6 +48,8 @@ public class DRISApproveFundingBean {
     private Notification financeMessage;
     private Date startDate;
     private Date endDate;
+    
+    private int noOfYears;
     
     /**
      * Creates a new instance of DRISApproveFundingBean
@@ -113,10 +116,27 @@ public class DRISApproveFundingBean {
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-            
+
+    public int getNoOfYears() {
+        return noOfYears;
+    }
+
+    public void setNoOfYears(int noOfYears) {
+        this.noOfYears = noOfYears;
+    }
+                    
     public Application getSelectedApplication()
     {
         return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
+    }
+    
+    public void onYearSlideEnd()
+    {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(startDate);
+        gregorianCalendar.add(GregorianCalendar.YEAR, noOfYears);
+        System.out.println("Number of years " + noOfYears);
+        endDate = gregorianCalendar.getTime();
     }
     
     public String preformFundingApprovalRequest()
@@ -125,6 +145,7 @@ public class DRISApproveFundingBean {
         {
             Application application = getSelectedApplication();
             application.setStartDate(startDate);
+            onYearSlideEnd();
             application.setEndDate(endDate);
             dRISApprovalServiceLocal.approveFunding(sessionManagerBean.getSession(), application, fundingReport,applicantMessage,cscMessage,financeMessage);
             return navigationManagerBean.goToDRISApprovalServiceApplicationSelectionView();

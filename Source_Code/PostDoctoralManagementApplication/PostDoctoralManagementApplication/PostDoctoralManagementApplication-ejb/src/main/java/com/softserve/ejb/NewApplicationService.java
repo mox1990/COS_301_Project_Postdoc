@@ -14,11 +14,13 @@ import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.*;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -36,7 +38,43 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    @EJB
+    private CVManagementServiceLocal cVManagementServiceLocal;
+    @EJB
+    private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
 
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
+    protected CVManagementServiceLocal getCVManagementServiceEJB()
+    {
+        return cVManagementServiceLocal;
+    }
+    
+    protected UserAccountManagementServiceLocal getUserAccountManagementServiceEJB()
+    {
+        return userAccountManagementServiceLocal;
+    }
+    
     public NewApplicationService() {
     }
 
@@ -49,34 +87,14 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    protected UserAccountManagementService getUserAccountManagementServiceEJB()
-    {
-        return new UserAccountManagementService(emf);
-    }
-    
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
-    
-    protected CVManagementService getCVManagementServiceEJB()
-    {
-        return new CVManagementService(emf);
-    }
-    
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
+    }
+    
+    protected ApplicationServicesUtil getApplicationServicesUtil()
+    {
+        return new ApplicationServicesUtil(emf);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -97,7 +115,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             throw new Exception("CV is not valid");
         }
         
-        CVManagementService cVManagementService = getCVManagementServiceEJB();
+        CVManagementServiceLocal cVManagementService = getCVManagementServiceEJB();
         if(cVManagementService.hasCV(session))
         {
             cVManagementService.updateCV(session, cv);
@@ -112,7 +130,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     public void createNewApplication(Session session, Application application) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         userGateway.authenticateUser(session, roles);
@@ -125,7 +143,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Set status and application type
         if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
@@ -151,7 +169,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     {
         
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         userGateway.authenticateUser(session, roles);
@@ -164,8 +182,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
-        UserAccountManagementService accountManagementServices = getUserAccountManagementServiceEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Check if grant holder already exists
         if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()) != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
@@ -207,7 +225,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         userGateway.authenticateUser(session, roles);
@@ -221,8 +239,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
-        UserAccountManagementService accountManagementServices = getUserAccountManagementServiceEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Check if referee already exists
         if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()) != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
@@ -271,29 +289,17 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     public void submitApplication(Session session, Application application) throws Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
-        if(application == null)
-        {
-            throw new Exception("Application is not valid");
-        }
-        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        NotificationService notificationService = getNotificationServiceEJB();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        application = applicationJpaController.findApplication(application.getApplicationID());
-        
-        //Set application status
-        application.setSubmissionDate(getGregorianCalendar().getTime());
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
-        applicationJpaController.edit(application);
+        getApplicationServicesUtil().submitApplication(application);
         
         //Log action
         AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Submitted new application", session.getUser());
@@ -319,7 +325,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     public Application getOpenApplication(Session session) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         userGateway.authenticateUser(session, roles);

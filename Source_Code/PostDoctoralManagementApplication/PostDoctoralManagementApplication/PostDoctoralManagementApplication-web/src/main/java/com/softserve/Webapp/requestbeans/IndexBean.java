@@ -6,8 +6,12 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.DBEntities.Person;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.ejb.NotificationServiceLocal;
+import com.softserve.system.DBEntitiesFactory;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
@@ -26,6 +30,8 @@ public class IndexBean {
     private SessionManagerBean sessionManagerBean;
     @Inject
     private NavigationManagerBean navigationManagerBean;
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
     
     private UIComponent errorContainer;
     private String usernameOrEmail = "";
@@ -70,7 +76,7 @@ public class IndexBean {
     public String performLoginRequest()
     {
         String l = sessionManagerBean.login(errorContainer,usernameOrEmail,password);
-        System.out.println("====== " + l);
+        System.out.println("====== " + l);        
         return l;
     }
 }

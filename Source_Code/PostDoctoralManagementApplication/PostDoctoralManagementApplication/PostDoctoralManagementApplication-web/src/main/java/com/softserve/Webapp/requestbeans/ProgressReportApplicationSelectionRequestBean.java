@@ -66,6 +66,6 @@ public class ProgressReportApplicationSelectionRequestBean {
     public String viewApplication(Application application)
     {
         selectApplication(application);
-        return navigationManagerBean.goToRefereeReportServiceReportCreationView();
+        return navigationManagerBean.goToProgressReportManagementServiceReportCreationView();
     }
 }

@@ -28,6 +28,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -52,7 +53,41 @@ public class UserAccountManagementService implements UserAccountManagementServic
      */
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    /**
+     *
+     * @return
+     */
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
     /**
      *
      */
@@ -112,33 +147,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
     }
     
     /**
@@ -220,7 +228,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
     {     
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         userGateway.authenticateUser(session, roles);
@@ -240,8 +248,8 @@ public class UserAccountManagementService implements UserAccountManagementServic
         PersonJpaController personJpaController = getPersonDAO();
         EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
         AddressJpaController addressJpaController = getAddressDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         Address userAddress = user.getAddressLine1(); 
         EmployeeInformation userEmployeeInfo = user.getEmployeeInformation();
@@ -317,7 +325,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     public void updateUserAccount(Session session, Person user) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         try
         {
             //Authenticate user ownership of account
@@ -335,7 +343,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         AddressJpaController addressJpaController = getAddressDAO();
         EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         Address userAddress = user.getAddressLine1(); 
         EmployeeInformation userUPInfo = user.getEmployeeInformation();
@@ -441,8 +449,8 @@ public class UserAccountManagementService implements UserAccountManagementServic
     public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user) throws Exception
     {
         //Use this to create a new account
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         if(getUserBySystemIDOrEmail(user.getEmail()) != null)
@@ -476,7 +484,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public void activateOnDemandAccount(Session session, Person user) throws Exception
     {
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
@@ -495,7 +503,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception
     {
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         userGateway.authenticateUser(session, roles);
@@ -516,52 +524,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
         PersonJpaController personJpaController = getPersonDAO();
         
         return personJpaController.findUserBySystemIDOrEmail(intput);
-    }
-    
-    /**
-     *This is a simple example and testing function. It will not be deployed 
-     * in final production.
-     */
-    @Override
-    public void testAddresses() 
-    {
-        AddressJpaController addressJpaController = getAddressDAO();
-        
-        for(int i = 0; i < 15; i++ )
-        {
-            Address ad = new Address();
-            
-            ad.setCountry("South Africa");
-            ad.setProvince("MP");
-            ad.setZippostalCode("120" + i);
-
-            try 
-            {
-                addressJpaController.create(ad);                
-            } 
-            catch (NamingException ex) 
-            {
-                Logger.getLogger(UserAccountManagementService.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-            catch (RollbackFailureException ex) 
-            {
-                Logger.getLogger(UserAccountManagementService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            catch (Exception ex) 
-            {
-                Logger.getLogger(UserAccountManagementService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            if(ad.getAddressID() != null)
-            {
-                System.out.print("Adress id is " + ad.getAddressID());
-            }
-            else
-            {
-                System.out.print("Address " + i + "'s ID is null");
-            }
-            
-        }
     }
     
     /**

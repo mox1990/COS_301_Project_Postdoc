@@ -16,16 +16,5 @@ import com.softserve.ejb.ReportServices;
  * @author kgothatso
  */
 public class ReportServicesMockUnit extends ReportServices {
-    private PersonJpaController aDAO = null;
     
-    public void setADAO(PersonJpaController aDAO)
-    {
-        this.aDAO = aDAO;
-    }
-        
-    @Override
-    public  PersonJpaController getPersonDAO()
-    {
-        return aDAO;
-    }
 }

@@ -99,6 +99,19 @@
                             This service allows one to back up the database and any old data
                         </ui:define>
                     </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
+                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(7)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(7)"/>
+                        <ui:param name="buttonName" value="Notification inbox"/>
+                        <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                        <ui:param name="buttonAction" value="goToNotificationServiceNotificationManagementView"/>
+                        <ui:param name="infoContainerID" value="info7"/>
+                        <ui:define name="informationContent">
+                            This service allows you to view any notifications you may have received via the system 
+                        </ui:define>
+                    </ui:decorate>
                 </div>
         </ui:define>
     </ui:composition>

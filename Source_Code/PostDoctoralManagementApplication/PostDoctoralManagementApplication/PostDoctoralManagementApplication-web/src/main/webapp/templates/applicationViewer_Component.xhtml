@@ -112,6 +112,20 @@
                         </ui:decorate>
                     </p:tab>
                     
+                    <p:tab title="Committee meeting comments" rendered="#{selectedApplication.committeeMeetingList.size() > 0}">
+                        <p:accordionPanel value="#{selectedApplication.committeeMeetingList}" var="meeting">
+                            <p:tab title="Meeting - #{meeting.meetingID}" rendered="#{meeting.endDate != null}">
+                                <ui:decorate template="MeetingViewer_Component.xhtml">
+                                    <ui:param name="meeting" value="#{meeting}"/>
+                                </ui:decorate>
+                                <ui:decorate template="MeetingCommentsTable_Component.xhtml">
+                                    <ui:param name="header" value="Meeting minutes/comments"/>
+                                    <ui:param name="comments" value="#{meeting.minuteCommentList}"/>
+                                </ui:decorate>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:tab>
+                    
                     <p:tab title="Decline report" rendered="#{selectedApplication.declineReport != null}">
                         <ui:decorate template="declineReportViewer_Component.xhtml">
                             <ui:param name="declineReport" value="#{selectedApplication.declineReport}"/>
@@ -122,6 +136,16 @@
                         <ui:decorate template="fundingReportViewer_Component.xhtml">
                             <ui:param name="fundingReport" value="#{selectedApplication.fundingReport}"/>
                         </ui:decorate>
+                    </p:tab>
+                    
+                    <p:tab title="Progress reports" rendered="#{selectedApplication.progressReportList.size() > 0}">
+                        <p:accordionPanel value="#{selectedApplication.progressReportList}" var="report">
+                            <p:tab title="Progress report - #{report.reportID}">
+                                <ui:decorate template="ProgressReportViewer_Component.xhtml">
+                                    <ui:param name="progressReport" value="#{report}"/>
+                                </ui:decorate>
+                            </p:tab>
+                        </p:accordionPanel>
                     </p:tab>
                 </p:tabView>
             </p:panel>

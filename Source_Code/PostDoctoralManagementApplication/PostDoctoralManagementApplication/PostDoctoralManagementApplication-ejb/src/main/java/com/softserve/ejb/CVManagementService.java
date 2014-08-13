@@ -17,6 +17,7 @@ import com.softserve.Exceptions.*;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -34,7 +35,22 @@ public class CVManagementService implements CVManagementServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-
+    
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
     public CVManagementService() {
     }
     
@@ -57,22 +73,13 @@ public class CVManagementService implements CVManagementServiceLocal {
         return new ExperienceJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
-    
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
     }
     
-    protected boolean hasCV(Session session)
+    @Override
+    public boolean hasCV(Session session)
     {
         return (session.getUser().getCv() != null);
     }
@@ -90,7 +97,7 @@ public class CVManagementService implements CVManagementServiceLocal {
         AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
         ExperienceJpaController experienceJpaController = getExperienceDAO();
         CvJpaController cvJpaController = getCVDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         List<Experience> experienceList = cv.getExperienceList();
@@ -129,7 +136,7 @@ public class CVManagementService implements CVManagementServiceLocal {
         ExperienceJpaController experienceJpaController = getExperienceDAO();
         
         CvJpaController cvJpaController = getCVDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         List<Experience> experienceList = cv.getExperienceList();

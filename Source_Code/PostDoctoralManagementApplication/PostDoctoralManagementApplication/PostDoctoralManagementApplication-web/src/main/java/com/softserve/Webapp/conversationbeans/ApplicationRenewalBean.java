@@ -7,14 +7,15 @@
 package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Application;
+import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
+import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
+import com.softserve.Webapp.depenedentbeans.ProgressReportCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.ApplicationRenewalServiceLocal;
-import com.softserve.system.Session;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -37,15 +38,21 @@ public class ApplicationRenewalBean implements Serializable {
     @Inject 
     private ConversationManagerBean conversationManagerBean;
     @Inject
-    private Conversation convesation;       
+    private Conversation convesation;
+    
+    @Inject
+    private ProgressReportCreationDependBean progressReportCreationDependBean;
+    @Inject
+    private CVCreationDependBean cVCreationDependBean;
+    @Inject
+    private ApplicationCreationDependBean applicationCreationDependBean;
     
     @EJB
     private ApplicationRenewalServiceLocal applicationRenewalServiceLocal;
     
     private Application oldApplication;
-    private Application newApplication;
     
-    
+    private int wizardActiveTab;
     
     /**
      * Creates a new instance of ApplicationRenewalBean
@@ -56,14 +63,111 @@ public class ApplicationRenewalBean implements Serializable {
     @PostConstruct
     public void init()
     {
-        newApplication = new Application();
-        oldApplication = sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
+        conversationManagerBean.registerConversation(convesation);
+        conversationManagerBean.startConversation(convesation);
+        oldApplication = sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class); 
+        
+        applicationCreationDependBean.init(new Application());
+        cVCreationDependBean.init(oldApplication.getFellow().getCv());
+        progressReportCreationDependBean.init();        
+        
+        if(applicationRenewalServiceLocal.doesApplicationHaveFinalProgressReport(oldApplication))
+        {
+            wizardActiveTab = 0;
+        }
+        else
+        {
+            wizardActiveTab = 1;
+        }
+    }
+
+    public int getWizardActiveTab() {
+        return wizardActiveTab;
+    }
+
+    public void setWizardActiveTab(int wizardActiveTab) {
+        this.wizardActiveTab = wizardActiveTab;
+    }
+
+    public ApplicationCreationDependBean getApplicationCreationDependBean() {
+        return applicationCreationDependBean;
+    }
+
+    public void setApplicationCreationDependBean(ApplicationCreationDependBean applicationCreationDependBean) {
+        this.applicationCreationDependBean = applicationCreationDependBean;
+    }
+
+    public CVCreationDependBean getCVCreationDependBean() {
+        return cVCreationDependBean;
+    }
+
+    public void setCVCreationDependBean(CVCreationDependBean cVCreationDependBean) {
+        this.cVCreationDependBean = cVCreationDependBean;
+    }
+
+    public ProgressReportCreationDependBean getProgressReportCreationDependBean() {
+        return progressReportCreationDependBean;
+    }
+
+    public void setProgressReportCreationDependBean(ProgressReportCreationDependBean progressReportCreationDependBean) {
+        this.progressReportCreationDependBean = progressReportCreationDependBean;
     }
     
-    
-    public String preformApplicationRenewalRequest()
+    public void completeFinalProgressReport()
     {
-        return "";
+        try
+        {            
+            applicationRenewalServiceLocal.createFinalProgressReportForApplication(sessionManagerBean.getSession(), oldApplication, progressReportCreationDependBean.getCombinedProgressReport());
+            wizardActiveTab++;
+        }
+        catch (Exception ex)
+        {
+            ExceptionUtil.logException(ApplicationRenewalBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+    }
+    
+    public void updateCV()
+    {
+        try
+        {            
+            applicationRenewalServiceLocal.updateResearchFellowCV(sessionManagerBean.getSession(),cVCreationDependBean.getCombinedCv());
+            wizardActiveTab++;
+        }
+        catch (Exception ex)
+        {
+            ExceptionUtil.logException(ApplicationRenewalBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+    }    
+    
+    public void completeApplicationRenewal()
+    {
+        try 
+        {            
+            applicationRenewalServiceLocal.createRenewalApplication(sessionManagerBean.getSession(), oldApplication, applicationCreationDependBean.getCombinedApplication());
+            wizardActiveTab++;
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(ApplicationRenewalBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+    }
+    
+    public String submitApplicationRenewal()
+    {
+        try 
+        {            
+            applicationRenewalServiceLocal.submitApplication(sessionManagerBean.getSession(), applicationCreationDependBean.getCombinedApplication());
+            return navigationManagerBean.goToApplicationRenewalServiceApplicationSelectionView();
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(ApplicationRenewalBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            return "";
+        }
     }
     
     

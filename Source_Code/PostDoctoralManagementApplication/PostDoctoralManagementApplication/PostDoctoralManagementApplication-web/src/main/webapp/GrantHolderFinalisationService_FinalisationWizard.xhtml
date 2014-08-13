@@ -27,7 +27,7 @@
                                 <h2 class="header2">Create or update your CV</h2>
                                 <ui:decorate template="templates/cvFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="bean" value="#{grantHolderFinalisationWizardBean}"/>
+                                    <ui:param name="bean" value="#{grantHolderFinalisationWizardBean.CVCreationDependBean}"/>
                                 </ui:decorate>                        
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
@@ -42,7 +42,7 @@
                                 <h2 class="header2">Complete application form</h2>
                                 <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="bean" value="#{grantHolderFinalisationWizardBean}"/>
+                                    <ui:param name="bean" value="#{grantHolderFinalisationWizardBean.applicationCreationDependBean}"/>
                                 </ui:decorate>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>

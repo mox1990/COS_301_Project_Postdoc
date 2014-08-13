@@ -20,5 +20,6 @@ import javax.ejb.Local;
 public interface CVManagementServiceLocal {
     public void createCV(Session session, Cv cv) throws AuthenticationException, Exception;
     public void updateCV(Session session, Cv cv) throws AuthenticationException, Exception;
+    public boolean hasCV(Session session);
     
 }

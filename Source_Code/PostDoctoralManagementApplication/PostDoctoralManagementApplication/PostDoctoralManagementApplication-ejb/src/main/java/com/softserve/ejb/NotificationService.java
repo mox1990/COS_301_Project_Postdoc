@@ -110,6 +110,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     
     
     @Override
+    @Asynchronous
     public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception
     {
         for(Notification n : notifications)

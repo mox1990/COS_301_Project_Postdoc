@@ -27,7 +27,7 @@
                                 <h2 class="header2">Create or update your CV</h2>
                                 <ui:decorate template="templates/cvFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                    <ui:param name="bean" value="#{newApplicationCreationBean.CVCreationDependBean}"/>
                                 </ui:decorate>                        
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
@@ -42,7 +42,7 @@
                                 <h2 class="header2">Complete application form</h2>
                                 <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                    <ui:param name="bean" value="#{newApplicationCreationBean.applicationCreationDependBean}"/>
                                 </ui:decorate>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
@@ -58,8 +58,8 @@
                                 <h:form>
                                     <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
                                         <ui:param name="renderAttribute" value="#{true}"/>
-                                        <ui:param name="person" value="#{newApplicationCreationBean.grantHolder}"/>
-                                        <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                        <ui:param name="person" value="#{newApplicationCreationBean.applicationCreationDependBean.grantHolder}"/>
+                                        <ui:param name="bean" value="#{newApplicationCreationBean.applicationCreationDependBean}"/>
                                         <ui:param name="beanAction" value="setGrantHolder"/>
                                     </ui:decorate>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>                                    
@@ -77,17 +77,17 @@
                                         <ui:decorate template="templates/PersonDataList_Component.xhtml">
                                             <ui:param name="renderAttribute" value="#{true}"/>
                                             <ui:param name="header" value="Already added Referees"/>
-                                            <ui:param name="persons" value="#{newApplicationCreationBean.referees}"/>
+                                            <ui:param name="persons" value="#{newApplicationCreationBean.applicationCreationDependBean.referees}"/>
                                         </ui:decorate>
 
                                         <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
                                             <ui:param name="renderAttribute" value="#{true}"/>
-                                            <ui:param name="person" value="#{newApplicationCreationBean.currentReferee}"/>
-                                            <ui:param name="bean" value="#{newApplicationCreationBean}"/>
+                                            <ui:param name="person" value="#{newApplicationCreationBean.applicationCreationDependBean.currentReferee}"/>
+                                            <ui:param name="bean" value="#{newApplicationCreationBean.applicationCreationDependBean}"/>
                                             <ui:param name="beanAction" value="setCurrentReferee"/>
                                         </ui:decorate>
                                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                        <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill"/>
+                                        <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.applicationCreationDependBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill"/>
                                     </p:outputPanel>
                                 </h:form>
                                 <h:form>
