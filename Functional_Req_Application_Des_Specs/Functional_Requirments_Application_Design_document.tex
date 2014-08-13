@@ -113,6 +113,10 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 01/08/2014 & v 1.01 & Added interface diagrams. & Carlo Machaba \\
 \hline
+13/08/2014 & v 2.01 & Started with iteration 3 documentation. & Mathys Ellis \\
+\hline
+13/08/2014 & v 2.4 & Added and updated use case diagrams and descriptions. Added and updated post conditions and also domain objects. & Mathys Ellis \\
+\hline
 
 %\end{tabbing}
 \end{tabular}
@@ -1430,7 +1434,7 @@ The system will be following a object oriented approach due it being the paradig
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/DomainObjects/DomainObjects.png}}
+\framebox{\includegraphics[scale=0.45]{../Images_Docs/Diagrams/DomainObjects/DomainObjects1.png}}
 \caption{Overview of the data structures and relationships for the core domain objects of the
 system.}
 \end{figure}
@@ -1439,15 +1443,49 @@ system.}
 \subsubsection{Person}
 This object represents the stakeholders that will make use of the system. All stakeholders will have accounts which they will use to log on to the system, using a unique user id and a predefined or user specified password. The unique user id can either be a Peoplesoft Emplid number or a email address. The person has an associated \textbf{Location} and \textbf{SecurityRole}(s)
 
-\subsubsection{Location}
-This object represents the location of a \textbf{Person} in the institution if they are a member of the University of Pretoria. This object will no longer be needed if the system is integrated with peoplesoft as it would cause redundancy.
+\subsubsection{Department}
+This object represents the department under which a \textbf{Person} falls in the \textbf{Faculty}. This is used to if they are a \textbf{employee} or \textbf{Research fellow} at the University of Pretoria. This object will no longer be needed if the system is integrated with peoplesoft as it would cause redundancy.
+
+\subsubsection{Faculty}
+This object represents the faculty that may exist under an institution. It is used to map the location of a \textbf{Person}. 
+
+\subsubsection{Institution}
+This object represents the institutions that may exist in the system. It is used to map the location of a \textbf{Person}. This allows for generic support if the software solution had to be expanded to other universities.
+
+\subsubsection{EmployeeInformation}
+This object represents the information regarding the employment of a \textbf{Person} at the University. It also contains the \textbf{Department} under which the \textbf{Person} falls. Also it contains the physical \textbf{Address} of the employee's office. This is made generic for software expansion support.  
+
+\subsubsection{ResearchFellowInformation}
+This object represents the CSC's or institution equivalents assigned emplid and the institution's assigned email address for an appointed \textbf{ResearchFellow}. This allows for possible future integration and better user support. Also it stores the \textbf{Department} in the institution to which the fellow was assigned to by the \textbf{DRIS}.
+
+\subsubsection{Address}
+This object represents a physical address. Thus it is used to expand and provide location details for a particular physical object or person.  
 
 \subsubsection{SecurityRole}
-This object represents a particular security role of a \textbf{Person}. A \textbf{Person} may have many different security roles.
+This object represents a particular security role of a \textbf{Person}. A \textbf{Person} may have many different security roles. The security role can be used as a subtype discriminator for relational database architectures.
 
 \subsubsection{DRIS}
 This object represents members of Department of Research and Innovation Support who administers the process.
 
+\subsubsection{FundingReport}
+This object represents an \textbf{Application}'s funding costs as decide per the \textbf{DRIS}. It comprises of multiple \textbf{FundingCost}s that provides the various funding inputs from various parties for the particular fund-able costs namely fellowship, travel, running, equipment, operating
+and conference.
+ 
+\subsubsection{FundingCost}
+This object represents a particular funding input cost for a \textbf{Application} from a particular funder. 
+
+\subsubsection{DeclineReport}
+This object represents the report associated with an \textbf{Application} that has been declined by some authority. It contains the creation timestamp, \textbf{Person} responsible and the reason. Only one such report can exist per \textbf{Application}.
+
+\subsubsection{AmmendRequest}
+This object represents a Amend request for a \textbf{Application} that is sent by some \textbf{HOD}. It contains the creation timestamp, \textbf{HOD} responsible and the reason. This is used to allow fellow to understand what is wrong with their \textbf{Application} so that they can correct it. There can be multiple such requests associated with an \textbf{Application}.
+
+\subsubsection{EligibilityReport}
+This object represents a report associated with an \textbf{Application} that has been checked for eligibility. It contains the check timestamp and \textbf{DRIS} member responsible. It is primary used for auditing. Only one such report can exist per \textbf{Application}.
+
+\subsubsection{ForwardAndRewindReport}
+This object represents a report associated with an \textbf{Application} that has been either forwarded or re-winded through a particular set of application stages. This is used to track such actions and the reasons for them. There can be multiple such reports associated with an \textbf{Application}. 
+ 
 \subsubsection{ProspectiveFellow}
 This inherited object represents a prospective fellow who is a holder of a PhD obtained in the last five years (or nearing completion of a PhD) or is 40 years or younger and has a PhD. The prospective fellow can open a \textbf{NewApplication}.
 
@@ -1479,16 +1517,13 @@ This object represents the referral report from an identified referee of a \text
 This inherited object represents the individual members of the post-doctoral committee who approves all available \textbf{Applications} during committee meetings and records the \textbf{Minutes} of the meeting.
 
 \subsubsection{CommitteeMeeting}
-This object represents a meeting of the \textbf{PostDocCommittee} convened by the \textbf{DRIS} that will be review the \textbf{Applications} and will evaluate each. This object contains the attendance list, date and time convened and the \textbf{Minutes} of the meeting.
-
-\subsubsection{Minutes}
-This object represents the minutes of the \textbf{CommitteeMeeting} and holds the \textbf{MinuteComment}(s) of the meeting.
+This object represents a meeting of the \textbf{PostDocCommittee} convened by the \textbf{DRIS} that will be review the \textbf{Applications} and will evaluate each. This object contains the attendance list, date and time convened and the \textbf{MinuteComment}s of the meeting.
 
 \subsubsection{MinuteComment}
 This object represents a comment made by a \textbf{PostDocCommittee} member during a \textbf{CommitteeMeeting}.
 
 \subsubsection{Application}
-This object represents an applications and will contain the information of \textbf{ProspectiveFellow} or \textbf{ResearchFellow} and \textbf{GrantHolder} who owns it. The object holds the status of the application. As well as the \textbf{HODRecommandationReport} of a \textbf{HOD} and \textbf{Endorsement} from a \textbf{DeansOffice}.
+This object represents an applications and will contain the information of \textbf{ProspectiveFellow} or \textbf{ResearchFellow} and \textbf{GrantHolder} who owns it. The object holds the status of the application and any project information. As well as the \textbf{HODRecommandationReport} of a \textbf{HOD} and \textbf{Endorsement} from a \textbf{DeansOffice}. It further holds the \textbf{EligibilityReport} and \textbf{FundingReport} from the \textbf{DRIS}. If the application is declined the \textbf{DeclineReport} is associated with the application. The application object can also hold multiple \textbf{AmmendRequest}s if any such requests are created. All the \textbf{ProgressReport}s created by the \textbf{ResearchFellow} are also contained in the application. Lastly if the application forwarded or re-winded then the associated \textbf{Forward rewind report}s are also contained by the application 
 
 \subsubsection{NewApplication}
 This inherited object represents new application for a \textbf{ProspectiveFellow} who is currently not a fellow in the system. Also it holds any \textbf{RefereeReport}(s) that has been created for the application.
@@ -1497,7 +1532,7 @@ This inherited object represents new application for a \textbf{ProspectiveFellow
 This inherited object represents renewal application for a \textbf{ProspectiveFellow} who is a fellow in the system. Also it holds the \textbf{ProgressReport} that has been created for the application.
 
 \subsubsection{ProgressReport}
-This object represents a report on the research that the \textbf{ResearchFellow} had done through the duration of their fellowship.
+This object represents the periodical report on the research that the \textbf{ResearchFellow} has done for the particular period in the duration of their fellowship. These reports are completed on an annual bases.
 
 \subsubsection{CV}
 This object represents a CV and contains all the information such as personal details, \textbf{AcademicQualification}(s), \textbf{Experience} regarding a \textbf{GrantHolder} or \textbf{ProspectiveFellow} in the system.
@@ -1509,13 +1544,10 @@ This object represents a academic qualification and the information regarding it
 This object represents a work experience and the information regarding it such as the capacity of the work, where this work was done and when it was done.
 
 \subsubsection{Notification}
-This object represents a email or internal message sent by a user to a user via the system. The system itself may also seen as a user in this regard.
+This object represents a email or internal message sent by a user to a user via the system. The system itself may also seen as a user with regards to the sender of such notification. It consists of the actual message, subject, timestamp and email status. 
 
 \subsubsection{AuditLog}
-This object represents a audit log that stores all the actions of all users within the system.
-
-\subsubsection{LogEntry}
-This object represents a \textbf{AuditLog} entry which records the action, who committed the action as well as at what time the action was committed.
+This object represents a audit log that stores all the actions of all users within the system. Each entry records the action, who committed the action as well as at what time the action was committed.
 
 \newpage
 
