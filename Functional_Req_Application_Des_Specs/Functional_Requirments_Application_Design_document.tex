@@ -6,6 +6,8 @@
 \usepackage{lastpage} % Required to determine the last page for the footer
 \usepackage{extramarks} % Required for headers and footers
 \usepackage{graphicx} % Required to insert images
+\usepackage{caption} % Required for sub figures
+\usepackage{subcaption} % subfigures
 \usepackage{listings} % Required for insertion of code
 \usepackage{courier} % Required for the courier font
 \usepackage{color}
@@ -457,11 +459,11 @@ The following sections will discuss the required functionality of all the major 
 \caption{Use case diagram of Grant holder application finalisation service}
 \end{figure}
 
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/CV Management service1.jpg}}
-\caption{Use case diagram of CV management service}
-\end{figure}
+%\begin{figure}[H]
+%\centering	
+%\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/CV Management service1.jpg}}
+%\caption{Use case diagram of CV management service}
+%\end{figure}
 
 \begin{figure}[H]
 \centering	
@@ -1330,54 +1332,93 @@ The system will be following a object oriented approach due it being the paradig
 \newpage
 
 \subsection{Interface Diagrams}
+% Problem with having to many figures =========================================================================================
 
-\begin{figure}[H]
+%\begin{figure}[H]
+%\centering
+%\subfloat[Interface Diagram for the Application Progress Viewer service][Application Progress Viewer service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationProgressViewerService.jpg}}
+%\label{fig:subfig1}}
+%\subfloat[Interface Diagram for the Application Renewal service][Application Renewal service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationRenewalService.jpg}}
+%\label{fig:subfig2}}
+%\qquad
+%\subfloat[Interface Diagram for the Archival service][Archival service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ArchivalService.jpg}}
+%\label{fig:subfig3}}
+%\subfloat[Interface Diagram for the CV Management service][CV Management service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/CVManagementService.jpg}}
+%\label{fig:subfig4}}
+%\qquad
+%\subfloat[Interface Diagram for the Application Progress Viewer service][Application Progress Viewer service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DeansEndorsementService.jpg}}
+%\label{fig:subfig1}}
+%\subfloat[Interface Diagram for the Application Renewal service][Application Renewal service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DRISApprovalService.jpg}}
+%\label{fig:subfig2}}
+%\qquad
+%\subfloat[Interface Diagram for the Archival service][Archival service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/GrantHolderFinalisationService.jpg}}
+%\label{fig:subfig3}}
+%\subfloat[Interface Diagram for the CV Management service][CV Management service]{
+%\framebox{\includegraphics[width=0.47\textwidth]{../Images_Docs/Diagrams/Interface Diagram/HODRecommendationServices.jpg}}
+%\label{fig:subfig4}}
+%\caption{Interface diagrams}
+%\label{fig:globfig}
+%\end{figure}
+% =================================================================================================================================
+
+% Alternative implementation
+\begin{figure}
+
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/ApplicationProgressViewerService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationProgressViewerService.jpg}}
 \caption{Interface Diagram for the Application Progress Viewer service.}
-\end{figure}
-
-\begin{figure}[H]
+\end{subfigure}
+~
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/ApplicationRenewalService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationRenewalService.jpg}}
 \caption{Interface Diagram for the Application Renewal service.}
-\end{figure}
+\end{subfigure}
 
-\begin{figure}[H]
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/ArchivalService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ArchivalService.jpg}}
 \caption{Interface Diagram for the Archival service.}
-\end{figure}
-
-\begin{figure}[H]
+\end{subfigure}
+~
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/CVManagementService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/CVManagementService.jpg}}
 \caption{Interface Diagram for the CV Management service.}
-\end{figure}
+\end{subfigure}
 
-
-\begin{figure}[H]
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/DeansEndorsementService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DeansEndorsementService.jpg}}
 \caption{Interface Diagram for the Deans Endorsement service.}
-\end{figure}
-
-\begin{figure}[H]
+\end{subfigure}
+~
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/DRISApprovalService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DRISApprovalService.jpg}}
 \caption{Interface Diagram for the DRIS Approval service.}
-\end{figure}
+\end{subfigure}
 
-\begin{figure}[H]
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/GrantHolderFinalisationService.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/GrantHolderFinalisationService.jpg}}
 \caption{Interface Diagram for the Grant Holder Finalisation service.}
-\end{figure}
-
-\begin{figure}[H]
+\end{subfigure}
+~
+\begin{subfigure}[p]{0.47\textwidth}
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/HODRecommendationServices.jpg}}
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/HODRecommendationServices.jpg}}
 \caption{Interface Diagram for the HOD Recommendation service.}
+\end{subfigure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{figure}
 
 \begin{figure}[H]
