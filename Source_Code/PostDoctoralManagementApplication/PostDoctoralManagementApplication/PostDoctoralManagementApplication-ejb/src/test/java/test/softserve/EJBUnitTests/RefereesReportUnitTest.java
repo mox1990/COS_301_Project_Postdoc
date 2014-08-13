@@ -18,6 +18,7 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RefereeReport;
@@ -57,7 +58,7 @@ public class RefereesReportUnitTest {
     public void tearDown() {
     }
     
-    public void testLoadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords)
+    public void testLoadPendingApplications()
     {
         RefereesReportMockUnit instance = new RefereesReportMockUnit();
         ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
@@ -75,7 +76,7 @@ public class RefereesReportUnitTest {
         
         try
         {
-            instance.loadPendingApplications(session, StartIndex, maxNumberOfRecords);
+            instance.loadPendingApplications(mockSession, start, max);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED, start, max);
         }
@@ -86,7 +87,7 @@ public class RefereesReportUnitTest {
         }
     }
     
-    public void testCountTotalPendingApplications(Session session)
+    public void testCountTotalPendingApplications()
     {
         RefereesReportMockUnit instance = new RefereesReportMockUnit();
         ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
@@ -102,14 +103,14 @@ public class RefereesReportUnitTest {
         instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntities(mockDBEntitiesFactory);
         instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
+        instance.setuEJB(mockUserGateway); 
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         
         try
         {
-            instance.countTotalPendingApplications(session);
+            instance.countTotalPendingApplications(mockSession);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
         }
@@ -120,7 +121,7 @@ public class RefereesReportUnitTest {
         }
     }
    
-    public void testSubmitReferralReport(Session session, Application application, RefereeReport refereeReport)
+    public void testSubmitReferralReport()
     {
         RefereesReportMockUnit instance = new RefereesReportMockUnit();
         ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
@@ -131,12 +132,23 @@ public class RefereesReportUnitTest {
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         Session mockSession = mock(Session.class);
         
+        RefereeReport mockRefereeReport = mock(RefereeReport.class);
+        RefereeReportJpaController mockRefereeReportController = mock(RefereeReportJpaController.class);
+        Application mockApplication = mock(Application.class);
+        
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         try
         {
-            instance.submitReferralReport(session, application, refereeReport);
+            instance.submitReferralReport(mockSession, mockApplication, mockRefereeReport);
+            verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockApplicationJpaController).edit(mockApplication);
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"));
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
            
         }
         catch(Exception ex)

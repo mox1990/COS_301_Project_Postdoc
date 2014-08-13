@@ -63,7 +63,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         return new DBEntitiesFactory();
     }
     
-     protected GregorianCalendar getGregorianCalendarUTIL()
+    protected GregorianCalendar getGregorianCalendarUTIL()
     {
         return new GregorianCalendar();
     }

@@ -7,15 +7,20 @@
 package test.softserve.EJBUnitTests;
 
 import com.softserve.DBDAO.AddressJpaController;
+import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.EmployeeInformationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
+import com.softserve.ejb.NotificationService;
+import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.junit.*;
@@ -28,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
+import test.softserve.MockEJBClasses.ApplicationServicesUtilMockUnit;
 import test.softserve.MockEJBClasses.UserAccountManagementServicesMockUnit;
 
 /**
@@ -38,7 +44,16 @@ import test.softserve.MockEJBClasses.UserAccountManagementServicesMockUnit;
 @RunWith(MockitoJUnitRunner.class)
 public class UserAccountManagmentUnitTest {
       
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private Session mockSession;
+    private UserGateway mockUserGateway;
+    private NotificationService mockNotificationService;
+    private AuditTrailService mockAuditTrailService;
+    private GregorianCalendar mockGregorianCalendar;
+    private Person mockPerson;
+    private PersonJpaController mockPersonController;
     
+    private UserAccountManagementServicesMockUnit instance;
     
     public UserAccountManagmentUnitTest() {
     }
@@ -53,7 +68,20 @@ public class UserAccountManagmentUnitTest {
     }
     
     @Before
-    public void setUp() {              
+    public void setUp() { 
+        mockSession = mock(Session.class);
+        mockUserGateway = mock(UserGateway.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockAuditTrailService = mock(AuditTrailService.class);
+        mockPerson = mock(Person.class);
+        mockPersonController = mock(PersonJpaController.class);
+        mockGregorianCalendar = mock(GregorianCalendar.class);
+        
+        
+        instance.setAuditTrailService(mockAuditTrailService);
+        instance.setDBEntitiesFactory(mockDBEntitiesFactory);
+        instance.setNotificationService(mockNotificationService);
+        instance.setUserGateway(mockUserGateway);
     }
     
     @After
@@ -64,562 +92,182 @@ public class UserAccountManagmentUnitTest {
     {
         
     }
-  /*  
+   
     @Test
-    public void createUserAccount_Manual_IsUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
+    public void testCreateUserWithFalse(){
         
-        //Setup dependices mocks
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-       // when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        //when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+        boolean useManualSystemIDSpecification = false;
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-           // instance.createUserAccount(mockSession, true, mockPerson, mockAddress, mockUpInfo);
-            */
-            //Verify correct function behaviour
-            /*verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress);            
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockEmployeeInformationJpaController).create(mockUpInfo);
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);            
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));*/
-  /*      }
-        catch (Exception ex)
+            instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
+        }
+        catch(Exception ex)
         {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+        @Test
+    public void testCreateUserWithTrue(){
+        
+        boolean useManualSystemIDSpecification = true;
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try
+        {
+            instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
     @Test
-    public void createUserAccount_Manual_NotUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        //Setup dependices mocks
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-       // when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        //when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    public void testUpdateUser(){
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-          //  instance.createUserAccount(mockSession, true, mockPerson, mockAddress, null);
-            
-            //Verify correct function behaviour
-           // verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-           // verifyNoMoreInteractions(mockUpInfo);     
-           // verify(mockAddressJpaController).create(mockAddress);
-           // verify(mockPerson).setAddressLine1(mockAddress);            
-//            verify(mockPersonJpaController).create(mockPerson);
-//            verifyNoMoreInteractions(mockPersonJpaController);
-//            verifyNoMoreInteractions(mockPerson);
-//            verifyNoMoreInteractions(mockAddress);                   
-//            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-//            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            instance.updateUserAccount(mockSession, mockPerson);
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
     @Test
-    public void createUserAccount_Auto_IsSystemAdmin_IsUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "a14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-//        when(mockCalander.get(Calendar.YEAR)).thenReturn(2014);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        when(mockPersonJpaController.getMaxSystemIDForYear(2014, 'a')).thenReturn(5);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-//        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-//        when(mockPerson.getSystemID()).thenReturn(expectedSystemID);
-//        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.TRUE);
-//        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-//        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    public void testRemoveUser(){
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        String id = mockPerson.getSystemID();
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, mockUpInfo);
+            instance.removeUserAccount(mockSession, id);
             
-            //Verify correct function behaviour
-            verify(mockPerson).setSystemID(expectedSystemID);
-            verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress); 
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-            verify(mockPersonJpaController).getMaxSystemIDForYear(2014, 'a');
-            verify(mockPerson).getSystemID();
-            verify(mockUpInfo).setEmployeeID(expectedSystemID);
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockEmployeeInformationJpaController).create(mockUpInfo);
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-            verifyNoMoreInteractions(mockUpInfo);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    @Test 
+    public void testViewAllUserAccounts(){
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try
+        {
+            instance.viewAllUserAccounts(mockSession);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
     @Test
-    public void createUserAccount_Auto_IsSystemAdmin_NotUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "a14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-        when(mockCalander.get(Calendar.YEAR)).thenReturn(2014);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        when(mockPersonJpaController.getMaxSystemIDForYear(2014, 'a')).thenReturn(5);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getSystemID()).thenReturn(expectedSystemID);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.TRUE);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    public void testGenerateOnDemandAccountTrue(){
+        String reason = "Required to be a referre";
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, null);
-            
-            //Verify correct function behaviour
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-            verifyNoMoreInteractions(mockUpInfo);            
-            verify(mockPerson).setSystemID(expectedSystemID);
-            verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress); 
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-            verify(mockPersonJpaController).getMaxSystemIDForYear(2014, 'a');
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            instance.generateOnDemandAccount(mockSession, reason, true, mockPerson);
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
-
-    @Test
-    public void createUserAccount_Auto_IsProspectiveFellow_IsUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "f14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-        when(mockCalander.get(Calendar.YEAR)).thenReturn(2014);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        when(mockPersonJpaController.getMaxSystemIDForYear(2014, 'f')).thenReturn(5);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getSystemID()).thenReturn(expectedSystemID);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW)).thenReturn(Boolean.TRUE);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    
+    public void testGenerateOnDemandAccountFalse(){
+        String reason = "Required to be a referre";
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, mockUpInfo);
-            
-            //Verify correct function behaviour
-            verify(mockPerson).setSystemID(expectedSystemID);
-            verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress); 
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
-            verify(mockPersonJpaController).getMaxSystemIDForYear(2014, 'f');
-            verify(mockPerson).getSystemID();
-            verify(mockUpInfo).setEmployeeID(expectedSystemID);
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockEmployeeInformationJpaController).create(mockUpInfo);
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-            verifyNoMoreInteractions(mockUpInfo);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            instance.generateOnDemandAccount(mockSession, reason, false, mockPerson);
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
     @Test
-    public void createUserAccount_Auto_IsProspectiveFellow_NotUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "f14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-        when(mockCalander.get(Calendar.YEAR)).thenReturn(2014);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        when(mockPersonJpaController.getMaxSystemIDForYear(2014, 'f')).thenReturn(5);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getSystemID()).thenReturn(expectedSystemID);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW)).thenReturn(Boolean.TRUE);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    public void testActivateOnDemandAccount()
+    {
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, null);
-            
-            //Verify correct function behaviour
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-            verifyNoMoreInteractions(mockUpInfo);
-            verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress); 
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
-            verify(mockPersonJpaController).getMaxSystemIDForYear(2014, 'f');
-            verify(mockPerson).setSystemID(expectedSystemID);
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            instance.activateOnDemandAccount(mockSession, mockPerson);
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
     @Test
-    public void createUserAccount_Auto_IsReferee_IsUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "r14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-        when(mockCalander.get(Calendar.YEAR)).thenReturn(2014);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        when(mockPersonJpaController.getMaxSystemIDForYear(2014, 'r')).thenReturn(5);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getSystemID()).thenReturn(expectedSystemID);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE)).thenReturn(Boolean.TRUE);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    public void testGetAllSecurityRoles()
+    {
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, mockUpInfo);
-            
-            //Verify correct function behaviour
-            verify(mockPerson).setSystemID(expectedSystemID);
-            verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress); 
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE);
-            verify(mockPersonJpaController).getMaxSystemIDForYear(2014, 'r');
-            verify(mockPerson).getSystemID();
-            verify(mockUpInfo).setEmployeeID(expectedSystemID);
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockEmployeeInformationJpaController).create(mockUpInfo);
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-            verifyNoMoreInteractions(mockUpInfo);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            instance.getAllSecurityRoles();
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
     @Test
-    public void createUserAccount_Auto_IsReferee_NotUpEmployee_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "r14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-        when(mockCalander.get(Calendar.YEAR)).thenReturn(2014);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        when(mockPersonJpaController.getMaxSystemIDForYear(2014, 'r')).thenReturn(5);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user account", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getSystemID()).thenReturn(expectedSystemID);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE)).thenReturn(Boolean.TRUE);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
+    public void testGetUserBySystemIDOrEmail()
+    {
+        String user = "u12078027";
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, null);
-            
-            //Verify correct function behaviour
-            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
-            verifyNoMoreInteractions(mockUpInfo);
-            verify(mockAddressJpaController).create(mockAddress);
-            verify(mockPerson).setAddressLine1(mockAddress); 
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
-            verify(mockPersonJpaController).doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE);
-            verify(mockPersonJpaController).getMaxSystemIDForYear(2014, 'r');
-            verify(mockPerson).setSystemID(expectedSystemID);
-            verify(mockPersonJpaController).create(mockPerson);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockPerson);
-            verifyNoMoreInteractions(mockAddress);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user account", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            instance.getUserBySystemIDOrEmail(mockPerson.getEmail());
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
+            ex.printStackTrace();
             fail("An exception occured");
         }
     }
     
+    
     @Test
-    public void createUserAccount_Auto_NotReferee_NotSystemAdmin_NotProspectiveFellow_Exception_UnitTest() 
-    {        
-        UserAccountManagementServicesMockUnit instance = new UserAccountManagementServicesMockUnit();
-        
-        String expectedSystemID = "r14000006";
-        
-        //Setup dependices mocks
-        GregorianCalendar mockCalander = mock(GregorianCalendar.class);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        AddressJpaController mockAddressJpaController = mock(AddressJpaController.class);
-        EmployeeInformationJpaController mockEmployeeInformationJpaController = mock(EmployeeInformationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockAddressJpaController);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuDAO(mockEmployeeInformationJpaController);
-        instance.setDbFactory(mockDBEntitiesFactory);
-        instance.setAtsEJB(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        Person mockPerson = mock(Person.class);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW)).thenReturn(Boolean.FALSE);
-        when(mockPersonJpaController.doesPersonHaveSecurityRole(mockPerson, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE)).thenReturn(Boolean.FALSE);
-        Address mockAddress = mock(Address.class);
-        EmployeeInformation mockUpInfo = mock(EmployeeInformation.class);        
-        Session mockSession = mock(Session.class);
-        
+    public void testTestAddress(){
+         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            //Execute function
-            instance.createUserAccount(mockSession, false, mockPerson, mockAddress, null);
+            instance.testAddresses();
             
-            //Verify correct function behaviour            
-            fail("AutomaticSystemIDGenerationException expected");
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
-            assertTrue(true);
+            ex.printStackTrace();
+            fail("An exception occured");
         }
     }
-
-    private void fail(String automaticSystemIDGenerationException_expe) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void assertTrue(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private Object verify(AuditTrailService mockAuditTrailService) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void verifyNoMoreInteractions(DBEntitiesFactory mockDBEntitiesFactory) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private Object verify(PersonJpaController mockPersonJpaController) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private Object when(int get) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
 }

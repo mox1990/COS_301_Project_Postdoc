@@ -10,6 +10,8 @@ import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.ProgressReportJpaController;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
@@ -57,7 +59,7 @@ public class ProgressReportManagementUnitTest
     @After
     public void tearDown() {
     }
-    /*
+    
     @Test
     void testCreateProgressReport() throws Exception
     {
@@ -74,10 +76,9 @@ public class ProgressReportManagementUnitTest
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         ProgressReport mockProgress = mock(ProgressReport.class);
         ProgressReportJpaController mockProgressReportController = mock(ProgressReportJpaController.class);
-      //  ApplicationJpaController mockApplication = mock(ApplicationJpaController.class);
-        
+      
         Session mockSession = mock(Session.class);
-         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         instance.setaDAO(mockApplicationDAO);
@@ -93,7 +94,11 @@ public class ProgressReportManagementUnitTest
         {
             instance.createProgressReport(mockSession, mockApplication, mockProgress);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockProgressReportController).create(mockProgress);
+            verify(mockProgressReportController).edit(mockProgress);
+            verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -120,7 +125,7 @@ public class ProgressReportManagementUnitTest
         ApplicationJpaController mockApplication = mock(ApplicationJpaController.class);
         
         Session mockSession = mock(Session.class);
-         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         instance.setaDAO(mockApplication);
@@ -131,6 +136,7 @@ public class ProgressReportManagementUnitTest
         instance.setpDAO(mockPersonJpaController);
         instance.setuEJB(mockUserGateway);
         instance.setaSEJB(mockApplicationServices);
+        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
           
         try
@@ -138,6 +144,10 @@ public class ProgressReportManagementUnitTest
             instance.updateProgressReport(mockSession, mockProgress);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockProgressReportController).edit(mockProgress);
+            verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -148,5 +158,5 @@ public class ProgressReportManagementUnitTest
         
     }
 
-*/
+
 }
