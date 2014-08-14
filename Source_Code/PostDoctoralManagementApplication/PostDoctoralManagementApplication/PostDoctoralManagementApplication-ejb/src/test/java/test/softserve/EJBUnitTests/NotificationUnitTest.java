@@ -8,7 +8,6 @@ package test.softserve.EJBUnitTests;
 
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
 import com.softserve.ejb.NotificationServiceLocal;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -24,9 +23,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import test.softserve.MockEJBClasses.NotificationServiceMockUnit;
 
 /**
@@ -63,8 +59,7 @@ public class NotificationUnitTest {
         instance.setNDAO(mockNotificationJpaController);
         
         Notification mockNotification = mock(Notification.class);
-        when(mockNotification.getReciever()).thenReturn(new Person("u12345678"));
-        List<Notification> mockNotifications = Arrays.asList(mockNotification);;
+        List<Notification> mockNotifications = Arrays.asList(mockNotification, mockNotification, mockNotification);;
         
         try
         {
@@ -85,7 +80,7 @@ public class NotificationUnitTest {
         instance.setNDAO(mockNotificationJpaController);
         
         Notification mockNotification = mock(Notification.class);
-        when(mockNotification.getReciever()).thenReturn(new Person("u12345678"));
+        
         try
         {
             instance.sendNotification(mockNotification, false);
@@ -106,7 +101,6 @@ public class NotificationUnitTest {
         instance.setNDAO(mockNotificationJpaController);
         
         Notification mockNotification = mock(Notification.class);
-        when(mockNotification.getReciever()).thenReturn(new Person("u12345678"));
         
         try
         {
