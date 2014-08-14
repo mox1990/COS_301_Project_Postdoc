@@ -10,6 +10,7 @@ import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
 import com.softserve.ejb.AuditTrailService;
@@ -34,6 +35,12 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     private ApplicationServicesUtil aSEJB;
     private EligiblityReportJpaController eDAO;
     private GregorianCalendar gCal;
+    private PersonJpaController pDAO;
+
+    public void setpDAO(PersonJpaController pDAO) {
+        this.pDAO = pDAO;
+    }
+    
 
     public void setgCal(GregorianCalendar gCal) {
         this.gCal = gCal;
@@ -124,6 +131,12 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     protected GregorianCalendar getGregorianCalendar()
     {
         return gCal;
+    }
+    
+    @Override
+    protected PersonJpaController getPersonDAO()
+    {
+        return pDAO;
     }
     
     /** TODO: Implement work around...
