@@ -11,6 +11,7 @@ import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -53,16 +55,26 @@ public class ReportServices implements ReportServicesLocal
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
+    @EJB 
+    private UserGatewayLocal userGateway;
+    
     private final String fs = System.getProperty("file.separator");
     private final String filepath = "Reports" + fs;
+    private final JasperReport personReport;
+    private final JasperReport applicationReport;
     
+    public ReportServices() throws JRException
+    {
+        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
+        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // TODO: Work an application report
+    }
     /**
      *
      * @return
      */
-    protected UserGateway getUserGatewayServiceEJB()
+    protected UserGatewayLocal getUserGatewayServiceEJB()
     {
-        return new UserGateway(emf);
+        return userGateway;
     }
     
     /**
@@ -74,58 +86,76 @@ public class ReportServices implements ReportServicesLocal
         return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
-    @Override
-    public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws JRException, ClassNotFoundException, SQLException, InterruptedException
+    /**
+     *
+     * @return
+     */
+    protected ApplicationJpaController getApplicationDAO()
     {
-        System.out.println("Working in: " + System.getProperty("user.home") );
+        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    @Override
+    public List<Person> getAllPersons()
+    {
+        return getPersonDAO().findPersonEntities();
+    }
+    
+    @Override
+    public List<Application> getAllApplications()
+    {
+        return getApplicationDAO().findApplicationEntities();
+    }
+    
+    @Override
+    public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws Exception
+    {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        //getUserGatewayServiceEJB().authenticateUser(session, roles);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
-        // Create a map of parameters to pass to the report.
         Map parameters = new HashMap();
         
         parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
 
-        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(getPersonDAO().findPersonEntities());
+        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(persons);
         
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(personReport, parameters, beanColDataSource);
         // You can use JasperPrint to create PDF
         
         return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
     }
     
     @Override
-    public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws JRException, ClassNotFoundException, SQLException, InterruptedException
+    public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws Exception
     {
-        System.out.println("Working in: " + System.getProperty("user.home") );
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        //getUserGatewayServiceEJB().authenticateUser(session, roles);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Application.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
-        // Create a map of parameters to pass to the report.
         Map parameters = new HashMap();
         
         parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
 
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(applications);
         
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(applicationReport, parameters, beanColDataSource);
         // You can use JasperPrint to create PDF
         
         return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
     }
     
     @Override
-    public byte[] exportPersonsToExcel(Session session, List<Person> persons) throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException
+    public byte[] exportPersonsToExcel(Session session, List<Person> persons) throws Exception
     {
         System.out.println("Working in: " + System.getProperty("user.home") );
-        JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
-        // Create a map of parameters to pass to the report.
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
         Map parameters = new HashMap();
         
         //parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
@@ -134,26 +164,29 @@ public class ReportServices implements ReportServicesLocal
         // with data. This data is transperantly accessed via a SQL statement in the XML
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(getPersonDAO().findPersonEntities());
         
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(personReport, parameters, beanColDataSource);
         // You can use JasperPrint to create PDF
 
         JRXlsExporter exporter = new JRXlsExporter();
 
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-        exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, System.getProperty("user.home") + fs + "Person.xls");
-
+        exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "temp.xls");
+        // TODO: Check for unique name...
         exporter.exportReport();
             
-        Path path = Paths.get(System.getProperty("user.home") + fs + "Person.xls");
+        Path path = Paths.get("temp.xls");
         
         return Files.readAllBytes(path); // Returns byte stream...
     }
     
     @Override
-    public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException
+    public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception
     {
-        System.out.println("Working in: " + System.getProperty("user.home") );
-        JasperReport jasperReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // Still need to locate file in Netbeans... (I put it in the source code folder for easy access... gonna move it soon)
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
         // Create a map of parameters to pass to the report.
         Map parameters = new HashMap();
         
@@ -163,17 +196,17 @@ public class ReportServices implements ReportServicesLocal
         // with data. This data is transperantly accessed via a SQL statement in the XML
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(applications);
         
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(applicationReport, parameters, beanColDataSource);
         // You can use JasperPrint to create PDF
 
         JRXlsExporter exporter = new JRXlsExporter();
 
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-        exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, System.getProperty("user.home") + fs + "Person.xls");
+        exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,"Person.xls");
 
         exporter.exportReport();
             
-        Path path = Paths.get(System.getProperty("user.home") + fs + "Person.xls");
+        Path path = Paths.get("Person.xls");
         
         return Files.readAllBytes(path); // Returns byte stream...
     }

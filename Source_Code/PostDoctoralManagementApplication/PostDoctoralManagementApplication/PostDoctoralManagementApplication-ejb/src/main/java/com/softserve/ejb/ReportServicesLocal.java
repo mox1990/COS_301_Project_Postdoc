@@ -9,6 +9,7 @@ package com.softserve.ejb;
 import com.itextpdf.text.DocumentException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
+import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,6 +24,9 @@ import net.sf.jasperreports.engine.JRException;
  */
 @Local
 public interface ReportServicesLocal {
+    
+    public List<Person> getAllPersons();
+    public List<Application> getAllApplications();
     /**
      * Export PDF of report made up of persons
      * @param session
@@ -33,7 +37,7 @@ public interface ReportServicesLocal {
      * @throws SQLException
      * @throws InterruptedException 
      */
-    public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws JRException, ClassNotFoundException, SQLException, InterruptedException;
+    public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws Exception;
     
     /**
      * Export PDF of report made up of applications
@@ -45,7 +49,7 @@ public interface ReportServicesLocal {
      * @throws SQLException
      * @throws InterruptedException 
      */
-    public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws JRException, ClassNotFoundException, SQLException, InterruptedException;
-    public byte[] exportPersonsToExcel(Session session, List<Person> application) throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException;
-    public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws JRException, ClassNotFoundException, SQLException, InterruptedException, IOException;
+    public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws Exception;
+    public byte[] exportPersonsToExcel(Session session, List<Person> application) throws Exception;
+    public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception;
 }

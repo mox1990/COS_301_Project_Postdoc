@@ -82,11 +82,11 @@ public class ReportBean {
             {
                 case "application":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), null));
+                    stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), reportEJB.getAllApplications()));
                     break;
                 case "person":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), null));
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), reportEJB.getAllPersons()));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
@@ -123,11 +123,11 @@ public class ReportBean {
             {
                 case "application":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), null));
+                    stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), reportEJB.getAllApplications()));
                     break;
                 case "person":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), null));
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), reportEJB.getAllPersons()));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
