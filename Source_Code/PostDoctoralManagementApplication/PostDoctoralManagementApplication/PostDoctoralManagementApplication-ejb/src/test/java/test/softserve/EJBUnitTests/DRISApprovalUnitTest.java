@@ -9,6 +9,7 @@ package test.softserve.EJBUnitTests;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
@@ -61,6 +62,7 @@ public class DRISApprovalUnitTest {
     ApplicationServicesUtil mockApplicationServices;
     EligiblityReportJpaController mockEligiblityReportJpaController;
     GregorianCalendar mockCal;
+    PersonJpaController mockPersonJpaController;
     
     public DRISApprovalUnitTest() {
     }
@@ -86,6 +88,7 @@ public class DRISApprovalUnitTest {
         mockApplicationServices = mock(ApplicationServicesUtil.class);
         mockEligiblityReportJpaController = mock(EligiblityReportJpaController.class);
         mockCal = mock(GregorianCalendar.class);
+        mockPersonJpaController = mock(PersonJpaController.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -96,6 +99,7 @@ public class DRISApprovalUnitTest {
         instance.setuEJB(mockUserGateway);
         instance.seteDAO(mockEligiblityReportJpaController);
         instance.setgCal(mockCal);
+        instance.setpDAO(mockPersonJpaController);
     }
     
     @After
@@ -363,6 +367,7 @@ public class DRISApprovalUnitTest {
         
         Person mockPerson = mock(Person.class);
         when(mockPerson.getCv()).thenReturn(mockCv);
+        when(mockPerson.getSecurityRoleList()).thenReturn(Arrays.asList(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW));
         
         Application mockApplication = mock(Application.class);
         when(mockApplication.getFellow()).thenReturn(mockPerson);
@@ -387,6 +392,7 @@ public class DRISApprovalUnitTest {
         FundingReport mockFundingReport = mock(FundingReport.class);
         when(mockFundingReport.getReportID()).thenReturn(Long.MAX_VALUE);
 
+        when(mockPersonJpaController.findPerson(mockPerson.getSystemID())).thenReturn(mockPerson);
         try
         {
             instance.approveFunding(mockSession, mockApplication, mockFundingReport, applicantMessage, mockCscNotification, mockFinanceNotification);
@@ -411,7 +417,7 @@ public class DRISApprovalUnitTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     

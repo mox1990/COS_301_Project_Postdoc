@@ -12,6 +12,7 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
 import com.softserve.ejb.ReportServices;
+import com.softserve.ejb.UserGateway;
 import com.softserve.system.Session;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import test.softserve.MockEJBClasses.ReportServicesMockUnit;
  */
 public class ReportServicesTest {
     private ReportServicesMockUnit instance;
+    private UserGateway mockUserGateway;
     
     public ReportServicesTest() {
     }
@@ -50,7 +52,9 @@ public class ReportServicesTest {
     public void setUp() 
     {
         instance = new ReportServicesMockUnit();
+        mockUserGateway = mock(UserGateway.class);
         
+        instance.setuEJB(mockUserGateway);
     }
     
     @After
@@ -69,7 +73,7 @@ public class ReportServicesTest {
         a.setTitle("Mr.");
         a.setAccountStatus("Chilled");
         
-        Person b = new Person("qwrituqw3oty");
+        Person b = new Person("u12345678");
         b.setEmail("Damn");
         b.setTitle("Sir");
         
@@ -84,7 +88,7 @@ public class ReportServicesTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-           //fail("An exception occured");
+           fail("An exception occured");
         }
     }
     
