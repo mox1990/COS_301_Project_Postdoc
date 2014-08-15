@@ -23,7 +23,11 @@ This type of user will have no training with regard to the system. Their compute
 \end{itemize}
 
 In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. A further quantification of this requirement can be seen as finding the least number of clicks a user has to perform in order to perform any operation. Thus to meet this requirement it should be considered local tasks should take a maximum of five clicks and distant tasks should take up to a maximum of 8 clicks. Where local refers to tasks that are related to the current section begin accessed with in the system. These clicks should not include the clicks need to enter various lengthy form data.
+\vspace{0.1in}
 
+\textbf{Trade Offs}
+
+Since the system will be interacting with an imense amount of stakeholders (fellows, grantholders, referres, and such) that will only be using it for short periods of time and at a very low frequency, security assurance will be compromised by having the restrictions on the clicks per task and catering for the needs of the normal user. This means that certain security routines, mainting a record of all beings that act on the system, cannot be implemented within the system. As a conseqeunce, the robustness of the system is being diluted and features such as auditabilty cannot be fully accomplished for task such as referre reports which require third party participation.
 \end{flushleft}
 
 \subsubsection{Security requirements}
@@ -40,7 +44,10 @@ Another security requirement is that the audit trail must not be allowed to be m
 To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. \\
 Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days.
 \vspace{0.1in}
-This requirement will influence the usability requirement negativity as it is known that the more secure a system becomes the less user friendly it becomes because there will be need for more user forms and interactions. But the impact of this requirement must be minimized as much as possible. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated. Further this requirement will also negatively impact performance as it will result on more code command execution per action that needs to be secured.
+
+\textbf{Trade Offs}
+
+This requirement will influence the usability requirement negativitly as  the more secure a system becomes the less user friendly it is, this is so because there will be need for more user forms and interactions. Since userbility is of higher proirty then security the impact of this requirement must be minimized as much as possible. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated while mainting the sort after usability requirement. Further this requirement will also negatively impact performance as it will result on more code command execution per action that needs to be secured.
 \end{flushleft}
 
 \vspace{0.1in}
@@ -52,11 +59,14 @@ This requirement will influence the usability requirement negativity as it is kn
 This is seen as the third most important requirement according to the client. The system needs to provide some form of an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action as well as any operation by a user that leads to a change in the data stored by the system. The Audit trail will be in the form of a read-only table stored in the database as stipulated in the security requirements above.\\
 
 To quantify this requirement, the system will need to have an active audit log that can capture all the actions, that meet the list of critical actions, of each user that uses the system. With regards to usability, the feature needs to run in the background and not be noticeable by any user while they are using the system except if it is deliberately queried.
+\vspace{0.1in}
+
+\textbf{Trade Offs}
+
+This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. Though the audit logging action should be made as light weight as possible. Also adequate storage will be needed since such entries can easily grow exponentially which can lead to availability and other performance issues.  
 
 \vspace{0.1in}
-This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. Though the audit logging action should be made as light weight as possible. Also adequate storage will be need since such entries can easily grow exponentially which can lead availability and other performance issues.  
 
-\vspace{0.1in}
 
 \end{flushleft}
 
@@ -67,7 +77,7 @@ This requirement will have a negative impact on performance as it will be adding
 As research is still viewed as small field that is slowly growing by the client this is only the fourth most important requirement for the system. The current aim is to create a scalable system that can support 50 to 500 applicants per year with possible growth to a 1000 or more. This is in line with the figures given by the client and the growth, over the next ten to twenty years, in the research sector of the University of Pretoria.\\
 \vspace{0.05in}
 
-The system needs to be scalable in regard to the following factors:
+The system needs to be scalable with regards to the following factors:
 \begin{itemize}
 
 \item\textbf{Performance:} This aspect of the system regards the speed and responsiveness of the system.
@@ -75,7 +85,7 @@ The system needs to handle large report queries in less than 10 seconds. It shou
 
 \item\textbf{Storage:} This aspect of the system regards the growth and shrinking of the data that is stored by the system.
 The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the fact that the system will need to store a large amount of active data over a period of about 3 to 8 years before it can be archived.
-\\Another requirement of the system is that it will need to support archival functionality and archived data that will eventual store all the old data from the active database for as long as time period as possible. Since the archival database should only grow it will need to be about 15 times larger than the active database. Due these reasons the calculation of how much space should be required will only be possible once the system is implemented and practically tested.\\The suggested linear formula to the above analysis is as follows: 
+\\Another requirement of the system is that it will need to support archival functionality and archived data that will eventual store all the old data from the active database for as long a time period as possible. Since the archival database should only grow it will need to be about 15 times larger than the active database. Due to these reasons the calculation of how much space should be required will only be possible once the system is implemented and practically tested.\\The suggested linear formula to the above analysis is as follows: 
 \begin{equation}
 A \times ( (Xna \times Nna) + (Xra \times Nra) ) = B
 \end{equation}
@@ -91,6 +101,10 @@ Nra = Number of renewal applications a year\\
 The system will need to support at least 100+/- concurrent users efficiently and effectively since the system requires multiple stakeholders to part take in the application process while there can be multiple applications occurring at the same time.\\
 
 \end{itemize}
+\vspace{0.1in}
+
+\textbf{Trade Offs}
+
 
 This requirement will require that the code undergo optimization and as well as certain functionality which can reduce the maintain-ability of the code itself also it can lead to reduction in terms of system robustness.
 
@@ -101,8 +115,14 @@ This requirement will require that the code undergo optimization and as well as 
 
 \begin{flushleft}
 
-The system's availability on designated networks will depend on the availability of the servers of the hosting service's that will be used to host the system.\\
+The system's availability on designated networks will depend on the availability of the servers of the hosting service's that will be used to host the system. None the less, the system should theoritical be avaible for use any hour of day or night.\\
 In order to quantify this it should be seen as follows: If the hosting service's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. Where the designated networks are defined as the internet and/or the local network where in the server of the hosting service is located.
+\vspace{0.1in}
+
+\textbf{Trade Offs}
+
+% This trade off is questionable...
+This requirement directly impacts on the scalabilty of the system. Even though it is meant to cater for a relatively small number of applications (50 to 500 per year) when compared to what the techonolgy allows to compute, the system should still be able to withstand a sudden influx in request and not be rendered unavailible when such happens.
 
 \vspace{0.1in}
 %Say something about the trade off of avaibility
@@ -112,16 +132,20 @@ In order to quantify this it should be seen as follows: If the hosting service's
 
 \begin{flushleft}
 
-This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in in terms of its data validation routines, data storage routines, security routines, and system integrity checks. 
+This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in terms of its data validation routines, data storage routines, security routines, and system integrity checks. 
 
 These four aspects of robustness are quantified as follow:
 \begin{itemize}
 \item \textbf{Data validation}: This aspects refer to the high level data validation that occurs at a user interface level. All data that is manually imputed by a user, such as text, numbers, emails, passwords, etc. Must be checked to see if they meet constraints imposed on them through the use of data type checking and regular expression analysis. Any section in the system that requires certain data to completed by the user before performing a action must be checked for completeness before allowing the user to perform the action. Where completeness means the data is not empty and validate according to constraints imposed on it. Data is only sent to lower levels of the system after the data has been validated.
-\item \textbf{Data storage}: When the data is actually stored the data needs to be validated against a set of low-level storage rules and constraints. Many DBMS packages allow this type of validation through data typing and allowing the database administrator to a specify constraints. Note that this is validation is independent from the validation that occurs at the user interface level.
-\item \textbf{Security}: As mentioned above in the security requirements, the re-authentication of users is seen as a robustness check. Another robustness check for security is that a particular user may only have one of either a account retrieval token or on-demand user account creation token active at a time else it is regarded as fault.
+\item \textbf{Data storage}: When the data is actually stored the data needs to be validated against a set of low-level storage rules and constraints. Many DBMS packages allow this type of validation through data typing and allowing the database administrator to specify constraints. Note that this validation is independent from the validation that occurs at the user interface level.
+\item \textbf{Security}: As mentioned above in the security requirements, the re-authentication of users is seen as a robustness check. Another robustness check for security is that a particular user may only have one of either an account retrieval token or on-demand user account creation token active at a time else it is regarded as fault.
 \item \textbf{System Integrity}: If any malfunctioning modules are detected within the system any user action will not be completed and the user will be notified immediately with the appropriate error message. So prevent any data corruption due to system faults.
 \end{itemize}
+\vspace{0.1in}
 
+\textbf{Trade Offs}
+
+This requirement might have an effect on the scalability requirement of the system. As specified above, request should be handled in a timily manner and this requirement will take up amounts from the reponse time.
 \vspace{0.1in}
 
 \subsubsection{Testability:}
@@ -174,9 +198,13 @@ User acceptance testing will test the whole system in regard to:
 \begin{flushleft}
 
 The system should be designed in such a way that adding new features can be done without extensive code restructuring or reverse engineering. The process of adding new features should require the programmer working on the system to easily create a new module for the new functionality. For this to be realised the system will should use appropriate design patterns that allow this. For example the strategy, dependency injection and command design patterns. 
+\vspace{0.1in}
+
+\textbf{Trade Offs}
+This requirement will lead to an increase in complexity as implementing some of the design patterns will still require satisfying the large set of requirments.
 
 \vspace{0.1in}
-This requirement will lead to an increase in complexity as implementing some of the design patterns will still require satisfying the large set of requirments (including usability).
+
 \end{flushleft}
 
 
@@ -198,7 +226,7 @@ The system's components should be designed in such away that they can be reused 
 The system should be maintainable in regards to 2 aspects: 
 \begin{itemize}
 \item \textbf{System housekeeping}: This aspect revolves around the actually administration of the system once it is deployed. The system should prevent the system administrator from unnecessary worrying about automated tasks. But the system should allow the system administrator to be able to manage user data, perform backups manually, archival routines and system configuration manually. 
-\item \textbf{System development}: This aspect revolves around the developers of the software. The system must be developed in such a way that the source code is easy to maintain and highly readable such that debugging and patching difficulty can be reduced. Also this ensures that the code can easily given to a third party if need be. The coding documentation standard that must be adhered is that stipulated by the JavaDoc standard. The coding style convention must be defined in such away that the code is easy to read and structured in a logical manner. The identifiers used must be named appropriately and must follow the camelCase standard except where the identifiers are constants in which case the entire name will be in capital letters. The style suggested is a variant of the Allman style:
+\item \textbf{System development}: This aspect revolves around the developers of the software. The system must be developed in such a way that the source code is easy to maintain and highly readable such that debugging and patching difficulty can be reduced. Also this ensures that the code can easily be given to a third party if need be. The coding documentation standard that must be adhered is that stipulated by the JavaDoc standard. The coding style convention must be defined in such away that the code is easy to read and structured in a logical manner. The identifiers used must be named appropriately and must follow the camelCase standard except where the identifiers are constants in which case the entire name will be in capital letters. The style suggested is a variant of the Allman style:
 \begin{lstlisting}
 public void run()
 {
