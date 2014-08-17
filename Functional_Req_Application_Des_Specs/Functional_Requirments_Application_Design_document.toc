@@ -1,0 +1,78 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Project Repository}{8}
+\contentsline {section}{\numberline {2}Document description:}{9}
+\contentsline {subsection}{\numberline {2.1}Document purpose:}{9}
+\contentsline {subsection}{\numberline {2.2}Documentation methodology}{9}
+\contentsline {subsection}{\numberline {2.3}Document conventions:}{10}
+\contentsline {subsection}{\numberline {2.4}References:}{10}
+\contentsline {section}{\numberline {3}Functional requirements}{11}
+\contentsline {subsection}{\numberline {3.1}Introduction}{11}
+\contentsline {subsection}{\numberline {3.2}Required functionality}{11}
+\contentsline {subsubsection}{\numberline {3.2.1}User gateway}{11}
+\contentsline {subsubsection}{\numberline {3.2.2}Application services}{12}
+\contentsline {subsubsection}{\numberline {3.2.3}Report services}{15}
+\contentsline {subsubsection}{\numberline {3.2.4}User account management services}{16}
+\contentsline {subsubsection}{\numberline {3.2.5}Notification services}{16}
+\contentsline {subsubsection}{\numberline {3.2.6}Audit-Trail services}{17}
+\contentsline {subsubsection}{\numberline {3.2.7}Archival services}{17}
+\contentsline {subsubsection}{\numberline {3.2.8}Imports and exports services}{17}
+\contentsline {subsubsection}{\numberline {3.2.9}Location management services}{18}
+\contentsline {subsubsection}{\numberline {3.2.10}CV management services}{18}
+\contentsline {subsection}{\numberline {3.3}Use case diagrams}{19}
+\contentsline {subsection}{\numberline {3.4}Use case prioritization}{31}
+\contentsline {subsection}{\numberline {3.5}Use case/Services contracts}{32}
+\contentsline {subsubsection}{\numberline {3.5.1}Preconditions}{32}
+\contentsline {subsubsection}{\numberline {3.5.2}Postconditions}{37}
+\contentsline {subsubsection}{\numberline {3.5.3}Request and result data structures}{45}
+\contentsline {subsection}{\numberline {3.6}Process specifications}{46}
+\contentsline {subsection}{\numberline {3.7}Interface Diagrams}{81}
+\contentsline {subsection}{\numberline {3.8}Data Flow Diagrams}{84}
+\contentsline {subsection}{\numberline {3.9}Domain Objects}{86}
+\contentsline {subsubsection}{\numberline {3.9.1}Overview}{86}
+\contentsline {subsubsection}{\numberline {3.9.2}Person}{87}
+\contentsline {subsubsection}{\numberline {3.9.3}Department}{87}
+\contentsline {subsubsection}{\numberline {3.9.4}Faculty}{87}
+\contentsline {subsubsection}{\numberline {3.9.5}Institution}{87}
+\contentsline {subsubsection}{\numberline {3.9.6}EmployeeInformation}{87}
+\contentsline {subsubsection}{\numberline {3.9.7}ResearchFellowInformation}{87}
+\contentsline {subsubsection}{\numberline {3.9.8}Address}{87}
+\contentsline {subsubsection}{\numberline {3.9.9}SecurityRole}{88}
+\contentsline {subsubsection}{\numberline {3.9.10}DRIS}{88}
+\contentsline {subsubsection}{\numberline {3.9.11}FundingReport}{88}
+\contentsline {subsubsection}{\numberline {3.9.12}FundingCost}{88}
+\contentsline {subsubsection}{\numberline {3.9.13}DeclineReport}{88}
+\contentsline {subsubsection}{\numberline {3.9.14}AmmendRequest}{88}
+\contentsline {subsubsection}{\numberline {3.9.15}EligibilityReport}{88}
+\contentsline {subsubsection}{\numberline {3.9.16}ForwardAndRewindReport}{89}
+\contentsline {subsubsection}{\numberline {3.9.17}ProspectiveFellow}{89}
+\contentsline {subsubsection}{\numberline {3.9.18}ResearchFellow}{89}
+\contentsline {subsubsection}{\numberline {3.9.19}GrantHolder}{89}
+\contentsline {subsubsection}{\numberline {3.9.20}HOD}{89}
+\contentsline {subsubsection}{\numberline {3.9.21}HODRecommandationReport}{89}
+\contentsline {subsubsection}{\numberline {3.9.22}Deans Office}{89}
+\contentsline {subsubsection}{\numberline {3.9.23}Endorsement}{90}
+\contentsline {subsubsection}{\numberline {3.9.24}Referee}{90}
+\contentsline {subsubsection}{\numberline {3.9.25}RefereeReport}{90}
+\contentsline {subsubsection}{\numberline {3.9.26}PostDocCommittee}{90}
+\contentsline {subsubsection}{\numberline {3.9.27}CommitteeMeeting}{90}
+\contentsline {subsubsection}{\numberline {3.9.28}MinuteComment}{90}
+\contentsline {subsubsection}{\numberline {3.9.29}Application}{90}
+\contentsline {subsubsection}{\numberline {3.9.30}NewApplication}{91}
+\contentsline {subsubsection}{\numberline {3.9.31}RenewalApplication}{91}
+\contentsline {subsubsection}{\numberline {3.9.32}ProgressReport}{91}
+\contentsline {subsubsection}{\numberline {3.9.33}CV}{91}
+\contentsline {subsubsection}{\numberline {3.9.34}AcademicQualification}{91}
+\contentsline {subsubsection}{\numberline {3.9.35}Experience}{91}
+\contentsline {subsubsection}{\numberline {3.9.36}Notification}{91}
+\contentsline {subsubsection}{\numberline {3.9.37}AuditLog}{91}
+\contentsline {section}{\numberline {4}User acceptance tests}{92}
+\contentsline {subsection}{\numberline {4.1}User Accounts}{92}
+\contentsline {subsubsection}{\numberline {4.1.1}Creating prospective fellow user account}{92}
+\contentsline {subsubsection}{\numberline {4.1.2}Creating stakeholder user account}{92}
+\contentsline {subsubsection}{\numberline {4.1.3}Modifying user account}{93}
+\contentsline {subsection}{\numberline {4.2}New Application}{94}
+\contentsline {subsubsection}{\numberline {4.2.1}Prospective Fellow Creates new application}{94}
+\contentsline {subsubsection}{\numberline {4.2.2}Referees submit Motivation}{95}
+\contentsline {subsubsection}{\numberline {4.2.3}Grant holder validation of application}{95}
+\contentsline {subsubsection}{\numberline {4.2.4}Application approval by stakeholder}{96}
+\contentsline {section}{\numberline {5}Glossary:}{96}

@@ -1,0 +1,81 @@
+\select@language {english}
+\contentsline {figure}{\numberline {1}{\ignorespaces Use case diagram of Post-doctoral fellowship management system\relax }}{19}
+\contentsline {figure}{\numberline {2}{\ignorespaces Use case diagram of Application service\relax }}{20}
+\contentsline {figure}{\numberline {3}{\ignorespaces Use case diagram of Report service\relax }}{20}
+\contentsline {figure}{\numberline {4}{\ignorespaces Use case diagram of Notification services\relax }}{21}
+\contentsline {figure}{\numberline {5}{\ignorespaces Use case diagram of User account management services\relax }}{21}
+\contentsline {figure}{\numberline {6}{\ignorespaces Use case diagram of User gateway\relax }}{22}
+\contentsline {figure}{\numberline {7}{\ignorespaces Use case diagram of Audit-Trail services\relax }}{22}
+\contentsline {figure}{\numberline {8}{\ignorespaces Use case diagram of Archival services\relax }}{23}
+\contentsline {figure}{\numberline {9}{\ignorespaces Use case diagram of Imports and exports services\relax }}{23}
+\contentsline {figure}{\numberline {10}{\ignorespaces Use case diagram of Application progress viewer service\relax }}{24}
+\contentsline {figure}{\numberline {11}{\ignorespaces Use case diagram of New fellowship application service\relax }}{24}
+\contentsline {figure}{\numberline {12}{\ignorespaces Use case diagram of Application renewal service\relax }}{25}
+\contentsline {figure}{\numberline {13}{\ignorespaces Use case diagram of Referees' report service\relax }}{25}
+\contentsline {figure}{\numberline {14}{\ignorespaces Use case diagram of Grant holder application finalisation service\relax }}{26}
+\contentsline {figure}{\numberline {15}{\ignorespaces Use case diagram of HOD Approval service\relax }}{27}
+\contentsline {figure}{\numberline {16}{\ignorespaces Use case diagram of Dean endorsement service\relax }}{27}
+\contentsline {figure}{\numberline {17}{\ignorespaces Use case diagram of DRIS approval service\relax }}{28}
+\contentsline {figure}{\numberline {18}{\ignorespaces Use case diagram of Progress Report Management Service\relax }}{28}
+\contentsline {figure}{\numberline {19}{\ignorespaces Use case diagram of Meeting management service\relax }}{29}
+\contentsline {figure}{\numberline {20}{\ignorespaces Use case diagram of Location Management Service\relax }}{30}
+\contentsline {figure}{\numberline {21}{\ignorespaces Use case diagram of Forward and Rewind Service\relax }}{30}
+\contentsline {figure}{\numberline {22}{\ignorespaces Activity diagram of the Login user use case.\relax }}{46}
+\contentsline {figure}{\numberline {23}{\ignorespaces Activity diagram of the Generate user on-demand account use case.\relax }}{46}
+\contentsline {figure}{\numberline {24}{\ignorespaces Activity diagram of the Activate user on-demand account use case.\relax }}{47}
+\contentsline {figure}{\numberline {25}{\ignorespaces Activity diagram of the Authenticate user use case.\relax }}{48}
+\contentsline {figure}{\numberline {26}{\ignorespaces Activity diagram of the User account retrieval use case.\relax }}{49}
+\contentsline {figure}{\numberline {27}{\ignorespaces Activity diagram of the Load pending applications use case.\relax }}{50}
+\contentsline {figure}{\numberline {28}{\ignorespaces Activity diagram of the Get All Applications use case.\relax }}{51}
+\contentsline {figure}{\numberline {29}{\ignorespaces Activity diagram of the View application progress use case.\relax }}{51}
+\contentsline {figure}{\numberline {30}{\ignorespaces Activity diagram of the Create Final Progress Report For Application use case.\relax }}{52}
+\contentsline {figure}{\numberline {31}{\ignorespaces Activity diagram of the Create renewal Application use case.\relax }}{52}
+\contentsline {figure}{\numberline {32}{\ignorespaces Activity diagram of the Does Application Have Final Progress Report use case.\relax }}{53}
+\contentsline {figure}{\numberline {33}{\ignorespaces Activity diagram of the Get Renewable Applications for Fellow use case.\relax }}{54}
+\contentsline {figure}{\numberline {34}{\ignorespaces Activity diagram of the Create CV use case.\relax }}{55}
+\contentsline {figure}{\numberline {35}{\ignorespaces Activity diagram of the Update CV use case.\relax }}{56}
+\contentsline {figure}{\numberline {36}{\ignorespaces Activity diagram of the Deny Application use case.\relax }}{56}
+\contentsline {figure}{\numberline {37}{\ignorespaces Activity diagram of the Endorse Application use case.\relax }}{57}
+\contentsline {figure}{\numberline {38}{\ignorespaces Activity diagram of the Approve Funding use case.\relax }}{58}
+\contentsline {figure}{\numberline {39}{\ignorespaces Activity diagram of the Check Appligibilty use case.\relax }}{59}
+\contentsline {figure}{\numberline {40}{\ignorespaces Activity diagram of the Deny Funding use case.\relax }}{60}
+\contentsline {figure}{\numberline {41}{\ignorespaces Activity diagram of the Create Grantholder CV use case.\relax }}{60}
+\contentsline {figure}{\numberline {42}{\ignorespaces Activity diagram of the Finalise Application use case.\relax }}{61}
+\contentsline {figure}{\numberline {43}{\ignorespaces Activity diagram of the Ammend Application use case.\relax }}{61}
+\contentsline {figure}{\numberline {44}{\ignorespaces Activity diagram of the Approve Application use case.\relax }}{62}
+\contentsline {figure}{\numberline {45}{\ignorespaces Activity diagram of the Deny Application use case.\relax }}{63}
+\contentsline {figure}{\numberline {46}{\ignorespaces Activity diagram of the Add Minute Comment use case.\relax }}{63}
+\contentsline {figure}{\numberline {47}{\ignorespaces Activity diagram of the Create Meeting use case.\relax }}{64}
+\contentsline {figure}{\numberline {48}{\ignorespaces Activity diagram of the End Meeting use case.\relax }}{64}
+\contentsline {figure}{\numberline {49}{\ignorespaces Activity diagram of the Get All Active Meetings use case.\relax }}{65}
+\contentsline {figure}{\numberline {50}{\ignorespaces Activity diagram of the Get All Meetings use case.\relax }}{65}
+\contentsline {figure}{\numberline {51}{\ignorespaces Activity diagram of the Start Meeting use case.\relax }}{66}
+\contentsline {figure}{\numberline {52}{\ignorespaces Activity diagram of the Update Meeting use case.\relax }}{66}
+\contentsline {figure}{\numberline {53}{\ignorespaces Activity diagram of the Can the fellow open a New Application use case.\relax }}{67}
+\contentsline {figure}{\numberline {54}{\ignorespaces Activity diagram of the Create CV use case.\relax }}{67}
+\contentsline {figure}{\numberline {55}{\ignorespaces Activity diagram of the Create New Application use case.\relax }}{68}
+\contentsline {figure}{\numberline {56}{\ignorespaces Activity diagram of the Get Open Application use case.\relax }}{68}
+\contentsline {figure}{\numberline {57}{\ignorespaces Activity diagram of the Link Grant Holder to Application use case.\relax }}{69}
+\contentsline {figure}{\numberline {58}{\ignorespaces Activity diagram of the Link Referee to Application use case.\relax }}{69}
+\contentsline {figure}{\numberline {59}{\ignorespaces Activity diagram of the Submit Application use case.\relax }}{70}
+\contentsline {figure}{\numberline {60}{\ignorespaces Activity diagram of the Get Notifications for Person use case.\relax }}{70}
+\contentsline {figure}{\numberline {61}{\ignorespaces Activity diagram of the Get Notifications from Person use case.\relax }}{71}
+\contentsline {figure}{\numberline {62}{\ignorespaces Activity diagram of the Send batch Notifications use case.\relax }}{71}
+\contentsline {figure}{\numberline {63}{\ignorespaces Activity diagram of the Create Progress Report use case.\relax }}{72}
+\contentsline {figure}{\numberline {64}{\ignorespaces Activity diagram of the Update Progress Report use case.\relax }}{72}
+\contentsline {figure}{\numberline {65}{\ignorespaces Activity diagram of the Create Referee Report use case.\relax }}{73}
+\contentsline {figure}{\numberline {66}{\ignorespaces Activity diagram of the Submit Referee Report use case.\relax }}{73}
+\contentsline {figure}{\numberline {67}{\ignorespaces Activity diagram of the Count Pending Reports use case.\relax }}{74}
+\contentsline {figure}{\numberline {68}{\ignorespaces Activity diagram of the Export PDF Report use case.\relax }}{74}
+\contentsline {figure}{\numberline {69}{\ignorespaces Activity diagram of the Export PDF Report use case.\relax }}{75}
+\contentsline {figure}{\numberline {70}{\ignorespaces Activity diagram of the Generate System ID use case.\relax }}{75}
+\contentsline {figure}{\numberline {71}{\ignorespaces Activity diagram of the Get All Security Roles use case.\relax }}{76}
+\contentsline {figure}{\numberline {72}{\ignorespaces Activity diagram of the Get user by Email use case.\relax }}{76}
+\contentsline {figure}{\numberline {73}{\ignorespaces Activity diagram of the Get User by System ID use case.\relax }}{77}
+\contentsline {figure}{\numberline {74}{\ignorespaces Activity diagram of the Remove User use case.\relax }}{77}
+\contentsline {figure}{\numberline {75}{\ignorespaces Activity diagram of the Update User use case.\relax }}{78}
+\contentsline {figure}{\numberline {76}{\ignorespaces Activity diagram of the View All Users use case.\relax }}{78}
+\contentsline {figure}{\numberline {77}{\ignorespaces Activity diagram of the Authenticate User as Owner use case.\relax }}{79}
+\contentsline {figure}{\numberline {78}{\ignorespaces Activity diagram of the Get Http Session from Session use case.\relax }}{79}
+\contentsline {figure}{\numberline {79}{\ignorespaces Activity diagram of the Logout use case.\relax }}{80}
+\contentsline {figure}{\numberline {84}{\ignorespaces Overview of the data structures and relationships for the core domain objects of the system.\relax }}{86}
