@@ -242,7 +242,9 @@ A managed thread factory is used by applications to create managed threads. The 
 The core design philosophy of the Java-EE platform is to provide a Java-EE application developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of the project.
 
 \subsection{JavaServer Faces (JSF)}
-JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.
+JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.\\
+
+It will help achieve the usability quality requirement as it will implement all aspects of the user interface.
 
 \subsection{Java Persistence API}
 Java EE is based on Java which is an object-oriented language. Whereas most modern day database management systems, DBMSs, provide relation databases. Thus to bridge this gap the Java Persistence API is used. It provides a Object Relational Mapping solution which allows the relation database to be viewed as a object-oriented database. Thus this critical for the system SoftServe wishes to develop as the system will make use of MySQL which is a relation database management system. The Java persistence API contains the following components:  
@@ -251,26 +253,26 @@ Java EE is based on Java which is an object-oriented language. Whereas most mode
 \item The query language
 \item ORM
 \end{itemize}
-
 \subsection{Java API for RESTful Web Services (JAX-RS)}
 The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. This will allow the system to easily be accesses by mobile and computer platforms alike and also be accessible over most companies firewalls as it will make use of the HTTPS protocol. Further this will allow for future expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
+\subsection{JUnit}
+JUnit is a simple unit testing framework used to write repeatable tests. Test methods must be annotated by the @Test annotation. It is also possible to define a method to execute before (or after) each (or all) of the test methods with the @Before (or @After) and @BeforeClass (or @AfterClass) annotations. \\
 
+It will be used to achieve the testbility of the system.
 %\subsubsection{Java EE Connector Architecture}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Data Access Object Pattern}
+The DAO (Data Access Object Pattern) provide specific data operations without exposing details of the database. It will be used to abstract the details of persistence implementation in the system. The isolation supports th single reponsibilty principle, which states that every context (class, function, variable, etc.) should have a single responsibility, and that responsibility should be entirely encapsulated by the context.\\
+
+The use of DAO will help reduce the existance of object-relational impedance mismatch present in the system. It will also contribute to the flexibilty of the system. In the case where the systems underlying persistance mechanism has to change only the DAO will have to be updated and all the places in the system where the DAO was used will then remain constant.
 \subsection{Builder Pattern}
-The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. This helps improve the flexibility of the code.  
-
+The Builder Design Pattern allows for the construction of complex structures in small, but sequantial, steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. This helps improve the flexibility of the code, by avoiding using numerous constructors for an object with a number of constructor parameter combinations.  
 \subsection{Factory Design Pattern}
-The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. This allows for separation of concerns, amongst the classes. Using the Factory relates back to Re-Usability.
-
+The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. This allows for separation of concerns, amongst the classes. Using the Factory relates back to Re-Usability. % It's main focus is to enable polymorphism. I, Alfred, didn'tsee where we have used this in the system so far.
 \subsection{State Design Pattern}
 The State Design Pattern is used to make different services available depending on the changes the object may go through. 
-
 \subsection{Dependency Injection}
-This is used to implement, inversion control. The client is only allowed to use a service rather than creating their own services. This helps with the maintainability and testability of the code because it is easier to test the different services provided individually. 
-
+This is used to implement inversion control. The client is only allowed to use a service rather than creating their own services. This helps with the maintainability and testability of the code because it is easier to test the different services provided individually. The flexibilty of the system is also improved as the implementation of a service will be decoupled. 
 \section{Access and Integration channels}
 This section discusses the requirements for the access channels through which the system can be accessed by humans and other systems. Also it discusses the integration channels which need to be used by the system. 
 
