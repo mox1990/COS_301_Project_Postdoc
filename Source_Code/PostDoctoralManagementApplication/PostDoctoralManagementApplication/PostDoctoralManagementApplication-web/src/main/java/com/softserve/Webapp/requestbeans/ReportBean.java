@@ -34,8 +34,8 @@ import org.primefaces.model.StreamedContent;
 @Named(value = "reportBean")
 @RequestScoped
 public class ReportBean {
-    private String reportType;
-    private String[] applicationTypes;
+    private String reportType = "";
+    private String[] applicationTypes = {""};
     
     private final String openStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN;
     private final String submittedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
@@ -174,11 +174,12 @@ public class ReportBean {
                 case "application":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
                     List<Application> applications = new ArrayList<>();
-                    for(String type: applicationTypes)
+                    /*for(String type: applicationTypes)
                     {
                         System.out.println("Adding type: " + type);
                         applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
-                    }
+                    }*/
+                    System.out.println("TypesGiving: " + applicationTypes);
                     stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), applications));
                     break;
                 case "person":
