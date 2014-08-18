@@ -85,6 +85,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 23/05/2014 & v 1.0 & Finalised and edited document for first iteration. & Mathys Ellis \\
 \hline
+18/08/2014 & v 2.1 & Added to technologies as well as updated the section. & Mathys Ellis \\
+\hline
 %\end{tabbing}
 \end{tabular}
 \end{center}
@@ -242,7 +244,9 @@ A managed thread factory is used by applications to create managed threads. The 
 The core design philosophy of the Java-EE platform is to provide a Java-EE application developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of the project.
 
 \subsection{JavaServer Faces (JSF)}
-JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.
+JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.\\
+
+It will help achieve the usability quality requirement as it will implement all aspects of the user interface.
 
 \subsection{Java Persistence API}
 Java EE is based on Java which is an object-oriented language. Whereas most modern day database management systems, DBMSs, provide relation databases. Thus to bridge this gap the Java Persistence API is used. It provides a Object Relational Mapping solution which allows the relation database to be viewed as a object-oriented database. Thus this critical for the system SoftServe wishes to develop as the system will make use of MySQL which is a relation database management system. The Java persistence API contains the following components:  
@@ -251,26 +255,26 @@ Java EE is based on Java which is an object-oriented language. Whereas most mode
 \item The query language
 \item ORM
 \end{itemize}
-
 \subsection{Java API for RESTful Web Services (JAX-RS)}
 The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. This will allow the system to easily be accesses by mobile and computer platforms alike and also be accessible over most companies firewalls as it will make use of the HTTPS protocol. Further this will allow for future expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
+\subsection{JUnit}
+JUnit is a simple unit testing framework used to write repeatable tests. Test methods must be annotated by the @Test annotation. It is also possible to define a method to execute before (or after) each (or all) of the test methods with the @Before (or @After) and @BeforeClass (or @AfterClass) annotations. \\
 
+It will be used to achieve the testbility of the system.
 %\subsubsection{Java EE Connector Architecture}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Data Access Object Pattern}
+The DAO (Data Access Object Pattern) provide specific data operations without exposing details of the database. It will be used to abstract the details of persistence implementation in the system. The isolation supports th single reponsibilty principle, which states that every context (class, function, variable, etc.) should have a single responsibility, and that responsibility should be entirely encapsulated by the context.\\
+
+The use of DAO will help reduce the existance of object-relational impedance mismatch present in the system. It will also contribute to the flexibilty of the system. In the case where the systems underlying persistance mechanism has to change only the DAO will have to be updated and all the places in the system where the DAO was used will then remain constant.
 \subsection{Builder Pattern}
-The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. This helps improve the flexibility of the code.  
-
+The Builder Design Pattern allows for the construction of complex structures in small, but sequantial, steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. This helps improve the flexibility of the code, by avoiding using numerous constructors for an object with a number of constructor parameter combinations.  
 \subsection{Factory Design Pattern}
-The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. This allows for separation of concerns, amongst the classes. Using the Factory relates back to Re-Usability.
-
+The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. This allows for separation of concerns, amongst the classes. Using the Factory relates back to Re-Usability. % It's main focus is to enable polymorphism. I, Alfred, didn'tsee where we have used this in the system so far.
 \subsection{State Design Pattern}
 The State Design Pattern is used to make different services available depending on the changes the object may go through. 
-
 \subsection{Dependency Injection}
-This is used to implement, inversion control. The client is only allowed to use a service rather than creating their own services. This helps with the maintainability and testability of the code because it is easier to test the different services provided individually. 
-
+This is used to implement inversion control. The client is only allowed to use a service rather than creating their own services. This helps with the maintainability and testability of the code because it is easier to test the different services provided individually. The flexibilty of the system is also improved as the implementation of a service will be decoupled. 
 \section{Access and Integration channels}
 This section discusses the requirements for the access channels through which the system can be accessed by humans and other systems. Also it discusses the integration channels which need to be used by the system. 
 
@@ -303,33 +307,96 @@ The system should be buildable independent of an IDE but it will be developed on
 
 \subsection{Development technologies}
 \subsubsection{Java Servlet Technology}
-A Java servlet is used to extend the Java-EE application server to support HTTP or HTTPS request and respond commands to the business Tier of the application. This is used by the JSF framework to communicate with the business Tier in order to receive and send data.
+\textbf{Description}\\
+A Java servlet is used to extend the Java-EE application server to support HTTP or HTTPS requests and responses. It allows the server to provide RESTful based web services to connecting clients. Thus it acts as a middle man between any HTTP or HTTPS client and the business tier. This will not be used directly but will be used the JSF framework.\\\\
+\textbf{Reasons for use}\\
+The JSF framework uses servlets to render JSF pages to HTML and provide them to clients connecting via HTTP or HTTPS. Secondly this will allow the solution to provide lightweight RESTful based web services that will help improve accessibility and availability of the solution. Further it will allow the solution to satisfy the access channel requirements.
+
 \subsubsection{JavaServer Pages (JSP)}
-JSP is a technology that is used by the Java-EE platform to provide a native language approach to creating web pages by using HTML or XML to specify static content on a web page and Expression language to provide dynamic content. Thought this will not be used directly but rather by the JSF framework.
+\textbf{Description}\\
+JSP is a technology that is used by the Java-EE platform to provide a native language approach to creating web pages. It uses HTML or XML to specify static content on a web page and Expression Language (EL) to provide dynamic content. This will not be used directly but will be used by the JSF framework.\\\\
+\textbf{Reasons for use}\\
+JSF pages is the a specialised version of JSP pages thus it is used in the JSF framework. Secondly it will help with the maintainability of the code as pages based on JSP technology are easily understandable and readable due to the simplicity of the HTML and XML mark-up languages.    
  
 \subsubsection{Expression Language (EL)}
-Is a language used by JSP pages and JSF facelets to write servlet code snippets which allow the usage of the data available to the servlet to do calculations or get or set data.
+\textbf{Description}\\
+It is a language used by JSP and JSF pages to write servlet based code snippets which allow the usage of the data available to the servlet to do calculations, call functions, get or set data. The language closely resembles the Java Language syntax.\\\\
+\textbf{Reasons for use}\\
+It is used by the JSP technology and JSF framework for dynamic content specification and communication with the backing servlet.
 
 \subsubsection{JavaMail API}
-The JavaMail API provides a email communication infrastructure for Java-EE applications. Thus this will be employed by the system in order to create and provide the email notification infrastructure.
+\textbf{Description}\\
+The JavaMail API provides a robust and well tested email communication infrastructure for any Java based applications.\\\\
+\textbf{Reasons for use}\\
+This technology will be employed by the system in order to provide the functional email notification infrastructure requirement needed by the solution.
 
 \subsubsection{JavaBeans Activation Framework (JAF)}
-The JavaBeans Activation Framework allows the Java-EE application to determine the data type of some section of data and thus allow the application to provide access to it by encapsulating it and determining the operations that the application may perform on it. This is mainly used by the JavaMail API thus it will need to be included in the system. 
+\textbf{Description}\\
+The JavaBeans Activation Framework allows the Java-EE application to determine the data type of some section of data and thus allow the application to provide access to it by encapsulating it and determining the operations that the application may perform on it.\\\\
+\textbf{Reasons for use}\\
+This technology is used by the JavaMail API thus it will be used by the system. 
 
 \subsubsection{Java Database Connectivity API (JDBC)}
-The Java Database Connectivity API provides the a Java-EE application with the means to execute SQL statements on the database server via programming language commands. This will be used by the system to query the database in order to retrieve and store data on the database via the MySQL DBMS.
+\textbf{Description}\\
+The Java Database Connectivity API provides the a Java-EE application with the means to access data from various datasources including databases, spreadsheet, etc via the Java programming language.\\\\
+\textbf{Reasons for use}\\
+The system will use this to communicate with the databases located in the EIS tier of the system in order to retrieve and store data in the databases. 
 
 \subsubsection{Java Transaction API (JTA)}
-The Java Transaction API provides the Java-EE Application with the means to handle data transactions to the database. The API makes use of an auto commit feature by default that allows any client to see any writing of data to the database automatically. This will be used in the system to improve the data centralisation and data accuracy.
+\textbf{Description}\\
+The Java Transaction API provides the Java-EE Application with the means to handle and demarcate data transactions to the database. The API allows the the manual or automatic demarcation of database transactions and ensures that the database and ORM entities are synchronised after commits.\\\\ 
+\textbf{Reasons for use}\\
+This will be used in the system to improve the centralisation and accuracy of the data accessed by users. Further it will be used to allow access to multiple databases located in the EIS tier and the controlling of such resources.
 
 \subsubsection{Enterprise JavaBeans (EJB)}
-The Enterprise JavaBeans is a component used by all Java-EE applications to encapsulate the various business logic modules of the application. Thus it contains the attributes and methods associated with the business logic module and hence can be treated as an stand alone unit that can be reused. The two primary EJBs are Session beans that represent a clients session and the data associated with it and a Message-driven bean that can a allow the component to receive messages asynchronously via event listeners. The session bean will be used by the system to support the Session-Oriented infrastructure.  
+\textbf{Description}\\
+The Enterprise JavaBeans is a component used by all Java-EE applications to encapsulate the various business logic of the application into reusable modules. Thus it contains the attributes and methods associated with the business logic module and hence can be treated as an stand alone unit that can be reused. The two primary EJBs are Session beans that represent a clients session and the data associated with it and a Message-driven bean that can a allow the component to receive messages asynchronously via event listeners. The system will make use of Stateless session EJBs in order to capture the back end services of the solution.\\\\
+\textbf{Reasons for use}\\
+The use of EJBs will ensure the modularity of the system and the re-usability of its components. Also within the Java-EE framework it is considered the core of the business tier and thus will be required.
+  
 
 \subsubsection{Java Naming and Directory Interface (JNDI)}
-The Java Naming and Directory Interface provides Java-EE applications to search for data across LDAP, DNS, etc, directory services. Above this it also allows the application to search for objects that exist within the application and provides access to them so that they can be used by the application. This is used by Java-EE applications usually to locate EJB objects for usage therefore the system will make use of this API.
+\textbf{Description}\\
+The Java Naming and Directory Interface provides Java-EE applications with the ability to search for data across LDAP, DNS, etc, directory services. Above this it also allows the application to search for objects that exist within the application and provides access to them so that they can be used by the application. It is also used by Java-EE applications to locate object instances of EJBs and managed beans for usage by the application.\\\\
+\textbf{Reasons for use}\\
+This technology is a core service required by Java-EE applications to function and thus is needed by the solution.
 
-\subsubsection{Java Authentication and Authorization Service (JAAS)}
-The Java Authentication and Authorization Service provides Java-EE applications with a means to provide user access control. The API allows the application to authorize users with regards to specific user accounts or user groups. Thus this will be used by the system to support the security infrastructure needed by the system.
+\subsubsection{Java Architecture for XML Binding (JAXB)}
+\textbf{Description}\\
+JAXB is used to parse any XML data into a set of XML usable Java object instances that represent the content of the XML data. Likewise it is used to convert such objects to XML formatted data. This is accomplished by using an XML schema to define the structure or annotated classes.\\\\
+\textbf{Reasons for use}\\
+This will be used by the system to handle any XML data extraction or creation from or for storage.
+
+\subsubsection{Jasper Reports}
+\textbf{Description}\\
+The Jasper reporting library provides a flexible, well-tested and maintained reporting framework to create reports based on data that is located in various data sources.\\\\
+\textbf{Reasons for use}\\
+This will be used to provide a reporting infrastructure as need by the system on a functional requirement level.   
+
+\subsubsection{JSF Managed Beans}
+\textbf{Description}\\
+This is a standard POJO (Plain Old Java Object), which is used to provide encapsulated services to  front-end JSF pages. JSF access them via Expression Lanaguage. These beans can be used in conjunction with EJBs and CDI to communicate with the database or call back-end services of hosted by the server.\\\\
+\textbf{Reasons for use}\\
+This technology is part of the JSF framework and is therefore required. It further also allows improved modularity and re-usability of components.
+
+\subsubsection{Primefaces}
+\textbf{Description}\\
+This is component library which is used to expand and provide an improved range of easy to use components for JSF pages. It incorporates Javascript, jQuery and AJAX in order to provide the various components.\\\\
+\textbf{Reasons for use}\\
+It is an easy to use, versatile library that allows the solution provide a sophisticated and clean user interface. Further is highly compatible with mobile platform HTTP web browsers thus allowing the solution to provide better accessibility without extensive modification.    
+
+\subsubsection{Mockito}
+\textbf{Description}\\
+This is a mock framework that allows the mocking of dependencies during unit testing phases.\\\\
+\textbf{Reasons for use}\\
+It is easy to use and provides a great number of effective features that will help enhance unit testing during the development of the solution. Thus it helps improve the testability of the solution.
+
+\subsubsection{MySQL DBMS}
+\textbf{Description}\\
+This is a well-proven open-source relational database management system that provides extensive set of features for maintaining the data and database.\\\\
+\textbf{Reasons for use}\\
+It a is well-proven DBMS. Further since the data captured by the solution will fit well in a relation approach the DBMS will be efficient enough to meet the performance and scalability requirements of the solution.
+
 
 \subsection*{Build Tools}
 \begin{itemize}
