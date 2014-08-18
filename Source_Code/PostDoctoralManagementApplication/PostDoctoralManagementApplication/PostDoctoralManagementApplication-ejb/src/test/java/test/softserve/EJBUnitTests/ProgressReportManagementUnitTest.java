@@ -60,8 +60,8 @@ public class ProgressReportManagementUnitTest
     public void tearDown() {
     }
     
-    @Test
-    void testCreateProgressReport() throws Exception
+    //@Test
+    public void testCreateProgressReport() throws Exception
     {
         ProgressReportManagementMockUnit instance = new ProgressReportManagementMockUnit();
         
@@ -109,8 +109,8 @@ public class ProgressReportManagementUnitTest
         
     }
     
-    @Test
-    void testUpdateProgressReport() throws Exception
+    //@Test
+    public void testUpdateProgressReport() throws Exception
     {
         ProgressReportManagementMockUnit instance = new ProgressReportManagementMockUnit();
         
