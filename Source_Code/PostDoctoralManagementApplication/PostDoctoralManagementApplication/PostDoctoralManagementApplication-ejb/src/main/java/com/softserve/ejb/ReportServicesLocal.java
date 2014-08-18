@@ -27,6 +27,7 @@ public interface ReportServicesLocal {
     
     public List<Person> getAllPersons();
     public List<Application> getAllApplications();
+    public List<Application> getAllApplicationsWithStatus(String status);
     /**
      * Export PDF of report made up of persons
      * @param session

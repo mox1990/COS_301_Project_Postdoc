@@ -108,6 +108,12 @@ public class ReportServices implements ReportServicesLocal
     }
     
     @Override
+    public List<Application> getAllApplicationsWithStatus(String status)
+    {
+        return getApplicationDAO().findAllApplicationsWithStatus(status, -1, -1);
+    }
+    
+    @Override
     public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws Exception
     {
         //Authenticate user privliges
@@ -123,7 +129,7 @@ public class ReportServices implements ReportServicesLocal
         
         JasperPrint jasperPrint = JasperFillManager.fillReport(personReport, parameters, beanColDataSource);
         // You can use JasperPrint to create PDF
-        
+        //JasperViewer.viewReport(jasperPrint);
         return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
     }
     
@@ -150,7 +156,6 @@ public class ReportServices implements ReportServicesLocal
     @Override
     public byte[] exportPersonsToExcel(Session session, List<Person> persons) throws Exception
     {
-        System.out.println("Working in: " + System.getProperty("user.home") );
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
