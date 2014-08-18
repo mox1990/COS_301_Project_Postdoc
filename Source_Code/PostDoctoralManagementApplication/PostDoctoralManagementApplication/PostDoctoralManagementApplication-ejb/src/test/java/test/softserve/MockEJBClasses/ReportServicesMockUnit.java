@@ -12,6 +12,7 @@ import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.ejb.ReportServices;
 import com.softserve.ejb.UserGateway;
 import com.softserve.ejb.UserGatewayLocal;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -19,7 +20,12 @@ import com.softserve.ejb.UserGatewayLocal;
  */
 public class ReportServicesMockUnit extends ReportServices {
     UserGateway uEJB;
-
+    
+    public ReportServicesMockUnit() throws JRException
+    {
+        
+    }
+    
     public UserGateway getuEJB() {
         return uEJB;
     }

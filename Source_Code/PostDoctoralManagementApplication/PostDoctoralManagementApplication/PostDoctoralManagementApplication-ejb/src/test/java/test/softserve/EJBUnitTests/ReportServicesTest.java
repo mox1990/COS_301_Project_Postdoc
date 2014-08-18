@@ -17,6 +17,7 @@ import com.softserve.system.Session;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import net.sf.jasperreports.engine.JRException;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -49,7 +50,7 @@ public class ReportServicesTest {
     }
     
     @Before
-    public void setUp() 
+    public void setUp() throws JRException 
     {
         instance = new ReportServicesMockUnit();
         mockUserGateway = mock(UserGateway.class);
