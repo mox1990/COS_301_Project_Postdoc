@@ -3,6 +3,9 @@ These are the quality requirements as specified by the client and are also in th
 \subsubsection{Usability requirements}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 This is first and foremost quality requirement stipulated by the client. The primary language of the system will be South African English. Any other language support is not considered part of the requirements but the system will be designed to allow for such development in the future.\\
 
@@ -14,7 +17,7 @@ The system's UI will only consider 2 types of user categories with regard to usa
 
 \item\textbf{Trained user:}
 
-This type of user will have to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. These user will be regarded as system administrators or specialised users of the system. The stakeholders who fall under this category is the DRIS staff members overseeing the application process and any technical or maintenance support users.
+This type of user will need to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. These user will be regarded as system administrators or specialised users of the system. The stakeholders who fall under this category is the DRIS staff members overseeing the application process and any technical or maintenance support users.
 
 \item\textbf{Normal user:}
 
@@ -22,28 +25,41 @@ This type of user will have no training with regard to the system. Their compute
 
 \end{itemize}
 
-In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. A further quantification of this requirement can be seen as finding the least number of clicks a user has to perform in order to perform any operation. Thus to meet this requirement it should be considered local tasks should take a maximum of five clicks and distant tasks should take up to a maximum of 8 clicks. Where local refers to tasks that are related to the current section begin accessed with in the system. These clicks should not include the clicks need to enter various lengthy form data.
+In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. A further quantification of this requirement can be seen as finding the least number of clicks a user has to perform in order to perform any operation. Thus to meet this requirement local tasks should take a maximum of five clicks and distant tasks should take up to a maximum of 8 clicks. Where local refers to tasks that are related to the current section being accessed by a user within the system. These clicks should not include the clicks need to enter various lengthy form data. Distant task being those task outside the current section a user finds themselves within a system.
+%\vspace{0.1in}
+%
+%\textbf{Improvement} %Benefits to the systems
+%
+%All the normal users interacting with the UI should be able to use it intuitively. 
 \vspace{0.1in}
 
 \textbf{Trade Offs}
 
-Since the system will be interacting with an imense amount of stakeholders (fellows, grantholders, referres, and such) that will only be using it for short periods of time and at a very low frequency, security assurance will be compromised by having the restrictions on the clicks per task and catering for the needs of the normal user. This means that certain security routines, mainting a record of all beings that act on the system, cannot be implemented within the system. As a conseqeunce, the robustness of the system is being diluted and features such as auditabilty cannot be fully accomplished for task such as referre reports which require third party participation.
+Since the system will be interacting with an imense amount of users whom will only be using it for short periods of time and at a very low frequency, security assurance will be compromised by having the restrictions on the clicks per task and catering for the needs of the normal user. This means that certain security routines, mainting a record of all beings that act on the system, cannot be implemented within the system. %As a conseqeunce, the robustness of the system is being diluted. 
 \end{flushleft}
 
 \subsubsection{Security requirements}
 
 \begin{flushleft}
+\vspace{0.1in}
 
-The system will need to be fully secured since it deals with confidential information such as person information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audible application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever.\\
+\textbf{Requirement}
+
+The system will need to be fully secured since it deals with confidential information such as personal information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and auditable application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever.\\
 \vspace{0.1in}
 
 The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a system administrator to allow for flexibility.\\
 There will also need to be predefined roles so to allow a stakeholder from list of stakeholders in the vision and scope document, to only have the ability and access to perform the actions as defined by the vision and scope document.\\
 The system administrator should be able to access all the sections in the system and should be able to modify them except where only the system itself has that right.\\
 Another security requirement is that the audit trail must not be allowed to be modified by any human user and only allow the system to be able to insert data into the audit log. Further the audit table should only be query-able by a user with the correct security role.\\
-To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. \\
-Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days.
+To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. When a user attempts to make an unauthorized action, the execution of that action will be halted and a message will be shown to the user, through the UI, that they are unauthoried to make that action.\\
+Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days. Once this time has expired the time will be unusable in the system. Failed user actions will not be logged in the audit trail.
 \vspace{0.1in}
+
+%\textbf{Improvement} %Benefits to the systems
+%
+%This requirement will keep the system robust and ensure the quality of the auditablilty.
+%\vspace{0.1in}
 
 \textbf{Trade Offs}
 
@@ -55,15 +71,23 @@ This requirement will influence the usability requirement negativitly as  the mo
 \subsubsection{Audit-ability:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 This is seen as the third most important requirement according to the client. The system needs to provide some form of an audit trail of all critical actions that occur in the system. Critical actions are considered: user account management operations, login action, logout action as well as any operation by a user that leads to a change in the data stored by the system. The Audit trail will be in the form of a read-only table stored in the database as stipulated in the security requirements above.\\
 
 To quantify this requirement, the system will need to have an active audit log that can capture all the actions, that meet the list of critical actions, of each user that uses the system. With regards to usability, the feature needs to run in the background and not be noticeable by any user while they are using the system except if it is deliberately queried.
 \vspace{0.1in}
+%
+%\textbf{Improvement} %Benefits to the systems
+%
+%The 
+%\vspace{0.1in}
 
 \textbf{Trade Offs}
 
-This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. Though the audit logging action should be made as light weight as possible. Also adequate storage will be needed since such entries can easily grow exponentially which can lead to availability and other performance issues.  
+This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. To combat this overhead the audit logging action should be made as light weight as possible. Also adequate storage will be needed since such entries can easily grow exponentially which can lead to availability and other performance issues.  
 
 \vspace{0.1in}
 
@@ -73,6 +97,9 @@ This requirement will have a negative impact on performance as it will be adding
 \subsubsection{Scalability requirements}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 As research is still viewed as small field that is slowly growing by the client this is only the fourth most important requirement for the system. The current aim is to create a scalable system that can support 50 to 500 applicants per year with possible growth to a 1000 or more. This is in line with the figures given by the client and the growth, over the next ten to twenty years, in the research sector of the University of Pretoria.\\
 \vspace{0.05in}
@@ -114,6 +141,9 @@ This requirement will require that the code undergo optimization and as well as 
 \subsubsection{Availability:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 The system's availability on designated networks will depend on the availability of the servers of the hosting service's that will be used to host the system. None the less, the system should theoritical be avaible for use any hour of day or night.\\
 In order to quantify this it should be seen as follows: If the hosting service's servers hosting the system are active and provide access over a designated network then the system must be available over that designated network. Where the designated networks are defined as the internet and/or the local network where in the server of the hosting service is located.
@@ -131,6 +161,9 @@ This requirement directly impacts on the scalabilty of the system. Even though i
 \subsubsection{Robustness:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in terms of its data validation routines, data storage routines, security routines, and system integrity checks. 
 
@@ -147,10 +180,13 @@ These four aspects of robustness are quantified as follow:
 
 This requirement might have an effect on the scalability requirement of the system. As specified above, request should be handled in a timily manner and this requirement will take up amounts from the reponse time.
 \vspace{0.1in}
-
+\end{flushleft}
 \subsubsection{Testability:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 The system must be testable in order to show that the system meets the clients expectations. This will be done using user acceptance testing, integration testing and unit testing. The test plan will be laid out in the Non-Functional and Functional testing documents of this project. Each of which will provide a set of tests to be performed in order to verify the systems compliance. Therefore each non-functional and functional requirement needs to be quantified in a manner that allows the SoftServe group to test for it in the system. This requirement will help ensure the other requirements are met and all in all improve the system as a whole. Below are the suggested methods quantifying the tests for each type of test:\\
 
@@ -188,14 +224,12 @@ User acceptance testing will test the whole system in regard to:
 
 \end{flushleft}
 
-
-
-\end{flushleft}
-
-
 \subsubsection{Flexibility:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 The system should be designed in such a way that adding new features can be done without extensive code restructuring or reverse engineering. The process of adding new features should require the programmer working on the system to easily create a new module for the new functionality. For this to be realised the system will should use appropriate design patterns that allow this. For example the strategy, dependency injection and command design patterns. 
 \vspace{0.1in}
@@ -211,6 +245,9 @@ This requirement will lead to an increase in complexity as implementing some of 
 \subsubsection{Re-usability:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
 
 The system's components should be designed in such away that they can be reused in different sections in the system or even in external systems. For example the user access control module should be portable to other systems that can be developed.
 
@@ -223,6 +260,10 @@ The system's components should be designed in such away that they can be reused 
 \subsubsection{Maintainability:}
 
 \begin{flushleft}
+\vspace{0.1in}
+
+\textbf{Requirement}
+
 The system should be maintainable in regards to 2 aspects: 
 \begin{itemize}
 \item \textbf{System housekeeping}: This aspect revolves around the actually administration of the system once it is deployed. The system should prevent the system administrator from unnecessary worrying about automated tasks. But the system should allow the system administrator to be able to manage user data, perform backups manually, archival routines and system configuration manually. 
