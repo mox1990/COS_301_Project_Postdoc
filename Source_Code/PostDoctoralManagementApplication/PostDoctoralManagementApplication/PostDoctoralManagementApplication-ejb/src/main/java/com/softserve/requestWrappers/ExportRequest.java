@@ -4,18 +4,13 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.ejb;
-
-import javax.ejb.Stateless;
+package com.softserve.requestWrappers;
 
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Stateless
-public class ImportServices implements ImportServicesLocal {
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+public class ExportRequest {
+    
 }

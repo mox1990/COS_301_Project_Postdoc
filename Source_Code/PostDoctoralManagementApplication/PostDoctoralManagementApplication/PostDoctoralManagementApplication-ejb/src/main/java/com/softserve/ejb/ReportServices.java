@@ -65,8 +65,10 @@ public class ReportServices implements ReportServicesLocal
     
     public ReportServices() throws JRException
     {
-        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
-        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // TODO: Work an application report
+        personReport = null;
+        applicationReport = null;
+//personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
+        //applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // TODO: Work an application report
     }
     /**
      *

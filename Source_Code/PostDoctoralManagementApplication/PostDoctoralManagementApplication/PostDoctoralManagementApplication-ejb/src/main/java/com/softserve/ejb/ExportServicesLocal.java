@@ -6,16 +6,15 @@
 
 package com.softserve.ejb;
 
-import javax.ejb.Stateless;
+import com.softserve.requestWrappers.ExportRequest;
+import javax.ejb.Local;
 
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Stateless
-public class ImportServices implements ImportServicesLocal {
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+@Local
+public interface ExportServicesLocal {    
+    public byte[] exportData(ExportRequest exportRequest) throws Exception; 
 }
