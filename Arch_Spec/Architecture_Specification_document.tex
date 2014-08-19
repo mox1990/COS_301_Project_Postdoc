@@ -236,6 +236,20 @@ provides the scheduling functionality that allows users to set a specific date/t
 \subsubsection{Managed Thread Factory}
 A managed thread factory is used by applications to create managed threads. The threads are started and managed by the container. The context of the container is propagated to the thread executing the task. This object can also be used to provide custom factories for specific use cases (with custom Threads) and, for example, set specific/proprietary properties to these objects (Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).
 
+\subsection{Builder Pattern}
+The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. The process of creating objects speeds up as well. This construction of objects in small steps decreasing coupling and makes the code more testable. The design helps improve the flexibility as well as the maintainability of the code.  
+
+\subsection{Factory Design Pattern}
+The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. The pattern allows the developers to define an interface for creating an object, but let the classes that implement the interface decide which class to instantiate. By doing this the code is now flexible and creation of new objects is much simpler. It also helps redundancy 
+
+\subsection{State Design Pattern}
+The State Design Pattern is best used in situations where the actions take place in a pre-defined order as with this project. The State pattern changes the state of the objects depending on how far in the pipeline. It provides a simple and clean way to change the state of an object during run time. The design pattern improves the usability of the system as users will know exactly when some change has taken place. 
+
+\subsection{Dependency Injection}
+This is used to implement, inversion control. The client is only allowed to use a service rather than creating their own services. The design pattern allows a client to remove all knowledge of a concrete implementation that it needs to use. This helps isolate the client from the impact of design changes and defects. It promotes re-usability, testability and maintainability 
+
+\subsection{Database Access Objects}
+The Database Access Object is used by all the application calls to provide specific data operations without exposing details of the database to external objects. It forms part of the Core J2EE Patterns. This design pattern acts an intermediary between the application and database, by moving back and forth between objects and database records. It also contains the effects of any changes to the persistence mechanism to a confined area and not the whole application. This pattern improves the audit-ability as well maintaining the integrity of the data contained in the system. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Use of Reference Architecture and Framework}
@@ -259,17 +273,6 @@ The JAX-RS API provides a way for the Java-EE application to provide web service
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Builder Pattern}
-The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. This helps improve the flexibility of the code.  
-
-\subsection{Factory Design Pattern}
-The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. This allows for separation of concerns, amongst the classes. Using the Factory relates back to Re-Usability.
-
-\subsection{State Design Pattern}
-The State Design Pattern is used to make different services available depending on the changes the object may go through. 
-
-\subsection{Dependency Injection}
-This is used to implement, inversion control. The client is only allowed to use a service rather than creating their own services. This helps with the maintainability and testability of the code because it is easier to test the different services provided individually. 
 
 \section{Access and Integration channels}
 This section discusses the requirements for the access channels through which the system can be accessed by humans and other systems. Also it discusses the integration channels which need to be used by the system. 
