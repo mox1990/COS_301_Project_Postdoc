@@ -13,21 +13,31 @@
             <h:form>
                 <p:panel id="cvInfo" header="Report Generation">  
                     <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
-                        <p:selectOneRadio id="applicationType" value="#{reportBean.reportType}" layout="grid" columns="4">
+                        <p:selectOneButton id="applicationType" value="#{reportBean.reportType}">
                             <f:selectItem itemLabel="Application" itemValue="application"/>
                             <f:selectItem itemLabel="Person" itemValue="person" />
-                        </p:selectOneRadio>
-                        
-                        <p:outputLabel value="Start Date:" for="startDate"/>                                
-                        <p:calendar id="startDate" value="#{reportBean.startDate}" pattern="yyyy-mm-dd" required="true"/>
-                        <p:message for="startDate" styleClass="fieldErrorMessage"/>
-
-                        <p:outputLabel value="End Date:" for="endDate"/>                                
-                        <p:calendar id="endDate" value="#{reportBean.endDate}" pattern="yyyy-mm-dd" required="true"/>
-                        <p:message for="endDate" styleClass="fieldErrorMessage"/>
-
+                            <f:ajax render="report_attributes" />
+                        </p:selectOneButton>
                     </h:panelGrid>
-
+                    
+                    <h:panelGrid id="report_attributes">
+                        <!-- Application values... -->
+                        <p:selectManyButton id="applicationTypes" value="#{reportBean.applicationTypes}" rendered="#{reportBean.applicationReport()}">
+                            <f:selectItem itemLabel="#{reportBean.openStatus}" itemValue="#{reportBean.openStatus}"/>
+                            <f:selectItem itemLabel="#{reportBean.submittedStatus}" itemValue="#{reportBean.submittedStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.declinedStatus}" itemValue="#{reportBean.declinedStatus}"/>
+                            <f:selectItem itemLabel="#{reportBean.refereedStatus}" itemValue="#{reportBean.refereedStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.finalisedStatus}" itemValue="#{reportBean.finalisedStatus}"/>
+                            <f:selectItem itemLabel="#{reportBean.recommendedStatus}" itemValue="#{reportBean.recommendedStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.endorsedStatus}" itemValue="#{reportBean.endorsedStatus}"/>
+                            <f:selectItem itemLabel="#{reportBean.eligibleStatus}" itemValue="#{reportBean.eligibleStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.fundedStatus}" itemValue="#{reportBean.fundedStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.completedStatus}" itemValue="#{reportBean.completedStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.terminatedStatus}" itemValue="#{reportBean.terminatedStatus}" />
+                        </p:selectManyButton>
+                        <!-- Person values... -->
+                    </h:panelGrid>
+                    
                     <p:commandButton value="DownloadPDF" ajax="false" styleClass="button button-fill">
                         <p:fileDownload value="#{reportBean.reportPDF}" />
                     </p:commandButton>
