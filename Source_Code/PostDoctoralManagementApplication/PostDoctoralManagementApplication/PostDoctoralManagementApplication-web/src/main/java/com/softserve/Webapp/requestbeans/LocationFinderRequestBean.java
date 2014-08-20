@@ -6,6 +6,9 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -40,12 +43,11 @@ public class LocationFinderRequestBean implements Serializable {
     private Conversation conversation;
     
     @EJB
-    private LocationManagementServiceLocal locationManagementServiceLocal;
+    private LocationManagementServiceLocal locationManagementServiceLocal;   
     
-    
-    
-    private List<String> AllAllFacultiesInInstitution;
-    private List<String> AllAllDeparmentsInFacultyInInstitution;
+    private Institution selectedInstitution;
+    private Faculty selectedfaculty;
+    private Department selectedDepartment;
     
     /**
      * Creates a new instance of LocationFinderRequestBean
@@ -58,9 +60,13 @@ public class LocationFinderRequestBean implements Serializable {
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
+        
+        selectedInstitution = null;
+        selectedfaculty = null;
+        selectedDepartment = null;
     }
     
-    public List<String> getAllInstitutions()
+    public List<Institution> getAllInstitutions()
     {
         System.out.println("============" + "Called");
         try 
@@ -71,47 +77,33 @@ public class LocationFinderRequestBean implements Serializable {
         {
             ExceptionUtil.logException(LocationFinderRequestBean.class, ex);
             ExceptionUtil.handleException(null, ex);
-            return new ArrayList<String>();
-        }
-    }
-    
-    public void getAllFacultiesInInstitution(String insititution)
-    {
-        System.out.println("============" + insititution);
-        try 
-        {
-            AllAllFacultiesInInstitution = locationManagementServiceLocal.getAllFacultiesInInstitution(insititution);
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.logException(LocationFinderRequestBean.class, ex);
-            ExceptionUtil.handleException(null, ex);
-            AllAllFacultiesInInstitution = new ArrayList<String>();
-        }
-    }
-    
-    public void getAllDeparmentsInFacultyInInstitution(String insititution, String faculty)
-    {
-        System.out.println("============" + insititution);
-        System.out.println("============" + faculty);
-        try 
-        {
-            AllAllDeparmentsInFacultyInInstitution = locationManagementServiceLocal.getAllDepartmentsInFacultyInInstitution(insititution,faculty);
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.logException(LocationFinderRequestBean.class, ex);
-            ExceptionUtil.handleException(null, ex);
-            AllAllDeparmentsInFacultyInInstitution = new ArrayList<String>();
+            return new ArrayList<Institution>();
         }
     }
 
-    public List<String> getAllAllFacultiesInInstitution() {
-        return AllAllFacultiesInInstitution;
+    public Department getSelectedDepartment() {
+        return selectedDepartment;
     }
 
-    public List<String> getAllAllDeparmentsInFacultyInInstitution() {
-        return AllAllDeparmentsInFacultyInInstitution;
+    public void setSelectedDepartment(Department selectedDepartment) {
+        this.selectedDepartment = selectedDepartment;
+    }
+
+    public Faculty getSelectedfaculty() {
+        return selectedfaculty;
+    }
+
+    public void setSelectedfaculty(Faculty selectedfaculty) {
+        this.selectedfaculty = selectedfaculty;
     }
     
+    public Institution getSelectedInstitution() {
+        return selectedInstitution;
+    }
+
+    public void setSelectedInstitution(Institution selectedInstitution) {
+        System.out.println("Settting " + selectedInstitution.toString());
+        this.selectedInstitution = selectedInstitution;
+    }
+           
 }

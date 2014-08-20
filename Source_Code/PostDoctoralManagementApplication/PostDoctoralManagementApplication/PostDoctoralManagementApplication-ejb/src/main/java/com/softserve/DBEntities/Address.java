@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Address.findByCountry", query = "SELECT a FROM Address a WHERE a.country = :country"),
     @NamedQuery(name = "Address.findByProvince", query = "SELECT a FROM Address a WHERE a.province = :province"),
     @NamedQuery(name = "Address.findByTownCity", query = "SELECT a FROM Address a WHERE a.townCity = :townCity"),
+    @NamedQuery(name = "Address.findBySuburb", query = "SELECT a FROM Address a WHERE a.suburb = :suburb"),
     @NamedQuery(name = "Address.findByStreet", query = "SELECT a FROM Address a WHERE a.street = :street"),
     @NamedQuery(name = "Address.findByStreeNumber", query = "SELECT a FROM Address a WHERE a.streeNumber = :streeNumber"),
     @NamedQuery(name = "Address.findByRoomNumber", query = "SELECT a FROM Address a WHERE a.roomNumber = :roomNumber"),
@@ -47,16 +48,19 @@ public class Address implements Serializable {
     @Basic(optional = false)
     @Column(name = "_addressID")
     private Long addressID;
-    @Size(max = 50)
+    @Size(max = 100)
     @Column(name = "_country")
     private String country;
-    @Size(max = 50)
+    @Size(max = 100)
     @Column(name = "_province")
     private String province;
-    @Size(max = 50)
+    @Size(max = 100)
     @Column(name = "_town_city")
     private String townCity;
-    @Size(max = 50)
+    @Size(max = 100)
+    @Column(name = "_suburb")
+    private String suburb;
+    @Size(max = 100)
     @Column(name = "_street")
     private String street;
     @Column(name = "_streeNumber")
@@ -109,6 +113,14 @@ public class Address implements Serializable {
 
     public void setTownCity(String townCity) {
         this.townCity = townCity;
+    }
+
+    public String getSuburb() {
+        return suburb;
+    }
+
+    public void setSuburb(String suburb) {
+        this.suburb = suburb;
     }
 
     public String getStreet() {

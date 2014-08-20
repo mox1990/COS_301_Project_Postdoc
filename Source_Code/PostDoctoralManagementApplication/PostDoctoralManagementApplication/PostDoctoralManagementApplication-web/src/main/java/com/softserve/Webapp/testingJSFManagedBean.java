@@ -43,7 +43,6 @@ public class testingJSFManagedBean implements Serializable {
         ArrayList<EmployeeInformation> employeeInformation = new ArrayList<EmployeeInformation>();
         ArrayList<Address> addresses = new ArrayList<Address>();
         ArrayList<Cv> cvs = new ArrayList<Cv>();
-        ArrayList<Location> locations = new ArrayList<Location>();
         ArrayList<Application> Applications = new ArrayList<Application>();
         DataFactory dataFactory = new DataFactory();
         DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();

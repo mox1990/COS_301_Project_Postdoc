@@ -43,6 +43,8 @@ public class AmmendRequest implements Serializable {
     @NotNull
     @Column(name = "_requestID")
     private Long requestID;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "_timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
@@ -62,6 +64,11 @@ public class AmmendRequest implements Serializable {
 
     public AmmendRequest(Long requestID) {
         this.requestID = requestID;
+    }
+
+    public AmmendRequest(Long requestID, Date timestamp) {
+        this.requestID = requestID;
+        this.timestamp = timestamp;
     }
 
     public Long getRequestID() {

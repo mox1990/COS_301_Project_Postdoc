@@ -203,7 +203,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         //Ammend application
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);        
+        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
         applicationJpaController.edit(application);
         
         AmmendRequest ammendRequest = dBEntitiesFactory.bulidAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());

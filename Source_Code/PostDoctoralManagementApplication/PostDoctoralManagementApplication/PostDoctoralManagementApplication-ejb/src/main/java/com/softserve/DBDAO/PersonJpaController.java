@@ -15,6 +15,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.softserve.DBEntities.ResearchFellowInformation;
 import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Address;
@@ -25,14 +26,15 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.AmmendRequest;
+import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.MinuteComment;
 import com.softserve.DBEntities.EligiblityReport;
+import com.softserve.DBEntities.ForwardAndRewindReport;
 import com.softserve.DBEntities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -74,12 +76,6 @@ public class PersonJpaController implements Serializable {
         if (person.getEndorsementList() == null) {
             person.setEndorsementList(new ArrayList<Endorsement>());
         }
-        if (person.getAuditLogList() == null) {
-            person.setAuditLogList(new ArrayList<AuditLog>());
-        }
-        if (person.getRecommendationReportList() == null) {
-            person.setRecommendationReportList(new ArrayList<RecommendationReport>());
-        }
         if (person.getRefereeReportList() == null) {
             person.setRefereeReportList(new ArrayList<RefereeReport>());
         }
@@ -89,11 +85,17 @@ public class PersonJpaController implements Serializable {
         if (person.getNotificationList1() == null) {
             person.setNotificationList1(new ArrayList<Notification>());
         }
-        if (person.getFundingReportList() == null) {
-            person.setFundingReportList(new ArrayList<FundingReport>());
-        }
         if (person.getAmmendRequestList() == null) {
             person.setAmmendRequestList(new ArrayList<AmmendRequest>());
+        }
+        if (person.getAuditLogList() == null) {
+            person.setAuditLogList(new ArrayList<AuditLog>());
+        }
+        if (person.getRecommendationReportList() == null) {
+            person.setRecommendationReportList(new ArrayList<RecommendationReport>());
+        }
+        if (person.getFundingReportList() == null) {
+            person.setFundingReportList(new ArrayList<FundingReport>());
         }
         if (person.getApplicationList1() == null) {
             person.setApplicationList1(new ArrayList<Application>());
@@ -107,10 +109,18 @@ public class PersonJpaController implements Serializable {
         if (person.getEligiblityReportList() == null) {
             person.setEligiblityReportList(new ArrayList<EligiblityReport>());
         }
+        if (person.getForwardAndRewindReportList() == null) {
+            person.setForwardAndRewindReportList(new ArrayList<ForwardAndRewindReport>());
+        }
         EntityManager em = null;
         try {
             utx.begin();
             em = getEntityManager();
+            ResearchFellowInformation researchFellowInformation = person.getResearchFellowInformation();
+            if (researchFellowInformation != null) {
+                researchFellowInformation = em.getReference(researchFellowInformation.getClass(), researchFellowInformation.getSystemAssignedID());
+                person.setResearchFellowInformation(researchFellowInformation);
+            }
             EmployeeInformation employeeInformation = person.getEmployeeInformation();
             if (employeeInformation != null) {
                 employeeInformation = em.getReference(employeeInformation.getClass(), employeeInformation.getEmployeeID());
@@ -156,18 +166,6 @@ public class PersonJpaController implements Serializable {
                 attachedEndorsementList.add(endorsementListEndorsementToAttach);
             }
             person.setEndorsementList(attachedEndorsementList);
-            List<AuditLog> attachedAuditLogList = new ArrayList<AuditLog>();
-            for (AuditLog auditLogListAuditLogToAttach : person.getAuditLogList()) {
-                auditLogListAuditLogToAttach = em.getReference(auditLogListAuditLogToAttach.getClass(), auditLogListAuditLogToAttach.getEntryID());
-                attachedAuditLogList.add(auditLogListAuditLogToAttach);
-            }
-            person.setAuditLogList(attachedAuditLogList);
-            List<RecommendationReport> attachedRecommendationReportList = new ArrayList<RecommendationReport>();
-            for (RecommendationReport recommendationReportListRecommendationReportToAttach : person.getRecommendationReportList()) {
-                recommendationReportListRecommendationReportToAttach = em.getReference(recommendationReportListRecommendationReportToAttach.getClass(), recommendationReportListRecommendationReportToAttach.getReportID());
-                attachedRecommendationReportList.add(recommendationReportListRecommendationReportToAttach);
-            }
-            person.setRecommendationReportList(attachedRecommendationReportList);
             List<RefereeReport> attachedRefereeReportList = new ArrayList<RefereeReport>();
             for (RefereeReport refereeReportListRefereeReportToAttach : person.getRefereeReportList()) {
                 refereeReportListRefereeReportToAttach = em.getReference(refereeReportListRefereeReportToAttach.getClass(), refereeReportListRefereeReportToAttach.getReportID());
@@ -186,18 +184,30 @@ public class PersonJpaController implements Serializable {
                 attachedNotificationList1.add(notificationList1NotificationToAttach);
             }
             person.setNotificationList1(attachedNotificationList1);
-            List<FundingReport> attachedFundingReportList = new ArrayList<FundingReport>();
-            for (FundingReport fundingReportListFundingReportToAttach : person.getFundingReportList()) {
-                fundingReportListFundingReportToAttach = em.getReference(fundingReportListFundingReportToAttach.getClass(), fundingReportListFundingReportToAttach.getReportID());
-                attachedFundingReportList.add(fundingReportListFundingReportToAttach);
-            }
-            person.setFundingReportList(attachedFundingReportList);
             List<AmmendRequest> attachedAmmendRequestList = new ArrayList<AmmendRequest>();
             for (AmmendRequest ammendRequestListAmmendRequestToAttach : person.getAmmendRequestList()) {
                 ammendRequestListAmmendRequestToAttach = em.getReference(ammendRequestListAmmendRequestToAttach.getClass(), ammendRequestListAmmendRequestToAttach.getRequestID());
                 attachedAmmendRequestList.add(ammendRequestListAmmendRequestToAttach);
             }
             person.setAmmendRequestList(attachedAmmendRequestList);
+            List<AuditLog> attachedAuditLogList = new ArrayList<AuditLog>();
+            for (AuditLog auditLogListAuditLogToAttach : person.getAuditLogList()) {
+                auditLogListAuditLogToAttach = em.getReference(auditLogListAuditLogToAttach.getClass(), auditLogListAuditLogToAttach.getEntryID());
+                attachedAuditLogList.add(auditLogListAuditLogToAttach);
+            }
+            person.setAuditLogList(attachedAuditLogList);
+            List<RecommendationReport> attachedRecommendationReportList = new ArrayList<RecommendationReport>();
+            for (RecommendationReport recommendationReportListRecommendationReportToAttach : person.getRecommendationReportList()) {
+                recommendationReportListRecommendationReportToAttach = em.getReference(recommendationReportListRecommendationReportToAttach.getClass(), recommendationReportListRecommendationReportToAttach.getReportID());
+                attachedRecommendationReportList.add(recommendationReportListRecommendationReportToAttach);
+            }
+            person.setRecommendationReportList(attachedRecommendationReportList);
+            List<FundingReport> attachedFundingReportList = new ArrayList<FundingReport>();
+            for (FundingReport fundingReportListFundingReportToAttach : person.getFundingReportList()) {
+                fundingReportListFundingReportToAttach = em.getReference(fundingReportListFundingReportToAttach.getClass(), fundingReportListFundingReportToAttach.getReportID());
+                attachedFundingReportList.add(fundingReportListFundingReportToAttach);
+            }
+            person.setFundingReportList(attachedFundingReportList);
             List<Application> attachedApplicationList1 = new ArrayList<Application>();
             for (Application applicationList1ApplicationToAttach : person.getApplicationList1()) {
                 applicationList1ApplicationToAttach = em.getReference(applicationList1ApplicationToAttach.getClass(), applicationList1ApplicationToAttach.getApplicationID());
@@ -222,7 +232,22 @@ public class PersonJpaController implements Serializable {
                 attachedEligiblityReportList.add(eligiblityReportListEligiblityReportToAttach);
             }
             person.setEligiblityReportList(attachedEligiblityReportList);
+            List<ForwardAndRewindReport> attachedForwardAndRewindReportList = new ArrayList<ForwardAndRewindReport>();
+            for (ForwardAndRewindReport forwardAndRewindReportListForwardAndRewindReportToAttach : person.getForwardAndRewindReportList()) {
+                forwardAndRewindReportListForwardAndRewindReportToAttach = em.getReference(forwardAndRewindReportListForwardAndRewindReportToAttach.getClass(), forwardAndRewindReportListForwardAndRewindReportToAttach.getReportID());
+                attachedForwardAndRewindReportList.add(forwardAndRewindReportListForwardAndRewindReportToAttach);
+            }
+            person.setForwardAndRewindReportList(attachedForwardAndRewindReportList);
             em.persist(person);
+            if (researchFellowInformation != null) {
+                Person oldPersonOfResearchFellowInformation = researchFellowInformation.getPerson();
+                if (oldPersonOfResearchFellowInformation != null) {
+                    oldPersonOfResearchFellowInformation.setResearchFellowInformation(null);
+                    oldPersonOfResearchFellowInformation = em.merge(oldPersonOfResearchFellowInformation);
+                }
+                researchFellowInformation.setPerson(person);
+                researchFellowInformation = em.merge(researchFellowInformation);
+            }
             if (employeeInformation != null) {
                 Person oldPersonOfEmployeeInformation = employeeInformation.getPerson();
                 if (oldPersonOfEmployeeInformation != null) {
@@ -275,24 +300,6 @@ public class PersonJpaController implements Serializable {
                     oldDeanOfEndorsementListEndorsement = em.merge(oldDeanOfEndorsementListEndorsement);
                 }
             }
-            for (AuditLog auditLogListAuditLog : person.getAuditLogList()) {
-                Person oldPersonOfAuditLogListAuditLog = auditLogListAuditLog.getPerson();
-                auditLogListAuditLog.setPerson(person);
-                auditLogListAuditLog = em.merge(auditLogListAuditLog);
-                if (oldPersonOfAuditLogListAuditLog != null) {
-                    oldPersonOfAuditLogListAuditLog.getAuditLogList().remove(auditLogListAuditLog);
-                    oldPersonOfAuditLogListAuditLog = em.merge(oldPersonOfAuditLogListAuditLog);
-                }
-            }
-            for (RecommendationReport recommendationReportListRecommendationReport : person.getRecommendationReportList()) {
-                Person oldHodOfRecommendationReportListRecommendationReport = recommendationReportListRecommendationReport.getHod();
-                recommendationReportListRecommendationReport.setHod(person);
-                recommendationReportListRecommendationReport = em.merge(recommendationReportListRecommendationReport);
-                if (oldHodOfRecommendationReportListRecommendationReport != null) {
-                    oldHodOfRecommendationReportListRecommendationReport.getRecommendationReportList().remove(recommendationReportListRecommendationReport);
-                    oldHodOfRecommendationReportListRecommendationReport = em.merge(oldHodOfRecommendationReportListRecommendationReport);
-                }
-            }
             for (RefereeReport refereeReportListRefereeReport : person.getRefereeReportList()) {
                 Person oldRefereeOfRefereeReportListRefereeReport = refereeReportListRefereeReport.getReferee();
                 refereeReportListRefereeReport.setReferee(person);
@@ -320,15 +327,6 @@ public class PersonJpaController implements Serializable {
                     oldRecieverOfNotificationList1Notification = em.merge(oldRecieverOfNotificationList1Notification);
                 }
             }
-            for (FundingReport fundingReportListFundingReport : person.getFundingReportList()) {
-                Person oldDrisOfFundingReportListFundingReport = fundingReportListFundingReport.getDris();
-                fundingReportListFundingReport.setDris(person);
-                fundingReportListFundingReport = em.merge(fundingReportListFundingReport);
-                if (oldDrisOfFundingReportListFundingReport != null) {
-                    oldDrisOfFundingReportListFundingReport.getFundingReportList().remove(fundingReportListFundingReport);
-                    oldDrisOfFundingReportListFundingReport = em.merge(oldDrisOfFundingReportListFundingReport);
-                }
-            }
             for (AmmendRequest ammendRequestListAmmendRequest : person.getAmmendRequestList()) {
                 Person oldCreatorOfAmmendRequestListAmmendRequest = ammendRequestListAmmendRequest.getCreator();
                 ammendRequestListAmmendRequest.setCreator(person);
@@ -336,6 +334,33 @@ public class PersonJpaController implements Serializable {
                 if (oldCreatorOfAmmendRequestListAmmendRequest != null) {
                     oldCreatorOfAmmendRequestListAmmendRequest.getAmmendRequestList().remove(ammendRequestListAmmendRequest);
                     oldCreatorOfAmmendRequestListAmmendRequest = em.merge(oldCreatorOfAmmendRequestListAmmendRequest);
+                }
+            }
+            for (AuditLog auditLogListAuditLog : person.getAuditLogList()) {
+                Person oldPersonOfAuditLogListAuditLog = auditLogListAuditLog.getPerson();
+                auditLogListAuditLog.setPerson(person);
+                auditLogListAuditLog = em.merge(auditLogListAuditLog);
+                if (oldPersonOfAuditLogListAuditLog != null) {
+                    oldPersonOfAuditLogListAuditLog.getAuditLogList().remove(auditLogListAuditLog);
+                    oldPersonOfAuditLogListAuditLog = em.merge(oldPersonOfAuditLogListAuditLog);
+                }
+            }
+            for (RecommendationReport recommendationReportListRecommendationReport : person.getRecommendationReportList()) {
+                Person oldHodOfRecommendationReportListRecommendationReport = recommendationReportListRecommendationReport.getHod();
+                recommendationReportListRecommendationReport.setHod(person);
+                recommendationReportListRecommendationReport = em.merge(recommendationReportListRecommendationReport);
+                if (oldHodOfRecommendationReportListRecommendationReport != null) {
+                    oldHodOfRecommendationReportListRecommendationReport.getRecommendationReportList().remove(recommendationReportListRecommendationReport);
+                    oldHodOfRecommendationReportListRecommendationReport = em.merge(oldHodOfRecommendationReportListRecommendationReport);
+                }
+            }
+            for (FundingReport fundingReportListFundingReport : person.getFundingReportList()) {
+                Person oldDrisOfFundingReportListFundingReport = fundingReportListFundingReport.getDris();
+                fundingReportListFundingReport.setDris(person);
+                fundingReportListFundingReport = em.merge(fundingReportListFundingReport);
+                if (oldDrisOfFundingReportListFundingReport != null) {
+                    oldDrisOfFundingReportListFundingReport.getFundingReportList().remove(fundingReportListFundingReport);
+                    oldDrisOfFundingReportListFundingReport = em.merge(oldDrisOfFundingReportListFundingReport);
                 }
             }
             for (Application applicationList1Application : person.getApplicationList1()) {
@@ -374,6 +399,15 @@ public class PersonJpaController implements Serializable {
                     oldEligiblityCheckerOfEligiblityReportListEligiblityReport = em.merge(oldEligiblityCheckerOfEligiblityReportListEligiblityReport);
                 }
             }
+            for (ForwardAndRewindReport forwardAndRewindReportListForwardAndRewindReport : person.getForwardAndRewindReportList()) {
+                Person oldDrisOfForwardAndRewindReportListForwardAndRewindReport = forwardAndRewindReportListForwardAndRewindReport.getDris();
+                forwardAndRewindReportListForwardAndRewindReport.setDris(person);
+                forwardAndRewindReportListForwardAndRewindReport = em.merge(forwardAndRewindReportListForwardAndRewindReport);
+                if (oldDrisOfForwardAndRewindReportListForwardAndRewindReport != null) {
+                    oldDrisOfForwardAndRewindReportListForwardAndRewindReport.getForwardAndRewindReportList().remove(forwardAndRewindReportListForwardAndRewindReport);
+                    oldDrisOfForwardAndRewindReportListForwardAndRewindReport = em.merge(oldDrisOfForwardAndRewindReportListForwardAndRewindReport);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -398,6 +432,8 @@ public class PersonJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             Person persistentPerson = em.find(Person.class, person.getSystemID());
+            ResearchFellowInformation researchFellowInformationOld = persistentPerson.getResearchFellowInformation();
+            ResearchFellowInformation researchFellowInformationNew = person.getResearchFellowInformation();
             EmployeeInformation employeeInformationOld = persistentPerson.getEmployeeInformation();
             EmployeeInformation employeeInformationNew = person.getEmployeeInformation();
             Cv cvOld = persistentPerson.getCv();
@@ -414,20 +450,20 @@ public class PersonJpaController implements Serializable {
             List<DeclineReport> declineReportListNew = person.getDeclineReportList();
             List<Endorsement> endorsementListOld = persistentPerson.getEndorsementList();
             List<Endorsement> endorsementListNew = person.getEndorsementList();
-            List<AuditLog> auditLogListOld = persistentPerson.getAuditLogList();
-            List<AuditLog> auditLogListNew = person.getAuditLogList();
-            List<RecommendationReport> recommendationReportListOld = persistentPerson.getRecommendationReportList();
-            List<RecommendationReport> recommendationReportListNew = person.getRecommendationReportList();
             List<RefereeReport> refereeReportListOld = persistentPerson.getRefereeReportList();
             List<RefereeReport> refereeReportListNew = person.getRefereeReportList();
             List<Notification> notificationListOld = persistentPerson.getNotificationList();
             List<Notification> notificationListNew = person.getNotificationList();
             List<Notification> notificationList1Old = persistentPerson.getNotificationList1();
             List<Notification> notificationList1New = person.getNotificationList1();
-            List<FundingReport> fundingReportListOld = persistentPerson.getFundingReportList();
-            List<FundingReport> fundingReportListNew = person.getFundingReportList();
             List<AmmendRequest> ammendRequestListOld = persistentPerson.getAmmendRequestList();
             List<AmmendRequest> ammendRequestListNew = person.getAmmendRequestList();
+            List<AuditLog> auditLogListOld = persistentPerson.getAuditLogList();
+            List<AuditLog> auditLogListNew = person.getAuditLogList();
+            List<RecommendationReport> recommendationReportListOld = persistentPerson.getRecommendationReportList();
+            List<RecommendationReport> recommendationReportListNew = person.getRecommendationReportList();
+            List<FundingReport> fundingReportListOld = persistentPerson.getFundingReportList();
+            List<FundingReport> fundingReportListNew = person.getFundingReportList();
             List<Application> applicationList1Old = persistentPerson.getApplicationList1();
             List<Application> applicationList1New = person.getApplicationList1();
             List<Application> applicationList2Old = persistentPerson.getApplicationList2();
@@ -436,7 +472,15 @@ public class PersonJpaController implements Serializable {
             List<MinuteComment> minuteCommentListNew = person.getMinuteCommentList();
             List<EligiblityReport> eligiblityReportListOld = persistentPerson.getEligiblityReportList();
             List<EligiblityReport> eligiblityReportListNew = person.getEligiblityReportList();
+            List<ForwardAndRewindReport> forwardAndRewindReportListOld = persistentPerson.getForwardAndRewindReportList();
+            List<ForwardAndRewindReport> forwardAndRewindReportListNew = person.getForwardAndRewindReportList();
             List<String> illegalOrphanMessages = null;
+            if (researchFellowInformationOld != null && !researchFellowInformationOld.equals(researchFellowInformationNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain ResearchFellowInformation " + researchFellowInformationOld + " since its person field is not nullable.");
+            }
             if (employeeInformationOld != null && !employeeInformationOld.equals(employeeInformationNew)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
@@ -465,22 +509,6 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Endorsement " + endorsementListOldEndorsement + " since its dean field is not nullable.");
                 }
             }
-            for (AuditLog auditLogListOldAuditLog : auditLogListOld) {
-                if (!auditLogListNew.contains(auditLogListOldAuditLog)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain AuditLog " + auditLogListOldAuditLog + " since its person field is not nullable.");
-                }
-            }
-            for (RecommendationReport recommendationReportListOldRecommendationReport : recommendationReportListOld) {
-                if (!recommendationReportListNew.contains(recommendationReportListOldRecommendationReport)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportListOldRecommendationReport + " since its hod field is not nullable.");
-                }
-            }
             for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
                 if (!refereeReportListNew.contains(refereeReportListOldRefereeReport)) {
                     if (illegalOrphanMessages == null) {
@@ -505,20 +533,36 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain Notification " + notificationList1OldNotification + " since its reciever field is not nullable.");
                 }
             }
-            for (FundingReport fundingReportListOldFundingReport : fundingReportListOld) {
-                if (!fundingReportListNew.contains(fundingReportListOldFundingReport)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain FundingReport " + fundingReportListOldFundingReport + " since its dris field is not nullable.");
-                }
-            }
             for (AmmendRequest ammendRequestListOldAmmendRequest : ammendRequestListOld) {
                 if (!ammendRequestListNew.contains(ammendRequestListOldAmmendRequest)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain AmmendRequest " + ammendRequestListOldAmmendRequest + " since its creator field is not nullable.");
+                }
+            }
+            for (AuditLog auditLogListOldAuditLog : auditLogListOld) {
+                if (!auditLogListNew.contains(auditLogListOldAuditLog)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain AuditLog " + auditLogListOldAuditLog + " since its person field is not nullable.");
+                }
+            }
+            for (RecommendationReport recommendationReportListOldRecommendationReport : recommendationReportListOld) {
+                if (!recommendationReportListNew.contains(recommendationReportListOldRecommendationReport)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain RecommendationReport " + recommendationReportListOldRecommendationReport + " since its hod field is not nullable.");
+                }
+            }
+            for (FundingReport fundingReportListOldFundingReport : fundingReportListOld) {
+                if (!fundingReportListNew.contains(fundingReportListOldFundingReport)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain FundingReport " + fundingReportListOldFundingReport + " since its dris field is not nullable.");
                 }
             }
             for (Application applicationList1OldApplication : applicationList1Old) {
@@ -545,8 +589,20 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain EligiblityReport " + eligiblityReportListOldEligiblityReport + " since its eligiblityChecker field is not nullable.");
                 }
             }
+            for (ForwardAndRewindReport forwardAndRewindReportListOldForwardAndRewindReport : forwardAndRewindReportListOld) {
+                if (!forwardAndRewindReportListNew.contains(forwardAndRewindReportListOldForwardAndRewindReport)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ForwardAndRewindReport " + forwardAndRewindReportListOldForwardAndRewindReport + " since its dris field is not nullable.");
+                }
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (researchFellowInformationNew != null) {
+                researchFellowInformationNew = em.getReference(researchFellowInformationNew.getClass(), researchFellowInformationNew.getSystemAssignedID());
+                person.setResearchFellowInformation(researchFellowInformationNew);
             }
             if (employeeInformationNew != null) {
                 employeeInformationNew = em.getReference(employeeInformationNew.getClass(), employeeInformationNew.getEmployeeID());
@@ -595,20 +651,6 @@ public class PersonJpaController implements Serializable {
             }
             endorsementListNew = attachedEndorsementListNew;
             person.setEndorsementList(endorsementListNew);
-            List<AuditLog> attachedAuditLogListNew = new ArrayList<AuditLog>();
-            for (AuditLog auditLogListNewAuditLogToAttach : auditLogListNew) {
-                auditLogListNewAuditLogToAttach = em.getReference(auditLogListNewAuditLogToAttach.getClass(), auditLogListNewAuditLogToAttach.getEntryID());
-                attachedAuditLogListNew.add(auditLogListNewAuditLogToAttach);
-            }
-            auditLogListNew = attachedAuditLogListNew;
-            person.setAuditLogList(auditLogListNew);
-            List<RecommendationReport> attachedRecommendationReportListNew = new ArrayList<RecommendationReport>();
-            for (RecommendationReport recommendationReportListNewRecommendationReportToAttach : recommendationReportListNew) {
-                recommendationReportListNewRecommendationReportToAttach = em.getReference(recommendationReportListNewRecommendationReportToAttach.getClass(), recommendationReportListNewRecommendationReportToAttach.getReportID());
-                attachedRecommendationReportListNew.add(recommendationReportListNewRecommendationReportToAttach);
-            }
-            recommendationReportListNew = attachedRecommendationReportListNew;
-            person.setRecommendationReportList(recommendationReportListNew);
             List<RefereeReport> attachedRefereeReportListNew = new ArrayList<RefereeReport>();
             for (RefereeReport refereeReportListNewRefereeReportToAttach : refereeReportListNew) {
                 refereeReportListNewRefereeReportToAttach = em.getReference(refereeReportListNewRefereeReportToAttach.getClass(), refereeReportListNewRefereeReportToAttach.getReportID());
@@ -630,13 +672,6 @@ public class PersonJpaController implements Serializable {
             }
             notificationList1New = attachedNotificationList1New;
             person.setNotificationList1(notificationList1New);
-            List<FundingReport> attachedFundingReportListNew = new ArrayList<FundingReport>();
-            for (FundingReport fundingReportListNewFundingReportToAttach : fundingReportListNew) {
-                fundingReportListNewFundingReportToAttach = em.getReference(fundingReportListNewFundingReportToAttach.getClass(), fundingReportListNewFundingReportToAttach.getReportID());
-                attachedFundingReportListNew.add(fundingReportListNewFundingReportToAttach);
-            }
-            fundingReportListNew = attachedFundingReportListNew;
-            person.setFundingReportList(fundingReportListNew);
             List<AmmendRequest> attachedAmmendRequestListNew = new ArrayList<AmmendRequest>();
             for (AmmendRequest ammendRequestListNewAmmendRequestToAttach : ammendRequestListNew) {
                 ammendRequestListNewAmmendRequestToAttach = em.getReference(ammendRequestListNewAmmendRequestToAttach.getClass(), ammendRequestListNewAmmendRequestToAttach.getRequestID());
@@ -644,6 +679,27 @@ public class PersonJpaController implements Serializable {
             }
             ammendRequestListNew = attachedAmmendRequestListNew;
             person.setAmmendRequestList(ammendRequestListNew);
+            List<AuditLog> attachedAuditLogListNew = new ArrayList<AuditLog>();
+            for (AuditLog auditLogListNewAuditLogToAttach : auditLogListNew) {
+                auditLogListNewAuditLogToAttach = em.getReference(auditLogListNewAuditLogToAttach.getClass(), auditLogListNewAuditLogToAttach.getEntryID());
+                attachedAuditLogListNew.add(auditLogListNewAuditLogToAttach);
+            }
+            auditLogListNew = attachedAuditLogListNew;
+            person.setAuditLogList(auditLogListNew);
+            List<RecommendationReport> attachedRecommendationReportListNew = new ArrayList<RecommendationReport>();
+            for (RecommendationReport recommendationReportListNewRecommendationReportToAttach : recommendationReportListNew) {
+                recommendationReportListNewRecommendationReportToAttach = em.getReference(recommendationReportListNewRecommendationReportToAttach.getClass(), recommendationReportListNewRecommendationReportToAttach.getReportID());
+                attachedRecommendationReportListNew.add(recommendationReportListNewRecommendationReportToAttach);
+            }
+            recommendationReportListNew = attachedRecommendationReportListNew;
+            person.setRecommendationReportList(recommendationReportListNew);
+            List<FundingReport> attachedFundingReportListNew = new ArrayList<FundingReport>();
+            for (FundingReport fundingReportListNewFundingReportToAttach : fundingReportListNew) {
+                fundingReportListNewFundingReportToAttach = em.getReference(fundingReportListNewFundingReportToAttach.getClass(), fundingReportListNewFundingReportToAttach.getReportID());
+                attachedFundingReportListNew.add(fundingReportListNewFundingReportToAttach);
+            }
+            fundingReportListNew = attachedFundingReportListNew;
+            person.setFundingReportList(fundingReportListNew);
             List<Application> attachedApplicationList1New = new ArrayList<Application>();
             for (Application applicationList1NewApplicationToAttach : applicationList1New) {
                 applicationList1NewApplicationToAttach = em.getReference(applicationList1NewApplicationToAttach.getClass(), applicationList1NewApplicationToAttach.getApplicationID());
@@ -672,7 +728,23 @@ public class PersonJpaController implements Serializable {
             }
             eligiblityReportListNew = attachedEligiblityReportListNew;
             person.setEligiblityReportList(eligiblityReportListNew);
+            List<ForwardAndRewindReport> attachedForwardAndRewindReportListNew = new ArrayList<ForwardAndRewindReport>();
+            for (ForwardAndRewindReport forwardAndRewindReportListNewForwardAndRewindReportToAttach : forwardAndRewindReportListNew) {
+                forwardAndRewindReportListNewForwardAndRewindReportToAttach = em.getReference(forwardAndRewindReportListNewForwardAndRewindReportToAttach.getClass(), forwardAndRewindReportListNewForwardAndRewindReportToAttach.getReportID());
+                attachedForwardAndRewindReportListNew.add(forwardAndRewindReportListNewForwardAndRewindReportToAttach);
+            }
+            forwardAndRewindReportListNew = attachedForwardAndRewindReportListNew;
+            person.setForwardAndRewindReportList(forwardAndRewindReportListNew);
             person = em.merge(person);
+            if (researchFellowInformationNew != null && !researchFellowInformationNew.equals(researchFellowInformationOld)) {
+                Person oldPersonOfResearchFellowInformation = researchFellowInformationNew.getPerson();
+                if (oldPersonOfResearchFellowInformation != null) {
+                    oldPersonOfResearchFellowInformation.setResearchFellowInformation(null);
+                    oldPersonOfResearchFellowInformation = em.merge(oldPersonOfResearchFellowInformation);
+                }
+                researchFellowInformationNew.setPerson(person);
+                researchFellowInformationNew = em.merge(researchFellowInformationNew);
+            }
             if (employeeInformationNew != null && !employeeInformationNew.equals(employeeInformationOld)) {
                 Person oldPersonOfEmployeeInformation = employeeInformationNew.getPerson();
                 if (oldPersonOfEmployeeInformation != null) {
@@ -757,28 +829,6 @@ public class PersonJpaController implements Serializable {
                     }
                 }
             }
-            for (AuditLog auditLogListNewAuditLog : auditLogListNew) {
-                if (!auditLogListOld.contains(auditLogListNewAuditLog)) {
-                    Person oldPersonOfAuditLogListNewAuditLog = auditLogListNewAuditLog.getPerson();
-                    auditLogListNewAuditLog.setPerson(person);
-                    auditLogListNewAuditLog = em.merge(auditLogListNewAuditLog);
-                    if (oldPersonOfAuditLogListNewAuditLog != null && !oldPersonOfAuditLogListNewAuditLog.equals(person)) {
-                        oldPersonOfAuditLogListNewAuditLog.getAuditLogList().remove(auditLogListNewAuditLog);
-                        oldPersonOfAuditLogListNewAuditLog = em.merge(oldPersonOfAuditLogListNewAuditLog);
-                    }
-                }
-            }
-            for (RecommendationReport recommendationReportListNewRecommendationReport : recommendationReportListNew) {
-                if (!recommendationReportListOld.contains(recommendationReportListNewRecommendationReport)) {
-                    Person oldHodOfRecommendationReportListNewRecommendationReport = recommendationReportListNewRecommendationReport.getHod();
-                    recommendationReportListNewRecommendationReport.setHod(person);
-                    recommendationReportListNewRecommendationReport = em.merge(recommendationReportListNewRecommendationReport);
-                    if (oldHodOfRecommendationReportListNewRecommendationReport != null && !oldHodOfRecommendationReportListNewRecommendationReport.equals(person)) {
-                        oldHodOfRecommendationReportListNewRecommendationReport.getRecommendationReportList().remove(recommendationReportListNewRecommendationReport);
-                        oldHodOfRecommendationReportListNewRecommendationReport = em.merge(oldHodOfRecommendationReportListNewRecommendationReport);
-                    }
-                }
-            }
             for (RefereeReport refereeReportListNewRefereeReport : refereeReportListNew) {
                 if (!refereeReportListOld.contains(refereeReportListNewRefereeReport)) {
                     Person oldRefereeOfRefereeReportListNewRefereeReport = refereeReportListNewRefereeReport.getReferee();
@@ -812,17 +862,6 @@ public class PersonJpaController implements Serializable {
                     }
                 }
             }
-            for (FundingReport fundingReportListNewFundingReport : fundingReportListNew) {
-                if (!fundingReportListOld.contains(fundingReportListNewFundingReport)) {
-                    Person oldDrisOfFundingReportListNewFundingReport = fundingReportListNewFundingReport.getDris();
-                    fundingReportListNewFundingReport.setDris(person);
-                    fundingReportListNewFundingReport = em.merge(fundingReportListNewFundingReport);
-                    if (oldDrisOfFundingReportListNewFundingReport != null && !oldDrisOfFundingReportListNewFundingReport.equals(person)) {
-                        oldDrisOfFundingReportListNewFundingReport.getFundingReportList().remove(fundingReportListNewFundingReport);
-                        oldDrisOfFundingReportListNewFundingReport = em.merge(oldDrisOfFundingReportListNewFundingReport);
-                    }
-                }
-            }
             for (AmmendRequest ammendRequestListNewAmmendRequest : ammendRequestListNew) {
                 if (!ammendRequestListOld.contains(ammendRequestListNewAmmendRequest)) {
                     Person oldCreatorOfAmmendRequestListNewAmmendRequest = ammendRequestListNewAmmendRequest.getCreator();
@@ -831,6 +870,39 @@ public class PersonJpaController implements Serializable {
                     if (oldCreatorOfAmmendRequestListNewAmmendRequest != null && !oldCreatorOfAmmendRequestListNewAmmendRequest.equals(person)) {
                         oldCreatorOfAmmendRequestListNewAmmendRequest.getAmmendRequestList().remove(ammendRequestListNewAmmendRequest);
                         oldCreatorOfAmmendRequestListNewAmmendRequest = em.merge(oldCreatorOfAmmendRequestListNewAmmendRequest);
+                    }
+                }
+            }
+            for (AuditLog auditLogListNewAuditLog : auditLogListNew) {
+                if (!auditLogListOld.contains(auditLogListNewAuditLog)) {
+                    Person oldPersonOfAuditLogListNewAuditLog = auditLogListNewAuditLog.getPerson();
+                    auditLogListNewAuditLog.setPerson(person);
+                    auditLogListNewAuditLog = em.merge(auditLogListNewAuditLog);
+                    if (oldPersonOfAuditLogListNewAuditLog != null && !oldPersonOfAuditLogListNewAuditLog.equals(person)) {
+                        oldPersonOfAuditLogListNewAuditLog.getAuditLogList().remove(auditLogListNewAuditLog);
+                        oldPersonOfAuditLogListNewAuditLog = em.merge(oldPersonOfAuditLogListNewAuditLog);
+                    }
+                }
+            }
+            for (RecommendationReport recommendationReportListNewRecommendationReport : recommendationReportListNew) {
+                if (!recommendationReportListOld.contains(recommendationReportListNewRecommendationReport)) {
+                    Person oldHodOfRecommendationReportListNewRecommendationReport = recommendationReportListNewRecommendationReport.getHod();
+                    recommendationReportListNewRecommendationReport.setHod(person);
+                    recommendationReportListNewRecommendationReport = em.merge(recommendationReportListNewRecommendationReport);
+                    if (oldHodOfRecommendationReportListNewRecommendationReport != null && !oldHodOfRecommendationReportListNewRecommendationReport.equals(person)) {
+                        oldHodOfRecommendationReportListNewRecommendationReport.getRecommendationReportList().remove(recommendationReportListNewRecommendationReport);
+                        oldHodOfRecommendationReportListNewRecommendationReport = em.merge(oldHodOfRecommendationReportListNewRecommendationReport);
+                    }
+                }
+            }
+            for (FundingReport fundingReportListNewFundingReport : fundingReportListNew) {
+                if (!fundingReportListOld.contains(fundingReportListNewFundingReport)) {
+                    Person oldDrisOfFundingReportListNewFundingReport = fundingReportListNewFundingReport.getDris();
+                    fundingReportListNewFundingReport.setDris(person);
+                    fundingReportListNewFundingReport = em.merge(fundingReportListNewFundingReport);
+                    if (oldDrisOfFundingReportListNewFundingReport != null && !oldDrisOfFundingReportListNewFundingReport.equals(person)) {
+                        oldDrisOfFundingReportListNewFundingReport.getFundingReportList().remove(fundingReportListNewFundingReport);
+                        oldDrisOfFundingReportListNewFundingReport = em.merge(oldDrisOfFundingReportListNewFundingReport);
                     }
                 }
             }
@@ -884,6 +956,17 @@ public class PersonJpaController implements Serializable {
                     }
                 }
             }
+            for (ForwardAndRewindReport forwardAndRewindReportListNewForwardAndRewindReport : forwardAndRewindReportListNew) {
+                if (!forwardAndRewindReportListOld.contains(forwardAndRewindReportListNewForwardAndRewindReport)) {
+                    Person oldDrisOfForwardAndRewindReportListNewForwardAndRewindReport = forwardAndRewindReportListNewForwardAndRewindReport.getDris();
+                    forwardAndRewindReportListNewForwardAndRewindReport.setDris(person);
+                    forwardAndRewindReportListNewForwardAndRewindReport = em.merge(forwardAndRewindReportListNewForwardAndRewindReport);
+                    if (oldDrisOfForwardAndRewindReportListNewForwardAndRewindReport != null && !oldDrisOfForwardAndRewindReportListNewForwardAndRewindReport.equals(person)) {
+                        oldDrisOfForwardAndRewindReportListNewForwardAndRewindReport.getForwardAndRewindReportList().remove(forwardAndRewindReportListNewForwardAndRewindReport);
+                        oldDrisOfForwardAndRewindReportListNewForwardAndRewindReport = em.merge(oldDrisOfForwardAndRewindReportListNewForwardAndRewindReport);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -919,6 +1002,13 @@ public class PersonJpaController implements Serializable {
                 throw new NonexistentEntityException("The person with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            ResearchFellowInformation researchFellowInformationOrphanCheck = person.getResearchFellowInformation();
+            if (researchFellowInformationOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the ResearchFellowInformation " + researchFellowInformationOrphanCheck + " in its researchFellowInformation field has a non-nullable person field.");
+            }
             EmployeeInformation employeeInformationOrphanCheck = person.getEmployeeInformation();
             if (employeeInformationOrphanCheck != null) {
                 if (illegalOrphanMessages == null) {
@@ -947,20 +1037,6 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Endorsement " + endorsementListOrphanCheckEndorsement + " in its endorsementList field has a non-nullable dean field.");
             }
-            List<AuditLog> auditLogListOrphanCheck = person.getAuditLogList();
-            for (AuditLog auditLogListOrphanCheckAuditLog : auditLogListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AuditLog " + auditLogListOrphanCheckAuditLog + " in its auditLogList field has a non-nullable person field.");
-            }
-            List<RecommendationReport> recommendationReportListOrphanCheck = person.getRecommendationReportList();
-            for (RecommendationReport recommendationReportListOrphanCheckRecommendationReport : recommendationReportListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RecommendationReport " + recommendationReportListOrphanCheckRecommendationReport + " in its recommendationReportList field has a non-nullable hod field.");
-            }
             List<RefereeReport> refereeReportListOrphanCheck = person.getRefereeReportList();
             for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -982,19 +1058,33 @@ public class PersonJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Notification " + notificationList1OrphanCheckNotification + " in its notificationList1 field has a non-nullable reciever field.");
             }
-            List<FundingReport> fundingReportListOrphanCheck = person.getFundingReportList();
-            for (FundingReport fundingReportListOrphanCheckFundingReport : fundingReportListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the FundingReport " + fundingReportListOrphanCheckFundingReport + " in its fundingReportList field has a non-nullable dris field.");
-            }
             List<AmmendRequest> ammendRequestListOrphanCheck = person.getAmmendRequestList();
             for (AmmendRequest ammendRequestListOrphanCheckAmmendRequest : ammendRequestListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AmmendRequest " + ammendRequestListOrphanCheckAmmendRequest + " in its ammendRequestList field has a non-nullable creator field.");
+            }
+            List<AuditLog> auditLogListOrphanCheck = person.getAuditLogList();
+            for (AuditLog auditLogListOrphanCheckAuditLog : auditLogListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AuditLog " + auditLogListOrphanCheckAuditLog + " in its auditLogList field has a non-nullable person field.");
+            }
+            List<RecommendationReport> recommendationReportListOrphanCheck = person.getRecommendationReportList();
+            for (RecommendationReport recommendationReportListOrphanCheckRecommendationReport : recommendationReportListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the RecommendationReport " + recommendationReportListOrphanCheckRecommendationReport + " in its recommendationReportList field has a non-nullable hod field.");
+            }
+            List<FundingReport> fundingReportListOrphanCheck = person.getFundingReportList();
+            for (FundingReport fundingReportListOrphanCheckFundingReport : fundingReportListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the FundingReport " + fundingReportListOrphanCheckFundingReport + " in its fundingReportList field has a non-nullable dris field.");
             }
             List<Application> applicationList1OrphanCheck = person.getApplicationList1();
             for (Application applicationList1OrphanCheckApplication : applicationList1OrphanCheck) {
@@ -1016,6 +1106,13 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the EligiblityReport " + eligiblityReportListOrphanCheckEligiblityReport + " in its eligiblityReportList field has a non-nullable eligiblityChecker field.");
+            }
+            List<ForwardAndRewindReport> forwardAndRewindReportListOrphanCheck = person.getForwardAndRewindReportList();
+            for (ForwardAndRewindReport forwardAndRewindReportListOrphanCheckForwardAndRewindReport : forwardAndRewindReportListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the ForwardAndRewindReport " + forwardAndRewindReportListOrphanCheckForwardAndRewindReport + " in its forwardAndRewindReportList field has a non-nullable dris field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -1189,14 +1286,22 @@ public class PersonJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         System.out.println("Out " + input);
-        List<Person> persons = em.createQuery("SELECT p FROM Person p WHERE p.systemID = :in OR p.email = :in", Person.class).setParameter("in", input).getResultList();
+        List<Person> persons = em.createQuery("SELECT p FROM Person p WHERE (p.systemID = :in) OR (p.email = :in)", Person.class).setParameter("in", input).getResultList();
         if(persons.size() > 0)
         {
             return persons.get(0);
         }
         else
         {
-            return null;
+            persons = em.createQuery("SELECT r.person FROM ResearchFellowInformation r WHERE  r.institutionAssignedEmail = :in OR r.institutionAssignedID = :in", Person.class).setParameter("in", input).getResultList();
+            if(persons.size() > 0)
+            {
+                return persons.get(0);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
     
@@ -1205,6 +1310,15 @@ public class PersonJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.accountStatus = :status AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("status", accountStatus).setParameter("secRole", securityRole);
+        
+        return q.getResultList();
+    }
+    
+    public List<Person> findAllUsersWhichHaveAccountStatus(String accountStatus)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.accountStatus = :status", Person.class).setParameter("status", accountStatus);
         
         return q.getResultList();
     }

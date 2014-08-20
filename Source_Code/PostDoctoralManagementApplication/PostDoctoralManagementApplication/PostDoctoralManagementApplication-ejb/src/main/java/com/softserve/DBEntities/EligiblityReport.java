@@ -42,6 +42,8 @@ public class EligiblityReport implements Serializable {
     @NotNull
     @Column(name = "_reportID")
     private Long reportID;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "_eligiblityCheckDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date eligiblityCheckDate;
@@ -57,6 +59,11 @@ public class EligiblityReport implements Serializable {
 
     public EligiblityReport(Long reportID) {
         this.reportID = reportID;
+    }
+
+    public EligiblityReport(Long reportID, Date eligiblityCheckDate) {
+        this.reportID = reportID;
+        this.eligiblityCheckDate = eligiblityCheckDate;
     }
 
     public Long getReportID() {

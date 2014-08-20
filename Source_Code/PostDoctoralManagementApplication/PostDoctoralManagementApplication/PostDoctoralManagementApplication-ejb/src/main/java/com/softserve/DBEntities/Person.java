@@ -118,10 +118,8 @@ public class Person implements Serializable {
     private List<DeclineReport> declineReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dean")
     private List<Endorsement> endorsementList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
-    private List<AuditLog> auditLogList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
-    private List<RecommendationReport> recommendationReportList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
+    private ResearchFellowInformation researchFellowInformation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee")
     private List<RefereeReport> refereeReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
@@ -130,10 +128,14 @@ public class Person implements Serializable {
     private List<Notification> notificationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reciever")
     private List<Notification> notificationList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
-    private List<FundingReport> fundingReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     private List<AmmendRequest> ammendRequestList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+    private List<AuditLog> auditLogList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
+    private List<RecommendationReport> recommendationReportList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
+    private List<FundingReport> fundingReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Cv cv;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
@@ -147,6 +149,8 @@ public class Person implements Serializable {
     private List<MinuteComment> minuteCommentList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eligiblityChecker")
     private List<EligiblityReport> eligiblityReportList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
+    private List<ForwardAndRewindReport> forwardAndRewindReportList;
 
     public Person() {
     }
@@ -311,22 +315,12 @@ public class Person implements Serializable {
         this.endorsementList = endorsementList;
     }
 
-    @XmlTransient
-    public List<AuditLog> getAuditLogList() {
-        return auditLogList;
+    public ResearchFellowInformation getResearchFellowInformation() {
+        return researchFellowInformation;
     }
 
-    public void setAuditLogList(List<AuditLog> auditLogList) {
-        this.auditLogList = auditLogList;
-    }
-
-    @XmlTransient
-    public List<RecommendationReport> getRecommendationReportList() {
-        return recommendationReportList;
-    }
-
-    public void setRecommendationReportList(List<RecommendationReport> recommendationReportList) {
-        this.recommendationReportList = recommendationReportList;
+    public void setResearchFellowInformation(ResearchFellowInformation researchFellowInformation) {
+        this.researchFellowInformation = researchFellowInformation;
     }
 
     @XmlTransient
@@ -365,21 +359,39 @@ public class Person implements Serializable {
     }
 
     @XmlTransient
-    public List<FundingReport> getFundingReportList() {
-        return fundingReportList;
-    }
-
-    public void setFundingReportList(List<FundingReport> fundingReportList) {
-        this.fundingReportList = fundingReportList;
-    }
-
-    @XmlTransient
     public List<AmmendRequest> getAmmendRequestList() {
         return ammendRequestList;
     }
 
     public void setAmmendRequestList(List<AmmendRequest> ammendRequestList) {
         this.ammendRequestList = ammendRequestList;
+    }
+
+    @XmlTransient
+    public List<AuditLog> getAuditLogList() {
+        return auditLogList;
+    }
+
+    public void setAuditLogList(List<AuditLog> auditLogList) {
+        this.auditLogList = auditLogList;
+    }
+
+    @XmlTransient
+    public List<RecommendationReport> getRecommendationReportList() {
+        return recommendationReportList;
+    }
+
+    public void setRecommendationReportList(List<RecommendationReport> recommendationReportList) {
+        this.recommendationReportList = recommendationReportList;
+    }
+
+    @XmlTransient
+    public List<FundingReport> getFundingReportList() {
+        return fundingReportList;
+    }
+
+    public void setFundingReportList(List<FundingReport> fundingReportList) {
+        this.fundingReportList = fundingReportList;
     }
 
     public Cv getCv() {
@@ -432,6 +444,15 @@ public class Person implements Serializable {
 
     public void setEligiblityReportList(List<EligiblityReport> eligiblityReportList) {
         this.eligiblityReportList = eligiblityReportList;
+    }
+
+    @XmlTransient
+    public List<ForwardAndRewindReport> getForwardAndRewindReportList() {
+        return forwardAndRewindReportList;
+    }
+
+    public void setForwardAndRewindReportList(List<ForwardAndRewindReport> forwardAndRewindReportList) {
+        this.forwardAndRewindReportList = forwardAndRewindReportList;
     }
 
     @Override

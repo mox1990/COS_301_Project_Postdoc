@@ -27,7 +27,9 @@ public class generalInformationBean {
     private List<SelectItem> contributionTypeItems;
     private List<SelectItem> degreeTypeItems;
     private List<SelectItem> genderItems;
-    
+    private List<SelectItem> raceItems;
+    private List<SelectItem> appointmentStatusItems;
+    private List<SelectItem> fundingCostTypeItems;
     
     /**
      * Creates a new instance of generalInformationBean
@@ -76,9 +78,17 @@ public class generalInformationBean {
         degreeTypeItems.add(new SelectItem("Honours (Hon)","Honours (Hon)"));
         
         genderItems = new ArrayList<SelectItem>();
-        genderItems.add(new SelectItem("Male","Male"));
-        genderItems.add(new SelectItem("Female","Female"));
-        genderItems.add(new SelectItem("Other","Other"));
+        genderItems.add(new SelectItem("Male",com.softserve.constants.PersistenceConstants.CV_GENDER_MALE));
+        genderItems.add(new SelectItem("Female",com.softserve.constants.PersistenceConstants.CV_GENDER_FEMALE));
+        genderItems.add(new SelectItem("Other",com.softserve.constants.PersistenceConstants.CV_GENDER_OTHER));
+        
+        fundingCostTypeItems = new ArrayList<SelectItem>();
+        fundingCostTypeItems.add(new SelectItem("Fellowship",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_FELLOWSHIP));
+        fundingCostTypeItems.add(new SelectItem("Travel",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_TRAVEL));
+        fundingCostTypeItems.add(new SelectItem("Equipment",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_EQUIPMENT));
+        fundingCostTypeItems.add(new SelectItem("Operating",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_OPERATING));
+        fundingCostTypeItems.add(new SelectItem("Running",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_RUNNING));
+        fundingCostTypeItems.add(new SelectItem("Conference",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE));
     }
 
     public List<String> getTitleSelectItems() {
@@ -100,6 +110,21 @@ public class generalInformationBean {
     public List<SelectItem> getGenderItems() {
         return genderItems;
     }
-    
+
+    public List<SelectItem> getAppointmentStatusItems() {
+        return appointmentStatusItems;
+    }
+
+
+    public List<SelectItem> getFundingCostTypeItems() {
+        return fundingCostTypeItems;
+    }
+
+
+    public List<SelectItem> getRaceItems() {
+        return raceItems;
+    }
+
+
     
 }

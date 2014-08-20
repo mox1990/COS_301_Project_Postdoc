@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
+import com.softserve.DBDAO.FundingCostJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
@@ -16,6 +17,7 @@ import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.EligiblityReport;
+import com.softserve.DBEntities.FundingCost;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
@@ -97,6 +99,11 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     protected FundingReportJpaController getFundingReportDAO()
     {
         return new FundingReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected FundingCostJpaController getFundingCostDAO()
+    {
+        return new FundingCostJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     protected EligiblityReportJpaController getEligiblityReportDAO()
@@ -374,6 +381,12 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
+        FundingCostJpaController fundingCostJpaController = getFundingCostDAO();
+        
+        for(FundingCost fundingCost : fundingReport.getFundingCostList())
+        {
+            fundingCostJpaController.create(fundingCost);
+        }
         
         //Create funding report
         fundingReport.setApplication(application);

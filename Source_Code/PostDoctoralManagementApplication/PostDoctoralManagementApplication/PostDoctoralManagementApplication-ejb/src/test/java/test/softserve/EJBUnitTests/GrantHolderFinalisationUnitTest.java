@@ -159,7 +159,7 @@ public class GrantHolderFinalisationUnitTest {
             instance.loadPendingApplications(mockSession, startIndex, max);
             
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED, startIndex, max);
+            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, startIndex, max);
         }
         catch (Exception ex)
         {
@@ -183,7 +183,7 @@ public class GrantHolderFinalisationUnitTest {
             instance.countTotalPendingApplications(mockSession);
             
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }
         catch (Exception ex)
         {

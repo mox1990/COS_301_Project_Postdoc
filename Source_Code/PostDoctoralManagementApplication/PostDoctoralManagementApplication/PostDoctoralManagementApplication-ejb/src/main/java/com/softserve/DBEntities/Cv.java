@@ -62,7 +62,7 @@ public class Cv implements Serializable {
     private String cvID;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 30)
     @Column(name = "_idNumber")
     private String idNumber;
     @Basic(optional = false)
@@ -73,7 +73,7 @@ public class Cv implements Serializable {
     @Size(max = 6)
     @Column(name = "_gender")
     private String gender;
-    @Size(max = 50)
+    @Size(max = 100)
     @Column(name = "_citizenship")
     private String citizenship;
     @Size(max = 4)
@@ -82,7 +82,7 @@ public class Cv implements Serializable {
     @Size(max = 20)
     @Column(name = "_race")
     private String race;
-    @Size(max = 50)
+    @Size(max = 100)
     @Column(name = "_recentInstitution")
     private String recentInstitution;
     @Lob
@@ -99,11 +99,11 @@ public class Cv implements Serializable {
     private String additionalInformation;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
     private List<Experience> experienceList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
+    private List<AcademicQualification> academicQualificationList;
     @JoinColumn(name = "_cvID", referencedColumnName = "_systemID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Person person;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
-    private List<AcademicQualification> academicQualificationList;
 
     public Cv() {
     }
@@ -278,14 +278,6 @@ public class Cv implements Serializable {
         this.experienceList = experienceList;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
     @XmlTransient
     public List<AcademicQualification> getAcademicQualificationList() {
         return academicQualificationList;
@@ -293,6 +285,14 @@ public class Cv implements Serializable {
 
     public void setAcademicQualificationList(List<AcademicQualification> academicQualificationList) {
         this.academicQualificationList = academicQualificationList;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @Override

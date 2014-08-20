@@ -180,7 +180,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         System.out.println("====Number of reports: " + application.getRefereeReportList().size());
         if(application.getPersonList().size() == application.getRefereeReportList().size())
         {
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         
             try
             {

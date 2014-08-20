@@ -6,7 +6,9 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBEntities.Location;
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
 import java.util.List;
@@ -19,12 +21,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface LocationManagementServiceLocal {
-    public void createLocation(Session session, Location location) throws AuthenticationException, Exception;
-    public void updateLocation(Session session, Location location) throws AuthenticationException, Exception;
-    public List<Location> getAllLocations() throws AuthenticationException, Exception;
-    public Location getLocationIDForLocation(Location location) throws AuthenticationException, Exception;
-    public List<Location> getAllLocationsInFaculty(String faculty) throws AuthenticationException, Exception;
-    public List<String> getAllDepartmentsInFacultyInInstitution(String institution, String faculty) throws AuthenticationException, Exception;
-    public List<String> getAllFacultiesInInstitution(String institution) throws AuthenticationException, Exception;
-    public List<String> getAllInstitutions() throws AuthenticationException, Exception;
+    public void createInstitution(Session session, Institution institution) throws AuthenticationException, Exception;
+    public void createFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception;
+    public void createDepartment(Session session, Department department) throws AuthenticationException, Exception;
+    public void updateInstitution(Session session, Institution institution) throws AuthenticationException, Exception;
+    public void updateFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception;
+    public void updateDepartment(Session session, Department department) throws AuthenticationException, Exception;
+    public List<Institution> getAllInstitutions() throws AuthenticationException, Exception;
 }

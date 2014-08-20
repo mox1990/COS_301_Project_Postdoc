@@ -50,12 +50,13 @@ public class PersistenceConstants {
     public final static String ACCOUNT_STATUS_ACTIVE = "active";
     public final static String ACCOUNT_STATUS_DISABLED = "disabled";
     public final static String ACCOUNT_STATUS_DORMENT = "dorment";
+    public final static String ACCOUNT_STATUS_PENDING = "pending";
     
     //Application status constants
     public final static String APPLICATION_STATUS_OPEN = "open";
     public final static String APPLICATION_STATUS_SUBMITTED = "submitted";
     public final static String APPLICATION_STATUS_DECLINED = "declined";
-    public final static String APPLICATION_STATUS_REFEREED = "refereed";
+    public final static String APPLICATION_STATUS_REFERRED = "referred";
     public final static String APPLICATION_STATUS_FINALISED = "finalised";
     public final static String APPLICATION_STATUS_RECOMMENDED = "recommended";
     public final static String APPLICATION_STATUS_ENDORSED = "endorsed";
@@ -66,11 +67,17 @@ public class PersistenceConstants {
     
     //Application type constants
     public final static String APPLICATION_TYPE_NEW = "new";
-    public final static String APPLICATION_TYPE_RENEWAL = "renewal"; 
+    public final static String APPLICATION_TYPE_RENEWAL = "renewal";
+    
+    //Application funding type constants
+    public final static String APPLICATION_FUNDINGTYPE_UPPHDPOSTDOC = "UP PhD Postdoc";
+    public final static String APPLICATION_FUNDINGTYPE_UPPOSTDOC = "UP Postdoc";
+    public final static String APPLICATION_FUNDINGTYPE_EXTERNALLYFUNDED = "Externally funded";
     
     //CV gender constants
-    public final static String CV_GENDER_MALE = "male";
-    public final static String CV_GENDER_FEMALE = "female";
+    public final static String CV_GENDER_MALE = "Male";
+    public final static String CV_GENDER_FEMALE = "Female";
+    public final static String CV_GENDER_OTHER = "Other";
     
     //Person title constants
     public final static String PERSON_TITLE_MR = "Mr";
@@ -81,8 +88,20 @@ public class PersistenceConstants {
     
     //Notification email status
     public final static String NOTIFICATION_EMAIL_STATUS_SENT = "sent";
-    public final static String NOTIFICATION_EMAIL_STATUS_SENDING = "sending";
+    public final static String NOTIFICATION_EMAIL_STATUS_QUEUED = "queued";
     public final static String NOTIFICATION_EMAIL_STATUS_DISABLED = "disabled";
+    
+    //Funding cost type constants
+    public final static String FUNDINGCOST_TYPE_FELLOWSHIP = "fellowship";
+    public final static String FUNDINGCOST_TYPE_RUNNING = "running";
+    public final static String FUNDINGCOST_TYPE_TRAVEL = "travel";
+    public final static String FUNDINGCOST_TYPE_EQUIPMENT = "equipment";
+    public final static String FUNDINGCOST_TYPE_OPERATING = "operating";
+    public final static String FUNDINGCOST_TYPE_CONFERENCE = "conference";
+    
+    //Forward and rewind report type constants
+    public final static String FORWARDREWINREPORT_TYPE_FORWARD = "forward";
+    public final static String FORWARDREWINREPORT_TYPE_REWIND = "rewind";
     
     public static UserTransaction getUserTransaction()
     {

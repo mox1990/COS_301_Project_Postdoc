@@ -7,10 +7,10 @@
 package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Location;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -83,7 +83,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
         address = new Address();
         employeeInformation = new EmployeeInformation();
         upAddress = new Address();
-        employeeInformation.setLocation(new Location());
+        employeeInformation.setDepartment(new Department());
         
         sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
         sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -178,7 +178,6 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);
-                employeeInformation.setLocation(locationManagementServiceLocal.getLocationIDForLocation(employeeInformation.getLocation()));
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), true, person);               
             }
             else

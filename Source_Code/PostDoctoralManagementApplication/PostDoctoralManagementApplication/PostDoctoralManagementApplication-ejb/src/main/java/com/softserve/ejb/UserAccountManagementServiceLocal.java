@@ -28,7 +28,10 @@ public interface UserAccountManagementServiceLocal {
     public void removeUserAccount(Session session, String systemID) throws RollbackFailureException, Exception;
     public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception;
     public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user) throws Exception;
+    public void approveOnDemandAccount(Session session, Person account) throws Exception;
+    public void declineOnDemandAccount(Session session, Person account) throws Exception;
     public void activateOnDemandAccount(Session session, Person user) throws Exception;
+    public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception;
     public List<SecurityRole> getAllSecurityRoles();
     public Person getUserBySystemIDOrEmail(String intput);
     public Person getUserBySystemID(String systemID);

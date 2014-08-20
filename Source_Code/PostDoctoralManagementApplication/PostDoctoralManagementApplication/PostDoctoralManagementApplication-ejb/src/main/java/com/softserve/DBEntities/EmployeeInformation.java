@@ -58,9 +58,9 @@ public class EmployeeInformation implements Serializable {
     @JoinColumn(name = "_employeeID", referencedColumnName = "_systemID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Person person;
-    @JoinColumn(name = "_location", referencedColumnName = "_locationID")
+    @JoinColumn(name = "_department", referencedColumnName = "_departmentID")
     @ManyToOne
-    private Location location;
+    private Department department;
     @JoinColumn(name = "_physicalAddress", referencedColumnName = "_addressID")
     @ManyToOne
     private Address physicalAddress;
@@ -112,12 +112,12 @@ public class EmployeeInformation implements Serializable {
         this.person = person;
     }
 
-    public Location getLocation() {
-        return location;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public Address getPhysicalAddress() {

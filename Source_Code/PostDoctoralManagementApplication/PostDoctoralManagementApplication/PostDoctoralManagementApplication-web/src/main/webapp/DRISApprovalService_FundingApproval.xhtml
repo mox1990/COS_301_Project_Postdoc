@@ -14,6 +14,13 @@
                 <h2>Fill in the details to complete the funding approval for the application</h2>
             </div>
             <div>
+                <p:panel header="Funding report">
+                    <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
+                        <ui:param name="bean" value="#{drisApproveFundingBean.fundingReportCreationDependBean}"/>
+                        <ui:param name="beanAction" value="addFundingCostToList()"/>
+                    </ui:decorate>
+                </p:panel>
+                
                 <h:form id="formMain">
                     
                     <p:panel header="Application details">
@@ -33,51 +40,7 @@
                             <p:message for="endDate" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
                     </p:panel>
-                    <p:panel header="Funding report">
-                        <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="Fellowship cost (ZAR):" for="fellowshipCost"/>                                
-                            <p:inputText id="fellowshipCost" value="#{drisApproveFundingBean.fundingReport.fellowshipCost}" required="true">
-                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
-                                <f:validateDoubleRange minimum="0.00" />
-                            </p:inputText>
-                            <p:message for="fellowshipCost" styleClass="fieldErrorMessage"/>
-
-                            <p:outputLabel value="Running cost (ZAR):" for="runningCost"/>                                
-                            <p:inputText id="runningCost" value="#{drisApproveFundingBean.fundingReport.runningCost}">
-                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
-                                <f:validateDoubleRange minimum="0.00" />
-                            </p:inputText>
-                            <p:message for="runningCost" styleClass="fieldErrorMessage"/>
-
-                            <p:outputLabel value="Travel cost (ZAR):" for="travelCost"/>                                
-                            <p:inputText id="travelCost" value="#{drisApproveFundingBean.fundingReport.travelCost}">
-                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
-                                <f:validateDoubleRange minimum="0.00" />
-                            </p:inputText>
-                            <p:message for="travelCost" styleClass="fieldErrorMessage"/>
-
-                            <p:outputLabel value="Operating cost (ZAR):" for="operatingCost"/>                                
-                            <p:inputText id="operatingCost" value="#{drisApproveFundingBean.fundingReport.operatingCost}">
-                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
-                                <f:validateDoubleRange minimum="0.00" />
-                            </p:inputText>
-                            <p:message for="operatingCost" styleClass="fieldErrorMessage"/>
-
-                            <p:outputLabel value="Conference cost (ZAR):" for="conferenceCost"/>                                
-                            <p:inputText id="conferenceCost" value="#{drisApproveFundingBean.fundingReport.conferenceCost}">
-                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
-                                <f:validateDoubleRange minimum="0.00" />
-                            </p:inputText>
-                            <p:message for="conferenceCost" styleClass="fieldErrorMessage"/>
-
-                            <p:outputLabel value="Equipment cost (ZAR):" for="equipmentCost"/>                                
-                            <p:inputText id="equipmentCost" value="#{drisApproveFundingBean.fundingReport.equipmentCost}">
-                                <f:convertNumber  maxFractionDigits="2" minFractionDigits="2" />
-                                <f:validateDoubleRange minimum="0.00" />
-                            </p:inputText>
-                            <p:message for="equipmentCost" styleClass="fieldErrorMessage"/>
-                        </h:panelGrid>
-                    </p:panel>
+                    
                     
                     <p:panel header="CSC department Email">
                         <ui:decorate template="templates/CustomEmailNotification_Component.xhtml">

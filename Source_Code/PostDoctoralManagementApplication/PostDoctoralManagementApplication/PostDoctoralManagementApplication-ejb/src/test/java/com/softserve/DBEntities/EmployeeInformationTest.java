@@ -75,9 +75,9 @@ public class EmployeeInformationTest {
     public void testSetAndGetLocation() 
     {
         EmployeeInformation instance = new EmployeeInformation();
-        Location location = new Location(Long.MAX_VALUE);
-        instance.setLocation(location);
-        assertEquals(location, instance.getLocation());
+        Department department = new Department(Long.MAX_VALUE);
+        instance.setDepartment(department);
+        assertEquals(department, instance.getDepartment());
     }
 
     @Test

@@ -16,7 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.Location;
+import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.EmployeeInformation;
 import java.util.ArrayList;
@@ -67,10 +67,10 @@ public class EmployeeInformationJpaController implements Serializable {
                 person = em.getReference(person.getClass(), person.getSystemID());
                 employeeInformation.setPerson(person);
             }
-            Location location = employeeInformation.getLocation();
-            if (location != null) {
-                location = em.getReference(location.getClass(), location.getLocationID());
-                employeeInformation.setLocation(location);
+            Department department = employeeInformation.getDepartment();
+            if (department != null) {
+                department = em.getReference(department.getClass(), department.getDepartmentID());
+                employeeInformation.setDepartment(department);
             }
             Address physicalAddress = employeeInformation.getPhysicalAddress();
             if (physicalAddress != null) {
@@ -82,9 +82,9 @@ public class EmployeeInformationJpaController implements Serializable {
                 person.setEmployeeInformation(employeeInformation);
                 person = em.merge(person);
             }
-            if (location != null) {
-                location.getEmployeeInformationList().add(employeeInformation);
-                location = em.merge(location);
+            if (department != null) {
+                department.getEmployeeInformationList().add(employeeInformation);
+                department = em.merge(department);
             }
             if (physicalAddress != null) {
                 physicalAddress.getEmployeeInformationList().add(employeeInformation);
@@ -116,8 +116,8 @@ public class EmployeeInformationJpaController implements Serializable {
             EmployeeInformation persistentEmployeeInformation = em.find(EmployeeInformation.class, employeeInformation.getEmployeeID());
             Person personOld = persistentEmployeeInformation.getPerson();
             Person personNew = employeeInformation.getPerson();
-            Location locationOld = persistentEmployeeInformation.getLocation();
-            Location locationNew = employeeInformation.getLocation();
+            Department departmentOld = persistentEmployeeInformation.getDepartment();
+            Department departmentNew = employeeInformation.getDepartment();
             Address physicalAddressOld = persistentEmployeeInformation.getPhysicalAddress();
             Address physicalAddressNew = employeeInformation.getPhysicalAddress();
             List<String> illegalOrphanMessages = null;
@@ -137,9 +137,9 @@ public class EmployeeInformationJpaController implements Serializable {
                 personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
                 employeeInformation.setPerson(personNew);
             }
-            if (locationNew != null) {
-                locationNew = em.getReference(locationNew.getClass(), locationNew.getLocationID());
-                employeeInformation.setLocation(locationNew);
+            if (departmentNew != null) {
+                departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
+                employeeInformation.setDepartment(departmentNew);
             }
             if (physicalAddressNew != null) {
                 physicalAddressNew = em.getReference(physicalAddressNew.getClass(), physicalAddressNew.getAddressID());
@@ -154,13 +154,13 @@ public class EmployeeInformationJpaController implements Serializable {
                 personNew.setEmployeeInformation(employeeInformation);
                 personNew = em.merge(personNew);
             }
-            if (locationOld != null && !locationOld.equals(locationNew)) {
-                locationOld.getEmployeeInformationList().remove(employeeInformation);
-                locationOld = em.merge(locationOld);
+            if (departmentOld != null && !departmentOld.equals(departmentNew)) {
+                departmentOld.getEmployeeInformationList().remove(employeeInformation);
+                departmentOld = em.merge(departmentOld);
             }
-            if (locationNew != null && !locationNew.equals(locationOld)) {
-                locationNew.getEmployeeInformationList().add(employeeInformation);
-                locationNew = em.merge(locationNew);
+            if (departmentNew != null && !departmentNew.equals(departmentOld)) {
+                departmentNew.getEmployeeInformationList().add(employeeInformation);
+                departmentNew = em.merge(departmentNew);
             }
             if (physicalAddressOld != null && !physicalAddressOld.equals(physicalAddressNew)) {
                 physicalAddressOld.getEmployeeInformationList().remove(employeeInformation);
@@ -209,10 +209,10 @@ public class EmployeeInformationJpaController implements Serializable {
                 person.setEmployeeInformation(null);
                 person = em.merge(person);
             }
-            Location location = employeeInformation.getLocation();
-            if (location != null) {
-                location.getEmployeeInformationList().remove(employeeInformation);
-                location = em.merge(location);
+            Department department = employeeInformation.getDepartment();
+            if (department != null) {
+                department.getEmployeeInformationList().remove(employeeInformation);
+                department = em.merge(department);
             }
             Address physicalAddress = employeeInformation.getPhysicalAddress();
             if (physicalAddress != null) {

@@ -13,9 +13,10 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.DeclineReport;
+import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Location;
+import com.softserve.DBEntities.Faculty;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
@@ -125,7 +126,7 @@ public class ApplicationServicesUtilUnitTest {
     
     @Test
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndGrantholder() {
-        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED;
+        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED;
         
         try
         {
@@ -145,11 +146,11 @@ public class ApplicationServicesUtilUnitTest {
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndDepartment() {
         String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
         
-        Location mockLocation = mock(Location.class);
-        when(mockLocation.getDepartment()).thenReturn("TEST");
+        Department mockDepartment = mock(Department.class);
+        when(mockDepartment.getName()).thenReturn("TEST");
         
         EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
-        when(mockEmployeeInformation.getLocation()).thenReturn(mockLocation);
+        when(mockEmployeeInformation.getDepartment()).thenReturn(mockDepartment);
         
         Person mockPerson = mock(Person.class);
         when(mockPerson.getEmployeeInformation()).thenReturn(mockEmployeeInformation);
@@ -158,7 +159,7 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
            
-            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndDepartment(applicationStatusGroup, "TEST");
+            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndDepartment(applicationStatusGroup, mockDepartment);
             verifyNoMoreInteractions(mockApplicationJpaController);
         }
         catch (Exception ex)
@@ -172,11 +173,16 @@ public class ApplicationServicesUtilUnitTest {
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndFaculty() {
         String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
         
-        Location mockLocation = mock(Location.class);
-        when(mockLocation.getFaculty()).thenReturn("TEST");
+        Department mockDepartment = mock(Department.class);
+        
+        
+        Faculty mockFaculty = mock(Faculty.class);
+        when(mockFaculty.getName()).thenReturn("TEST");
+        when(mockDepartment.getFaculty()).thenReturn(mockFaculty);
         
         EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
-        when(mockEmployeeInformation.getLocation()).thenReturn(mockLocation);
+        
+        when(mockEmployeeInformation.getDepartment()).thenReturn(mockDepartment);
         
         Person mockPerson = mock(Person.class);
         when(mockPerson.getEmployeeInformation()).thenReturn(mockEmployeeInformation);
@@ -185,7 +191,7 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
            
-            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndFaculty(applicationStatusGroup, "TEST");
+            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndFaculty(applicationStatusGroup, mockFaculty);
             verifyNoMoreInteractions(mockApplicationJpaController);
         }
         catch (Exception ex)

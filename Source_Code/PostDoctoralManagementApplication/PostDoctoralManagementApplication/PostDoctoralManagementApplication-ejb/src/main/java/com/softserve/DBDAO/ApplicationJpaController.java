@@ -9,28 +9,31 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.DeclineReport;
-import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.EligiblityReport;
-import java.util.ArrayList;
-import java.util.List;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.CommitteeMeeting;
+import com.softserve.DBEntities.DeclineReport;
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.EligiblityReport;
+import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.ForwardAndRewindReport;
+import com.softserve.DBEntities.FundingReport;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
+import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.DBEntities.RefereeReport;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -66,6 +69,9 @@ public class ApplicationJpaController implements Serializable {
         }
         if (application.getProgressReportList() == null) {
             application.setProgressReportList(new ArrayList<ProgressReport>());
+        }
+        if (application.getForwardAndRewindReportList() == null) {
+            application.setForwardAndRewindReportList(new ArrayList<ForwardAndRewindReport>());
         }
         EntityManager em = null;
         try {
@@ -136,6 +142,12 @@ public class ApplicationJpaController implements Serializable {
                 attachedProgressReportList.add(progressReportListProgressReportToAttach);
             }
             application.setProgressReportList(attachedProgressReportList);
+            List<ForwardAndRewindReport> attachedForwardAndRewindReportList = new ArrayList<ForwardAndRewindReport>();
+            for (ForwardAndRewindReport forwardAndRewindReportListForwardAndRewindReportToAttach : application.getForwardAndRewindReportList()) {
+                forwardAndRewindReportListForwardAndRewindReportToAttach = em.getReference(forwardAndRewindReportListForwardAndRewindReportToAttach.getClass(), forwardAndRewindReportListForwardAndRewindReportToAttach.getReportID());
+                attachedForwardAndRewindReportList.add(forwardAndRewindReportListForwardAndRewindReportToAttach);
+            }
+            application.setForwardAndRewindReportList(attachedForwardAndRewindReportList);
             em.persist(application);
             if (declineReport != null) {
                 Application oldApplicationOfDeclineReport = declineReport.getApplication();
@@ -225,6 +237,15 @@ public class ApplicationJpaController implements Serializable {
                     oldApplicationOfProgressReportListProgressReport = em.merge(oldApplicationOfProgressReportListProgressReport);
                 }
             }
+            for (ForwardAndRewindReport forwardAndRewindReportListForwardAndRewindReport : application.getForwardAndRewindReportList()) {
+                Application oldApplicationOfForwardAndRewindReportListForwardAndRewindReport = forwardAndRewindReportListForwardAndRewindReport.getApplication();
+                forwardAndRewindReportListForwardAndRewindReport.setApplication(application);
+                forwardAndRewindReportListForwardAndRewindReport = em.merge(forwardAndRewindReportListForwardAndRewindReport);
+                if (oldApplicationOfForwardAndRewindReportListForwardAndRewindReport != null) {
+                    oldApplicationOfForwardAndRewindReportListForwardAndRewindReport.getForwardAndRewindReportList().remove(forwardAndRewindReportListForwardAndRewindReport);
+                    oldApplicationOfForwardAndRewindReportListForwardAndRewindReport = em.merge(oldApplicationOfForwardAndRewindReportListForwardAndRewindReport);
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -270,6 +291,8 @@ public class ApplicationJpaController implements Serializable {
             List<AmmendRequest> ammendRequestListNew = application.getAmmendRequestList();
             List<ProgressReport> progressReportListOld = persistentApplication.getProgressReportList();
             List<ProgressReport> progressReportListNew = application.getProgressReportList();
+            List<ForwardAndRewindReport> forwardAndRewindReportListOld = persistentApplication.getForwardAndRewindReportList();
+            List<ForwardAndRewindReport> forwardAndRewindReportListNew = application.getForwardAndRewindReportList();
             List<String> illegalOrphanMessages = null;
             if (declineReportOld != null && !declineReportOld.equals(declineReportNew)) {
                 if (illegalOrphanMessages == null) {
@@ -323,6 +346,14 @@ public class ApplicationJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain ProgressReport " + progressReportListOldProgressReport + " since its application field is not nullable.");
+                }
+            }
+            for (ForwardAndRewindReport forwardAndRewindReportListOldForwardAndRewindReport : forwardAndRewindReportListOld) {
+                if (!forwardAndRewindReportListNew.contains(forwardAndRewindReportListOldForwardAndRewindReport)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ForwardAndRewindReport " + forwardAndRewindReportListOldForwardAndRewindReport + " since its application field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -391,6 +422,13 @@ public class ApplicationJpaController implements Serializable {
             }
             progressReportListNew = attachedProgressReportListNew;
             application.setProgressReportList(progressReportListNew);
+            List<ForwardAndRewindReport> attachedForwardAndRewindReportListNew = new ArrayList<ForwardAndRewindReport>();
+            for (ForwardAndRewindReport forwardAndRewindReportListNewForwardAndRewindReportToAttach : forwardAndRewindReportListNew) {
+                forwardAndRewindReportListNewForwardAndRewindReportToAttach = em.getReference(forwardAndRewindReportListNewForwardAndRewindReportToAttach.getClass(), forwardAndRewindReportListNewForwardAndRewindReportToAttach.getReportID());
+                attachedForwardAndRewindReportListNew.add(forwardAndRewindReportListNewForwardAndRewindReportToAttach);
+            }
+            forwardAndRewindReportListNew = attachedForwardAndRewindReportListNew;
+            application.setForwardAndRewindReportList(forwardAndRewindReportListNew);
             application = em.merge(application);
             if (declineReportNew != null && !declineReportNew.equals(declineReportOld)) {
                 Application oldApplicationOfDeclineReport = declineReportNew.getApplication();
@@ -510,6 +548,17 @@ public class ApplicationJpaController implements Serializable {
                     }
                 }
             }
+            for (ForwardAndRewindReport forwardAndRewindReportListNewForwardAndRewindReport : forwardAndRewindReportListNew) {
+                if (!forwardAndRewindReportListOld.contains(forwardAndRewindReportListNewForwardAndRewindReport)) {
+                    Application oldApplicationOfForwardAndRewindReportListNewForwardAndRewindReport = forwardAndRewindReportListNewForwardAndRewindReport.getApplication();
+                    forwardAndRewindReportListNewForwardAndRewindReport.setApplication(application);
+                    forwardAndRewindReportListNewForwardAndRewindReport = em.merge(forwardAndRewindReportListNewForwardAndRewindReport);
+                    if (oldApplicationOfForwardAndRewindReportListNewForwardAndRewindReport != null && !oldApplicationOfForwardAndRewindReportListNewForwardAndRewindReport.equals(application)) {
+                        oldApplicationOfForwardAndRewindReportListNewForwardAndRewindReport.getForwardAndRewindReportList().remove(forwardAndRewindReportListNewForwardAndRewindReport);
+                        oldApplicationOfForwardAndRewindReportListNewForwardAndRewindReport = em.merge(oldApplicationOfForwardAndRewindReportListNewForwardAndRewindReport);
+                    }
+                }
+            }
             utx.commit();
         } catch (Exception ex) {
             try {
@@ -600,6 +649,13 @@ public class ApplicationJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the ProgressReport " + progressReportListOrphanCheckProgressReport + " in its progressReportList field has a non-nullable application field.");
+            }
+            List<ForwardAndRewindReport> forwardAndRewindReportListOrphanCheck = application.getForwardAndRewindReportList();
+            for (ForwardAndRewindReport forwardAndRewindReportListOrphanCheckForwardAndRewindReport : forwardAndRewindReportListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the ForwardAndRewindReport " + forwardAndRewindReportListOrphanCheckForwardAndRewindReport + " in its forwardAndRewindReportList field has a non-nullable application field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -715,19 +771,19 @@ public class ApplicationJpaController implements Serializable {
         return q.getResultList();
     }
     
-    public List<Application> findAllApplicationsWithStatusAndDepartment(String applicationStatus, String deparment, int startRecord, int maxRecords)
+    public List<Application> findAllApplicationsWithStatusAndDepartment(String applicationStatus, Department deparment, int startRecord, int maxRecords)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.department = :dep", Application.class).setParameter("status", applicationStatus).setParameter("dep", deparment).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department = :dep", Application.class).setParameter("status", applicationStatus).setParameter("dep", deparment).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
-    public List<Application> findAllApplicationsWithStatusAndFaculty(String applicationStatus, String faculty, int startRecord, int maxRecords)
+    public List<Application> findAllApplicationsWithStatusAndFaculty(String applicationStatus, Faculty faculty, int startRecord, int maxRecords)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.faculty = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department.faculty = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
     
@@ -736,7 +792,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.department = :loc AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getDepartment()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department = :loc AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         return q.getResultList();
     }
     
@@ -744,7 +800,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.location.faculty = :loc AND :secRole MEMBER OF p.securityRoleList ", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getLocation().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department.faculty = :loc AND :secRole MEMBER OF p.securityRoleList ", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         return q.getResultList();
     }
     
@@ -796,19 +852,19 @@ public class ApplicationJpaController implements Serializable {
         return q.getSingleResult();
     }
     
-    public long countAllApplicationsWithStatusAndDepartment(String applicationStatus, String deparment)
+    public long countAllApplicationsWithStatusAndDepartment(String applicationStatus, Department deparment)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.department = :dep", Long.class).setParameter("status", applicationStatus).setParameter("dep", deparment);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department = :dep", Long.class).setParameter("status", applicationStatus).setParameter("dep", deparment);
         return q.getSingleResult();
     }
     
-    public long countAllApplicationsWithStatusAndFaculty(String applicationStatus, String faculty)
+    public long countAllApplicationsWithStatusAndFaculty(String applicationStatus, Faculty faculty)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.location.faculty = :fac", Long.class).setParameter("status", applicationStatus).setParameter("fac", faculty);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(a) FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department.faculty = :fac", Long.class).setParameter("status", applicationStatus).setParameter("fac", faculty);
         return q.getSingleResult();
     }
     

@@ -16,8 +16,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.FundingCost;
+import com.softserve.DBEntities.FundingReport;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -43,6 +44,9 @@ public class FundingReportJpaController implements Serializable {
     }
 
     public void create(FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+        if (fundingReport.getFundingCostList() == null) {
+            fundingReport.setFundingCostList(new ArrayList<FundingCost>());
+        }
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = fundingReport.getApplication();
         if (applicationOrphanCheck != null) {
@@ -71,6 +75,12 @@ public class FundingReportJpaController implements Serializable {
                 dris = em.getReference(dris.getClass(), dris.getSystemID());
                 fundingReport.setDris(dris);
             }
+            List<FundingCost> attachedFundingCostList = new ArrayList<FundingCost>();
+            for (FundingCost fundingCostListFundingCostToAttach : fundingReport.getFundingCostList()) {
+                fundingCostListFundingCostToAttach = em.getReference(fundingCostListFundingCostToAttach.getClass(), fundingCostListFundingCostToAttach.getCostID());
+                attachedFundingCostList.add(fundingCostListFundingCostToAttach);
+            }
+            fundingReport.setFundingCostList(attachedFundingCostList);
             em.persist(fundingReport);
             if (application != null) {
                 application.setFundingReport(fundingReport);
@@ -79,6 +89,15 @@ public class FundingReportJpaController implements Serializable {
             if (dris != null) {
                 dris.getFundingReportList().add(fundingReport);
                 dris = em.merge(dris);
+            }
+            for (FundingCost fundingCostListFundingCost : fundingReport.getFundingCostList()) {
+                FundingReport oldFundingReportOfFundingCostListFundingCost = fundingCostListFundingCost.getFundingReport();
+                fundingCostListFundingCost.setFundingReport(fundingReport);
+                fundingCostListFundingCost = em.merge(fundingCostListFundingCost);
+                if (oldFundingReportOfFundingCostListFundingCost != null) {
+                    oldFundingReportOfFundingCostListFundingCost.getFundingCostList().remove(fundingCostListFundingCost);
+                    oldFundingReportOfFundingCostListFundingCost = em.merge(oldFundingReportOfFundingCostListFundingCost);
+                }
             }
             utx.commit();
         } catch (Exception ex) {
@@ -108,6 +127,8 @@ public class FundingReportJpaController implements Serializable {
             Application applicationNew = fundingReport.getApplication();
             Person drisOld = persistentFundingReport.getDris();
             Person drisNew = fundingReport.getDris();
+            List<FundingCost> fundingCostListOld = persistentFundingReport.getFundingCostList();
+            List<FundingCost> fundingCostListNew = fundingReport.getFundingCostList();
             List<String> illegalOrphanMessages = null;
             if (applicationNew != null && !applicationNew.equals(applicationOld)) {
                 FundingReport oldFundingReportOfApplication = applicationNew.getFundingReport();
@@ -116,6 +137,14 @@ public class FundingReportJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type FundingReport whose application column cannot be null. Please make another selection for the application field.");
+                }
+            }
+            for (FundingCost fundingCostListOldFundingCost : fundingCostListOld) {
+                if (!fundingCostListNew.contains(fundingCostListOldFundingCost)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain FundingCost " + fundingCostListOldFundingCost + " since its fundingReport field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -129,6 +158,13 @@ public class FundingReportJpaController implements Serializable {
                 drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
                 fundingReport.setDris(drisNew);
             }
+            List<FundingCost> attachedFundingCostListNew = new ArrayList<FundingCost>();
+            for (FundingCost fundingCostListNewFundingCostToAttach : fundingCostListNew) {
+                fundingCostListNewFundingCostToAttach = em.getReference(fundingCostListNewFundingCostToAttach.getClass(), fundingCostListNewFundingCostToAttach.getCostID());
+                attachedFundingCostListNew.add(fundingCostListNewFundingCostToAttach);
+            }
+            fundingCostListNew = attachedFundingCostListNew;
+            fundingReport.setFundingCostList(fundingCostListNew);
             fundingReport = em.merge(fundingReport);
             if (applicationOld != null && !applicationOld.equals(applicationNew)) {
                 applicationOld.setFundingReport(null);
@@ -145,6 +181,17 @@ public class FundingReportJpaController implements Serializable {
             if (drisNew != null && !drisNew.equals(drisOld)) {
                 drisNew.getFundingReportList().add(fundingReport);
                 drisNew = em.merge(drisNew);
+            }
+            for (FundingCost fundingCostListNewFundingCost : fundingCostListNew) {
+                if (!fundingCostListOld.contains(fundingCostListNewFundingCost)) {
+                    FundingReport oldFundingReportOfFundingCostListNewFundingCost = fundingCostListNewFundingCost.getFundingReport();
+                    fundingCostListNewFundingCost.setFundingReport(fundingReport);
+                    fundingCostListNewFundingCost = em.merge(fundingCostListNewFundingCost);
+                    if (oldFundingReportOfFundingCostListNewFundingCost != null && !oldFundingReportOfFundingCostListNewFundingCost.equals(fundingReport)) {
+                        oldFundingReportOfFundingCostListNewFundingCost.getFundingCostList().remove(fundingCostListNewFundingCost);
+                        oldFundingReportOfFundingCostListNewFundingCost = em.merge(oldFundingReportOfFundingCostListNewFundingCost);
+                    }
+                }
             }
             utx.commit();
         } catch (Exception ex) {
@@ -168,7 +215,7 @@ public class FundingReportJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -179,6 +226,17 @@ public class FundingReportJpaController implements Serializable {
                 fundingReport.getReportID();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The fundingReport with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<FundingCost> fundingCostListOrphanCheck = fundingReport.getFundingCostList();
+            for (FundingCost fundingCostListOrphanCheckFundingCost : fundingCostListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This FundingReport (" + fundingReport + ") cannot be destroyed since the FundingCost " + fundingCostListOrphanCheckFundingCost + " in its fundingCostList field has a non-nullable fundingReport field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Application application = fundingReport.getApplication();
             if (application != null) {

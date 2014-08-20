@@ -187,7 +187,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED, StartIndex, maxNumberOfRecords);
+        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, StartIndex, maxNumberOfRecords);
     }
     
     @Override
@@ -200,7 +200,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
     }
     
     /**

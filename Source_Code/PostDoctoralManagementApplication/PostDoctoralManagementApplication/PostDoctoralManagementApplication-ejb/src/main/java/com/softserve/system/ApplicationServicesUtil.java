@@ -13,6 +13,8 @@ import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.DeclineReport;
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.Faculty;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.Exceptions.AuthenticationException;
@@ -124,7 +126,7 @@ public class ApplicationServicesUtil {
             
             output = temp;
         }
-        else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
+        else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             output = applicationJpaController.findAllApplicationsWithStatusAndGrantHolder(applicationStatusGroup,user,StartIndex,maxNumberOfRecords);
             /*for(int i = 0; i < output.size(); i++)
@@ -138,7 +140,7 @@ public class ApplicationServicesUtil {
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
-            String userDepartment = user.getEmployeeInformation().getLocation().getDepartment();
+            Department userDepartment = user.getEmployeeInformation().getDepartment();
             
             output = applicationJpaController.findAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment,StartIndex,maxNumberOfRecords);
             
@@ -153,7 +155,7 @@ public class ApplicationServicesUtil {
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
-            String userFaculty = user.getEmployeeInformation().getLocation().getFaculty();
+            Faculty userFaculty = user.getEmployeeInformation().getDepartment().getFaculty();
             output = applicationJpaController.findAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty,StartIndex,maxNumberOfRecords);
             /*for(int i = 0; i < output.size(); i++)
             {
@@ -184,18 +186,18 @@ public class ApplicationServicesUtil {
             output = applicationJpaController.countAllApplicationsWithStatusAndReferee(applicationStatusGroup,user);
 
         }
-        else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
+        else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             output = applicationJpaController.countAllApplicationsWithStatusAndGrantHolder(applicationStatusGroup,user);
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
-            String userDepartment = user.getEmployeeInformation().getLocation().getDepartment();            
+            Department userDepartment = user.getEmployeeInformation().getDepartment();            
             output = applicationJpaController.countAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment);
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
-            String userFaculty = user.getEmployeeInformation().getLocation().getFaculty();
+            Faculty userFaculty = user.getEmployeeInformation().getDepartment().getFaculty();
             output = applicationJpaController.countAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty);
         }
         else

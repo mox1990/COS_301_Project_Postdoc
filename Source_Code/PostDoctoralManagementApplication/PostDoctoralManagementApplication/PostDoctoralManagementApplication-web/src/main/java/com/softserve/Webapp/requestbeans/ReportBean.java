@@ -41,7 +41,7 @@ public class ReportBean {
         com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN,
         com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED,
         com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED,
         com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED,
         com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED,
         com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,
@@ -55,7 +55,7 @@ public class ReportBean {
     private final String openStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN;
     private final String submittedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
     private final String declinedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED;
-    private final String refereedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED;
+    private final String refereedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED;
     private final String finalisedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
     private final String recommendedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
     private final String endorsedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED;

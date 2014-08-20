@@ -78,7 +78,7 @@ public class RefereesReportUnitTest {
         {
             instance.loadPendingApplications(mockSession, start, max);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED, start, max);
+            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, start, max);
         }
         catch(Exception ex)
         {
@@ -112,7 +112,7 @@ public class RefereesReportUnitTest {
         {
             instance.countTotalPendingApplications(mockSession);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }
         catch(Exception ex)
         {

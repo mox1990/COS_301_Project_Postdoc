@@ -48,52 +48,16 @@ public class FundingReportTest {
     }
 
     @Test
-    public void testSetAndGetFellowshipCost() 
+    public void testSetAndGetFundingCostList() 
     {
-        FundingReport instance = new FundingReport();
-        instance.setFellowshipCost(1000f);
-        assertEquals(new Float(1000f),instance.getFellowshipCost());
+        FundingReport instance = new FundingReport();        
+        instance.setFundingCostList(new ArrayList<FundingCost>());
+        FundingCost c = new FundingCost(new Long(1));
+        instance.getFundingCostList().add(c);
+        assertEquals(c, instance.getFundingCostList().get(0));
+        assertTrue((instance.getFundingCostList().size() == 1));
     }
 
-    @Test
-    public void testSetAndGetTravelCost() 
-    {
-        FundingReport instance = new FundingReport();
-        instance.setTravelCost(1000f);
-        assertEquals(new Float(1000f),instance.getTravelCost());
-    }
-
-    @Test
-    public void testSetAndGetRunningCost() 
-    {
-        FundingReport instance = new FundingReport();
-        instance.setRunningCost(1000f);
-        assertEquals(new Float(1000f),instance.getRunningCost());
-    }
-
-    @Test
-    public void testSetAndGetOperatingCost() 
-    {
-        FundingReport instance = new FundingReport();
-        instance.setOperatingCost(1000f);
-        assertEquals(new Float(1000f),instance.getOperatingCost());
-    }
-
-    @Test
-    public void testSetAndGetEquipmentCost() 
-    {
-        FundingReport instance = new FundingReport();
-        instance.setEquipmentCost(1000f);
-        assertEquals(new Float(1000f),instance.getEquipmentCost());
-    }
-
-    @Test
-    public void testSetAndGetConferenceCost() 
-    {
-        FundingReport instance = new FundingReport();
-        instance.setConferenceCost(1000f);
-        assertEquals(new Float(1000f),instance.getConferenceCost());
-    }
 
     @Test
     public void testSetAndGetDris() 

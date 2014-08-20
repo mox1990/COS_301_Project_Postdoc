@@ -49,6 +49,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByApplicationID", query = "SELECT a FROM Application a WHERE a.applicationID = :applicationID"),
     @NamedQuery(name = "Application.findByType", query = "SELECT a FROM Application a WHERE a.type = :type"),
     @NamedQuery(name = "Application.findByStatus", query = "SELECT a FROM Application a WHERE a.status = :status"),
+    @NamedQuery(name = "Application.findByFundingType", query = "SELECT a FROM Application a WHERE a.fundingType = :fundingType"),
     @NamedQuery(name = "Application.findByTimestamp", query = "SELECT a FROM Application a WHERE a.timestamp = :timestamp"),
     @NamedQuery(name = "Application.findBySubmissionDate", query = "SELECT a FROM Application a WHERE a.submissionDate = :submissionDate"),
     @NamedQuery(name = "Application.findByFinalisationDate", query = "SELECT a FROM Application a WHERE a.finalisationDate = :finalisationDate"),
@@ -68,6 +69,9 @@ public class Application implements Serializable {
     @Size(max = 11)
     @Column(name = "_status")
     private String status;
+    @Size(max = 17)
+    @Column(name = "_fundingType")
+    private String fundingType;
     @Basic(optional = false)
     @NotNull
     @Column(name = "_timestamp")
@@ -100,14 +104,14 @@ public class Application implements Serializable {
     private DeclineReport declineReport;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
     private Endorsement endorsement;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
-    private RecommendationReport recommendationReport;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
     private List<RefereeReport> refereeReportList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
-    private FundingReport fundingReport;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
     private List<AmmendRequest> ammendRequestList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private RecommendationReport recommendationReport;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
+    private FundingReport fundingReport;
     @JoinColumn(name = "_fellow", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
     private Person fellow;
@@ -118,6 +122,8 @@ public class Application implements Serializable {
     private List<ProgressReport> progressReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
     private EligiblityReport eligiblityReport;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
+    private List<ForwardAndRewindReport> forwardAndRewindReportList;
 
     public Application() {
     }
@@ -153,6 +159,14 @@ public class Application implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getFundingType() {
+        return fundingType;
+    }
+
+    public void setFundingType(String fundingType) {
+        this.fundingType = fundingType;
     }
 
     public Date getTimestamp() {
@@ -265,14 +279,6 @@ public class Application implements Serializable {
         this.endorsement = endorsement;
     }
 
-    public RecommendationReport getRecommendationReport() {
-        return recommendationReport;
-    }
-
-    public void setRecommendationReport(RecommendationReport recommendationReport) {
-        this.recommendationReport = recommendationReport;
-    }
-
     @XmlTransient
     public List<RefereeReport> getRefereeReportList() {
         return refereeReportList;
@@ -282,14 +288,6 @@ public class Application implements Serializable {
         this.refereeReportList = refereeReportList;
     }
 
-    public FundingReport getFundingReport() {
-        return fundingReport;
-    }
-
-    public void setFundingReport(FundingReport fundingReport) {
-        this.fundingReport = fundingReport;
-    }
-
     @XmlTransient
     public List<AmmendRequest> getAmmendRequestList() {
         return ammendRequestList;
@@ -297,6 +295,22 @@ public class Application implements Serializable {
 
     public void setAmmendRequestList(List<AmmendRequest> ammendRequestList) {
         this.ammendRequestList = ammendRequestList;
+    }
+
+    public RecommendationReport getRecommendationReport() {
+        return recommendationReport;
+    }
+
+    public void setRecommendationReport(RecommendationReport recommendationReport) {
+        this.recommendationReport = recommendationReport;
+    }
+
+    public FundingReport getFundingReport() {
+        return fundingReport;
+    }
+
+    public void setFundingReport(FundingReport fundingReport) {
+        this.fundingReport = fundingReport;
     }
 
     public Person getFellow() {
@@ -330,6 +344,15 @@ public class Application implements Serializable {
 
     public void setEligiblityReport(EligiblityReport eligiblityReport) {
         this.eligiblityReport = eligiblityReport;
+    }
+
+    @XmlTransient
+    public List<ForwardAndRewindReport> getForwardAndRewindReportList() {
+        return forwardAndRewindReportList;
+    }
+
+    public void setForwardAndRewindReportList(List<ForwardAndRewindReport> forwardAndRewindReportList) {
+        this.forwardAndRewindReportList = forwardAndRewindReportList;
     }
 
     @Override

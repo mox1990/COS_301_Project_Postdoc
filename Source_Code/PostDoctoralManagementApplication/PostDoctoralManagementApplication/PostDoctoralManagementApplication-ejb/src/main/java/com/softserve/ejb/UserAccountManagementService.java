@@ -15,6 +15,7 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.ResearchFellowInformation;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
@@ -133,6 +134,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
     protected EmployeeInformationJpaController getEmployeeInfoDAO()
     {
         return new EmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected ResearchFellowInformationJpaController getResearchFellowInformationDAO()
+    {
+        return new ResearchFellowInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     protected SecurityRoleJpaController getSecurityRoleDAO()
@@ -254,6 +260,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         Address userAddress = user.getAddressLine1(); 
         EmployeeInformation userEmployeeInfo = user.getEmployeeInformation();
         Address upAddress = (userEmployeeInfo != null)?userEmployeeInfo.getPhysicalAddress():null;
+        ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
         
         //Check if automatic systemID generation is required
         if(!useManualSystemIDSpecification)
@@ -288,6 +295,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         //Link to unpersisted person
         user.setAddressLine1(userAddress);       
         user.setEmployeeInformation(null);
+        user.setResearchFellowInformation(null);
         //******Possible concurrency issue if multiple automaic System IDs are generated******
         personJpaController.create(user);        
         
@@ -298,6 +306,14 @@ public class UserAccountManagementService implements UserAccountManagementServic
             userEmployeeInfo.setPerson(user);
             userEmployeeInfo.setEmployeeID(user.getSystemID());
             employeeInformationJpaController.create(userEmployeeInfo);
+        }
+        
+        
+        if(researchFellowInformation != null)
+        {
+            researchFellowInformation.setPerson(user);
+            researchFellowInformation.setSystemAssignedID(user.getSystemID());
+            getResearchFellowInformationDAO().create(researchFellowInformation);
         }
         
         //Log action
@@ -341,6 +357,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
+        ResearchFellowInformationJpaController researchFellowInformationJpaController = getResearchFellowInformationDAO();
         EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
@@ -348,6 +365,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         Address userAddress = user.getAddressLine1(); 
         EmployeeInformation userUPInfo = user.getEmployeeInformation();
         Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
+        ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
         
         if(!getUserBySystemIDOrEmail(user.getEmail()).equals(user))
         {
@@ -392,6 +410,32 @@ public class UserAccountManagementService implements UserAccountManagementServic
                 addressJpaController.destroy(id);
             }
         }
+        
+        if(researchFellowInformation != null)
+        {   
+            
+            if(researchFellowInformationJpaController.findResearchFellowInformation(researchFellowInformation.getSystemAssignedID()) != null)
+            {
+                researchFellowInformationJpaController.edit(researchFellowInformation);
+            }
+            else
+            {
+                researchFellowInformation.setPerson(user);
+                researchFellowInformation.setSystemAssignedID(user.getSystemID());
+                researchFellowInformationJpaController.create(researchFellowInformation);
+                user.setResearchFellowInformation(researchFellowInformation);
+            }
+        }
+        else
+        {
+            if(researchFellowInformationJpaController.findResearchFellowInformation(user.getSystemID()) != null)
+            {
+                user.setResearchFellowInformation(null);
+                researchFellowInformation = researchFellowInformationJpaController.findResearchFellowInformation(user.getSystemID());
+                researchFellowInformationJpaController.destroy(researchFellowInformation.getSystemAssignedID());
+            }
+        }
+        
         
         personJpaController.edit(user);
         
@@ -547,6 +591,64 @@ public class UserAccountManagementService implements UserAccountManagementServic
         {
             return new ArrayList<SecurityRole>();
         }
+    }
+
+    @Override
+    public void approveOnDemandAccount(Session session, Person account) throws Exception 
+    {
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        userGateway.authenticateUser(session, roles);
+        
+        PersonJpaController personJpaController = getPersonDAO();
+        
+        account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        
+        personJpaController.edit(account);
+    }
+
+    @Override
+    public void declineOnDemandAccount(Session session, Person account) throws Exception 
+    {
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        userGateway.authenticateUser(session, roles);
+        
+        PersonJpaController personJpaController = getPersonDAO();
+        
+        account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        
+        if(account.getEmployeeInformation()!= null)
+        {
+            Address address = account.getEmployeeInformation().getPhysicalAddress();
+            
+            getEmployeeInfoDAO().destroy(account.getEmployeeInformation().getEmployeeID());
+            
+            if(address != null)
+            {
+                getAddressDAO().destroy(account.getEmployeeInformation().getPhysicalAddress().getAddressID());
+            }
+        }
+        
+        if(account.getAddressLine1() != null)
+        {
+            getAddressDAO().destroy(account.getAddressLine1().getAddressID());
+        }
+        
+        personJpaController.destroy(account.getSystemID());
+    }
+
+    @Override
+    public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception 
+    {
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        userGateway.authenticateUser(session, roles);
+        
+        return getPersonDAO().findAllUsersWhichHaveAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
     }
     
     

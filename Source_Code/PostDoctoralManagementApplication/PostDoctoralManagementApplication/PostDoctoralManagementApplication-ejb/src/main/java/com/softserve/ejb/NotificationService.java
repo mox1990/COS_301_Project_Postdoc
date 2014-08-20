@@ -142,7 +142,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                 }
                 catch(MessagingException ex)
                 {
-                    notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_SENDING);
+                    notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_QUEUED);
                 }
             }
             else

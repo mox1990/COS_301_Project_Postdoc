@@ -25,7 +25,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -40,6 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "CommitteeMeeting.findAll", query = "SELECT c FROM CommitteeMeeting c"),
     @NamedQuery(name = "CommitteeMeeting.findByMeetingID", query = "SELECT c FROM CommitteeMeeting c WHERE c.meetingID = :meetingID"),
+    @NamedQuery(name = "CommitteeMeeting.findByName", query = "SELECT c FROM CommitteeMeeting c WHERE c.name = :name"),
+    @NamedQuery(name = "CommitteeMeeting.findByVenue", query = "SELECT c FROM CommitteeMeeting c WHERE c.venue = :venue"),
     @NamedQuery(name = "CommitteeMeeting.findByStartDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.startDate = :startDate"),
     @NamedQuery(name = "CommitteeMeeting.findByEndDate", query = "SELECT c FROM CommitteeMeeting c WHERE c.endDate = :endDate")})
 public class CommitteeMeeting implements Serializable {
@@ -49,12 +51,15 @@ public class CommitteeMeeting implements Serializable {
     @Basic(optional = false)
     @Column(name = "_meetingID")
     private Long meetingID;
-    @Basic(optional = false)
-    @NotNull
+    @Size(max = 100)
+    @Column(name = "_name")
+    private String name;
+    @Size(max = 100)
+    @Column(name = "_venue")
+    private String venue;
     @Column(name = "_startDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
-    @Basic(optional = true)
     @Column(name = "_endDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
@@ -78,18 +83,28 @@ public class CommitteeMeeting implements Serializable {
         this.meetingID = meetingID;
     }
 
-    public CommitteeMeeting(Long meetingID, Date startDate, Date endDate) {
-        this.meetingID = meetingID;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
     public Long getMeetingID() {
         return meetingID;
     }
 
     public void setMeetingID(Long meetingID) {
         this.meetingID = meetingID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 
     public Date getStartDate() {

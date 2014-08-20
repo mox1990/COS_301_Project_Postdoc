@@ -44,6 +44,8 @@ public class DeclineReport implements Serializable {
     @NotNull
     @Column(name = "_reportID")
     private Long reportID;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "_timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
@@ -63,6 +65,11 @@ public class DeclineReport implements Serializable {
 
     public DeclineReport(Long reportID) {
         this.reportID = reportID;
+    }
+
+    public DeclineReport(Long reportID, Date timestamp) {
+        this.reportID = reportID;
+        this.timestamp = timestamp;
     }
 
     public Long getReportID() {

@@ -133,7 +133,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);
-                employeeInformation.setLocation(locationManagementServiceLocal.getLocationIDForLocation(employeeInformation.getLocation()));
+
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);               
             }
             else

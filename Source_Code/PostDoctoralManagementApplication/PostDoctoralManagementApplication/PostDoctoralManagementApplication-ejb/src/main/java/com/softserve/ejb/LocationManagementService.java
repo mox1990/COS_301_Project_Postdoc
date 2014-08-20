@@ -6,8 +6,12 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.LocationJpaController;
-import com.softserve.DBEntities.Location;
+import com.softserve.DBDAO.DepartmentJpaController;
+import com.softserve.DBDAO.FacultyJpaController;
+import com.softserve.DBDAO.InstitutionJpaController;
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
@@ -48,9 +52,19 @@ public class LocationManagementService implements LocationManagementServiceLocal
         this.emf = emf;
     }
             
-    protected LocationJpaController getLocationDAO()
+    protected InstitutionJpaController getInstitutionDAO()
     {
-        return new LocationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new InstitutionJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected FacultyJpaController getFacultyDAO()
+    {
+        return new FacultyJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected DepartmentJpaController getDepartmentDAO()
+    {
+        return new DepartmentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -60,74 +74,82 @@ public class LocationManagementService implements LocationManagementServiceLocal
     
     
     @Override
-    public void createLocation(Session session, Location location) throws AuthenticationException, Exception
+    public void createInstitution(Session session, Institution institution) throws AuthenticationException, Exception
     {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        LocationJpaController locationJpaController = getLocationDAO();
+        InstitutionJpaController institutionJpaController = getInstitutionDAO();
         
-        locationJpaController.create(location);
+        institutionJpaController.create(institution);
     }
     
     @Override
-    public void updateLocation(Session session, Location location) throws AuthenticationException, Exception
+    public void createFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception
     {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        LocationJpaController locationJpaController = getLocationDAO();
+        FacultyJpaController facultyJpaController = getFacultyDAO();
         
-        locationJpaController.edit(location);
+        facultyJpaController.create(faculty);
     }
     
     @Override
-    public List<Location> getAllLocations() throws AuthenticationException, Exception
+    public void createDepartment(Session session, Department department) throws AuthenticationException, Exception
     {
-        LocationJpaController locationJpaController = getLocationDAO();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        return locationJpaController.findLocationEntities();
+        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        
+        departmentJpaController.create(department);
     }
     
     @Override
-    public Location getLocationIDForLocation(Location location) throws AuthenticationException, Exception
+    public void updateInstitution(Session session, Institution institution) throws AuthenticationException, Exception
     {
-        LocationJpaController locationJpaController = getLocationDAO();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        return locationJpaController.getLocationFromComponents(location.getInstitution(), location.getFaculty(), location.getDepartment());
+        InstitutionJpaController institutionJpaController = getInstitutionDAO();
+        
+        institutionJpaController.edit(institution);
     }
     
     @Override
-    public List<Location> getAllLocationsInFaculty(String faculty) throws AuthenticationException, Exception
+    public void updateFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception
     {
-        LocationJpaController locationJpaController = getLocationDAO();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        return locationJpaController.findLocationEntities();
+        FacultyJpaController facultyJpaController = getFacultyDAO();
+        
+        facultyJpaController.edit(faculty);
     }
     
     @Override
-    public List<String> getAllDepartmentsInFacultyInInstitution(String institution, String faculty) throws AuthenticationException, Exception
+    public void updateDepartment(Session session, Department department) throws AuthenticationException, Exception
     {
-        LocationJpaController locationJpaController = getLocationDAO();
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        return locationJpaController.getAllDepartmentsInFacultyInInstitution(institution, faculty);
+        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        
+        departmentJpaController.edit(department);
     }
-    
-    @Override
-    public List<String> getAllFacultiesInInstitution(String institution) throws AuthenticationException, Exception
-    {
-        LocationJpaController locationJpaController = getLocationDAO();
         
-        return locationJpaController.getAllFacultiesInInstitution(institution);
-    }
-    
     @Override
-    public List<String> getAllInstitutions() throws AuthenticationException, Exception
+    public List<Institution> getAllInstitutions() throws AuthenticationException, Exception
     {
-        LocationJpaController locationJpaController = getLocationDAO();
+        InstitutionJpaController institutionJpaController = getInstitutionDAO();
         
-        return locationJpaController.getAllInstitutions();
+        return institutionJpaController.findInstitutionEntities();
     }
 }

@@ -74,7 +74,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         {
             return 1;
         }
-        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             return 2;
         }
@@ -165,11 +165,11 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
             }
         }
         
-        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED))
+        if(hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             if(application.getRefereeReportList().size() == application.getPersonList().size())
             {
-                stageStatuses.get(stageStatuses.size() - 1).setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);
+                stageStatuses.get(stageStatuses.size() - 1).setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
             }
         }
         
