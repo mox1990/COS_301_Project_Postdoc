@@ -23,7 +23,7 @@
                     <h:panelGrid id="report_attributes">
                         <!-- Application values... -->
                         <p:selectManyButton id="applicationTypes" value="#{reportBean.applicationTypes}" rendered="#{reportBean.applicationReport()}">
-                            <f:selectItem itemLabel="#{reportBean.openStatus}" itemValue="#{reportBean.openStatus}"/>
+                            <!--<f:selectItem itemLabel="#{reportBean.openStatus}" itemValue="#{reportBean.openStatus}"/>
                             <f:selectItem itemLabel="#{reportBean.submittedStatus}" itemValue="#{reportBean.submittedStatus}" />
                             <f:selectItem itemLabel="#{reportBean.declinedStatus}" itemValue="#{reportBean.declinedStatus}"/>
                             <f:selectItem itemLabel="#{reportBean.refereedStatus}" itemValue="#{reportBean.refereedStatus}" />
@@ -33,9 +33,21 @@
                             <f:selectItem itemLabel="#{reportBean.eligibleStatus}" itemValue="#{reportBean.eligibleStatus}" />
                             <f:selectItem itemLabel="#{reportBean.fundedStatus}" itemValue="#{reportBean.fundedStatus}" />
                             <f:selectItem itemLabel="#{reportBean.completedStatus}" itemValue="#{reportBean.completedStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.terminatedStatus}" itemValue="#{reportBean.terminatedStatus}" />
+                            <f:selectItem itemLabel="#{reportBean.terminatedStatus}" itemValue="#{reportBean.terminatedStatus}" />-->
+                            <f:selectItems value="#{reportBean.applicationTypes}" />
                         </p:selectManyButton>
                         <!-- Person values... -->
+                        <p:selectManyButton id="personTypes" value="#{reportBean.personTypes}" rendered="#{reportBean.personReport()}">
+                            <f:selectItem itemLabel="prospective fellow" itemValue="#{reportBean.prospectiveFellow}"/>
+                            <f:selectItem itemLabel="referre" itemValue="#{reportBean.referre}"/>
+                            <f:selectItem itemLabel="research fellow" itemValue="#{reportBean.researchFellow}"/>
+                            <f:selectItem itemLabel="grant holder" itemValue="#{reportBean.grantHolder}"/>
+                            <f:selectItem itemLabel="HOD" itemValue="#{reportBean.hod}"/>
+                            <f:selectItem itemLabel="deans office" itemValue="#{reportBean.deansOffice}"/>
+                            <f:selectItem itemLabel="DRIS" itemValue="#{reportBean.dris}"/>
+                            <f:selectItem itemLabel="post doc commitee member" itemValue="#{reportBean.postDocComitteeMember}"/>
+                            <f:selectItem itemLabel="admin" itemValue="#{reportBean.systemAdmin}"/>
+                        </p:selectManyButton>
                     </h:panelGrid>
                     
                     <p:commandButton value="DownloadPDF" ajax="false" styleClass="button button-fill">

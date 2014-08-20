@@ -104,6 +104,12 @@ public class ReportServices implements ReportServicesLocal
     }
     
     @Override
+    public List<Person> getAllPersonsWithSecurityRole(String role)
+    {
+        return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(Long.parseLong(role)), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+    }
+    
+    @Override
     public List<Application> getAllApplications()
     {
         return getApplicationDAO().findApplicationEntities();
