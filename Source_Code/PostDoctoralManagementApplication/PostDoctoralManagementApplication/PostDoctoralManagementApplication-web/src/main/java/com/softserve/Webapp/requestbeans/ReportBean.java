@@ -18,52 +18,40 @@ import com.softserve.ejb.ReportServicesLocal;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 /**
- *
- * @author kgothatso
+ * 
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Named(value = "reportBean")
-@RequestScoped
-public class ReportBean {
+@SessionScoped
+public class ReportBean implements Serializable {
     private String reportType = "";
-    private String[] applicationTypes = {
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED,
-        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED
-    };
-    private String[] personTypes = {""};
+    private String[] applicationTypes = {};
+    private String[] personTypes = {};
     
-    private final String openStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN;
-    private final String submittedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
-    private final String declinedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED;
-    private final String refereedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED;
-    private final String finalisedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
-    private final String recommendedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
-    private final String endorsedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED;
-    private final String eligibleStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE;
-    private final String fundedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED;
-    private final String completedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED;
-    private final String terminatedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED;
-    
+    @PostConstruct
+    public void init()
+    {
+        
+    }
+    //TODO: Move these to an array...
     private final String prospectiveFellow = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
     private final String referre = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE);
     private final String researchFellow = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW);
@@ -112,48 +100,22 @@ public class ReportBean {
         this.personTypes = personTypes;
     }
     
-    public String getOpenStatus() {
-        return openStatus;
-    }
-
-    public String getSubmittedStatus() {
-        return submittedStatus;
-    }
-
-    public String getDeclinedStatus() {
-        return declinedStatus;
-    }
-
-    public String getRefereedStatus() {
-        return refereedStatus;
-    }
-
-    public String getFinalisedStatus() {
-        return finalisedStatus;
-    }
-
-    public String getRecommendedStatus() {
-        return recommendedStatus;
-    }
-
-    public String getEndorsedStatus() {
-        return endorsedStatus;
-    }
-
-    public String getEligibleStatus() {
-        return eligibleStatus;
-    }
-
-    public String getFundedStatus() {
-        return fundedStatus;
-    }
-
-    public String getCompletedStatus() {
-        return completedStatus;
-    }
-
-    public String getTerminatedStatus() {
-        return terminatedStatus;
+    public String[] applicationTypeValues()
+    {
+        String[] a = {
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED
+        };
+        return a;
     }
 
     // Person values
@@ -201,11 +163,9 @@ public class ReportBean {
             switch(reportType)
             {
                 case "application":
-                    System.out.println("TypesGiving: " + Arrays.toString(applicationTypes));
                     List<Application> applications = new ArrayList<>();
                     for(String type: applicationTypes)
                     {
-                        System.out.println("Adding type: " + type);
                         applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
                     }
                     //stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), applications));
@@ -214,7 +174,10 @@ public class ReportBean {
                     List<Person> persons = new ArrayList<>();
                     for(String role: personTypes)
                     {
-                        persons.addAll(reportEJB.getAllPersonsWithSecurityRole(role));
+                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                        {
+                            if(!persons.contains(p)) persons.add(p);
+                        }
                     }
                     stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), persons));
                     break;
@@ -254,19 +217,20 @@ public class ReportBean {
                 case "application":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
                     List<Application> applications = new ArrayList<>();
-                    /*for(String type: applicationTypes)
+                    for(String type: applicationTypes)
                     {
-                        System.out.println("Adding type: " + type);
                         applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
-                    }*/
-                    System.out.println("TypesGiving: " + applicationTypes);
+                    }
                     stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), applications));
                     break;
                 case "person":
                     List<Person> persons = new ArrayList<>();
                     for(String role: personTypes)
                     {
-                        persons.addAll(reportEJB.getAllPersonsWithSecurityRole(role));
+                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                        {
+                            if(!persons.contains(p)) persons.add(p);
+                        }
                     }
                     stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), persons));
                     break;

@@ -23,18 +23,7 @@
                     <h:panelGrid id="report_attributes">
                         <!-- Application values... -->
                         <p:selectManyButton id="applicationTypes" value="#{reportBean.applicationTypes}" rendered="#{reportBean.applicationReport()}">
-                            <!--<f:selectItem itemLabel="#{reportBean.openStatus}" itemValue="#{reportBean.openStatus}"/>
-                            <f:selectItem itemLabel="#{reportBean.submittedStatus}" itemValue="#{reportBean.submittedStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.declinedStatus}" itemValue="#{reportBean.declinedStatus}"/>
-                            <f:selectItem itemLabel="#{reportBean.refereedStatus}" itemValue="#{reportBean.refereedStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.finalisedStatus}" itemValue="#{reportBean.finalisedStatus}"/>
-                            <f:selectItem itemLabel="#{reportBean.recommendedStatus}" itemValue="#{reportBean.recommendedStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.endorsedStatus}" itemValue="#{reportBean.endorsedStatus}"/>
-                            <f:selectItem itemLabel="#{reportBean.eligibleStatus}" itemValue="#{reportBean.eligibleStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.fundedStatus}" itemValue="#{reportBean.fundedStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.completedStatus}" itemValue="#{reportBean.completedStatus}" />
-                            <f:selectItem itemLabel="#{reportBean.terminatedStatus}" itemValue="#{reportBean.terminatedStatus}" />-->
-                            <f:selectItems value="#{reportBean.applicationTypes}" />
+                            <f:selectItems value="#{reportBean.applicationTypeValues()}" />
                         </p:selectManyButton>
                         <!-- Person values... -->
                         <p:selectManyButton id="personTypes" value="#{reportBean.personTypes}" rendered="#{reportBean.personReport()}">
