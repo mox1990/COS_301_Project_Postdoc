@@ -394,16 +394,24 @@ INSERT INTO postdoc_db.security_role (_name, _roleMask) VALUES("Prospective fell
 															("Post doctoral Committee member",7), 
 															("System administrator",8);
 
-INSERT INTO postdoc_db.location (_institution, _faculty, _department) VALUES ('University of Pretoria', 'EBIT', 'Computer Science'),
-																			('University of Pretoria', 'EBIT', 'Informatics'),
-																			('University of Pretoria', 'EBIT', 'Computer and Electronic Engineers'),
-																			('University of Pretoria', 'Humanities', 'Philosophy');
+INSERT INTO postdoc_db.institution (_name) VALUES ('University of Pretoria'),
+												('University of Cape Town');
+
+INSERT INTO postdoc_db.faculty (_institution,_name) VALUES (1,'EBIT'),
+												(1,'Humanities'),
+												(2,'Health sciences');
+
+INSERT INTO postdoc_db.department (_department,_name) VALUES (1,'Computer Science'),
+												(1,'Informatics'),
+												(1,'Computer and Electronic Engineers'),
+												(2,'Philosophy'),
+												(3,'Dean');
 
 INSERT INTO postdoc_db.address (_country) VALUES("TestMainia");
 INSERT INTO postdoc_db.address (_country) VALUES("TestUniversity");
 
 INSERT INTO postdoc_db.person (_systemID,_fullName,_password,_title,_surname,_email,_addressLine1,_UpEmployee,_accountStatus) VALUES ('u12019837','Test','test','Mr','Tester','test@gmail.com',1,true, 'active');
-INSERT INTO postdoc_db.employee_information (_employeeID, _physicalAddress, _position, _dateOfAppointment, _appointmentStatus, _location) VALUES('u12019837',2,'HOD','2001/01/20','full time',1);
+INSERT INTO postdoc_db.employee_information (_employeeID, _physicalAddress, _position, _dateOfAppointment, _appointmentStatus, _department) VALUES('u12019837',2,'HOD','2001/01/20','full time',1);
 
 INSERT INTO postdoc_db.person_security_role (_personID, _roleID) VALUES ('u12019837',1),
 																		('u12019837',2),
