@@ -27,7 +27,7 @@ CREATE TABLE institution (
 
 CREATE TABLE faculty (
 	_facultyID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_institution VARCHAR(250) NOT NULL,
+	_institution BIGINT UNSIGNED NOT NULL,
 	_name VARCHAR(250) NOT NULL,
 	
 	PRIMARY KEY (_facultyID),
@@ -37,7 +37,7 @@ CREATE TABLE faculty (
 
 CREATE TABLE department (
 	_departmentID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_faculty VARCHAR(250) NOT NULL,
+	_faculty BIGINT UNSIGNED NOT NULL,
 	_name VARCHAR(250) NOT NULL,
 	
 	PRIMARY KEY (_departmentID),
@@ -401,7 +401,7 @@ INSERT INTO postdoc_db.faculty (_institution,_name) VALUES (1,'EBIT'),
 												(1,'Humanities'),
 												(2,'Health sciences');
 
-INSERT INTO postdoc_db.department (_department,_name) VALUES (1,'Computer Science'),
+INSERT INTO postdoc_db.department (_faculty,_name) VALUES (1,'Computer Science'),
 												(1,'Informatics'),
 												(1,'Computer and Electronic Engineers'),
 												(2,'Philosophy'),
