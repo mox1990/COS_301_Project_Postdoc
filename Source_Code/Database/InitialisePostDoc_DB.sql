@@ -6,10 +6,11 @@ USE PostDoc_DB;
 
 CREATE TABLE address (
 	_addressID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_country VARCHAR(50),
-	_province VARCHAR(50),
-	_town_city VARCHAR(50),
-	_street VARCHAR(50),
+	_country VARCHAR(100),
+	_province VARCHAR(100),
+	_town_city VARCHAR(100),
+	_suburb VARCHAR(100),
+	_street VARCHAR(100),
 	_streeNumber INT,
 	_roomNumber VARCHAR(50),
 	_zip_postalCode CHAR(6),
@@ -17,13 +18,30 @@ CREATE TABLE address (
 	PRIMARY KEY (_addressID)
 ) ENGINE=InnoDB;
 
-CREATE TABLE location (
-	_locationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	_institution VARCHAR(250) NOT NULL,
-	_faculty VARCHAR(250) NOT NULL,
-	_department VARCHAR(250) NOT NULL,
+CREATE TABLE institution (
+	_institutionID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_name VARCHAR(250) NOT NULL,
 	
-	PRIMARY KEY (_locationID)
+	PRIMARY KEY (_institutionID)
+) ENGINE=InnoDB;
+
+CREATE TABLE faculty (
+	_facultyID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_institution VARCHAR(250) NOT NULL,
+	_name VARCHAR(250) NOT NULL,
+	
+	PRIMARY KEY (_facultyID),
+	FOREIGN KEY (_institution) REFERENCES institution(_institutionID)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE department (
+	_departmentID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_faculty VARCHAR(250) NOT NULL,
+	_name VARCHAR(250) NOT NULL,
+	
+	PRIMARY KEY (_departmentID),
+	FOREIGN KEY (_faculty) REFERENCES faculty(_facultyID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE person (
@@ -39,7 +57,7 @@ CREATE TABLE person (
 	_cellphoneNumber CHAR(20),	
 	_addressLine1 BIGINT UNSIGNED,
 	_upEmployee BOOLEAN NOT NULL,
-	_accountStatus ENUM('active','disabled','dorment'),
+	_accountStatus ENUM('active', 'pending', 'disabled', 'dorment'),
 	
 	
 	PRIMARY KEY (_systemID),	
@@ -52,12 +70,23 @@ CREATE TABLE employee_information (
 	_position VARCHAR(50),
 	_dateOfAppointment DATE,
 	_appointmentStatus VARCHAR(50),
-	_location BIGINT UNSIGNED,
+	_department BIGINT UNSIGNED,
 	
 	PRIMARY KEY (_employeeID),
 	FOREIGN KEY (_employeeID) REFERENCES person(_systemID),
-	FOREIGN KEY (_location) REFERENCES location(_locationID),
+	FOREIGN KEY (_department) REFERENCES department(_departmentID),
 	FOREIGN KEY (_physicalAddress) REFERENCES address(_addressID)
+) ENGINE=InnoDB;
+
+CREATE TABLE research_fellow_information (
+	_systemAssignedID CHAR(9) NOT NULL,	
+	_institutionAssignedID CHAR(9),
+	_institutionAssignedEmail CHAR(9),
+	_department BIGINT UNSIGNED,
+	
+	PRIMARY KEY (_systemAssignedID),
+	FOREIGN KEY (_systemAssignedID) REFERENCES person(_systemID),
+	FOREIGN KEY (_department) REFERENCES department(_departmentID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE security_role (
@@ -81,7 +110,7 @@ CREATE TABLE notification (
 	_notificationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_subject VARCHAR(200),
 	_message TEXT,
-	_emailStatus ENUM('sent', 'sending', 'disabled'),
+	_emailStatus ENUM('sent', 'queued', 'disabled'),
 	_timestamp DATETIME NOT NULL,
 	_sender CHAR(9) NOT NULL,
 	_reciever	CHAR(9) NOT NULL,
@@ -96,7 +125,8 @@ CREATE TABLE notification (
 CREATE TABLE application (
     _applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     _type ENUM('new', 'renewal'),
-    _status ENUM('open', 'submitted', 'declined', 'refereed', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
+    _status ENUM('open', 'submitted', 'declined', 'referred', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
+	_fundingType ENUM('UP PhD Postdoc', 'UP Postdoc', 'Externally funded'),
     _timestamp DATETIME NOT NULL,
 	_submissionDate DATETIME,
     _finalisationDate DATETIME,    
@@ -113,7 +143,7 @@ CREATE TABLE application (
 
 CREATE TABLE eligiblity_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
-	_eligiblityCheckDate DATETIME,
+	_eligiblityCheckDate DATETIME NOT NULL,
 	_eligiblityChecker CHAR(9) NOT NULL,
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
@@ -123,7 +153,7 @@ CREATE TABLE eligiblity_report (
 CREATE TABLE decline_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
 	_creator CHAR(9) NOT NULL,
-	_timestamp DATETIME,
+	_timestamp DATETIME NOT NULL,
 	_reason TEXT,
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
@@ -134,7 +164,7 @@ CREATE TABLE ammend_request (
 	_requestID BIGINT UNSIGNED NOT NULL,
 	_application BIGINT UNSIGNED NOT NULL,
 	_creator CHAR(9) NOT NULL,
-	_timestamp DATETIME,
+	_timestamp DATETIME NOT NULL,
 	_request TEXT,
 	PRIMARY KEY (_requestID),
 	FOREIGN KEY (_application) REFERENCES application(_applicationID),
@@ -168,18 +198,22 @@ CREATE TABLE funding_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
 	_dris CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_fellowshipCost FLOAT,
-	_travelCost FLOAT,
-	_runningCost FLOAT,
-	_operatingCost FLOAT,
-	_equipmentCost FLOAT,
-	_conferenceCost FLOAT,
 
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_reportID) REFERENCES application(_applicationID),
 	FOREIGN KEY (_dris) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
+CREATE TABLE funding_cost (
+	_costID BIGINT UNSIGNED NOT NULL,
+	_fundingReport BIGINT UNSIGNED NOT NULL,
+	_amount FLOAT,
+	_provider VARCHAR(100),
+	_type ENUM('fellowship','running','travel','equipment','operating','conference'),
+
+	PRIMARY KEY (_costID),
+	FOREIGN KEY (_fundingReport) REFERENCES funding_report(_reportID)
+) ENGINE=InnoDB;
 
 CREATE TABLE referee_application (
 	_refereeID CHAR(9) NOT NULL,
@@ -218,6 +252,19 @@ CREATE TABLE progress_report (
 	FOREIGN KEY (_application) REFERENCES application(_applicationID)
 ) ENGINE=InnoDB;
 
+CREATE TABLE forward_and_rewind_report (
+	_reportID BIGINT UNSIGNED NOT NULL,
+	_application BIGINT UNSIGNED NOT NULL,
+	_dris CHAR(9) NOT NULL,
+	_timestamp DATETIME NOT NULL,
+	_type ENUM('forward', 'rewind') NOT NULL,
+	_reason TEXT,
+
+	PRIMARY KEY (_reportID),
+	FOREIGN KEY (_application) REFERENCES application(_applicationID),
+	FOREIGN KEY (_dris) REFERENCES person(_systemID)
+) ENGINE=InnoDB;
+
 #CREATE TABLE RENEWAL_applicationS (
 #	_applicationID BIGINT UNSIGNED NOT NULL,
 	
@@ -227,8 +274,11 @@ CREATE TABLE progress_report (
 
 CREATE TABLE committee_meeting (
 	_meetingID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_name VARCHAR(100),
+	_venue VARCHAR(100),
 	_startDate DATETIME,
 	_endDate DATETIME,
+	
 	PRIMARY KEY (_meetingID)
 ) ENGINE=InnoDB;
 
@@ -293,13 +343,13 @@ CREATE TABLE audit_log (
 
 CREATE TABLE cv (
 	_cvID CHAR(9) NOT NULL,
-	_idNumber CHAR(20) NOT NULL,
+	_idNumber CHAR(30) NOT NULL,
 	_dateOfBirth DATE NOT NULL,
 	_gender ENUM('Male','Female','Other'),
-	_citizenship CHAR(50),
+	_citizenship VARCHAR(100),
 	_nrfRating CHAR(4),
 	_race CHAR(20),
-	_recentInstitution VARCHAR(50),
+	_recentInstitution VARCHAR(100),
 	_researchOutput TEXT,
 	_otherContributions TEXT,
 	_additionalInformation TEXT,
