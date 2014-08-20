@@ -9,6 +9,7 @@ package com.softserve.Webapp.requestbeans;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Person;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -18,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -35,7 +37,20 @@ import org.primefaces.model.StreamedContent;
 @RequestScoped
 public class ReportBean {
     private String reportType = "";
-    private String[] applicationTypes = {""};
+    private String[] applicationTypes = {
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED,
+        com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED
+    };
+    private String[] personTypes = {""};
     
     private final String openStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN;
     private final String submittedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
@@ -48,6 +63,16 @@ public class ReportBean {
     private final String fundedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED;
     private final String completedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED;
     private final String terminatedStatus = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED;
+    
+    private final String prospectiveFellow = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
+    private final String referre = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE);
+    private final String researchFellow = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW);
+    private final String grantHolder = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER);
+    private final String hod = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD);
+    private final String deansOffice = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER);
+    private final String dris = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER);
+    private final String postDocComitteeMember = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER);
+    private final String systemAdmin = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -79,6 +104,14 @@ public class ReportBean {
         this.applicationTypes = applicationTypes;
     }
 
+    public String[] getPersonTypes() {
+        return personTypes;
+    }
+
+    public void setPersonTypes(String[] personTypes) {
+        this.personTypes = personTypes;
+    }
+    
     public String getOpenStatus() {
         return openStatus;
     }
@@ -122,6 +155,43 @@ public class ReportBean {
     public String getTerminatedStatus() {
         return terminatedStatus;
     }
+
+    // Person values
+    public String getProspectiveFellow() {
+        return prospectiveFellow;
+    }
+
+    public String getReferre() {
+        return referre;
+    }
+
+    public String getResearchFellow() {
+        return researchFellow;
+    }
+
+    public String getGrantHolder() {
+        return grantHolder;
+    }
+
+    public String getHod() {
+        return hod;
+    }
+
+    public String getDeansOffice() {
+        return deansOffice;
+    }
+
+    public String getDris() {
+        return dris;
+    }
+
+    public String getPostDocComitteeMember() {
+        return postDocComitteeMember;
+    }
+
+    public String getSystemAdmin() {
+        return systemAdmin;
+    }
     
     public StreamedContent getReportPDF() // TODO: Add report filters...
     {
@@ -131,12 +201,22 @@ public class ReportBean {
             switch(reportType)
             {
                 case "application":
-                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), reportEJB.getAllApplications()));
+                    System.out.println("TypesGiving: " + Arrays.toString(applicationTypes));
+                    List<Application> applications = new ArrayList<>();
+                    for(String type: applicationTypes)
+                    {
+                        System.out.println("Adding type: " + type);
+                        applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                    }
+                    //stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), applications));
                     break;
                 case "person":
-                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), reportEJB.getAllPersons()));
+                    List<Person> persons = new ArrayList<>();
+                    for(String role: personTypes)
+                    {
+                        persons.addAll(reportEJB.getAllPersonsWithSecurityRole(role));
+                    }
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), persons));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
@@ -183,9 +263,12 @@ public class ReportBean {
                     stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), applications));
                     break;
                 case "person":
-                    // TODO: Come up with a discretion for the persons...
-                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), reportEJB.getAllPersons()));
+                    List<Person> persons = new ArrayList<>();
+                    for(String role: personTypes)
+                    {
+                        persons.addAll(reportEJB.getAllPersonsWithSecurityRole(role));
+                    }
+                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), persons));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");

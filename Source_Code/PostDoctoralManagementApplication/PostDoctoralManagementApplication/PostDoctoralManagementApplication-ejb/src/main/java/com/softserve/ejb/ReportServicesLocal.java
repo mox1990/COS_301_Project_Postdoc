@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JRException;
 public interface ReportServicesLocal {
     
     public List<Person> getAllPersons();
+    public List<Person> getAllPersonsWithSecurityRole(String role);
     public List<Application> getAllApplications();
     public List<Application> getAllApplicationsWithStatus(String status);
     /**
