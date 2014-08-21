@@ -61,14 +61,18 @@ public class ReportServices implements ReportServicesLocal
     private final String fs = System.getProperty("file.separator");
     private final String filepath = "Reports" + fs;
     private final JasperReport personReport;
+    private final JasperReport allPersonReport;
     private final JasperReport applicationReport;
+    private final JasperReport allApplicationReport;
     
     public ReportServices() throws JRException
     {
-        personReport = null;
-        applicationReport = null;
-//personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
-        //applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // TODO: Work an application report
+        //personReport = null;
+        //applicationReport = null;
+        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
+        allPersonReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
+        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // TODO: Work an application report
+        allApplicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
     }
     /**
      *
@@ -77,6 +81,15 @@ public class ReportServices implements ReportServicesLocal
     protected UserGatewayLocal getUserGatewayServiceEJB()
     {
         return userGateway;
+    }
+    
+    protected Connection getConnection() throws SQLException, ClassNotFoundException
+    {
+        // This checks to see if the MySQL driver is avaible to use
+        Class.forName("com.mysql.jdbc.Driver");
+
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/PostDoc_DB?zeroDateTimeBehavior=convertToNull"
+        + "&user=root&password=root");
     }
     
     /**
@@ -142,6 +155,24 @@ public class ReportServices implements ReportServicesLocal
     }
     
     @Override
+    public byte[] exportAllPersonsToPdf(Session session) throws Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        Map parameters = new HashMap();
+        
+        parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
+        
+        JasperPrint jasperPrint = JasperFillManager.fillReport(allPersonReport, parameters, getConnection());
+        // You can use JasperPrint to create PDF
+        //JasperViewer.viewReport(jasperPrint);
+        return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
+    }
+    
+    @Override
     public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws Exception
     {
         //Authenticate user privliges
@@ -156,6 +187,24 @@ public class ReportServices implements ReportServicesLocal
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(applications);
         
         JasperPrint jasperPrint = JasperFillManager.fillReport(applicationReport, parameters, beanColDataSource);
+        // You can use JasperPrint to create PDF
+        
+        return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
+    }
+    
+    @Override
+    public byte[] exportAllApplicationToPdf(Session session) throws Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        Map parameters = new HashMap();
+        
+        parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
+        
+        JasperPrint jasperPrint = JasperFillManager.fillReport(allApplicationReport, parameters, getConnection());
         // You can use JasperPrint to create PDF
         
         return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
@@ -193,10 +242,37 @@ public class ReportServices implements ReportServicesLocal
     }
     
     @Override
+    public byte[] exportAllPersonsToExcel(Session session) throws Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        Map parameters = new HashMap();
+        
+        //parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(allPersonReport, parameters, getConnection());
+        // You can use JasperPrint to create PDF
+
+        JRXlsExporter exporter = new JRXlsExporter();
+
+        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+        exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "temp.xls");
+        // TODO: Check for unique name...
+        exporter.exportReport();
+            
+        Path path = Paths.get("temp.xls");
+        
+        return Files.readAllBytes(path); // Returns byte stream...
+    }
+    
+    @Override
     public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception
     {
         //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        ArrayList<SecurityRole> roles = new ArrayList<>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
@@ -210,6 +286,35 @@ public class ReportServices implements ReportServicesLocal
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(applications);
         
         JasperPrint jasperPrint = JasperFillManager.fillReport(applicationReport, parameters, beanColDataSource);
+        // You can use JasperPrint to create PDF
+
+        JRXlsExporter exporter = new JRXlsExporter();
+
+        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+        exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME,"Person.xls");
+
+        exporter.exportReport();
+            
+        Path path = Paths.get("Person.xls");
+        
+        return Files.readAllBytes(path); // Returns byte stream...
+    }
+    
+    @Override
+    public byte[] exportAllApplicationToExcel(Session session) throws Exception
+    {
+        //Authenticate user privliges
+        ArrayList<SecurityRole> roles = new ArrayList<>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        // Create a map of parameters to pass to the report.
+        Map parameters = new HashMap();
+        
+        //parameters.put("Title", "Basic JasperReport"); // Dynamic data like user name and time goes here
+
+        
+        JasperPrint jasperPrint = JasperFillManager.fillReport(allApplicationReport, parameters, getConnection());
         // You can use JasperPrint to create PDF
 
         JRXlsExporter exporter = new JRXlsExporter();

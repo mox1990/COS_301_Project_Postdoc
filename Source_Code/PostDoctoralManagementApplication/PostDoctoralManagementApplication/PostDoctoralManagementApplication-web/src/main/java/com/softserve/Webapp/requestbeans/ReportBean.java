@@ -106,7 +106,7 @@ public class ReportBean implements Serializable {
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED,
-            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERREED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,
@@ -163,23 +163,37 @@ public class ReportBean implements Serializable {
             switch(reportType)
             {
                 case "application":
-                    List<Application> applications = new ArrayList<>();
-                    for(String type: applicationTypes)
+                    if(applicationTypes.length == 0 || applicationTypes.length == 9)
                     {
-                        applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                        stream = new ByteArrayInputStream(reportEJB.exportAllApplicationToPdf(sessionManagerBean.getSession()));
                     }
-                    //stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), applications));
+                    else
+                    {
+                        List<Application> applications = new ArrayList<>();
+                        for(String type: applicationTypes)
+                        {
+                            applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                        }
+                        stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), applications));
+                    }
                     break;
                 case "person":
-                    List<Person> persons = new ArrayList<>();
-                    for(String role: personTypes)
+                    if(personTypes.length == 0 || personTypes.length == 9)
                     {
-                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
-                        {
-                            if(!persons.contains(p)) persons.add(p);
-                        }
+                        stream = new ByteArrayInputStream(reportEJB.exportAllPersonsToPdf(sessionManagerBean.getSession()));
                     }
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), persons));
+                    else
+                    {
+                        List<Person> persons = new ArrayList<>();
+                        for(String role: personTypes)
+                        {
+                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                            {
+                                if(!persons.contains(p)) persons.add(p);
+                            }
+                        }
+                        stream = new ByteArrayInputStream(reportEJB.exportPersonsToPdf(sessionManagerBean.getSession(), persons));
+                    }
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
@@ -216,23 +230,37 @@ public class ReportBean implements Serializable {
             {
                 case "application":
                     // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    List<Application> applications = new ArrayList<>();
-                    for(String type: applicationTypes)
+                    if(applicationTypes.length == 0 || applicationTypes.length == 9)
                     {
-                        applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                        stream = new ByteArrayInputStream(reportEJB.exportAllApplicationToExcel(sessionManagerBean.getSession()));
                     }
-                    stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), applications));
+                    else
+                    {
+                        List<Application> applications = new ArrayList<>();
+                        for(String type: applicationTypes)
+                        {
+                            applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                        }
+                        stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), applications));
+                    }
                     break;
                 case "person":
-                    List<Person> persons = new ArrayList<>();
-                    for(String role: personTypes)
+                    if(personTypes.length == 0 || personTypes.length == 9)
                     {
-                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
-                        {
-                            if(!persons.contains(p)) persons.add(p);
-                        }
+                        stream = new ByteArrayInputStream(reportEJB.exportAllPersonsToExcel(sessionManagerBean.getSession()));
                     }
-                    stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), persons));
+                    else
+                    {
+                        List<Person> persons = new ArrayList<>();
+                        for(String role: personTypes)
+                        {
+                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                            {
+                                if(!persons.contains(p)) persons.add(p);
+                            }
+                        }
+                        stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), persons));
+                    }
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");

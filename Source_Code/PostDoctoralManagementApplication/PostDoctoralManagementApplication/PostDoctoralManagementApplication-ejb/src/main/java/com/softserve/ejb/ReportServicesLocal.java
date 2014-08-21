@@ -40,6 +40,7 @@ public interface ReportServicesLocal {
      * @throws InterruptedException 
      */
     public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws Exception;
+    public byte[] exportAllPersonsToPdf(Session session) throws Exception;
     
     /**
      * Export PDF of report made up of applications
@@ -52,6 +53,9 @@ public interface ReportServicesLocal {
      * @throws InterruptedException 
      */
     public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws Exception;
+    public byte[] exportAllApplicationToPdf(Session session) throws Exception;
     public byte[] exportPersonsToExcel(Session session, List<Person> application) throws Exception;
+    public byte[] exportAllPersonsToExcel(Session session) throws Exception;
     public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception;
+    public byte[] exportAllApplicationToExcel(Session session) throws Exception;
 }
