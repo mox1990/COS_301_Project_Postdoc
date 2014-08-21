@@ -14,6 +14,7 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -65,14 +66,24 @@ public class ReportServices implements ReportServicesLocal
     private final JasperReport applicationReport;
     private final JasperReport allApplicationReport;
     
-    public ReportServices() throws JRException
+    public ReportServices() throws Exception
     {
         //personReport = null;
         //applicationReport = null;
-        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
-        allPersonReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
-        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml"); // TODO: Work an application report
-        allApplicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.xml");
+        InputStream personInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.PERSON.getBytes("UTF-8"));
+        InputStream allPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_PERSONS.getBytes("UTF-8"));
+        InputStream applicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.APPLICATION.getBytes("UTF-8"));
+        InputStream allApplicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_APPLICATIONS.getBytes("UTF-8"));
+        
+//        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.jrxml");
+//        allPersonReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllPersons.jrxml");
+//        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Application.jrxml"); // TODO: Work an application report
+//        allApplicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllApplications.jrxml");
+        
+        personReport = JasperCompileManager.compileReport(personInputStream);
+        allPersonReport = JasperCompileManager.compileReport(allPersonInputStream);
+        applicationReport = JasperCompileManager.compileReport(applicationInputStream); // TODO: Work an application report
+        allApplicationReport = JasperCompileManager.compileReport(allApplicationInputStream);
     }
     /**
      *
@@ -150,7 +161,7 @@ public class ReportServices implements ReportServicesLocal
         
         JasperPrint jasperPrint = JasperFillManager.fillReport(personReport, parameters, beanColDataSource);
         // You can use JasperPrint to create PDF
-        //JasperViewer.viewReport(jasperPrint);
+        // JasperViewer.viewReport(jasperPrint);
         return JasperExportManager.exportReportToPdf(jasperPrint); // Returns byte stream...
     }
     
