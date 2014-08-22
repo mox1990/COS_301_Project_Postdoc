@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.JRException;
 public class ReportServicesMockUnit extends ReportServices {
     UserGateway uEJB;
     
-    public ReportServicesMockUnit() throws JRException
+    public ReportServicesMockUnit() throws Exception
     {
         
     }

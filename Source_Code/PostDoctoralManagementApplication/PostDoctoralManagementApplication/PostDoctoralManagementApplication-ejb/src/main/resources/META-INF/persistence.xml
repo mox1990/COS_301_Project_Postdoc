@@ -10,4 +10,16 @@
       <property name="eclipselink.persistence-context.flush-mode" value="auto"/>
     </properties>
   </persistence-unit>
+  <persistence-unit name="com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU2" transaction-type="JTA">
+    <jta-data-source>Postdoc_Archive_DB</jta-data-source>
+    <properties>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU3" transaction-type="JTA">
+    <jta-data-source>Postdoc_Backup_DB</jta-data-source>
+    <properties>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
 </persistence>

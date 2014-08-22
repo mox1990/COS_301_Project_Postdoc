@@ -2,6 +2,12 @@
 DROP DATABASE IF EXISTS PostDoc_DB;
 CREATE DATABASE PostDoc_DB;
 
+DROP DATABASE IF EXISTS PostDoc_Archive_DB;
+CREATE DATABASE PostDoc_Archive_DB;
+
+DROP DATABASE IF EXISTS PostDoc_BackUp_DB;
+CREATE DATABASE PostDoc_BackUp_DB;
+
 USE PostDoc_DB;
 
 CREATE TABLE address (
@@ -424,7 +430,127 @@ INSERT INTO postdoc_db.person_security_role (_personID, _roleID) VALUES ('u12019
 																		('u12019837',9);
 
 
+USE PostDoc_Archive_DB;
 
+CREATE TABLE address  LIKE postdoc_db.address;
 
+CREATE TABLE institution  LIKE postdoc_db.institution;
 
+CREATE TABLE faculty  LIKE postdoc_db.faculty;
+
+CREATE TABLE department  LIKE postdoc_db.department;
+
+CREATE TABLE person  LIKE postdoc_db.person;
+
+CREATE TABLE employee_information  LIKE postdoc_db.employee_information;
+
+CREATE TABLE research_fellow_information  LIKE postdoc_db.research_fellow_information;
+
+CREATE TABLE security_role  LIKE postdoc_db.security_role;
+
+CREATE TABLE person_security_role  LIKE postdoc_db.person_security_role;
+
+CREATE TABLE notification  LIKE postdoc_db.notification;
+
+CREATE TABLE application  LIKE postdoc_db.application;
+
+CREATE TABLE eligiblity_report  LIKE postdoc_db.eligiblity_report;
+
+CREATE TABLE decline_report  LIKE postdoc_db.decline_report;
+
+CREATE TABLE ammend_request  LIKE postdoc_db.ammend_request;
+
+CREATE TABLE recommendation_report  LIKE postdoc_db.recommendation_report;
+
+CREATE TABLE endorsement  LIKE postdoc_db.endorsement;
+
+CREATE TABLE funding_report  LIKE postdoc_db.funding_report;
+
+CREATE TABLE funding_cost  LIKE postdoc_db.funding_cost;
+
+CREATE TABLE referee_application  LIKE postdoc_db.referee_application;
+
+CREATE TABLE referee_report  LIKE postdoc_db.referee_report;
+
+CREATE TABLE progress_report  LIKE postdoc_db.progress_report;
+
+CREATE TABLE forward_and_rewind_report  LIKE postdoc_db.forward_and_rewind_report;
+
+CREATE TABLE committee_meeting  LIKE postdoc_db.committee_meeting;
+
+CREATE TABLE minute_comment  LIKE postdoc_db.minute_comment;
+
+CREATE TABLE attendence_list  LIKE postdoc_db.attendence_list;
+
+CREATE TABLE committee_meetings_applications  LIKE postdoc_db.committee_meetings_applications;
+
+CREATE TABLE audit_log  LIKE postdoc_db.audit_log;
+
+CREATE TABLE cv  LIKE postdoc_db.cv;
+
+CREATE TABLE academic_qualification  LIKE postdoc_db.academic_qualification;
+
+CREATE TABLE experience LIKE postdoc_db.experience;
+
+USE PostDoc_BackUp_DB;
+
+CREATE TABLE address  LIKE postdoc_db.address;
+
+CREATE TABLE institution  LIKE postdoc_db.institution;
+
+CREATE TABLE faculty  LIKE postdoc_db.faculty;
+
+CREATE TABLE department  LIKE postdoc_db.department;
+
+CREATE TABLE person  LIKE postdoc_db.person;
+
+CREATE TABLE employee_information  LIKE postdoc_db.employee_information;
+
+CREATE TABLE research_fellow_information  LIKE postdoc_db.research_fellow_information;
+
+CREATE TABLE security_role  LIKE postdoc_db.security_role;
+
+CREATE TABLE person_security_role  LIKE postdoc_db.person_security_role;
+
+CREATE TABLE notification  LIKE postdoc_db.notification;
+
+CREATE TABLE application  LIKE postdoc_db.application;
+
+CREATE TABLE eligiblity_report  LIKE postdoc_db.eligiblity_report;
+
+CREATE TABLE decline_report  LIKE postdoc_db.decline_report;
+
+CREATE TABLE ammend_request  LIKE postdoc_db.ammend_request;
+
+CREATE TABLE recommendation_report  LIKE postdoc_db.recommendation_report;
+
+CREATE TABLE endorsement  LIKE postdoc_db.endorsement;
+
+CREATE TABLE funding_report  LIKE postdoc_db.funding_report;
+
+CREATE TABLE funding_cost  LIKE postdoc_db.funding_cost;
+
+CREATE TABLE referee_application  LIKE postdoc_db.referee_application;
+
+CREATE TABLE referee_report  LIKE postdoc_db.referee_report;
+
+CREATE TABLE progress_report  LIKE postdoc_db.progress_report;
+
+CREATE TABLE forward_and_rewind_report  LIKE postdoc_db.forward_and_rewind_report;
+
+CREATE TABLE committee_meeting  LIKE postdoc_db.committee_meeting;
+
+CREATE TABLE minute_comment  LIKE postdoc_db.minute_comment;
+
+CREATE TABLE attendence_list  LIKE postdoc_db.attendence_list;
+
+CREATE TABLE committee_meetings_applications  LIKE postdoc_db.committee_meetings_applications;
+
+CREATE TABLE audit_log  LIKE postdoc_db.audit_log;
+
+CREATE TABLE cv  LIKE postdoc_db.cv;
+
+CREATE TABLE academic_qualification  LIKE postdoc_db.academic_qualification;
+
+CREATE TABLE experience LIKE postdoc_db.experience;
 

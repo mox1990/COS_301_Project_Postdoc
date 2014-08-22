@@ -35,7 +35,7 @@
             <p:message for="institution" styleClass="fieldErrorMessage"/>
             
             <p:outputLabel value="Faculty:" for="faculty"/>                                
-            <p:selectOneMenu id="faculty" value="#{locationFinderRequestBean.selectedfaculty}" disabled="#{locationFinderRequestBean.selectedInstitution != null}">
+            <p:selectOneMenu id="faculty" value="#{locationFinderRequestBean.selectedfaculty}" disabled="#{locationFinderRequestBean.selectedInstitution == null}">
                 <f:selectItem itemLabel="Select a faculty" noSelectionOption="true"/>
                 <f:selectItems value="#{locationFinderRequestBean.selectedInstitution.facultyList}" var="fac" itemLabel="#{fac.name}" itemValue="#{fac}"/>
                 <p:ajax event="change" update="department" process="@this"/>
@@ -43,7 +43,7 @@
             <p:message for="faculty" styleClass="fieldErrorMessage"/>
             
             <p:outputLabel value="Department:" for="department"/>                                
-            <p:selectOneMenu id="department" value="#{employeeInformation.department}" disabled="#{locationFinderRequestBean.selectedfaculty != null}">
+            <p:selectOneMenu id="department" value="#{employeeInformation.department}" disabled="#{locationFinderRequestBean.selectedfaculty == null}">
                 <f:selectItem itemLabel="Select a department" noSelectionOption="true"/>
                 <f:selectItems value="#{locationFinderRequestBean.selectedfaculty.departmentList}" var="dep" itemLabel="#{dep.name}" itemValue="#{dep}"/>
             </p:selectOneMenu>

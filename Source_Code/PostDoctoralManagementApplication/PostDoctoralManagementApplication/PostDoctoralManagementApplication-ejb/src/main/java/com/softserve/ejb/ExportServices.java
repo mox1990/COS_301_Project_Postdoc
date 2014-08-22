@@ -14,6 +14,8 @@ import com.softserve.DBEntities.Person;
 import com.softserve.requestWrappers.ExportRequest;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 
 /**
  *
@@ -23,6 +25,9 @@ import javax.ejb.Stateless;
 @Stateless
 public class ExportServices implements ExportServicesLocal {
 
+    @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
+    
     @Override
     public byte[] exportData(ExportRequest exportRequest) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

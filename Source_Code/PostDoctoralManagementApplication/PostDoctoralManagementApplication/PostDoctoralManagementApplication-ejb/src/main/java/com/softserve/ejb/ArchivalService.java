@@ -38,7 +38,7 @@ public class ArchivalService implements ArchivalServiceLocal {
             Timestamp time = new Timestamp(new Date().getTime());
             String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
             Process exec = Runtime.getRuntime().exec("mysqldump -u root -p" + "passwordHere" 
-                    + PersistenceConstants.PERSISTENCE_UNIT_NAME + " > " 
+                    + PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME + " > " 
                     + filepath + filename);
 
             if(exec.waitFor()==0)

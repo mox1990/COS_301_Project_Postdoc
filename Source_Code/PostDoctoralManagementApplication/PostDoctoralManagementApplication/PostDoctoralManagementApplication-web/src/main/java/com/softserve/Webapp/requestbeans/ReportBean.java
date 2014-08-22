@@ -106,7 +106,7 @@ public class ReportBean implements Serializable {
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED,
-            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERREED,
+            com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED,
             com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,

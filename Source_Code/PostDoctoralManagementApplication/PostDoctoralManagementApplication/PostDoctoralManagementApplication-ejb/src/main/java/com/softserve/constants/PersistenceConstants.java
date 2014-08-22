@@ -22,8 +22,10 @@ import javax.transaction.UserTransaction;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class PersistenceConstants {
-    //Persistence unit name for primary postdoc_db
-    public final static String PERSISTENCE_UNIT_NAME = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU";
+    //Persistence unit name for postdoc databases
+    public final static String WORKING_DB_PERSISTENCE_UNIT_NAME = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU";
+    public final static String BACKUP_DB_PERSISTENCE_UNIT_NAME = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU3";
+    public final static String ARCHIVE_DB_PERSISTENCE_UNIT_NAME = "com.softserve_PostDoctoralManagementApplication-ejb_ejb_0.0PU2";
     
     //Security role IDs constants
     public final static long SECURITY_ROLE_ID_PROSPECTIVE_FELLOW = 1;

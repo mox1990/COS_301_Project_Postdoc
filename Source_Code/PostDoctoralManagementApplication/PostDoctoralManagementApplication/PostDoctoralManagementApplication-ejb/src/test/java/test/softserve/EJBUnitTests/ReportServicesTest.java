@@ -50,7 +50,7 @@ public class ReportServicesTest {
     }
     
     @Before
-    public void setUp() throws JRException 
+    public void setUp() throws Exception 
     {
         instance = new ReportServicesMockUnit();
         mockUserGateway = mock(UserGateway.class);

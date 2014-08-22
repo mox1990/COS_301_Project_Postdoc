@@ -43,7 +43,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     //All our ejb should be stateless due to the beter reusablity of the ejb
     //private CommitteeMeeting cMeeting = new CommitteeMeeting();
     
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
