@@ -18,7 +18,6 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
-import static com.softserve.DBEntities.RefereeReport_.referee;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.UserGateway;

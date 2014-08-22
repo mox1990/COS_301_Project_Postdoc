@@ -16,5 +16,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface ExportServicesLocal {    
-    public byte[] exportData(ExportRequest exportRequest) throws Exception; 
+    public byte[] exportData(ExportRequest exportRequest) throws Exception;
+    
 }
