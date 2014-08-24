@@ -1256,4 +1256,61 @@ public class JasperReportTemplateStrings {
 "		<band/>\n" +
 "	</summary>\n" +
 "</jasperReport>";
+    public static final String DYNAMIC_PERSON = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+"<jasperReport xmlns=\"http://jasperreports.sourceforge.net/jasperreports\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd\" name=\"SiemPdfPrototype\" pageWidth=\"595\" pageHeight=\"842\" columnWidth=\"555\" leftMargin=\"20\" rightMargin=\"20\" topMargin=\"20\" bottomMargin=\"20\" uuid=\"f11e581d-1fe5-4a84-a06d-10f7c2322f73\">\n" +
+"	<property name=\"ireport.zoom\" value=\"1.5\"/>\n" +
+"	<property name=\"ireport.x\" value=\"0\"/>\n" +
+"	<property name=\"ireport.y\" value=\"0\"/>\n" +
+"	<parameter name=\"REPORT_TITLE\" class=\"java.lang.String\"/>\n" +
+"	<parameter name=\"SQL\" class=\"java.lang.String\"/>\n" +
+"	<parameter name=\"HEADER_IMAGE\" class=\"java.lang.String\"/>\n" +
+"	<parameter name=\"CHART_IMAGE\" class=\"java.lang.String\"/>\n" +
+"	<background>\n" +
+"		<band splitType=\"Stretch\"/>\n" +
+"	</background>\n" +
+"	<title>\n" +
+"		<band height=\"85\" splitType=\"Stretch\">\n" +
+"			<textField>\n" +
+"				<reportElement x=\"123\" y=\"43\" width=\"303\" height=\"32\" uuid=\"7ed703bc-8c60-478f-babd-c3e1cd45b9fb\"/>\n" +
+"				<textElement textAlignment=\"Center\">\n" +
+"					<font size=\"22\" isBold=\"true\"/>\n" +
+"				</textElement>\n" +
+"				<textFieldExpression><![CDATA[$P{REPORT_TITLE}]]></textFieldExpression>\n" +
+"			</textField>\n" +
+"			<staticText>\n" +
+"				<reportElement x=\"-286\" y=\"16\" width=\"100\" height=\"20\" uuid=\"f937fcf1-d9b4-4d99-865c-e3f77772acb8\"/>\n" +
+"				<text><![CDATA[run on ]]></text>\n" +
+"			</staticText>\n" +
+"			<textField pattern=\"dd MMMMM yyyy\">\n" +
+"				<reportElement x=\"426\" y=\"0\" width=\"129\" height=\"20\" uuid=\"39ece12f-0d1a-4809-8f45-107c1934c927\"/>\n" +
+"				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>\n" +
+"			</textField>\n" +
+"		</band>\n" +
+"	</title>\n" +
+"	<pageHeader>\n" +
+"		<band height=\"8\" splitType=\"Stretch\"/>\n" +
+"	</pageHeader>\n" +
+"	<columnHeader>\n" +
+"		<band height=\"20\" splitType=\"Stretch\"/>\n" +
+"	</columnHeader>\n" +
+"	<columnFooter>\n" +
+"		<band splitType=\"Stretch\"/>\n" +
+"	</columnFooter>\n" +
+"	<pageFooter>\n" +
+"		<band height=\"31\" splitType=\"Stretch\">\n" +
+"			<textField>\n" +
+"				<reportElement x=\"222\" y=\"11\" width=\"80\" height=\"20\" uuid=\"8c0e1205-87c0-43cc-823b-d4af96852884\"/>\n" +
+"				<textElement textAlignment=\"Right\"/>\n" +
+"				<textFieldExpression><![CDATA[\"Page \"+$V{PAGE_NUMBER}+\" of\"]]></textFieldExpression>\n" +
+"			</textField>\n" +
+"			<textField evaluationTime=\"Report\">\n" +
+"				<reportElement x=\"302\" y=\"11\" width=\"40\" height=\"20\" uuid=\"fee10489-4118-47d5-8908-f333367d52a4\"/>\n" +
+"				<textFieldExpression><![CDATA[\" \" + $V{PAGE_NUMBER}]]></textFieldExpression>\n" +
+"			</textField>\n" +
+"		</band>\n" +
+"	</pageFooter>\n" +
+"	<summary>\n" +
+"		<band splitType=\"Stretch\"/>\n" +
+"	</summary>\n" +
+"</jasperReport>"; 
 }

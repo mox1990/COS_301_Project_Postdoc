@@ -12,9 +12,12 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.jasper.DynamicColumnDataSource;
+import com.softserve.jasper.DynamicReportBuilder;
 import com.softserve.system.Session;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -41,7 +44,9 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -65,6 +70,7 @@ public class ReportServices implements ReportServicesLocal
     private final JasperReport allPersonReport;
     private final JasperReport applicationReport;
     private final JasperReport allApplicationReport;
+    private final JasperDesign dynamicPersonReport;
     
     public ReportServices() throws Exception
     {
@@ -74,6 +80,7 @@ public class ReportServices implements ReportServicesLocal
         InputStream allPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_PERSONS.getBytes("UTF-8"));
         InputStream applicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.APPLICATION.getBytes("UTF-8"));
         InputStream allApplicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_APPLICATIONS.getBytes("UTF-8"));
+        InputStream dynamicPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.DYNAMIC_PERSON.getBytes("UTF-8"));
         
 //        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.jrxml");
 //        allPersonReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllPersons.jrxml");
@@ -84,6 +91,7 @@ public class ReportServices implements ReportServicesLocal
         allPersonReport = JasperCompileManager.compileReport(allPersonInputStream);
         applicationReport = JasperCompileManager.compileReport(applicationInputStream); // TODO: Work an application report
         allApplicationReport = JasperCompileManager.compileReport(allApplicationInputStream);
+        dynamicPersonReport = JRXmlLoader.load(dynamicPersonInputStream);
     }
     /**
      *
@@ -128,9 +136,9 @@ public class ReportServices implements ReportServicesLocal
     }
     
     @Override
-    public List<Person> getAllPersonsWithSecurityRole(String role)
+    public List<Person> getAllPersonsWithSecurityRole(Long role)
     {
-        return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(Long.parseLong(role)), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
     @Override
@@ -338,5 +346,21 @@ public class ReportServices implements ReportServicesLocal
         Path path = Paths.get("Person.xls");
         
         return Files.readAllBytes(path); // Returns byte stream...
+    }
+    
+    @Override
+    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows) throws Exception 
+    {
+        DynamicReportBuilder reportBuilder = new DynamicReportBuilder(dynamicPersonReport, columnHeaders.size());
+        reportBuilder.addDynamicColumns();
+
+        JasperReport jasperReport = JasperCompileManager.compileReport(dynamicPersonReport);
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("REPORT_TITLE", "Person Report");
+        DynamicColumnDataSource pdfDataSource = new DynamicColumnDataSource(columnHeaders, rows);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, pdfDataSource);
+        
+        return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 }

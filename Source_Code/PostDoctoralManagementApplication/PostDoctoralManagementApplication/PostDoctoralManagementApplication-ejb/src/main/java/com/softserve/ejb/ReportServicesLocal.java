@@ -26,7 +26,7 @@ import net.sf.jasperreports.engine.JRException;
 public interface ReportServicesLocal {
     
     public List<Person> getAllPersons();
-    public List<Person> getAllPersonsWithSecurityRole(String role);
+    public List<Person> getAllPersonsWithSecurityRole(Long role);
     public List<Application> getAllApplications();
     public List<Application> getAllApplicationsWithStatus(String status);
     /**
@@ -58,4 +58,5 @@ public interface ReportServicesLocal {
     public byte[] exportAllPersonsToExcel(Session session) throws Exception;
     public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception;
     public byte[] exportAllApplicationToExcel(Session session) throws Exception;
+    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows) throws Exception;
 }

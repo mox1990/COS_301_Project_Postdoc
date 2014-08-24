@@ -93,4 +93,32 @@ public class ReportServicesTest {
         }
     }
     
+    /**
+     * Test of exportPersonsToPdf method, of class ReportServices.
+     */
+    @Test
+    public void testDynamicPdfReport() throws Exception {
+        Session session = mock(Session.class);
+        
+        List<String> columnHeaders = Arrays.asList(new String[] {"Col1", "Col2", "Col3", "Col4"});
+        List<List<String>> rows = new ArrayList<List<String>>();
+        List<String> row1 = Arrays.asList(new String[] {"Data1", "Data2", "Data3", "Data4"});
+        List<String> row2 = Arrays.asList(new String[] {"Data5", "Data6", "Data7", "Data8"});
+        List<String> row3 = Arrays.asList(new String[] {"Data9", "Data10", "Data11", "Data12"});
+
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+        
+        try
+        {
+            instance.dynamicReport(columnHeaders, rows);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+           //fail("An exception occured");
+        }
+    }
+    
 }
