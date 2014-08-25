@@ -64,13 +64,13 @@ public class NewApplicationUnitTest {
         CvJpaController mockCvJpaController =  mock(CvJpaController.class);
         instance.setcVDAO(mockCvJpaController);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
    
@@ -80,7 +80,7 @@ public class NewApplicationUnitTest {
              verify(mockCvJpaController).create(mockCV);
              
              verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
-              verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created user cv", new Person("u12236731"));
+              verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created user cv", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); 
         }
@@ -101,7 +101,7 @@ public class NewApplicationUnitTest {
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         instance.setaSEJB(mockApplicationServices);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         Session mockSession = mock(Session.class);
         Person mockPerson = mock(Person.class);
         Cv mockCV = mock(Cv.class);
@@ -123,7 +123,7 @@ public class NewApplicationUnitTest {
             verify(mockApplicationController).create(mockApplication);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow());
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new application", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
@@ -145,7 +145,7 @@ public class NewApplicationUnitTest {
         ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
         instance.setaSEJB(mockApplicationServices);
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         Session mockSession = mock(Session.class);
         Person mockPerson = mock(Person.class);
         Cv mockCV = mock(Cv.class);
@@ -337,9 +337,9 @@ public class NewApplicationUnitTest {
             instance.submitApplication(mockSession, mockApplication);
             verify(mockApplicationJpaController).edit(mockApplication);
             
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
             
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application finalised", "The following application has been submitted by " + mockSession.getUser().getCompleteName() +  ". Please complete referee report.");
+            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPerson, "Application finalised", "The following application has been submitted by " + mockSession.getUser().getCompleteName() +  ". Please complete referee report.");
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow()); 
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));

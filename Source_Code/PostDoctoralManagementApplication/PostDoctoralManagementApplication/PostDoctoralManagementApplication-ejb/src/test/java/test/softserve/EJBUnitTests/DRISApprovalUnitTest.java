@@ -287,8 +287,8 @@ public class DRISApprovalUnitTest {
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         //when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
         
-        when(mockDBEntitiesFactory.bulidEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime())).thenReturn(new EligiblityReport(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime())).thenReturn(new EligiblityReport(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -300,8 +300,8 @@ public class DRISApprovalUnitTest {
             // Declined Application...
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"));
-            verify(mockDBEntitiesFactory).bulidEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime());
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime());
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
@@ -333,9 +333,9 @@ public class DRISApprovalUnitTest {
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -377,13 +377,13 @@ public class DRISApprovalUnitTest {
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         String applicantMessage = "appMSG";
         
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(1)));
-        when(mockDBEntitiesFactory.buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(2)));
+        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(1)));
+        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(2)));
         
         Notification mockCscNotification = mock(Notification.class);
         Notification mockFinanceNotification = mock(Notification.class);
         
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -401,10 +401,10 @@ public class DRISApprovalUnitTest {
             
             verify(mockFundingReportJpaController).create(mockFundingReport);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"));
             
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
-            verify(mockDBEntitiesFactory).buildNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
+            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
+            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));

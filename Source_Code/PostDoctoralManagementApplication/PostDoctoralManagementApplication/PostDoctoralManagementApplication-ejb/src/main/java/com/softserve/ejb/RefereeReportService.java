@@ -172,7 +172,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         refereeReportJpaController.create(refereeReport);
         
         //Log action        
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application refereed" + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application refereed" + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
         application = applicationJpaController.findApplication(application.getApplicationID());
@@ -194,7 +194,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
             }
             
             //Send notification to Grant holder
-            notificationService.sendNotification(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
+            notificationService.sendNotification(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
         }
     }
     

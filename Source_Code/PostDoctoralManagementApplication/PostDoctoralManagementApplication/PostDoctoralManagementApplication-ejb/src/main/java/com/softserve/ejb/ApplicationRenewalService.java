@@ -205,7 +205,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         applicationJpaController.create(application);
         
         //Log action
-        AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Opened a renewal application", session.getUser());
+        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Opened a renewal application", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -226,7 +226,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         getApplicationServicesUtil().submitApplication(application);
         
         //Log action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Submitted renewal application", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Submitted renewal application", session.getUser());
         auditTrailService.logAction(auditLog);
     }
 }

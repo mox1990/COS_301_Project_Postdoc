@@ -145,7 +145,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         //Create notifications for each attendee
         for(Person p : committeeMeeting.getPersonList())
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
         }
         
         //Create the meeting
@@ -156,7 +156,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         notificationService.sendBatchNotifications(notifications, true);
         
         //Log action      
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created a postdoctoral committee meeting", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created a postdoctoral committee meeting", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -195,13 +195,13 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         for(Person p : committeeMeeting.getPersonList())
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
         }
         
         notificationService.sendBatchNotifications(notifications, true);
         
         //Log action      
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
         auditTrailService.logAction(auditLog);
     }
 
@@ -227,7 +227,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         for(Person p : committeeMeeting.getPersonList())
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
         }
         
         committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());
@@ -237,7 +237,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         notificationService.sendBatchNotifications(notifications, true);
         
         //Log action      
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     

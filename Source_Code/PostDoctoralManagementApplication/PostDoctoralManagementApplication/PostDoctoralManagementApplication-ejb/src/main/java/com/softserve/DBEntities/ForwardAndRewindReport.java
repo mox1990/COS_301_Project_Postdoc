@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ForwardAndRewindReport.findByTimestamp", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.timestamp = :timestamp"),
     @NamedQuery(name = "ForwardAndRewindReport.findByType", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.type = :type")})
 public class ForwardAndRewindReport implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -58,6 +59,12 @@ public class ForwardAndRewindReport implements Serializable {
     @Size(max = 65535)
     @Column(name = "_reason")
     private String reason;
+    @Size(max = 11)
+    @Column(name = "_fromStatus")
+    private String fromStatus;
+    @Size(max = 11)
+    @Column(name = "_toStatus")
+    private String toStatus;
     @JoinColumn(name = "_application", referencedColumnName = "_applicationID")
     @ManyToOne(optional = false)
     private Application application;
@@ -109,6 +116,22 @@ public class ForwardAndRewindReport implements Serializable {
     public void setReason(String reason) {
         this.reason = reason;
     }
+    
+    public String getFromStatus() {
+        return fromStatus;
+    }
+
+    public void setFromStatus(String fromStatus) {
+        this.fromStatus = fromStatus;
+    }
+
+    public String getToStatus() {
+        return toStatus;
+    }
+
+    public void setToStatus(String toStatus) {
+        this.toStatus = toStatus;
+    }
 
     public Application getApplication() {
         return application;
@@ -150,5 +173,7 @@ public class ForwardAndRewindReport implements Serializable {
     public String toString() {
         return "com.softserve.DBEntities.ForwardAndRewindReport[ reportID=" + reportID + " ]";
     }
+
+    
     
 }

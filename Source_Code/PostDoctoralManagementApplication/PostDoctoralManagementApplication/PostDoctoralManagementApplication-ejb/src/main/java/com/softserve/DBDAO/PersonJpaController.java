@@ -26,6 +26,7 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.AmmendRequest;
@@ -75,6 +76,9 @@ public class PersonJpaController implements Serializable {
         }
         if (person.getEndorsementList() == null) {
             person.setEndorsementList(new ArrayList<Endorsement>());
+        }
+        if (person.getApplicationReviewRequestList() == null) {
+            person.setApplicationReviewRequestList(new ArrayList<ApplicationReviewRequest>());
         }
         if (person.getRefereeReportList() == null) {
             person.setRefereeReportList(new ArrayList<RefereeReport>());
@@ -166,6 +170,12 @@ public class PersonJpaController implements Serializable {
                 attachedEndorsementList.add(endorsementListEndorsementToAttach);
             }
             person.setEndorsementList(attachedEndorsementList);
+            List<ApplicationReviewRequest> attachedApplicationReviewRequestList = new ArrayList<ApplicationReviewRequest>();
+            for (ApplicationReviewRequest applicationReviewRequestListApplicationReviewRequestToAttach : person.getApplicationReviewRequestList()) {
+                applicationReviewRequestListApplicationReviewRequestToAttach = em.getReference(applicationReviewRequestListApplicationReviewRequestToAttach.getClass(), applicationReviewRequestListApplicationReviewRequestToAttach.getApplicationReviewRequestPK());
+                attachedApplicationReviewRequestList.add(applicationReviewRequestListApplicationReviewRequestToAttach);
+            }
+            person.setApplicationReviewRequestList(attachedApplicationReviewRequestList);
             List<RefereeReport> attachedRefereeReportList = new ArrayList<RefereeReport>();
             for (RefereeReport refereeReportListRefereeReportToAttach : person.getRefereeReportList()) {
                 refereeReportListRefereeReportToAttach = em.getReference(refereeReportListRefereeReportToAttach.getClass(), refereeReportListRefereeReportToAttach.getReportID());
@@ -298,6 +308,15 @@ public class PersonJpaController implements Serializable {
                 if (oldDeanOfEndorsementListEndorsement != null) {
                     oldDeanOfEndorsementListEndorsement.getEndorsementList().remove(endorsementListEndorsement);
                     oldDeanOfEndorsementListEndorsement = em.merge(oldDeanOfEndorsementListEndorsement);
+                }
+            }
+            for (ApplicationReviewRequest applicationReviewRequestListApplicationReviewRequest : person.getApplicationReviewRequestList()) {
+                Person oldPerson1OfApplicationReviewRequestListApplicationReviewRequest = applicationReviewRequestListApplicationReviewRequest.getPerson1();
+                applicationReviewRequestListApplicationReviewRequest.setPerson1(person);
+                applicationReviewRequestListApplicationReviewRequest = em.merge(applicationReviewRequestListApplicationReviewRequest);
+                if (oldPerson1OfApplicationReviewRequestListApplicationReviewRequest != null) {
+                    oldPerson1OfApplicationReviewRequestListApplicationReviewRequest.getApplicationReviewRequestList().remove(applicationReviewRequestListApplicationReviewRequest);
+                    oldPerson1OfApplicationReviewRequestListApplicationReviewRequest = em.merge(oldPerson1OfApplicationReviewRequestListApplicationReviewRequest);
                 }
             }
             for (RefereeReport refereeReportListRefereeReport : person.getRefereeReportList()) {
@@ -450,6 +469,8 @@ public class PersonJpaController implements Serializable {
             List<DeclineReport> declineReportListNew = person.getDeclineReportList();
             List<Endorsement> endorsementListOld = persistentPerson.getEndorsementList();
             List<Endorsement> endorsementListNew = person.getEndorsementList();
+            List<ApplicationReviewRequest> applicationReviewRequestListOld = persistentPerson.getApplicationReviewRequestList();
+            List<ApplicationReviewRequest> applicationReviewRequestListNew = person.getApplicationReviewRequestList();
             List<RefereeReport> refereeReportListOld = persistentPerson.getRefereeReportList();
             List<RefereeReport> refereeReportListNew = person.getRefereeReportList();
             List<Notification> notificationListOld = persistentPerson.getNotificationList();
@@ -507,6 +528,14 @@ public class PersonJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Endorsement " + endorsementListOldEndorsement + " since its dean field is not nullable.");
+                }
+            }
+            for (ApplicationReviewRequest applicationReviewRequestListOldApplicationReviewRequest : applicationReviewRequestListOld) {
+                if (!applicationReviewRequestListNew.contains(applicationReviewRequestListOldApplicationReviewRequest)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ApplicationReviewRequest " + applicationReviewRequestListOldApplicationReviewRequest + " since its person1 field is not nullable.");
                 }
             }
             for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
@@ -651,6 +680,13 @@ public class PersonJpaController implements Serializable {
             }
             endorsementListNew = attachedEndorsementListNew;
             person.setEndorsementList(endorsementListNew);
+            List<ApplicationReviewRequest> attachedApplicationReviewRequestListNew = new ArrayList<ApplicationReviewRequest>();
+            for (ApplicationReviewRequest applicationReviewRequestListNewApplicationReviewRequestToAttach : applicationReviewRequestListNew) {
+                applicationReviewRequestListNewApplicationReviewRequestToAttach = em.getReference(applicationReviewRequestListNewApplicationReviewRequestToAttach.getClass(), applicationReviewRequestListNewApplicationReviewRequestToAttach.getApplicationReviewRequestPK());
+                attachedApplicationReviewRequestListNew.add(applicationReviewRequestListNewApplicationReviewRequestToAttach);
+            }
+            applicationReviewRequestListNew = attachedApplicationReviewRequestListNew;
+            person.setApplicationReviewRequestList(applicationReviewRequestListNew);
             List<RefereeReport> attachedRefereeReportListNew = new ArrayList<RefereeReport>();
             for (RefereeReport refereeReportListNewRefereeReportToAttach : refereeReportListNew) {
                 refereeReportListNewRefereeReportToAttach = em.getReference(refereeReportListNewRefereeReportToAttach.getClass(), refereeReportListNewRefereeReportToAttach.getReportID());
@@ -826,6 +862,17 @@ public class PersonJpaController implements Serializable {
                     if (oldDeanOfEndorsementListNewEndorsement != null && !oldDeanOfEndorsementListNewEndorsement.equals(person)) {
                         oldDeanOfEndorsementListNewEndorsement.getEndorsementList().remove(endorsementListNewEndorsement);
                         oldDeanOfEndorsementListNewEndorsement = em.merge(oldDeanOfEndorsementListNewEndorsement);
+                    }
+                }
+            }
+            for (ApplicationReviewRequest applicationReviewRequestListNewApplicationReviewRequest : applicationReviewRequestListNew) {
+                if (!applicationReviewRequestListOld.contains(applicationReviewRequestListNewApplicationReviewRequest)) {
+                    Person oldPerson1OfApplicationReviewRequestListNewApplicationReviewRequest = applicationReviewRequestListNewApplicationReviewRequest.getPerson1();
+                    applicationReviewRequestListNewApplicationReviewRequest.setPerson1(person);
+                    applicationReviewRequestListNewApplicationReviewRequest = em.merge(applicationReviewRequestListNewApplicationReviewRequest);
+                    if (oldPerson1OfApplicationReviewRequestListNewApplicationReviewRequest != null && !oldPerson1OfApplicationReviewRequestListNewApplicationReviewRequest.equals(person)) {
+                        oldPerson1OfApplicationReviewRequestListNewApplicationReviewRequest.getApplicationReviewRequestList().remove(applicationReviewRequestListNewApplicationReviewRequest);
+                        oldPerson1OfApplicationReviewRequestListNewApplicationReviewRequest = em.merge(oldPerson1OfApplicationReviewRequestListNewApplicationReviewRequest);
                     }
                 }
             }
@@ -1036,6 +1083,13 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the Endorsement " + endorsementListOrphanCheckEndorsement + " in its endorsementList field has a non-nullable dean field.");
+            }
+            List<ApplicationReviewRequest> applicationReviewRequestListOrphanCheck = person.getApplicationReviewRequestList();
+            for (ApplicationReviewRequest applicationReviewRequestListOrphanCheckApplicationReviewRequest : applicationReviewRequestListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the ApplicationReviewRequest " + applicationReviewRequestListOrphanCheckApplicationReviewRequest + " in its applicationReviewRequestList field has a non-nullable person1 field.");
             }
             List<RefereeReport> refereeReportListOrphanCheck = person.getRefereeReportList();
             for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {

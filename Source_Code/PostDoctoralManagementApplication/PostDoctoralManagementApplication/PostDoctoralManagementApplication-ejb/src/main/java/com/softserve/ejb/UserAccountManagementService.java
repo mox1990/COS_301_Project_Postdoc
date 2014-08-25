@@ -317,10 +317,10 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
         
         //Log action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created new user account", (session.getUser() == null && session.isSystem())  ? user : session.getUser()); //This is a isolated instance when a prospective fellow creates a new account
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created new user account", (session.getUser() == null && session.isSystem())  ? user : session.getUser()); //This is a isolated instance when a prospective fellow creates a new account
         auditTrailService.logAction(auditLog);
         
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(user, user, "Created account", "Account has been created for you");
+        Notification notification = dBEntitiesFactory.createNotificationEntity(user, user, "Created account", "Account has been created for you");
         notificationService.sendNotification(notification, true);
     }
     
@@ -440,7 +440,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         personJpaController.edit(user);
         
         //Log action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated user account", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Updated user account", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -475,7 +475,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         personJpaController.edit(user);
         
         //Log action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Removed user account", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Removed user account", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -511,11 +511,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
         createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user);
         
         //Notify the new user
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
+        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
         notificationService.sendNotification(notification, true);
         
         //Log this action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Generated on demand account", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Generated on demand account", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -534,7 +534,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
         updateUserAccount(session, user);
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Activated on demand account", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Activated on demand account", session.getUser());
         auditTrailService.logAction(auditLog);
 
     }    

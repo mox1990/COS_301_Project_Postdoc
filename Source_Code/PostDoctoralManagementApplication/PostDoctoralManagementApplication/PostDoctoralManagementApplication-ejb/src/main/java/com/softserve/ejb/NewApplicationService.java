@@ -159,7 +159,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         //Log action
-        AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Opened a new application", session.getUser());
+        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Opened a new application", session.getUser());
         auditTrailService.logAction(auditLog);
                 
     }
@@ -217,7 +217,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         //Log action
-        AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Linked grant holder to new application", session.getUser());
+        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Linked grant holder to new application", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -281,7 +281,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             applicationJpaController.edit(a);
         }
         //Log action
-        AuditLog auditLog = getDBEntitiesFactory().buildAduitLogEntitiy("Linked referee to new application", session.getUser());
+        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Linked referee to new application", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -302,7 +302,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         getApplicationServicesUtil().submitApplication(application);
         
         //Log action
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Submitted new application", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Submitted new application", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     

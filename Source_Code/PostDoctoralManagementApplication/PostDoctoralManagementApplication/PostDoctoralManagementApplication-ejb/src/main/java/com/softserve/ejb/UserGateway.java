@@ -94,7 +94,7 @@ public class UserGateway implements UserGatewayLocal
                 //Set login status to true
                 session.setLoggedInStatus(Boolean.TRUE);
                 //Log action
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("User logged in", session.getUser());
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("User logged in", session.getUser());
                 auditTrailService.logAction(auditLog);
             } 
             else
@@ -119,7 +119,7 @@ public class UserGateway implements UserGatewayLocal
         session.setLoggedInStatus(Boolean.FALSE);
         session.setHttpSessionUsername("");
         session.setHttpSessionPassword("");
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("User logged out", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("User logged out", session.getUser());
         auditTrailService.logAction(auditLog);
         
         
@@ -183,13 +183,13 @@ public class UserGateway implements UserGatewayLocal
                 {
                     if(allowedRoles.contains(sr))
                     {
-                        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Authenticated user", session.getUser());
+                        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Authenticated user", session.getUser());
                         auditTrailService.logAction(auditLog);
                         return;
                     }
                 }
                 
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Unable to authenticate user", session.getUser());
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Unable to authenticate user", session.getUser());
                 auditTrailService.logAction(auditLog);
                 
                 throw new AuthenticationException("User does not have the correct priviliges for this section");

@@ -98,7 +98,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
         progressReportJpaController.create(progressReport);
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created progress report", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created progress report", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -124,7 +124,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
         progressReportJpaController.edit(progressReport);
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("updated progress report", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("updated progress report", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     

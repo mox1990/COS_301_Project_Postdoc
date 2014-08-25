@@ -147,6 +147,16 @@ CREATE TABLE application (
     FOREIGN KEY (_grantHolder) REFERENCES person (_systemID)
 )  ENGINE=InnoDB;
 
+CREATE TABLE application_review_request (
+	_person CHAR(9) NOT NULL,
+	_application BIGINT UNSIGNED NOT NULL,
+	_type ENUM('HOD','DEAN'),
+
+	PRIMARY KEY (_person, _application, _type),
+	FOREIGN KEY (_person) REFERENCES person(_systemID),
+	FOREIGN KEY (_application) REFERENCES application(_applicationID)
+)  ENGINE=InnoDB;
+
 CREATE TABLE eligiblity_report (
 	_reportID BIGINT UNSIGNED NOT NULL,
 	_eligiblityCheckDate DATETIME NOT NULL,
@@ -265,6 +275,8 @@ CREATE TABLE forward_and_rewind_report (
 	_timestamp DATETIME NOT NULL,
 	_type ENUM('forward', 'rewind') NOT NULL,
 	_reason TEXT,
+	_fromStatus ENUM('open', 'submitted', 'declined', 'referred', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
+	_toStatus ENUM('open', 'submitted', 'declined', 'referred', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
 
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_application) REFERENCES application(_applicationID),

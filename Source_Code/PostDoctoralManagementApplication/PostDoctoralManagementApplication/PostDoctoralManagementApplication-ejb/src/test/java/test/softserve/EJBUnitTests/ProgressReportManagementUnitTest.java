@@ -96,7 +96,7 @@ public class ProgressReportManagementUnitTest
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockProgressReportController).edit(mockProgress);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -136,7 +136,7 @@ public class ProgressReportManagementUnitTest
         instance.setpDAO(mockPersonJpaController);
         instance.setuEJB(mockUserGateway);
         instance.setaSEJB(mockApplicationServices);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
           
         try
@@ -145,7 +145,7 @@ public class ProgressReportManagementUnitTest
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockProgressReportController).edit(mockProgress);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             

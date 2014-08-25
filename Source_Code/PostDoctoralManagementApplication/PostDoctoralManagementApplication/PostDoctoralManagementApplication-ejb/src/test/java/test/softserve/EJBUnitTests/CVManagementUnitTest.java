@@ -83,7 +83,7 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testCreateCV() throws Exception {
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
                 
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
@@ -97,7 +97,7 @@ public class CVManagementUnitTest {
             
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
             verify(mockCvJpaController).create(mockCV);          
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created user cv", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created user cv", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
         }
@@ -110,7 +110,7 @@ public class CVManagementUnitTest {
     
     @Test
     public void testCreateCVButHasCV() throws Exception {
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
                 
         Person mockPerson = mock(Person.class);
         
@@ -141,7 +141,7 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testUpdateCV() throws Exception {
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
@@ -154,7 +154,7 @@ public class CVManagementUnitTest {
             
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
             verify(mockCvJpaController).edit(mockCV);          
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Updated user cv", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Updated user cv", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
         }

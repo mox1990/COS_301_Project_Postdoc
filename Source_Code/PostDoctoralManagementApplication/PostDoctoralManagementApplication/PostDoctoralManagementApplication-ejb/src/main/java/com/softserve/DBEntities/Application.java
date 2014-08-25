@@ -104,6 +104,8 @@ public class Application implements Serializable {
     private DeclineReport declineReport;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "application")
     private Endorsement endorsement;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "application1")
+    private List<ApplicationReviewRequest> applicationReviewRequestList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationID")
     private List<RefereeReport> refereeReportList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
@@ -277,6 +279,15 @@ public class Application implements Serializable {
 
     public void setEndorsement(Endorsement endorsement) {
         this.endorsement = endorsement;
+    }
+
+    @XmlTransient
+    public List<ApplicationReviewRequest> getApplicationReviewRequestList() {
+        return applicationReviewRequestList;
+    }
+
+    public void setApplicationReviewRequestList(List<ApplicationReviewRequest> applicationReviewRequestList) {
+        this.applicationReviewRequestList = applicationReviewRequestList;
     }
 
     @XmlTransient

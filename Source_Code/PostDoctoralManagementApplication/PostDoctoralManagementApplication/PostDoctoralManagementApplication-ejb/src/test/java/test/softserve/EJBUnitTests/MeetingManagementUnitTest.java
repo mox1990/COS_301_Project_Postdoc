@@ -73,7 +73,7 @@ public class MeetingManagementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         
@@ -97,7 +97,7 @@ public class MeetingManagementUnitTest {
             
             //Verify correct function behaviour
             verify(mockCommitteeMeetingJpaController).create(mockCommitteeMeeting);           
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
@@ -120,7 +120,7 @@ public class MeetingManagementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         
@@ -144,7 +144,7 @@ public class MeetingManagementUnitTest {
             
             //Verify correct function behaviour
             verify(mockCommitteeMeetingJpaController).edit(mockCommitteeMeeting);           
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
@@ -167,7 +167,7 @@ public class MeetingManagementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         
@@ -214,7 +214,7 @@ public class MeetingManagementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         
@@ -261,7 +261,7 @@ public class MeetingManagementUnitTest {
         UserGateway mockUserGateway = mock(UserGateway.class);
         NotificationService mockNotificationService = mock(NotificationService.class);
         DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         
         
