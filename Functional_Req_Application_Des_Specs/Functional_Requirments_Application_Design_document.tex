@@ -582,12 +582,12 @@ These are conditions that must be met by the system or user before they are allo
 \begin{itemize}
 	\item\textbf{ Application service}
 		\begin{itemize}
-			\item New fellowship application service: Can only be accessed if new applications are open.
+			\item New fellowship application service: Can only be accessed if new applications are open, if the user has no open applications, and the applicant is under the age of 40.
 			\item Application renewal service: Can only be accessed if renewals are open and if the user is a research fellow that is still in possession of a fellowship.
 			\item Referees' report service:  Can only be accessed if user is a referee.
-			\item Grant holder application finalisation service:  Can only be accessed if user is a grant holder.
-			\item HOD Approval service:  Can only be accessed if user is a HOD.
-			\item Dean endorsement service:  Can only be accessed if user is a member of the dean's office.
+			\item Grant holder application finalisation service:  Can only be accessed if user is a grant holder to the specified application.
+			\item HOD Approval service:  Can only be accessed if user is a HOD for the department, the application is linked to.
+			\item Dean endorsement service:  Can only be accessed if user is a member of the dean's office for the faculty the department is linked to.
 			\item DRIS Approval service:  Can only be accessed if user is a member of the DRIS.
 			\item Meeting management service:  Can only be accessed if user is a member of the DRIS or post-doctoral committee member.
 			\item Application progress viewer service: Can only be accessed if user logged as a prospective fellow, research fellow or grant holder. Also the user needs to have at least one application on the system.	
@@ -601,7 +601,7 @@ These are conditions that must be met by the system or user before they are allo
 			\item Generate report: If data has been selected.
 			\item View report: If a report has been generated.
 			\item Export report: If user wants to export report and the user is busy viewing the report.
-			\item To spreadsheet: If user wants to export report to a spreadsheet.
+			\item To csv: If user wants to export report to a cvs file.
 			\item To pdf: If user wants to export report to a pdf.	
 		\end{itemize}
 	
@@ -616,7 +616,7 @@ These are conditions that must be met by the system or user before they are allo
 	
 	\item \textbf{User account management services}
 		\begin{itemize}
-			\item Create new account: If requesting user has the appropriate security role.
+			\item Create new account: If requesting user has the appropriate security role or the system administrator.
 			\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
 			\item Remove account: If requesting user has the appropriate security role.	
 			\item View all accounts: If requesting user is a system administrator.					
@@ -626,7 +626,6 @@ These are conditions that must be met by the system or user before they are allo
 		\begin{itemize}
 			\item Login user: If requesting user is a user of the system.
 			\item User account retrieval: If requesting user has forgotten their user credentials.				
-			\item Create prospective fellow account: If a new prospective fellow wishes to create an account.	
 			\item Activate on-demand user account: If a user has been identified by an applicant and has a security token.
 			\item Authenticate user: if user is logged in.						
 		\end{itemize}
@@ -654,13 +653,13 @@ These are conditions that must be met by the system or user before they are allo
 			\item Import referral reports: If the application is a new application.
 			\item Import progress report: If the application is a renewal application.
 			\item Import HOD recommendations: If the application has a valid HOD recommendation.
-			\item Import dean endorsements: If the application has a valid dean's endorsement.
+			\item Import dean endorsements: If the application has a valid Dean's endorsement.
 			\item Import DRIS approval data: If the application has valid DRIS approval data.
 			\item Import funding data: If the application has a valid funding data and has been funded.				
 		\end{itemize}		
 	\item \textbf{Application progress viewer service}
 		\begin{itemize}
-			\item View application progress: Can only be used if there are any applications made by the user.
+			\item View application progress: Can only be used if there are any applications made by the user or there are pending applications for their approval or recommendation.
 		\end{itemize}
 		
 	\item \textbf{New fellowship application service}
