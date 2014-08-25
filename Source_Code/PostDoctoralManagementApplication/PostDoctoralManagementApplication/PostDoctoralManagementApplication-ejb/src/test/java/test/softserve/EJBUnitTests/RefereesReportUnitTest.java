@@ -136,7 +136,7 @@ public class RefereesReportUnitTest {
         RefereeReportJpaController mockRefereeReportController = mock(RefereeReportJpaController.class);
         Application mockApplication = mock(Application.class);
         
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
@@ -146,7 +146,7 @@ public class RefereesReportUnitTest {
             verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
            

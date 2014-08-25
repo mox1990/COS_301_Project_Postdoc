@@ -123,7 +123,7 @@ public class CVManagementService implements CVManagementServiceLocal {
         }
         
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Created user cv", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created user cv", session.getUser());
         auditTrailService.logAction(auditLog);
     }
     
@@ -171,7 +171,7 @@ public class CVManagementService implements CVManagementServiceLocal {
         cv.setCvID(session.getUser().getSystemID());
         cvJpaController.edit(cv);
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Updated user cv", session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Updated user cv", session.getUser());
         auditTrailService.logAction(auditLog);
     }
 }

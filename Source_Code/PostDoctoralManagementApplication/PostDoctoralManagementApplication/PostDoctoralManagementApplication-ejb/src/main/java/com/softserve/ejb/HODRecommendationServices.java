@@ -206,18 +206,18 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
         applicationJpaController.edit(application);
         
-        AmmendRequest ammendRequest = dBEntitiesFactory.bulidAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
+        AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
         ammendRequestJpaController.create(ammendRequest);
         
         //Log action        
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Ammendment request for application " + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Ammendment request for application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
         //Send notification to grant holder and applicatantD        
-        Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
         notificationService.sendNotification(notification, true);
         
-        notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+        notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
         notificationService.sendNotification(notification, true);
     }
     
@@ -267,7 +267,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         
         //Log action
         
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
         //Send notification to Deans office
@@ -275,7 +275,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         for(Person p : DeansOfficeMembers)
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
         }
         notificationService.sendBatchNotifications(notifications, true);
     }

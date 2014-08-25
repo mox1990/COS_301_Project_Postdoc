@@ -311,7 +311,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
                 applicationJpaController.edit(application);
 
                 //Log action  
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application made eligible" + application.getApplicationID(), session.getUser());
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application made eligible" + application.getApplicationID(), session.getUser());
                 auditTrailService.logAction(auditLog);
             }
             else
@@ -323,7 +323,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
                 applicationServices.declineAppliction(session, application, reason);
             }
             
-            EligiblityReport eligiblityReport = dBEntitiesFactory.bulidEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
+            EligiblityReport eligiblityReport = dBEntitiesFactory.createEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
             eligiblityReportJpaController.create(eligiblityReport);
         }
         else
@@ -419,13 +419,13 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }
                 
         //Log action  
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
 
         //Send notification to CSC, Finance, grant holder and applicatant
         ArrayList<Notification> notifications = new ArrayList<Notification>();        
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
-        notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
+        notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
+        notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
         
         notificationService.sendBatchNotifications(notifications, true);
         

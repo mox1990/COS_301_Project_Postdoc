@@ -223,18 +223,18 @@ public class ApplicationServicesUtil {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);        
             applicationJpaController.edit(application);
 
-            DeclineReport declineReport = dBEntitiesFactory.bulidDeclineReportEntity(application,session.getUser(), reason, getGregorianCalendar().getTime());
+            DeclineReport declineReport = dBEntitiesFactory.createDeclineReportEntity(application,session.getUser(), reason, getGregorianCalendar().getTime());
             declineReportJpaController.create(declineReport);
 
             //Log action  
-            AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
+            AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
             auditTrailService.logAction(auditLog);
 
             //Send notification to grant holder and applicatantD
-            Notification notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
             notificationService.sendNotification(notification, true);
 
-            notification = dBEntitiesFactory.buildNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
             notificationService.sendNotification(notification, true);
         }
         else
@@ -259,6 +259,61 @@ public class ApplicationServicesUtil {
         application.setSubmissionDate(getGregorianCalendar().getTime());
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
         applicationJpaController.edit(application);
+    }
+    
+    public int getOrderIndexOfApplicationStatus(String status)
+    {
+        if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+        {
+            return 0;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
+        {
+            return 1;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
+        {
+            return 2;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+        {
+            return 3;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+        {
+            return 4;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
+        {
+            return 5;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
+        {
+            return 6;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED))
+        {
+            return 7;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED))
+        {
+            return 8;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED))
+        {
+            return 9;
+        }
+        else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED))
+        {
+            return 9;
+        }
+        
+        return 20;
+    }
+    
+    public boolean hasApplicationAchivedThisStatus(Application application, String status)
+    {
+        return getOrderIndexOfApplicationStatus(application.getStatus()) >= getOrderIndexOfApplicationStatus(status);
     }
     
 }

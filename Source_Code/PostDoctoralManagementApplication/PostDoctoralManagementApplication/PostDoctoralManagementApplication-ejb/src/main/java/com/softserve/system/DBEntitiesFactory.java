@@ -16,7 +16,7 @@ import java.util.Date;
  */
 public class DBEntitiesFactory {
     
-    public Address buildAddressEntitiy(String country, String province, String townCity, String street, Integer streetNum, String roomNum, String zipPostalCode)
+    public Address createAddressEntitiy(String country, String province, String townCity, String street, Integer streetNum, String roomNum, String zipPostalCode)
     {
         Address address = new Address();
         
@@ -31,7 +31,7 @@ public class DBEntitiesFactory {
         return address;
     }
     
-    public AuditLog buildAduitLogEntitiy(String action, Person person)
+    public AuditLog createAduitLogEntitiy(String action, Person person)
     {
         AuditLog auditLog = new AuditLog();
         
@@ -41,7 +41,7 @@ public class DBEntitiesFactory {
         return auditLog;
     }
     
-    public Notification buildNotificationEntity(Person sender, Person reciever, String subject, String message)
+    public Notification createNotificationEntity(Person sender, Person reciever, String subject, String message)
     {
         Notification notification = new Notification();
         
@@ -53,7 +53,7 @@ public class DBEntitiesFactory {
         return notification;
     }
     
-    public SecurityRole bulidSecurityRoleEntity(Long id, String roleName, Long roleMask)
+    public SecurityRole createSecurityRoleEntity(Long id, String roleName, Long roleMask)
     {
         SecurityRole securityRole= new SecurityRole();
         
@@ -64,7 +64,7 @@ public class DBEntitiesFactory {
         return securityRole;
     }
     
-    public ProgressReport bulidProgressReportEntity(Application application, String content, Date timestamp)
+    public ProgressReport createProgressReportEntity(Application application, String content, Date timestamp)
     {
         ProgressReport progressReport = new ProgressReport();
         
@@ -75,7 +75,7 @@ public class DBEntitiesFactory {
         return progressReport;
     }
     
-    public AmmendRequest bulidAmmendRequestEntity(Application application, Person creator, String request, Date timestamp)
+    public AmmendRequest createAmmendRequestEntity(Application application, Person creator, String request, Date timestamp)
     {
         AmmendRequest ammendRequest = new AmmendRequest();
         ammendRequest.setCreator(creator);
@@ -86,7 +86,7 @@ public class DBEntitiesFactory {
         return ammendRequest;        
     }
     
-    public DeclineReport bulidDeclineReportEntity(Application application, Person creator, String reason, Date timestamp)
+    public DeclineReport createDeclineReportEntity(Application application, Person creator, String reason, Date timestamp)
     {
         DeclineReport declineReport = new DeclineReport();
         
@@ -99,7 +99,7 @@ public class DBEntitiesFactory {
         return declineReport;        
     }
     
-    public EligiblityReport bulidEligiblityReportEntity(Application application, Person checker, Date timestamp)
+    public EligiblityReport createEligiblityReportEntity(Application application, Person checker, Date timestamp)
     {
         EligiblityReport eligiblityReport = new EligiblityReport();
         
@@ -109,6 +109,21 @@ public class DBEntitiesFactory {
         eligiblityReport.setEligiblityChecker(checker);
         
         return eligiblityReport;        
+    }
+    
+    public ForwardAndRewindReport createForwardAndRewindReport(Application application, Person dris, Date timestamp, String reason, String type, String toStatus, String fromStatus)
+    {
+        ForwardAndRewindReport forwardAndRewindReport = new ForwardAndRewindReport();
+        
+        forwardAndRewindReport.setApplication(application);
+        forwardAndRewindReport.setDris(dris);
+        forwardAndRewindReport.setReason(reason);
+        forwardAndRewindReport.setType(reason);
+        forwardAndRewindReport.setTimestamp(timestamp);
+        forwardAndRewindReport.setToStatus(toStatus);
+        forwardAndRewindReport.setFromStatus(fromStatus);
+        
+        return forwardAndRewindReport;        
     }
     //Rest of entities: Add as required
 }

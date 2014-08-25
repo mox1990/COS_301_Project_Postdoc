@@ -231,7 +231,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         applicationJpaController.edit(application);
         
         //Log action      
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Finalised application " + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Finalised application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
         
         //Send notification to HOD        
@@ -239,7 +239,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         for(Person p : HODs)
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
         }
         notificationService.sendBatchNotifications(notifications, true);
         

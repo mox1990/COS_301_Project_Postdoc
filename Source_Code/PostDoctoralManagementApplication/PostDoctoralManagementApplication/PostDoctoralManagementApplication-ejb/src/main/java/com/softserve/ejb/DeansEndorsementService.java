@@ -169,7 +169,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         }
         
         //Log action  
-        AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("Endorsed application " + application.getApplicationID(), session.getUser());
+        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Endorsed application " + application.getApplicationID(), session.getUser());
         auditTrailService.logAction(auditLog);
 
         //Send notification to DRIS member(s)
@@ -177,7 +177,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         for(Person p : DRISMembers)
         {
-            notifications.add(dBEntitiesFactory.buildNotificationEntity(session.getUser(), p, "Application endorsed", "The following application has been endorsed by " + session.getUser().getCompleteName() + ". Please review for eligbility."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application endorsed", "The following application has been endorsed by " + session.getUser().getCompleteName() + ". Please review for eligbility."));
         }
         notificationService.sendBatchNotifications(notifications, true);
         

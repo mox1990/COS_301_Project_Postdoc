@@ -9,24 +9,25 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.AmmendRequest;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.CommitteeMeeting;
+import java.io.Serializable;
 import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.Endorsement;
+import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.ForwardAndRewindReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ProgressReport;
-import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.DBEntities.RefereeReport;
-import java.io.Serializable;
+import com.softserve.DBEntities.EligiblityReport;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import com.softserve.DBEntities.CommitteeMeeting;
+import com.softserve.DBEntities.ApplicationReviewRequest;
+import com.softserve.DBEntities.RefereeReport;
+import com.softserve.DBEntities.AmmendRequest;
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.ProgressReport;
+import com.softserve.DBEntities.ForwardAndRewindReport;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
@@ -60,6 +61,9 @@ public class ApplicationJpaController implements Serializable {
         }
         if (application.getCommitteeMeetingList() == null) {
             application.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
+        }
+        if (application.getApplicationReviewRequestList() == null) {
+            application.setApplicationReviewRequestList(new ArrayList<ApplicationReviewRequest>());
         }
         if (application.getRefereeReportList() == null) {
             application.setRefereeReportList(new ArrayList<RefereeReport>());
@@ -124,6 +128,12 @@ public class ApplicationJpaController implements Serializable {
                 attachedCommitteeMeetingList.add(committeeMeetingListCommitteeMeetingToAttach);
             }
             application.setCommitteeMeetingList(attachedCommitteeMeetingList);
+            List<ApplicationReviewRequest> attachedApplicationReviewRequestList = new ArrayList<ApplicationReviewRequest>();
+            for (ApplicationReviewRequest applicationReviewRequestListApplicationReviewRequestToAttach : application.getApplicationReviewRequestList()) {
+                applicationReviewRequestListApplicationReviewRequestToAttach = em.getReference(applicationReviewRequestListApplicationReviewRequestToAttach.getClass(), applicationReviewRequestListApplicationReviewRequestToAttach.getApplicationReviewRequestPK());
+                attachedApplicationReviewRequestList.add(applicationReviewRequestListApplicationReviewRequestToAttach);
+            }
+            application.setApplicationReviewRequestList(attachedApplicationReviewRequestList);
             List<RefereeReport> attachedRefereeReportList = new ArrayList<RefereeReport>();
             for (RefereeReport refereeReportListRefereeReportToAttach : application.getRefereeReportList()) {
                 refereeReportListRefereeReportToAttach = em.getReference(refereeReportListRefereeReportToAttach.getClass(), refereeReportListRefereeReportToAttach.getReportID());
@@ -210,6 +220,15 @@ public class ApplicationJpaController implements Serializable {
                 committeeMeetingListCommitteeMeeting.getApplicationList().add(application);
                 committeeMeetingListCommitteeMeeting = em.merge(committeeMeetingListCommitteeMeeting);
             }
+            for (ApplicationReviewRequest applicationReviewRequestListApplicationReviewRequest : application.getApplicationReviewRequestList()) {
+                Application oldApplication1OfApplicationReviewRequestListApplicationReviewRequest = applicationReviewRequestListApplicationReviewRequest.getApplication1();
+                applicationReviewRequestListApplicationReviewRequest.setApplication1(application);
+                applicationReviewRequestListApplicationReviewRequest = em.merge(applicationReviewRequestListApplicationReviewRequest);
+                if (oldApplication1OfApplicationReviewRequestListApplicationReviewRequest != null) {
+                    oldApplication1OfApplicationReviewRequestListApplicationReviewRequest.getApplicationReviewRequestList().remove(applicationReviewRequestListApplicationReviewRequest);
+                    oldApplication1OfApplicationReviewRequestListApplicationReviewRequest = em.merge(oldApplication1OfApplicationReviewRequestListApplicationReviewRequest);
+                }
+            }
             for (RefereeReport refereeReportListRefereeReport : application.getRefereeReportList()) {
                 Application oldApplicationIDOfRefereeReportListRefereeReport = refereeReportListRefereeReport.getApplicationID();
                 refereeReportListRefereeReport.setApplicationID(application);
@@ -285,6 +304,8 @@ public class ApplicationJpaController implements Serializable {
             List<Person> personListNew = application.getPersonList();
             List<CommitteeMeeting> committeeMeetingListOld = persistentApplication.getCommitteeMeetingList();
             List<CommitteeMeeting> committeeMeetingListNew = application.getCommitteeMeetingList();
+            List<ApplicationReviewRequest> applicationReviewRequestListOld = persistentApplication.getApplicationReviewRequestList();
+            List<ApplicationReviewRequest> applicationReviewRequestListNew = application.getApplicationReviewRequestList();
             List<RefereeReport> refereeReportListOld = persistentApplication.getRefereeReportList();
             List<RefereeReport> refereeReportListNew = application.getRefereeReportList();
             List<AmmendRequest> ammendRequestListOld = persistentApplication.getAmmendRequestList();
@@ -323,6 +344,14 @@ public class ApplicationJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("You must retain EligiblityReport " + eligiblityReportOld + " since its application field is not nullable.");
+            }
+            for (ApplicationReviewRequest applicationReviewRequestListOldApplicationReviewRequest : applicationReviewRequestListOld) {
+                if (!applicationReviewRequestListNew.contains(applicationReviewRequestListOldApplicationReviewRequest)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ApplicationReviewRequest " + applicationReviewRequestListOldApplicationReviewRequest + " since its application1 field is not nullable.");
+                }
             }
             for (RefereeReport refereeReportListOldRefereeReport : refereeReportListOld) {
                 if (!refereeReportListNew.contains(refereeReportListOldRefereeReport)) {
@@ -401,6 +430,13 @@ public class ApplicationJpaController implements Serializable {
             }
             committeeMeetingListNew = attachedCommitteeMeetingListNew;
             application.setCommitteeMeetingList(committeeMeetingListNew);
+            List<ApplicationReviewRequest> attachedApplicationReviewRequestListNew = new ArrayList<ApplicationReviewRequest>();
+            for (ApplicationReviewRequest applicationReviewRequestListNewApplicationReviewRequestToAttach : applicationReviewRequestListNew) {
+                applicationReviewRequestListNewApplicationReviewRequestToAttach = em.getReference(applicationReviewRequestListNewApplicationReviewRequestToAttach.getClass(), applicationReviewRequestListNewApplicationReviewRequestToAttach.getApplicationReviewRequestPK());
+                attachedApplicationReviewRequestListNew.add(applicationReviewRequestListNewApplicationReviewRequestToAttach);
+            }
+            applicationReviewRequestListNew = attachedApplicationReviewRequestListNew;
+            application.setApplicationReviewRequestList(applicationReviewRequestListNew);
             List<RefereeReport> attachedRefereeReportListNew = new ArrayList<RefereeReport>();
             for (RefereeReport refereeReportListNewRefereeReportToAttach : refereeReportListNew) {
                 refereeReportListNewRefereeReportToAttach = em.getReference(refereeReportListNewRefereeReportToAttach.getClass(), refereeReportListNewRefereeReportToAttach.getReportID());
@@ -513,6 +549,17 @@ public class ApplicationJpaController implements Serializable {
                 if (!committeeMeetingListOld.contains(committeeMeetingListNewCommitteeMeeting)) {
                     committeeMeetingListNewCommitteeMeeting.getApplicationList().add(application);
                     committeeMeetingListNewCommitteeMeeting = em.merge(committeeMeetingListNewCommitteeMeeting);
+                }
+            }
+            for (ApplicationReviewRequest applicationReviewRequestListNewApplicationReviewRequest : applicationReviewRequestListNew) {
+                if (!applicationReviewRequestListOld.contains(applicationReviewRequestListNewApplicationReviewRequest)) {
+                    Application oldApplication1OfApplicationReviewRequestListNewApplicationReviewRequest = applicationReviewRequestListNewApplicationReviewRequest.getApplication1();
+                    applicationReviewRequestListNewApplicationReviewRequest.setApplication1(application);
+                    applicationReviewRequestListNewApplicationReviewRequest = em.merge(applicationReviewRequestListNewApplicationReviewRequest);
+                    if (oldApplication1OfApplicationReviewRequestListNewApplicationReviewRequest != null && !oldApplication1OfApplicationReviewRequestListNewApplicationReviewRequest.equals(application)) {
+                        oldApplication1OfApplicationReviewRequestListNewApplicationReviewRequest.getApplicationReviewRequestList().remove(applicationReviewRequestListNewApplicationReviewRequest);
+                        oldApplication1OfApplicationReviewRequestListNewApplicationReviewRequest = em.merge(oldApplication1OfApplicationReviewRequestListNewApplicationReviewRequest);
+                    }
                 }
             }
             for (RefereeReport refereeReportListNewRefereeReport : refereeReportListNew) {
@@ -628,6 +675,13 @@ public class ApplicationJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the EligiblityReport " + eligiblityReportOrphanCheck + " in its eligiblityReport field has a non-nullable application field.");
+            }
+            List<ApplicationReviewRequest> applicationReviewRequestListOrphanCheck = application.getApplicationReviewRequestList();
+            for (ApplicationReviewRequest applicationReviewRequestListOrphanCheckApplicationReviewRequest : applicationReviewRequestListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Application (" + application + ") cannot be destroyed since the ApplicationReviewRequest " + applicationReviewRequestListOrphanCheckApplicationReviewRequest + " in its applicationReviewRequestList field has a non-nullable application1 field.");
             }
             List<RefereeReport> refereeReportListOrphanCheck = application.getRefereeReportList();
             for (RefereeReport refereeReportListOrphanCheckRefereeReport : refereeReportListOrphanCheck) {

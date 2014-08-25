@@ -187,7 +187,7 @@ public class ReportBean implements Serializable {
                         List<Person> persons = new ArrayList<>();
                         for(String role: personTypes)
                         {
-                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(Long.parseLong(role)))
                             {
                                 if(!persons.contains(p)) persons.add(p);
                             }
@@ -254,7 +254,7 @@ public class ReportBean implements Serializable {
                         List<Person> persons = new ArrayList<>();
                         for(String role: personTypes)
                         {
-                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(Long.parseLong(role)))
                             {
                                 if(!persons.contains(p)) persons.add(p);
                             }

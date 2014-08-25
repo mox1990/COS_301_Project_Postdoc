@@ -51,7 +51,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                 
                 DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
                 AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("System backup success: " + str, null); // TODO: System account
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System backup success: " + str, null); // TODO: System account
                 auditTrailService.logAction(auditLog);
             }
             else
@@ -64,7 +64,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                 
                 DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
                 AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("System backup fail: " + str, null);
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System backup fail: " + str, null);
                 auditTrailService.logAction(auditLog);
             }
         }
@@ -100,7 +100,7 @@ public class ArchivalService implements ArchivalServiceLocal {
 
                 DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
                 AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("System restore success: " + str, null); // TODO: System account
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System restore success: " + str, null); // TODO: System account
                 auditTrailService.logAction(auditLog);
             }
             else
@@ -113,7 +113,7 @@ public class ArchivalService implements ArchivalServiceLocal {
 
                 DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
                 AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("System restore fail: " + str, null);
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System restore fail: " + str, null);
                 auditTrailService.logAction(auditLog);
             }
         }

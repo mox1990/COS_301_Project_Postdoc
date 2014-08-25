@@ -75,7 +75,9 @@ public class ExportServices implements ExportServicesLocal {
         
         output += classSerializer.convertMembersToHeading(new Application(), convertPropertys) + "\n\r";
         
-        output += classSerializer.convertClassToSerial(application, convertPropertys) + "\n\r";        
+        output += classSerializer.convertClassToSerial(application, convertPropertys) + "\n\r"; 
+        
+        
         
         return output;
     }

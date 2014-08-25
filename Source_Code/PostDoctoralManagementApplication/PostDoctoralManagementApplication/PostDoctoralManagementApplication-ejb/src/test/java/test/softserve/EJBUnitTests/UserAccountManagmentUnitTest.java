@@ -100,7 +100,7 @@ public class UserAccountManagmentUnitTest {
     public void testCreateUserWithFalse(){
         
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE)); 
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE)); 
         boolean useManualSystemIDSpecification = false;
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -109,7 +109,7 @@ public class UserAccountManagmentUnitTest {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new user", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -125,7 +125,7 @@ public class UserAccountManagmentUnitTest {
     public void testCreateUserWithTrue(){
         
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Created new user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         boolean useManualSystemIDSpecification = true;
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -134,7 +134,7 @@ public class UserAccountManagmentUnitTest {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new user", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new user", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -167,7 +167,7 @@ public class UserAccountManagmentUnitTest {
     //@Test
     public void testUpdateUser(){
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Updated user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
@@ -175,7 +175,7 @@ public class UserAccountManagmentUnitTest {
             instance.updateUserAccount(mockSession, mockPerson);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Updated user", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Updated user", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -190,7 +190,7 @@ public class UserAccountManagmentUnitTest {
     //@Test
     public void testRemoveUser(){
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.buildAduitLogEntitiy("Removed user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createAduitLogEntitiy("Removed user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         String id = mockPerson.getSystemID();
@@ -231,7 +231,7 @@ public class UserAccountManagmentUnitTest {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Viewed all accounts", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Viewed all accounts", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -256,7 +256,7 @@ public class UserAccountManagmentUnitTest {
             instance.generateOnDemandAccount(mockSession, reason, true, mockPerson);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new application", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -277,7 +277,7 @@ public class UserAccountManagmentUnitTest {
             instance.generateOnDemandAccount(mockSession, reason, false, mockPerson);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new on demand account", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new on demand account", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -299,7 +299,7 @@ public class UserAccountManagmentUnitTest {
             instance.activateOnDemandAccount(mockSession, mockPerson);
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new application", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -321,7 +321,7 @@ public class UserAccountManagmentUnitTest {
             instance.getAllSecurityRoles();
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new application", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -344,7 +344,7 @@ public class UserAccountManagmentUnitTest {
             instance.getUserBySystemIDOrEmail(mockPerson.getEmail());
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new application", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
@@ -365,7 +365,7 @@ public class UserAccountManagmentUnitTest {
             instance.testAddresses();
             verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).buildAduitLogEntitiy("Created new application", new Person("u12236731"));
+            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
