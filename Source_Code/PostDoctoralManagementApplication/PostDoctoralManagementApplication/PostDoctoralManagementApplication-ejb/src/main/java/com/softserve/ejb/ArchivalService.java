@@ -39,7 +39,7 @@ public class ArchivalService implements ArchivalServiceLocal {
             Timestamp time = new Timestamp(new Date().getTime());
             String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
             Process exec = Runtime.getRuntime().exec("mysqldump -u root -p" + "root" 
-                    + PersistenceConstants.PERSISTENCE_UNIT_NAME + " > " 
+                    + PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME + " > " 
                     + filepath + filename);
 
             if(exec.waitFor()==0)
@@ -91,7 +91,7 @@ public class ArchivalService implements ArchivalServiceLocal {
             Timestamp time = new Timestamp(new Date().getTime());
             String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
             Process exec = Runtime.getRuntime().exec("mysqldump -u root -p" + "root" 
-                    + PersistenceConstants.PERSISTENCE_UNIT_NAME + " > " 
+                    + PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME + " > " 
                     + filepath + filename);
 
             //mysql -u someuser -p anotherdatabase < mydatabase.sql
@@ -175,7 +175,7 @@ public class ArchivalService implements ArchivalServiceLocal {
             Timestamp time = new Timestamp(new Date().getTime());
             String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
             Process exec = Runtime.getRuntime().exec("mysql --user" + "root" 
-                    + PersistenceConstants.PERSISTENCE_UNIT_NAME + " > " 
+                    + PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME + " > " 
                     + filepath + filename);
             
              if(exec.waitFor()==0)
@@ -188,7 +188,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                 
                 DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
                 AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("System restore success: " + str, null); // TODO: System account
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System restore success: " + str, null); // TODO: System account
                 auditTrailService.logAction(auditLog);
             }
             else
@@ -201,7 +201,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                 
                 DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
                 AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-                AuditLog auditLog = dBEntitiesFactory.buildAduitLogEntitiy("System restore fail: " + str, null);
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System restore fail: " + str, null);
                 auditTrailService.logAction(auditLog);
             }
         }
