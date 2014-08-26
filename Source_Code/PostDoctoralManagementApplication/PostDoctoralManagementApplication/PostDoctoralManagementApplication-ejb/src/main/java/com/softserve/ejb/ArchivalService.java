@@ -31,14 +31,15 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     AuditLog aLog;
     @Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
+    
     public void backupDatabase()
     {
         try
         {
             Timestamp time = new Timestamp(new Date().getTime());
             String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
-            Process exec = Runtime.getRuntime().exec("mysqldump -u root -p" + "passwordHere" 
-                    + PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME + " > " 
+            Process exec = Runtime.getRuntime().exec("mysqldump -u root -p" + "root" 
+                    + PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME + " > " 
                     + filepath + filename);
 
             if(exec.waitFor()==0)
@@ -83,11 +84,54 @@ public class ArchivalService implements ArchivalServiceLocal {
          
     }
     
+    protected void createArchivalDB() throws InterruptedException, IOException, Exception
+    {
+        try
+        {
+            Timestamp time = new Timestamp(new Date().getTime());
+            String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
+            Process exec = Runtime.getRuntime().exec("mysqldump -u root -p" + "root" 
+                    + PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME + " > " 
+                    + filepath + filename);
+
+            //mysql -u someuser -p anotherdatabase < mydatabase.sql
+            
+            if(exec.waitFor()==0)
+            {
+                InputStream inputStream = exec.getInputStream();
+                byte[] buffer = new byte[inputStream.available()];
+                inputStream.read(buffer);
+
+                String str = new String(buffer);
+                System.out.println("Archival Database created");
+            }
+              else
+            {
+                InputStream errorStream = exec.getErrorStream();
+                byte[] buffer = new byte[errorStream.available()];
+                errorStream.read(buffer);
+
+                String str = new String(buffer);
+                System.out.println("Archival Database not created");
+            }
+        }
+        catch(IOException | InterruptedException ex)
+        {
+            Logger.getLogger(ArchivalService.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (Exception ex)
+        {
+            Logger.getLogger(ArchivalService.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+    
+    }
+    
     public void retrieveArchievedInformation(String filename) throws IOException
     {
         try
         {
-            Process exec = Runtime.getRuntime().exec("mysql -u root -p" + "passwordHere" 
+            Process exec = Runtime.getRuntime().exec("mysql -u root -p" + "root" 
                     + "temporyPersistanceUnitHere" + " < " + filepath + filename + ".sql");
 
             if(exec.waitFor()==0)
@@ -121,6 +165,54 @@ public class ArchivalService implements ArchivalServiceLocal {
             Logger.getLogger(ArchivalService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(ArchivalService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void restoreDatabase()
+    {
+        try
+        {
+            Timestamp time = new Timestamp(new Date().getTime());
+            String filename = new SimpleDateFormat("dd/MM/yyyy").format(time) + ".sql";
+            Process exec = Runtime.getRuntime().exec("mysql --user" + "root" 
+                    + PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME + " > " 
+                    + filepath + filename);
+            
+             if(exec.waitFor()==0)
+            {
+                InputStream inputStream = exec.getInputStream();
+                byte[] buffer = new byte[inputStream.available()];
+                inputStream.read(buffer);
+
+                String str = new String(buffer);
+                
+                DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+                AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System restore success: " + str, null); // TODO: System account
+                auditTrailService.logAction(auditLog);
+            }
+            else
+            {
+                InputStream errorStream = exec.getErrorStream();
+                byte[] buffer = new byte[errorStream.available()];
+                errorStream.read(buffer);
+
+                String str = new String(buffer);
+                
+                DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+                AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("System restore fail: " + str, null);
+                auditTrailService.logAction(auditLog);
+            }
+        }
+        catch(IOException | InterruptedException ex)
+        {
+            Logger.getLogger(ArchivalService.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (Exception ex)
+        {
+            Logger.getLogger(ArchivalService.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
     

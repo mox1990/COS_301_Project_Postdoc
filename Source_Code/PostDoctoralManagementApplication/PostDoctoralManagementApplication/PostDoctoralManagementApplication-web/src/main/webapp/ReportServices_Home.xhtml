@@ -13,6 +13,7 @@
             <h:form>
                 <p:panel id="cvInfo" header="Report Generation">  
                     <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                        Report Type: 
                         <p:selectOneButton id="applicationType" value="#{reportBean.reportType}">
                             <f:selectItem itemLabel="Application" itemValue="application"/>
                             <f:selectItem itemLabel="Person" itemValue="person" />
@@ -25,18 +26,22 @@
                         <p:selectManyButton id="applicationTypes" value="#{reportBean.applicationTypes}" rendered="#{reportBean.applicationReport()}">
                             <f:selectItems value="#{reportBean.applicationTypeValues()}" />
                         </p:selectManyButton>
+                        
                         <!-- Person values... -->
-                        <p:selectManyButton id="personTypes" value="#{reportBean.personTypes}" rendered="#{reportBean.personReport()}">
-                            <!--<f:selectItem itemLabel="prospective fellow" itemValue="#{reportBean.prospectiveFellow}"/>
-                            <f:selectItem itemLabel="referre" itemValue="#{reportBean.referre}"/>
-                            <f:selectItem itemLabel="research fellow" itemValue="#{reportBean.researchFellow}"/>
-                            <f:selectItem itemLabel="grant holder" itemValue="#{reportBean.grantHolder}"/>
-                            <f:selectItem itemLabel="HOD" itemValue="#{reportBean.hod}"/>
-                            <f:selectItem itemLabel="deans office" itemValue="#{reportBean.deansOffice}"/>
-                            <f:selectItem itemLabel="DRIS" itemValue="#{reportBean.dris}"/>
-                            <f:selectItem itemLabel="post doc commitee member" itemValue="#{reportBean.postDocComitteeMember}"/>
-                            <f:selectItem itemLabel="admin" itemValue="#{reportBean.systemAdmin}"/>-->
-                            <f:selectItems value="#{reportBean.personTypeValues()}" />
+                        <p:selectManyButton id="personType" value="#{reportBean.personTypes}" rendered="#{reportBean.personReport()}">
+                            Person Types: <f:selectItems value="#{reportBean.personTypeValues()}" />
+                        </p:selectManyButton>
+                        
+                        <p:selectManyButton id="personAttrib" value="#{reportBean.personAttributes}" rendered="#{reportBean.personReport()}">
+                            Person Attributes: <f:selectItems value="#{reportBean.personAttribValues()}" />
+                        </p:selectManyButton>
+                        
+                        <p:selectManyButton id="personAddress" value="#{reportBean.personAddressAttributes}" rendered="#{reportBean.personReport()}">
+                            Person Address: <f:selectItems value="#{reportBean.personAddressAttribValues()}" />
+                        </p:selectManyButton>
+                        
+                        <p:selectManyButton id="personCv" value="#{reportBean.personCvAttributes}" rendered="#{reportBean.personReport()}">
+                            Person CV: <f:selectItems value="#{reportBean.personCvAttribValues()}" />
                         </p:selectManyButton>
                     </h:panelGrid>
                     
