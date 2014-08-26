@@ -21,6 +21,7 @@ import java.util.List;
 import com.softserve.DBEntities.EmployeeInformation;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -289,6 +290,15 @@ public class DepartmentJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Department> findAllDepartmentsInFaculty(Faculty faculty)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Department> q = em.createQuery("SELECT d FROM Department d WHERE d.faculty = :fac", Department.class).setParameter("fac", faculty);
+        
+        return q.getResultList();
     }
     
 }

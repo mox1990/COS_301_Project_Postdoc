@@ -50,6 +50,7 @@
 
             <p:outputLabel value="Are you an UP empolyee:" for="upEmployee"/>                                
             <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}">
+                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                 <p:ajax update="upEmployeeInfoPanel"/>
             </p:selectBooleanCheckbox>
             <p:message for="upEmployee" styleClass="fieldErrorMessage"/>

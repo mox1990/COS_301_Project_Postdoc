@@ -35,7 +35,7 @@
             </div>
 
             <div>
-                <h:form>
+                <h:form id="createForm">
                     <center>
                         <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
                             <ui:param name="person" value="#{prospectiveUserAccountCreationBean.person}"/>
@@ -55,9 +55,10 @@
                             </ui:define>
                         </ui:decorate>
 
-                        <p:outputPanel id="upEmployeeInfoPanel">
+                        <p:panel id="upEmployeeInfoPanel">
                             <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
                                 <ui:param name="employeeInformation" value="#{prospectiveUserAccountCreationBean.employeeInformation}"/>
+                                <ui:param name="locationBean" value="#{prospectiveUserAccountCreationBean.locationFinderDependBean}"/>
                                 <ui:param name="renderAttribute" value="#{prospectiveUserAccountCreationBean.person.upEmployee}"/>
                                 <ui:param name="employeeIDEditable" value="#{true}"/>
                                 <ui:define name="header">
@@ -73,9 +74,11 @@
                                     <h:outputText styleClass="header2" value="UP office address"/>
                                 </ui:define>
                             </ui:decorate>                            
-                        </p:outputPanel>
+                        </p:panel>
                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser"  action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" ajax="false"/>
+                        <p:commandButton styleClass="button" value="Create user account" id="createUser"  action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" update="createForm" process="@form">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                        </p:commandButton>
                     </center>
                 </h:form>
             </div>

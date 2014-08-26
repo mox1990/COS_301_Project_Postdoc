@@ -28,4 +28,9 @@ public interface LocationManagementServiceLocal {
     public void updateFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception;
     public void updateDepartment(Session session, Department department) throws AuthenticationException, Exception;
     public List<Institution> getAllInstitutions() throws AuthenticationException, Exception;
+    public List<Faculty> getAllFacultiesInInstitution(Institution institution) throws AuthenticationException, Exception;
+    public List<Department> getAllDepartmentForFaculty(Faculty faculty) throws AuthenticationException, Exception;
+    public Institution getInstitution(Long institution) throws Exception;
+    public Faculty getFaculty(Long faculty) throws Exception;
+    public Department getDepartment(Long department) throws Exception;
 }

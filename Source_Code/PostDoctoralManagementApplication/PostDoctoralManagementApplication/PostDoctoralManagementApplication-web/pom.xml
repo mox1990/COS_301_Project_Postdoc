@@ -31,7 +31,13 @@
             <groupId>org.primefaces</groupId>  
             <artifactId>primefaces</artifactId>  
             <version>5.0</version>  
-        </dependency>  
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
+            <artifactId>myfaces-extcdi-bundle-jsf20</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+  
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>PostDoctoralManagementApplication-ejb</artifactId>

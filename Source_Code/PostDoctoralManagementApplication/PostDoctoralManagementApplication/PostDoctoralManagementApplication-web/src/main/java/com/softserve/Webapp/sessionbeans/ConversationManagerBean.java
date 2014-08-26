@@ -104,7 +104,10 @@ public class ConversationManagerBean implements Serializable {
     
     public void registerConversation(Conversation conversation) throws ArrayIndexOutOfBoundsException
     {
-        trackedConversations.add(conversation);
+        if(getIndexOfConversation(conversation) == -1)
+        {
+            trackedConversations.add(conversation);
+        }
     }
         
     public void deregisterConversation(int index) throws ArrayIndexOutOfBoundsException
@@ -155,6 +158,11 @@ public class ConversationManagerBean implements Serializable {
     public int getIndexOfConversation(Conversation conversation) throws ArrayIndexOutOfBoundsException
     {
         return trackedConversations.indexOf(conversation);
+    }
+    
+    public boolean isConversationRegistered(Conversation conversation)
+    {
+        return trackedConversations.contains(conversation);
     }
        
 }

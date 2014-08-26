@@ -40,7 +40,7 @@ import org.primefaces.model.StreamedContent;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "reportBean")
+@Named(value = "rreportBean")
 @SessionScoped
 public class ReportBean implements Serializable {
     private String reportType = "";

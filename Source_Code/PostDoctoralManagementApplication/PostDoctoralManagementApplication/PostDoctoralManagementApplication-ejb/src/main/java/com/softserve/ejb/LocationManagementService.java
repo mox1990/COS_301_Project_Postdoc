@@ -152,4 +152,38 @@ public class LocationManagementService implements LocationManagementServiceLocal
         
         return institutionJpaController.findInstitutionEntities();
     }
+    
+    @Override
+    public List<Faculty> getAllFacultiesInInstitution(Institution institution) throws AuthenticationException, Exception
+    {
+        FacultyJpaController facultyJpaController = getFacultyDAO();
+        
+        return facultyJpaController.findAllFacultiesInInstitution(institution);
+    }
+    
+    @Override
+    public List<Department> getAllDepartmentForFaculty(Faculty faculty) throws AuthenticationException, Exception
+    {
+        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        
+        return departmentJpaController.findAllDepartmentsInFaculty(faculty);
+    }
+    
+    @Override
+    public Institution getInstitution(Long institution) throws Exception
+    {
+        return getInstitutionDAO().findInstitution(institution);
+    }
+    
+    @Override
+    public Faculty getFaculty(Long faculty) throws Exception
+    {
+        return getFacultyDAO().findFaculty(faculty);
+    }
+    
+    @Override
+    public Department getDepartment(Long department) throws Exception
+    {
+        return getDepartmentDAO().findDepartment(department);
+    }
 }

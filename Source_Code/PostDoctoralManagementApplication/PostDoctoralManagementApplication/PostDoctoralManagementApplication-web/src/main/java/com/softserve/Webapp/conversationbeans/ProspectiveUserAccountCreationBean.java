@@ -7,9 +7,13 @@
 package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Address;
+import com.softserve.DBEntities.Department;
+import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -27,6 +31,7 @@ import javax.enterprise.context.ConversationScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 /**
  *
@@ -45,6 +50,8 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     private ConversationManagerBean conversationManagerBean;
     @Inject
     private Conversation conversation;
+    @Inject
+    private LocationFinderDependBean locationFinderDependBean;
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
@@ -67,14 +74,39 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     @PostConstruct
     public void init()
     {
-        conversationManagerBean.registerConversation(conversation);
-        conversationManagerBean.startConversation(conversation);
         
-        person = new Person();
-        person.setTitle("Mr.");        
-        address = new Address();
-        employeeInformation = new EmployeeInformation();
-        upAddress = new Address();
+        if(conversationManagerBean.isConversationRegistered(conversation))
+        {
+            
+            System.out.println("converstion is registered ");
+        }
+        else
+        {
+            conversationManagerBean.registerConversation(conversation);
+        }
+        System.out.println("converstion is " + conversation.isTransient());
+        if(!conversation.isTransient())
+        {
+            System.out.println("converstion has started ");
+        }
+        else
+        {
+            
+            conversationManagerBean.startConversation(conversation);
+            System.out.println("converstion is " + conversation.isTransient());
+            person = new Person();
+            person.setTitle("Mr.");        
+            address = new Address();
+            employeeInformation = new EmployeeInformation();
+            upAddress = new Address();
+            employeeInformation.setDepartment(new Department((long)(0)));
+            employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+            employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+
+            locationFinderDependBean.init();
+        }
+        
+        
         
     }
 
@@ -117,6 +149,14 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     public void setErrorContainer(UIComponent errorContainer) {
         this.errorContainer = errorContainer;
     }
+
+    public LocationFinderDependBean getLocationFinderDependBean() {
+        return locationFinderDependBean;
+    }
+
+    public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
+        this.locationFinderDependBean = locationFinderDependBean;
+    }
     
     public String performProspectiveFellowUserAccountCreation()
     {        
@@ -130,6 +170,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
             
             if(person.getUpEmployee())
             {
+                employeeInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(employeeInformation.getDepartment().getDepartmentID()));
                 person.setSystemID(employeeInformation.getEmployeeID());
                 employeeInformation.setPhysicalAddress(address);
                 person.setEmployeeInformation(employeeInformation);

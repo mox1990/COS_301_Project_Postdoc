@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 
 /**
@@ -254,4 +255,12 @@ public class FacultyJpaController implements Serializable {
         }
     }
     
+    public List<Faculty> findAllFacultiesInInstitution(Institution institution)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Faculty> q = em.createQuery("SELECT f FROM Faculty f WHERE f.institution = :inst", Faculty.class).setParameter("inst", institution);
+        
+        return q.getResultList();
+    }
 }
