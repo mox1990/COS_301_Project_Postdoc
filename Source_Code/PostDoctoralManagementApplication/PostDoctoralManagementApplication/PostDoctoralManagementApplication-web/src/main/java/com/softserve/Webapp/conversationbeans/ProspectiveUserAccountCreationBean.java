@@ -31,7 +31,6 @@ import javax.enterprise.context.ConversationScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 /**
  *
