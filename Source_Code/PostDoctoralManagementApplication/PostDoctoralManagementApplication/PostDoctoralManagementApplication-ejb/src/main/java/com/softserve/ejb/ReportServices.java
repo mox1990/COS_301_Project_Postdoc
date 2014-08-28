@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.PersonJpaController;
+import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
@@ -17,23 +18,29 @@ import com.softserve.jasper.DynamicReportBuilder;
 import com.softserve.system.Session;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import net.sf.jasperreports.engine.JRException;
@@ -48,6 +55,11 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Gives a generic implementation of the Report generationservice
@@ -150,7 +162,8 @@ public class ReportServices implements ReportServicesLocal
     @Override
     public List<Application> getAllApplicationsWithStatus(String status)
     {
-        return getApplicationDAO().findAllApplicationsWithStatus(status, -1, -1);
+        ApplicationJpaController a = getApplicationDAO();
+        return a.findAllApplicationsWithStatus(status, 0, (int) a.countAllApplicationsWithStatus(status));
     }
     
     @Override
@@ -349,7 +362,7 @@ public class ReportServices implements ReportServicesLocal
     }
     
     @Override
-    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows) throws Exception 
+    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows, String title) throws Exception 
     {
         DynamicReportBuilder reportBuilder = new DynamicReportBuilder(dynamicPersonReport, columnHeaders.size());
         reportBuilder.addDynamicColumns();
@@ -357,10 +370,56 @@ public class ReportServices implements ReportServicesLocal
         JasperReport jasperReport = JasperCompileManager.compileReport(dynamicPersonReport);
 
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("REPORT_TITLE", "Person Report");
+        params.put("REPORT_TITLE", title);
         DynamicColumnDataSource pdfDataSource = new DynamicColumnDataSource(columnHeaders, rows);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, pdfDataSource);
         
         return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
+    
+    @Override
+    public byte[] exportSpreadsheetReport(List<String> columnHeaders, List<List<String>> rows, String title) throws IOException
+    {
+        // TODO: Write code with a clear head
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet applicationSheet = workbook.createSheet(title);
+        
+        // Setup headers
+        setupSheetHeaders(applicationSheet, columnHeaders);
+        
+        // Enter data...
+        int rIndex = 1; // Adding values from the second row onwards.
+        for(List<String> aRow: rows)
+        {
+            Row row = applicationSheet.createRow(rIndex++);
+            addEntityToWorksheetRow(row, aRow);
+        }   
+        workbook.write(baos);
+        return baos.toByteArray();   
+    }
+    
+    private void setupSheetHeaders(Sheet sheet, List<String> columnHeaders)
+    {
+        Row row = sheet.createRow(0);
+        int cIndex = 0;
+        
+        for(String header: columnHeaders)
+        {
+            Cell cell = row.createCell(cIndex++);
+            cell.setCellValue(header);
+        }
+    }
+    
+    private void addEntityToWorksheetRow(Row row, List<String> rows)
+    {
+        int cIndex = 0;
+        
+        for(String item: rows)
+        {
+            Cell cell = row.createCell(cIndex++);
+            cell.setCellValue(item);
+        }
     }
 }

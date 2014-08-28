@@ -112,7 +112,7 @@ public class ReportServicesTest {
         
         try
         {
-            instance.dynamicReport(columnHeaders, rows);
+            instance.dynamicReport(columnHeaders, rows, "Sample Report Title");
         }
         catch (Exception ex)
         {
