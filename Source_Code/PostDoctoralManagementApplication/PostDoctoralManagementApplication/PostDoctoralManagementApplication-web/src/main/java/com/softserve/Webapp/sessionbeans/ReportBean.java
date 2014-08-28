@@ -40,11 +40,14 @@ import org.primefaces.model.StreamedContent;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "rreportBean")
+@Named(value = "reportBean")
 @SessionScoped
 public class ReportBean implements Serializable {
     private String reportType = "";
+    
     private String[] applicationTypes = {};
+    private String[] applicationAttributes = {};
+    private String[] applicationStageAttributes = {};
     
     private String[] personTypes = {};
     private String[] personAttributes = {};
@@ -57,16 +60,10 @@ public class ReportBean implements Serializable {
         
     }
     //TODO: Move these to an array...
-    private final String prospectiveFellow = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW);
-    private final String referre = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE);
-    private final String researchFellow = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW);
-    private final String grantHolder = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER);
-    private final String hod = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD);
-    private final String deansOffice = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER);
-    private final String dris = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER);
-    private final String postDocComitteeMember = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER);
-    private final String systemAdmin = String.valueOf(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR);
-    
+    private final String P_PROSPECTIVE_FELLOW = "prospectiveFellow";
+    private final String P_RESEARCH_FELLOW = "researchFellow";
+    private final String P_GRANT_HOLDER = "grantHolder";
+            
     // Person Address data...
     private final String ADDRESS_COUNTRY = "country";
     private final String ADDRESS_PROVINCE = "province";
@@ -88,6 +85,134 @@ public class ReportBean implements Serializable {
     private final String CV_RESEARCH_OUTPUT = "Research Output";
     private final String CV_OTHER_CONTRIB = "Other Contributions";
     private final String CV_ADDITIONAL = "Additional Information";
+    
+    // Application Attributes...
+    private final String A_TYPE = "Type";
+    private final String A_STATUS = "Status";
+    private final String A_FUNDING_TYPE = "Funding Type";
+    private final String A_TIME = "Created on";
+    private final String A_SUBMISSION = "Submission Date";
+    private final String A_FINALISATION = "Finalisation Date";
+    private final String A_START = "Start Date";
+    private final String A_END = "End Date";
+    private final String A_TITLE = "Project Title";
+    private final String A_INFORMATION = "Information";
+    private final String A_FELLOW = "Fellow";
+    private final String A_GRANTHOLDER = "Grant Holder";
+    
+    public String[] applicationAttribValues()
+    {
+        String[] a = {
+            A_TYPE,
+            A_STATUS,
+            A_FUNDING_TYPE,
+            A_TIME,
+            A_SUBMISSION,
+            A_FINALISATION,
+            A_START,
+            A_END,
+            A_TITLE,
+            A_INFORMATION,
+            A_FELLOW ,
+            A_GRANTHOLDER
+        };
+        return a;
+    }
+    
+    private String getAttribFromApplication(String attrib, Application a)
+    {
+        switch(attrib)
+        {
+            case A_TYPE:
+                return a.getType();
+            case A_STATUS:
+                return a.getStatus();
+            case A_FUNDING_TYPE:
+                return a.getFundingType();
+            case A_TIME:
+                if(a.getTimestamp() == null)
+                    return "null";
+                return a.getTimestamp().toString();
+            case A_SUBMISSION:
+                if(a.getStartDate() == null)
+                    return "null";
+                return a.getSubmissionDate().toString();
+            case A_FINALISATION:
+                if(a.getFinalisationDate() == null)
+                    return "null";
+                return a.getFinalisationDate().toString();
+            case A_START:
+                if(a.getStartDate() == null)
+                    return "null";
+                return a.getStartDate().toString();
+            case A_END:
+                if(a.getEndDate() == null)
+                    return "null";
+                return a.getEndDate().toString();
+            case A_TITLE:
+                return a.getProjectTitle();
+            case A_INFORMATION:
+                return a.getInformation();
+            case A_FELLOW:
+                if(a.getFellow() == null)
+                    return "null";
+                return a.getFellow().getCompleteName();
+            case A_GRANTHOLDER:
+                if(a.getGrantHolder()== null)
+                    return "null";
+                return a.getGrantHolder().getCompleteName();
+            default:
+                return "null";
+        }
+    }
+    
+    // Application Stage Reports
+    private final String AS_FUNDING = "Funding Report";
+    private final String AS_ENDORSEMENT = "Endorsement";
+    private final String AS_RECOMMENDATION = "Recommendation Report";
+    private final String AS_ELIGIBILTY = "Eligibilty Report";
+    private final String AS_DECLINE = "Decline Report";
+    
+    public String[] applicationStageAttribValues()
+    {
+        String[] a = {
+            AS_FUNDING ,
+            AS_ENDORSEMENT,
+            AS_RECOMMENDATION ,
+            AS_ELIGIBILTY,
+            AS_DECLINE
+        };
+        return a;
+    }
+    
+    private String getStageAttribFromApplication(String attrib, Application a)
+    {
+        switch(attrib)
+        {
+            case AS_FUNDING:
+                if(a.getFundingType() == null)
+                    return "null";
+                return a.getFundingReport().getTimestamp().toString() + ": " + a.getFundingReport().getFundingCostList().toString();
+            case AS_ENDORSEMENT:
+                if(a.getEndorsement() == null)
+                    return "null";
+                return a.getEndorsement().getTimestamp().toString() + ": " + a.getEndorsement().getMotivation();
+            case AS_RECOMMENDATION:
+                if(a.getRecommendationReport() == null)
+                    return "null";
+                return a.getRecommendationReport().getTimestamp().toString() + ": " + a.getRecommendationReport().getContent();
+            case AS_ELIGIBILTY:
+                if(a.getEligiblityReport()== null)
+                    return "null";
+                return a.getEligiblityReport().getEligiblityCheckDate().toString() + ": Checked by " + a.getEligiblityReport().getEligiblityChecker().getCompleteName();
+            case AS_DECLINE:
+                if(a.getDeclineReport()== null)
+                    return "null";
+                return a.getDeclineReport().getTimestamp().toString() + "(" + a.getDeclineReport().getCreator().getFullName() + ") : " + a.getDeclineReport().getReason();
+            default:
+                return "null";
+        }
+    }
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -150,6 +275,22 @@ public class ReportBean implements Serializable {
     public void setPersonCvAttributes(String[] personCvAttributes) {
         this.personCvAttributes = personCvAttributes;
     }
+
+    public String[] getApplicationAttributes() {
+        return applicationAttributes;
+    }
+
+    public void setApplicationAttributes(String[] applicationAttributes) {
+        this.applicationAttributes = applicationAttributes;
+    }
+
+    public String[] getApplicationStageAttributes() {
+        return applicationStageAttributes;
+    }
+
+    public void setApplicationStageAttributes(String[] applicationStageAttributes) {
+        this.applicationStageAttributes = applicationStageAttributes;
+    }
     
     public String[] applicationTypeValues()
     {
@@ -168,10 +309,6 @@ public class ReportBean implements Serializable {
         };
         return a;
     }
-    
-            private final String P_PROSPECTIVE_FELLOW = "prospectiveFellow";
-            private final String P_RESEARCH_FELLOW = "researchFellow";
-            private final String P_GRANT_HOLDER = "grantHolder";
     
     public String[] personTypeValues()
     {
@@ -314,69 +451,45 @@ public class ReportBean implements Serializable {
                 return "null";
         }
     }
-
-    // Person values
-    public String getProspectiveFellow() {
-        return prospectiveFellow;
-    }
-
-    public String getReferre() {
-        return referre;
-    }
-
-    public String getResearchFellow() {
-        return researchFellow;
-    }
-
-    public String getGrantHolder() {
-        return grantHolder;
-    }
-
-    public String getHod() {
-        return hod;
-    }
-
-    public String getDeansOffice() {
-        return deansOffice;
-    }
-
-    public String getDris() {
-        return dris;
-    }
-
-    public String getPostDocComitteeMember() {
-        return postDocComitteeMember;
-    }
-
-    public String getSystemAdmin() {
-        return systemAdmin;
-    }
     
     public StreamedContent getReportPDF() // TODO: Add report filters...
         {
         InputStream stream = null;
         try 
         {
+            List<String> col = new ArrayList<>();
+            List<List<String>> rows = new ArrayList<List<String>>();
             switch(reportType)
             {
                 case "application":
-                    if(applicationTypes.length == 0 || applicationTypes.length == 9)
+                    List<Application> applications = new ArrayList<>();
+                    for(String type: applicationTypes)
                     {
-                        stream = new ByteArrayInputStream(reportEJB.exportAllApplicationToPdf(sessionManagerBean.getSession()));
-                    }
-                    else
-                    {
-                        List<Application> applications = new ArrayList<>();
-                        for(String type: applicationTypes)
+                        for(Application a: reportEJB.getAllApplicationsWithStatus(type))
                         {
-                            applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                            List<String> row = new ArrayList<>();
+                            for(String attrib: applicationAttributes)
+                            {
+                                String val = getAttribFromApplication(attrib, a);
+                                row.add(val);
+                            }
+                            for(String attrib: applicationStageAttributes)
+                            {
+                                String val = getStageAttribFromApplication(attrib, a);
+                                row.add(val);
+                            }
+                            if(!rows.contains(row))
+                                rows.add(row);
                         }
-                        stream = new ByteArrayInputStream(reportEJB.exportApplicationToPdf(sessionManagerBean.getSession(), applications));
+                        
                     }
+                    col.addAll(Arrays.asList(applicationAttributes));
+                    col.addAll(Arrays.asList(applicationStageAttributes));
+                    
+                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(col, rows, "Application Report"));
                     break;
                 case "person":
                     List<Person> persons = new ArrayList<>();
-                    List<List<String>> rows = new ArrayList<List<String>>();
                     for(String role: personTypes)
                     {
                         for(Person p: reportEJB.getAllPersonsWithSecurityRole(getSecurityRoleID(role)))
@@ -401,15 +514,11 @@ public class ReportBean implements Serializable {
                                 rows.add(row);
                         }
                     }
-                    List<String> col = new ArrayList<>();
                     col.addAll(Arrays.asList(personAttributes));
-                    
                     col.addAll(Arrays.asList(personAddressAttributes));
-                    
                     col.addAll(Arrays.asList(personCvAttributes));
                     
-                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(col, rows));
-
+                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(col, rows, "Person Report"));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
@@ -457,41 +566,68 @@ public class ReportBean implements Serializable {
         InputStream stream = null;
         try 
         {
+            List<String> col = new ArrayList<>();
+            List<List<String>> rows = new ArrayList<List<String>>();
             switch(reportType)
             {
                 case "application":
-                    // Use the session manager sessionManagerBean.getSystemLevelSessionForCurrentSession()
-                    if(applicationTypes.length == 0 || applicationTypes.length == 9)
+                    List<Application> applications = new ArrayList<>();
+                    for(String type: applicationTypes)
                     {
-                        stream = new ByteArrayInputStream(reportEJB.exportAllApplicationToExcel(sessionManagerBean.getSession()));
-                    }
-                    else
-                    {
-                        List<Application> applications = new ArrayList<>();
-                        for(String type: applicationTypes)
+                        for(Application a: reportEJB.getAllApplicationsWithStatus(type))
                         {
-                            applications.addAll(reportEJB.getAllApplicationsWithStatus(type));
+                            List<String> row = new ArrayList<>();
+                            for(String attrib: applicationAttributes)
+                            {
+                                String val = getAttribFromApplication(attrib, a);
+                                row.add(val);
+                            }
+                            for(String attrib: applicationStageAttributes)
+                            {
+                                String val = getStageAttribFromApplication(attrib, a);
+                                row.add(val);
+                            }
+                            if(!rows.contains(row))
+                                rows.add(row);
                         }
-                        stream = new ByteArrayInputStream(reportEJB.exportApplicationToExcel(sessionManagerBean.getSession(), applications));
+                        
                     }
+                    col.addAll(Arrays.asList(applicationAttributes));
+                    col.addAll(Arrays.asList(applicationStageAttributes));
+                    
+                    stream = new ByteArrayInputStream(reportEJB.exportSpreadsheetReport(col, rows, "Application Report"));
                     break;
                 case "person":
-                    if(personAttributes.length == 0 || personAttributes.length == 9)
+                    List<Person> persons = new ArrayList<>();
+                    for(String role: personTypes)
                     {
-                        stream = new ByteArrayInputStream(reportEJB.exportAllPersonsToExcel(sessionManagerBean.getSession()));
-                    }
-                    else
-                    {
-                        List<Person> persons = new ArrayList<>();
-                        /*for(String role: personTypes)
+                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(getSecurityRoleID(role)))
                         {
-                            for(Person p: reportEJB.getAllPersonsWithSecurityRole(role))
+                            List<String> row = new ArrayList<>();
+                            for(String attrib: personAttributes)
                             {
-                                if(!persons.contains(p)) persons.add(p);
+                                String val = getAttribFromPerson(attrib, p);
+                                row.add(val);
                             }
-                        }*/
-                        stream = new ByteArrayInputStream(reportEJB.exportPersonsToExcel(sessionManagerBean.getSession(), persons));
+                            for(String attrib: personAddressAttributes)
+                            {
+                                String val = getAddressAttribFromPerson(attrib, p);
+                                row.add(val);
+                            }
+                            for(String attrib: personCvAttributes)
+                            {
+                                String val = getCvAttribFromPerson(attrib, p);
+                                row.add(val);
+                            }
+                            if(!rows.contains(row))
+                                rows.add(row);
+                        }
                     }
+                    col.addAll(Arrays.asList(personAttributes));
+                    col.addAll(Arrays.asList(personAddressAttributes));
+                    col.addAll(Arrays.asList(personCvAttributes));
+                    
+                    stream = new ByteArrayInputStream(reportEJB.exportSpreadsheetReport(col, rows, "Person Report"));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");

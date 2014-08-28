@@ -58,5 +58,7 @@ public interface ReportServicesLocal {
     public byte[] exportAllPersonsToExcel(Session session) throws Exception;
     public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception;
     public byte[] exportAllApplicationToExcel(Session session) throws Exception;
-    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows) throws Exception;
+    
+    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows, String title) throws Exception;
+    public byte[] exportSpreadsheetReport(List<String> columnHeaders, List<List<String>> rows, String title) throws IOException;
 }

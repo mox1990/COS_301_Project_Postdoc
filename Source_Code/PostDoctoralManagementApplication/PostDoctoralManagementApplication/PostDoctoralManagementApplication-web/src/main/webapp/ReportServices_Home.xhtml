@@ -24,7 +24,15 @@
                     <h:panelGrid id="report_attributes">
                         <!-- Application values... -->
                         <p:selectManyButton id="applicationTypes" value="#{reportBean.applicationTypes}" rendered="#{reportBean.applicationReport()}">
-                            <f:selectItems value="#{reportBean.applicationTypeValues()}" />
+                            Application Phases: <f:selectItems value="#{reportBean.applicationTypeValues()}" />
+                        </p:selectManyButton>
+                        
+                        <p:selectManyButton id="applicationAttrib" value="#{reportBean.applicationAttributes}" rendered="#{reportBean.applicationReport()}">
+                            Application Attributes: <f:selectItems value="#{reportBean.applicationAttribValues()}" />
+                        </p:selectManyButton>
+                        
+                        <p:selectManyButton id="applicationStageAttributes" value="#{reportBean.applicationStageAttributes}" rendered="#{reportBean.applicationReport()}">
+                            Application Resolution: <f:selectItems value="#{reportBean.applicationStageAttribValues()}" />
                         </p:selectManyButton>
                         
                         <!-- Person values... -->
