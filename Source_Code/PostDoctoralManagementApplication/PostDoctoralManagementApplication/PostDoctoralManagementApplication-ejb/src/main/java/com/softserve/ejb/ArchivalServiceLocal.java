@@ -19,4 +19,5 @@ public interface ArchivalServiceLocal {
     public void backupDatabase();
     public void archiveOldInformation();
     public void retrieveArchievedInformation(String filename) throws IOException;
+    public void restoreDatabase();
 }
