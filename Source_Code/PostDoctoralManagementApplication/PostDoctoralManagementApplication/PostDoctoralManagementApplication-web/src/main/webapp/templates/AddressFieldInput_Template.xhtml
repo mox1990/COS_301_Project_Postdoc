@@ -21,6 +21,10 @@
             <p:outputLabel value="Town / City:" for="#{prefix}townCity"/>                                
             <p:inputText id="#{prefix}townCity" value="#{address.townCity}"/>
             <p:message for="#{prefix}townCity" styleClass="fieldErrorMessage"/>
+            
+            <p:outputLabel value="Suburb:" for="#{prefix}suburb"/>                                
+            <p:inputText id="#{prefix}suburb" value="#{address.suburb}"/>
+            <p:message for="#{prefix}suburb" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Street name:" for="#{prefix}street"/>                                
             <p:inputText id="#{prefix}street" value="#{address.street}"/>

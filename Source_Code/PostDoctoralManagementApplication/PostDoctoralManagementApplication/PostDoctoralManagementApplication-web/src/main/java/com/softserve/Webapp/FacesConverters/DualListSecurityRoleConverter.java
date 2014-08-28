@@ -24,12 +24,43 @@ public class DualListSecurityRoleConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) 
     {        
-        return new SecurityRole(Long.parseLong(value));
+        
+        System.out.println("Converting string " + value);
+        if(value.equals(""))
+        {
+            System.out.println("Converting string " + value + " to null" );
+            return null;
+        }
+        else
+        {
+        
+            SecurityRole role = new SecurityRole();
+            role.setRoleID(Long.parseLong(value));
+            role.setName(com.softserve.constants.PersistenceConstants.getSecurityRoleName(role.getRoleID()));
+            //role.setRoleID(Long.parseLong(value.substring(0, value.indexOf(" "))));
+            //role.setName(value.substring(value.indexOf(" ") + 1));
+            System.out.println("Converting string " + value + " to " + role.getName() + " " + role.toString());
+            return role;
+        }
+        
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        return Long.toString(((SecurityRole) value).getRoleID());
+        //String s = Long.toString(((SecurityRole) value).getRoleID()) + " " + ((SecurityRole) value).getName();
+        String s = "";
+        
+        if(value == null)
+        {
+            return s;
+        }
+        else
+        {
+            s = String.valueOf(((SecurityRole) value).getRoleID());            
+        }
+        
+        System.out.println("Converting object " + value.toString() + " to " + s);
+        return s;
     }
     
 }

@@ -366,7 +366,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         EmployeeInformation userUPInfo = user.getEmployeeInformation();
         Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
         ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
-        
+        System.out.println("=====" + user.getEmail() + " " + user.toString() + " " + getUserBySystemIDOrEmail(user.getEmail()));
         if(!getUserBySystemIDOrEmail(user.getEmail()).equals(user))
         {
             throw new UserAlreadyExistsException("This email is already in use by a user account");
@@ -387,6 +387,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
             
             if(employeeInformationJpaController.findEmployeeInformation(userUPInfo.getEmployeeID()) != null)
             {
+                addressJpaController.edit(userUPInfo.getPhysicalAddress());
                 userUPInfo.setPhysicalAddress(upAddress);
                 employeeInformationJpaController.edit(userUPInfo);
             }

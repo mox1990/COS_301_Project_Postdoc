@@ -22,7 +22,14 @@ public class SelectDepartmentConverter implements Converter {
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return new Department(Long.parseLong(value));
+        try
+        {
+            return new Department(Long.parseLong(value));
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
     @Override

@@ -18,12 +18,9 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.LocationManagementServiceLocal;
 import com.softserve.ejb.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -31,7 +28,6 @@ import javax.enterprise.context.ConversationScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 /**
  *
@@ -55,8 +51,6 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
-    @EJB
-    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -73,41 +67,20 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     
     @PostConstruct
     public void init()
-    {
-        
-        if(conversationManagerBean.isConversationRegistered(conversation))
-        {
-            
-            System.out.println("converstion is registered ");
-        }
-        else
-        {
-            conversationManagerBean.registerConversation(conversation);
-        }
-        System.out.println("converstion is " + conversation.isTransient());
-        if(!conversation.isTransient())
-        {
-            System.out.println("converstion has started ");
-        }
-        else
-        {
-            
-            conversationManagerBean.startConversation(conversation);
-            System.out.println("converstion is " + conversation.isTransient());
-            person = new Person();
-            person.setTitle("Mr.");        
-            address = new Address();
-            employeeInformation = new EmployeeInformation();
-            upAddress = new Address();
-            employeeInformation.setDepartment(new Department((long)(0)));
-            employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
-            employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+    {        
+        conversationManagerBean.registerConversation(conversation);
 
-            locationFinderDependBean.init();
-        }
-        
-        
-        
+        conversationManagerBean.startConversation(conversation);
+        person = new Person();
+        person.setTitle("Mr.");        
+        address = new Address();
+        employeeInformation = new EmployeeInformation();
+        upAddress = new Address();
+        employeeInformation.setDepartment(new Department((long)(0)));
+        employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+        employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+
+        locationFinderDependBean.init(null);    
     }
 
     public Person getPerson() {
@@ -172,7 +145,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
             {
                 employeeInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(employeeInformation.getDepartment().getDepartmentID()));
                 person.setSystemID(employeeInformation.getEmployeeID());
-                employeeInformation.setPhysicalAddress(address);
+                employeeInformation.setPhysicalAddress(upAddress);
                 person.setEmployeeInformation(employeeInformation);
 
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);               
@@ -188,7 +161,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
         catch (Exception ex) 
         {
             ExceptionUtil.logException(ProspectiveUserAccountCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     } 

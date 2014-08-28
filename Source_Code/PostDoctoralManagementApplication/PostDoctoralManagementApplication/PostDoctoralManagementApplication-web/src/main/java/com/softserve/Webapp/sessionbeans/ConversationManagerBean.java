@@ -57,6 +57,11 @@ public class ConversationManagerBean implements Serializable {
             if(!isConversationActive(index))
             {
                 trackedConversations.get(index).begin();
+                System.out.println("Conversation has started");
+            }
+            else
+            {
+                System.out.println("Conversation has already been started");
             }
         }
         else
@@ -104,9 +109,14 @@ public class ConversationManagerBean implements Serializable {
     
     public void registerConversation(Conversation conversation) throws ArrayIndexOutOfBoundsException
     {
-        if(getIndexOfConversation(conversation) == -1)
+        if(!isConversationRegistered(conversation))
         {
             trackedConversations.add(conversation);
+            System.out.println("Conversation registered");
+        }
+        else
+        {
+            System.out.println("Conversation has already been registered");
         }
     }
         

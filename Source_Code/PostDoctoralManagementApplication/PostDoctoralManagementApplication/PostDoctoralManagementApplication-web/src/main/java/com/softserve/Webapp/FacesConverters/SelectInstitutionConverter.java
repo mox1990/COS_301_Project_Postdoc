@@ -24,7 +24,14 @@ public class SelectInstitutionConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         System.out.println("Converting " + value + " to object");
-        return new Institution(Long.parseLong(value));
+        try
+        {
+            return new Institution(Long.parseLong(value));
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
     }
 
     @Override

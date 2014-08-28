@@ -6,14 +6,9 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.DBEntities.Person;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
-import com.softserve.ejb.NotificationServiceLocal;
-import com.softserve.system.DBEntitiesFactory;
-import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -30,10 +25,7 @@ public class IndexBean {
     private SessionManagerBean sessionManagerBean;
     @Inject
     private NavigationManagerBean navigationManagerBean;
-    @EJB
-    private NotificationServiceLocal notificationServiceLocal;
-    
-    private UIComponent errorContainer;
+
     private String usernameOrEmail = "";
     private String password = "";    
     
@@ -45,18 +37,10 @@ public class IndexBean {
     
     public void setupIndexPage()
     {
-        sessionManagerBean.resetSession(errorContainer);
+        sessionManagerBean.resetSession();
         navigationManagerBean.clearBreadCrumbsTo(0);
     }
 
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    }
-    
     public String getUsernameOrEmail() {
         return usernameOrEmail;
     }
@@ -75,8 +59,6 @@ public class IndexBean {
     
     public String performLoginRequest()
     {
-        String l = sessionManagerBean.login(errorContainer,usernameOrEmail,password);
-        System.out.println("====== " + l);        
-        return l;
+        return sessionManagerBean.login(usernameOrEmail,password);
     }
 }

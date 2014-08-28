@@ -23,24 +23,16 @@ public class logoutRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
-    
-    private UIComponent errorContainer;
+
     /**
      * Creates a new instance of logoutRequestBean
      */
     public logoutRequestBean() {
     }
 
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    }
     
     public String performLogoutRequest()
     {
-        return sessionManagerBean.logout(errorContainer);
+        return sessionManagerBean.logout();
     }
 }

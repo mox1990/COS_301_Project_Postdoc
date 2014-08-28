@@ -27,20 +27,19 @@
             <p:message for="position" styleClass="fieldErrorMessage"/>
             
             <p:outputLabel value="Institution:" for="institution"/>                                
-            <p:selectOneMenu id="institution" value="#{employeeInformation.department.faculty.institution}" >
+            <p:selectOneMenu id="institution" value="#{locationBean.selectedInstitution}" >
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                <p:ajax update="faculty department" listener="#{locationBean.populateFaculties(employeeInformation.department.faculty.institution)}" process="@this"/>
-                <f:selectItem itemLabel="Select an institution" noSelectionOption="true"/>
+                <p:ajax listener="#{locationBean.populateFaculties(locationBean.selectedInstitution)}" update="faculty department" process="@this"/>
                 <f:selectItems value="#{locationBean.institutions}" var="inst" itemLabel="#{inst.name}" itemValue="#{inst}"/>
                 <f:converter converterId="com.softserve.Webapp.SelectInstitutionConverter"/>                
             </p:selectOneMenu>
             <p:message for="institution" styleClass="fieldErrorMessage"/>
             
             <p:outputLabel value="Faculty:" for="faculty"/>                                
-            <p:selectOneMenu id="faculty" value="#{employeeInformation.department.faculty}" disabled="#{locationBean.faculties.size() == 0}">
+            <p:selectOneMenu id="faculty" value="#{locationBean.selectedFaculty}" disabled="#{locationBean.faculties.size() == 0}">
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                <p:ajax listener="#{locationBean.populateDepartments(employeeInformation.department.faculty)}" update="faculty department" process="@this"/>
-                <f:selectItem itemLabel="Select a faculty" noSelectionOption="true"/>
+                <p:ajax listener="#{locationBean.populateDepartments(locationBean.selectedFaculty)}" update="department" process="@this"/>
+                <f:selectItem itemLabel="Select a faculty"/>
                 <f:selectItems value="#{locationBean.faculties}" var="fac" itemLabel="#{fac.name}" itemValue="#{fac}"/>
                 <f:converter converterId="com.softserve.Webapp.SelectFacultyConverter"/>                
             </p:selectOneMenu>
@@ -48,7 +47,7 @@
             
             <p:outputLabel value="Department:" for="department"/>                                
             <p:selectOneMenu id="department" value="#{employeeInformation.department}" disabled="#{locationBean.departments.size() == 0}">
-                <f:selectItem itemLabel="Select a department" noSelectionOption="true"/>
+                <f:selectItem itemLabel="Select a department" />
                 <f:selectItems value="#{locationBean.departments}" var="dep" itemLabel="#{dep.name}" itemValue="#{dep}"/>
                 <f:converter converterId="com.softserve.Webapp.SelectDepartmentConverter"/>
             </p:selectOneMenu>

@@ -55,7 +55,7 @@ public class SessionManagerBean implements Serializable {
         sessionStorage = new ArrayList<StorageItem>();
     }
     
-    public String login(UIComponent errorMessageComponent, String username, String password)
+    public String login(String username, String password)
     {
         HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
@@ -87,13 +87,13 @@ public class SessionManagerBean implements Serializable {
         catch(Exception ex)
         {
             System.out.println("Login exception");
-//errorMessage = "User name and/or password is invalid";
-            ExceptionUtil.handleException(errorMessageComponent, ex);
+            ExceptionUtil.logException(SessionManagerBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }
     
-    public String logout(UIComponent errorMessageComponent)
+    public String logout()
     {
         try 
         {   
@@ -104,12 +104,13 @@ public class SessionManagerBean implements Serializable {
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.handleException(errorMessageComponent, ex);
+            ExceptionUtil.logException(SessionManagerBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return navigationManagerBean.goToPortalView();
         }
     }
     
-    public void resetSession(UIComponent component)
+    public void resetSession()
     {
         HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
@@ -124,7 +125,7 @@ public class SessionManagerBean implements Serializable {
         {
             if(httpSession.getAttribute("status") != null && httpSession.getAttribute("status").equals(Boolean.TRUE))
             {
-                logout(component);
+                logout();
             }            
         }
         

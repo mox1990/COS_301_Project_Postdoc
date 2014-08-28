@@ -9,8 +9,11 @@ package com.softserve.Webapp.conversationbeans;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -44,14 +47,14 @@ public class GeneralUserAccountCreationBean implements Serializable{
     private NavigationManagerBean navigationManagerBean;
     @Inject
     private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private LocationFinderDependBean locationFinderDependBean;
     
     @Inject
     private Conversation conversation;
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
-    @EJB
-    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -83,7 +86,11 @@ public class GeneralUserAccountCreationBean implements Serializable{
         address = new Address();
         employeeInformation = new EmployeeInformation();
         upAddress = new Address();
-        employeeInformation.setDepartment(new Department());
+        employeeInformation.setDepartment(new Department((long)(0)));
+        employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+        employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+
+        locationFinderDependBean.init(null);
         
         sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
         sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
@@ -149,9 +156,18 @@ public class GeneralUserAccountCreationBean implements Serializable{
     public void setErrorContainer(UIComponent errorContainer) {
         this.errorContainer = errorContainer;
     }
+
+    public LocationFinderDependBean getLocationFinderDependBean() {
+        return locationFinderDependBean;
+    }
+
+    public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
+        this.locationFinderDependBean = locationFinderDependBean;
+    }
         
     public String performGeneralUserAccountCreationRequest()
     {
+        System.out.println("================================= creating");
         try 
         {
             if(isSystemAdmin)
@@ -161,8 +177,6 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 
                 securityRoles.getTarget().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
-            System.out.println(securityRoles.getSource().toString());
-            System.out.println(securityRoles.getTarget().toString());
 
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
             person.getSecurityRoleList().addAll(securityRoles.getTarget());
@@ -175,8 +189,9 @@ public class GeneralUserAccountCreationBean implements Serializable{
             
             if(person.getUpEmployee())
             {
+                employeeInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(employeeInformation.getDepartment().getDepartmentID()));
                 person.setSystemID(employeeInformation.getEmployeeID());
-                employeeInformation.setPhysicalAddress(address);
+                employeeInformation.setPhysicalAddress(upAddress);
                 person.setEmployeeInformation(employeeInformation);
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), true, person);               
             }
@@ -191,8 +206,9 @@ public class GeneralUserAccountCreationBean implements Serializable{
         } 
         catch (Exception ex) 
         {
+            System.out.println("================================= error");
             ExceptionUtil.logException(GeneralUserAccountCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

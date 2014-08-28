@@ -22,7 +22,14 @@ public class SelectFacultyConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return new Faculty(Long.parseLong(value));
+        try
+        {
+            return new Faculty(Long.parseLong(value));
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
     }
 
     @Override

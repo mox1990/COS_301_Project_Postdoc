@@ -6,16 +6,17 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <ui:component>
-        <h:form>
+        <h:form id="breadcrumbFrom">
             <div class="breadCrumbs">
-                <p:commandLink styleClass="breadCrumb" value="Logout" binding="#{logoutRequestBean.errorContainer}" action="#{logoutRequestBean.performLogoutRequest()}"/>
+                <p:growl sticky="true" showSummary="true" showDetail="true"/>
+                <p:commandLink styleClass="breadCrumb" value="Logout" action="#{logoutRequestBean.performLogoutRequest()}" update="breadcrumbFrom"/>
                 <span>   </span>
                 <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
                     <c:if test="#{(counter.count == 1)}">
-                        <p:commandLink styleClass="breadCrumb-disabled" value="#{crumb.viewName}"/>
+                        <p:commandLink styleClass="breadCrumb-disabled" value="#{crumb.viewName}" update="breadcrumbFrom"/>
                     </c:if>
                     <c:if test="#{(counter.count > 1)}">
-                        <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>
+                        <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}" update="breadcrumbFrom"/>
                     </c:if>                    
                     <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
                         <span class="breadCrumb-Splitter">></span>

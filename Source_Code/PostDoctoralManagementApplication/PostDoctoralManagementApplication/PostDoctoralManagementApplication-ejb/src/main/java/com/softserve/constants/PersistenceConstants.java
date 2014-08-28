@@ -129,4 +129,48 @@ public class PersistenceConstants {
         
         return list;
     }
+    
+    public static String getSecurityRoleName(Long id)
+    {
+        if(id == SECURITY_ROLE_ID_PROSPECTIVE_FELLOW)
+        {
+            return "Prospective fellow";
+        }
+        else if(id == SECURITY_ROLE_ID_RESEARCH_FELLOW)
+        {
+            return "Research fellow";
+        }
+        else if(id == SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER)
+        {
+            return "Dean's office member";
+        }
+        else if(id == SECURITY_ROLE_ID_DRIS_MEMBER)
+        {
+            return "DRIS member";
+        }
+        else if(id == SECURITY_ROLE_ID_GRANT_HOLDER)
+        {
+            return "Grant holder";
+        }
+        else if(id == SECURITY_ROLE_ID_HOD)
+        {
+            return "HOD";
+        }
+        else if(id == SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER)
+        {
+            return "Post doctoral Committee member";
+        }
+        else if(id == SECURITY_ROLE_ID_REFEREE)
+        {
+            return "Referee";
+        }
+        else if(id == SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR)
+        {
+            return "System administrator";
+        }
+        else
+        {
+            return "";
+        }
+    }
 }

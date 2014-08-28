@@ -19,7 +19,7 @@
             </div>
 
             <div>
-                <h:form>
+                <h:form id="gencreateFrom">
                     <center>
                         <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
                             <ui:param name="person" value="#{generalUserAccountCreationBean.person}"/>
@@ -51,6 +51,7 @@
                         <p:outputPanel id="upEmployeeInfoPanel">
                             <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
                                 <ui:param name="employeeInformation" value="#{generalUserAccountCreationBean.employeeInformation}"/>
+                                <ui:param name="locationBean" value="#{generalUserAccountCreationBean.locationFinderDependBean}"/>
                                 <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
                                 <ui:param name="employeeIDEditable" value="#{true}"/>
                                 <ui:define name="header">
@@ -67,12 +68,10 @@
                                 </ui:define>
                             </ui:decorate>                            
                         </p:outputPanel>
-                        <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser" binding="#{generalUserAccountCreationBean.errorContainer}" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" ajax="false"/>
-                        
-                        <div class="errorContainer">
-                            <h:message styleClass="errorSpan" id="createErrors" for="createUser"/>
-                        </div>
+                        <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="false"/>
+                        <p:commandButton styleClass="button" value="Create user account" id="createUser" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" update="gencreateFrom" process="@form">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                        </p:commandButton>
                     </center>
                 </h:form>
             </div>

@@ -9,8 +9,11 @@ package com.softserve.Webapp.conversationbeans;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -44,14 +47,14 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     private NavigationManagerBean navigationManagerBean;
     @Inject
     private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private LocationFinderDependBean locationFinderDependBean;
     
     @Inject
     private Conversation conversation;
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
-    @EJB
-    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -78,27 +81,24 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        person = sessionManagerBean.getObjectFromSessionStorage(0, Person.class); 
-        if(person == null)
-        {
-            System.out.println("==========Is null");
-        }
-        else
-        {
-            System.out.println("==========Is not null");
-        }
+        person = sessionManagerBean.getObjectFromSessionStorage(0, Person.class);
+        
         address = person.getAddressLine1();
         
         if(person.getUpEmployee())
         {
             employeeInformation = person.getEmployeeInformation();
-            upAddress = person.getEmployeeInformation().getPhysicalAddress();            
+            upAddress = person.getEmployeeInformation().getPhysicalAddress(); 
+            locationFinderDependBean.init(employeeInformation.getDepartment());
         }
         else
         {
             employeeInformation = new EmployeeInformation();
             upAddress = new Address();
-            employeeInformation.setDepartment(new Department());
+            employeeInformation.setDepartment(new Department((long)(0)));
+            employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+            employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+            locationFinderDependBean.init(null);
         }
         employeeInformation.setEmployeeID(person.getSystemID());
         
@@ -172,24 +172,36 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     public void setErrorContainer(UIComponent errorContainer) {
         this.errorContainer = errorContainer;
     }
-        
+
+    public LocationFinderDependBean getLocationFinderDependBean() {
+        return locationFinderDependBean;
+    }
+
+    public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
+        this.locationFinderDependBean = locationFinderDependBean;
+    }
+            
     public String performGeneralUserAccountEditRequest()
     {
         try 
         {
             if(isSystemAdmin)
-            {                
-                targetRoles.addAll(sourceRoles);
-                sourceRoles.clear();
-                targetRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            {
+                securityRoles.getTarget().addAll(securityRoles.getSource()); 
+                securityRoles.getTarget().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
+
+            person.setSecurityRoleList(new ArrayList<SecurityRole>());
+            person.getSecurityRoleList().addAll(securityRoles.getTarget());
             
-            person.setSecurityRoleList(targetRoles);
+            System.out.println(person.getSecurityRoleList().toString());
+            
             person.setAddressLine1(address);
             if(person.getUpEmployee())
             {
+                employeeInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(employeeInformation.getDepartment().getDepartmentID()));
                 employeeInformation.setEmployeeID(person.getSystemID());
-                employeeInformation.setPhysicalAddress(address);
+                employeeInformation.setPhysicalAddress(upAddress);
                 person.setEmployeeInformation(employeeInformation);
                 userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);               
             }
@@ -205,7 +217,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(UserAccountsGeneralAccountEditBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

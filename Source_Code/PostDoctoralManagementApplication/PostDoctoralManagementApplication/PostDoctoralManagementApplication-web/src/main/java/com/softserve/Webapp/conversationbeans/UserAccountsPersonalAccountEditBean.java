@@ -11,7 +11,10 @@ import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.DBEntities.EmployeeInformation;
+import com.softserve.DBEntities.Faculty;
+import com.softserve.DBEntities.Institution;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -46,14 +49,14 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     private NavigationManagerBean navigationManagerBean;
     @Inject
     private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private LocationFinderDependBean locationFinderDependBean;
     
     @Inject
     private Conversation conversation;
     
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
-    @EJB
-    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -84,13 +87,17 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             {
                 employeeInformation = person.getEmployeeInformation();
                 upAddress = person.getEmployeeInformation().getPhysicalAddress();
-                
+                locationFinderDependBean.init(employeeInformation.getDepartment());                
             }
             else
             {
                 employeeInformation = new EmployeeInformation();
                 upAddress = new Address();
-                employeeInformation.setDepartment(new Department());
+                employeeInformation.setDepartment(new Department((long)(0)));
+                employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+                employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+                
+                locationFinderDependBean.init(null);
             }
             employeeInformation.setEmployeeID(person.getSystemID());
         } 
@@ -141,6 +148,14 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     public void setErrorContainer(UIComponent errorContainer) {
         this.errorContainer = errorContainer;
     }
+
+    public LocationFinderDependBean getLocationFinderDependBean() {
+        return locationFinderDependBean;
+    }
+
+    public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
+        this.locationFinderDependBean = locationFinderDependBean;
+    }
         
     public String performPersonalUserAccountEditRequest()
     {
@@ -149,8 +164,9 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             person.setAddressLine1(address);
             if(person.getUpEmployee())
             {
+                employeeInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(employeeInformation.getDepartment().getDepartmentID()));
                 employeeInformation.setEmployeeID(person.getSystemID());
-                employeeInformation.setPhysicalAddress(address);
+                employeeInformation.setPhysicalAddress(upAddress);
                 person.setEmployeeInformation(employeeInformation);
                 userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);               
             }
@@ -165,7 +181,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }
@@ -194,7 +210,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

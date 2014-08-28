@@ -9,7 +9,7 @@
         <ui:param name="pageTitle" value="Portal"/>
         
         <ui:define name="pageEvents">
-            <f:event type="preRenderView" listener="#{indexBean.setupIndexPage()}"/>
+
         </ui:define>
         
         <ui:define name="CSSStyleSheets">
@@ -27,7 +27,7 @@
                     </h:form>
                 </div>
                 <div id="sideR">                            
-                    <h:form>
+                    <h:form id="loginForm">
                         <h:outputLabel value="User name or email:"/>
                         <br/>
                         <p:inputText value="#{indexBean.usernameOrEmail}"/>
@@ -37,11 +37,8 @@
                         <p:inputText value="#{indexBean.password}"/>
                         <br/>
                         <p:growl sticky="true" showSummary="true" showDetail="true"/>
-                        <p:commandButton id="loginButton" styleClass="button" value="Login" binding="#{indexBean.errorContainer}" action="#{indexBean.performLoginRequest()}" ajax="false"/>
+                        <p:commandButton id="loginButton" styleClass="button" value="Login" action="#{indexBean.performLoginRequest()}" update="loginForm"/>
                         <br/>
-                        <div class="errorContainer">
-                            <h:message styleClass="errorSpan" id="loginErrors" for="loginButton" />
-                        </div>
                     </h:form>  
                 </div>
             </div>
