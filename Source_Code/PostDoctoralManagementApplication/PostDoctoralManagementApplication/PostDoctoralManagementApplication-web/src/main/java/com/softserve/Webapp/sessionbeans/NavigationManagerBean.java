@@ -508,4 +508,12 @@ public class NavigationManagerBean implements Serializable {
         
         return goToLink(breadCrumb);
     }
+    
+    public String goToUserAccountManagementServicesOndemandUserAccountApprovalServiceView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_OnDemandAccountsApprovalService", "On-Demand user account approval");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
 }

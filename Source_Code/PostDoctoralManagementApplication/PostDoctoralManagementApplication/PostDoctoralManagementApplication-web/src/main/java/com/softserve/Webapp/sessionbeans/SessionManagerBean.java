@@ -79,9 +79,14 @@ public class SessionManagerBean implements Serializable {
             {
                 return navigationManagerBean.goToUserAccountManagementServicesOnDemandUserActivationView();
             }
-            else
+            else if(session.isUserAccountActive())
             {
                 return navigationManagerBean.goToWelcomeView();
+            }
+            else
+            {
+                ExceptionUtil.handleException(null, new Exception("User account is not available"));
+                return navigationManagerBean.goToPortalView();
             }
         }
         catch(Exception ex)

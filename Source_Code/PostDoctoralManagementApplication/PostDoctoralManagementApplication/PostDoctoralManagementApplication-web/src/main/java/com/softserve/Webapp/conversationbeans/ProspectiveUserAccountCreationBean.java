@@ -155,8 +155,9 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);            
             }
             
+            String outcome = sessionManagerBean.login(person.getSystemID(), person.getPassword());
             conversationManagerBean.deregisterConversation(conversation);
-            return navigationManagerBean.goToPortalView();
+            return outcome;
         }
         catch (Exception ex) 
         {

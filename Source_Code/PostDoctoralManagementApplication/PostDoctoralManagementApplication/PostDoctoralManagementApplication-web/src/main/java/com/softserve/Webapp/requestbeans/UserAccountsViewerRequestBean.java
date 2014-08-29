@@ -60,8 +60,24 @@ public class UserAccountsViewerRequestBean {
         }
         catch(Exception ex)
         {
-            System.out.println("Exception");
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            return new ArrayList<Person>();
+        }
+    }
+    
+    public List<Person> getPendingUserAccounts()
+    {
+        try
+        {            
+            List<Person> accounts = userAccountManagementServiceLocal.loadAllPendingOnDemandAccounts(sessionManagerBean.getSession());
+            System.out.println("Number of accounts " + accounts.size());
+            return accounts;
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return new ArrayList<Person>();
         }
     }
@@ -86,7 +102,38 @@ public class UserAccountsViewerRequestBean {
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+        
+        return "";
+    }
+    
+    public String approveOndemandAccount(Person person)
+    {
+        try 
+        {
+            userAccountManagementServiceLocal.approveOnDemandAccount(sessionManagerBean.getSession(), person);
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+        
+        return "";
+    }
+    
+    public String declineOndemandAccount(Person person)
+    {
+        try 
+        {
+            userAccountManagementServiceLocal.declineOnDemandAccount(sessionManagerBean.getSession(), person);
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
         }
         
         return "";
@@ -95,6 +142,16 @@ public class UserAccountsViewerRequestBean {
     public boolean isUserAccountDisabled(Person account)
     {
         return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+    }
+    
+    public boolean isUserAccountDorment(Person account)
+    {
+        return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+    }
+    
+    public boolean isUserAccountActive(Person account)
+    {
+        return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
     public boolean isOwnerOfAccount(Person account)
@@ -106,7 +163,7 @@ public class UserAccountsViewerRequestBean {
         catch (AuthenticationException ex) 
         {
             ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return false;
         }
     }
@@ -123,5 +180,11 @@ public class UserAccountsViewerRequestBean {
         {
             return false;
         }  
+    }
+    
+    public boolean isUserAccountRemovable(Person person)
+    {
+        return !isOwnerOfAccount(person) && (isUserAccountActive(person) || isUserAccountDorment(person));
+            
     }
 }

@@ -60,7 +60,7 @@
                             <center>
                                 <h2 class="header2">Specify grant holder</h2>
                                 <h:form>
-                                    <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
+                                    <ui:decorate template="templates/personOnDemandFieldInputEmployee_Component.xhtml">
                                         <ui:param name="renderAttribute" value="#{true}"/>
                                         <ui:param name="person" value="#{newApplicationCreationBean.applicationCreationDependBean.grantHolder}"/>
                                         <ui:param name="bean" value="#{newApplicationCreationBean.applicationCreationDependBean}"/>
@@ -94,6 +94,7 @@
                                             <ui:param name="person" value="#{newApplicationCreationBean.applicationCreationDependBean.currentReferee}"/>
                                             <ui:param name="bean" value="#{newApplicationCreationBean.applicationCreationDependBean}"/>
                                             <ui:param name="beanAction" value="setCurrentReferee"/>
+                                            
                                         </ui:decorate>
                                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                                         <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.applicationCreationDependBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill">

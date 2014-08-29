@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:component>
+        <div>
+            <c:if test="#{userAccounts.size() == 0}">
+                <div>
+                    <h:outputText styleClass="text-label" value="No user accounts"/>
+                </div>
+            </c:if>
+            <c:if test="#{userAccounts.size() > 0}">  
+                <p:accordionPanel dynamic="true" cache="true" value="#{userAccounts}" var="account" styleClass="box-round">
+                    <p:tab title="User account - #{account.systemID} - #{account.completeName}" >
+                        <h:panelGrid columns="2">
+                            <h:outputText styleClass="text-label" value="Full name:"/>
+                            <h:outputText value="#{account.fullName}"/>
+                            <h:outputText styleClass="text-label" value="Surname name:"/>
+                            <h:outputText value="#{account.surname}"/>
+                            <h:outputText styleClass="text-label" value="Email address:"/>
+                            <h:outputText value="#{account.email}"/>
+                            <h:outputText styleClass="text-label" value="Account Status:"/>
+                            <h:outputText value="#{account.accountStatus}"/>
+                            <h:outputText styleClass="text-label" value="Is UP employee:"/>
+                            <h:outputText value="#{account.upEmployee}"/>
+                        </h:panelGrid>
+                        <h:form>
+                            <ui:insert name="commandButtons"/>                            
+                        </h:form>
+                    </p:tab>
+                </p:accordionPanel>
+            </c:if>
+        </div>
+    </ui:component>
+</html>
+

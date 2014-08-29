@@ -89,6 +89,8 @@ public class UserAccountManagementService implements UserAccountManagementServic
         return auditTrailServiceLocal;
     }
     
+    
+    
     /**
      *
      */
@@ -144,6 +146,16 @@ public class UserAccountManagementService implements UserAccountManagementServic
     protected SecurityRoleJpaController getSecurityRoleDAO()
     {
         return new SecurityRoleJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected NotificationJpaController getNotificationDAO()
+    {
+        return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected AuditLogJpaController getAuditLogDAO()
+    {
+        return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     /**
@@ -504,7 +516,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
         
         //Set account to dorment
-        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
         //Set new random password
         user.setPassword(getGeneratorUTIL().generateRandomHexString());
         
@@ -618,8 +630,39 @@ public class UserAccountManagementService implements UserAccountManagementServic
         userGateway.authenticateUser(session, roles);
         
         PersonJpaController personJpaController = getPersonDAO();
+        NotificationJpaController notificationJpaController = getNotificationDAO();
+        AuditLogJpaController auditLogJpaController = getAuditLogDAO();
         
-        account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+        
+        for(Notification notification: account.getNotificationList())
+        {
+            try
+            {
+                notificationJpaController.destroy(notification.getNotificationID());
+            }
+            catch(Exception ex)
+            {
+                
+            }
+        }
+        
+        for(Notification notification: account.getNotificationList1())
+        {
+            try
+            {
+                notificationJpaController.destroy(notification.getNotificationID());
+            }
+            catch(Exception ex)
+            {
+                
+            }
+        }
+        
+        for(AuditLog auditLog : account.getAuditLogList())
+        {
+            auditLogJpaController.destroy(auditLog.getEntryID());
+        }
         
         if(account.getEmployeeInformation()!= null)
         {

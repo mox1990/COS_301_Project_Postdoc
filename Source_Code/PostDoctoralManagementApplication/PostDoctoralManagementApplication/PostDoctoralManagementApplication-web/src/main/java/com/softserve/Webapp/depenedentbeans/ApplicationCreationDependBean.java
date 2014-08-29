@@ -86,6 +86,7 @@ public class ApplicationCreationDependBean implements Serializable{
         {
             grantHolder = new Person();
             grantHolder.setTitle("Mr");
+            grantHolder.setUpEmployee(true);
         }
         
         if(referees == null)

@@ -195,22 +195,26 @@ public class NewApplicationCreationBean implements Serializable {
             if(openApplication.getGrantHolder() != null && openApplication.getGrantHolder().getSystemID() == null)
             {
                 openApplication.setGrantHolder(null);
+                
             }
             
             newApplicationServiceLocal.createNewApplication(session, openApplication);
             
-            if(openApplication.getGrantHolder() != null)
+            if(openApplication.getGrantHolder() == null)
             {                
+                ApplicationCreationDependBean.getGrantHolder().setUpEmployee(true);
                 wizardActiveTab = 2;
             }
-            
-            if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
-            {
-                wizardActiveTab = 3;
-            }
             else
-            {
-                wizardActiveTab = 4;
+            {            
+                if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
+                {
+                    wizardActiveTab = 3;
+                }
+                else
+                {
+                    wizardActiveTab = 4;
+                }
             }
             sessionManagerBean.clearSessionStorage();
             

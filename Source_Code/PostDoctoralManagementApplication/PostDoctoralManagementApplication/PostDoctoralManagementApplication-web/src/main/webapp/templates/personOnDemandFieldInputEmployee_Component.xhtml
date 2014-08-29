@@ -44,16 +44,9 @@
                 </p:inputText>
                 <p:message for="sname" styleClass="fieldErrorMessage"/>
                 
-                <p:outputLabel value="Is person an UP empolyee:" for="upEmployee"/>                                
-                <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}">
-                    <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                    <p:ajax event="change" update="upEmployee"/>
-                    <p:ajax event="change" update="sysID"/>
-                </p:selectBooleanCheckbox>
-                <p:message for="upEmployee" styleClass="fieldErrorMessage"/>
 
                 <p:outputLabel value="Employee ID:" for="sysID"/>                                
-                <p:inputText id="sysID" value="#{person.systemID}" required="#{!ondemandUserAccountRequestBean.doesUserAccountExist()}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()?true:!person.upEmployee}" >
+                <p:inputText id="sysID" value="#{person.systemID}" required="#{true}" disabled="#{ondemandUserAccountRequestBean.doesUserAccountExist()}" >
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     <p:ajax event="change" update="sysID"/>
                 </p:inputText>

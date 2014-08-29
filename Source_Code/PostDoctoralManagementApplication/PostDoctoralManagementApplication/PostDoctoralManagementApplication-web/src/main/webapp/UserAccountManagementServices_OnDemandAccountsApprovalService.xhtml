@@ -13,15 +13,15 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">User accounts viewer</h1>
+                <h1 class="header1">On-demand user account approval service</h1>
                 <h2>Click on the user accounts to view more details and options</h2>
             </div>
             <div>
                 <ui:decorate template="templates/accountsListing_Comoponent.xhtml">
-                    <ui:param name="userAccounts" value="#{userAccountsViewerRequestBean.userAccounts}"/>
+                    <ui:param name="userAccounts" value="#{userAccountsViewerRequestBean.pendingUserAccounts}"/>
                     <ui:define name="commandButtons" >
-                        <p:commandButton value="Edit user account" styleClass="button-fill button" action="#{userAccountsViewerRequestBean.editUserAccount(account)}" rendered="#{!userAccountsViewerRequestBean.isOwnerOfAccount(account)}"/>
-                        <p:commandButton value="Remove user account" styleClass="button-fill button" action="#{userAccountsViewerRequestBean.removeUserAccount(account)}" rendered="#{(userAccountsViewerRequestBean.isUserAccountRemovable(account))}"/>
+                        <p:commandButton value="Approve on-demand user account" styleClass="button-fill button" action="#{userAccountsViewerRequestBean.approveOndemandAccount(account)}" update="@all"/>
+                        <p:commandButton value="Decline on-demand user account" styleClass="button-fill button" action="#{userAccountsViewerRequestBean.declineOndemandAccount(account)}" update="@all"/>
                     </ui:define>
                 </ui:decorate>
             </div>

@@ -91,6 +91,7 @@ public class UserGateway implements UserGatewayLocal
             //Checks if httpsession password and entities password still match
             if (session.doesHttpSessionPasswordMatchUserPassword()) 
             {
+                
                 //Set login status to true
                 session.setLoggedInStatus(Boolean.TRUE);
                 //Log action

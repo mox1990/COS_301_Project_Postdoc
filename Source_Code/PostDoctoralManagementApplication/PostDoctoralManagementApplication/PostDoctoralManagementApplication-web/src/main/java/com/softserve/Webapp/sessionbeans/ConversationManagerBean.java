@@ -135,7 +135,7 @@ public class ConversationManagerBean implements Serializable {
         }
         else
         {
-            throw new ArrayIndexOutOfBoundsException();
+            System.out.println("Conversation is not being tracked");
         }
     }
     

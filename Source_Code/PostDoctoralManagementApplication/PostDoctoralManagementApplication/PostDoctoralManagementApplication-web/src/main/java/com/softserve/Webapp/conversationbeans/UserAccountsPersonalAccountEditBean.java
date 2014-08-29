@@ -203,9 +203,10 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             {
                 userAccountManagementServiceLocal.activateOnDemandAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);
             }
-            
+            sessionManagerBean.logout();
+            String outcome = sessionManagerBean.login(person.getSystemID(), person.getPassword());
             conversationManagerBean.deregisterConversation(conversation);
-            return navigationManagerBean.goToWelcomeView();
+            return outcome;
         } 
         catch (Exception ex) 
         {
