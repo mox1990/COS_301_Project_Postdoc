@@ -43,7 +43,9 @@
                         <p:message for="tposition" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanAction]}" value="Add team member" styleClass="button button-fill"/>
+                    <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanAction]}" value="Add team member" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
                 </div>
             </p:outputPanel>
         </h:form>

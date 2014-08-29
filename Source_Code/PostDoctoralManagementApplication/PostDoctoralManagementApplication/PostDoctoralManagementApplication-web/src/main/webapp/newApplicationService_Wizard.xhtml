@@ -20,7 +20,7 @@
             </div>
             
             <div>
-                <p:tabView activeIndex="#{newApplicationCreationBean.wizardActiveTab}">
+                <p:tabView activeIndex="#{newApplicationCreationBean.wizardActiveTab}" id="wizardTab">
                     <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 0}" title="Step 1: CV details">
                         <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 0}">
                             <center>
@@ -31,7 +31,9 @@
                                 </ui:decorate>                        
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeCV()}" value="Next" styleClass="button button-fill"/>
+                                    <p:commandButton update=":wizardTab" action="#{newApplicationCreationBean.completeCV()}" value="Next" styleClass="button button-fill">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>
@@ -46,7 +48,9 @@
                                 </ui:decorate>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeApplication()}" value="Next" styleClass="button button-fill"/>
+                                    <p:commandButton update=":wizardTab" action="#{newApplicationCreationBean.completeApplication()}" value="Next" styleClass="button button-fill">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>
@@ -63,7 +67,9 @@
                                         <ui:param name="beanAction" value="setGrantHolder"/>
                                     </ui:decorate>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>                                    
-                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill"/>
+                                    <p:commandButton update=":wizardTab" action="#{newApplicationCreationBean.completeGrantHolderSpecification()}" value="Next" styleClass="button button-fill">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>
@@ -87,11 +93,16 @@
                                             <ui:param name="beanAction" value="setCurrentReferee"/>
                                         </ui:decorate>
                                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                        <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.applicationCreationDependBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill"/>
+                                        <p:commandButton ajax="true" actionListener="#{newApplicationCreationBean.applicationCreationDependBean.addToRefereesList()}" update="referees" value="Add referee" styleClass="button button-fill">
+                                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        </p:commandButton>
                                     </p:outputPanel>
                                 </h:form>
                                 <h:form>
-                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.completeRefereeSpecification()}" value="Next" styleClass="button button-fill"/>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton update=":wizardTab" action="#{newApplicationCreationBean.completeRefereeSpecification()}" value="Next" styleClass="button button-fill">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>    

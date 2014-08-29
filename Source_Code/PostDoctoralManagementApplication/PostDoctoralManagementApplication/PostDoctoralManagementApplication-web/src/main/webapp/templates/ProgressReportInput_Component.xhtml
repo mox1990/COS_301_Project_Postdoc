@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:form>
             <h:panelGrid columns="2" cellpadding="10px">            
@@ -12,7 +13,9 @@
                 <p:message for="selfE" styleClass="fieldErrorMessage"/>            
             </h:panelGrid>
             <p:growl id="growler" sticky="true" globalOnly="true" showDetail="true"/>
-            <p:commandButton value="Add infromation to progress report" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" update="growler"/>
+            <p:commandButton value="Add infromation to progress report" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" update="growler">
+                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+            </p:commandButton>
         </h:form>
         
         <p:panel header="Research output generated" toggleable="true" collapsed="true">

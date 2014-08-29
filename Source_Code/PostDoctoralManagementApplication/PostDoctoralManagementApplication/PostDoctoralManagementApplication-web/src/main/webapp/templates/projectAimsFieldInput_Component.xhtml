@@ -19,7 +19,9 @@
                         <p:message for="taim" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanAction]}" value="Add project aim" styleClass="button button-fill"/>
+                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanAction]}" value="Add project aim" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
                 </div>
             </p:outputPanel>
         </h:form>

@@ -8,10 +8,13 @@
     <ui:component>
         <h:form>
             <p:outputPanel id="#{prefix}researchoutput">
-                <ui:decorate template="referenceDataTable_Component.xhtml">
-                    <ui:param name="header" value="Research output already added"/>
-                    <ui:param name="references" value="#{references}"/>
-                </ui:decorate>
+                <p:outputPanel id="#{prefix}researchoutputTable">
+                    <ui:decorate template="referenceDataTableInput_Component.xhtml">
+                        <ui:param name="header" value="Research output already added"/>
+                        <ui:param name="references" value="#{references}"/>
+                        <ui:param name="selectedReferenceList" value="#{selectedReferenceList}" />
+                    </ui:decorate>
+                </p:outputPanel>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Reference type" for="#{prefix}reftype"/>                                
@@ -29,7 +32,7 @@
                         <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate"/>                                
-                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}" pattern="yyyy-mm-dd" required="true">
+                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}" pattern="yyyy-MM-dd" required="true">
                             <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                         </p:calendar>
                         <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage"/>
@@ -43,7 +46,12 @@
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton value="Add reference" actionListener="#{bean[beanAction]}" update="#{prefix}researchoutput" styleClass="button button-fill"/>
+                    <p:commandButton value="Add reference" actionListener="#{bean[beanActionAdd]}" update="#{prefix}researchoutput" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
+                    <p:commandButton value="Remove selected reference" actionListener="#{bean[beanActionRemove]}" update="#{prefix}researchoutput" styleClass="button button-fill" process="@this #{prefix}researchoutputTable">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
                 </div>
             </p:outputPanel>
         </h:form>

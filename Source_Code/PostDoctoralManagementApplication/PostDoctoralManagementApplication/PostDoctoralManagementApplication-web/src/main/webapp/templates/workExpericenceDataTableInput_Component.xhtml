@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <p:dataTable value="#{experienceList}" var="experience" selection="#{selectedExperienceList}" rowKey="#{experience.capacity} #{experience.organisation}" style="margin-bottom:0">
+            <f:facet name="header">
+                #{header}
+            </f:facet>
+            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+            <p:column headerText="Capacity">
+                <h:outputText value="#{experience.capacity}"/>
+            </p:column>
+            <p:column headerText="Organisation">
+                <h:outputText value="#{experience.organisation}"/>
+            </p:column>
+            <p:column headerText="Start date">
+                <h:outputText value="#{experience.startDate}">
+                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:outputText>
+            </p:column>    
+            <p:column headerText="End date">
+                <h:outputText value="#{experience.endDate}">
+                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:outputText>
+            </p:column> 
+        </p:dataTable>
+    </ui:component>
+</html>
+

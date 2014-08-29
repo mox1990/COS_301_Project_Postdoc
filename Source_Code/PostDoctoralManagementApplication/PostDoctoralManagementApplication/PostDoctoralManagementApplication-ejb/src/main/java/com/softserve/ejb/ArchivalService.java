@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -32,7 +33,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Singleton
+@Stateless
 public class ArchivalService implements ArchivalServiceLocal {
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME)
@@ -46,13 +47,19 @@ public class ArchivalService implements ArchivalServiceLocal {
     AuditLog aLog;
     private UserGatewayLocal userGatewayLocal;
     private AuditTrailServiceLocal auditTrailServiceLocal;
+
+    public ArchivalService() {
+    }
+    
+    
     
     public ArchivalService(EntityManagerFactory emfW, EntityManagerFactory emfA )
     {
     }
     
     
-    @Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
+    //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
+    @Override
     public void backupDatabase()
     {
         try
@@ -109,7 +116,7 @@ public class ArchivalService implements ArchivalServiceLocal {
     }
     
     
-    @Schedule(dayOfWeek="Sat", hour="2", info = "Daily backup of the database.")
+    //@Schedule(dayOfWeek="Sat", hour="2", info = "Daily backup of the database.")
     public void archiveOldInformation(Session session) throws Exception
     {
         // TODO: Does the archiving of old information not fit into the backing up?
@@ -180,6 +187,7 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     }
     
+    @Override
     public void retrieveArchievedInformation(String filename) throws IOException
     {
         try
@@ -221,6 +229,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         }
     }
     
+    @Override
     public void restoreDatabase()
     {
         try

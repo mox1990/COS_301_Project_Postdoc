@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <div>
             <h:form>
@@ -36,7 +37,9 @@
                         <p:message for="projectMotivation" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                      <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>  
-                    <p:commandButton value="Add infomration to application" update="applicationInfo" styleClass="button button-fill"  actionListener="#{bean.addInfromationToApplication()}"/>
+                    <p:commandButton value="Add infomration to application" update="applicationInfo" styleClass="button button-fill"  actionListener="#{bean.addInfromationToApplication()}">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
                 </p:panel>
             </h:form>
             
