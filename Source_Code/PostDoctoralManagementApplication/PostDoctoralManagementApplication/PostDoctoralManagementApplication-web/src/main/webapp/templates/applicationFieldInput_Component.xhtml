@@ -15,6 +15,14 @@
                         <p:outputLabel value="Project title:" for="projectTitle"/>                                
                         <p:inputText id="projectTitle" value="#{bean.application.projectTitle}" required="true"/>
                         <p:message for="projectTitle" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Application funding type:" for="fundingType"/>                                
+                        <p:selectOneButton id="fundingType" value="#{bean.application.fundingType}" required="true" >
+                            <f:selectItems value="#{generalInformationBean.fundingTypeItems}" var="t" itemLabel="#{t}" itemValue="#{t}" />
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />                            
+                        </p:selectOneButton>
+                        <p:message for="fundingType" styleClass="fieldErrorMessage"/>                        
+                        
 
                         <p:outputLabel value="Research Methodology:" for="researchMethodology"/>                                
                         <p:inputTextarea id="researchMethodology" value="#{bean.informationXMLEntity.researchMethodology}" required="true"/>
@@ -47,8 +55,10 @@
                 <ui:decorate template="teamMembersFieldInput_Component.xhtml">
                     <ui:param name="members" value="#{bean.informationXMLEntity.teamMembers.member}"/>
                     <ui:param name="currentMember" value="#{bean.currentMember}"/>
+                    <ui:param name="selectedMemberList" value="#{bean.selectedMemberList}"/>
                     <ui:param name="bean" value="#{bean}"/>
-                    <ui:param name="beanAction" value="addToTeamMembersList"/>
+                    <ui:param name="beanActionAdd" value="addToTeamMembersList"/>
+                    <ui:param name="beanActionRemove" value="removeFromTeamMembersList"/>
                 </ui:decorate>
             </p:panel>
             
@@ -56,8 +66,10 @@
                 <ui:decorate template="projectAimsFieldInput_Component.xhtml">
                     <ui:param name="aims" value="#{bean.informationXMLEntity.projectAims.aim}"/>
                     <ui:param name="currentAim" value="#{bean.currentAim}"/>
+                    <ui:param name="selectedAimList" value="#{bean.selectedAimList}"/>
                     <ui:param name="bean" value="#{bean}"/>
-                    <ui:param name="beanAction" value="addToProjectAimsList"/>
+                    <ui:param name="beanActionAdd" value="addToProjectAimsList"/>
+                    <ui:param name="beanActionRemove" value="removeFromProjectAimsList"/>
                 </ui:decorate>
             </p:panel>
             
@@ -65,8 +77,10 @@
                 <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
                     <ui:param name="expectedOutcomes" value="#{bean.informationXMLEntity.expectedOutcomes.outcome}"/>
                     <ui:param name="currentExpectedOutcome" value="#{bean.currentExpectedOutcome}"/>
+                    <ui:param name="selectedOutcomeList" value="#{bean.selectedOutcomeList}"/>
                     <ui:param name="bean" value="#{bean}"/>
-                    <ui:param name="beanAction" value="addToExpectedOutcomesList"/>
+                    <ui:param name="beanActionAdd" value="addToExpectedOutcomesList"/>
+                    <ui:param name="beanActionRemove" value="removeFromExpectedOutcomesList"/>
                 </ui:decorate>
             </p:panel>
         </div>

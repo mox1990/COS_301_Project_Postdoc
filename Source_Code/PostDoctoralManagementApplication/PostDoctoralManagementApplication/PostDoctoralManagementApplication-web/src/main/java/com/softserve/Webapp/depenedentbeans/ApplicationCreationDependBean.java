@@ -9,6 +9,7 @@ package com.softserve.Webapp.depenedentbeans;
 import auto.softserve.XMLEntities.application.ApplicationInformation;
 import auto.softserve.XMLEntities.application.Member;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
 import com.softserve.Webapp.util.MessageUtil;
 import java.io.Serializable;
@@ -31,6 +32,10 @@ public class ApplicationCreationDependBean implements Serializable{
     private Application application;
     
     private ApplicationInformation informationXMLEntity;
+    private List<Member> selectedMemberList;
+    private List<String> selectedAimList;
+    private List<String> selectedOutcomeList;
+    
     private Member currentMember;
     private String currentAim;
     private String currentExpectedOutcome;
@@ -38,6 +43,7 @@ public class ApplicationCreationDependBean implements Serializable{
     private Person grantHolder;
     
     private List<Person> referees;
+    private List<Person> selectedRefereeList;
     private Person currentReferee;
     
     /**
@@ -86,6 +92,10 @@ public class ApplicationCreationDependBean implements Serializable{
         {
             referees = new ArrayList<Person>();
         }
+        selectedRefereeList = new ArrayList<Person>();
+        selectedAimList = new ArrayList<String>();
+        selectedMemberList = new ArrayList<Member>();
+        selectedOutcomeList = new ArrayList<String>();
         
         currentMember = new Member();
         currentAim = "";
@@ -157,6 +167,40 @@ public class ApplicationCreationDependBean implements Serializable{
     public void setReferees(List<Person> referees) {
         this.referees = referees;
     }
+
+    public void setSelectedAimList(List<String> selectedAimList) {
+        this.selectedAimList = selectedAimList;
+    }
+
+    public List<String> getSelectedAimList() {
+        return selectedAimList;
+    }
+
+    public void setSelectedMemberList(List<Member> selectedMemberList) {
+        this.selectedMemberList = selectedMemberList;
+    }
+
+    public List<Member> getSelectedMemberList() {
+        return selectedMemberList;
+    }
+
+    public void setSelectedOutcomeList(List<String> selectedOutcomeList) {
+        this.selectedOutcomeList = selectedOutcomeList;
+    }
+
+    public List<String> getSelectedOutcomeList() {
+        return selectedOutcomeList;
+    }
+
+    public void setSelectedRefereeList(List<Person> selectedRefereeList) {
+        this.selectedRefereeList = selectedRefereeList;
+    }
+
+    public List<Person> getSelectedRefereeList() {
+        return selectedRefereeList;
+    }
+    
+    
     
     public void addToTeamMembersList()
     {
@@ -165,11 +209,51 @@ public class ApplicationCreationDependBean implements Serializable{
         MessageUtil.CreateGlobalFacesMessage("Team member added!", "The team member has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
+    public void removeFromTeamMembersList()
+    {
+        if(selectedMemberList.size() > 0)
+        {
+            for(Member member : selectedMemberList)
+            {
+                String removeValue = member.getTitle()+ " " + member.getFullName() + " " + member.getSurname() + " " + member.getDegreeType();
+                for(int i = 0; i < informationXMLEntity.getTeamMembers().getMember().size(); i++)
+                {
+                    Member member1 = informationXMLEntity.getTeamMembers().getMember().get(i);
+                    String value = member1.getTitle()+ " " + member1.getFullName() + " " + member1.getSurname() + " " + member1.getDegreeType();
+                    if(removeValue.equals(value))
+                    {
+                        informationXMLEntity.getTeamMembers().getMember().remove(i);
+                    }
+                }
+            }
+            selectedMemberList = new ArrayList<Member>();
+            MessageUtil.CreateGlobalFacesMessage("Team members removed!","The selected team members have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No team members selected!", "You have to select team members which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
+    } 
+    
     public void addToProjectAimsList()
     {
         informationXMLEntity.getProjectAims().getAim().add(currentAim);
         currentAim = "";
         MessageUtil.CreateGlobalFacesMessage("Project aim added!", "The project aim has been added to the list!", FacesMessage.SEVERITY_INFO);
+    }
+    
+    public void removeFromProjectAimsList()
+    {
+        if(selectedAimList.size() > 0)
+        {
+            informationXMLEntity.getProjectAims().getAim().removeAll(selectedAimList);
+            selectedAimList = new ArrayList<String>();
+            MessageUtil.CreateGlobalFacesMessage("Project aims removed!","The selected project aims have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No project aims selected!", "You have to select project aims which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
     }
     
     public void addToExpectedOutcomesList()
@@ -179,12 +263,52 @@ public class ApplicationCreationDependBean implements Serializable{
         MessageUtil.CreateGlobalFacesMessage("Expected outcome added!", "The expected outcome has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
+    public void removeFromExpectedOutcomesList()
+    {
+        if(selectedOutcomeList.size() > 0)
+        {
+            informationXMLEntity.getExpectedOutcomes().getOutcome().removeAll(selectedOutcomeList);
+            selectedOutcomeList = new ArrayList<String>();
+            MessageUtil.CreateGlobalFacesMessage("Expected outcomes removed!","The selected expected outcomes have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No expected outcomes selected!", "You have to select expected outcomes which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
+    }
+    
     public void addToRefereesList()
     {
         referees.add(currentReferee);
         currentReferee = new Person();
         MessageUtil.CreateGlobalFacesMessage("Referee added!", "The referee has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
+    
+    public void removeFromRefereesList()
+    {
+        if(selectedRefereeList.size() > 0)
+        {
+            for(Person referee : selectedRefereeList)
+            {
+                String removeValue = referee.getEmail();
+                for(int i = 0; i < referees.size(); i++)
+                {
+                    Person referee1 = referees.get(i);
+                    String value = referee1.getEmail();
+                    if(removeValue.equals(value))
+                    {
+                        referees.remove(i);
+                    }
+                }
+            }
+            selectedRefereeList = new ArrayList<Person>();
+            MessageUtil.CreateGlobalFacesMessage("Referees removed!","The selected referees have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No referees selected!", "You have to select referees which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
+    } 
     
     public void addInfromationToApplication()
     {

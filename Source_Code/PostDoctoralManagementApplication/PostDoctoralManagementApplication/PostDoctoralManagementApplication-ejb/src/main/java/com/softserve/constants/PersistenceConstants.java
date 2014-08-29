@@ -105,6 +105,22 @@ public class PersistenceConstants {
     public final static String FORWARDREWINREPORT_TYPE_FORWARD = "forward";
     public final static String FORWARDREWINREPORT_TYPE_REWIND = "rewind";
     
+    //CV race type constants
+    public final static String CV_RACE_WHITE = "White";
+    public final static String CV_RACE_BLACK = "Black";
+    public final static String CV_RACE_ASIAN = "Asian";
+    public final static String CV_RACE_INDIAN = "Indian";
+    public final static String CV_RACE_COLOURED = "Coloured";
+    public final static String CV_RACE_OTHER = "Other";
+    
+    //CV race type constants
+    public final static String CV_CITIZENSHIP_SOUTHAFRICAN = "South African";
+    public final static String CV_CITIZENSHIP_OTHER = "Other";
+    
+    //Employee appointment status type constants
+    public final static String EMPLOYEE_APPOINTMENT_STATUS_FULLTIME = "Full time";
+    public final static String EMPLOYEE_APPOINTMENT_STATUS_PARTTIME = "Part time";
+    
     public static UserTransaction getUserTransaction()
     {
         try 

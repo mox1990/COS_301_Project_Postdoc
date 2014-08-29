@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
                  
-        <h:form>
+        <h:form id="CVInfoForm">
             <p:panel id="cvInfo" header="CV information" toggleable="true">   
                 <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
                     <p:outputLabel value="ID number:" for="idNumber"/>                                
@@ -21,17 +21,21 @@
                     <p:message for="dateOfBirth" styleClass="fieldErrorMessage"/>
 
                     <p:outputLabel value="Citizenship:" for="citizenship"/>                                
-                    <p:inputText id="citizenship" value="#{bean.cv.citizenship}" required="true"/>
+                    <p:selectOneButton id="citizenship" value="#{bean.cv.citizenship}" required="true" >
+                        <f:selectItems value="#{generalInformationBean.citizenshipTypeItems}"/>                           
+                    </p:selectOneButton>
                     <p:message for="citizenship" styleClass="fieldErrorMessage"/>
 
                     <p:outputLabel value="Race:" for="race"/>                                
-                    <p:inputText id="race" value="#{bean.cv.race}" required="true"/>
+                    <p:selectOneButton id="race" value="#{bean.cv.race}" required="true" >
+                        <f:selectItems value="#{generalInformationBean.raceItems}" />                           
+                    </p:selectOneButton>
                     <p:message for="race" styleClass="fieldErrorMessage"/>
 
                     <p:outputLabel value="Gender:" for="gender"/>                                
-                    <p:selectOneMenu id="gender" value="#{bean.cv.gender}" required="true">
+                    <p:selectOneButton id="gender" value="#{bean.cv.gender}" required="true">
                         <f:selectItems value="#{generalInformationBean.genderItems}"/>
-                    </p:selectOneMenu> 
+                    </p:selectOneButton> 
                     <p:message for="gender" styleClass="gender"/>
 
                     <p:outputLabel value="NRF Rating:" for="nrfRating"/>                                

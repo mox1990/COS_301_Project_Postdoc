@@ -8,10 +8,13 @@
     <ui:component>
         <h:form>
             <p:outputPanel id="expectedOutcomes">
-                <ui:decorate template="expectedOutcomesDataTable_Component.xhtml">
-                    <ui:param name="header" value="Project expected outcomes already added"/>
-                    <ui:param name="expectedOutcomes" value="#{expectedOutcomes}"/>
-                </ui:decorate>
+                <p:outputPanel id="outcomesTable">
+                    <ui:decorate template="expectedOutcomesDataTableInput_Component.xhtml">
+                        <ui:param name="header" value="Project expected outcomes already added"/>
+                        <ui:param name="expectedOutcomes" value="#{expectedOutcomes}"/>
+                        <ui:param name="selectedOutcomeList" value="#{selectedOutcomeList}"/>
+                    </ui:decorate>
+                </p:outputPanel>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Expected outcome" for="tExpectedOutcome"/>                                
@@ -19,7 +22,10 @@
                         <p:message for="tExpectedOutcome" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="expectedOutcomes" action="#{bean[beanAction]}" value="Add expected outcome" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="expectedOutcomes" action="#{bean[beanActionAdd]}" value="Add expected outcome" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
+                    <p:commandButton ajax="true" update="expectedOutcomes" action="#{bean[beanActionRemove]}" process="@this outcomesTable" value="Remove selected expected outcomes" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                 </div>
