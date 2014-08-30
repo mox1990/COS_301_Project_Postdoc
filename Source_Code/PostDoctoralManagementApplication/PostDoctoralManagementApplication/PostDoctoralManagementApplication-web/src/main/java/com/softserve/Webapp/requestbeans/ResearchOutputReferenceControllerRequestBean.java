@@ -27,9 +27,8 @@ public class ResearchOutputReferenceControllerRequestBean {
     
     public boolean doesReferenceHavePubliser(Reference reference)
     {
-        System.out.print("DOES HAVe publisher =====");
-        if(reference != null && reference.getStatus() != null)
-        {
+        if(reference != null && reference.getStatus() != null && !reference.getStatus().equals(""))
+        {            
             return !reference.getStatus().equals(com.softserve.constants.PersistenceConstants.CV_REFERENCE_INPROGRESS);
         }
         else
@@ -40,8 +39,8 @@ public class ResearchOutputReferenceControllerRequestBean {
     
     public boolean doesReferenceHavePublicationDate(Reference reference)
     {
-        if(reference != null && reference.getStatus() != null)
-        {
+        if(reference != null && reference.getStatus() != null && !reference.getStatus().equals(""))
+        {            
             return reference.getStatus().equals(com.softserve.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED);
         }
         else

@@ -95,6 +95,7 @@ public class CVCreationDependBean implements Serializable{
         currentExperience = new Experience();
         currentItem = new Item();
         currentReference = new Reference();
+        currentReference.setStatus("");
     }
 
     public Cv getCv() {

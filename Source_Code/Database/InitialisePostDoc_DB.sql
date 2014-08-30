@@ -221,7 +221,7 @@ CREATE TABLE funding_report (
 ) ENGINE=InnoDB;
 
 CREATE TABLE funding_cost (
-	_costID BIGINT UNSIGNED NOT NULL,
+	_costID BIGINT UNSIGNED AUTO_INCREMENT,
 	_fundingReport BIGINT UNSIGNED NOT NULL,
 	_amount FLOAT,
 	_provider VARCHAR(100),
@@ -269,7 +269,7 @@ CREATE TABLE progress_report (
 ) ENGINE=InnoDB;
 
 CREATE TABLE forward_and_rewind_report (
-	_reportID BIGINT UNSIGNED NOT NULL,
+	_reportID BIGINT UNSIGNED AUTO_INCREMENT,
 	_application BIGINT UNSIGNED NOT NULL,
 	_dris CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,

@@ -95,7 +95,7 @@ public class PersistenceConstants {
     public final static String CV_REFERENCE_SUBMITTED = "Submitted";
     public final static String CV_REFERENCE_UNDERREVIEW = "Under review";
     public final static String CV_REFERENCE_INPROGRESS = "In progress";
-    public final static String CV_REFERENCE_PUBLISHED = "In progress";
+    public final static String CV_REFERENCE_PUBLISHED = "Published";
     
     //Person title constants
     public final static String PERSON_TITLE_MR = "Mr";
