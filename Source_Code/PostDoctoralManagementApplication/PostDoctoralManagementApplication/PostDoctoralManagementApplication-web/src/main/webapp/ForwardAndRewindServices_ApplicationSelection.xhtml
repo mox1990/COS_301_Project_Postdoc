@@ -29,7 +29,14 @@
                             <p:message for="tostatus" styleClass="fieldErrorMessage"/>                                                                        
                         </h:panelGrid> 
                         <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                        <p:commandButton value="Move application to status" styleClass="button button-fill" action="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@all"/>
+                        <p:commandButton value="Move application to status" styleClass="button button-fill" action="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@all">
+                            <p:confirm header="Confirmation" message="Are you sure that you want to move the application the selected status? Warning: If rewinding any information pertaining to rewinded stages will be removed permanently." icon="ui-icon-alert"/>
+                        </p:commandButton>
+                        
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
                     </p:panel>
                 </ui:define>
             </ui:decorate>
