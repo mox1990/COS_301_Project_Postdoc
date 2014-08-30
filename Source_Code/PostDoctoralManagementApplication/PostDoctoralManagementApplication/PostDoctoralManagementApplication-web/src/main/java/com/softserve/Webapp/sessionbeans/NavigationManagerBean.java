@@ -516,4 +516,14 @@ public class NavigationManagerBean implements Serializable {
         
         return goToLink(breadCrumb);
     }
+    
+    public String goToForwardAndRewindServicesApplicationSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("ForwardAndRewindServices_ApplicationSelection", "Forward and rewind application selection");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    
 }

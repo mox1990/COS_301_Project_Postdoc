@@ -114,7 +114,6 @@ public class DBEntitiesFactory {
     public ForwardAndRewindReport createForwardAndRewindReport(Application application, Person dris, Date timestamp, String reason, String type, String toStatus, String fromStatus)
     {
         ForwardAndRewindReport forwardAndRewindReport = new ForwardAndRewindReport();
-        
         forwardAndRewindReport.setApplication(application);
         forwardAndRewindReport.setDris(dris);
         forwardAndRewindReport.setReason(reason);

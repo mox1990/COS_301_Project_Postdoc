@@ -81,6 +81,22 @@ public class PersistenceConstants {
     public final static String CV_GENDER_FEMALE = "Female";
     public final static String CV_GENDER_OTHER = "Other";
     
+    //CV nrf ratings constants
+    public final static String CV_NRF_RATING_A = "A";
+    public final static String CV_NRF_RATING_B1 = "B1";
+    public final static String CV_NRF_RATING_B2 = "B2";
+    public final static String CV_NRF_RATING_C1 = "C1";
+    public final static String CV_NRF_RATING_C2 = "C2";
+    public final static String CV_NRF_RATING_C3 = "C3";
+    public final static String CV_NRF_RATING_Y = "Y";
+    public final static String CV_NRF_RATING_P = "P";
+    public final static String CV_NRF_RATING_NA = "N/A";
+    
+    public final static String CV_REFERENCE_SUBMITTED = "Submitted";
+    public final static String CV_REFERENCE_UNDERREVIEW = "Under review";
+    public final static String CV_REFERENCE_INPROGRESS = "In progress";
+    public final static String CV_REFERENCE_PUBLISHED = "In progress";
+    
     //Person title constants
     public final static String PERSON_TITLE_MR = "Mr";
     public final static String PERSON_TITLE_MRS = "Mrs";

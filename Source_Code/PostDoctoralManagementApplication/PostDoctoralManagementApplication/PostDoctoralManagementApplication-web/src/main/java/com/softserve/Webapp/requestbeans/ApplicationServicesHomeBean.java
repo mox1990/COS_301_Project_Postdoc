@@ -187,4 +187,19 @@ public class ApplicationServicesHomeBean {
             return false;
         }
     }
+    
+    public boolean isForwardAndRewindServiceDisplayable()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (AuthenticationException ex) 
+        {
+            return false;
+        }
+    }
 }

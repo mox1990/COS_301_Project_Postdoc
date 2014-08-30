@@ -23,27 +23,35 @@
                         </p:selectOneMenu>                        
                         <p:message for="#{prefix}reftype" styleClass="fieldErrorMessage"/>
                         
+                        <p:outputLabel value="Reference status" for="#{prefix}refstatus"/>                                
+                        <p:selectOneButton id="#{prefix}refstatus" value="#{currentReference.status}" required="true">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            <f:selectItems value="#{generalInformationBean.referneceStatusItems}"/>
+                            <p:ajax process="@this" update="#{prefix}refpublisher #{prefix}refpublicationDate #{prefix}refpublicationISBN #{prefix}refpublicationPageLocation"/>
+                        </p:selectOneButton>                        
+                        <p:message for="#{prefix}refstatus" styleClass="fieldErrorMessage"/>
+                        
                         <p:outputLabel value="Publication Name:" for="#{prefix}refpublicationName"/>                                
                         <p:inputText id="#{prefix}refpublicationName" value="#{currentReference.publicationName}" required="true"/>
                         <p:message for="#{prefix}refpublicationName" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Publisher:" for="#{prefix}refpublisher"/>                                
-                        <p:inputText id="#{prefix}refpublisher" value="#{currentReference.publisher}" required="true"/>
-                        <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage"/>
+                        <p:outputLabel value="Publisher:" for="#{prefix}refpublisher" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePubliser(currentReference)}"/>                                
+                        <p:inputText id="#{prefix}refpublisher" value="#{currentReference.publisher}" required="true" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePubliser(currentReference)}"/>
+                        <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePubliser(currentReference)}"/>
 
-                        <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate"/>                                
-                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}" pattern="yyyy-MM-dd" required="true">
+                        <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>                                
+                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}" pattern="yyyy-MM-dd" required="true" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}">
                             <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                         </p:calendar>
-                        <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage"/>
+                        <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
 
-                        <p:outputLabel value="Publication ISBN:" for="#{prefix}refpublicationISBN"/>                                
-                        <p:inputText id="#{prefix}refpublicationISBN" value="#{currentReference.publicationISBN}"/>
-                        <p:message for="#{prefix}refpublicationISBN"/>
+                        <p:outputLabel value="Publication ISBN:" for="#{prefix}refpublicationISBN" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>                                
+                        <p:inputText id="#{prefix}refpublicationISBN" value="#{currentReference.publicationISBN}" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
+                        <p:message for="#{prefix}refpublicationISBN" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
 
-                        <p:outputLabel value="Page Location:" for="#{prefix}refpublicationPageLocation"/>                                
-                        <p:inputText id="#{prefix}refpublicationPageLocation" value="#{currentReference.publicationPageLocation}"/>
-                        <p:message for="#{prefix}refpublicationPageLocation"/>
+                        <p:outputLabel value="Page Location:" for="#{prefix}refpublicationPageLocation" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>                                
+                        <p:inputText id="#{prefix}refpublicationPageLocation" value="#{currentReference.publicationPageLocation}" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
+                        <p:message for="#{prefix}refpublicationPageLocation" rendered="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     <p:commandButton value="Add reference" actionListener="#{bean[beanActionAdd]}" update="#{prefix}researchoutput" styleClass="button button-fill">

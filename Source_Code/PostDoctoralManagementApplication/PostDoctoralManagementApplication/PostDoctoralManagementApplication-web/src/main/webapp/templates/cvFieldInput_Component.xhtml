@@ -37,9 +37,11 @@
                         <f:selectItems value="#{generalInformationBean.genderItems}"/>
                     </p:selectOneButton> 
                     <p:message for="gender" styleClass="gender"/>
-
+                    
                     <p:outputLabel value="NRF Rating:" for="nrfRating"/>                                
-                    <p:inputText id="nrfRating" value="#{bean.cv.nrfRating}"/>
+                    <p:selectOneButton id="nrfRating" value="#{bean.cv.nrfRating}" required="true">
+                        <f:selectItems value="#{generalInformationBean.nrfRatingsItems}"/>
+                    </p:selectOneButton> 
                     <p:message for="nrfRating" styleClass="fieldErrorMessage"/>
 
                     <p:outputLabel value="Additional information:" for="additionalInformationXMLEntity"/>                               

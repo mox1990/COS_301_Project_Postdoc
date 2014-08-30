@@ -19,138 +19,147 @@
             <div>
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.applicationProgressViewerServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(3)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(1)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
                     <ui:param name="buttonName" value="Application progress viewer service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToApplicationProgressViewerApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info3"/>
+                    <ui:param name="infoContainerID" value="info1"/>
                     <ui:define name="informationContent">
-                        This will allow you to view any applications progress that you are the fellow or grant holder of.
-                        If you are a DRIS member you will be allowed to view the progress of all applications.
+                        This option allows you to view the progress and information attachments of applications for which you are
+                        the <b>fellow</b> or <b>grant holder</b> of.<br></br>
+                        Further if you are part of <b>DRIS</b> you can use this option to view the above for all applications on the system.
                     </ui:define>
                 </ui:decorate>
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.progressReportMangementServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(10)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(10)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(2)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
                     <ui:param name="buttonName" value="Progress report management service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToProgressReportManagementServiceApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info10"/>
+                    <ui:param name="infoContainerID" value="info2"/>
                     <ui:define name="informationContent">
-                        This will allow you to create progress reports for any application that has outstanding progress reports.
+                        This option allows you to create progress reports for any fellowships which you are the fellow of.
                     </ui:define>
                 </ui:decorate>
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.newApplicationServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(1)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(3)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
                     <ui:param name="buttonName" value="New application service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToNewApplicationWizardView"/>
-                    <ui:param name="infoContainerID" value="info1"/>
+                    <ui:param name="infoContainerID" value="info3"/>
                     <ui:define name="informationContent">
-                        This will allow you to open a new application.  
+                        This option allows you to apply for a fellowship. Please use it to open an new application. For renewals please use the renewal option below.  
                     </ui:define>
                 </ui:decorate>
                     
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.renewalApplicationServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(2)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(4)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
                     <ui:param name="buttonName" value="Application renewal"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToApplicationRenewalServiceApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info2"/>
+                    <ui:param name="infoContainerID" value="info4"/>
                     <ui:define name="informationContent">
-                        This will allow you to renew your currently active application.
+                        This option allows you to renew any applications which you are the fellow of which qualify for renewals.
                     </ui:define>
                 </ui:decorate>
 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.refereeReportServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(4)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(5)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
                     <ui:param name="buttonName" value="Referee report service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToRefereeReportServiceApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info4"/>
+                    <ui:param name="infoContainerID" value="info5"/>
                     <ui:define name="informationContent">
-                        This will allow you to view all applications that are pending for you to write a referal report.
-                        Also it will allow you to create a referal report for those pending.
+                        This option allows you create referral reports for those submitted new fellowship application for which you have been requested to referee.
                     </ui:define>
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.grantHolderFinalisationServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(8)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(6)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
                     <ui:param name="buttonName" value="Grant holder finalisation service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToGrantHolderFinalisationServiceApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info8"/>
+                    <ui:param name="infoContainerID" value="info6"/>
                     <ui:define name="informationContent">
-                        This will allow you to view any applications pending for finalisation that you are the grant holder of.                        
+                        This option allows you to review and finalise any referred new or renewal fellowship applications for which you are the grant holder of.                        
                     </ui:define>
                 </ui:decorate>
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.HODRecommendationServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(5)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(7)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(7)"/>
                     <ui:param name="buttonName" value="HOD recommendation service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToHODApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info5"/>
+                    <ui:param name="infoContainerID" value="info7"/>
                     <ui:define name="informationContent">
-                        This will allow you to view all applications that are pending for your review.
-                        Also it will allow you to decline, recommend or request for ammendment on any of pending applications.
+                        This option allows you to review, recommend, decline or request the ammendment of any finalised new or renewal fellowship applications that are pending for your approval.                        
                     </ui:define>
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.deanEndorsementServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(6)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(8)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
                     <ui:param name="buttonName" value="Dean endorsement service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToDeanApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info6"/>
+                    <ui:param name="infoContainerID" value="info8"/>
                     <ui:define name="informationContent">
-                        This will allow you to view all applications that are pending for your review.
-                        Also it will allow you to decline or endorse any of pending applications.
+                        This option allows you to review, endorse or decline any recommended new or renewal fellowship application.
                     </ui:define>
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.DRISApprovalServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(7)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(7)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(9)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(9)"/>
                     <ui:param name="buttonName" value="DRIS approval service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToDRISApprovalServiceApplicationSelectionView"/>
-                    <ui:param name="infoContainerID" value="info7"/>
+                    <ui:param name="infoContainerID" value="info9"/>
                     <ui:define name="informationContent">
-                        This will allow you to view all applications that are pending for your review.
-                        Also it will allow you to check for eligibility of any pending applications.
-                        Further this service will allow you to decline or approve the funding of applications.
+                        This option allows you to review, decline, check the eligiblity of and approve or edit funding details for any endorsed new or renewal fellowship application.
                     </ui:define>
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.meetingManagementServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(9)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(9)"/>
+                    <ui:param name="showFunction" value="showInfoDiv(10)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(10)"/>
                     <ui:param name="buttonName" value="Meeting management service"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToMeetingManagementServiceHomeView"/>
-                    <ui:param name="infoContainerID" value="info9"/>
+                    <ui:param name="infoContainerID" value="info10"/>
                     <ui:define name="informationContent">
-                        This will allow you to create post doctoral committee meetings and manage them.
-                        Further this will allow you access active meetings and take minutes for them.
+                        This options allows you to schedule, manage, comment on and review any post doctoral committee meetings.
+                    </ui:define>
+                </ui:decorate>
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.forwardAndRewindServiceDisplayable}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(11)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(11)"/>
+                    <ui:param name="buttonName" value="Forward and rewind application service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToForwardAndRewindServicesApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info11"/>
+                    <ui:define name="informationContent">
+                        This option allows you to forward or rewind any application still in the application pipeline through the various stages.
+                        Note the use of this service can cause the irrevocable loss of information regarding any selected application.
                     </ui:define>
                 </ui:decorate>
             </div>

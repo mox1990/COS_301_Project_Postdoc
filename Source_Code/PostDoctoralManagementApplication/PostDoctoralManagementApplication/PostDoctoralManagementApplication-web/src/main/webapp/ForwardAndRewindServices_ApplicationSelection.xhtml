@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Pending applications"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Forward and rewindable Applications</h1>
+                <h2>Click on the application for more details and options</h2>
+            </div>
+            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                <ui:param name="pendingApplications" value="#{forwardAndRewindServiceRequestBean.movableApplications}"/>
+                <ui:define name="commandButtons">
+                    <p:panel>
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Reason for move:" for="reason"/>                                
+                            <p:inputTextarea id="reason" value="#{forwardAndRewindServiceRequestBean.reason}" required="true" />
+                            <p:message for="reason" styleClass="fieldErrorMessage"/> 
+
+                            <p:outputLabel value="Select status to move to:" for="tostatus"/>                                
+                            <p:selectOneButton id="tostatus" value="#{forwardAndRewindServiceRequestBean.toStatus}" required="true">
+                                <f:selectItems value="#{forwardAndRewindServiceRequestBean.getPossibleStatusChanges(app)}" var="value" itemLabel="#{value}" itemValue="#{value}"/>
+                            </p:selectOneButton>
+                            <p:message for="tostatus" styleClass="fieldErrorMessage"/>                                                                        
+                        </h:panelGrid> 
+                        <p:growl sticky="true" showDetail="true" globalOnly="false"/>
+                        <p:commandButton value="Move application to status" styleClass="button button-fill" action="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@all"/>
+                    </p:panel>
+                </ui:define>
+            </ui:decorate>
+        </ui:define>
+    </ui:composition>
+</html>
+

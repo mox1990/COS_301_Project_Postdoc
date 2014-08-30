@@ -26,8 +26,11 @@ import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -37,6 +40,7 @@ import javax.persistence.PersistenceUnit;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
 
     @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
@@ -365,6 +369,24 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
         AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application rewinded " + application.getApplicationID(), session.getUser());
         auditTrailServiceLocal.logAction(auditLog);
+    }
+    
+    public List<Application> loadMovableApplications(Session session) throws Exception
+    {
+        List<Application> applications = new ArrayList<Application>();
+        
+        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, 0, Integer.MAX_VALUE));
+        applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, 0, Integer.MAX_VALUE));
+        
+        return applications;
     }
     
 }

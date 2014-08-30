@@ -32,6 +32,9 @@ public class generalInformationBean {
     private List<SelectItem> fundingCostTypeItems;
     private List<SelectItem> fundingTypeItems;
     private List<SelectItem> citizenshipTypeItems;
+    private List<SelectItem> nrfRatingsItems;
+    private List<SelectItem> referneceStatusItems;
+    
     /**
      * Creates a new instance of generalInformationBean
      */
@@ -92,9 +95,9 @@ public class generalInformationBean {
         fundingCostTypeItems.add(new SelectItem("Conference",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE));
         
         fundingTypeItems = new ArrayList<SelectItem>();
-        fundingTypeItems.add(new SelectItem("Extenally funded",com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_EXTERNALLYFUNDED));
-        fundingTypeItems.add(new SelectItem("UP PhD Postdoc",com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPHDPOSTDOC));
-        fundingTypeItems.add(new SelectItem("UP Postdoc",com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC));
+        fundingTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_EXTERNALLYFUNDED,com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_EXTERNALLYFUNDED));
+        fundingTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPHDPOSTDOC,com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPHDPOSTDOC));
+        fundingTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC,com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC));
         
         raceItems = new ArrayList<SelectItem>();
         raceItems.add(new SelectItem("White",com.softserve.constants.PersistenceConstants.CV_RACE_WHITE));
@@ -111,6 +114,24 @@ public class generalInformationBean {
         citizenshipTypeItems = new ArrayList<SelectItem>();
         citizenshipTypeItems.add(new SelectItem("South African",com.softserve.constants.PersistenceConstants.CV_CITIZENSHIP_SOUTHAFRICAN));
         citizenshipTypeItems.add(new SelectItem("Other",com.softserve.constants.PersistenceConstants.CV_CITIZENSHIP_OTHER));
+        
+        nrfRatingsItems = new ArrayList<SelectItem>();
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_A,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_A));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_B1,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_B1));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_B2,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_B2));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_C1,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_C1));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_C2,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_C2));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_C3,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_C3));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_P,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_P));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_Y,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_Y));
+        nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_NA,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_NA));
+        
+        referneceStatusItems = new ArrayList<SelectItem>();
+        referneceStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_REFERENCE_INPROGRESS,com.softserve.constants.PersistenceConstants.CV_REFERENCE_INPROGRESS));
+        referneceStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_REFERENCE_SUBMITTED,com.softserve.constants.PersistenceConstants.CV_REFERENCE_SUBMITTED));
+        referneceStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_REFERENCE_UNDERREVIEW,com.softserve.constants.PersistenceConstants.CV_REFERENCE_UNDERREVIEW));
+        referneceStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED,com.softserve.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED));
+        
         
     }
 
@@ -155,8 +176,13 @@ public class generalInformationBean {
     public List<SelectItem> getCitizenshipTypeItems() {
         return citizenshipTypeItems;
     }
-    
-    
 
-    
+    public List<SelectItem> getNrfRatingsItems() {
+        return nrfRatingsItems;
+    }
+
+    public List<SelectItem> getReferneceStatusItems() {
+        return referneceStatusItems;
+    }
+        
 }

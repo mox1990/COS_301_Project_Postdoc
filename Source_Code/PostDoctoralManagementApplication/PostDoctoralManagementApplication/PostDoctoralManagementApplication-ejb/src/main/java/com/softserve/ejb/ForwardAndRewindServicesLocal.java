@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBEntities.Application;
 import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -17,6 +18,9 @@ import javax.ejb.Local;
  */
 @Local
 public interface ForwardAndRewindServicesLocal {
+    
+    public List<Application> loadMovableApplications(Session session) throws Exception;
     public void forwardApplication(Session session, Application application, String toStatus, String reason) throws Exception;
     public void rewindApplication(Session session, Application application, String toStatus, String reason) throws Exception;
+    
 }

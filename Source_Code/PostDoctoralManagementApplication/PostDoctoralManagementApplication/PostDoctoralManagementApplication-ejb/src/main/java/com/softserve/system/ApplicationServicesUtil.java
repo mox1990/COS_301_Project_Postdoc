@@ -257,7 +257,14 @@ public class ApplicationServicesUtil {
         
         //Set application status
         application.setSubmissionDate(getGregorianCalendar().getTime());
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+        if(application.getRefereeReportList().size() == application.getPersonList().size())
+        {
+            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+        }
+        else
+        {
+            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+        }
         applicationJpaController.edit(application);
     }
     
