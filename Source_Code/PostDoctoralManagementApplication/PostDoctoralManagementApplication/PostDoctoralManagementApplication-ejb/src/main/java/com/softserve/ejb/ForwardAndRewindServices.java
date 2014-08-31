@@ -188,7 +188,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
                 ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
                 for(ApplicationReviewRequest applicationReviewRequest : application.getApplicationReviewRequestList())
                 {
-                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD))
+                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD))
                     {
                         applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
                     }

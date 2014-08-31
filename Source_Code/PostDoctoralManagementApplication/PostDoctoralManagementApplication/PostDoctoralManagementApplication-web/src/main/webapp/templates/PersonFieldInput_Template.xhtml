@@ -49,7 +49,7 @@
             <p:message for="cellphoneNumber" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Are you an UP empolyee:" for="upEmployee"/>                                
-            <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}">
+            <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}" disabled="#{!employeeEnabled}">
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                 <p:ajax update="upEmployeeInfoPanel"/>
             </p:selectBooleanCheckbox>

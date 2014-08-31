@@ -9,6 +9,7 @@ package com.softserve.ejb;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
@@ -27,4 +28,6 @@ public interface HODRecommendationServicesLocal {
     public void declineAppliction(Session session, Application application, String reason) throws Exception;
     public void ammendAppliction(Session session, Application application, String reason) throws Exception;
     public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception;
+    public List<Person> getDeansOfApplication(Session session, Application application) throws Exception;
+    public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception;
 }

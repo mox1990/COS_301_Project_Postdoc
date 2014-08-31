@@ -104,7 +104,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         catch (AuthenticationException ex) 
         {
             ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }
     }
 
@@ -155,6 +155,18 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
 
     public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
         this.locationFinderDependBean = locationFinderDependBean;
+    }
+    
+    public boolean isUserEmployee(Person person)
+    {
+        for(SecurityRole securityRole : person.getSecurityRoleList())
+        {
+            if(securityRole.getRoleID() > 3)
+            {
+                return true;
+            }
+        }
+        return false;
     }
         
     public String performPersonalUserAccountEditRequest()

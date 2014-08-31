@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Application viewer"/>
         
@@ -14,6 +15,7 @@
             </div>
             <div>
                 <h:form>
+                    <h2 class="header2">Recommendation report</h2>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Is candidate suitable for project:" for="doesCandidateFit"/>                                
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="doesCandidateFit" value="#{hodRecommendRequestBean.recommendationReportContent.doesCandidateFit}"/>
@@ -51,8 +53,22 @@
                         <p:inputTextarea id="infrastructureAvailability" value="#{hodRecommendRequestBean.recommendationReportContent.infrastructureAvailability}"/>
                         <p:message for="infrastructureAvailability" styleClass="fieldErrorMessage"/>                                                
                     </h:panelGrid>
+                    <h2 class="header2">Specify Deans office member</h2>
+                    <ui:decorate template="templates/OndemandPersonSelectionInput_Component.xhtml">                                        
+                        <ui:param name="header" value="The system identified the following Deans. Please select one"/>
+                        <ui:param name="bean" value="#{hodRecommendRequestBean.applicationReviewRequestCreationDependBean}"/>
+                    </ui:decorate> 
+                    
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" ajax="false" styleClass="button button-fill"/>
+                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to recommend this application?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
             

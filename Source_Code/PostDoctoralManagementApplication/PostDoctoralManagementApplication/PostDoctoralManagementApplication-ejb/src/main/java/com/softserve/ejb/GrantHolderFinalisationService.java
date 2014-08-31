@@ -13,11 +13,13 @@ import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
@@ -325,7 +327,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         auditTrailService.logAction(auditLog);
         
         //Send notification to HOD       
-        List<Person> HODs = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD);
+        List<Person> HODs = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         for(Person p : HODs)
         {
@@ -356,11 +358,18 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD);
+        List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         
         if(requestAlreadyFound != null & requestAlreadyFound.size() > 0)
         {
             throw new Exception("A request for HOD reviewal has already been made");
+        }
+        
+        hod.setUpEmployee(true);
+        if(hod.getEmployeeInformation() == null)
+        {
+            hod.setEmployeeInformation(new EmployeeInformation());
+            hod.getEmployeeInformation().setPhysicalAddress(new Address());
         }
         
         if(getPersonDAO().findUserBySystemIDOrEmail(hod.getSystemID()) == null)
@@ -390,7 +399,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         }
         
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, hod, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD);
+        ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, hod, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         
         getApplicationReviewRequestDAO().create(applicationReviewRequest);
 

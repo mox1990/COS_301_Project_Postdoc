@@ -82,7 +82,7 @@ public class PersistenceConstants {
     public final static String CV_GENDER_OTHER = "Other";
     
     //Application review request type constants
-    public final static String APPLICATION_REVIEW_TPYE_HOD = "HOD";
+    public final static String APPLICATION_REVIEW_TYPE_HOD = "HOD";
     public final static String APPLICATION_REVIEW_TYPE_DEAN = "DEAN";
     
     //CV nrf ratings constants

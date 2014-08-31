@@ -21,10 +21,17 @@
                                                 
                         <p:outputLabel value="Endorsement motivation:" for="motivation"/>                                
                         <p:inputTextarea id="motivation" value="#{deanEndorseRequestBean.endorsement.motivation}"/>
-                        <p:message for="motivation" styleClass="fieldErrorMessage"/>
-                                                                 
+                        <p:message for="motivation" styleClass="fieldErrorMessage"/>                                                                 
                     </h:panelGrid>
-                    <p:commandButton value="Endorse application" action="#{deanEndorseRequestBean.preformEndorseRequest()}" ajax="false" styleClass="button button-fill"/>
+                    <p:growl sticky="true" showDetail="true" globalOnly="false"/>
+                    <p:commandButton value="Endorse application" action="#{deanEndorseRequestBean.preformEndorseRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to endorse this application?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
             

@@ -76,7 +76,8 @@ public class DeanDeclineRequestBean {
         }
         catch(Exception ex)
         {
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.logException(DeanDeclineRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

@@ -4,19 +4,23 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp.requestbeans;
+package com.softserve.Webapp.conversationbeans;
 
 import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.Webapp.depenedentbeans.ApplicationReviewRequestCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.HODRecommendationServices;
 import com.softserve.ejb.HODRecommendationServicesLocal;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
@@ -28,13 +32,19 @@ import javax.inject.Named;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Named(value = "hodRecommendRequestBean")
-@RequestScoped
-public class HODRecommendRequestBean {
+@ConversationScoped
+public class HODRecommendConversationBean implements Serializable{
     
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+     @Inject
+    private Conversation conversation;
+    @Inject 
+    private ApplicationReviewRequestCreationDependBean applicationReviewRequestCreationDependBean;
     
     @EJB
     private HODRecommendationServicesLocal hodRecommendationServicesLocal;
@@ -47,15 +57,26 @@ public class HODRecommendRequestBean {
     /**
      * Creates a new instance of HODRecommendBean
      */
-    public HODRecommendRequestBean() 
+    public HODRecommendConversationBean() 
     {        
     }
     
     @PostConstruct
     public void init()
     {
+        conversationManagerBean.registerConversation(conversation);
+        conversationManagerBean.startConversation(conversation);
+        
         recommendationReport = new RecommendationReport();
         recommendationReportContent = new RecommendationReportContent();
+        try
+        {
+            applicationReviewRequestCreationDependBean.init(hodRecommendationServicesLocal.getDeansOfApplication(sessionManagerBean.getSession(), getSelectedApplication()));
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(HODRecommendConversationBean.class, ex);
+        }
     }
     
     public Application getSelectedApplication()
@@ -86,18 +107,28 @@ public class HODRecommendRequestBean {
     public void setRecommendationReportContent(RecommendationReportContent recommendationReportContent) {
         this.recommendationReportContent = recommendationReportContent;
     }
+
+    public ApplicationReviewRequestCreationDependBean getApplicationReviewRequestCreationDependBean() {
+        return applicationReviewRequestCreationDependBean;
+    }
+
+    public void setApplicationReviewRequestCreationDependBean(ApplicationReviewRequestCreationDependBean applicationReviewRequestCreationDependBean) {
+        this.applicationReviewRequestCreationDependBean = applicationReviewRequestCreationDependBean;
+    }
             
     public String preformRecommendRequest()
     {
         try
         {
             recommendationReport.setContentXMLEntity(recommendationReportContent);
+            hodRecommendationServicesLocal.requestSpecificDeanToReview(sessionManagerBean.getSession(), getSelectedApplication(), applicationReviewRequestCreationDependBean.getPerson());
             hodRecommendationServicesLocal.recommendApplication(sessionManagerBean.getSession(), getSelectedApplication(), recommendationReport);
             return navigationManagerBean.goToHODApplicationSelectionView();
         }
         catch(Exception ex)
         {
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.logException(HODRecommendConversationBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

@@ -16,8 +16,8 @@
                 <ui:param name="selectedApplication" value="#{applicationViewerRequestBean.selectedApplication}"/>
             </ui:decorate>
             <h:form>
-                <p:commandButton value="Recommend application" styleClass="button-fill" action="#{navigationManagerBean.goToDeanEndorseView()}" ajax="false"/> 
-                <p:commandButton value="Decline application" styleClass="button-fill" action="#{navigationManagerBean.goToDeanDeclineView()}" ajax="false"/>
+                <p:commandButton value="Recommend application" styleClass="button button-fill" action="#{navigationManagerBean.goToDeanEndorseView()}" ajax="false"/> 
+                <p:commandButton value="Decline application" styleClass="button button-fill" action="#{navigationManagerBean.goToDeanDeclineView()}" ajax="false"/>
             </h:form>            
         </ui:define>
     </ui:composition>

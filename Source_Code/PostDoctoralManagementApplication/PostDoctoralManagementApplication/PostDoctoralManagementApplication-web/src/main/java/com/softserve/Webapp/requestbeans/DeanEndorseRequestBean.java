@@ -87,7 +87,8 @@ public class DeanEndorseRequestBean {
         }
         catch(Exception ex)
         {
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.logException(DeanEndorseRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

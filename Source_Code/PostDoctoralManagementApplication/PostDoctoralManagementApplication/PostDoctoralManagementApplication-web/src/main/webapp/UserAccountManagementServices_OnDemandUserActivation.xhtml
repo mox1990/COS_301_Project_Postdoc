@@ -25,6 +25,7 @@
                             <ui:param name="person" value="#{userAccountsPersonalAccountEditBean.person}"/>
                             <ui:param name="renderAttribute" value="#{true}"/>
                             <ui:param name="emailEditable" value="#{false}"/>
+                            <ui:param name="employeeEnabled" value="#{userAccountsPersonalAccountEditBean.isUserEmployee(userAccountsPersonalAccountEditBean.person)}"/>
                             <ui:define name="header">
                                 <h:outputText styleClass="header2" value="Person information"/>
                             </ui:define>

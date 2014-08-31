@@ -148,7 +148,7 @@ public class ApplicationServicesUtil {
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
             Department userDepartment = user.getEmployeeInformation().getDepartment();
-            output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD);
+            output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
             
             if(output.size() < 1)
             {
@@ -158,7 +158,7 @@ public class ApplicationServicesUtil {
                     boolean found = false;
                     for(ApplicationReviewRequest reviewRequest : application.getApplicationReviewRequestList())
                     {
-                        if(reviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD))
+                        if(reviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD))
                         {                            
                             found = true;
                             break;

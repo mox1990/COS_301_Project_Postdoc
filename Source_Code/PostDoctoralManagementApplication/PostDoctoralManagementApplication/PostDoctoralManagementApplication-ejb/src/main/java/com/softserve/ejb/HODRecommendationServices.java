@@ -9,14 +9,19 @@ package com.softserve.ejb;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.DeclineReportJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.AmmendRequest;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.DeclineReport;
+import com.softserve.DBEntities.EmployeeInformation;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
@@ -53,6 +58,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     private AuditTrailServiceLocal auditTrailServiceLocal;
     @EJB
     private UserGatewayLocal userGatewayLocal;
+    @EJB
+    private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
     protected UserGatewayLocal getUserGatewayServiceEJB()
     {
@@ -67,6 +74,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     protected AuditTrailServiceLocal getAuditTrailServiceEJB()
     {
         return auditTrailServiceLocal;
+    }
+    
+    protected UserAccountManagementServiceLocal getUserAccountManagementServiceEJB()
+    {
+        return userAccountManagementServiceLocal;
     }
 
     public HODRecommendationServices() {
@@ -97,6 +109,16 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     protected AmmendRequestJpaController getAmmendRequestDAO()
     {
         return new AmmendRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected PersonJpaController getPersonDAO()
+    {
+        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
+    {
+        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     /**
@@ -278,5 +300,70 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
         }
         notificationService.sendBatchNotifications(notifications, true);
+    }
+    
+    @Override
+    public List<Person> getDeansOfApplication(Session session, Application application) throws Exception
+    {
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        
+        List<Person> Deans = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
+        
+        return Deans;
+    }
+    
+    @Override
+    public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
+    {
+        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        getUserGatewayServiceEJB().authenticateUser(session, roles);
+        
+        List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+        
+        if(requestAlreadyFound != null & requestAlreadyFound.size() > 0)
+        {
+            throw new Exception("A request for Dean reviewal has already been made");
+        }
+        dean.setUpEmployee(true);
+        if(dean.getEmployeeInformation() == null)
+        {
+            dean.setEmployeeInformation(new EmployeeInformation());
+            dean.getEmployeeInformation().setPhysicalAddress(new Address());
+        }
+        if(getPersonDAO().findUserBySystemIDOrEmail(dean.getSystemID()) == null)
+        {
+            
+            dean.setSecurityRoleList(new ArrayList<SecurityRole>());
+            dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a postdoc fellowship as an Dean", true, dean);
+        }
+        else
+        {
+            application = getApplicationDAO().findApplication(application.getApplicationID());
+            dean = getPersonDAO().findPerson(dean.getSystemID());
+            
+            if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
+            {
+                if(!dean.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER))
+                {
+                    dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+                    getUserAccountManagementServiceEJB().updateUserAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), dean);
+                }
+            }
+            else
+            {
+                throw new Exception("You cannot, nor the fellow, nor the referees of your application can be requested to review application");
+            }
+        }
+        
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, dean, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+        
+        getApplicationReviewRequestDAO().create(applicationReviewRequest);
     }
 }
