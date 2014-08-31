@@ -7,10 +7,12 @@
 package com.softserve.system;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.Department;
@@ -87,6 +89,11 @@ public class ApplicationServicesUtil {
         return new DeclineReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
+    {
+        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     protected GregorianCalendar getGregorianCalendar()
     {
         return new GregorianCalendar();
@@ -141,9 +148,29 @@ public class ApplicationServicesUtil {
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
             Department userDepartment = user.getEmployeeInformation().getDepartment();
+            output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD);
             
-            output = applicationJpaController.findAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment,StartIndex,maxNumberOfRecords);
-            
+            if(output.size() < 1)
+            {
+                List<Application> temp = applicationJpaController.findAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment,StartIndex,maxNumberOfRecords);
+                for(Application application: temp)
+                {
+                    boolean found = false;
+                    for(ApplicationReviewRequest reviewRequest : application.getApplicationReviewRequestList())
+                    {
+                        if(reviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD))
+                        {                            
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found)
+                    {
+                        output.add(application);
+                    }
+                }
+            }
             /*for(int i = 0; i < output.size(); i++)
             {
                 if(output.get(i).getGrantHolderID().getLocationID().getDepartment().equals(userDepartment))
@@ -156,7 +183,29 @@ public class ApplicationServicesUtil {
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
             Faculty userFaculty = user.getEmployeeInformation().getDepartment().getFaculty();
-            output = applicationJpaController.findAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty,StartIndex,maxNumberOfRecords);
+            output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            
+            if(output.size() < 1)
+            {
+                List<Application> temp = applicationJpaController.findAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty,StartIndex,maxNumberOfRecords);
+                for(Application application: temp)
+                {
+                    boolean found = false;
+                    for(ApplicationReviewRequest reviewRequest : application.getApplicationReviewRequestList())
+                    {
+                        if(reviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN))
+                        {                            
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found)
+                    {
+                        output.add(application);
+                    }
+                }
+            }
             /*for(int i = 0; i < output.size(); i++)
             {
                 if(output.get(i).getGrantHolderID().getLocationID().getFaculty().equals(userFaculty))

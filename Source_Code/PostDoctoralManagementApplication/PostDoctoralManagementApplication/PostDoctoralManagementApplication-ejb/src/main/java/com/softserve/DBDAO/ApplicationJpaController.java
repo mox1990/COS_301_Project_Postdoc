@@ -840,8 +840,7 @@ public class ApplicationJpaController implements Serializable {
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department.faculty = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
         return q.getResultList();
     }
-    
-    
+        
     public List<Person> findAllHODsWhoCanRecommendApplication(Application application)
     {
         EntityManager em = getEntityManager();

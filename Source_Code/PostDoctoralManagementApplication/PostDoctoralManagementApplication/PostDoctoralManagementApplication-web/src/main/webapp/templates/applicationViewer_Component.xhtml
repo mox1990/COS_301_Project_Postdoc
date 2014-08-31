@@ -86,7 +86,7 @@
                     
                     <p:tab title="Ammend requests" rendered="#{selectedApplication.ammendRequestList.size() > 0}">
                         <p:accordionPanel value="#{selectedApplication.ammendRequestList}" var="report">
-                            <p:tab title="Referal report from - #{report.referee.completeName}">
+                            <p:tab title="Referal report from - #{report.creator.completeName}">
                                 <ui:decorate template="ammendRequestViewer_Component.xhtml">
                                     <ui:param name="ammendRequest" value="#{report}"/>
                                 </ui:decorate>

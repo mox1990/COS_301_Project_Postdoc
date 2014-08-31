@@ -17,7 +17,7 @@
                 <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                     <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.fellowApplications}"/>
                     <ui:define name="commandButtons">
-                        <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
+                        <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
                     </ui:define>
                 </ui:decorate>
             </p:outputPanel>
@@ -27,7 +27,7 @@
                 <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                     <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.grantHolderApplications}"/>
                     <ui:define name="commandButtons">
-                        <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
+                        <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
                     </ui:define>
                 </ui:decorate>
             </p:outputPanel>

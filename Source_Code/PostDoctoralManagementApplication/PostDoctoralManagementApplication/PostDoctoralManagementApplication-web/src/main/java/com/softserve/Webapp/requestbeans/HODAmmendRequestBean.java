@@ -74,11 +74,12 @@ public class HODAmmendRequestBean {
         try
         {
             hodRecommendationServicesLocal.ammendAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
-            return navigationManagerBean.goToPreviousBreadCrumb();
+            return navigationManagerBean.goToHODApplicationSelectionView();
         }
         catch(Exception ex)
         {
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.logException(HODAmmendRequestBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }

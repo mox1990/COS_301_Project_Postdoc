@@ -177,7 +177,7 @@ CREATE TABLE decline_report (
 ) ENGINE=InnoDB;
 
 CREATE TABLE ammend_request (
-	_requestID BIGINT UNSIGNED NOT NULL,
+	_requestID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_application BIGINT UNSIGNED NOT NULL,
 	_creator CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,

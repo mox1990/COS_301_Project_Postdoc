@@ -74,5 +74,17 @@ public class GrantHolderApplicationSelectionRequestBean {
     {
         selectApplication(application);
         return navigationManagerBean.goToGrantHolderFinalisationServiceFinalisationWizardView();
-    }    
+    }
+    
+    public String ammendApplication(Application application)
+    {
+        selectApplication(application);
+        return navigationManagerBean.goToGrantHolderFinalisationServiceApplicationAmmendView();
+    }
+    
+    public String declineApplication(Application application)
+    {
+        selectApplication(application);
+        return navigationManagerBean.goToGrantHolderFinalisationServiceApplicationDeclineView();
+    }
 }

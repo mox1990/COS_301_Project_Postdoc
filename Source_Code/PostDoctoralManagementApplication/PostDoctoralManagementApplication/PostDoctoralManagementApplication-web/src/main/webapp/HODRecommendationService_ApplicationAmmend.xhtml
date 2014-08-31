@@ -18,8 +18,16 @@
                         <p:outputLabel value="Reason for ammendment" for="reason"/>                                
                         <p:inputTextarea id="reason" value="#{hodAmmendRequestBean.reason}"/>
                         <p:message for="reason" styleClass="fieldErrorMessage"/>
-                    </h:panelGrid>    
-                    <p:commandButton value="Request application ammendment" action="#{hodAmmendRequestBean.preformAmmendRequest()}" ajax="false" styleClass="button button-fill"/>
+                    </h:panelGrid>
+                    <p:growl sticky="true" showDetail="true" globalOnly="false"/>
+                    <p:commandButton value="Request application ammendment" action="#{hodAmmendRequestBean.preformAmmendRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to send an ammendment request to the Grant holder of this application?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
         </ui:define>

@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Application viewer"/>
         
@@ -16,11 +17,11 @@
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Reason for declining:" for="reason"/>                                
-                        <p:inputTextarea id="reason" value="#{hodDeclineRequestBean.reason}"/>
+                        <p:inputTextarea id="reason" value="#{grantHolderDeclineRequestBean.reason}"/>
                         <p:message for="reason" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Decline application" action="#{hodDeclineRequestBean.preformDeclineRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                    <p:commandButton value="Decline application" action="#{grantHolderDeclineRequestBean.preformDeclineRequest()}" process="@form" update="@all" styleClass="button button-fill">
                         <p:confirm header="Application decline confirmation" message="Are you sure you wish to decline this application? Warning: Once declined the application will no longer be active." icon="ui-icon-alert"/>
                     </p:commandButton>
                     

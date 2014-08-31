@@ -279,6 +279,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         applicationJpaController.edit(application);
         
         AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
+        
         ammendRequestJpaController.create(ammendRequest);
         
         //Log action        

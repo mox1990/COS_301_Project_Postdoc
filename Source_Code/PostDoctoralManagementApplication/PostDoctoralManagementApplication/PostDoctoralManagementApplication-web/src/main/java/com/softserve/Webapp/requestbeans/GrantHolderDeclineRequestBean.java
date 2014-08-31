@@ -11,6 +11,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.GrantHolderFinalisationServiceLocal;
 import com.softserve.ejb.HODRecommendationServices;
 import com.softserve.ejb.HODRecommendationServicesLocal;
 import javax.ejb.EJB;
@@ -24,9 +25,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "hodDeclineRequestBean")
+@Named(value = "grantHolderDeclineRequestBean")
 @RequestScoped
-public class HODDeclineRequestBean {
+public class GrantHolderDeclineRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -34,7 +35,7 @@ public class HODDeclineRequestBean {
     private NavigationManagerBean navigationManagerBean;
     
     @EJB
-    private HODRecommendationServicesLocal hodRecommendationServicesLocal;
+    private GrantHolderFinalisationServiceLocal grantHolderFinalisationServiceLocal;
     
     private UIComponent errorContainer;
     
@@ -43,7 +44,7 @@ public class HODDeclineRequestBean {
     /**
      * Creates a new instance of HODRecommendBean
      */
-    public HODDeclineRequestBean() {
+    public GrantHolderDeclineRequestBean() {
     }
     
     public Application getSelectedApplication()
@@ -71,12 +72,12 @@ public class HODDeclineRequestBean {
     {
         try
         {
-            hodRecommendationServicesLocal.declineAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
-            return navigationManagerBean.goToHODApplicationSelectionView();
+            grantHolderFinalisationServiceLocal.declineAppliction(sessionManagerBean.getSession(), getSelectedApplication(), reason);
+            return navigationManagerBean.goToGrantHolderFinalisationServiceApplicationSelectionView();
         }
         catch(Exception ex)
         {
-            ExceptionUtil.logException(HODDeclineRequestBean.class, ex);
+            ExceptionUtil.logException(GrantHolderDeclineRequestBean.class, ex);
             ExceptionUtil.handleException(null, ex);
             return "";
         }

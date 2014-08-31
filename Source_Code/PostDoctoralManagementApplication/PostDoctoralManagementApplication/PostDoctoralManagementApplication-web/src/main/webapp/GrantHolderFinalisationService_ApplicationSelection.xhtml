@@ -15,7 +15,9 @@
             <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                 <ui:param name="pendingApplications" value="#{grantHolderApplicationSelectionRequestBean.pendingApplications}"/>
                 <ui:define name="commandButtons">
-                    <p:commandButton value="Use wizard to finalise application" styleClass="button-fill" action="#{grantHolderApplicationSelectionRequestBean.viewApplication(app)}"/> 
+                    <p:commandButton value="Use wizard to finalise application" styleClass="button button-fill" action="#{grantHolderApplicationSelectionRequestBean.viewApplication(app)}"/>
+                    <p:commandButton value="Request application to be ammended" styleClass="button button-fill" action="#{grantHolderApplicationSelectionRequestBean.ammendApplication(app)}" ajax="false"/> 
+                    <p:commandButton value="Decline application" styleClass="button button-fill" action="#{grantHolderApplicationSelectionRequestBean.declineApplication(app)}" ajax="false"/>
                 </ui:define>
             </ui:decorate>
         </ui:define>

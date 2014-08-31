@@ -51,6 +51,7 @@
                         <p:inputTextarea id="infrastructureAvailability" value="#{hodRecommendRequestBean.recommendationReportContent.infrastructureAvailability}"/>
                         <p:message for="infrastructureAvailability" styleClass="fieldErrorMessage"/>                                                
                     </h:panelGrid>
+                    <p:growl sticky="true" showDetail="true" globalOnly="false"/>
                     <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" ajax="false" styleClass="button button-fill"/>
                 </h:form>
             </div>
