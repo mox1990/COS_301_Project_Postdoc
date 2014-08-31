@@ -353,7 +353,7 @@ CREATE TABLE audit_log (
 	_entryID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_person CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_action VARCHAR(100) NOT NULL,
+	_action VARCHAR(500) NOT NULL,
 	
 	PRIMARY KEY (_entryID),
 	FOREIGN KEY (_person) REFERENCES person(_systemID)

@@ -21,4 +21,6 @@ import java.util.List;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SecuredMethod {
     long[] AllowedSecurityRoles();
+    boolean ownerAuthentication() default false;
+    int ownerParameterIndex() default -1;
 }

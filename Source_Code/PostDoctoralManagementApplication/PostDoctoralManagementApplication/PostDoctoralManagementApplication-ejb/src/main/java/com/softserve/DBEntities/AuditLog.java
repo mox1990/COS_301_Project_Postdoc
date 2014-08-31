@@ -52,7 +52,7 @@ public class AuditLog implements Serializable {
     private Date timestamp;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 500)
     @Column(name = "_action")
     private String action;
     @JoinColumn(name = "_person", referencedColumnName = "_systemID")
