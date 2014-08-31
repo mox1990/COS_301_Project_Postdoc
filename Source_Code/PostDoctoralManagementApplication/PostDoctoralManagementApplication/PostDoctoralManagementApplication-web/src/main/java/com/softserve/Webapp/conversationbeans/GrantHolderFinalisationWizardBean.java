@@ -6,38 +6,23 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import auto.softserve.XMLEntities.CV.AdditionalInformation;
-import auto.softserve.XMLEntities.CV.Item;
-import auto.softserve.XMLEntities.CV.OtherContributions;
-import auto.softserve.XMLEntities.CV.Reference;
-import auto.softserve.XMLEntities.CV.ResearchOutput;
-import auto.softserve.XMLEntities.application.ApplicationInformation;
-import auto.softserve.XMLEntities.application.Member;
-import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
-import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
+import com.softserve.Webapp.depenedentbeans.ApplicationReviewRequestCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.ejb.GrantHolderFinalisationServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -62,6 +47,8 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
     private CVCreationDependBean cVCreationDependBean;
     @Inject
     private ApplicationCreationDependBean applicationCreationDependBean;
+    @Inject
+    private ApplicationReviewRequestCreationDependBean applicationReviewRequestCreationDependBean;
     
     @EJB
     private GrantHolderFinalisationServiceLocal grantHolderFinalisationServiceLocal;
@@ -96,8 +83,18 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
         }
         
         applicationCreationDependBean.init(sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class));
-        
+        wizardActiveTab = 0;
         cVCreationDependBean.init(session.getUser().getCv());
+        
+        try 
+        {
+            applicationReviewRequestCreationDependBean.init(grantHolderFinalisationServiceLocal.getHODsOfApplication(session, applicationCreationDependBean.getApplication()));
+        } 
+        catch (Exception ex) 
+        {
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
+        }
         
     }
 
@@ -125,6 +122,14 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
         this.cVCreationDependBean = cVCreationDependBean;
     }
 
+    public ApplicationReviewRequestCreationDependBean getApplicationReviewRequestCreationDependBean() {
+        return applicationReviewRequestCreationDependBean;
+    }
+
+    public void setApplicationReviewRequestCreationDependBean(ApplicationReviewRequestCreationDependBean applicationReviewRequestCreationDependBean) {
+        this.applicationReviewRequestCreationDependBean = applicationReviewRequestCreationDependBean;
+    }
+    
     public int getWizardActiveTab() {
         return wizardActiveTab;
     }
@@ -161,12 +166,12 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
             cv.setPerson(session.getUser());
             grantHolderFinalisationServiceLocal.createGrantHolderCV(sessionManagerBean.getSession(), cv);
             
-            wizardActiveTab++;
+            wizardActiveTab = 1;
         }
         catch(Exception ex)
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }         
     }
     
@@ -187,15 +192,17 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
             Session session = sessionManagerBean.getSession();
             
             Application openApplication = applicationCreationDependBean.getCombinedApplication();
+            
+            grantHolderFinalisationServiceLocal.saveChangesToApplication(session, openApplication);
 
-            wizardActiveTab++;
-            sessionManagerBean.clearSessionStorage();
+            wizardActiveTab = 2;
+            //sessionManagerBean.clearSessionStorage();
             
         }
         catch(Exception ex)
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }
         
     }
@@ -205,15 +212,23 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
         try 
         {            
             Session session = sessionManagerBean.getSession();
-
-            grantHolderFinalisationServiceLocal.finaliseApplication(session, applicationCreationDependBean.getCombinedApplication());
+            if(applicationReviewRequestCreationDependBean.getPerson() != null && (applicationReviewRequestCreationDependBean.getManualSpecification() || applicationReviewRequestCreationDependBean.getPerson().getSystemID() != null))
+            {
+                grantHolderFinalisationServiceLocal.requestSpecificHODtoReview(session, applicationCreationDependBean.getApplication(), applicationReviewRequestCreationDependBean.getPerson());
+                grantHolderFinalisationServiceLocal.finaliseApplication(session, applicationCreationDependBean.getCombinedApplication());
+            }
+            else
+            {
+                throw new Exception("An HOD must be specified");
+            }
             
             return navigationManagerBean.goToGrantHolderFinalisationServiceApplicationSelectionView();
         } 
         catch (Exception ex) 
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
+            applicationReviewRequestCreationDependBean.setPerson(new Person());
             return "";
         }
         

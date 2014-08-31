@@ -6,11 +6,10 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:dataTable value="#{attendenceSelectionList}" var="person" selection="#{selectedAttendees}" rowKey="#{person.systemID}">
+        <p:dataTable value="#{personSelectionList}" var="person" selectionMode="single" selection="#{selectedPerson}" rowKey="#{person.systemID}" >
             <f:facet name="header">
-                Attendee selection list
+                #{header}
             </f:facet>
-            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
             <p:column headerText="System ID">
                 <h:outputText value="#{person.systemID}"/>
             </p:column>
@@ -19,7 +18,14 @@
             </p:column>
             <p:column headerText="Position">
                 <h:outputText value="#{person.employeeInformation.position}"/>
-            </p:column>  
+            </p:column>
+            <p:column headerText="Department">
+                <h:outputText value="#{person.employeeInformation.department.name}"/>
+            </p:column>
+            
+                    
         </p:dataTable>
     </ui:component>
 </html>
+
+

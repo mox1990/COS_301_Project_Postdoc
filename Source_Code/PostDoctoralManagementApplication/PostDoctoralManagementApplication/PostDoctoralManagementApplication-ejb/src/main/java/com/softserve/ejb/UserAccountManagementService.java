@@ -301,6 +301,10 @@ public class UserAccountManagementService implements UserAccountManagementServic
             }
         }
         
+        if(userAddress == null)
+        {
+            userAddress = new Address();
+        }
         
         //Store address in database
         addressJpaController.create(userAddress);

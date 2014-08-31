@@ -111,13 +111,24 @@ public class ForwardAndRewindServiceRequestBean {
         ApplicationServicesUtil applicationServicesUtil = new ApplicationServicesUtil(null);
         try
         {
-            if(applicationServicesUtil.getOrderIndexOfApplicationStatus(toStatus) > applicationServicesUtil.getOrderIndexOfApplicationStatus(application.getStatus()))
+            if(applicationServicesUtil.getOrderIndexOfApplicationStatus(toStatus) < 6 && applicationServicesUtil.getOrderIndexOfApplicationStatus(application.getStatus()) < 9)
             {
-                forwardAndRewindServicesLocal.forwardApplication(sessionManagerBean.getSession(), application, toStatus, reason);
+            
+                if(applicationServicesUtil.getOrderIndexOfApplicationStatus(toStatus) > applicationServicesUtil.getOrderIndexOfApplicationStatus(application.getStatus()))
+                {
+                    forwardAndRewindServicesLocal.forwardApplication(sessionManagerBean.getSession(), application, toStatus, reason);
+                }
+                else
+                {
+                    forwardAndRewindServicesLocal.rewindApplication(sessionManagerBean.getSession(), application, toStatus, reason);
+                }
+                
+                reason = "";
+                
             }
             else
             {
-                forwardAndRewindServicesLocal.rewindApplication(sessionManagerBean.getSession(), application, toStatus, reason);
+                throw new Exception("An error has ocurred with the status specification.");
             }
         }
         catch(Exception ex)

@@ -120,9 +120,9 @@
                                 <h2 class="header2">Submit application</h2>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton ajax="false" action="#{newApplicationCreationBean.submitApplication()}" value="Confirm application submission" styleClass="button button-fill">
+                                    <p:commandButton process="@this" update="@form" action="#{newApplicationCreationBean.submitApplication()}" value="Confirm application submission" styleClass="button button-fill">
                                         <p:confirm header="Application submission confirmation" message="Are you sure you wish to submit this application? Note: Sumbitting this application means you agree with the DRIS fellowship application policy and that the information is correct. Warning: Once submitted the application cannot be edited by you." icon="ui-icon-alert"/>
-                                    </p:confirm>
+                                    </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                                         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>

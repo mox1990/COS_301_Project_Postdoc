@@ -6,12 +6,9 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Cv;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.Exceptions.CVAlreadExistsException;
+import com.softserve.DBEntities.Person;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
@@ -23,8 +20,14 @@ import javax.ejb.Local;
  */
 @Local
 public interface GrantHolderFinalisationServiceLocal {
-    public void createGrantHolderCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception;
-    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception;
-    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception;
-    public void finaliseApplication(Session session, Application application) throws NonexistentEntityException, RollbackFailureException, Exception;    
+    public void createGrantHolderCV(Session session, Cv cv) throws Exception;
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception;
+    public int countTotalPendingApplications(Session session) throws Exception;
+    public void saveChangesToApplication(Session session, Application application) throws Exception;
+    public List<Person> getHODsOfApplication(Session session, Application application) throws Exception;
+    public void requestSpecificHODtoReview(Session session, Application application, Person hod) throws Exception;
+    public void declineAppliction(Session session, Application application, String reason) throws Exception;
+    public void ammendAppliction(Session session, Application application, String reason) throws Exception;
+    public void finaliseApplication(Session session, Application application) throws Exception;
+    
 }

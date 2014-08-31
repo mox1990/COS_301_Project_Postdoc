@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.DBDAO.ForwardAndRewindReportJpaController;
@@ -16,6 +17,7 @@ import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.DBDAO.RefereeReportJpaController;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.ForwardAndRewindReport;
 import com.softserve.DBEntities.FundingCost;
@@ -132,10 +134,16 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         return new ForwardAndRewindReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
+    {
+        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
     protected GregorianCalendar getGregorianCalendar()
     {
         return new GregorianCalendar();
     }
+    
     
     protected void rewindApplicationToOpenStatus(Application application) throws Exception
     {
@@ -174,6 +182,18 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
             
             application.setFinalisationDate(null);
+            
+            if(application.getApplicationReviewRequestList() != null)
+            {
+                ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
+                for(ApplicationReviewRequest applicationReviewRequest : application.getApplicationReviewRequestList())
+                {
+                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TPYE_HOD))
+                    {
+                        applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
+                    }
+                }
+            }
         }
     }
     
@@ -188,6 +208,18 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             {
                 getRecommmendationReportDAO().destroy(application.getRecommendationReport().getReportID());
                 application.setRecommendationReport(null);
+            }
+            
+            if(application.getApplicationReviewRequestList() != null)
+            {
+                ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
+                for(ApplicationReviewRequest applicationReviewRequest : application.getApplicationReviewRequestList())
+                {
+                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN))
+                    {
+                        applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
+                    }
+                }
             }
         }
     }
@@ -313,7 +345,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         }
         else
         {
-            throw new Exception("The status specified to forward to does not exist");
+            throw new Exception("The status " + toStatus + " specified to forward to does not exist");
         }
         
         getApplicationDAO().edit(application);

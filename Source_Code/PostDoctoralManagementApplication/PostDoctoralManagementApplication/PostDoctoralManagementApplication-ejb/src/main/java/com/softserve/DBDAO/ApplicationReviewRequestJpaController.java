@@ -9,18 +9,19 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.ApplicationReviewRequestPK;
+import com.softserve.DBEntities.Person;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
 /**
@@ -229,6 +230,22 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Application> findAllApplicationsRequestForPersonAs(Person person, String type)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT r.application1 FROM ApplicationReviewRequest r WHERE r.person1 = :per AND r.applicationReviewRequestPK.type = :type", Application.class).setParameter("per", person).setParameter("type", type);
+        return q.getResultList();
+    }
+    
+    public List<Person> findAllPeopleWhoHaveBeenRequestForApplicationAs(Application application, String type)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Person> q = em.createQuery("SELECT r.person1 FROM ApplicationReviewRequest r WHERE r.application1 = :app AND r.applicationReviewRequestPK.type = :type", Person.class).setParameter("app", application).setParameter("type", type);
+        return q.getResultList();
     }
     
 }

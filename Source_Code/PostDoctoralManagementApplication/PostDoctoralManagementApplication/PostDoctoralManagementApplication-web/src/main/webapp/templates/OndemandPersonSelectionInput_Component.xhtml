@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <h:panelGrid columns="2" cellpadding="5px">
+            <p:outputLabel for="selectionSpecification" value="HOD selection mode:" styleClass="label-text"/>
+            <p:selectBooleanButton id="selectionSpecification" value="#{bean.manualSpecification}" onLabel="Specify person manually" offLabel="Choose from list of possible persons">
+                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                <p:ajax process="@this" update="peopleSelection"/>
+            </p:selectBooleanButton>
+        </h:panelGrid>
+        
+        <h:panelGrid id="peopleSelection">
+            
+            
+            <p:outputPanel id="possiblePeopleTable" rendered="#{!bean.isManualSpecification()}">
+                <ui:decorate template="PersonSingleListInput_Component.xhtml">
+                    <ui:param name="header" value="#{header}"/>
+                    <ui:param name="personSelectionList" value="#{bean.personSelectionList}"/>
+                    <ui:param name="selectedPerson" value="#{bean.person}"/>
+                    <ui:param name="bean" value="#{bean}"/>
+                </ui:decorate>
+            </p:outputPanel>            
+            
+            <p:outputPanel id="manualPersonSpecification" rendered="#{bean.isManualSpecification()}">
+                <ui:decorate template="personOnDemandFieldInputEmployee_Component.xhtml">
+                    <ui:param name="renderAttribute" value="#{true}"/>
+                    <ui:param name="person" value="#{bean.person}"/>
+                    <ui:param name="bean" value="#{bean}"/>
+                    <ui:param name="beanAction" value="setPerson"/>
+                </ui:decorate>
+            </p:outputPanel>
+        </h:panelGrid>
+    </ui:component>
+</html>
+

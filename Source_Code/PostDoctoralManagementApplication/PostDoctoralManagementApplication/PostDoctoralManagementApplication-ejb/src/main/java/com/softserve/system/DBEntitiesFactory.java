@@ -125,5 +125,21 @@ public class DBEntitiesFactory {
         
         return forwardAndRewindReport;        
     }
+    
+    public ApplicationReviewRequest createApplicationReviewRequest(Application application, Person person, String type)
+    {
+        ApplicationReviewRequest applicationReviewRequest = new ApplicationReviewRequest();
+        
+        ApplicationReviewRequestPK applicationReviewRequestPK = new ApplicationReviewRequestPK();
+        applicationReviewRequestPK.setApplication(application.getApplicationID());
+        applicationReviewRequestPK.setPerson(person.getSystemID());
+        applicationReviewRequestPK.setType(type);
+        
+        applicationReviewRequest.setApplicationReviewRequestPK(applicationReviewRequestPK);
+        applicationReviewRequest.setApplication1(application);
+        applicationReviewRequest.setPerson1(person);
+        
+        return applicationReviewRequest;       
+    }
     //Rest of entities: Add as required
 }

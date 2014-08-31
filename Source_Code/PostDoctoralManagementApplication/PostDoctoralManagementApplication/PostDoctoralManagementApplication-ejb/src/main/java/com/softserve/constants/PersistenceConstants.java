@@ -81,6 +81,10 @@ public class PersistenceConstants {
     public final static String CV_GENDER_FEMALE = "Female";
     public final static String CV_GENDER_OTHER = "Other";
     
+    //Application review request type constants
+    public final static String APPLICATION_REVIEW_TPYE_HOD = "HOD";
+    public final static String APPLICATION_REVIEW_TYPE_DEAN = "DEAN";
+    
     //CV nrf ratings constants
     public final static String CV_NRF_RATING_A = "A";
     public final static String CV_NRF_RATING_B1 = "B1";

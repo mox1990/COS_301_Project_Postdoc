@@ -131,7 +131,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws java.lang.Exception
      */
     @Override
-    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
+    public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -144,7 +144,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     }
     
     @Override
-    public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
+    public int countTotalPendingApplications(Session session) throws Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -167,7 +167,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws Exception
      */
     @Override
-    public void declineAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    public void declineAppliction(Session session, Application application, String reason) throws Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -189,7 +189,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws Exception
      */
     @Override
-    public void ammendAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    public void ammendAppliction(Session session, Application application, String reason) throws Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -232,7 +232,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws Exception
      */
     @Override
-    public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
+    public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception
     {
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
