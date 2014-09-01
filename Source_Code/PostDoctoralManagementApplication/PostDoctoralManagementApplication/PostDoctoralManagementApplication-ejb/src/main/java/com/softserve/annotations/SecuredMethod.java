@@ -6,10 +6,7 @@
 
 package com.softserve.annotations;
 
-import com.softserve.DBEntities.SecurityRole;
 import java.lang.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

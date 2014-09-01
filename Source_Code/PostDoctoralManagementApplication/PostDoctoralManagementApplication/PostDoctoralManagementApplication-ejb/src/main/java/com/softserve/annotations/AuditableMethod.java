@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AuditableMethod {
-    String message();
+    String message() default "";
     boolean logMethodName() default true;
     boolean logMethodParameters() default true;
 }

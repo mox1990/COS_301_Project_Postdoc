@@ -14,6 +14,11 @@ import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.*;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.constants.PersistenceConstants.*;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -24,6 +29,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -32,6 +38,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class NewApplicationService implements  NewApplicationServiceLocal{
@@ -102,14 +109,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         return new GregorianCalendar();
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @AuditableMethod(message = "Updated/Created CV")
     @Override
     public void createProspectiveFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         if(cv == null)
         {
             throw new Exception("CV is not valid");
@@ -126,15 +130,13 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @AuditableMethod(message = "Created/Updated a new application")
     @Override
     public void createNewApplication(Session session, Application application) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
         UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        userGateway.authenticateUser(session, roles);
-        //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
         if(application == null)
@@ -143,7 +145,6 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Set status and application type
         if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
@@ -156,23 +157,17 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         else
         {
             applicationJpaController.edit(application);
-        }
-        
-        //Log action
-        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Opened a new application", session.getUser());
-        auditTrailService.logAction(auditLog);
-                
+        }                
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @AuditableMethod(message = "Linked grant holder to new application")
     @Override
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
         
         //Authenticate user privliges
         UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
@@ -183,7 +178,6 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Check if grant holder already exists
         if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()) != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
@@ -211,24 +205,17 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         {
             //Link grant holder to application
             a.setGrantHolder(grantHolder);
-            System.out.println("===========Linking " + a.getGrantHolder().toString());
-            System.out.println("===========Linking to" + a.toString());
             applicationJpaController.edit(a);
-        }
-        
-        //Log action
-        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Linked grant holder to new application", session.getUser());
-        auditTrailService.logAction(auditLog);
+        }        
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @AuditableMethod(message = "Linked referee to new application")
     @Override
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
         //Authenticate user privliges
         UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
@@ -280,19 +267,15 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             a.getPersonList().add(referee);
             applicationJpaController.edit(a);
         }
-        //Log action
-        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Linked referee to new application", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @AuditableMethod(message = "Submitted a new application")
     @Override
     public void submitApplication(Session session, Application application) throws Exception
     {
         //Authenticate user privliges
         UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
@@ -301,9 +284,6 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
         getApplicationServicesUtil().submitApplication(application);
         
-        //Log action
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Submitted new application", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
     @Override
@@ -311,7 +291,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     {
         for(Application application: fellow.getApplicationList())
         {
-            if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
+            if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
             {
                 return false;
             }
@@ -320,16 +300,12 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         return true;
     }   
     
-    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @AuditableMethod
     @Override
     public Application getOpenApplication(Session session) throws AuthenticationException, Exception
     {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        userGateway.authenticateUser(session, roles);
-        
+                
         for(Application application: session.getUser().getApplicationList1())
         {
             if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))

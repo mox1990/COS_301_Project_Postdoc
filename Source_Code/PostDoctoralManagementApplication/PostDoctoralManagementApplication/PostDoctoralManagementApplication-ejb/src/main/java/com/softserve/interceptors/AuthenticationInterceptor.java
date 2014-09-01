@@ -30,10 +30,12 @@ public class AuthenticationInterceptor {
     public Object intercept(InvocationContext context) throws Exception
     {
 
+        System.out.println("=====================Authentication interceptor: " + context.getMethod().getName());
         SecuredMethod[] securedMethodAnnotations = context.getMethod().getDeclaredAnnotationsByType(SecuredMethod.class);
         Object result = null;
         if(securedMethodAnnotations.length > 0)
         {
+            System.out.println("Authentication enabled: " + context.getMethod().getName());
             Session session = null;
             
             for(Object parameter : context.getParameters())
@@ -47,6 +49,7 @@ public class AuthenticationInterceptor {
             
             if(session != null)
             {
+                System.out.println("Authenticating: " + context.getMethod().getName());
                 ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
                 for(long roleID : securedMethodAnnotations[0].AllowedSecurityRoles())
                 {
@@ -55,16 +58,19 @@ public class AuthenticationInterceptor {
                 //Normal role authentication
                 if(roles.size() >= 0 && !securedMethodAnnotations[0].ownerAuthentication())
                 {
+                    System.out.println("Normal authentication : " + context.getMethod().getName());
                     userGatewayLocal.authenticateUser(session, roles);
                 }//Normal owner authentication
                 else if(roles.isEmpty() && securedMethodAnnotations[0].ownerAuthentication())
                 {                    
+                    System.out.println("Owner authentication : " + context.getMethod().getName());
                     userGatewayLocal.authenticateUserAsOwner(session, (Person) context.getParameters()[securedMethodAnnotations[0].ownerParameterIndex()]);
                 }
                 else
                 {
                     try
                     {
+                        System.out.println("Normal & Owner authentication : " + context.getMethod().getName());
                         userGatewayLocal.authenticateUser(session, roles);
                     }
                     catch(Exception ex)
@@ -82,6 +88,7 @@ public class AuthenticationInterceptor {
         }
         else
         {
+            System.out.println("Authentication disabled: " + context.getMethod().getName());
             result = context.proceed();
         }
         

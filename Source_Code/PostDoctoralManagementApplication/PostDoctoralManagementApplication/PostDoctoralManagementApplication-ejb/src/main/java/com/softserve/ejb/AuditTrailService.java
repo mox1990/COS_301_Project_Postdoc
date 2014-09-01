@@ -47,7 +47,10 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     public void logAction(AuditLog auditLog) throws Exception
     {        
         auditLog.setTimestamp(new Timestamp(new Date().getTime()));
-        
+        if(auditLog.getAction().length() > 500)
+        {
+            auditLog.setAction(auditLog.getAction().substring(0, 500));
+        }
         getAuditLogDAO().create(auditLog);
     }
     
