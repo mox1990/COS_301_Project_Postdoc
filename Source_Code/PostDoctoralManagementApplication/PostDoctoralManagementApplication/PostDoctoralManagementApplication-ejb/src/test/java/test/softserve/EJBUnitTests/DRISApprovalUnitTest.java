@@ -8,6 +8,7 @@ package test.softserve.EJBUnitTests;
 
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
+import com.softserve.DBDAO.FundingCostJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.AcademicQualification;
@@ -42,6 +43,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import test.softserve.MockEJBClasses.DRISApprovalServiceMockUnit;
@@ -63,6 +65,7 @@ public class DRISApprovalUnitTest {
     EligiblityReportJpaController mockEligiblityReportJpaController;
     GregorianCalendar mockCal;
     PersonJpaController mockPersonJpaController;
+    FundingCostJpaController mockFundingCostJpaController; 
     
     public DRISApprovalUnitTest() {
     }
@@ -89,6 +92,7 @@ public class DRISApprovalUnitTest {
         mockEligiblityReportJpaController = mock(EligiblityReportJpaController.class);
         mockCal = mock(GregorianCalendar.class);
         mockPersonJpaController = mock(PersonJpaController.class);
+        mockFundingCostJpaController = mock(FundingCostJpaController.class);
         
         instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
@@ -100,6 +104,7 @@ public class DRISApprovalUnitTest {
         instance.seteDAO(mockEligiblityReportJpaController);
         instance.setgCal(mockCal);
         instance.setpDAO(mockPersonJpaController);
+        instance.setfCDAO(mockFundingCostJpaController);
     }
     
     @After

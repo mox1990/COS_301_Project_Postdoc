@@ -6,8 +6,10 @@
 
 package test.softserve.MockEJBClasses;
 
+import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.ejb.AuditTrailService;
@@ -16,6 +18,7 @@ import com.softserve.ejb.GrantHolderFinalisationService;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -31,6 +34,16 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
     private AuditTrailService aTEJB;
     private CVManagementService cVEJB;
     private ApplicationServicesUtil aSEJB;
+    private GregorianCalendar gCal;
+    private ApplicationReviewRequestJpaController aRDAO;
+
+    public void setaRDAO(ApplicationReviewRequestJpaController aRDAO) {
+        this.aRDAO = aRDAO;
+    }
+    
+    public void setgCal(GregorianCalendar gCal) {
+        this.gCal = gCal;
+    }
 
     public void setpDAO(PersonJpaController pDAO) {
         this.pDAO = pDAO;
@@ -120,5 +133,17 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
         return aSEJB;
+    }
+    
+    @Override
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return gCal;
+    }
+    
+    @Override
+    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
+    {
+        return aRDAO;
     }
 }

@@ -9,6 +9,7 @@ package test.softserve.MockEJBClasses;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
+import com.softserve.DBDAO.FundingCostJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.AcademicQualification;
@@ -36,7 +37,12 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     private EligiblityReportJpaController eDAO;
     private GregorianCalendar gCal;
     private PersonJpaController pDAO;
+    private FundingCostJpaController fCDAO;
 
+    public void setfCDAO(FundingCostJpaController fCDAO) {
+        this.fCDAO = fCDAO;
+    }
+    
     public void setpDAO(PersonJpaController pDAO) {
         this.pDAO = pDAO;
     }
@@ -137,6 +143,12 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     protected PersonJpaController getPersonDAO()
     {
         return pDAO;
+    }
+    
+    @Override
+    protected FundingCostJpaController getFundingCostDAO()
+    {
+        return fCDAO;
     }
     
     /** TODO: Implement work around...
