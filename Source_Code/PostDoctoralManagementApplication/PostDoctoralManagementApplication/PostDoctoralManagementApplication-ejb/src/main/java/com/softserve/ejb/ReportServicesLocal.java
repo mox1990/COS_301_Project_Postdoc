@@ -39,26 +39,7 @@ public interface ReportServicesLocal {
      * @throws SQLException
      * @throws InterruptedException 
      */
-    public byte[] exportPersonsToPdf(Session session, List<Person> persons) throws Exception;
-    public byte[] exportAllPersonsToPdf(Session session) throws Exception;
     
-    /**
-     * Export PDF of report made up of applications
-     * @param session
-     * @param applications
-     * @return
-     * @throws JRException
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     * @throws InterruptedException 
-     */
-    public byte[] exportApplicationToPdf(Session session, List<Application> applications) throws Exception;
-    public byte[] exportAllApplicationToPdf(Session session) throws Exception;
-    public byte[] exportPersonsToExcel(Session session, List<Person> application) throws Exception;
-    public byte[] exportAllPersonsToExcel(Session session) throws Exception;
-    public byte[] exportApplicationToExcel(Session session, List<Application> applications) throws Exception;
-    public byte[] exportAllApplicationToExcel(Session session) throws Exception;
-    
-    public byte[] dynamicReport(List<String> columnHeaders, List<List<String>> rows, String title) throws Exception;
-    public byte[] exportSpreadsheetReport(List<String> columnHeaders, List<List<String>> rows, String title) throws IOException;
+    public byte[] dynamicReport(Session session, List<String> columnHeaders, List<List<String>> rows, String title) throws Exception;
+    public byte[] exportSpreadsheetReport(Session session, List<String> columnHeaders, List<List<String>> rows, String title) throws IOException;
 }

@@ -486,7 +486,7 @@ public class ReportBean implements Serializable {
                     col.addAll(Arrays.asList(applicationAttributes));
                     col.addAll(Arrays.asList(applicationStageAttributes));
                     
-                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(col, rows, "Application Report"));
+                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(sessionManagerBean.getSession(), col, rows, "Application Report"));
                     break;
                 case "person":
                     List<Person> persons = new ArrayList<>();
@@ -518,7 +518,7 @@ public class ReportBean implements Serializable {
                     col.addAll(Arrays.asList(personAddressAttributes));
                     col.addAll(Arrays.asList(personCvAttributes));
                     
-                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(col, rows, "Person Report"));
+                    stream = new ByteArrayInputStream(reportEJB.dynamicReport(sessionManagerBean.getSession(), col, rows, "Person Report"));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
@@ -595,7 +595,7 @@ public class ReportBean implements Serializable {
                     col.addAll(Arrays.asList(applicationAttributes));
                     col.addAll(Arrays.asList(applicationStageAttributes));
                     
-                    stream = new ByteArrayInputStream(reportEJB.exportSpreadsheetReport(col, rows, "Application Report"));
+                    stream = new ByteArrayInputStream(reportEJB.exportSpreadsheetReport(sessionManagerBean.getSession(), col, rows, "Application Report"));
                     break;
                 case "person":
                     List<Person> persons = new ArrayList<>();
@@ -627,7 +627,7 @@ public class ReportBean implements Serializable {
                     col.addAll(Arrays.asList(personAddressAttributes));
                     col.addAll(Arrays.asList(personCvAttributes));
                     
-                    stream = new ByteArrayInputStream(reportEJB.exportSpreadsheetReport(col, rows, "Person Report"));
+                    stream = new ByteArrayInputStream(reportEJB.exportSpreadsheetReport(sessionManagerBean.getSession(), col, rows, "Person Report"));
                     break;
                 default:
                     throw new Exception("Didn't Specify valid report type.");
