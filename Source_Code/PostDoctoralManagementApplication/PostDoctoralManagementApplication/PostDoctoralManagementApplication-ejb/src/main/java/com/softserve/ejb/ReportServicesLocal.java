@@ -25,10 +25,10 @@ import net.sf.jasperreports.engine.JRException;
 @Local
 public interface ReportServicesLocal {
     
-    public List<Person> getAllPersons();
-    public List<Person> getAllPersonsWithSecurityRole(Long role);
-    public List<Application> getAllApplications();
-    public List<Application> getAllApplicationsWithStatus(String status);
+    public List<Person> getAllPersons(Session session);
+    public List<Person> getAllPersonsWithSecurityRole(Session session, Long role);
+    public List<Application> getAllApplications(Session session);
+    public List<Application> getAllApplicationsWithStatus(Session session, String status);
     /**
      * Export PDF of report made up of persons
      * @param session

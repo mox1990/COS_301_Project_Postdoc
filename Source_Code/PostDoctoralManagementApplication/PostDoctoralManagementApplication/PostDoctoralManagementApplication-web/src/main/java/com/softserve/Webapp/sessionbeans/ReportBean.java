@@ -465,7 +465,7 @@ public class ReportBean implements Serializable {
                     List<Application> applications = new ArrayList<>();
                     for(String type: applicationTypes)
                     {
-                        for(Application a: reportEJB.getAllApplicationsWithStatus(type))
+                        for(Application a: reportEJB.getAllApplicationsWithStatus(sessionManagerBean.getSession(), type))
                         {
                             List<String> row = new ArrayList<>();
                             for(String attrib: applicationAttributes)
@@ -492,7 +492,7 @@ public class ReportBean implements Serializable {
                     List<Person> persons = new ArrayList<>();
                     for(String role: personTypes)
                     {
-                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(getSecurityRoleID(role)))
+                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(sessionManagerBean.getSession(), getSecurityRoleID(role)))
                         {
                             List<String> row = new ArrayList<>();
                             for(String attrib: personAttributes)
@@ -574,7 +574,7 @@ public class ReportBean implements Serializable {
                     List<Application> applications = new ArrayList<>();
                     for(String type: applicationTypes)
                     {
-                        for(Application a: reportEJB.getAllApplicationsWithStatus(type))
+                        for(Application a: reportEJB.getAllApplicationsWithStatus(sessionManagerBean.getSession(), type))
                         {
                             List<String> row = new ArrayList<>();
                             for(String attrib: applicationAttributes)
@@ -601,7 +601,7 @@ public class ReportBean implements Serializable {
                     List<Person> persons = new ArrayList<>();
                     for(String role: personTypes)
                     {
-                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(getSecurityRoleID(role)))
+                        for(Person p: reportEJB.getAllPersonsWithSecurityRole(sessionManagerBean.getSession(), getSecurityRoleID(role)))
                         {
                             List<String> row = new ArrayList<>();
                             for(String attrib: personAttributes)

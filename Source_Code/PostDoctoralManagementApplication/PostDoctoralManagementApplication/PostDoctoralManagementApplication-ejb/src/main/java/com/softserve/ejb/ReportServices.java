@@ -123,28 +123,28 @@ public class ReportServices implements ReportServicesLocal
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
-    public List<Person> getAllPersons()
+    public List<Person> getAllPersons(Session session)
     {
         return getPersonDAO().findPersonEntities();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
-    public List<Person> getAllPersonsWithSecurityRole(Long role)
+    public List<Person> getAllPersonsWithSecurityRole(Session session, Long role)
     {
         return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
-    public List<Application> getAllApplications()
+    public List<Application> getAllApplications(Session session)
     {
         return getApplicationDAO().findApplicationEntities();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
-    public List<Application> getAllApplicationsWithStatus(String status)
+    public List<Application> getAllApplicationsWithStatus(Session session, String status)
     {
         ApplicationJpaController a = getApplicationDAO();
         return a.findAllApplicationsWithStatus(status, 0, (int) a.countAllApplicationsWithStatus(status));
