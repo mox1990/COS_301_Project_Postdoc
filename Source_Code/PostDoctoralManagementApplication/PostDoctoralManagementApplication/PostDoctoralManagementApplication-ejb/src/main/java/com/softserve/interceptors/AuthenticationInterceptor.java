@@ -6,7 +6,10 @@
 
 package com.softserve.interceptors;
 
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.ejb.UserGatewayLocal;
@@ -64,7 +67,27 @@ public class AuthenticationInterceptor {
                 else if(roles.isEmpty() && securedMethodAnnotations[0].ownerAuthentication())
                 {                    
                     System.out.println("Owner authentication : " + context.getMethod().getName());
-                    userGatewayLocal.authenticateUserAsOwner(session, (Person) context.getParameters()[securedMethodAnnotations[0].ownerParameterIndex()]);
+                    Object objToAuthenticate = context.getParameters()[securedMethodAnnotations[0].ownerParameterIndex()];
+                    if(objToAuthenticate.getClass() == Person.class)
+                    {
+                        userGatewayLocal.authenticateUserAsOwner(session, (Person) objToAuthenticate);
+                    }
+                    else if(objToAuthenticate.getClass() == Application.class)
+                    {
+                        userGatewayLocal.authenticateUserAsOwner(session, (Application) objToAuthenticate);
+                    }
+                    else if(objToAuthenticate.getClass() == Cv.class)
+                    {
+                        userGatewayLocal.authenticateUserAsOwner(session, (Cv) objToAuthenticate);
+                    }
+                    else if(objToAuthenticate.getClass() == ProgressReport.class)
+                    {
+                        userGatewayLocal.authenticateUserAsOwner(session, (ProgressReport) objToAuthenticate);
+                    }
+                    else
+                    {
+                        throw new Exception("Invaild ownership object specified");
+                    }
                 }
                 else
                 {
@@ -75,7 +98,27 @@ public class AuthenticationInterceptor {
                     }
                     catch(Exception ex)
                     {
-                        userGatewayLocal.authenticateUserAsOwner(session, (Person) context.getParameters()[securedMethodAnnotations[0].ownerParameterIndex()]);
+                        Object objToAuthenticate = context.getParameters()[securedMethodAnnotations[0].ownerParameterIndex()];
+                        if(objToAuthenticate.getClass() == Person.class)
+                        {
+                            userGatewayLocal.authenticateUserAsOwner(session, (Person) objToAuthenticate);
+                        }
+                        else if(objToAuthenticate.getClass() == Application.class)
+                        {
+                            userGatewayLocal.authenticateUserAsOwner(session, (Application) objToAuthenticate);
+                        }
+                        else if(objToAuthenticate.getClass() == Cv.class)
+                        {
+                            userGatewayLocal.authenticateUserAsOwner(session, (Cv) objToAuthenticate);
+                        }
+                        else if(objToAuthenticate.getClass() == ProgressReport.class)
+                        {
+                            userGatewayLocal.authenticateUserAsOwner(session, (ProgressReport) objToAuthenticate);
+                        }
+                        else
+                        {
+                            throw new Exception("Invaild ownership object specified");
+                        }
                     }
                 }
                 

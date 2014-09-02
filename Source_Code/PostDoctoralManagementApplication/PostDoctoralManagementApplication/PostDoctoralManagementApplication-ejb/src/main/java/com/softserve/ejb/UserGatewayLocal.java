@@ -7,7 +7,10 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.SecurityRoleJpaController;
+import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
@@ -22,10 +25,13 @@ import javax.servlet.http.HttpSession;
 @Local
 public interface UserGatewayLocal 
 {
-    public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception;
-    public void authenticateUserAsOwner(Session session, Person person) throws AuthenticationException, Exception;
-    public void login(Session httpSession) throws AuthenticationException, Exception;
+    public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws Exception;
+    public void authenticateUserAsOwner(Session session, Person person) throws Exception;
+    public void authenticateUserAsOwner(Session session, Application application) throws Exception;
+    public void authenticateUserAsOwner(Session session, Cv cv) throws Exception;
+    public void authenticateUserAsOwner(Session session, ProgressReport progressReport) throws Exception;
+    public void login(Session httpSession) throws Exception;
     public void logout(Session session) throws Exception;
-    public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException;    
+    public Session getSessionFromHttpSession(HttpSession httpSession) throws Exception;    
     
 }

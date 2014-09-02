@@ -109,7 +109,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         return new GregorianCalendar();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Updated/Created CV")
     @Override
     public void createProspectiveFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception
@@ -130,15 +130,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Created/Updated a new application")
     @Override
     public void createNewApplication(Session session, Application application) throws AuthenticationException, Exception
-    {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        userGateway.authenticateUserAsOwner(session, application.getFellow());
-        
+    {  
         if(application == null)
         {
             throw new Exception("Application is not valid");

@@ -8,7 +8,7 @@ package com.softserve.Webapp.requestbeans;
 
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
+import java.lang.Exception;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -59,7 +59,7 @@ public class welcomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        
@@ -71,7 +71,7 @@ public class welcomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        
@@ -86,7 +86,7 @@ public class welcomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        
@@ -101,7 +101,7 @@ public class welcomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        

@@ -41,7 +41,7 @@ public class MeetingHomeRequestBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        
@@ -56,7 +56,7 @@ public class MeetingHomeRequestBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        
@@ -71,7 +71,7 @@ public class MeetingHomeRequestBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }        

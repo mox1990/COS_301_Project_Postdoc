@@ -8,7 +8,7 @@ package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
+import java.lang.Exception;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -160,7 +160,7 @@ public class UserAccountsViewerRequestBean {
         {
             return sessionManagerBean.getSession().getUser().equals(account);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             ExceptionUtil.logException(UserAccountsViewerRequestBean.class, ex);
             ExceptionUtil.handleException(null, ex);
@@ -176,7 +176,7 @@ public class UserAccountsViewerRequestBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }  

@@ -8,7 +8,6 @@ package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -159,7 +158,7 @@ public class MeetingSelectionRequestBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         } 

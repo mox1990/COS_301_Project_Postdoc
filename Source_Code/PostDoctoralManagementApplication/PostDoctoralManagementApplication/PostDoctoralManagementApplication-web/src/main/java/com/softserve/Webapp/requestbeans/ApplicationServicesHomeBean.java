@@ -7,7 +7,7 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
+import java.lang.Exception;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import java.util.ArrayList;
 import javax.enterprise.context.Dependent;
@@ -43,7 +43,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -58,7 +58,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -76,7 +76,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -91,7 +91,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -106,7 +106,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -121,7 +121,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -136,7 +136,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -151,7 +151,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -167,7 +167,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -182,7 +182,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }
@@ -197,7 +197,7 @@ public class ApplicationServicesHomeBean {
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             return false;
         }

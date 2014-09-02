@@ -6,8 +6,11 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.DBEntitiesFactory;
@@ -213,5 +216,24 @@ public class UserGateway implements UserGatewayLocal
             throw new AuthenticationException("You are not the owner of this item");
         }
     } 
+
+    @Override
+    public void authenticateUserAsOwner(Session session, Application application) throws Exception 
+    {
+        authenticateUserAsOwner(session, application.getFellow());
+    }
+
+    @Override
+    public void authenticateUserAsOwner(Session session, Cv cv) throws Exception 
+    {
+        authenticateUserAsOwner(session, cv.getPerson());
+    }
+
+    @Override
+    public void authenticateUserAsOwner(Session session, ProgressReport progressReport) throws Exception 
+    {
+        authenticateUserAsOwner(session, progressReport.getApplication().getFellow());
+    }
+    
     
 }

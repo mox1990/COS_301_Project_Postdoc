@@ -136,7 +136,7 @@ public class SessionManagerBean implements Serializable {
         
     }
     
-    public Session getSession() throws AuthenticationException
+    public Session getSession() throws Exception
     {
         HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
@@ -148,7 +148,7 @@ public class SessionManagerBean implements Serializable {
         return new Session(null, null, Boolean.TRUE);
     }
     
-    public Session getSystemLevelSessionForCurrentSession() throws AuthenticationException
+    public Session getSystemLevelSessionForCurrentSession() throws Exception
     {        
         Session session = getSession();
         

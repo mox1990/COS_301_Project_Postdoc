@@ -101,7 +101,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             }
             employeeInformation.setEmployeeID(person.getSystemID());
         } 
-        catch (AuthenticationException ex) 
+        catch (Exception ex) 
         {
             ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
             ExceptionUtil.handleException(null, ex);
