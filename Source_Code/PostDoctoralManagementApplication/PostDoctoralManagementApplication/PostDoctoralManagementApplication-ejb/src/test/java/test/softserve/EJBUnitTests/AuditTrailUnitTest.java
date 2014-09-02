@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import test.softserve.MockEJBClasses.AuditTrailServiceMockUnit;
 
@@ -67,6 +68,7 @@ public class AuditTrailUnitTest {
     @Test
     public void testLogAction() throws Exception {        
         AuditLog mockAuditLog = mock(AuditLog.class);
+        when(mockAuditLog.getAction()).thenReturn("Defualt action");
         try
         {
             instance.logAction(mockAuditLog);
@@ -76,8 +78,28 @@ public class AuditTrailUnitTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
+    @Test
+    public void testLogActionWithLongActionLength() throws Exception {        
+        AuditLog mockAuditLog = mock(AuditLog.class);
+        when(mockAuditLog.getAction()).thenReturn(new String(new char[550])); 
+        //when(mockAuditLog.getAction().length()).thenReturn(550);
+        when(mockAuditLog.getAction().substring(0, 500)).thenReturn("Shortened action");
+        String s = new String(new char[550]);
+        try
+        {
+            instance.logAction(mockAuditLog);
+            //verify(mockAuditLog).setAction("Shortened action");
+            verify(mockAuditLogJpaController).create(mockAuditLog);            
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
 }

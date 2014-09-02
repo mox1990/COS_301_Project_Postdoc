@@ -132,11 +132,11 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
-            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
+            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new user", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -173,11 +173,11 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.updateUserAccount(mockSession, mockPerson);
-            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
+            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Updated user", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -275,11 +275,11 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.generateOnDemandAccount(mockSession, reason, false, mockPerson);
-            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
+            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new on demand account", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -297,11 +297,11 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.activateOnDemandAccount(mockSession, mockPerson);
-            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
+            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -319,11 +319,11 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.getAllSecurityRoles();
-            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
+            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -342,11 +342,11 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.getUserBySystemIDOrEmail(mockPerson.getEmail());
-            verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
+            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
