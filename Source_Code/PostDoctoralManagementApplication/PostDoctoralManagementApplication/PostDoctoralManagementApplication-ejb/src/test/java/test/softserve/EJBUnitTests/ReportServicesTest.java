@@ -62,36 +62,6 @@ public class ReportServicesTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of exportPersonsToPdf method, of class ReportServices.
-     */
-    @Test
-    public void testExportPersonsToPdf() throws Exception {
-        Session session = mock(Session.class);
-        
-        Person a = new Person("u12236731");
-        a.setEmail("It Works...");
-        a.setTitle("Mr.");
-        a.setAccountStatus("Chilled");
-        
-        Person b = new Person("u12345678");
-        b.setEmail("Damn");
-        b.setTitle("Sir");
-        
-        List<Person> p = new ArrayList<>();
-        p.add(a);
-        p.add(b);
-        
-        try
-        {
-            instance.exportPersonsToPdf(session, p);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-           fail("An exception occured");
-        }
-    }
     
     /**
      * Test of exportPersonsToPdf method, of class ReportServices.
@@ -112,7 +82,7 @@ public class ReportServicesTest {
         
         try
         {
-            instance.dynamicReport(columnHeaders, rows, "Sample Report Title");
+            instance.dynamicReport(session, columnHeaders, rows, "Sample Report Title");
         }
         catch (Exception ex)
         {

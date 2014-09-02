@@ -13,6 +13,7 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.SecuredMethod;
 import com.softserve.jasper.DynamicColumnDataSource;
 import com.softserve.jasper.DynamicReportBuilder;
 import com.softserve.system.Session;
@@ -78,49 +79,28 @@ public class ReportServices implements ReportServicesLocal
     
     private final String fs = System.getProperty("file.separator");
     private final String filepath = "Reports" + fs;
-    private final JasperReport personReport;
-    private final JasperReport allPersonReport;
-    private final JasperReport applicationReport;
-    private final JasperReport allApplicationReport;
     private final JasperDesign dynamicPersonReport;
     
     public ReportServices() throws Exception
     {
         //personReport = null;
         //applicationReport = null;
-        InputStream personInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.PERSON.getBytes("UTF-8"));
-        InputStream allPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_PERSONS.getBytes("UTF-8"));
-        InputStream applicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.APPLICATION.getBytes("UTF-8"));
-        InputStream allApplicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_APPLICATIONS.getBytes("UTF-8"));
+//        InputStream personInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.PERSON.getBytes("UTF-8"));
+//        InputStream allPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_PERSONS.getBytes("UTF-8"));
+//        InputStream applicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.APPLICATION.getBytes("UTF-8"));
+//        InputStream allApplicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_APPLICATIONS.getBytes("UTF-8"));
         InputStream dynamicPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.DYNAMIC_PERSON.getBytes("UTF-8"));
         
 //        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.jrxml");
 //        allPersonReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllPersons.jrxml");
 //        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Application.jrxml"); // TODO: Work an application report
 //        allApplicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllApplications.jrxml");
-        
-        personReport = JasperCompileManager.compileReport(personInputStream);
-        allPersonReport = JasperCompileManager.compileReport(allPersonInputStream);
-        applicationReport = JasperCompileManager.compileReport(applicationInputStream); // TODO: Work an application report
-        allApplicationReport = JasperCompileManager.compileReport(allApplicationInputStream);
+//        
+//        personReport = JasperCompileManager.compileReport(personInputStream);
+//        allPersonReport = JasperCompileManager.compileReport(allPersonInputStream);
+//        applicationReport = JasperCompileManager.compileReport(applicationInputStream); // TODO: Work an application report
+//        allApplicationReport = JasperCompileManager.compileReport(allApplicationInputStream);
         dynamicPersonReport = JRXmlLoader.load(dynamicPersonInputStream);
-    }
-    /**
-     *
-     * @return
-     */
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGateway;
-    }
-    
-    protected Connection getConnection() throws SQLException, ClassNotFoundException
-    {
-        // This checks to see if the MySQL driver is avaible to use
-        Class.forName("com.mysql.jdbc.Driver");
-
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/PostDoc_DB?zeroDateTimeBehavior=convertToNull"
-        + "&user=root&password=root");
     }
     
     /**
@@ -141,24 +121,28 @@ public class ReportServices implements ReportServicesLocal
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersons()
     {
         return getPersonDAO().findPersonEntities();
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersonsWithSecurityRole(Long role)
     {
         return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Application> getAllApplications()
     {
         return getApplicationDAO().findApplicationEntities();
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Application> getAllApplicationsWithStatus(String status)
     {
@@ -166,6 +150,7 @@ public class ReportServices implements ReportServicesLocal
         return a.findAllApplicationsWithStatus(status, 0, (int) a.countAllApplicationsWithStatus(status));
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public byte[] dynamicReport(Session session, List<String> columnHeaders, List<List<String>> rows, String title) throws Exception 
     {
@@ -182,6 +167,7 @@ public class ReportServices implements ReportServicesLocal
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public byte[] exportSpreadsheetReport(Session session, List<String> columnHeaders, List<List<String>> rows, String title) throws IOException
     {

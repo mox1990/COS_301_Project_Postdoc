@@ -33,10 +33,4 @@ public class ReportServicesMockUnit extends ReportServices {
     public void setuEJB(UserGateway uEJB) {
         this.uEJB = uEJB;
     }
-    
-    @Override
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
 }
