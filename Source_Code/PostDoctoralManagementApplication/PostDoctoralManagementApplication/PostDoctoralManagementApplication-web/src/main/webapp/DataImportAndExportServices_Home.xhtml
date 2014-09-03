@@ -3,12 +3,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <ui:composition template="templates/generalPageTemplate.xhtml">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Welcome"/>
         
-        <ui:define name="CSSStyleSheets">
-            <link rel="stylesheet" type="text/css" href="CSS/welcomeScreenLayout.css"/>
+        <ui:define name="pageBody">
+            <p:panel id="importApplications" header="Import Application CSV">
+                <h:form>
+                    <p:fileUpload fileUploadListener="#{dataImportsAndExports.importApplications}" allowTypes="/(\.|\/)(csv)$/" sizeLimit="100000"/> 
+                </h:form>
+            </p:panel>
+            
+            <p:panel id="importPersons" header="Import Person CSV">
+                <h:form>
+                    <p:fileUpload fileUploadListener="#{dataImportsAndExports.importPersons}" allowTypes="/(\.|\/)(csv)$/" sizeLimit="100000"/> 
+                </h:form>
+            </p:panel>
         </ui:define>
     </ui:composition>
 </html>
+
