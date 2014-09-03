@@ -173,11 +173,12 @@ body
 
 .breadCrumbs
 {    
-    width: 992px;
-    height: 50px;
-    padding: 10px;
+    width: 100%;
+    min-height: 30px;
+    height: auto;
     overflow-wrap: normal;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .breadCrumb
@@ -296,6 +297,29 @@ body
     width: inherit!important;
 }
 
+.button-unsized
+{
+    font-size: 16pt;
+    color: black;
+    border: solid gray!important;
+    border-radius: 5px!important;
+    text-align: center!important; 
+}
+
+.button-unsized:hover
+{
+    box-shadow: 0px 0px 5px 0px darkblue!important;
+    border-color: black!important;
+    background: #deefff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #deefff 0%, #98bede 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #deefff 0%,#98bede 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #deefff 0%,#98bede 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #deefff 0%,#98bede 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #deefff 0%,#98bede 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 ); /* IE6-9 */
+}
+
 .button
 {
     width: auto;
@@ -313,14 +337,20 @@ body
 {
     box-shadow: 0px 0px 5px 0px darkblue!important;
     border-color: black!important;
-    background: #deefff; /* Old browsers */
-    background: -moz-linear-gradient(top,  #deefff 0%, #98bede 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #deefff 0%,#98bede 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #deefff 0%,#98bede 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #deefff 0%,#98bede 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #deefff 0%,#98bede 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 ); /* IE6-9 */
+    
+
+
+
+
+
+    background: #deefff; 
+    background: -moz-linear-gradient(top,  #deefff 0%, #98bede 100%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede)); 
+    background: -webkit-linear-gradient(top,  #deefff 0%,#98bede 100%); 
+    background: -o-linear-gradient(top,  #deefff 0%,#98bede 100%); 
+    background: -ms-linear-gradient(top,  #deefff 0%,#98bede 100%); 
+    background: linear-gradient(to bottom,  #deefff 0%,#98bede 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 );
 }
 
 form .button

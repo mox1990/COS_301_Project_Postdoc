@@ -8,20 +8,26 @@
     <ui:component>
         <h:form id="breadcrumbFrom">
             <div class="breadCrumbs">
-                <p:growl sticky="true" showSummary="true" showDetail="true"/>
-                <p:commandLink styleClass="breadCrumb" value="Logout" action="#{logoutRequestBean.performLogoutRequest()}" update="breadcrumbFrom"/>
-                <span>   </span>
-                <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
-                    <c:if test="#{(counter.count == 1)}">
-                        <p:commandLink styleClass="breadCrumb-disabled" value="#{crumb.viewName}" update="breadcrumbFrom"/>
-                    </c:if>
-                    <c:if test="#{(counter.count > 1)}">
-                        <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}" update="breadcrumbFrom"/>
-                    </c:if>                    
-                    <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
-                        <span class="breadCrumb-Splitter">></span>
-                    </c:if>
-                </c:forEach>
+                <table cellpadding="5px">
+                    <tr>
+                        <td>
+                            <p:growl sticky="true" showSummary="true" showDetail="true"/>
+                            <p:commandLink styleClass="breadCrumb" value="Logout" action="#{logoutRequestBean.performLogoutRequest()}" update="breadcrumbFrom"/>
+                            <span>   </span>
+                            <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
+                                <c:if test="#{(counter.count == 1)}">
+                                    <p:commandLink styleClass="breadCrumb-disabled" value="#{crumb.viewName}" update="breadcrumbFrom"/>
+                                </c:if>
+                                <c:if test="#{(counter.count > 1)}">
+                                    <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}" update="breadcrumbFrom"/>
+                                </c:if>                    
+                                <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
+                                    <span class="breadCrumb-Splitter">></span>
+                                </c:if>
+                            </c:forEach>                
+                        </td>
+                    </tr>
+                </table>
             </div>
         </h:form>
     </ui:component>

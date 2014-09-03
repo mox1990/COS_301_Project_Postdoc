@@ -4,16 +4,22 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp.requestbeans;
+package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Application;
+import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.RefereeReportServiceLocal;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
@@ -24,45 +30,52 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "refereeApplicationSelectionRequestBean")
-@RequestScoped
-public class RefereeApplicationSelectionRequestBean {
+@Named(value = "refereeApplicationSelectionBean")
+@ConversationScoped
+public class RefereeApplicationSelectionBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private ApplicationFilterDependBean applicationFilterDependBean;
+    @Inject
+    private Conversation conversation;
     
     @EJB
     private RefereeReportServiceLocal refereeReportServiceLocal;
     
-    private UIComponent errorContainer;
-    
     /**
      * Creates a new instance of refereeApplicationSelectionRequestBean
      */
-    public RefereeApplicationSelectionRequestBean() {
+    public RefereeApplicationSelectionBean() {
     }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    }
-            
-    public List<Application> getPendingApplications()
-    {   
+    
+    @PostConstruct
+    public void init()
+    {
+        conversationManagerBean.registerConversation(conversation);
+        conversationManagerBean.startConversation(conversation);
         try
         {
-            return refereeReportServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, refereeReportServiceLocal.countTotalPendingApplications(sessionManagerBean.getSession()));
+            applicationFilterDependBean.init(refereeReportServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
         }
         catch(Exception ex)
         {
-            ExceptionUtil.handleException(errorContainer, ex);
-            return new ArrayList<Application>();
+            ExceptionUtil.logException(null, ex);
+            ExceptionUtil.handleException(null, ex);
         }
+    }
+    
+    public ApplicationFilterDependBean getApplicationFilterDependBean() {
+        return applicationFilterDependBean;
+    }
+
+    public void setApplicationFilterDependBean(ApplicationFilterDependBean applicationFilterDependBean) {
+        this.applicationFilterDependBean = applicationFilterDependBean;
     }
     
     public void selectApplication(Application application)
@@ -73,6 +86,7 @@ public class RefereeApplicationSelectionRequestBean {
     public String viewApplication(Application application)
     {
         selectApplication(application);
+        conversationManagerBean.stopConversation(conversation);
         return navigationManagerBean.goToRefereeReportServiceReportCreationView();
     }
 }

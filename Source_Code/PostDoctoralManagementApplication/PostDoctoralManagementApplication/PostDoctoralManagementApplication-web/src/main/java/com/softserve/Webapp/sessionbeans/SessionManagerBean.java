@@ -220,16 +220,30 @@ public class SessionManagerBean implements Serializable {
             System.out.println("==========Object in is null");
         }
         
-        sessionStorage.add(new StorageItem(key, object));
-        
-        if(sessionStorage.get(sessionStorage.size() - 1) == null)
+        if(doesKeyExistInSessionStorage(key))
         {
-            System.out.println("==========Added Object in storage is null");
+            updateObjectInSessionStorageAt(key, object);
+            
+            return sessionStorage.indexOf(new StorageItem(key, null));
+            
+        }
+        else
+        {
+            sessionStorage.add(new StorageItem(key, object));            
+        
+            if(sessionStorage.get(sessionStorage.size() - 1) == null)
+            {
+                System.out.println("==========Added Object in storage is null");
+            }
+            else
+            {        
+                System.out.println("================Added to storage " + object.toString());
+            }
+            
+            return sessionStorage.size() - 1;
         }
         
-        System.out.println("================Added to storage");
         
-        return sessionStorage.size() - 1;
     }
     
     public void removeObjectFromSessionStorageAt(int index)
