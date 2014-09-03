@@ -56,23 +56,7 @@ public class CVManagementServiceMockUnit extends CVManagementService {
         return cVDAO;
     }    
     
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
-    
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aTEJB;
-    }
-    
-    @Override
-    protected DBEntitiesFactory getDBEntitiesFactory()
-    {
-        return dBEntities;
-    }
+
     
     @Override
     protected AcademicQualificationJpaController getAcademicQualificationDAO()

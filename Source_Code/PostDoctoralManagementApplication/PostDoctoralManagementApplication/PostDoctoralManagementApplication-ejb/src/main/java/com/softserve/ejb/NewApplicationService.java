@@ -49,27 +49,13 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @EJB
     private NotificationServiceLocal notificationServiceLocal;
     @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    @EJB
     private CVManagementServiceLocal cVManagementServiceLocal;
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
 
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
     }
     
     protected CVManagementServiceLocal getCVManagementServiceEJB()
@@ -156,17 +142,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }                
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Linked grant holder to new application")
     @Override
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception
-    {
-        
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        //Authenticate user ownership of application
-        userGateway.authenticateUserAsOwner(session, application.getFellow());
-        
+    {        
         if(grantHolder == null)
         {
             throw new Exception("Grant holder is not valid");
@@ -205,15 +185,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Linked referee to new application")
     @Override
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        //Authenticate user ownership of application
-        userGateway.authenticateUserAsOwner(session, application.getFellow());
         
         if(referee == null)
         {
@@ -223,7 +199,6 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         //Check if referee already exists
         if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()) != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
@@ -265,21 +240,12 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Submitted a new application")
     @Override
     public void submitApplication(Session session, Application application) throws Exception
-    {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        //Authenticate user ownership of application
-        userGateway.authenticateUserAsOwner(session, application.getFellow());
-        
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
-        getApplicationServicesUtil().submitApplication(application);
-        
+    {        
+        getApplicationServicesUtil().submitApplication(application);        
     }
     
     @Override

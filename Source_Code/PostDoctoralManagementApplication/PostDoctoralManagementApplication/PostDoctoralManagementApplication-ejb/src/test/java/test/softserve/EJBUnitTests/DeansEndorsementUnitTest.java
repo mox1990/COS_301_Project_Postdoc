@@ -223,7 +223,7 @@ public class DeansEndorsementUnitTest {
             
             verify(mockEndorsementJpaController).create(mockEndorsement);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"));
+            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             verify(mockNotificationService).sendBatchNotifications(new ArrayList<Notification>(), true);

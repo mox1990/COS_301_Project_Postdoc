@@ -87,21 +87,9 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     }
     
     @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
-    
-    @Override
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
-    }
-    
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aTEJB;
     }
     
     @Override

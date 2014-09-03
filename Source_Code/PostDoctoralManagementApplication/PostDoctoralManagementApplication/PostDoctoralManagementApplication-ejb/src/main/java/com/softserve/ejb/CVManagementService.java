@@ -14,6 +14,10 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Experience;
 import com.softserve.Exceptions.*;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
@@ -21,6 +25,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -29,27 +34,13 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class CVManagementService implements CVManagementServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-    
-    @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
-    }
     
     public CVManagementService() {
     }
@@ -73,22 +64,17 @@ public class CVManagementService implements CVManagementServiceLocal {
         return new ExperienceJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
-    protected DBEntitiesFactory getDBEntitiesFactory()
-    {
-        return new DBEntitiesFactory();
-    }
-    
     @Override
     public boolean hasCV(Session session)
     {
         return (session.getUser().getCv() != null);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod(message = "Created CV")
     @Override
     public void createCV(Session session, Cv cv) throws AuthenticationException, Exception
-    {
-        getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getPerson());
-        
+    {        
         if(hasCV(session))
         {
             throw new CVAlreadExistsException("The user already has a cv");
@@ -97,8 +83,6 @@ public class CVManagementService implements CVManagementServiceLocal {
         AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
         ExperienceJpaController experienceJpaController = getExperienceDAO();
         CvJpaController cvJpaController = getCVDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         List<Experience> experienceList = cv.getExperienceList();
         List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
@@ -121,26 +105,18 @@ public class CVManagementService implements CVManagementServiceLocal {
             academicQualification.setCv(cv);
             academicQualificationJpaController.create(academicQualification);
         }
-        
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created user cv", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod(message = "Updated CV")
     @Override
     public void updateCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
-        getUserGatewayServiceEJB().authenticateUserAsOwner(session, cv.getPerson());
         
         AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
         ExperienceJpaController experienceJpaController = getExperienceDAO();
         
-        CvJpaController cvJpaController = getCVDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
-        List<Experience> experienceList = cv.getExperienceList();
-        List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
+        CvJpaController cvJpaController = getCVDAO();        
 
         for(Experience experience : cv.getExperienceList())
         {
@@ -170,8 +146,5 @@ public class CVManagementService implements CVManagementServiceLocal {
         
         cv.setCvID(session.getUser().getSystemID());
         cvJpaController.edit(cv);
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Updated user cv", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
 }

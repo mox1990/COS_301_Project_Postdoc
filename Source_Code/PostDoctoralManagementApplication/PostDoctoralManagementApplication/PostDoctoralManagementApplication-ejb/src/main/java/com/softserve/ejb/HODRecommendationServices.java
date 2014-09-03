@@ -27,6 +27,10 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -37,6 +41,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -45,6 +50,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class HODRecommendationServices implements HODRecommendationServicesLocal {
@@ -55,25 +61,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @EJB
     private NotificationServiceLocal notificationServiceLocal;
     @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
-
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
     }
     
     protected UserAccountManagementServiceLocal getUserAccountManagementServiceEJB()
@@ -152,27 +144,21 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws com.softserve.Exceptions.AuthenticationException
      * @throws java.lang.Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    { 
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
@@ -188,14 +174,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws RollbackFailureException
      * @throws Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public void declineAppliction(Session session, Application application, String reason) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         applicationServices.declineAppliction(session, application, reason);               
     }
@@ -210,18 +193,14 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws RollbackFailureException
      * @throws Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         //Ammend application
@@ -230,10 +209,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         
         AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
         ammendRequestJpaController.create(ammendRequest);
-        
-        //Log action        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Ammendment request for application " + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
         
         //Send notification to grant holder and applicatantD        
         Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
@@ -253,18 +228,15 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws RollbackFailureException
      * @throws Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+       
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         RecommendationReportJpaController recommendationReportJpaController = getRecommmendationReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         recommendationReport.setReportID(application.getApplicationID());
@@ -287,11 +259,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             throw ex;
         }
         
-        //Log action
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application approved" + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
-        
         //Send notification to Deans office
         List<Person> DeansOfficeMembers = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
         ArrayList<Notification> notifications = new ArrayList<Notification>();
@@ -302,13 +269,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         notificationService.sendBatchNotifications(notifications, true);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public List<Person> getDeansOfApplication(Session session, Application application) throws Exception
     {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         
         List<Person> Deans = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
@@ -316,13 +281,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         return Deans;
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @AuditableMethod
     @Override
     public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
-    {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
         
         if(requestAlreadyFound != null & requestAlreadyFound.size() > 0)

@@ -224,7 +224,7 @@ public class GrantHolderFinalisationUnitTest {
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
+            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             // TODO: ADD list verfication...
             //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
@@ -263,7 +263,7 @@ public class GrantHolderFinalisationUnitTest {
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
             
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
+            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
             
             //verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPersonA, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");
             //verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPersonB, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");

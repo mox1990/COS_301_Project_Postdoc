@@ -230,7 +230,7 @@ public class HODRecommendationUnitTest {
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationJpaController).edit(mockApplication);
             
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
+            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
             verify(mockDBEntitiesFactory).createAmmendRequestEntity(mockApplication, mockSession.getUser(),reason, mockCal.getTime());
             verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
@@ -283,7 +283,7 @@ public class HODRecommendationUnitTest {
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockRecommendationReportJpaController).create(mockRecommendationReport);
             verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"));
+            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }

@@ -23,6 +23,10 @@ import com.softserve.DBEntities.ForwardAndRewindReport;
 import com.softserve.DBEntities.FundingCost;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -33,6 +37,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -41,6 +46,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
@@ -50,24 +56,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     @EJB
     private NotificationServiceLocal notificationServiceLocal;
-    @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
 
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
     }
 
     public ForwardAndRewindServices() {
@@ -309,17 +301,13 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             forwardApplicationToRecommendedStatus(application);
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         }
-    } 
-    
+    }
+        
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @AuditableMethod(message = "Application forwared")
     @Override
     public void forwardApplication(Session session, Application application, String toStatus, String reason) throws Exception 
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD, toStatus, application.getStatus());
         
@@ -350,20 +338,13 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
         getApplicationDAO().edit(application);
         getForwardAndRewindReportDAO().create(forwardAndRewindReport);
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application forwarded " + application.getApplicationID(), session.getUser());
-        auditTrailServiceLocal.logAction(auditLog);
     }
-
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @AuditableMethod(message = "Application rewinded")
     @Override
-    public void rewindApplication(Session session, Application application, String toStatus, String reason) throws Exception {
-        
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    public void rewindApplication(Session session, Application application, String toStatus, String reason) throws Exception 
+    {   
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_REWIND, toStatus, application.getStatus());
         
@@ -398,11 +379,11 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
         getApplicationDAO().edit(application);
         getForwardAndRewindReportDAO().create(forwardAndRewindReport);
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application rewinded " + application.getApplicationID(), session.getUser());
-        auditTrailServiceLocal.logAction(auditLog);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @AuditableMethod
+    @Override
     public List<Application> loadMovableApplications(Session session) throws Exception
     {
         List<Application> applications = new ArrayList<Application>();

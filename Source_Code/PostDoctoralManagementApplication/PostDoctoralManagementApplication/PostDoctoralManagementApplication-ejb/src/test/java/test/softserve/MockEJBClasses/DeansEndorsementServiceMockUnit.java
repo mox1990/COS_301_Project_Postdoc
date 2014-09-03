@@ -75,22 +75,10 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
     }
     
     @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
-    
-    @Override
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
-    }
-    
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aTEJB;
-    }
+    }    
     
     @Override
     protected ApplicationServicesUtil getApplicationServicesUTIL()

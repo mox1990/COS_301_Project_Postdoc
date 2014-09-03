@@ -25,6 +25,10 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -36,6 +40,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 /**
@@ -43,6 +48,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class GrantHolderFinalisationService implements GrantHolderFinalisationServiceLocal {
@@ -53,28 +59,13 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @EJB
     private NotificationServiceLocal notificationServiceLocal;
     @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    @EJB
     private CVManagementServiceLocal cVManagementServiceLocal;
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
-    
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
 
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
     }
     
     protected CVManagementServiceLocal getCVManagementServiceEJB()
@@ -168,13 +159,11 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws CVAlreadExistsException If the grant holder already has a CV
      * @throws Exception If an unknown error occurs
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public void createGrantHolderCV(Session session, Cv cv) throws Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         if(cv == null)
         {
@@ -201,53 +190,41 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @return A list of all the applications that user can finalise
      * @throws com.softserve.Exceptions.AuthenticationException
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, StartIndex, maxNumberOfRecords);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public void saveChangesToApplication(Session session, Application application) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         
         applicationJpaController.edit(application);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public void declineAppliction(Session session, Application application, String reason) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         applicationServices.declineAppliction(session, application, reason);               
     }
@@ -262,18 +239,14 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws RollbackFailureException
      * @throws Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         //Ammend application
@@ -283,10 +256,6 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
         
         ammendRequestJpaController.create(ammendRequest);
-        
-        //Log action        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Grant holder ammendment request for application " + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
         
         //Send notification to grant holder and applicatantD        
         Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
@@ -302,17 +271,14 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws RollbackFailureException If an error occured while rolling back the entry in the database
      * @throws Exception If an unknown error occured
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public void finaliseApplication(Session session, Application application) throws Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         application = applicationJpaController.findApplication(application.getApplicationID());
@@ -321,11 +287,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         application.setFinalisationDate(getGregorianCalendar().getTime());
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);        
         applicationJpaController.edit(application);
-        
-        //Log action      
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Finalised application " + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
-        
+                
         //Send notification to HOD       
         List<Person> HODs = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         ArrayList<Notification> notifications = new ArrayList<Notification>();
@@ -333,16 +295,14 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         {
             notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
         }
-        notificationService.sendBatchNotifications(notifications, true);
-        
+        notificationService.sendBatchNotifications(notifications, true);        
     }
-
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public List<Person> getHODsOfApplication(Session session, Application application) throws Exception 
     {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         
@@ -350,14 +310,12 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         return HODs;
     }
-
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @AuditableMethod
     @Override
     public void requestSpecificHODtoReview(Session session, Application application, Person hod) throws Exception 
-    {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         
         if(requestAlreadyFound != null & requestAlreadyFound.size() > 0)
