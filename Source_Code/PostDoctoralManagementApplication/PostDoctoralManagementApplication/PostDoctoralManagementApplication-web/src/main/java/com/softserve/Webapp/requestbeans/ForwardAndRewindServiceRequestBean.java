@@ -7,7 +7,9 @@
 package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.Application;
-import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
+import com.softserve.Webapp.conversationbeans.ForwardAndRewindServiceApplicationSelectionBean;
+import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.ForwardAndRewindServicesLocal;
@@ -16,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -31,9 +33,9 @@ public class ForwardAndRewindServiceRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
-    @Inject 
-    private NavigationManagerBean navigationManagerBean;
-
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+    
     @EJB
     private ForwardAndRewindServicesLocal forwardAndRewindServicesLocal;
     
@@ -41,7 +43,6 @@ public class ForwardAndRewindServiceRequestBean {
     
     private String toStatus;    
     private String reason;
-    
     /**
      * Creates a new instance of ForwardAndRewindServiceRequestBean
      */
@@ -50,10 +51,10 @@ public class ForwardAndRewindServiceRequestBean {
     
     @PostConstruct
     public void init()
-    {
+    {        
         toStatus = "";
         reason = "";
-        applicationServicesUtil = new ApplicationServicesUtil(null);
+        applicationServicesUtil = new ApplicationServicesUtil(null);        
     }
     
     public String getToStatus() {
@@ -71,25 +72,10 @@ public class ForwardAndRewindServiceRequestBean {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
-    public List<Application> getMovableApplications()
-    {
-        try
-        {
-            return forwardAndRewindServicesLocal.loadMovableApplications(sessionManagerBean.getSession());
-        }
-        catch(Exception ex)
-        {
-            ExceptionUtil.logException(ForwardAndRewindServiceRequestBean.class, ex);
-            ExceptionUtil.handleException(null, ex);
-            return new ArrayList<Application>();
-        }
-    }
-    
+            
     public List<String> getPossibleStatusChanges(Application application)
     {
         List<String> output = new ArrayList<String>();
-        ApplicationServicesUtil applicationServicesUtil = new ApplicationServicesUtil(null);
         
         if(applicationServicesUtil.getOrderIndexOfApplicationStatus(application.getStatus()) < 8)
         {
@@ -108,9 +94,10 @@ public class ForwardAndRewindServiceRequestBean {
     
     public void performApplicationStatusMoveRequest(Application application)
     {
-        ApplicationServicesUtil applicationServicesUtil = new ApplicationServicesUtil(null);
+        System.out.println("Preform");
         try
         {
+            
             if(applicationServicesUtil.getOrderIndexOfApplicationStatus(toStatus) < 6 && applicationServicesUtil.getOrderIndexOfApplicationStatus(application.getStatus()) < 9)
             {
             
@@ -124,7 +111,6 @@ public class ForwardAndRewindServiceRequestBean {
                 }
                 
                 reason = "";
-                
             }
             else
             {

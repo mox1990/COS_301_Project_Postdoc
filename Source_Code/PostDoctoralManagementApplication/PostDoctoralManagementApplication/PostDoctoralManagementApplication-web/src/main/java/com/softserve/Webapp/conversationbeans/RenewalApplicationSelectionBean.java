@@ -12,7 +12,8 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.RefereeReportServiceLocal;
+import com.softserve.ejb.ApplicationRenewalServiceLocal;
+import com.softserve.system.Session;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -26,9 +27,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "refereeApplicationSelectionBean")
+@Named(value = "renewalApplicationSelectionBean")
 @ConversationScoped
-public class RefereeApplicationSelectionBean implements Serializable {
+public class RenewalApplicationSelectionBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -42,12 +43,12 @@ public class RefereeApplicationSelectionBean implements Serializable {
     private Conversation conversation;
     
     @EJB
-    private RefereeReportServiceLocal refereeReportServiceLocal;
+    private ApplicationRenewalServiceLocal applicationRenewalServiceLocal;
     
     /**
-     * Creates a new instance of refereeApplicationSelectionRequestBean
+     * Creates a new instance of RenewalApplicationSelectionRequestBean
      */
-    public RefereeApplicationSelectionBean() {
+    public RenewalApplicationSelectionBean() {
     }
     
     @PostConstruct
@@ -57,32 +58,31 @@ public class RefereeApplicationSelectionBean implements Serializable {
         conversationManagerBean.startConversation(conversation);
         try
         {
-            applicationFilterDependBean.init(refereeReportServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
+            Session session = sessionManagerBean.getSession();
+            applicationFilterDependBean.init(applicationRenewalServiceLocal.getRenewableApplicationsForFellow(session, session.getUser()));
         }
         catch(Exception ex)
         {
-            ExceptionUtil.logException(RefereeApplicationSelectionBean.class, ex);
+            ExceptionUtil.logException(RenewalApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
         }
     }
-    
+
     public ApplicationFilterDependBean getApplicationFilterDependBean() {
         return applicationFilterDependBean;
     }
-
-    public void setApplicationFilterDependBean(ApplicationFilterDependBean applicationFilterDependBean) {
-        this.applicationFilterDependBean = applicationFilterDependBean;
-    }
-    
+            
     public void selectApplication(Application application)
     {
-        sessionManagerBean.addObjectToSessionStorage("APPLICATION",application);
+        sessionManagerBean.clearSessionStorage();
+        sessionManagerBean.addObjectToSessionStorage("APPLICATION", application);
     }
     
-    public String viewApplication(Application application)
+    public String renewApplicationWizard(Application application)
     {
         selectApplication(application);
         conversationManagerBean.deregisterConversation(conversation);
-        return navigationManagerBean.goToRefereeReportServiceReportCreationView();
+        return navigationManagerBean.goToApplicationRenewalServiceWizardView();
     }
+    
 }

@@ -34,7 +34,14 @@ public class ApplicationFilterDependBean implements Serializable {
     
     public void init(List<Application> applications)
     {
-        originalList = applications;
+        if(applications == null)
+        {
+            originalList = new ArrayList<Application>();
+        }
+        else
+        {
+            originalList = applications;
+        }
         filteredList = new ArrayList<Application>();
         filteredList.addAll(applications);
     }

@@ -14,6 +14,7 @@ import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.ApplicationReviewRequestPK;
 import com.softserve.DBEntities.Person;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -237,7 +238,9 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT r.application1 FROM ApplicationReviewRequest r WHERE r.person1 = :per AND r.applicationReviewRequestPK.type = :type", Application.class).setParameter("per", person).setParameter("type", type);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public List<Person> findAllPeopleWhoHaveBeenRequestForApplicationAs(Application application, String type)
@@ -245,7 +248,9 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Person> q = em.createQuery("SELECT r.person1 FROM ApplicationReviewRequest r WHERE r.application1 = :app AND r.applicationReviewRequestPK.type = :type", Person.class).setParameter("app", application).setParameter("type", type);
-        return q.getResultList();
+       
+        List<Person> people = q.getResultList();
+        return (people != null)?people:new ArrayList<Person>();
     }
     
 }

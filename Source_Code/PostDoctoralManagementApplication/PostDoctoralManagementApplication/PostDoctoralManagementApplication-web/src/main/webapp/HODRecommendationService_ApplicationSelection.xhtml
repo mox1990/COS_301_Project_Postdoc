@@ -12,12 +12,19 @@
                 <h1 class="header1">Applications pending for recommendation</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                <ui:param name="pendingApplications" value="#{hodApplicationSelectionRequestBean.pendingApplications}"/>
-                <ui:define name="commandButtons">
-                    <p:commandButton value="View application for consideration" styleClass="button button-fill" action="#{hodApplicationSelectionRequestBean.viewApplication(app)}"/> 
-                </ui:define>
+            <ui:decorate template="templates/filterSearch_Component.xhtml">
+                <ui:param name="prefix" value=""/>
+                <ui:param name="updatableItems" value=":pendingApplications"/>
+                <ui:param name="bean" value="#{hodApplicationSelectionBean.applicationFilterDependBean}"/>
             </ui:decorate>
+            <h:form id="pendingApplications">
+                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                    <ui:param name="pendingApplications" value="#{hodApplicationSelectionBean.applicationFilterDependBean.filteredList}"/>
+                    <ui:define name="commandButtons">
+                        <p:commandButton value="View application for consideration" styleClass="button button-fill" action="#{hodApplicationSelectionBean.viewApplication(app)}"/> 
+                    </ui:define>
+                </ui:decorate>
+            </h:form>
         </ui:define>
     </ui:composition>
 </html>

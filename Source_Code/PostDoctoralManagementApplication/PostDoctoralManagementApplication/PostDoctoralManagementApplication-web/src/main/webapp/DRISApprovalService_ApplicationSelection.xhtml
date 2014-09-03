@@ -9,26 +9,46 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Applications pending for eligiblity check</h1>
+                <h1 class="header1">DRIS Approval service application selection</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                <ui:param name="pendingApplications" value="#{drisApplicationSelectionRequestBean.pendingEndorsedApplications}"/>
-                <ui:define name="commandButtons">
-                    <p:commandButton value="View application for reviewal" styleClass="button button-fill" action="#{drisApplicationSelectionRequestBean.viewApplication(app)}"/> 
-                </ui:define>
-            </ui:decorate>
+            <p:outputPanel>                
+                <h1 class="header1-1">Applications pending for eligiblity check</h1>
+                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                    <ui:decorate template="templates/filterSearch_Component.xhtml">
+                        <ui:param name="prefix" value="End"/>
+                        <ui:param name="updatableItems" value=":pendingEndorsedApplications"/>
+                        <ui:param name="bean" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEndorsed}"/>
+                    </ui:decorate>
+                    <h:form id="pendingEndorsedApplications">
+                        <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                            <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEndorsed.filteredList}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View application for reviewal" styleClass="button button-fill" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </h:form>
+                </p:panel>
+            </p:outputPanel>
             
-            <div>
-                <h1 class="header1">Applications pending for funding approval</h1>
-                <h2>Click on the application for more details</h2>
-            </div>
-            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                <ui:param name="pendingApplications" value="#{drisApplicationSelectionRequestBean.pendingEligibleApplications}"/>
-                <ui:define name="commandButtons">
-                    <p:commandButton value="View application for funding consideration" styleClass="button-fill" action="#{drisApplicationSelectionRequestBean.viewApplication(app)}"/> 
-                </ui:define>
-            </ui:decorate>
+            <p:outputPanel>
+                <h1 class="header1-1">Applications pending for funding approval</h1>
+                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                    <ui:decorate template="templates/filterSearch_Component.xhtml">
+                        <ui:param name="prefix" value="Eli"/>
+                        <ui:param name="updatableItems" value=":pendingEligibleApplications"/>
+                        <ui:param name="bean" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEligible}"/>
+                    </ui:decorate>
+                    <h:form id="pendingEligibleApplications">
+                        <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                            <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEligible.filteredList}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View application for funding consideration" styleClass="button-fill" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </h:form>
+                </p:panel>
+            </p:outputPanel>
         </ui:define>
     </ui:composition>
 </html>

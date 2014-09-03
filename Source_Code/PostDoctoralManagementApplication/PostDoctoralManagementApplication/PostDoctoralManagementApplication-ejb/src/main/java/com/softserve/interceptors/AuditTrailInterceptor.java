@@ -30,7 +30,7 @@ public class AuditTrailInterceptor {
     public Object intercept(InvocationContext context) throws Exception
     {
         System.out.println("=====================Audit interceptor launching: " + context.getMethod().getName());
-        Object result;
+        Object result = null;
         String excptionMessage = "";
         try
         {
@@ -96,7 +96,9 @@ public class AuditTrailInterceptor {
             {
                 System.out.println("Auditing disabled: " + context.getMethod().getName());
             }
+            
+            return result;
         }
-        return result;
+        
     }
 }

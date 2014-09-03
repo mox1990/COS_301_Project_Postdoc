@@ -12,34 +12,62 @@
                 <h1 class="header1">Applications Progress viewer</h1>
                 <h2>Click on the application for more details</h2>
             </div>
-            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.fellowApplicationDisplayable}">
-                <h1 class="header1">Applications for which you are the fellow</h1>
-                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                    <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.fellowApplications}"/>
-                    <ui:define name="commandButtons">
-                        <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                    </ui:define>
-                </ui:decorate>
+            <p:outputPanel rendered="#{applicationProgressViewerSelectionBean.fellowApplicationDisplayable}"> 
+                <h1 class="header1-1">Applications for which you are the fellow</h1>
+                <p:panel  toggleable="true" header="Click to collapse or expand list"> 
+
+                    <ui:decorate template="templates/filterSearch_Component.xhtml">
+                        <ui:param name="prefix" value=""/>
+                        <ui:param name="updatableItems" value=":pendingFellowApplications"/>
+                        <ui:param name="bean" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanFellow}"/>
+                    </ui:decorate>
+                    <h:form id="pendingFellowApplications">
+                        <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                            <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanFellow.filteredList}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </h:form>
+                </p:panel>
             </p:outputPanel>
             
-            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.grantHolderApplicationDisplayable}">
-                <h1 class="header1">Applications for which you are the Grant holder</h1>
-                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                    <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.grantHolderApplications}"/>
-                    <ui:define name="commandButtons">
-                        <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                    </ui:define>
-                </ui:decorate>
+            <p:outputPanel rendered="#{applicationProgressViewerSelectionBean.grantHolderApplicationDisplayable}"> 
+                <h1 class="header1-1">Applications for which you are the Grant holder</h1>
+                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                    <ui:decorate template="templates/filterSearch_Component.xhtml">
+                        <ui:param name="prefix" value=""/>
+                        <ui:param name="updatableItems" value=":pendingGrantHolderApplications"/>
+                        <ui:param name="bean" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanGrantHolder}"/>
+                    </ui:decorate>
+                    <h:form id="pendingGrantHolderApplications">
+                        <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                            <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanGrantHolder.filteredList}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </h:form>
+                </p:panel>
             </p:outputPanel>
             
-            <p:outputPanel rendered="#{applicationProgressViewerSelectionRequest.allApplicationDisplayable}">
-                <h1 class="header1">All applications</h1>
-                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                    <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionRequest.allApplications}"/>
-                    <ui:define name="commandButtons">
-                        <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionRequest.viewApplication(app)}"/> 
-                    </ui:define>
-                </ui:decorate>
+            <p:outputPanel rendered="#{applicationProgressViewerSelectionBean.allApplicationDisplayable}">
+                <h1 class="header1-1">All applications</h1>
+                <p:panel  toggleable="true" header="Click to collapse or expand list">                
+                    <ui:decorate template="templates/filterSearch_Component.xhtml">
+                        <ui:param name="prefix" value=""/>
+                        <ui:param name="updatableItems" value=":pendingAllApplications"/>
+                        <ui:param name="bean" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanAll}"/>
+                    </ui:decorate>
+                    <h:form id="pendingAllApplications">                    
+                        <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                            <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanAll.filteredList}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </h:form>
+                </p:panel>
             </p:outputPanel>
         </ui:define>
     </ui:composition>

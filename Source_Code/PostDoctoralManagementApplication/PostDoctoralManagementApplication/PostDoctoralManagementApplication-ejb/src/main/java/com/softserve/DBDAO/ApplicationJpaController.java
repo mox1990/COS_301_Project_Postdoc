@@ -806,7 +806,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status", Application.class).setParameter("status", applicationStatus).setFirstResult(startRecord).setMaxResults(maxRecords);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public List<Application> findAllApplicationsWithStatusAndReferee(String applicationStatus, Person referee, int startRecord, int maxRecords)
@@ -814,7 +816,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND :ref MEMBER OF a.personList", Application.class).setParameter("status", applicationStatus).setParameter("ref", referee).setFirstResult(startRecord).setMaxResults(maxRecords);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public List<Application> findAllApplicationsWithStatusAndGrantHolder(String applicationStatus, Person grantHolder, int startRecord, int maxRecords)
@@ -822,7 +826,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         System.out.println("===calling2 ");
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder = :grantHolder", Application.class).setParameter("status", applicationStatus).setParameter("grantHolder", grantHolder).setFirstResult(startRecord).setMaxResults(maxRecords);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public List<Application> findAllApplicationsWithStatusAndDepartment(String applicationStatus, Department deparment, int startRecord, int maxRecords)
@@ -830,7 +836,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department = :dep", Application.class).setParameter("status", applicationStatus).setParameter("dep", deparment).setFirstResult(startRecord).setMaxResults(maxRecords);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public List<Application> findAllApplicationsWithStatusAndFaculty(String applicationStatus, Faculty faculty, int startRecord, int maxRecords)
@@ -838,7 +846,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.grantHolder.employeeInformation.department.faculty = :fac", Application.class).setParameter("status", applicationStatus).setParameter("fac", faculty).setFirstResult(startRecord).setMaxResults(maxRecords);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
         
     public List<Person> findAllHODsWhoCanRecommendApplication(Application application)
@@ -846,7 +856,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department = :loc AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        return q.getResultList();
+        
+        List<Person> people = q.getResultList();
+        return (people != null)?people:new ArrayList<Person>();
     }
     
     public List<Person> findAllDeansOfficeMembersWhoCanEndorseApplication(Application application)
@@ -854,7 +866,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department.faculty = :loc AND :secRole MEMBER OF p.securityRoleList ", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment().getFaculty()).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-        return q.getResultList();
+        
+        List<Person> people = q.getResultList();
+        return (people != null)?people:new ArrayList<Person>();
     }
     
     public List<Person> findAllDRISMembersWhoCanApproveApplication(Application application)
@@ -862,7 +876,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("secRole", com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        return q.getResultList();
+        
+        List<Person> people = q.getResultList();
+        return (people != null)?people:new ArrayList<Person>();
     }
     
     public List<Application> findAllApplicationsWhosFellowIs(Person fellow)
@@ -870,7 +886,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.fellow = :f", Application.class).setParameter("f", fellow);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public List<Application> findAllApplicationsWhosGrantHolderIs(Person grantHolder)
@@ -878,7 +896,9 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.grantHolder = :gh", Application.class).setParameter("gh", grantHolder);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
     
     public long countAllApplicationsWithStatus(String applicationStatus)
@@ -926,6 +946,8 @@ public class ApplicationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         
         TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE (a.fellow = :fellow) AND (a.endDate BETWEEN :rangeStart AND :rangeEnd)", Application.class).setParameter("rangeStart", rangeStart).setParameter("rangeEnd", rangeEnd).setParameter("fellow", fellow);
-        return q.getResultList();
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
     }
 }

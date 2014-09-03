@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Accounts listing"/>
         
@@ -17,13 +18,30 @@
                 <h2>Click on the user accounts to view more details and options</h2>
             </div>
             <div>
-                <ui:decorate template="templates/accountsListing_Comoponent.xhtml">
-                    <ui:param name="userAccounts" value="#{userAccountsViewerRequestBean.pendingUserAccounts}"/>
-                    <ui:define name="commandButtons" >
-                        <p:commandButton value="Approve on-demand user account" styleClass="button-fill button" action="#{userAccountsViewerRequestBean.approveOndemandAccount(account)}" update="@all"/>
-                        <p:commandButton value="Decline on-demand user account" styleClass="button-fill button" action="#{userAccountsViewerRequestBean.declineOndemandAccount(account)}" update="@all"/>
-                    </ui:define>
+                <ui:decorate template="templates/filterSearch_Component.xhtml">
+                    <ui:param name="prefix" value=""/>
+                    <ui:param name="updatableItems" value=":pendingUseraccounts"/>
+                    <ui:param name="bean" value="#{pendingUserAccountsSelectionBean.personFilterDependBean}"/>
                 </ui:decorate>
+                <h:form id="pendingUseraccounts">
+                    <ui:decorate template="templates/accountsListing_Comoponent.xhtml">
+                        <ui:param name="userAccounts" value="#{pendingUserAccountsSelectionBean.personFilterDependBean.filteredList}"/>
+                        <ui:define name="commandButtons" >
+                            <p:commandButton value="Approve on-demand user account" styleClass="button-fill button" action="#{pendingUserAccountsSelectionBean.approveOndemandAccount(account)}" update="@all">
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                                <p:confirm header="Confirmation" message="Are you sure that you approve this on-demand account?." icon="ui-icon-alert"/>
+                            </p:commandButton>                            
+                            <p:commandButton value="Decline on-demand user account" styleClass="button-fill button" action="#{pendingUserAccountsSelectionBean.declineOndemandAccount(account)}" update="@all">
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                                <p:confirm header="Confirmation" message="Are you sure that you decline this on-demand account? Warning: This will remove the account permanently from the system." icon="ui-icon-alert"/>
+                            </p:commandButton>
+                        </ui:define>
+                    </ui:decorate>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>                
             </div>
         </ui:define>
     </ui:composition>

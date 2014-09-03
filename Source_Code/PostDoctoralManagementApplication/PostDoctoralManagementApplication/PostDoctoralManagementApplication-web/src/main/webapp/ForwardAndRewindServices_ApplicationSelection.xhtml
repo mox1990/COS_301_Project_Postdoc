@@ -13,33 +13,39 @@
                 <h1 class="header1">Forward and rewindable Applications</h1>
                 <h2>Click on the application for more details and options</h2>
             </div>
-            <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
-                <ui:param name="pendingApplications" value="#{forwardAndRewindServiceRequestBean.movableApplications}"/>
-                <ui:define name="commandButtons">
-                    <p:panel>
-                        <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="Reason for move:" for="reason"/>                                
-                            <p:inputTextarea id="reason" value="#{forwardAndRewindServiceRequestBean.reason}" required="true" />
-                            <p:message for="reason" styleClass="fieldErrorMessage"/> 
-
-                            <p:outputLabel value="Select status to move to:" for="tostatus"/>                                
-                            <p:selectOneButton id="tostatus" value="#{forwardAndRewindServiceRequestBean.toStatus}" required="true">
-                                <f:selectItems value="#{forwardAndRewindServiceRequestBean.getPossibleStatusChanges(app)}" var="value" itemLabel="#{value}" itemValue="#{value}"/>
-                            </p:selectOneButton>
-                            <p:message for="tostatus" styleClass="fieldErrorMessage"/>                                                                        
-                        </h:panelGrid> 
-                        <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                        <p:commandButton value="Move application to status" styleClass="button button-fill" action="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@all" process="@form">
-                            <p:confirm header="Confirmation" message="Are you sure that you want to move the application the selected status? Warning: If rewinding any information pertaining to rewinded stages will be removed permanently." icon="ui-icon-alert"/>
-                        </p:commandButton>
-                        
-                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                        </p:confirmDialog>
-                    </p:panel>
-                </ui:define>
+            <ui:decorate template="templates/filterSearch_Component.xhtml">
+                <ui:param name="prefix" value=""/>
+                <ui:param name="updatableItems" value=":pendingApplications"/>
+                <ui:param name="bean" value="#{forwardAndRewindServiceApplicationSelectionBean.applicationFilterDependBean}"/>
             </ui:decorate>
+            <h:form id="pendingApplications">
+                <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                    <ui:param name="pendingApplications" value="#{forwardAndRewindServiceApplicationSelectionBean.applicationFilterDependBean.filteredList}"/>
+                    <ui:define name="commandButtons">
+                        <p:panel >
+                            <h:panelGrid columns="3" cellpadding="5" id="#{_objectInContext}Grid">
+                                <p:outputLabel value="Reason for move:" for="reason"/>                                
+                                <p:inputTextarea id="reason" value="#{forwardAndRewindServiceRequestBean.reason}" required="true" />
+                                <p:message for="reason" styleClass="fieldErrorMessage"/> 
+
+                                <p:outputLabel value="Select status to move to:" for="tostatus"/>                                
+                                <p:selectOneButton id="tostatus" value="#{forwardAndRewindServiceRequestBean.toStatus}" required="true">
+                                    <f:selectItems value="#{forwardAndRewindServiceRequestBean.getPossibleStatusChanges(app)}" var="value" itemLabel="#{value}" itemValue="#{value}"/>
+                                </p:selectOneButton>
+                                <p:message for="tostatus" styleClass="fieldErrorMessage"/>                                                                        
+                            </h:panelGrid> 
+                            <p:growl sticky="true" showDetail="true" globalOnly="false"/>
+                            <p:commandButton value="Move application to status" styleClass="button button-fill" actionListener="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@all" process="#{_objectInContext}Grid">
+                                <p:confirm header="Confirmation" message="Are you sure that you want to move the application the selected status? Warning: If rewinding any information pertaining to rewinded stages will be removed permanently." icon="ui-icon-alert"/>
+                            </p:commandButton>                           
+                        </p:panel>
+                    </ui:define>
+                </ui:decorate>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
         </ui:define>
     </ui:composition>
 </html>

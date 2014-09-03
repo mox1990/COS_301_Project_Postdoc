@@ -103,7 +103,7 @@ public class ApplicationServicesUtil {
     {
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         
-        List<Application> output = new ArrayList<Application>();        
+        List<Application> output;        
         
         if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {   
@@ -136,14 +136,6 @@ public class ApplicationServicesUtil {
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             output = applicationJpaController.findAllApplicationsWithStatusAndGrantHolder(applicationStatusGroup,user,StartIndex,maxNumberOfRecords);
-            /*for(int i = 0; i < output.size(); i++)
-            {
-                if(output.get(i).getGrantHolderID() != user)
-                {
-                    output.remove(i);
-                    i--;
-                }
-            }*/
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
@@ -171,14 +163,6 @@ public class ApplicationServicesUtil {
                     }
                 }
             }
-            /*for(int i = 0; i < output.size(); i++)
-            {
-                if(output.get(i).getGrantHolderID().getLocationID().getDepartment().equals(userDepartment))
-                {
-                    output.remove(i);
-                    i--;
-                }
-            }*/
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
@@ -206,18 +190,15 @@ public class ApplicationServicesUtil {
                     }
                 }
             }
-            /*for(int i = 0; i < output.size(); i++)
-            {
-                if(output.get(i).getGrantHolderID().getLocationID().getFaculty().equals(userFaculty))
-                {
-                    output.remove(i);
-                    i--;
-                }
-            }*/
         }
         else
         {
             output = applicationJpaController.findAllApplicationsWithStatus(applicationStatusGroup,StartIndex,maxNumberOfRecords);
+        }
+        
+        if(output == null)
+        {
+            output = new ArrayList<Application>();
         }
         
         return output;

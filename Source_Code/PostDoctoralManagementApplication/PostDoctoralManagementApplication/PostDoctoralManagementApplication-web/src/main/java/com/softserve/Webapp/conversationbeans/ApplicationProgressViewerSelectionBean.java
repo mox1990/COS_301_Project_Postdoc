@@ -4,21 +4,23 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.Webapp.requestbeans;
+package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.ApplicationProgressViewerServiceLocal;
+import com.softserve.system.Session;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,63 +29,64 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value="applicationProgressViewerSelectionRequest")
-@RequestScoped
-public class ApplicationProgressViewerSelectionRequest {
+@Named(value="applicationProgressViewerSelectionBean")
+@ConversationScoped
+public class ApplicationProgressViewerSelectionBean implements Serializable {
+    
     @Inject
     private SessionManagerBean sessionManagerBean;
-    @Inject
+    @Inject 
     private NavigationManagerBean navigationManagerBean;
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private ApplicationFilterDependBean applicationFilterDependBeanFellow;
+    @Inject
+    private ApplicationFilterDependBean applicationFilterDependBeanGrantHolder;
+    @Inject
+    private ApplicationFilterDependBean applicationFilterDependBeanAll;
+    @Inject
+    private Conversation conversation;
+    
     @EJB
     private ApplicationProgressViewerServiceLocal applicationProgressViewerServiceLocal;
     
-    public List<Application> getFellowApplications()
+    @PostConstruct
+    public void init()
     {
-        try 
+        conversationManagerBean.registerConversation(conversation);
+        conversationManagerBean.startConversation(conversation);
+        try
         {
-            return sessionManagerBean.getSession().getUser().getApplicationList1();
-        } 
-        catch (Exception ex) 
+            Session session = sessionManagerBean.getSession();
+            applicationFilterDependBeanFellow.init(session.getUser().getApplicationList1());
+            applicationFilterDependBeanGrantHolder.init(session.getUser().getApplicationList2());
+            applicationFilterDependBeanAll.init(applicationProgressViewerServiceLocal.getAllApplications(session));
+        }
+        catch(Exception ex)
         {
-            ExceptionUtil.logException(ApplicationProgressViewerSelectionRequest.class, ex);
-            ExceptionUtil.handleException(null, ex);   
-            return new ArrayList<Application>();
+            ExceptionUtil.logException(ApplicationProgressViewerSelectionBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
         }
     }
-    
-    public List<Application> getGrantHolderApplications()
-    {
-        try 
-        {
-            return sessionManagerBean.getSession().getUser().getApplicationList2();
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.logException(ApplicationProgressViewerSelectionRequest.class, ex);
-            ExceptionUtil.handleException(null, ex);   
-            return new ArrayList<Application>();
-        }
+
+    public ApplicationFilterDependBean getApplicationFilterDependBeanAll() {
+        return applicationFilterDependBeanAll;
     }
-    
-    public List<Application> getAllApplications()
-    {
-        try 
-        {
-            return applicationProgressViewerServiceLocal.getAllApplications(sessionManagerBean.getSession());
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.logException(ApplicationProgressViewerSelectionRequest.class, ex);
-            ExceptionUtil.handleException(null, ex);   
-            return new ArrayList<Application>();
-        }
+
+    public ApplicationFilterDependBean getApplicationFilterDependBeanFellow() {
+        return applicationFilterDependBeanFellow;
     }
-    
+
+    public ApplicationFilterDependBean getApplicationFilterDependBeanGrantHolder() {
+        return applicationFilterDependBeanGrantHolder;
+    }
+        
     public String viewApplication(Application application)
     {
         sessionManagerBean.clearSessionStorage();
         sessionManagerBean.addObjectToSessionStorage("APPLICATION",application);
-        
+        conversationManagerBean.deregisterConversation(conversation);
         return navigationManagerBean.goToApplicationProgressViewerApplicationProgressView();
     }
     
@@ -99,7 +102,7 @@ public class ApplicationProgressViewerSelectionRequest {
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.logException(ApplicationProgressViewerSelectionRequest.class, ex);
+            ExceptionUtil.logException(ApplicationProgressViewerSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);   
             return false;
         }
@@ -113,7 +116,7 @@ public class ApplicationProgressViewerSelectionRequest {
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.logException(ApplicationProgressViewerSelectionRequest.class, ex);
+            ExceptionUtil.logException(ApplicationProgressViewerSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);   
             return false;
         }
@@ -131,7 +134,7 @@ public class ApplicationProgressViewerSelectionRequest {
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.logException(ApplicationProgressViewerSelectionRequest.class, ex);
+            ExceptionUtil.logException(ApplicationProgressViewerSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);   
             return false;
         }

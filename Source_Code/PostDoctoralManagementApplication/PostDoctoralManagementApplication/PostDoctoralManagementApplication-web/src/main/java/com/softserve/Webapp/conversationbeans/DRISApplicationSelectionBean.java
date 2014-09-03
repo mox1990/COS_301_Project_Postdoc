@@ -12,12 +12,16 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.RefereeReportServiceLocal;
+import com.softserve.ejb.DRISApprovalServiceLocal;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -26,9 +30,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "refereeApplicationSelectionBean")
+@Named(value = "drisApplicationSelectionBean")
 @ConversationScoped
-public class RefereeApplicationSelectionBean implements Serializable {
+public class DRISApplicationSelectionBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -37,17 +41,19 @@ public class RefereeApplicationSelectionBean implements Serializable {
     @Inject
     private ConversationManagerBean conversationManagerBean;
     @Inject
-    private ApplicationFilterDependBean applicationFilterDependBean;
+    private ApplicationFilterDependBean applicationFilterDependBeanEndorsed;
+    @Inject
+    private ApplicationFilterDependBean applicationFilterDependBeanEligible;
     @Inject
     private Conversation conversation;
-    
+
     @EJB
-    private RefereeReportServiceLocal refereeReportServiceLocal;
+    private DRISApprovalServiceLocal dRISApprovalServiceLocal;
     
     /**
-     * Creates a new instance of refereeApplicationSelectionRequestBean
+     * Creates a new instance of HODApplicationSelectionRequestBean
      */
-    public RefereeApplicationSelectionBean() {
+    public DRISApplicationSelectionBean() {
     }
     
     @PostConstruct
@@ -57,23 +63,24 @@ public class RefereeApplicationSelectionBean implements Serializable {
         conversationManagerBean.startConversation(conversation);
         try
         {
-            applicationFilterDependBean.init(refereeReportServiceLocal.loadPendingApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
+            applicationFilterDependBeanEndorsed.init(dRISApprovalServiceLocal.loadPendingEndorsedApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
+            applicationFilterDependBeanEligible.init(dRISApprovalServiceLocal.loadPendingEligibleApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
         }
         catch(Exception ex)
         {
-            ExceptionUtil.logException(RefereeApplicationSelectionBean.class, ex);
+            ExceptionUtil.logException(null, ex);
             ExceptionUtil.handleException(null, ex);
         }
     }
-    
-    public ApplicationFilterDependBean getApplicationFilterDependBean() {
-        return applicationFilterDependBean;
+
+    public ApplicationFilterDependBean getApplicationFilterDependBeanEligible() {
+        return applicationFilterDependBeanEligible;
     }
 
-    public void setApplicationFilterDependBean(ApplicationFilterDependBean applicationFilterDependBean) {
-        this.applicationFilterDependBean = applicationFilterDependBean;
+    public ApplicationFilterDependBean getApplicationFilterDependBeanEndorsed() {
+        return applicationFilterDependBeanEndorsed;
     }
-    
+            
     public void selectApplication(Application application)
     {
         sessionManagerBean.addObjectToSessionStorage("APPLICATION",application);
@@ -83,6 +90,6 @@ public class RefereeApplicationSelectionBean implements Serializable {
     {
         selectApplication(application);
         conversationManagerBean.deregisterConversation(conversation);
-        return navigationManagerBean.goToRefereeReportServiceReportCreationView();
+        return navigationManagerBean.goToDRISApprovalServiceApplicationViewer();
     }
 }

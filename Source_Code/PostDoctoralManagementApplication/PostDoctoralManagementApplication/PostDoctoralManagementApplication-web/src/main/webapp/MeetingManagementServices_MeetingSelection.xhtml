@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Meeting selection"/>
         
@@ -11,43 +12,83 @@
             <div>
                 <h1 class="header1">Meeting selection menu</h1>
                 <h2>Click on the application for more details</h2>
-            </div>
-            <h:form id="meetingForm" >                
-                <p:outputPanel id="meetingsList">
-                    <p:outputPanel rendered="#{meetingSelectionRequestBean.userDRIS}">
-                        <h1 class="header1">Meetings that have not been held</h1>
-                        <ui:decorate template="templates/MeetingLister_Component.xhtml">
-                            <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.stillToBeHeldMeetings}"/>
-                            <ui:define name="commandButtons">
-                                <p:commandButton value="Edit meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.editMeeting(meeting)}" ajax="false"/>
-                                <p:commandButton value="Cancel meeting" styleClass="button button-fill" actionListener="#{meetingSelectionRequestBean.cancelMeeting(meeting)}" update=":meetingForm:meetingsList"/> 
-                                <p:commandButton value="Start meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.openMeeting(meeting)}" ajax="false"/> 
-                            </ui:define>
-                        </ui:decorate>
+            </div>              
+                    <p:outputPanel rendered="#{meetingSelectionBean.userDRIS}">
+                        <h1 class="header1-1">Meetings that have not been held</h1>
+                        <p:panel  toggleable="true" header="Click to collapse or expand list">
+                            <ui:decorate template="templates/filterSearch_Component.xhtml">
+                                <ui:param name="prefix" value="NH"/>
+                                <ui:param name="updatableItems" value=":notheldMeetings"/>
+                                <ui:param name="bean" value="#{meetingSelectionBean.meetingFilterDependBeanStillToBeHeld}"/>
+                            </ui:decorate>
+                            <h:form id="notheldMeetings">
+                                <ui:decorate template="templates/MeetingLister_Component.xhtml">
+                                    <ui:param name="meetingsList" value="#{meetingSelectionBean.meetingFilterDependBeanStillToBeHeld.filteredList}"/>
+                                    <ui:define name="commandButtons">
+                                        <p:commandButton value="Edit meeting" styleClass="button button-fill" action="#{meetingSelectionBean.editMeeting(meeting)}" ajax="false"/>
+                                        <p:commandButton value="Cancel meeting" styleClass="button button-fill" actionListener="#{meetingSelectionBean.cancelMeeting(meeting)}" update="@all">
+                                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                                            <p:confirm header="Confirmation" message="Are you sure that you wish to cancel this meeting?" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                        <p:commandButton value="Start meeting now" styleClass="button button-fill" action="#{meetingSelectionBean.openMeeting(meeting)}" update="@all">
+                                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                                            <p:confirm header="Confirmation" message="Are you sure that you wish to start this meeting now?" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </ui:define>
+                                </ui:decorate>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </h:form>
+                        </p:panel>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{true}">
-                        <h1 class="header1">Meetings that are currently active</h1>
-                        <ui:decorate template="templates/MeetingLister_Component.xhtml">
-                            <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.activeMeetings}"/>
-                            <ui:define name="commandButtons">
-                                <p:commandButton value="Comment on meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.commentOnMeeting(meeting)}" ajax="false"/>
-                                <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingSelectionRequestBean.closeMeeting(meeting)}" ajax="false"/>
-                            </ui:define>
-                        </ui:decorate>
+                        <h1 class="header1-1">Meetings that are currently active</h1>
+                        <p:panel  toggleable="true" header="Click to collapse or expand list">
+                            <ui:decorate template="templates/filterSearch_Component.xhtml">
+                                <ui:param name="prefix" value="ACT"/>
+                                <ui:param name="updatableItems" value=":activeMeetings"/>
+                                <ui:param name="bean" value="#{meetingSelectionBean.meetingFilterDependBeanActive}"/>
+                            </ui:decorate>
+                            <h:form id="activeMeetings">
+                                <ui:decorate template="templates/MeetingLister_Component.xhtml">
+                                    <ui:param name="meetingsList" value="#{meetingSelectionBean.meetingFilterDependBeanActive.filteredList}"/>
+                                    <ui:define name="commandButtons">
+                                        <p:commandButton value="Comment on meeting" styleClass="button button-fill" action="#{meetingSelectionBean.commentOnMeeting(meeting)}" ajax="false"/>
+                                        <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingSelectionBean.closeMeeting(meeting)}" update="@all">
+                                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                                            <p:confirm header="Confirmation" message="Are you sure that you wish to conclude this meeting now?" icon="ui-icon-alert"/>
+                                        </p:commandButton>
+                                    </ui:define>
+                                </ui:decorate>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </h:form>
+                        </p:panel>
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="#{meetingSelectionRequestBean.userDRIS}">
-                        <h1 class="header1">Meetings that have been concluded</h1>
-                        <ui:decorate template="templates/MeetingLister_Component.xhtml">
-                            <ui:param name="meetingsList" value="#{meetingSelectionRequestBean.concludedMeetings}"/>
-                            <ui:define name="commandButtons">
-                                <p:commandButton value="View meeting" styleClass="button button-fill" action="#{meetingSelectionRequestBean.viewMeeting(meeting)}" ajax="false"/> 
-                            </ui:define>
-                        </ui:decorate>
+                    <p:outputPanel rendered="#{meetingSelectionBean.userDRIS}">
+                        <h1 class="header1-1">Meetings that have been concluded</h1>
+                        <p:panel  toggleable="true" header="Click to collapse or expand list">
+                            <ui:decorate template="templates/filterSearch_Component.xhtml">
+                                <ui:param name="prefix" value="CON"/>
+                                <ui:param name="updatableItems" value=":concludedMeetings"/>
+                                <ui:param name="bean" value="#{meetingSelectionBean.meetingFilterDependBeanConcluded}"/>
+                            </ui:decorate>
+                            <h:form id="concludedMeetings">
+                                <ui:decorate template="templates/MeetingLister_Component.xhtml">
+                                    <ui:param name="meetingsList" value="#{meetingSelectionBean.meetingFilterDependBeanConcluded.filteredList}"/>
+                                    <ui:define name="commandButtons">
+                                        <p:commandButton value="View meeting" styleClass="button button-fill" action="#{meetingSelectionBean.viewMeeting(meeting)}" ajax="false"/> 
+                                    </ui:define>
+                                </ui:decorate>
+                            </h:form>
+                        </p:panel>
                     </p:outputPanel>
-                </p:outputPanel>
-            </h:form>
         </ui:define>
     </ui:composition>
 </html>

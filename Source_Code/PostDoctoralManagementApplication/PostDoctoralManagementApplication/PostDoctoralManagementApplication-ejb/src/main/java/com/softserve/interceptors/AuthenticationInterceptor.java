@@ -122,7 +122,7 @@ public class AuthenticationInterceptor {
                     }
                 }
                 
-                context.proceed();
+                result = context.proceed();
             }
             else
             {

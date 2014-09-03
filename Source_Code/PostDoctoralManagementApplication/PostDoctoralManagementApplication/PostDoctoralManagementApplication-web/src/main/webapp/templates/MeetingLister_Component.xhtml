@@ -18,10 +18,9 @@
                     <p:tab title="Meeting - #{meeting.meetingID}" >
                         <ui:decorate template="MeetingViewer_Component.xhtml">
                             <ui:param name="meeting" value="#{meeting}"/>
-                        </ui:decorate>
-                        <h:form>
-                            <ui:insert name="commandButtons"/>                            
-                        </h:form>
+                        </ui:decorate>                        
+                        <ui:insert name="commandButtons"/>                           
+                        
                     </p:tab>
                 </p:accordionPanel>
             </c:if>
