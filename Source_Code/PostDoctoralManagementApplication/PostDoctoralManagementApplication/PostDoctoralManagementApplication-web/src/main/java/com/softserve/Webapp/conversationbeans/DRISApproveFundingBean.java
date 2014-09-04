@@ -10,6 +10,7 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
+import com.softserve.DBEntities.ResearchFellowInformation;
 import com.softserve.Webapp.depenedentbeans.FundingReportCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
@@ -52,10 +53,7 @@ public class DRISApproveFundingBean implements Serializable{
     @EJB
     private DRISApprovalServiceLocal dRISApprovalServiceLocal;
     
-    private UIComponent errorContainer;
-    
-    
-    
+    private ResearchFellowInformation researchFellowInformation;
     private String applicantMessage;
     private Notification cscMessage;
     private Notification financeMessage;
@@ -84,14 +82,6 @@ public class DRISApproveFundingBean implements Serializable{
         cscMessage.setReciever(new Person());
         financeMessage.setReciever(new Person());
     }            
-            
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    }
 
     public FundingReportCreationDependBean getFundingReportCreationDependBean() {
         return fundingReportCreationDependBean;
