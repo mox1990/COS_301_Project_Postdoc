@@ -6,6 +6,7 @@
 
 package com.softserve.ejb;
 
+import com.softserve.system.Session;
 import java.io.IOException;
 import javax.ejb.Local;
 
@@ -16,8 +17,8 @@ import javax.ejb.Local;
  */
 @Local
 public interface ArchivalServiceLocal {
-    public void backupDatabase();
-    public void archiveOldInformation();
-    public void retrieveArchievedInformation(String filename) throws IOException;
-    public void restoreDatabase();
+    public void backupDatabase(Session session);
+    public void archiveOldInformation(Session session);
+    public void retrieveArchievedInformation(Session session);
+    public void restoreBackupToWorkingDatabase(Session session);
 }
