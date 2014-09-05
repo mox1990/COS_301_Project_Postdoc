@@ -8,13 +8,6 @@
     <ui:component>
         <h:form>
             <p:outputPanel id="experiences">
-                <p:outputPanel id="experiencesTable">
-                    <ui:decorate template="workExpericenceDataTableInput_Component.xhtml">
-                        <ui:param name="header" value="Work experience already added"/>
-                        <ui:param name="experienceList" value="#{experienceList}"/>
-                        <ui:param name="selectedExperienceList" value="#{selectedExperienceList}"/>
-                    </ui:decorate>
-                </p:outputPanel>
                 <div>
 
                     <h:panelGrid columns="3" cellpadding="5">
@@ -42,6 +35,13 @@
                     <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionAdd]}" value="Add work experience" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
+                    <p:outputPanel id="experiencesTable">
+                        <ui:decorate template="workExpericenceDataTableInput_Component.xhtml">
+                            <ui:param name="header" value="Work experience already added"/>
+                            <ui:param name="experienceList" value="#{experienceList}"/>
+                            <ui:param name="selectedExperienceList" value="#{selectedExperienceList}"/>
+                        </ui:decorate>
+                    </p:outputPanel>
                     <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionRemove]}" value="Remove selected work experience" styleClass="button button-fill" process="@this experiencesTable">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>

@@ -60,6 +60,7 @@ import com.softserve.DBEntities.RecommendationReport;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.ResearchFellowInformation;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.annotations.SecuredMethod;
 import com.softserve.constants.PersistenceConstants;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -75,6 +76,8 @@ import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -84,6 +87,7 @@ import javax.persistence.PersistenceUnit;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ArchivalService implements ArchivalServiceLocal {
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME)
@@ -238,8 +242,10 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
     @Override
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     public void backupDatabase(Session session)
     {
+        System.out.println("Running Backup...");
         // Setup Working DAOs...
         AcademicQualificationJpaController workingAcademicQualificationJpaController = getAcademicQualificationJpaController(emfWorking);
         AddressJpaController workingAddressJpaController = getAddressJpaController(emfWorking);
@@ -638,6 +644,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         
         for(Person item: workingPersonJpaController.findPersonEntities())
         {
+            System.out.println("Found: " + item.toString());
             try {
                 if(backupPersonJpaController.findPerson(item.getSystemID()) == null)
                 {
@@ -735,18 +742,21 @@ public class ArchivalService implements ArchivalServiceLocal {
     }    
     
     //@Schedule(dayOfWeek="Sat", hour="2", info = "Daily backup of the database.")
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void archiveOldInformation(Session session)
     {
         
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void retrieveArchievedInformation(Session session)
     {
         
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void restoreBackupToWorkingDatabase(Session session)
     {
