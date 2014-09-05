@@ -10,7 +10,16 @@
         
         <ui:define name="pageBody">
             
-            
+            <h:form>
+                <p:panel id="cvInfo" header="Archivals">                     
+                    <p:commandButton value="Backup Database" ajax="false" styleClass="button button-fill">
+                        <p:fileDownload value="#{archivalBean.backupDB()}" />
+                    </p:commandButton>
+                    <p:commandButton value="Restore Database" ajax="false" styleClass="button button-fill">
+                        <p:fileDownload value="#{archivalBean.restoreDB()}" />
+                    </p:commandButton>
+                </p:panel>
+            </h:form>
 
         </ui:define>
     </ui:composition>

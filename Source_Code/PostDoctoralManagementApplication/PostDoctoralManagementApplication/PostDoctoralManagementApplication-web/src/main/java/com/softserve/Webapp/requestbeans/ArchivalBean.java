@@ -38,7 +38,7 @@ public class ArchivalBean {
     {
         try
         {
-            archivalServiceLocal.backupDatabase();
+            archivalServiceLocal.restoreBackupToWorkingDatabase(sessionManagerBean.getSession());
         }
         catch(Exception ex)
         {
@@ -51,7 +51,7 @@ public class ArchivalBean {
         
         try
         {
-            archivalServiceLocal.restoreDatabase();
+            archivalServiceLocal.backupDatabase(sessionManagerBean.getSession());
         }
         catch(Exception ex)
         {
@@ -63,7 +63,7 @@ public class ArchivalBean {
     {
         try
         {
-            archivalServiceLocal.retrieveArchievedInformation(file);
+            archivalServiceLocal.retrieveArchievedInformation(sessionManagerBean.getSession());
         }
         catch(Exception ex)
         {
