@@ -333,6 +333,16 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         FundingCostJpaController fundingCostJpaController = getFundingCostDAO();
         
+        Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());
+                
+        
+        //Set application status to funded
+        oldApplication.setStartDate(application.getStartDate());
+        oldApplication.setEndDate(application.getEndDate());
+        oldApplication.setFundingReport(null);
+        oldApplication.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
+        applicationJpaController.edit(oldApplication);
+        
         List<FundingCost> fundingCosts = fundingReport.getFundingCostList();
         
         //Create funding report
@@ -340,6 +350,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         fundingReport.setReportID(application.getApplicationID());
         fundingReport.setDris(session.getUser());
         fundingReport.setTimestamp(getGregorianCalendar().getTime());
+        fundingReport.setFundingCostList(null);
         fundingReportJpaController.create(fundingReport);
         
         for(FundingCost fundingCost : fundingCosts)
@@ -347,23 +358,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             fundingCost.setFundingReport(fundingReport);
             fundingCostJpaController.create(fundingCost);
         }
-        
-        application = applicationJpaController.findApplication(application.getApplicationID());
-        
-        //Set application status to funded
-        application.setFundingReport(fundingReport);
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
-        
-        try
-        {
-            applicationJpaController.edit(application);
-        }
-        catch(Exception ex)
-        {
-            //If an error occurs during update of application the recommendation report must be removed as well
-            fundingReportJpaController.destroy(fundingReport.getReportID());
-            throw ex;
-        }
+  
         
         PersonJpaController personJpaController = getPersonDAO();
         Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
@@ -372,13 +367,19 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
         }
         
+        
+        researchFellowInformation.setPerson(fellow);
+        researchFellowInformation.setSystemAssignedID(fellow.getSystemID());
+        
         if(fellow.getResearchFellowInformation() == null)
         {
             getResearchFellowInformationDAO().create(researchFellowInformation);
         }
+        else
+        {
+            getResearchFellowInformationDAO().edit(researchFellowInformation);
+        }       
         
-        fellow.setResearchFellowInformation(researchFellowInformation);
-        personJpaController.edit(fellow);
 
         //Send notification to CSC, Finance, grant holder and applicatant
         ArrayList<Notification> notifications = new ArrayList<Notification>();        
@@ -451,13 +452,24 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
         }
         
+        researchFellowInformation.setPerson(fellow);
+        researchFellowInformation.setSystemAssignedID(fellow.getSystemID());
+        
         if(fellow.getResearchFellowInformation() == null)
         {
             getResearchFellowInformationDAO().create(researchFellowInformation);
         }
+        else
+        {
+            getResearchFellowInformationDAO().edit(researchFellowInformation);
+        } 
         
-        fellow.setResearchFellowInformation(researchFellowInformation);
-        personJpaController.edit(fellow);
+        Application oldApplication  = getApplicationDAO().findApplication(application.getApplicationID());                
+        
+        oldApplication.setStartDate(application.getStartDate());
+        oldApplication.setEndDate(application.getEndDate());       
+        
+        getApplicationDAO().edit(oldApplication);
 
     }
     

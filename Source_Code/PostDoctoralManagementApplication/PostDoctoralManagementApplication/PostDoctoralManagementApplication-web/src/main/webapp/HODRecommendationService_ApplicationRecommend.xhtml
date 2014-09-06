@@ -60,7 +60,7 @@
                     </ui:decorate> 
                     
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                         <p:confirm header="Application decline confirmation" message="Are you sure you wish to recommend this application?" icon="ui-icon-alert"/>
                     </p:commandButton>

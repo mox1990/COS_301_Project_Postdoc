@@ -3,11 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>            
             <h:panelGrid columns="2" cellpadding="10px">
                 <h:outputText styleClass="text-label" value="Report creation date:"/>
-                <h:outputText value="#{report.timestamp}"/> 
+                <h:outputText value="#{report.timestamp}">
+                    <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+                </h:outputText> 
                 <h:outputText styleClass="text-label" value="Referee name:"/>
                 <h:outputText value="#{report.referee.completeName}"/> 
                 <h:outputText styleClass="text-label" value="Referee email:"/>

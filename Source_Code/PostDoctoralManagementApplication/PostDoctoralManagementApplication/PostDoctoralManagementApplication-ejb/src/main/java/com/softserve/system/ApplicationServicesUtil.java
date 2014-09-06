@@ -307,7 +307,7 @@ public class ApplicationServicesUtil {
         
         //Set application status
         application.setSubmissionDate(getGregorianCalendar().getTime());
-        if(application.getRefereeReportList().size() == application.getPersonList().size())
+        if(!application.getFundingType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC) || application.getRefereeReportList().size() == application.getPersonList().size())
         {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }

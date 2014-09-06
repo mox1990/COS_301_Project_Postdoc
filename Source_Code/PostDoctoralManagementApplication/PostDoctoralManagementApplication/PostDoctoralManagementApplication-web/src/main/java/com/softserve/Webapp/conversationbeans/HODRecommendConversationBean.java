@@ -121,8 +121,9 @@ public class HODRecommendConversationBean implements Serializable{
         try
         {
             recommendationReport.setContentXMLEntity(recommendationReportContent);
-            hodRecommendationServicesLocal.requestSpecificDeanToReview(sessionManagerBean.getSession(), getSelectedApplication(), applicationReviewRequestCreationDependBean.getPerson());
-            hodRecommendationServicesLocal.recommendApplication(sessionManagerBean.getSession(), getSelectedApplication(), recommendationReport);
+            Application application = getSelectedApplication();
+            hodRecommendationServicesLocal.requestSpecificDeanToReview(sessionManagerBean.getSession(), application, applicationReviewRequestCreationDependBean.getPerson());
+            hodRecommendationServicesLocal.recommendApplication(sessionManagerBean.getSession(), application, recommendationReport);
             return navigationManagerBean.goToHODApplicationSelectionView();
         }
         catch(Exception ex)

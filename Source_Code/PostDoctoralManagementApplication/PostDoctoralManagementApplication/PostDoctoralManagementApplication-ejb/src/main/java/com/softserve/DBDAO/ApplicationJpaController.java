@@ -200,11 +200,11 @@ public class ApplicationJpaController implements Serializable {
                 fundingReport = em.merge(fundingReport);
             }
             if (fellow != null) {
-                fellow.getApplicationList().add(application);
+                fellow.getApplicationList1().add(application);
                 fellow = em.merge(fellow);
             }
             if (grantHolder != null) {
-                grantHolder.getApplicationList().add(application);
+                grantHolder.getApplicationList2().add(application);
                 grantHolder = em.merge(grantHolder);
             }
             if (eligiblityReport != null) {
@@ -507,19 +507,19 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportNew = em.merge(fundingReportNew);
             }
             if (fellowOld != null && !fellowOld.equals(fellowNew)) {
-                fellowOld.getApplicationList().remove(application);
+                fellowOld.getApplicationList1().remove(application);
                 fellowOld = em.merge(fellowOld);
             }
             if (fellowNew != null && !fellowNew.equals(fellowOld)) {
-                fellowNew.getApplicationList().add(application);
+                fellowNew.getApplicationList1().add(application);
                 fellowNew = em.merge(fellowNew);
             }
             if (grantHolderOld != null && !grantHolderOld.equals(grantHolderNew)) {
-                grantHolderOld.getApplicationList().remove(application);
+                grantHolderOld.getApplicationList2().remove(application);
                 grantHolderOld = em.merge(grantHolderOld);
             }
             if (grantHolderNew != null && !grantHolderNew.equals(grantHolderOld)) {
-                grantHolderNew.getApplicationList().add(application);
+                grantHolderNew.getApplicationList2().add(application);
                 grantHolderNew = em.merge(grantHolderNew);
             }
             if (eligiblityReportNew != null && !eligiblityReportNew.equals(eligiblityReportOld)) {
@@ -720,12 +720,12 @@ public class ApplicationJpaController implements Serializable {
             }
             Person fellow = application.getFellow();
             if (fellow != null) {
-                fellow.getApplicationList().remove(application);
+                fellow.getApplicationList1().remove(application);
                 fellow = em.merge(fellow);
             }
             Person grantHolder = application.getGrantHolder();
             if (grantHolder != null) {
-                grantHolder.getApplicationList().remove(application);
+                grantHolder.getApplicationList2().remove(application);
                 grantHolder = em.merge(grantHolder);
             }
             List<Person> personList = application.getPersonList();

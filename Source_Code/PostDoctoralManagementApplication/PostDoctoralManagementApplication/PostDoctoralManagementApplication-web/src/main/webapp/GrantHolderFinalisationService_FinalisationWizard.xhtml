@@ -68,7 +68,7 @@
                                     </ui:decorate>                                    
                                     
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton process="@form" update="@all" action="#{grantHolderFinalisationWizardBean.finaliseApplication()}" value="Confirm application finalisation" styleClass="button button-fill">
+                                    <p:commandButton process="@form" update="@form" action="#{grantHolderFinalisationWizardBean.finaliseApplication()}" value="Confirm application finalisation" styleClass="button button-fill">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                         <p:confirm header="Application submission confirmation" message="Are you sure you wish to finalise this application? Note: Finalising this application means you agree with the DRIS fellowship application policy and that the information is correct. Warning: Once finalised the application cannot be edited by you." icon="ui-icon-alert"/>
                                     </p:commandButton>

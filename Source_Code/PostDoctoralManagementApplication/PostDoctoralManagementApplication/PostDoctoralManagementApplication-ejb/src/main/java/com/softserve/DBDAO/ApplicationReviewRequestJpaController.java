@@ -259,4 +259,14 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         return (people != null)?people:new ArrayList<Person>();
     }
     
+    public List<ApplicationReviewRequest> findAllRequestsThatHaveBeenRequestForApplicationAs(Application application, String type)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<ApplicationReviewRequest> q = em.createQuery("SELECT r FROM ApplicationReviewRequest r WHERE r.application1 = :app AND r.applicationReviewRequestPK.type = :type", ApplicationReviewRequest.class).setParameter("app", application).setParameter("type", type);
+       
+        List<ApplicationReviewRequest> applicationReviewRequests = q.getResultList();
+        return (applicationReviewRequests != null)?applicationReviewRequests:new ArrayList<ApplicationReviewRequest>();
+    }
+    
 }

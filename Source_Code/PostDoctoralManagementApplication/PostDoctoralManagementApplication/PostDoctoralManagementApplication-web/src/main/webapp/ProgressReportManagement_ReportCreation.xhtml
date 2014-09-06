@@ -17,7 +17,14 @@
                 </ui:decorate>
                 <h:form>
                     <p:growl sticky="true" showDetail="true" globalOnly="true"/>
-                    <p:commandButton value="Create progress report" styleClass="button button-fill" action="#{progressReportCreationBean.preformProgressReportCreationRequest()}"/> 
+                    <p:commandButton value="Create progress report" action="#{progressReportCreationBean.preformProgressReportCreationRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                        <p:confirm header="Create progress report confirmation" message="Are you sure you wish to create a progress report for the application? Warning: This report can not be modified after it is created." icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
         </ui:define>
     </ui:composition>

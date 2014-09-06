@@ -14,11 +14,10 @@
             </div>
             <div>
                 <h:form>
-                    <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Starting date and time:" for="startDate"/>                                
-                        <p:calendar id="startDate" value="#{meetingEditBean.committeeMeeting.startDate}" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
-                        <p:message for="startDate" styleClass="fieldErrorMessage"/>                                                                        
-                    </h:panelGrid>
+                    <ui:decorate template="templates/meetingFieldInput_Component.xhtml">
+                        <ui:param name="committeeMeeting" value="#{meetingEditBean.committeeMeeting}"/>
+                    </ui:decorate>
+                    
                     <ui:decorate template="templates/AttendenceListInput_Component.xhtml">
                         <ui:param name="attendenceSelectionList" value="#{meetingEditBean.attendeesSelectionList}"/>
                         <ui:param name="selectedAttendees" value="#{meetingEditBean.selectedAttendeesList}"/>
@@ -27,7 +26,15 @@
                         <ui:param name="applicationsSelectionList" value="#{meetingEditBean.appliationSelectionList}"/>
                         <ui:param name="selectedApplications" value="#{meetingEditBean.selectedApplicationList}"/>
                     </ui:decorate>
-                    <p:commandButton value="Save changes" action="#{meetingEditBean.performMeetingUpdateRequest()}" ajax="false" styleClass="button button-fill"/>
+                    <p:growl sticky="true" showDetail="true" globalOnly="false"/>
+                    <p:commandButton value="Save changes" action="#{meetingEditBean.performMeetingUpdateRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                        <p:confirm header="Save changes confirmation" message="Are you sure you wish to save changes for this meeting?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
         </ui:define>

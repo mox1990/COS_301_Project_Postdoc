@@ -83,12 +83,12 @@ public class Session {
     
     public boolean doesHttpSessionUsernameMatchUserUsername()
     {
-        return (user.getSystemID().toLowerCase().equals(getHttpSessionUsername().toLowerCase()));
+        return (user.getSystemID().toLowerCase().equals(getHttpSessionUsername().toLowerCase()) || (user.getResearchFellowInformation() != null && user.getResearchFellowInformation().getInstitutionAssignedID().toLowerCase().equals(getHttpSessionUsername().toLowerCase())));
     }
     
     public boolean doesHttpSessionUsernameMatchUserEmail()
     {
-        return (user.getEmail().toLowerCase().equals(getHttpSessionUsername().toLowerCase()));
+        return (user.getEmail().toLowerCase().equals(getHttpSessionUsername().toLowerCase()) || (user.getResearchFellowInformation() != null && user.getResearchFellowInformation().getInstitutionAssignedEmail().toLowerCase().equals(getHttpSessionUsername().toLowerCase())));
     }
     
     public boolean doesHttpSessionPasswordMatchUserPassword()

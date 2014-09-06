@@ -245,6 +245,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         recommendationReport.setApplication(application);
         recommendationReportJpaController.create(recommendationReport);
         
+        application = applicationJpaController.findApplication(application.getApplicationID());
+        
         application.setRecommendationReport(recommendationReport);
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
         
@@ -286,12 +288,18 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
     {        
-        List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
-        
-        if(requestAlreadyFound != null & requestAlreadyFound.size() > 0)
+        List<ApplicationReviewRequest> applicationReviewRequests = getApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
+        if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
         {
-            throw new Exception("A request for Dean reviewal has already been made");
+            for(ApplicationReviewRequest applicationReviewRequest : applicationReviewRequests)
+            {
+                applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
+            }
         }
+        
+        application = getApplicationDAO().findApplication(application.getApplicationID());
+        
         dean.setUpEmployee(true);
         if(dean.getEmployeeInformation() == null)
         {
@@ -307,7 +315,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         }
         else
         {
-            application = getApplicationDAO().findApplication(application.getApplicationID());
+            
             dean = getPersonDAO().findPerson(dean.getSystemID());
             
             if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
@@ -327,6 +335,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, dean, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
         
-        getApplicationReviewRequestDAO().create(applicationReviewRequest);
+        applicationReviewRequestJpaController.create(applicationReviewRequest);
     }
 }

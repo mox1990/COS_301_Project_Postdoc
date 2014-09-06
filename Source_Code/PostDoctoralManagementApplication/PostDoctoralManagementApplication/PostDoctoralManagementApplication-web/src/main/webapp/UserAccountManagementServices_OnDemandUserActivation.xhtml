@@ -61,7 +61,7 @@
                             </ui:decorate>                            
                         </p:outputPanel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                        <p:commandButton styleClass="button" value="Activate account" id="Activate" action="#{userAccountsPersonalAccountEditBean.performUserAccountActivation()}" process="@all" update="@all">                            
+                        <p:commandButton styleClass="button" value="Activate account" id="Activate" action="#{userAccountsPersonalAccountEditBean.performUserAccountActivation()}" process="@form" update="@form">                            
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                             <p:confirm header="Activation confirmation" message="Are you sure you wish to activate your account with the following details?" icon="ui-icon-alert"/>
                         </p:commandButton>

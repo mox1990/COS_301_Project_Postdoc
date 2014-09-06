@@ -2,26 +2,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">    
             <h:outputText styleClass="text-label" value="Creation date:"/>
-            <h:outputText value="#{fundingReport.timestamp}"/> 
+            <h:outputText value="#{fundingReport.timestamp}">
+                <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+            </h:outputText>
             <h:outputText styleClass="text-label" value="DRIS member name:"/>
             <h:outputText value="#{fundingReport.dris.completeName}"/>
             
-            <h:outputText styleClass="text-label" value="Fellowship cost (ZAR):"/>
-            <h:outputText value="R #{fundingReport.fellowshipCost}"/> 
-            <h:outputText styleClass="text-label" value="Operating cost (ZAR):"/>
-            <h:outputText value="R #{fundingReport.operatingCost}"/>
-            <h:outputText styleClass="text-label" value="Equipment cost (ZAR):"/>
-            <h:outputText value="R #{fundingReport.equipmentCost}"/>
-            <h:outputText styleClass="text-label" value="Travel cost (ZAR):"/>
-            <h:outputText value="R #{fundingReport.travelCost}"/>
-            <h:outputText styleClass="text-label" value="Running cost (ZAR):"/>
-            <h:outputText value="R #{fundingReport.runningCost}"/>
-            <h:outputText styleClass="text-label" value="Conference cost (ZAR):"/>
-            <h:outputText value="R #{fundingReport.conferenceCost}"/>
+            
         </h:panelGrid>
+        <ui:decorate template="FundingCostDataTable_Component.xhtml">
+                <ui:param name="fundingCosts" value="#{fundingReport.fundingCostList}"/>
+                <ui:param name="header" value="Funding costs"/>
+            </ui:decorate>
     </ui:component>
 </html>

@@ -22,8 +22,10 @@
             <ui:decorate template="researchOutputFieldInput_Component.xhtml">
                 <ui:param name="references" value="#{bean.progressReportContent.researchOutput.references}"/>
                 <ui:param name="currentReference" value="#{bean.currentReference}"/>
-                <ui:param name="bean" value="#{bean}"/>
-                <ui:param name="beanAction" value="addToResearchOutputList"/>
+                <ui:param name="bean" value="#{bean}"/>                
+                <ui:param name="selectedReferenceList" value="#{bean.selectedReferenceList}" />
+                <ui:param name="beanActionAdd" value="addToResearchOutputList"/>
+                <ui:param name="beanActionRemove" value="removeFromResearchOutputList"/>
                 <ui:param name="prefix" value="res"/>
             </ui:decorate>
         </p:panel>
@@ -33,16 +35,20 @@
                 <ui:param name="aims" value="#{bean.progressReportContent.projectAimsAttainment.aimAttainment}"/>
                 <ui:param name="currentAim" value="#{bean.currentAttainedAim}"/>
                 <ui:param name="bean" value="#{bean}"/>
-                <ui:param name="beanAction" value="addToAttainedAimsList"/>
+                <ui:param name="selectedAimList" value="#{bean.selectedAimList}"/>
+                <ui:param name="beanActionAdd" value="addToAttainedAimsList"/>
+                <ui:param name="beanActionRemove" value="removeFromAttainedAimsList"/>
             </ui:decorate>
         </p:panel>
 
         <p:panel header="Outcomes which were attained" toggleable="true" collapsed="true">
             <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
                 <ui:param name="expectedOutcomes" value="#{bean.progressReportContent.projectOutcomesAttainment.outcomeAttainment}"/>
+                <ui:param name="selectedOutcomeList" value="#{bean.selectedOutcomeList}"/>
                 <ui:param name="currentExpectedOutcome" value="#{bean.currentAttainedOutcome}"/>
                 <ui:param name="bean" value="#{bean}"/>
-                <ui:param name="beanAction" value="addToAttainedOutcomesList"/>
+                <ui:param name="beanActionAdd" value="addToAttainedOutcomesList"/>
+                <ui:param name="beanActionRemove" value="removeFromAttainedOutcomesList"/>
             </ui:decorate>
         </p:panel>
     </ui:component>

@@ -23,24 +23,17 @@ import javax.ejb.Local;
  */
 @Local
 public interface MeetingManagementServiceLocal {
-    public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception;
-    public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception;
-    public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception;
-    public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception;
-    public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws AuthenticationException, Exception;
-    public void addMinuteComment(Session session, MinuteComment minuteComment) throws AuthenticationException, Exception;
-    public List<CommitteeMeeting> getAllMeetings(Session session) throws AuthenticationException, Exception;
-    public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws AuthenticationException, Exception;
-    public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws AuthenticationException, Exception;
-    public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws AuthenticationException, Exception;
-    public List<Person> getAllPostDocCommitteeMembers(Session session) throws AuthenticationException, Exception;
-    /*public CommitteeMeeting startMeeting(Session sess) throws Exception;
-    public CommitteeMeeting endMeeting(Session sess) throws Exception;
-    public CommitteeMeeting addEndorsedApplication(Session sess) throws Exception;
-    public CommitteeMeeting addEndorsedRenewals(Session sess) throws Exception;
-    public CommitteeMeeting addMemberToMeeting(Session sess) throws Exception;
-    public CommitteeMeeting removeMemberFromMeeting(Session sess) throws Exception;
-    public List<Person> getAttendants();
-    public List<Application> getApplications();*/
+    public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception;
+    public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception;
+    public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception;
+    public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception;
+    public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception;
+    public void addMinuteComment(Session session, MinuteComment minuteComment) throws Exception;
+    public List<CommitteeMeeting> getAllMeetings(Session session) throws Exception;
+    public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws Exception;
+    public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws Exception;
+    public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws Exception;
+    public List<Person> getAllPostDocCommitteeMembers(Session session) throws Exception;
+    public List<CommitteeMeeting> getAllActiveMeetingsForWhichUserIsToAttend(Session session) throws Exception;
     
 }

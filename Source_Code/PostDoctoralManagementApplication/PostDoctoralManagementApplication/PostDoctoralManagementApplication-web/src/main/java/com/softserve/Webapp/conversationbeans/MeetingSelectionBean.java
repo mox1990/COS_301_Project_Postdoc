@@ -73,11 +73,12 @@ public class MeetingSelectionBean implements Serializable {
                 Session session = sessionManagerBean.getSession();
                 meetingFilterDependBeanStillToBeHeld.init(meetingManagementServiceLocal.getAllStillToBeHeldMeetings(session));
                 meetingFilterDependBeanConcluded.init(meetingManagementServiceLocal.getAllConcludedMeetings(session));
+                
                 meetingFilterDependBeanActive.init(meetingManagementServiceLocal.getAllActiveMeetings(session));
             }
             else
             {
-                meetingFilterDependBeanActive.init(meetingManagementServiceLocal.getAllActiveMeetings(sessionManagerBean.getSession()));
+                meetingFilterDependBeanActive.init(meetingManagementServiceLocal.getAllActiveMeetingsForWhichUserIsToAttend(sessionManagerBean.getSession()));
             }
         }
         catch(Exception ex)
@@ -180,5 +181,29 @@ public class MeetingSelectionBean implements Serializable {
         {
             return false;
         } 
+    }
+    
+    public boolean isAttendeeOfMeeting(CommitteeMeeting meeting)
+    {
+        try 
+        {
+            return meeting.getPersonList().contains(sessionManagerBean.getSession().getUser());
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }
+    }
+    
+    public boolean isOrganiserOfMeeting(CommitteeMeeting meeting)
+    {
+        try 
+        {
+            return meeting.getOrganiser().equals(sessionManagerBean.getSession().getUser());
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }
     }
 }

@@ -91,11 +91,6 @@ public class MeetingManagementServiceMockUnit extends MeetingManagementService {
      *
      * @return
      */
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uGateway;
-    }
     
     /**
      *
@@ -111,9 +106,4 @@ public class MeetingManagementServiceMockUnit extends MeetingManagementService {
      *
      * @return
      */
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aService;
-    }
 }

@@ -46,18 +46,21 @@
                     <p:panel header="Research fellow details">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Insitution assigned student number:" for="institutionAssignedID"/>                                
-                            <p:calendar id="institutionAssignedID" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedID}"/>
+                            <p:inputText id="institutionAssignedID" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedID}"/>
                             <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
                             
                             <p:outputLabel value="Insitution assigned email:" for="institutionAssignedEmail"/>                                
-                            <p:calendar id="institutionAssignedEmail" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedEmail}"/>
+                            <p:inputText id="institutionAssignedEmail" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedEmail}"/>
                             <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
                             
-                            <ui:decorate template="LocationSelection_Component.xhtml">
+                            
+                        </h:panelGrid>   
+                        <center>
+                            <ui:decorate template="templates/LocationSelection_Component.xhtml">
                                 <ui:param name="locationBean" value="#{dirsApplicationFundingEditBean.locationFinderDependBean}"/>
                                 <ui:param name="departmentField" value="#{dirsApplicationFundingEditBean.researchFellowInformation.department}"/>
                             </ui:decorate>
-                        </h:panelGrid>
+                        </center>
                     </p:panel>  
                     
                     <p:growl sticky="true" globalOnly="true" showDetail="true" showSummary="true"/>

@@ -85,7 +85,14 @@ public class DRISApproveFundingBean implements Serializable{
         cscMessage.setReciever(new Person());
         financeMessage.setReciever(new Person());
         
-        researchFellowInformation = new  ResearchFellowInformation();
+        if(getSelectedApplication().getFellow().getResearchFellowInformation() != null)
+        {
+            researchFellowInformation = getSelectedApplication().getFellow().getResearchFellowInformation();
+        }
+        else
+        {
+            researchFellowInformation = new  ResearchFellowInformation();
+        }
         
         locationFinderDependBean.init(researchFellowInformation.getDepartment());
     }            
@@ -176,6 +183,7 @@ public class DRISApproveFundingBean implements Serializable{
             application.setStartDate(startDate);
             onYearSlideEnd();
             application.setEndDate(endDate);
+            researchFellowInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(researchFellowInformation.getDepartment().getDepartmentID()));
             researchFellowInformation.setSystemAssignedID(application.getFellow().getSystemID());
             researchFellowInformation.setPerson(application.getFellow());
             

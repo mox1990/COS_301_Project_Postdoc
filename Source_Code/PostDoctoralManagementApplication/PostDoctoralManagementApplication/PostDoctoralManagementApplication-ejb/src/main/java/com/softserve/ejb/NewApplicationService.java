@@ -251,7 +251,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public boolean canFellowOpenANewApplication(Person fellow)
     {
-        for(Application application: fellow.getApplicationList())
+        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(fellow);
+        for(Application application: applications)
         {
             if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
             {
@@ -267,8 +268,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public Application getOpenApplication(Session session) throws AuthenticationException, Exception
     {
-                
-        for(Application application: session.getUser().getApplicationList1())
+        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
+        for(Application application: applications)
         {
             if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
             {

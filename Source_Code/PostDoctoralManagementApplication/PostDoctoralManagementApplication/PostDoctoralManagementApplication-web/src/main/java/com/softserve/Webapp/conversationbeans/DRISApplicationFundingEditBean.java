@@ -153,12 +153,12 @@ public class DRISApplicationFundingEditBean implements Serializable {
             application.setStartDate(startDate);
             onYearSlideEnd();
             application.setEndDate(endDate);
+            researchFellowInformation.setDepartment(locationFinderDependBean.getActualDepartmentEntity(researchFellowInformation.getDepartment().getDepartmentID()));
             researchFellowInformation.setSystemAssignedID(application.getFellow().getSystemID());
             researchFellowInformation.setPerson(application.getFellow());
             
             application.getFellow().setResearchFellowInformation(researchFellowInformation);
-            application.setFundingReport(fundingReportCreationDependBean.getFundingReport());
-            
+            application.setFundingReport(fundingReportCreationDependBean.getFundingReport());            
             
             dRISApprovalServiceLocal.updateFundingInformation(sessionManagerBean.getSession(), application);
             return navigationManagerBean.goToDRISApprovalServiceApplicationSelectionView();
