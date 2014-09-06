@@ -17,7 +17,9 @@
                 <p:panel header="Funding report">
                     <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
                         <ui:param name="bean" value="#{drisApproveFundingBean.fundingReportCreationDependBean}"/>
-                        <ui:param name="beanAction" value="addFundingCostToList()"/>
+                        <ui:param name="beanActionAdd" value="addFundingCostToList"/>
+                        <ui:param name="beanActionRemove" value="removeFundingCostFromList"/>
+                        <ui:param name="selectedFundingCosts" value="#{drisApproveFundingBean.fundingReportCreationDependBean.selectedFundingCosts}"/>
                     </ui:decorate>
                 </p:panel>
                 
@@ -26,19 +28,44 @@
                     <p:panel header="Application details">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
-                            <p:calendar id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
+                            <p:calendar id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true">
+                                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                            </p:calendar>
                             <p:message for="startDate" styleClass="fieldErrorMessage"/>
                             
                             <p:outputLabel value="Application duration (Years):" for="sliderVal"/>                             
                             <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                                 <p:ajax event="slideEnd" listener="#{drisApproveFundingBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
                             </p:slider>
                             <h:inputHidden id="sliderVal" value="#{drisApproveFundingBean.noOfYears}" />
                             
                             <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
-                            <p:calendar id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true"/>
+                            <p:calendar id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true">
+                                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                            </p:calendar>
                             <p:message for="endDate" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:panel header="Research fellow details">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Insitution assigned student number:" for="institutionAssignedID"/>                                
+                            <p:inputText id="institutionAssignedID" value="#{drisApproveFundingBean.researchFellowInformation.institutionAssignedID}"/>
+                            <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
+                            
+                            <p:outputLabel value="Insitution assigned email:" for="institutionAssignedEmail"/>                                
+                            <p:inputText id="institutionAssignedEmail" value="#{drisApproveFundingBean.researchFellowInformation.institutionAssignedEmail}"/>
+                            <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
+                            
+                            
+                        </h:panelGrid>   
+                        <center>
+                            <ui:decorate template="templates/LocationSelection_Component.xhtml">
+                                <ui:param name="locationBean" value="#{drisApproveFundingBean.locationFinderDependBean}"/>
+                                <ui:param name="departmentField" value="#{drisApproveFundingBean.researchFellowInformation.department}"/>
+                            </ui:decorate>
+                        </center>
                     </p:panel>
                     
                     
@@ -57,7 +84,15 @@
                     </p:panel>
                     
                     <p:growl sticky="true" globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton value="Approve application funding" action="#{drisApproveFundingBean.preformFundingApprovalRequest()}" ajax="false" styleClass="button button-fill"/>
+                    <p:commandButton value="Approve application funding" action="#{drisApproveFundingBean.preformFundingApprovalRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                        <p:confirm header="Application approve funding confirmation" message="Are you sure you wish to approve the funding for this application?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
         </ui:define>

@@ -7,7 +7,6 @@
 package com.softserve.Webapp.conversationbeans;
 
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ResearchFellowInformation;
@@ -18,27 +17,25 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.DRISApprovalServiceLocal;
+import javax.inject.Named;
+import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.component.UIComponent;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "drisApproveFundingBean")
-@ConversationScoped 
-public class DRISApproveFundingBean implements Serializable{
-
+@Named(value = "dirsApplicationFundingEditBean")
+@ConversationScoped
+public class DRISApplicationFundingEditBean implements Serializable {
+    
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject 
@@ -57,18 +54,14 @@ public class DRISApproveFundingBean implements Serializable{
     private DRISApprovalServiceLocal dRISApprovalServiceLocal;
     
     private ResearchFellowInformation researchFellowInformation;
-    private String applicantMessage;
-    private Notification cscMessage;
-    private Notification financeMessage;
     private Date startDate;
     private Date endDate;
     
     private int noOfYears;
-    
     /**
-     * Creates a new instance of DRISApproveFundingBean
+     * Creates a new instance of DRISFundingReportEditBean
      */
-    public DRISApproveFundingBean() {
+    public DRISApplicationFundingEditBean() {
     }
     
     @PostConstruct
@@ -76,19 +69,24 @@ public class DRISApproveFundingBean implements Serializable{
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
-        System.out.println("Initialising");
-        fundingReportCreationDependBean.init(null);
-        applicantMessage = "";
-        cscMessage = new Notification();
-        financeMessage = new Notification();
         
-        cscMessage.setReciever(new Person());
-        financeMessage.setReciever(new Person());
+        Application openApplication = getSelectedApplication();
         
-        researchFellowInformation = new  ResearchFellowInformation();
+        fundingReportCreationDependBean.init(openApplication.getFundingReport());
         
-        locationFinderDependBean.init(researchFellowInformation.getDepartment());
-    }            
+        researchFellowInformation = openApplication.getFellow().getResearchFellowInformation();
+        
+        endDate = openApplication.getEndDate();
+        startDate = openApplication.getStartDate();
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(endDate.getTime() - startDate.getTime());
+        noOfYears  = calendar.get(GregorianCalendar.YEAR);
+    } 
+    
+    public Application getSelectedApplication()
+    {
+        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
+    }
 
     public FundingReportCreationDependBean getFundingReportCreationDependBean() {
         return fundingReportCreationDependBean;
@@ -98,28 +96,20 @@ public class DRISApproveFundingBean implements Serializable{
         this.fundingReportCreationDependBean = fundingReportCreationDependBean;
     }
 
-    public Notification getCscMessage() {
-        return cscMessage;
+    public LocationFinderDependBean getLocationFinderDependBean() {
+        return locationFinderDependBean;
     }
 
-    public void setCscMessage(Notification cscMessage) {
-        this.cscMessage = cscMessage;
+    public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
+        this.locationFinderDependBean = locationFinderDependBean;
     }
 
-    public Notification getFinanceMessage() {
-        return financeMessage;
+    public ResearchFellowInformation getResearchFellowInformation() {
+        return researchFellowInformation;
     }
 
-    public void setFinanceMessage(Notification financeMessage) {
-        this.financeMessage = financeMessage;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setResearchFellowInformation(ResearchFellowInformation researchFellowInformation) {
+        this.researchFellowInformation = researchFellowInformation;
     }
 
     public Date getStartDate() {
@@ -138,27 +128,14 @@ public class DRISApproveFundingBean implements Serializable{
         this.noOfYears = noOfYears;
     }
 
-    public ResearchFellowInformation getResearchFellowInformation() {
-        return researchFellowInformation;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setResearchFellowInformation(ResearchFellowInformation researchFellowInformation) {
-        this.researchFellowInformation = researchFellowInformation;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
-                    
-    public Application getSelectedApplication()
-    {
-        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
-    }
-
-    public LocationFinderDependBean getLocationFinderDependBean() {
-        return locationFinderDependBean;
-    }
-
-    public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
-        this.locationFinderDependBean = locationFinderDependBean;
-    }
-            
+    
     public void onYearSlideEnd()
     {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -168,7 +145,7 @@ public class DRISApproveFundingBean implements Serializable{
         endDate = gregorianCalendar.getTime();
     }
     
-    public String preformFundingApprovalRequest()
+    public String preformFundingEditRequest()
     {
         try
         {
@@ -179,7 +156,11 @@ public class DRISApproveFundingBean implements Serializable{
             researchFellowInformation.setSystemAssignedID(application.getFellow().getSystemID());
             researchFellowInformation.setPerson(application.getFellow());
             
-            dRISApprovalServiceLocal.approveFunding(sessionManagerBean.getSession(), application, researchFellowInformation, fundingReportCreationDependBean.getFundingReport(),applicantMessage,cscMessage,financeMessage);
+            application.getFellow().setResearchFellowInformation(researchFellowInformation);
+            application.setFundingReport(fundingReportCreationDependBean.getFundingReport());
+            
+            
+            dRISApprovalServiceLocal.updateFundingInformation(sessionManagerBean.getSession(), application);
             return navigationManagerBean.goToDRISApprovalServiceApplicationSelectionView();
         }
         catch(Exception ex)
@@ -189,6 +170,4 @@ public class DRISApproveFundingBean implements Serializable{
             return "";
         }
     }
-    
-    
 }

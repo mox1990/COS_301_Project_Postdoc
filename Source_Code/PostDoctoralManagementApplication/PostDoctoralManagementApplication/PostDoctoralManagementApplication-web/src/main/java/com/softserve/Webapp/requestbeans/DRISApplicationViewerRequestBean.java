@@ -42,8 +42,6 @@ public class DRISApplicationViewerRequestBean {
     @EJB
     private DRISApprovalServiceLocal dRISApprovalServiceLocal;
         
-    private UIComponent errorContainer;
-    
     /**
      * Creates a new instance of HODApplicationViewerRequestBean
      */
@@ -60,17 +58,23 @@ public class DRISApplicationViewerRequestBean {
         return getSelectedApplication().getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
     }
     
-    public String automaticEligiblityApproval()
+    public boolean isApplicationFunded()
+    {
+        return getSelectedApplication().getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
+    }
+    
+    public String getAutomaticEligiblityApprovalResult()
     {
         try 
         {
-            dRISApprovalServiceLocal.checkApplicationForEligiblity(sessionManagerBean.getSession(), getSelectedApplication());
-            return navigationManagerBean.goToDRISApprovalServiceApplicationSelectionView();
+            Boolean b = dRISApprovalServiceLocal.checkApplicationForEligiblity(sessionManagerBean.getSession(), getSelectedApplication());
+            
+            return (b)?"Eligible":"Not eligible";
         } 
         catch (Exception ex) 
         {
             ExceptionUtil.logException(DRISApplicationViewerRequestBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }
@@ -85,7 +89,7 @@ public class DRISApplicationViewerRequestBean {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(DRISApplicationViewerRequestBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }
@@ -100,7 +104,7 @@ public class DRISApplicationViewerRequestBean {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(DRISApplicationViewerRequestBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         }
     }
@@ -109,13 +113,5 @@ public class DRISApplicationViewerRequestBean {
     {
         return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
     }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
-    } 
     
 }

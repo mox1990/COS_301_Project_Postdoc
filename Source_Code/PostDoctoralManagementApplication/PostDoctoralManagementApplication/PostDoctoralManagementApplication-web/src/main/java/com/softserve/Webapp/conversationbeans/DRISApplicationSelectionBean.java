@@ -45,6 +45,8 @@ public class DRISApplicationSelectionBean implements Serializable {
     @Inject
     private ApplicationFilterDependBean applicationFilterDependBeanEligible;
     @Inject
+    private ApplicationFilterDependBean applicationFilterDependBeanFunded;
+    @Inject
     private Conversation conversation;
 
     @EJB
@@ -65,6 +67,7 @@ public class DRISApplicationSelectionBean implements Serializable {
         {
             applicationFilterDependBeanEndorsed.init(dRISApprovalServiceLocal.loadPendingEndorsedApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
             applicationFilterDependBeanEligible.init(dRISApprovalServiceLocal.loadPendingEligibleApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
+            applicationFilterDependBeanFunded.init(dRISApprovalServiceLocal.loadFundedApplications(sessionManagerBean.getSession(), 0, Integer.MAX_VALUE));
         }
         catch(Exception ex)
         {
@@ -80,7 +83,11 @@ public class DRISApplicationSelectionBean implements Serializable {
     public ApplicationFilterDependBean getApplicationFilterDependBeanEndorsed() {
         return applicationFilterDependBeanEndorsed;
     }
-            
+
+    public ApplicationFilterDependBean getApplicationFilterDependBeanFunded() {
+        return applicationFilterDependBeanFunded;
+    }
+                    
     public void selectApplication(Application application)
     {
         sessionManagerBean.addObjectToSessionStorage("APPLICATION",application);

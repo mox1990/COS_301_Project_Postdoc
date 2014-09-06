@@ -87,7 +87,7 @@ CREATE TABLE employee_information (
 CREATE TABLE research_fellow_information (
 	_systemAssignedID CHAR(9) NOT NULL,	
 	_institutionAssignedID CHAR(9),
-	_institutionAssignedEmail CHAR(9),
+	_institutionAssignedEmail  VARCHAR(50),
 	_department BIGINT UNSIGNED,
 	
 	PRIMARY KEY (_systemAssignedID),

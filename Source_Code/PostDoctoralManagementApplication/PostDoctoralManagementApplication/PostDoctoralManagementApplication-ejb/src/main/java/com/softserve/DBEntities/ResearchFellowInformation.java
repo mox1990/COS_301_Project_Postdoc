@@ -45,7 +45,7 @@ public class ResearchFellowInformation implements Serializable {
     @Size(max = 9)
     @Column(name = "_institutionAssignedID")
     private String institutionAssignedID;
-    @Size(max = 9)
+    @Size(max = 50)
     @Column(name = "_institutionAssignedEmail")
     private String institutionAssignedEmail;
     @JoinColumn(name = "_systemAssignedID", referencedColumnName = "_systemID", insertable = false, updatable = false)

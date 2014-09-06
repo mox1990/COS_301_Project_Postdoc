@@ -61,9 +61,15 @@
                             </ui:decorate>                            
                         </p:outputPanel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                        <p:commandButton styleClass="button" value="Save changes" id="saveChanges" action="#{userAccountsPersonalAccountEditBean.performPersonalUserAccountEditRequest()}" update="personalAccFrom" >
+                        <p:commandButton styleClass="button" value="Save changes" id="saveChanges" action="#{userAccountsPersonalAccountEditBean.performPersonalUserAccountEditRequest()}" process="@all" update="@all" >
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                            <p:confirm header="Edit confirmation" message="Are you sure you wish to save the changes to the user account details?" icon="ui-icon-alert"/>
                         </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
                     </center>
                 </h:form>
             </div>

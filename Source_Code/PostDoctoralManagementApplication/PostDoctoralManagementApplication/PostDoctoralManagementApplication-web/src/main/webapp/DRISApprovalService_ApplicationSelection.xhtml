@@ -43,7 +43,26 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEligible.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application for funding consideration" styleClass="button-fill" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="View application for funding consideration" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                            </ui:define>
+                        </ui:decorate>
+                    </h:form>
+                </p:panel>
+            </p:outputPanel>
+            
+            <p:outputPanel>
+                <h1 class="header1-1">Applications that are funded and in progress</h1>
+                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                    <ui:decorate template="templates/filterSearch_Component.xhtml">
+                        <ui:param name="prefix" value="fp"/>
+                        <ui:param name="updatableItems" value=":fundedApplications"/>
+                        <ui:param name="bean" value="#{drisApplicationSelectionBean.applicationFilterDependBeanFunded}"/>
+                    </ui:decorate>
+                    <h:form id="fundedApplications">
+                        <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
+                            <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanFunded.filteredList}"/>
+                            <ui:define name="commandButtons">
+                                <p:commandButton value="View application" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>

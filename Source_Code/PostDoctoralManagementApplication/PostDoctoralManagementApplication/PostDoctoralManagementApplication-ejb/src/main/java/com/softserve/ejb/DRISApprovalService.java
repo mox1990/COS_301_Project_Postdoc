@@ -157,8 +157,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         {
             if(aq.getName().toUpperCase().contains("PHD"))
             {
-                obtainCal.setTimeInMillis(aq.getYearObtained().getTime());
-                obtainCal.set(aq.getYearObtained().getYear(), aq.getYearObtained().getMonth() + 1, aq.getYearObtained().getDay());
+                obtainCal.setTimeInMillis(aq.getYearObtained().getTime());                
                 if(curCal.get(GregorianCalendar.YEAR) - obtainCal.get(GregorianCalendar.YEAR) <= 5)
                 {
                     return true;

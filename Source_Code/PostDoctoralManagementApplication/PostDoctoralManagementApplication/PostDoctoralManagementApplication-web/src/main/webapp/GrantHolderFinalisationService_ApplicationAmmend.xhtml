@@ -21,7 +21,7 @@
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
                     <p:commandButton value="Request application ammendment" action="#{grantHolderAmmendRequestBean.preformAmmendRequest()}" process="@form" update="@all" styleClass="button button-fill">
-                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to send an ammendment request to the fellow of this application?" icon="ui-icon-alert"/>
+                        <p:confirm header="Application ammendment confirmation" message="Are you sure you wish to send an ammendment request to the fellow of this application?" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

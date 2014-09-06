@@ -17,13 +17,36 @@
             </ui:decorate>
             <h:form>
                 <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                <p:commandButton value="Check application elgiblity automaically" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.automaticEligiblityApproval()}" ajax="false" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}"/> 
-                <p:commandButton value="Make application elgible" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityApproval()}" ajax="false" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}"/>
-                <p:commandButton value="Decline application elgiblity" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityDecline()}" ajax="false" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}"/>
-                <p:commandButton value="Approve funding for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApproveFundingSelectionView()}" ajax="false" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/> 
-                <p:commandButton value="Decline funding for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceDeclineFundingSelectionView()}" ajax="false" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/>
+                <p:commandButton value="Check application elgiblity" styleClass="button button-fill" type="button"  onclick="PF('dlg#{_objectInContext}').show()" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}"/> 
+                
+                <p:dialog header="Eligiblity checker" widgetVar="dlg#{_objectInContext}" minHeight="40" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}" modal="true">
+                    <h:panelGrid columns="1" cellpadding="5px">
+                        <h:outputText value="The application has been checked for eligiblity and found that the application is:" />
+                        <h:outputText styleClass="text-label" value="#{drisApplicationViewerRequestBean.automaticEligiblityApprovalResult}"/>
+                        <h:outputText value="Please choose an option:" />
+                    </h:panelGrid>
+                    
+                    <p:commandButton value="Make application elgible" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityApproval()}" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}">
+                        <p:confirm header="Application elgiblity confirmation" message="Are you sure you wish to make this application eligible?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:commandButton value="Decline application elgiblity" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityDecline()}" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}">
+                        <p:confirm header="Application elgiblity confirmation" message="Are you sure you wish to decline the eligiblity of this application?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                </p:dialog>
+                
+                <p:commandButton value="Approve funding for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApproveFundingSelectionView()}" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/> 
+                <p:commandButton value="Decline funding for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceDeclineFundingSelectionView()}" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/>        
+                    
+                <p:commandButton value="Edit funding information for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApplicationFundingReportMangementView()}" rendered="#{drisApplicationViewerRequestBean.applicationFunded}"/>                
+                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>            
         </ui:define>
+        
     </ui:composition>
 </html>
 

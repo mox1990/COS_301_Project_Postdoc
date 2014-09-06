@@ -37,7 +37,15 @@
                         <p:message for="rctevaluation" styleClass="fieldErrorMessage"/>
                                                                  
                     </h:panelGrid>
-                    <p:commandButton value="Refer application" action="#{refereeReportCreationRequestBean.preformRefereeReportCreationRequest()}" styleClass="button button-fill" ajax="false"/>
+                    <p:growl sticky="true" showDetail="true" globalOnly="false"/>
+                    <p:commandButton value="Refer application" action="#{refereeReportCreationRequestBean.preformRefereeReportCreationRequest()}" styleClass="button button-fill" process="@all" update="@all">                            
+                        <p:confirm header="Referral confirmation" message="Are you sure you wish create a referral report for the application?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>
             
