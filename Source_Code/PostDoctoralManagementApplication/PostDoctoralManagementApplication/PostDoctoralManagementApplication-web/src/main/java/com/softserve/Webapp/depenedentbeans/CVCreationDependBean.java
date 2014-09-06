@@ -232,21 +232,31 @@ public class CVCreationDependBean implements Serializable{
         
         System.out.println("==========================Size: " + academicQualificationList.size() + " " + selectedAcademicQualificationList.size());
         if(selectedAcademicQualificationList.size() > 0)
-        {
-            for(AcademicQualification qualification : selectedAcademicQualificationList)
+        {            
+            ArrayList<AcademicQualification> newAcademicQualifications = new ArrayList<AcademicQualification>();
+            
+            for(AcademicQualification qualification : academicQualificationList)
             {
                 String removeValue = qualification.getName() + " " + qualification.getFieldOfStudy() + " " + qualification.getInstitution();
-                for(int i = 0; i < academicQualificationList.size(); i++)
-                {
-                    AcademicQualification academicQualification = academicQualificationList.get(i);
-                    String value = academicQualification.getName() + " " + academicQualification.getFieldOfStudy() + " " + academicQualification.getInstitution();
+                
+                boolean found = false;
+                
+                for(AcademicQualification qualification1 : selectedAcademicQualificationList)
+                {                    
+                    String value = qualification1.getName() + " " + qualification1.getFieldOfStudy() + " " + qualification1.getInstitution();
                     if(removeValue.equals(value))
                     {
-                        academicQualificationList.remove(i);
+                       found = true;
                     }
+                }
+                
+                if(!found)
+                {
+                    newAcademicQualifications.add(qualification);
                 }
             }
             
+            academicQualificationList = newAcademicQualifications;
             
             selectedAcademicQualificationList = new ArrayList<AcademicQualification>();
             MessageUtil.CreateGlobalFacesMessage("Qualifications removed!","The selected academic qualfications have been removed from the list.", FacesMessage.SEVERITY_INFO);
@@ -268,19 +278,31 @@ public class CVCreationDependBean implements Serializable{
     {
         if(experienceList.size() > 0 && selectedExperienceList.size() > 0)
         {
-            for(Experience experience : selectedExperienceList)
+            
+            ArrayList<Experience> newExperiences = new ArrayList<Experience>();
+            
+            for(Experience experience : experienceList)
             {
                 String removeValue = experience.getCapacity()+ " " + experience.getOrganisation();
-                for(int i = 0; i < experienceList.size(); i++)
-                {
-                    Experience experience1 = experienceList.get(i);
+                
+                boolean found = false;
+                
+                for(Experience experience1 : selectedExperienceList)
+                {                    
                     String value = experience1.getCapacity()+ " " + experience1.getOrganisation();
                     if(removeValue.equals(value))
                     {
-                        experienceList.remove(i);
+                       found = true;
                     }
                 }
+                
+                if(!found)
+                {
+                    newExperiences.add(experience);
+                }
             }
+            
+            experienceList = newExperiences;
             selectedExperienceList = new ArrayList<Experience>();
             MessageUtil.CreateGlobalFacesMessage("Experiences removed!","The selected work experience items have been removed from the list.", FacesMessage.SEVERITY_INFO);
         }
@@ -300,20 +322,32 @@ public class CVCreationDependBean implements Serializable{
     public void removeFromResearchOutputReferences()
     {
         if(selectedReferenceList.size() > 0)
-        {            
-            for(Reference reference : selectedReferenceList)
+        {                        
+            ArrayList<Reference> newReferences = new ArrayList<Reference>();
+            
+            for(Reference reference : researchOutputXMLEntity.getReferences())
             {
                 String removeValue = reference.getType() + " " + reference.getPublicationName() + " " + reference.getPublisher()+ " " + reference.getPublicationISBN();
-                for(int i = 0; i < researchOutputXMLEntity.getReferences().size(); i++)
-                {
-                    Reference reference1 = researchOutputXMLEntity.getReferences().get(i);
+                
+                boolean found = false;
+                
+                for(Reference reference1 : selectedReferenceList)
+                {                    
                     String value = reference1.getType() + " " + reference1.getPublicationName() + " " + reference1.getPublisher()+ " " + reference1.getPublicationISBN();
                     if(removeValue.equals(value))
                     {
-                        researchOutputXMLEntity.getReferences().remove(i);
+                       found = true;
                     }
                 }
+                
+                if(!found)
+                {
+                    newReferences.add(reference);
+                }
             }
+            
+            researchOutputXMLEntity.getReferences().clear();
+            researchOutputXMLEntity.getReferences().addAll(newReferences);
             
             selectedReferenceList = new ArrayList<Reference>();
             MessageUtil.CreateGlobalFacesMessage("References removed!", "The selected research output references have been removed from the list!", FacesMessage.SEVERITY_INFO);    
@@ -335,20 +369,33 @@ public class CVCreationDependBean implements Serializable{
     {        
         System.out.println("==========================Size: " + otherContributionsXMLEntity.getItems().size() + " " + selectedItemList.size());
         if(selectedItemList.size() > 0)
-        {
-            for(Item item : selectedItemList)
+        {            
+            ArrayList<Item> newItems = new ArrayList<Item>();
+            
+            for(Item item : otherContributionsXMLEntity.getItems())
             {
                 String removeValue= item.getType() + " " + item.getName()+ " " + item.getDate().toString() + " " + item.getLocation();
-                for(int i = 0; i < otherContributionsXMLEntity.getItems().size(); i++)
-                {
-                    Item item1 = otherContributionsXMLEntity.getItems().get(i);
+                
+                boolean found = false;
+                
+                for(Item item1 : selectedItemList)
+                {                    
                     String value = item1.getType() + " " + item1.getName()+ " " + item1.getDate().toString()  + " " + item1.getLocation();
                     if(removeValue.equals(value))
                     {
-                        otherContributionsXMLEntity.getItems().remove(i);
+                       found = true;
                     }
                 }
+                
+                if(!found)
+                {
+                    newItems.add(item);
+                }
             }
+            
+            otherContributionsXMLEntity.getItems().clear();
+            otherContributionsXMLEntity.getItems().addAll(newItems);
+            
             selectedItemList = new ArrayList<Item>();
             MessageUtil.CreateGlobalFacesMessage("Contribution removed!", "The selected other contribution items have been removed from the list!", FacesMessage.SEVERITY_INFO);    
         }

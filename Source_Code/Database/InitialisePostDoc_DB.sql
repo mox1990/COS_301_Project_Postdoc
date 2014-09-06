@@ -292,12 +292,14 @@ CREATE TABLE forward_and_rewind_report (
 
 CREATE TABLE committee_meeting (
 	_meetingID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_organiser CHAR(9) NOT NULL,
 	_name VARCHAR(100),
 	_venue VARCHAR(100),
 	_startDate DATETIME,
 	_endDate DATETIME,
 	
-	PRIMARY KEY (_meetingID)
+	PRIMARY KEY (_meetingID),
+	FOREIGN KEY (_organiser) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE minute_comment (

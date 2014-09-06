@@ -10,6 +10,10 @@ import com.softserve.DBDAO.exceptions.IllegalOrphanException;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import com.softserve.DBEntities.DeclineReport;
 import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.Endorsement;
@@ -196,11 +200,11 @@ public class ApplicationJpaController implements Serializable {
                 fundingReport = em.merge(fundingReport);
             }
             if (fellow != null) {
-                fellow.getApplicationList1().add(application);
+                fellow.getApplicationList().add(application);
                 fellow = em.merge(fellow);
             }
             if (grantHolder != null) {
-                grantHolder.getApplicationList2().add(application);
+                grantHolder.getApplicationList().add(application);
                 grantHolder = em.merge(grantHolder);
             }
             if (eligiblityReport != null) {
@@ -503,19 +507,19 @@ public class ApplicationJpaController implements Serializable {
                 fundingReportNew = em.merge(fundingReportNew);
             }
             if (fellowOld != null && !fellowOld.equals(fellowNew)) {
-                fellowOld.getApplicationList1().remove(application);
+                fellowOld.getApplicationList().remove(application);
                 fellowOld = em.merge(fellowOld);
             }
             if (fellowNew != null && !fellowNew.equals(fellowOld)) {
-                fellowNew.getApplicationList1().add(application);
+                fellowNew.getApplicationList().add(application);
                 fellowNew = em.merge(fellowNew);
             }
             if (grantHolderOld != null && !grantHolderOld.equals(grantHolderNew)) {
-                grantHolderOld.getApplicationList2().remove(application);
+                grantHolderOld.getApplicationList().remove(application);
                 grantHolderOld = em.merge(grantHolderOld);
             }
             if (grantHolderNew != null && !grantHolderNew.equals(grantHolderOld)) {
-                grantHolderNew.getApplicationList2().add(application);
+                grantHolderNew.getApplicationList().add(application);
                 grantHolderNew = em.merge(grantHolderNew);
             }
             if (eligiblityReportNew != null && !eligiblityReportNew.equals(eligiblityReportOld)) {
@@ -716,12 +720,12 @@ public class ApplicationJpaController implements Serializable {
             }
             Person fellow = application.getFellow();
             if (fellow != null) {
-                fellow.getApplicationList1().remove(application);
+                fellow.getApplicationList().remove(application);
                 fellow = em.merge(fellow);
             }
             Person grantHolder = application.getGrantHolder();
             if (grantHolder != null) {
-                grantHolder.getApplicationList2().remove(application);
+                grantHolder.getApplicationList().remove(application);
                 grantHolder = em.merge(grantHolder);
             }
             List<Person> personList = application.getPersonList();

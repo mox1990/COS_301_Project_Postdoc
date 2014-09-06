@@ -40,7 +40,7 @@ public class ForwardAndRewindReportJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(ForwardAndRewindReport forwardAndRewindReport) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -70,9 +70,6 @@ public class ForwardAndRewindReportJpaController implements Serializable {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findForwardAndRewindReport(forwardAndRewindReport.getReportID()) != null) {
-                throw new PreexistingEntityException("ForwardAndRewindReport " + forwardAndRewindReport + " already exists.", ex);
             }
             throw ex;
         } finally {

@@ -40,7 +40,7 @@ public class AmmendRequestJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(AmmendRequest ammendRequest) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(AmmendRequest ammendRequest) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             utx.begin();
@@ -70,9 +70,6 @@ public class AmmendRequestJpaController implements Serializable {
                 utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findAmmendRequest(ammendRequest.getRequestID()) != null) {
-                throw new PreexistingEntityException("AmmendRequest " + ammendRequest + " already exists.", ex);
             }
             throw ex;
         } finally {

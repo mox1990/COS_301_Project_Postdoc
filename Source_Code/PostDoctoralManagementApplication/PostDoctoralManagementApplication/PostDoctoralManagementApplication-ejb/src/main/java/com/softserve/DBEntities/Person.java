@@ -132,6 +132,8 @@ public class Person implements Serializable {
     private List<Notification> notificationList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     private List<AmmendRequest> ammendRequestList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "organiser")
+    private List<CommitteeMeeting> committeeMeetingList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<AuditLog> auditLogList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
@@ -376,6 +378,15 @@ public class Person implements Serializable {
 
     public void setAmmendRequestList(List<AmmendRequest> ammendRequestList) {
         this.ammendRequestList = ammendRequestList;
+    }
+
+    @XmlTransient
+    public List<CommitteeMeeting> getCommitteeMeetingList1() {
+        return committeeMeetingList1;
+    }
+
+    public void setCommitteeMeetingList1(List<CommitteeMeeting> committeeMeetingList1) {
+        this.committeeMeetingList1 = committeeMeetingList1;
     }
 
     @XmlTransient

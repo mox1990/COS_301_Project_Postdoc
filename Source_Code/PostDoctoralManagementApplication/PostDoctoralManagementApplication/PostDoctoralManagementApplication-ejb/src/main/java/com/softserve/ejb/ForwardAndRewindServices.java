@@ -163,6 +163,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             }
             
             application.setRefereeReportList(new ArrayList<RefereeReport>());
+                        
         }
     }
     
@@ -314,6 +315,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
             forwardApplicationToSubmittedStatus(application);
+            if(application.getPersonList().isEmpty())
+            {
+                forwardApplicationToReferredStatus(application);
+            }
         }
         else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
@@ -355,6 +360,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
             rewindApplicationToSubmittedStatus(application);
+            if(application.getPersonList().isEmpty())
+            {
+                forwardApplicationToReferredStatus(application);
+            }
         }
         else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {

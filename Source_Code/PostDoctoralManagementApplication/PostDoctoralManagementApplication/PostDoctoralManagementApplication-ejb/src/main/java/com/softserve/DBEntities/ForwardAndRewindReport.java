@@ -38,13 +38,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ForwardAndRewindReport.findAll", query = "SELECT f FROM ForwardAndRewindReport f"),
     @NamedQuery(name = "ForwardAndRewindReport.findByReportID", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.reportID = :reportID"),
     @NamedQuery(name = "ForwardAndRewindReport.findByTimestamp", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.timestamp = :timestamp"),
-    @NamedQuery(name = "ForwardAndRewindReport.findByType", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.type = :type")})
+    @NamedQuery(name = "ForwardAndRewindReport.findByType", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.type = :type"),
+    @NamedQuery(name = "ForwardAndRewindReport.findByFromStatus", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.fromStatus = :fromStatus"),
+    @NamedQuery(name = "ForwardAndRewindReport.findByToStatus", query = "SELECT f FROM ForwardAndRewindReport f WHERE f.toStatus = :toStatus")})
 public class ForwardAndRewindReport implements Serializable {
-    
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "_reportID")
     private Long reportID;
     @Basic(optional = false)
@@ -118,7 +119,7 @@ public class ForwardAndRewindReport implements Serializable {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
+
     public String getFromStatus() {
         return fromStatus;
     }
@@ -175,7 +176,5 @@ public class ForwardAndRewindReport implements Serializable {
     public String toString() {
         return "com.softserve.DBEntities.ForwardAndRewindReport[ reportID=" + reportID + " ]";
     }
-
-    
     
 }
