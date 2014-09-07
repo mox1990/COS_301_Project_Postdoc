@@ -72,13 +72,14 @@ public class MeetingSelectionBean implements Serializable {
             {            
                 Session session = sessionManagerBean.getSession();
                 meetingFilterDependBeanStillToBeHeld.init(meetingManagementServiceLocal.getAllStillToBeHeldMeetings(session));
-                meetingFilterDependBeanConcluded.init(meetingManagementServiceLocal.getAllConcludedMeetings(session));
-                
+                meetingFilterDependBeanConcluded.init(meetingManagementServiceLocal.getAllConcludedMeetings(session));                
                 meetingFilterDependBeanActive.init(meetingManagementServiceLocal.getAllActiveMeetings(session));
             }
             else
             {
+                meetingFilterDependBeanConcluded.init(null);
                 meetingFilterDependBeanActive.init(meetingManagementServiceLocal.getAllActiveMeetingsForWhichUserIsToAttend(sessionManagerBean.getSession()));
+                meetingFilterDependBeanStillToBeHeld.init(null);
             }
         }
         catch(Exception ex)
@@ -125,7 +126,7 @@ public class MeetingSelectionBean implements Serializable {
         try
         {   
             meetingManagementServiceLocal.cancelMeeting(sessionManagerBean.getSession(), meeting);
-            conversationManagerBean.deregisterConversation(conversation);
+            init();
         }
         catch (Exception ex)
         {
@@ -139,7 +140,7 @@ public class MeetingSelectionBean implements Serializable {
         try
         {
             meetingManagementServiceLocal.startMeeting(sessionManagerBean.getSession(), meeting);
-            conversationManagerBean.deregisterConversation(conversation);
+            init();
         }
         catch (Exception ex)
         {
@@ -153,7 +154,7 @@ public class MeetingSelectionBean implements Serializable {
         try
         {
             meetingManagementServiceLocal.endMeeting(sessionManagerBean.getSession(), meeting);
-            conversationManagerBean.deregisterConversation(conversation);
+            init();
         }
         catch (Exception ex)
         {

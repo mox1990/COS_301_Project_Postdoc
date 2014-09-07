@@ -64,6 +64,7 @@ public class PendingUserAccountsSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(PendingUserAccountsSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToUserAccountManagementServicesHomeView());
         }
     }
 

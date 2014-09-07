@@ -69,22 +69,36 @@ public class DRISApplicationFundingEditBean implements Serializable {
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
-        
-        Application openApplication = getSelectedApplication();
-        
-        fundingReportCreationDependBean.init(openApplication.getFundingReport());
-        
-        researchFellowInformation = openApplication.getFellow().getResearchFellowInformation();
-        
-        endDate = openApplication.getEndDate();
-        startDate = openApplication.getStartDate();
-        GregorianCalendar startCalendar = new GregorianCalendar();
-        GregorianCalendar endCalendar = new GregorianCalendar();
-        startCalendar.setTime(startDate);
-        endCalendar.setTime(endDate);
-        noOfYears  = endCalendar.get(GregorianCalendar.YEAR) - startCalendar.get(GregorianCalendar.YEAR);
-        
-        locationFinderDependBean.init(openApplication.getFellow().getResearchFellowInformation().getDepartment());
+        try
+        {
+            
+            Application openApplication = getSelectedApplication();
+            
+            if(openApplication == null)
+            {
+                throw new Exception("No application selected");
+            }
+            
+            fundingReportCreationDependBean.init(openApplication.getFundingReport());
+
+            researchFellowInformation = openApplication.getFellow().getResearchFellowInformation();
+
+            endDate = openApplication.getEndDate();
+            startDate = openApplication.getStartDate();
+            GregorianCalendar startCalendar = new GregorianCalendar();
+            GregorianCalendar endCalendar = new GregorianCalendar();
+            startCalendar.setTime(startDate);
+            endCalendar.setTime(endDate);
+            noOfYears  = endCalendar.get(GregorianCalendar.YEAR) - startCalendar.get(GregorianCalendar.YEAR);
+
+            locationFinderDependBean.init(openApplication.getFellow().getResearchFellowInformation().getDepartment());
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(DRISApplicationFundingEditBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToDRISApprovalServiceApplicationViewer());
+        }
     } 
     
     public Application getSelectedApplication()

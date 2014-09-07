@@ -80,38 +80,50 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        person = sessionManagerBean.getObjectFromSessionStorage("ACCOUNT", Person.class);
-        
-        address = person.getAddressLine1();
-        
-        if(person.getUpEmployee())
+        try
         {
-            employeeInformation = person.getEmployeeInformation();
-            upAddress = person.getEmployeeInformation().getPhysicalAddress(); 
-            locationFinderDependBean.init(employeeInformation.getDepartment());
-        }
-        else
-        {
-            employeeInformation = new EmployeeInformation();
-            upAddress = new Address();
-            employeeInformation.setDepartment(new Department((long)(0)));
-            employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
-            employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
-            locationFinderDependBean.init(null);
-        }
-        employeeInformation.setEmployeeID(person.getSystemID());
-        
-        sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();        
-        sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        
-        targetRoles = person.getSecurityRoleList();
-        sourceRoles.removeAll(targetRoles);
+            person = sessionManagerBean.getObjectFromSessionStorage("ACCOUNT", Person.class);
+            if(person == null)
+            {
+                throw new Exception("No account selected");
+            }
+            address = person.getAddressLine1();
 
-        securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles); 
-        
-        if(targetRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
+            if(person.getUpEmployee())
+            {
+                employeeInformation = person.getEmployeeInformation();
+                upAddress = person.getEmployeeInformation().getPhysicalAddress(); 
+                locationFinderDependBean.init(employeeInformation.getDepartment());
+            }
+            else
+            {
+                employeeInformation = new EmployeeInformation();
+                upAddress = new Address();
+                employeeInformation.setDepartment(new Department((long)(0)));
+                employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+                employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+                locationFinderDependBean.init(null);
+            }
+            employeeInformation.setEmployeeID(person.getSystemID());
+
+            sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();        
+            sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+
+            targetRoles = person.getSecurityRoleList();
+            sourceRoles.removeAll(targetRoles);
+
+            securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles); 
+
+            if(targetRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
+            {
+                isSystemAdmin = true;            
+            }
+        }
+        catch(Exception ex)
         {
-            isSystemAdmin = true;            
+            ExceptionUtil.logException(UserAccountsGeneralAccountEditBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPreviousBreadCrumb());
         }
     }
 

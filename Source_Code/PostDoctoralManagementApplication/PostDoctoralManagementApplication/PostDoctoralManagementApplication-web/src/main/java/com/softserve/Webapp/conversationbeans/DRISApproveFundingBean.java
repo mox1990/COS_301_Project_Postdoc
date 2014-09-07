@@ -77,24 +77,38 @@ public class DRISApproveFundingBean implements Serializable{
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         System.out.println("Initialising");
-        fundingReportCreationDependBean.init(null);
-        applicantMessage = "";
-        cscMessage = new Notification();
-        financeMessage = new Notification();
-        
-        cscMessage.setReciever(new Person());
-        financeMessage.setReciever(new Person());
-        
-        if(getSelectedApplication().getFellow().getResearchFellowInformation() != null)
+        try
         {
-            researchFellowInformation = getSelectedApplication().getFellow().getResearchFellowInformation();
+            if(getSelectedApplication() == null)
+            {
+                throw new Exception("No application selected");
+            }
+            
+            fundingReportCreationDependBean.init(null);
+            applicantMessage = "";
+            cscMessage = new Notification();
+            financeMessage = new Notification();
+
+            cscMessage.setReciever(new Person());
+            financeMessage.setReciever(new Person());
+
+            if(getSelectedApplication().getFellow().getResearchFellowInformation() != null)
+            {
+                researchFellowInformation = getSelectedApplication().getFellow().getResearchFellowInformation();
+            }
+            else
+            {
+                researchFellowInformation = new  ResearchFellowInformation();
+            }
+
+            locationFinderDependBean.init(researchFellowInformation.getDepartment());
         }
-        else
+        catch(Exception ex)
         {
-            researchFellowInformation = new  ResearchFellowInformation();
+            ExceptionUtil.logException(DRISApproveFundingBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToDRISApprovalServiceApplicationSelectionView());
         }
-        
-        locationFinderDependBean.init(researchFellowInformation.getDepartment());
     }            
 
     public FundingReportCreationDependBean getFundingReportCreationDependBean() {

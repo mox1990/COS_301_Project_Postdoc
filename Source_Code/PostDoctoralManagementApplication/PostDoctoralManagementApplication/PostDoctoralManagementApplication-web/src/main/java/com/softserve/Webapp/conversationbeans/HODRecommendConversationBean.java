@@ -41,7 +41,7 @@ public class HODRecommendConversationBean implements Serializable{
     private NavigationManagerBean navigationManagerBean;
     @Inject
     private ConversationManagerBean conversationManagerBean;
-     @Inject
+    @Inject
     private Conversation conversation;
     @Inject 
     private ApplicationReviewRequestCreationDependBean applicationReviewRequestCreationDependBean;
@@ -65,15 +65,23 @@ public class HODRecommendConversationBean implements Serializable{
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        recommendationReport = new RecommendationReport();
-        recommendationReportContent = new RecommendationReportContent();
         try
         {
+            if(getSelectedApplication() == null)
+            {
+                throw new Exception("No application selected");
+            }
+            
+            recommendationReport = new RecommendationReport();
+            recommendationReportContent = new RecommendationReportContent();
+        
             applicationReviewRequestCreationDependBean.init(hodRecommendationServicesLocal.getDeansOfApplication(sessionManagerBean.getSession(), getSelectedApplication()));
         }
         catch(Exception ex)
         {
-            ExceptionUtil.logException(HODRecommendConversationBean.class, ex);
+            ExceptionUtil.logException(HODRecommendConversationBean.class, ex);          
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToHODApplicationViewer());
         }
     }
     

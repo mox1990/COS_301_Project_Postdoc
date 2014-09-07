@@ -70,38 +70,33 @@ public class MeetingEditBean implements Serializable {
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
-        
-        committeeMeeting = sessionManagerBean.getObjectFromSessionStorage("MEETING", CommitteeMeeting.class);
-        
-        if(committeeMeeting == null)
+        try
         {
-            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToMeetingManagementServiceMeetingSelectionView());
-            Exception ex = new Exception("Internal system error");
-            ExceptionUtil.logException(MeetingEditBean.class, ex);
-            ExceptionUtil.handleException(null, ex);
-        }
+            committeeMeeting = sessionManagerBean.getObjectFromSessionStorage("MEETING", CommitteeMeeting.class);
+
+            if(committeeMeeting == null)
+            {
+                throw new Exception("Internal system error");    
+            }
+
+            if(committeeMeeting.getApplicationList() == null)
+            {
+                selectedApplicationList = new ArrayList<Application>();
+            }
+            else
+            {
+                selectedApplicationList = committeeMeeting.getApplicationList();
+            }
+
+            if(committeeMeeting.getApplicationList() == null)
+            {
+                selectedAttendeesList = new ArrayList<Person>();
+            }
+            else
+            {
+                selectedAttendeesList = committeeMeeting.getPersonList();
+            }        
         
-        if(committeeMeeting.getApplicationList() == null)
-        {
-            selectedApplicationList = new ArrayList<Application>();
-        }
-        else
-        {
-            selectedApplicationList = committeeMeeting.getApplicationList();
-        }
-        
-        if(committeeMeeting.getApplicationList() == null)
-        {
-            selectedAttendeesList = new ArrayList<Person>();
-        }
-        else
-        {
-            selectedAttendeesList = committeeMeeting.getPersonList();
-        }
-        
-        
-        try 
-        {
             Session session = sessionManagerBean.getSession();
             appliationSelectionList = dRISApprovalServiceLocal.loadPendingEligibleApplications(session, 0, Integer.MAX_VALUE);
             attendeesSelectionList = meetingManagementServiceLocal.getAllPostDocCommitteeMembers(session);
@@ -112,6 +107,7 @@ public class MeetingEditBean implements Serializable {
             ExceptionUtil.handleException(null, ex);
             appliationSelectionList = new ArrayList<Application>();
             attendeesSelectionList = new ArrayList<Person>();
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToMeetingManagementServiceMeetingSelectionView());
         }
         
     }

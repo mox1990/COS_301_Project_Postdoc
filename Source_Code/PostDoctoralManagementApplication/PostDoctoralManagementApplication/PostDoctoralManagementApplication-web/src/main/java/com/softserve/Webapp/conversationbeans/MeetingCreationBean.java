@@ -71,13 +71,14 @@ public class MeetingCreationBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        selectedApplicationList = new ArrayList<Application>();
-        selectedAttendeesList = new ArrayList<Person>();
-        
-        committeeMeeting = new CommitteeMeeting();
-        
         try 
         {
+            selectedApplicationList = new ArrayList<Application>();
+            selectedAttendeesList = new ArrayList<Person>();
+        
+            committeeMeeting = new CommitteeMeeting();
+        
+        
             Session session = sessionManagerBean.getSession();
             appliationSelectionList = dRISApprovalServiceLocal.loadPendingEligibleApplications(session, 0, Integer.MAX_VALUE);
             attendeesSelectionList = meetingManagementServiceLocal.getAllPostDocCommitteeMembers(session);
@@ -88,6 +89,7 @@ public class MeetingCreationBean implements Serializable {
             ExceptionUtil.handleException(null, ex);
             appliationSelectionList = new ArrayList<Application>();
             attendeesSelectionList = new ArrayList<Person>();
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToMeetingManagementServiceHomeView());
         }
         
     }

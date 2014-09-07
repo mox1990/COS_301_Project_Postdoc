@@ -35,6 +35,7 @@ public class PersonFilterDependBean implements Serializable {
     
     public void init(List<Person> persons)
     {
+        filteredList = new ArrayList<Person>();
         if(persons == null)
         {
             originalList = new ArrayList<Person>();
@@ -42,9 +43,10 @@ public class PersonFilterDependBean implements Serializable {
         else
         {
             originalList = persons;
+            filteredList.addAll(persons);
         }
-        filteredList = new ArrayList<Person>();
-        filteredList.addAll(persons);
+        
+        
     }
 
     public List<Person> getFilteredList() {

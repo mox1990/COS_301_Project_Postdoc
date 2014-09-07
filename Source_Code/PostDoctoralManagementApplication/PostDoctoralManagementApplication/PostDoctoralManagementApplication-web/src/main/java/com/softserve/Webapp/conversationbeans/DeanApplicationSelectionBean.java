@@ -63,6 +63,7 @@ public class DeanApplicationSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(DeanApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

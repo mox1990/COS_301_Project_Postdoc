@@ -15,6 +15,10 @@ import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -26,6 +30,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -33,6 +38,7 @@ import javax.persistence.PersistenceUnit;
  *
  * @author K
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
@@ -43,25 +49,11 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     @EJB
     private NotificationServiceLocal notificationServiceLocal;
     @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    @EJB
     private CVManagementServiceLocal cVManagementServiceLocal;
     
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
-
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
     }
     
     protected CVManagementServiceLocal getCVManagementServiceEJB()
@@ -113,43 +105,44 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return new GregorianCalendar();
     }
     
-    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
-    public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws AuthenticationException, Exception
+    public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws Exception
     {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
-        userGateway.authenticateUser(session, roles);
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
+        List<Application> applications = applicationJpaController.findAllRenewalApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
+        if(applications.isEmpty())
+        {
+            GregorianCalendar startDate = getGregorianCalendarUTIL();
+            GregorianCalendar endDate = getGregorianCalendarUTIL();
+
+            final int NUMBER_OF_DAYS = 365;
+
+            endDate.add(GregorianCalendar.DAY_OF_YEAR, NUMBER_OF_DAYS);
         
-        GregorianCalendar startDate = getGregorianCalendarUTIL();
-        GregorianCalendar endDate = getGregorianCalendarUTIL();
-        
-        final int NUMBER_OF_DAYS = 365;
-        
-        endDate.add(GregorianCalendar.DAY_OF_YEAR, NUMBER_OF_DAYS);
-        
-        return applicationJpaController.getAllApplicationsForFellowWithEndDateInBetween(fellow, startDate.getTime(), endDate.getTime());
+            return applicationJpaController.getAllNewApplicationsForFellowWithEndDateInBetween(fellow, startDate.getTime(), endDate.getTime());
+        }
+        else
+        {
+            return applications;
+        }
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
-    public boolean doesApplicationHaveFinalProgressReport(Application application)
+    public boolean doesApplicationHaveFinalProgressReport(Session session,Application application) throws Exception
     {
-        return getProgressReportMangementEJB().doesApplicationHaveFinalProgressReport(application);
+        return getProgressReportMangementEJB().doesApplicationHaveFinalProgressReport(session,application);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
-    public void updateResearchFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception
-    {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    public void updateResearchFellowCV(Session session, Cv cv) throws Exception
+    {        
         if(cv == null)
         {
             throw new Exception("CV is not valid");
@@ -165,14 +158,15 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
             throw new Exception("CV does not exist valid");
         }
     }
-        
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
     public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
     {
         ProgressReportManagementService progressReportManagementService = getProgressReportMangementEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        if(getProgressReportMangementEJB().getNumberOfProgressReportsRequiredByApplication(application) == application.getProgressReportList().size() - 1)
+        if(progressReportManagementService.getNumberOfProgressReportsRequiredByApplication(session,application) == application.getProgressReportList().size() - 1)
         {
             progressReportManagementService.createProgressReport(session, application, progressReport);
         }
@@ -182,51 +176,28 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         }
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception
     {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
-        userGateway.authenticateUser(session, roles);
-        //Authenticate user ownership of application
-        userGateway.authenticateUserAsOwner(session, oldApplication.getFellow());
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         application.setTimestamp(getGregorianCalendarUTIL().getTime());
         application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
         application.setFellow(oldApplication.getFellow());
         application.setGrantHolder(oldApplication.getGrantHolder());
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
         
         applicationJpaController.create(application);
-        
-        //Log action
-        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Opened a renewal application", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public void submitApplication(Session session, Application application) throws Exception
-    {
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        userGateway.authenticateUser(session, roles);
-        //Authenticate user ownership of application
-        userGateway.authenticateUserAsOwner(session, application.getFellow());
-        
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
+    {  
         getApplicationServicesUtil().submitApplication(application);
-        
-        //Log action
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Submitted renewal application", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
 }

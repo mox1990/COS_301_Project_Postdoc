@@ -6,6 +6,7 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.ProgressReportJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
@@ -13,6 +14,10 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -30,28 +36,14 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ProgressReportManagementService implements ProgressReportManagementServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-    
-    @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
-    }
-    
+        
     public ProgressReportManagementService() {
     }
     
@@ -63,6 +55,11 @@ public class ProgressReportManagementService implements ProgressReportManagement
     {
         return new ProgressReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
+    
+    protected ApplicationJpaController getApplicationDAO()
+    {
+        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
         
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
@@ -73,105 +70,76 @@ public class ProgressReportManagementService implements ProgressReportManagement
     {
         return new GregorianCalendar();
     }
-    
-    public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        try
-        {
-            //Authenticate user ownership of account
-            userGateway.authenticateUserAsOwner(session, application.getFellow());
-        } 
-        catch(AuthenticationException ex)
-        {
-            //Authenticate user privliges
-            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-            userGateway.authenticateUser(session, roles);
-        }
-        
+     
+     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
+    @Override
+    public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws Exception
+    {        
         ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         progressReport.setApplication(application);
         progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
         progressReportJpaController.create(progressReport);
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created progress report", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
-    public void updateProgressReport(Session session, ProgressReport progressReport) throws AuthenticationException, Exception
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        try
-        {
-            //Authenticate user ownership of account
-            userGateway.authenticateUserAsOwner(session, progressReport.getApplication().getFellow());
-        } 
-        catch(AuthenticationException ex)
-        {
-            //Authenticate user privliges
-            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-            userGateway.authenticateUser(session, roles);
-        }
-        
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
+    @Override
+    public void updateProgressReport(Session session, ProgressReport progressReport) throws Exception
+    {        
         ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         progressReportJpaController.edit(progressReport);
-        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("updated progress report", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
-    {
-        
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
+    {        
         List<Application> output = new ArrayList<Application>();
         
-        Person user = session.getUser();
+        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
         GregorianCalendar curCal = getGregorianCalendarUTIL();
         
-        for(Application application : user.getApplicationList1())
+        for(Application application : applications)
         {        
             GregorianCalendar startCal = getGregorianCalendarUTIL();
-            startCal.setTime(application.getStartDate());
-            
+            startCal.setTime(application.getStartDate());            
             
             GregorianCalendar endCal = getGregorianCalendarUTIL();
             endCal.setTime(application.getEndDate());
             
+            System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
+            
             if(startCal.before(curCal) && endCal.after(curCal))
             {
-                if(getNumberOfProgressReportsRequiredByApplication(application) > application.getProgressReportList().size())
+                System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
+                if(getNumberOfProgressReportsRequiredByApplication(session,application) > application.getProgressReportList().size())
                 {
+                    System.out.println("Added" + application.toString());
                     output.add(application);
                 }
             }
         }
-        
+        System.out.println("====" + output.toString());
         return output;
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
-    public boolean doesApplicationHaveFinalProgressReport(Application application)
+    public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws Exception
     {
-        return getNumberOfProgressReportsRequiredByApplication(application) == application.getProgressReportList().size();
+        return getNumberOfProgressReportsRequiredByApplication(session,application) == application.getProgressReportList().size();
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @AuditableMethod
     @Override
-    public int getNumberOfProgressReportsRequiredByApplication(Application application)
+    public int getNumberOfProgressReportsRequiredByApplication(Session session, Application application) throws Exception
     {       
         GregorianCalendar startCal = getGregorianCalendarUTIL();
         startCal.setTime(application.getStartDate());

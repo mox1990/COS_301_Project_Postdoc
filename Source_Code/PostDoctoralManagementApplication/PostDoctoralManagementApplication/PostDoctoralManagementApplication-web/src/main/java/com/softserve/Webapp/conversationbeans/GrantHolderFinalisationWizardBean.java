@@ -73,27 +73,24 @@ public class GrantHolderFinalisationWizardBean implements Serializable {
         
         try 
         {        
-            session = sessionManagerBean.getSession();
-        } 
-        catch (Exception ex) 
-        {
-            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
-            return;
-        }
+            session = sessionManagerBean.getSession();        
+            Application application = sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
+            if(application == null)
+            {
+                throw new Exception("No application selected");
+            }
+            
+            applicationCreationDependBean.init(application);
+            wizardActiveTab = 0;
+            cVCreationDependBean.init(session.getUser().getCv());
         
-        applicationCreationDependBean.init(sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class));
-        wizardActiveTab = 0;
-        cVCreationDependBean.init(session.getUser().getCv());
-        
-        try 
-        {
             applicationReviewRequestCreationDependBean.init(grantHolderFinalisationServiceLocal.getHODsOfApplication(session, applicationCreationDependBean.getApplication()));
         } 
         catch (Exception ex) 
         {
-            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
+            ExceptionUtil.logException(NewApplicationCreationBean.class, ex);           
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToGrantHolderFinalisationServiceApplicationSelectionView());
         }
         
     }

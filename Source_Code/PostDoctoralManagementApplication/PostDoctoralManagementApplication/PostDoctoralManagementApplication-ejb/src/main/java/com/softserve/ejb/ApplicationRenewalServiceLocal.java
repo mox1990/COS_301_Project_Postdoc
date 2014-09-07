@@ -23,10 +23,10 @@ import javax.ejb.Local;
 @Local
 public interface ApplicationRenewalServiceLocal
 {
-    public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws AuthenticationException, Exception;
-    public boolean doesApplicationHaveFinalProgressReport(Application application);
-    public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception;
-    public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception;
+    public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws Exception;
+    public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws Exception;
+    public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws Exception;
+    public void createRenewalApplication(Session session, Application oldApplication, Application application) throws Exception;
     public void submitApplication(Session session, Application application) throws Exception;
-    public void updateResearchFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception;
+    public void updateResearchFellowCV(Session session, Cv cv) throws Exception;
 }

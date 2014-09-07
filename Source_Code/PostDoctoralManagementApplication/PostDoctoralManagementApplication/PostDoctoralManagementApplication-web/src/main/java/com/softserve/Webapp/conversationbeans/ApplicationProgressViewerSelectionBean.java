@@ -58,6 +58,7 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         conversationManagerBean.startConversation(conversation);
         try
         {
+            
             Session session = sessionManagerBean.getSession();
             if(isFellowApplicationDisplayable())
             {
@@ -76,6 +77,7 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(ApplicationProgressViewerSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

@@ -35,6 +35,7 @@ public class MeetingFilterDependBean implements Serializable {
     
     public void init(List<CommitteeMeeting> committeeMeetings)
     {
+        filteredList = new ArrayList<CommitteeMeeting>();
         if(committeeMeetings == null)
         {
             originalList = new ArrayList<CommitteeMeeting>();
@@ -42,9 +43,10 @@ public class MeetingFilterDependBean implements Serializable {
         else
         {
             originalList = committeeMeetings;
+            filteredList.addAll(committeeMeetings);
         }
-        filteredList = new ArrayList<CommitteeMeeting>();
-        filteredList.addAll(committeeMeetings);
+        
+        
     }
 
     public List<CommitteeMeeting> getFilteredList() {

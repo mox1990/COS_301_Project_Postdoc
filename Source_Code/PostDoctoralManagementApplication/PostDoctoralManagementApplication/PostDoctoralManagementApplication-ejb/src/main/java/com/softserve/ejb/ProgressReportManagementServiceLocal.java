@@ -20,9 +20,9 @@ import javax.ejb.Local;
  */
 @Local
 public interface ProgressReportManagementServiceLocal {
-    public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception;
-    public void updateProgressReport(Session session, ProgressReport progressReport) throws AuthenticationException, Exception;
+    public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws Exception;
+    public void updateProgressReport(Session session, ProgressReport progressReport) throws Exception;
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception;
-    public boolean doesApplicationHaveFinalProgressReport(Application application);
-    public int getNumberOfProgressReportsRequiredByApplication(Application application);
+    public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws Exception;
+    public int getNumberOfProgressReportsRequiredByApplication(Session session, Application application) throws Exception;
 }

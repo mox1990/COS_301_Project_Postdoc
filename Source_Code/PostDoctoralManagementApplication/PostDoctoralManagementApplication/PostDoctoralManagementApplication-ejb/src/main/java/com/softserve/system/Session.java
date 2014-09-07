@@ -83,16 +83,28 @@ public class Session {
     
     public boolean doesHttpSessionUsernameMatchUserUsername()
     {
+        if(user == null)
+        {
+            return false;
+        }
         return (user.getSystemID().toLowerCase().equals(getHttpSessionUsername().toLowerCase()) || (user.getResearchFellowInformation() != null && user.getResearchFellowInformation().getInstitutionAssignedID().toLowerCase().equals(getHttpSessionUsername().toLowerCase())));
     }
     
     public boolean doesHttpSessionUsernameMatchUserEmail()
     {
+        if(user == null)
+        {
+            return false;
+        }
         return (user.getEmail().toLowerCase().equals(getHttpSessionUsername().toLowerCase()) || (user.getResearchFellowInformation() != null && user.getResearchFellowInformation().getInstitutionAssignedEmail().toLowerCase().equals(getHttpSessionUsername().toLowerCase())));
     }
     
     public boolean doesHttpSessionPasswordMatchUserPassword()
     {
+        if(user == null)
+        {
+            return false;
+        }
         return (user.getPassword().equals(getHttpSessionPassword()));
     }
     
@@ -103,6 +115,10 @@ public class Session {
     
     public boolean doesUserHaveSecurityRole(SecurityRole securityRole)
     {
+        if(user == null)
+        {
+            return false;
+        }
         return user.getSecurityRoleList().contains(securityRole);
     }
     
@@ -120,6 +136,10 @@ public class Session {
     
     public boolean isUserAccountDisabled()
     {
+        if(user == null)
+        {
+            return false;
+        }
         if(isSystem())
         {
             return true;
@@ -138,6 +158,10 @@ public class Session {
     
     public boolean isUserAccountDorment()
     {
+        if(user == null)
+        {
+            return false;
+        }
         if(isSystem())
         {
             return false;
@@ -155,6 +179,10 @@ public class Session {
     
     public boolean isUserAccountActive()
     {
+        if(user == null)
+        {
+            return false;
+        }
         if(isSystem())
         {
             return true;

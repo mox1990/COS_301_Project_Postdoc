@@ -80,22 +80,31 @@ public class GeneralUserAccountCreationBean implements Serializable{
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        person = new Person();  
-        person.setTitle("Mr.");
-        address = new Address();
-        employeeInformation = new EmployeeInformation();
-        upAddress = new Address();
-        employeeInformation.setDepartment(new Department((long)(0)));
-        employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
-        employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
+        try
+        {
+            person = new Person();  
+            person.setTitle("Mr.");
+            address = new Address();
+            employeeInformation = new EmployeeInformation();
+            upAddress = new Address();
+            employeeInformation.setDepartment(new Department((long)(0)));
+            employeeInformation.getDepartment().setFaculty(new Faculty((long) 0));
+            employeeInformation.getDepartment().getFaculty().setInstitution(new Institution((long)(0)));
 
-        locationFinderDependBean.init(null);
-        
-        sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
-        sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        
-        targetRoles = new ArrayList<SecurityRole>();
-        securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles);
+            locationFinderDependBean.init(null);
+
+            sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
+            sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+
+            targetRoles = new ArrayList<SecurityRole>();
+            securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles);
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(GeneralUserAccountCreationBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToUserAccountManagementServicesHomeView());
+        }
         
     }
 

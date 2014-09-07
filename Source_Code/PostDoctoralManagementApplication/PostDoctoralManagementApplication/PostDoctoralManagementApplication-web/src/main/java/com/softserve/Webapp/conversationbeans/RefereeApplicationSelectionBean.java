@@ -63,6 +63,7 @@ public class RefereeApplicationSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(RefereeApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
     
