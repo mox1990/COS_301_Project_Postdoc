@@ -29,8 +29,12 @@
             <p:message for="email" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Password:" for="password"/>                                
-            <p:inputText id="password" value="#{person.password}"/>
+            <p:password id="password" value="#{person.password}"/>
             <p:message for="password" styleClass="fieldErrorMessage"/>
+            
+            <p:outputLabel value="Re-Type Password:" for="repassword"/>                                
+            <p:password id="repassword" value="#{retypePasswordValue}"/>
+            <p:message for="repassword" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Telephone number:" for="telephoneNumber"/>                                
             <p:inputText id="telephoneNumber" value="#{person.telephoneNumber}"/>

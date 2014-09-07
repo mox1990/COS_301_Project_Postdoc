@@ -49,8 +49,6 @@ public class HODRecommendConversationBean implements Serializable{
     @EJB
     private HODRecommendationServicesLocal hodRecommendationServicesLocal;
     
-    private UIComponent errorContainer; 
-    
     private RecommendationReport recommendationReport = null;
     private RecommendationReportContent recommendationReportContent = null;
     
@@ -81,15 +79,7 @@ public class HODRecommendConversationBean implements Serializable{
     
     public Application getSelectedApplication()
     {
-        return sessionManagerBean.getObjectFromSessionStorage(0, Application.class);
-    }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
+        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
     }
 
     public RecommendationReport getRecommendationReport() {

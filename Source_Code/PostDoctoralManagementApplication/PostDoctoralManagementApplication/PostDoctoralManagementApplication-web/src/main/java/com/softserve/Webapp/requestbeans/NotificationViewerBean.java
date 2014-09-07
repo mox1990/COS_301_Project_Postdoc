@@ -63,7 +63,8 @@ public class NotificationViewerBean implements Serializable {
             
             Session session = sessionManagerBean.getSession();
             notifications = notificationServiceLocal.getAllNotificationsForPerson(session, session.getUser());
-            filteredNotifications = new ArrayList<Notification>();            
+            filteredNotifications = new ArrayList<Notification>();   
+            filteredNotifications.addAll(notifications);
         }
         catch(Exception ex)
         {

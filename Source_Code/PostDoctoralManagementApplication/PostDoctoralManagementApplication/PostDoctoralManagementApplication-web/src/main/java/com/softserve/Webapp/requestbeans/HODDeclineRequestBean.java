@@ -36,8 +36,6 @@ public class HODDeclineRequestBean {
     @EJB
     private HODRecommendationServicesLocal hodRecommendationServicesLocal;
     
-    private UIComponent errorContainer;
-    
     private String reason = "";
     
     /**
@@ -49,14 +47,6 @@ public class HODDeclineRequestBean {
     public Application getSelectedApplication()
     {
         return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
-    }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
     }
             
     public String getReason() {

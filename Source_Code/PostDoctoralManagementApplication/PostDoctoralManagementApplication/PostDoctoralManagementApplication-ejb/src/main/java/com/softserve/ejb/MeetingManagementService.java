@@ -154,7 +154,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
@@ -183,7 +183,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         notificationService.sendBatchNotifications(notifications, true);
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
@@ -224,7 +224,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
@@ -248,7 +248,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 

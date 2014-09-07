@@ -28,7 +28,7 @@
                     <p:panel header="Application details">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
-                            <p:calendar id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true">
+                            <p:calendar mask="true" id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true">
                                 <f:convertDateTime pattern="yyyy/MM/dd"/>
                             </p:calendar>
                             <p:message for="startDate" styleClass="fieldErrorMessage"/>
@@ -41,7 +41,7 @@
                             <h:inputHidden id="sliderVal" value="#{drisApproveFundingBean.noOfYears}" />
                             
                             <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
-                            <p:calendar id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true">
+                            <p:calendar mask="true" id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true">
                                 <f:convertDateTime pattern="yyyy/MM/dd"/>
                             </p:calendar>
                             <p:message for="endDate" styleClass="fieldErrorMessage"/>

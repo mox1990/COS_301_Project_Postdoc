@@ -168,6 +168,51 @@ body
     font-weight: bold;
 }
 
+.ui-tabs
+{
+    margin-top: 10px!important;
+    box-shadow: 0px 2px 4px 0px gray!important;
+    border: solid gray!important;
+    border-radius: 5px!important;
+}
+
+.ui-tabs:hover
+{
+    margin-top: 10px!important;
+    box-shadow: 0px 0px 5px 0px darkblue!important;
+    border: solid black!important;
+    border-radius: 5px!important;
+}
+
+.ui-accordion
+{
+    margin-top: 10px!important;
+    box-shadow: 0px 2px 4px 0px gray!important;
+    border: solid gray!important;
+    border-radius: 5px!important;
+}
+
+.ui-accordion:hover
+{
+    margin-top: 10px!important;
+    box-shadow: 0px 0px 5px 0px darkblue!important;
+    border: solid black!important;
+    border-radius: 5px!important;
+}
+
+.ui-accordion-header:hover
+{
+    
+    background: #deefff; 
+    background: -moz-linear-gradient(top,  #deefff 0%, #98bede 100%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#deefff), color-stop(100%,#98bede)); 
+    background: -webkit-linear-gradient(top,  #deefff 0%,#98bede 100%); 
+    background: -o-linear-gradient(top,  #deefff 0%,#98bede 100%); 
+    background: -ms-linear-gradient(top,  #deefff 0%,#98bede 100%); 
+    background: linear-gradient(to bottom,  #deefff 0%,#98bede 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deefff', endColorstr='#98bede',GradientType=0 );
+}
+
 .ui-panel
 {
     margin-top: 10px!important;
@@ -178,6 +223,16 @@ body
 {
     margin-top: 10px!important;
     box-shadow: 0px 2px 4px 0px gray!important;
+    //border: solid gray!important;
+    //border-radius: 5px!important;
+}
+
+.ui-datatable:hover
+{
+    margin-top: 10px!important;
+    box-shadow: 0px 2px 4px 0px darkred!important;
+    border-color: black!important;
+    //border-radius: 5px!important;
 }
 
 .text-label
@@ -187,11 +242,7 @@ body
 
 .box-round
 {
-    border-radius: 6px;
-    border-width: 2px;
-    border-style: solid;
-    color: grey;
-    padding: 5px;
+    
 }
 
 .breadCrumbs
@@ -380,10 +431,6 @@ body
 {
     box-shadow: 0px 0px 5px 0px darkblue!important;
     border-color: black!important;
-    
-
-
-
 
 
     background: #deefff; 
@@ -448,16 +495,36 @@ form select[disabled]
     background-color: lightgray;
 }
 
+form input.ui-state-focus
+{
+    box-shadow: 0px 0px 5px 0px cornflowerblue, inset 0px 1px 2px 0px black!important;
+}
+
+form textarea.ui-state-focus
+{
+    box-shadow: 0px 0px 5px 0px cornflowerblue, inset 0px 1px 2px 0px black!important;
+}
+
+ui-selectonemenu.ui-state-focus
+{
+    box-shadow: 0px 0px 5px 0px cornflowerblue, inset 0px 1px 2px 0px black!important;
+}
+
+ui-selectonemenu.ui-state-hover
+{
+    box-shadow: 0px 0px 5px 0px cornflowerblue, inset 0px 1px 2px 0px black!important;
+}
+
 form input:focus
 {
-    box-shadow: 0px 0px 5px 0px darkblue;
-    border-color: black;
+    //box-shadow: 0px 0px 5px 0px darkblue!important;
+    //border-color: black!important;
 }
 
 form select:focus
 {
-    box-shadow: 0px 0px 5px 0px darkblue;
-    border-color: black;
+    //box-shadow: 0px 0px 5px 0px darkblue!important;
+    //border-color: black!important;
 }
 
 form input::-webkit-input-placeholder

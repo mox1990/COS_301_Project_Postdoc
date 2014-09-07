@@ -269,9 +269,16 @@ public class CVCreationDependBean implements Serializable{
     
     public void addToExperienceList()
     {
-        experienceList.add(currentExperience);
-        currentExperience = new Experience();
-        MessageUtil.CreateGlobalFacesMessage("Experience added!","The work experience item has been added to the list.", FacesMessage.SEVERITY_INFO);
+        if(currentExperience.getStartDate().before(currentExperience.getEndDate()))
+        {
+            experienceList.add(currentExperience);
+            currentExperience = new Experience();
+            MessageUtil.CreateGlobalFacesMessage("Experience added!","The work experience item has been added to the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("Incorrect date!", "The start date can not be after the end date for the work experience you wish to add!", FacesMessage.SEVERITY_WARN);
+        }
     }
     
     public void removeFromExperienceList()

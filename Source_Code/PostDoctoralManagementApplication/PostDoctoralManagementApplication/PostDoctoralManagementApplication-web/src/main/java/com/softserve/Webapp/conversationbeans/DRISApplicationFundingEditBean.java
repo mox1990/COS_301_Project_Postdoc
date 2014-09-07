@@ -78,9 +78,13 @@ public class DRISApplicationFundingEditBean implements Serializable {
         
         endDate = openApplication.getEndDate();
         startDate = openApplication.getStartDate();
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTimeInMillis(endDate.getTime() - startDate.getTime());
-        noOfYears  = calendar.get(GregorianCalendar.YEAR);
+        GregorianCalendar startCalendar = new GregorianCalendar();
+        GregorianCalendar endCalendar = new GregorianCalendar();
+        startCalendar.setTime(startDate);
+        endCalendar.setTime(endDate);
+        noOfYears  = endCalendar.get(GregorianCalendar.YEAR) - startCalendar.get(GregorianCalendar.YEAR);
+        
+        locationFinderDependBean.init(openApplication.getFellow().getResearchFellowInformation().getDepartment());
     } 
     
     public Application getSelectedApplication()

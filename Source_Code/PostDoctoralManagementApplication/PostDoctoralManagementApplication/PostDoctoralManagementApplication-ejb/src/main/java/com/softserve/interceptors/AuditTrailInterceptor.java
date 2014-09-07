@@ -66,27 +66,35 @@ public class AuditTrailInterceptor {
 
             if(session != null)
             {               
-                DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
-                String logString = auditableMethodAnnotations[0].message();
-                if(auditableMethodAnnotations[0].logMethodName())
+                if(session.getUser() != null && session.getUser().getSystemID() != null)
                 {
-                    logString += " [ Method = " + context.getMethod().getName() + " ]";
-                }
-                if(auditableMethodAnnotations[0].logMethodParameters())
-                {
-                    logString += " [ Parameters: ";
-                    for(Object parameter : context.getParameters())
+                    DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
+                    String logString = auditableMethodAnnotations[0].message();
+                    if(auditableMethodAnnotations[0].logMethodName())
                     {
-                        logString += parameter.toString() + "; ";
+                        logString += " [ Method = " + context.getMethod().getName() + " ]";
                     }
+                    if(auditableMethodAnnotations[0].logMethodParameters())
+                    {
+                        logString += " [ Parameters: ";
+                        for(Object parameter : context.getParameters())
+                        {
+                            logString += parameter.toString() + "; ";
+                        }
 
-                    logString += "]";
+                        logString += "]";
+                    }
+                    logString += excptionMessage;
+                    System.out.println("Auditied : " + context.getMethod().getName());
+                    AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy(logString, session.getUser());
+                    System.out.println("Auditmessage : " + auditLog.getAction());
+                    auditTrailServiceLocal.logAction(auditLog);
                 }
-                logString += excptionMessage;
-                System.out.println("Auditied : " + context.getMethod().getName());
-                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy(logString, session.getUser());
-                System.out.println("Auditmessage : " + auditLog.getAction());
-                auditTrailServiceLocal.logAction(auditLog);
+                else
+                {
+                    System.out.println("Audit interceptor skipping as session user null: " + context.getMethod().getName());
+                }
+                
             }
             else
             {

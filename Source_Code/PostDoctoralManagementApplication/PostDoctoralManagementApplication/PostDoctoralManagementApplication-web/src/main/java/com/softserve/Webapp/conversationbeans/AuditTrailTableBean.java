@@ -33,8 +33,6 @@ public class AuditTrailTableBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
-    @Inject 
-    private NavigationManagerBean navigationManagerBean;
     @Inject
     private ConversationManagerBean conversationManagerBean;
     
@@ -62,6 +60,7 @@ public class AuditTrailTableBean implements Serializable {
         
         entries = auditTrailServiceLocal.findAll();
         filteredEntries = new ArrayList<AuditLog>();
+        filteredEntries.addAll(entries);
         
         System.out.println("Entires " + entries.size() );
         

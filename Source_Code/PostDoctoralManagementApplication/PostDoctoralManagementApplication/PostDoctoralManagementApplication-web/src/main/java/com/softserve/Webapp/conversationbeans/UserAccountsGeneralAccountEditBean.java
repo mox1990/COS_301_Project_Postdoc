@@ -56,8 +56,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
-    private UIComponent errorContainer;
-    
+    private String reTypePassword;
     private Person person;
     private Address address;
     private EmployeeInformation employeeInformation;
@@ -81,7 +80,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        person = sessionManagerBean.getObjectFromSessionStorage(0, Person.class);
+        person = sessionManagerBean.getObjectFromSessionStorage("ACCOUNT", Person.class);
         
         address = person.getAddressLine1();
         
@@ -164,15 +163,15 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     public boolean isIsSystemAdmin() {
         return isSystemAdmin;
     }
-    
-    public UIComponent getErrorContainer() {
-        return errorContainer;
+
+    public String getReTypePassword() {
+        return reTypePassword;
     }
 
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
+    public void setReTypePassword(String reTypePassword) {
+        this.reTypePassword = reTypePassword;
     }
-
+        
     public LocationFinderDependBean getLocationFinderDependBean() {
         return locationFinderDependBean;
     }
@@ -185,6 +184,11 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     {
         try 
         {
+            if(!reTypePassword.equals(person.getPassword()))
+            {
+                throw new Exception("Passwords do not match");
+            }
+            
             if(isSystemAdmin)
             {
                 securityRoles.getTarget().addAll(securityRoles.getSource()); 

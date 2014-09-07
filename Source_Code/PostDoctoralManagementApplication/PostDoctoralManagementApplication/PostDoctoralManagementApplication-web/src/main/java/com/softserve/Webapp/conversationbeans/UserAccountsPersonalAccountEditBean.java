@@ -60,6 +60,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     
     private UIComponent errorContainer;
     
+    private String reTypePassword;
     private Person person;
     private Address address;
     private EmployeeInformation employeeInformation;
@@ -156,7 +157,16 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
         this.locationFinderDependBean = locationFinderDependBean;
     }
+
+    public String getReTypePassword() {
+        return reTypePassword;
+    }
+
+    public void setReTypePassword(String reTypePassword) {
+        this.reTypePassword = reTypePassword;
+    }
     
+        
     public boolean isUserEmployee(Person person)
     {
         for(SecurityRole securityRole : person.getSecurityRoleList())
@@ -173,6 +183,11 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     {
         try 
         {
+            if(!reTypePassword.equals(person.getPassword()))
+            {
+                throw new Exception("Passwords do not match");
+            }
+            
             person.setAddressLine1(address);
             if(person.getUpEmployee())
             {
@@ -202,6 +217,11 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     {
         try 
         {
+            if(!reTypePassword.equals(person.getPassword()))
+            {
+                throw new Exception("Passwords do not match");
+            }
+            
             person.setAddressLine1(address);
             if(person.getUpEmployee())
             {

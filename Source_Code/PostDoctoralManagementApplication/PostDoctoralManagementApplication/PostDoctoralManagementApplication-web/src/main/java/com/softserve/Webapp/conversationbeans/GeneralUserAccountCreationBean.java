@@ -56,8 +56,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
-    private UIComponent errorContainer;
-    
+    private String reTypePassword;
     private Person person;
     private Address address;
     private EmployeeInformation employeeInformation;
@@ -148,15 +147,15 @@ public class GeneralUserAccountCreationBean implements Serializable{
     public boolean isIsSystemAdmin() {
         return isSystemAdmin;
     }
-    
-    public UIComponent getErrorContainer() {
-        return errorContainer;
+
+    public String getReTypePassword() {
+        return reTypePassword;
     }
 
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
+    public void setReTypePassword(String reTypePassword) {
+        this.reTypePassword = reTypePassword;
     }
-
+            
     public LocationFinderDependBean getLocationFinderDependBean() {
         return locationFinderDependBean;
     }
@@ -170,6 +169,11 @@ public class GeneralUserAccountCreationBean implements Serializable{
         System.out.println("================================= creating");
         try 
         {
+            if(!reTypePassword.equals(person.getPassword()))
+            {
+                throw new Exception("Passwords do not match");
+            }
+            
             if(isSystemAdmin)
             {
                 securityRoles.getTarget().addAll(securityRoles.getSource());

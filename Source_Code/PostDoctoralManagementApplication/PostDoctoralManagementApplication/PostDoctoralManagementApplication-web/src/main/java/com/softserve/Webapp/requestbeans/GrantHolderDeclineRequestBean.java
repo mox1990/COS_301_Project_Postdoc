@@ -37,8 +37,6 @@ public class GrantHolderDeclineRequestBean {
     @EJB
     private GrantHolderFinalisationServiceLocal grantHolderFinalisationServiceLocal;
     
-    private UIComponent errorContainer;
-    
     private String reason = "";
     
     /**
@@ -50,14 +48,6 @@ public class GrantHolderDeclineRequestBean {
     public Application getSelectedApplication()
     {
         return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
-    }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
     }
             
     public String getReason() {

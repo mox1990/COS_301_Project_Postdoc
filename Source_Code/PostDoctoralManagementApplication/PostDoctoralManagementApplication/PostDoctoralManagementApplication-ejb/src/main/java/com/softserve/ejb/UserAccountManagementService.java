@@ -20,6 +20,10 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
 import com.softserve.Exceptions.UserAlreadyExistsException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Generator;
 import com.softserve.system.Session;
@@ -33,6 +37,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -42,7 +47,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserAccountManagementService implements UserAccountManagementServiceLocal {     
@@ -190,6 +195,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param prefix The prefix to be used for the 9 character systemID
      * @return The newly generated SystemID as a string
      */
+    @AuditableMethod
     protected String generateSystemID(char prefix)
     {
         PersonJpaController personJpaController = getPersonDAO();
@@ -242,14 +248,10 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws com.softserve.DBDAO.exceptions.RollbackFailureException Is thrown if an address, person or employeeinfo failed to rollback due to some error 
      * @throws Exception Is thrown if an unknown error has occurred
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
-    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user) throws AutomaticSystemIDGenerationException, PreexistingEntityException, RollbackFailureException, Exception
+    public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user) throws Exception
     {     
-        //Authenticate user privliges
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        userGateway.authenticateUser(session, roles);
         /* NB DISABLED FOR TESTING PURPOSE
         if(findUserBySystemIDOrEmail(user.getEmail()) != null)
         {
@@ -353,30 +355,15 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws com.softserve.DBDAO.exceptions.RollbackFailureException Is thrown if an address, person or employeeinfo failed to rollback due to some error 
      * @throws Exception Is thrown if an unknown error has occurred
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
-    public void updateUserAccount(Session session, Person user) throws NonexistentEntityException, RollbackFailureException, Exception
+    public void updateUserAccount(Session session, Person user) throws Exception
     {
-        
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        try
-        {
-            //Authenticate user ownership of account
-            userGateway.authenticateUserAsOwner(session, user);
-        } 
-        catch(AuthenticationException ex)
-        {
-            //Authenticate user privliges
-            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-            userGateway.authenticateUser(session, roles);
-        } 
-        
         PersonJpaController personJpaController = getPersonDAO();
         AddressJpaController addressJpaController = getAddressDAO();
         ResearchFellowInformationJpaController researchFellowInformationJpaController = getResearchFellowInformationDAO();
         EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
         Address userAddress = user.getAddressLine1(); 
         EmployeeInformation userUPInfo = user.getEmployeeInformation();
@@ -455,10 +442,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         
         personJpaController.edit(user);
-        
-        //Log action
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Updated user account", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
     /**
@@ -468,13 +451,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws RollbackFailureException
      * @throws Exception Is thrown if an unknown error has occurred
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
-    public void removeUserAccount(Session session, String systemID) throws RollbackFailureException, Exception
+    public void removeUserAccount(Session session, String systemID) throws Exception
     {
         //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
         if(session.getUser().getSystemID().equals(systemID))
         {
@@ -491,9 +473,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
         personJpaController.edit(user);
         
-        //Log action
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Removed user account", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
     /**
@@ -506,11 +485,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param userUPInfo
      * @throws Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user) throws Exception
     {
         //Use this to create a new account
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
@@ -531,9 +511,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
         Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
         notificationService.sendNotification(notification, true);
         
-        //Log this action
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Generated on demand account", session.getUser());
-        auditTrailService.logAction(auditLog);
     }
     
     /**
@@ -542,18 +519,15 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param user
      * @throws java.lang.Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {})
     @Override
     public void activateOnDemandAccount(Session session, Person user) throws Exception
-    {
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
+    {        
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-        updateUserAccount(session, user);
+        updateUserAccount(session, user);  
         
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Activated on demand account", session.getUser());
-        auditTrailService.logAction(auditLog);
-
+        AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Activated user account", user); //This is a isolated instance when a user activates a new account
+        getAuditTrailServiceEJB().logAction(auditLog);
     }    
     
     /**
@@ -561,14 +535,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param session The current HttpSession that is used for user authentication
      * @return A list of Person objects representing the user accounts
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        userGateway.authenticateUser(session, roles);
-        
+    {        
         PersonJpaController personJpaController = getPersonDAO();
         
         return personJpaController.findPersonEntities();        
@@ -609,30 +580,24 @@ public class UserAccountManagementService implements UserAccountManagementServic
             return new ArrayList<SecurityRole>();
         }
     }
-
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void approveOnDemandAccount(Session session, Person account) throws Exception 
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        userGateway.authenticateUser(session, roles);
-        
+    {        
         PersonJpaController personJpaController = getPersonDAO();
         
         account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
         
         personJpaController.edit(account);
     }
-
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void declineOnDemandAccount(Session session, Person account) throws Exception 
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        userGateway.authenticateUser(session, roles);
-        
+    { 
         PersonJpaController personJpaController = getPersonDAO();
         NotificationJpaController notificationJpaController = getNotificationDAO();
         AuditLogJpaController auditLogJpaController = getAuditLogDAO();
@@ -687,15 +652,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
         personJpaController.destroy(account.getSystemID());
     }
-
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception 
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        userGateway.authenticateUser(session, roles);
-        
+    {        
         return getPersonDAO().findAllUsersWhichHaveAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
     }
     

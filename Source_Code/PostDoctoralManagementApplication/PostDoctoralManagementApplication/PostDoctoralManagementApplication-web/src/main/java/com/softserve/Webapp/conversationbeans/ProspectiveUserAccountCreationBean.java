@@ -52,8 +52,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
-    private UIComponent errorContainer;
-    
+    private String reTypePassword;
     private Person person;
     private Address address;
     private EmployeeInformation employeeInformation;
@@ -114,15 +113,15 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     public void setUpAddress(Address upAddress) {
         this.upAddress = upAddress;
     }
-                
-    public UIComponent getErrorContainer() {
-        return errorContainer;
+
+    public String getReTypePassword() {
+        return reTypePassword;
     }
 
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
+    public void setReTypePassword(String reTypePassword) {
+        this.reTypePassword = reTypePassword;
     }
-
+        
     public LocationFinderDependBean getLocationFinderDependBean() {
         return locationFinderDependBean;
     }
@@ -135,6 +134,11 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     {        
         try 
         {
+            if(!reTypePassword.equals(person.getPassword()))
+            {
+                throw new Exception("Passwords do not match");
+            }
+            
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
             person.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
             

@@ -123,7 +123,7 @@ public class MeetingSelectionBean implements Serializable {
     public void cancelMeeting(CommitteeMeeting meeting)
     {
         try
-        {
+        {   
             meetingManagementServiceLocal.cancelMeeting(sessionManagerBean.getSession(), meeting);
             conversationManagerBean.deregisterConversation(conversation);
         }
