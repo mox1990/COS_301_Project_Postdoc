@@ -103,11 +103,6 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
         return dBEntities;
     }
     
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
     
     @Override
     protected NotificationService getNotificationServiceEJB()
@@ -115,11 +110,6 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
         return nEJB;
     }
     
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aTEJB;
-    }
     
     @Override
     protected ApplicationServicesUtil getApplicationServicesUTIL()

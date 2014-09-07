@@ -29,6 +29,7 @@ public class FundingReportCreationDependBean implements Serializable{
      * Creates a new instance of FundingReportCreationDependBean
      */
     
+    private ArrayList<FundingCost> selectedFundingCosts;
     private FundingCost currentFundingCost;
     private FundingReport fundingReport;
 
@@ -53,6 +54,8 @@ public class FundingReportCreationDependBean implements Serializable{
         {
             fundingReport.setFundingCostList(new ArrayList<FundingCost>());
         }
+        
+        selectedFundingCosts = new ArrayList<FundingCost>();
     }
 
     public FundingCost getCurrentFundingCost() {
@@ -70,12 +73,63 @@ public class FundingReportCreationDependBean implements Serializable{
     public void setFundingReport(FundingReport fundingReport) {
         this.fundingReport = fundingReport;
     }
+
+    public ArrayList<FundingCost> getSelectedFundingCosts() {
+        return selectedFundingCosts;
+    }
+
+    public void setSelectedFundingCosts(ArrayList<FundingCost> selectedFundingCosts) {
+        this.selectedFundingCosts = selectedFundingCosts;
+    }
     
+       
     public void addFundingCostToList()
     {
+        System.out.println(fundingReport.getFundingCostList().size());
+         System.out.println(fundingReport.getFundingCostList().toString());
         fundingReport.getFundingCostList().add(currentFundingCost);
+        System.out.println(fundingReport.getFundingCostList().toString());
+         System.out.println(fundingReport.getFundingCostList().size());
         currentFundingCost = new FundingCost();
         MessageUtil.CreateGlobalFacesMessage("Funding cost added!","The funding cost has been added to the list.", FacesMessage.SEVERITY_INFO);
     }
     
+    public void removeFundingCostFromList()
+    {
+        if(selectedFundingCosts.size() > 0)
+        {
+            ArrayList<FundingCost> newFundingCosts = new ArrayList<FundingCost>();
+            
+            for(FundingCost fundingCost : fundingReport.getFundingCostList())
+            {
+                String removeValue = fundingCost.getProvider()+ " " + fundingCost.getType()+ " " + fundingCost.getAmount();
+                
+                boolean found = false;
+                
+                for(FundingCost fundingCost1 : selectedFundingCosts)
+                {                    
+                    String value = fundingCost1.getProvider()+ " " + fundingCost1.getType()+ " " + fundingCost1.getAmount();
+                    if(removeValue.equals(value))
+                    {
+                       found = true;
+                    }
+                }
+                
+                if(!found)
+                {
+                    newFundingCosts.add(fundingCost);
+                }
+            }
+            
+            fundingReport.setFundingCostList(newFundingCosts);
+            
+            selectedFundingCosts = new ArrayList<FundingCost>();
+            MessageUtil.CreateGlobalFacesMessage("Funding costs removed!","The selected funding costs have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No funding costs selected!", "You have to select funding costs which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
+    }
+        
 }

@@ -22,8 +22,8 @@
                 <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                     <ui:param name="pendingApplications" value="#{forwardAndRewindServiceApplicationSelectionBean.applicationFilterDependBean.filteredList}"/>
                     <ui:define name="commandButtons">
-                        <p:panel >
-                            <h:panelGrid columns="3" cellpadding="5" id="#{_objectInContext}Grid">
+                        <p:panel id="#{_objectInContext}Grid">
+                            <h:panelGrid columns="3" cellpadding="5" >
                                 <p:outputLabel value="Reason for move:" for="reason"/>                                
                                 <p:inputTextarea id="reason" value="#{forwardAndRewindServiceRequestBean.reason}" required="true" />
                                 <p:message for="reason" styleClass="fieldErrorMessage"/> 
@@ -35,7 +35,7 @@
                                 <p:message for="tostatus" styleClass="fieldErrorMessage"/>                                                                        
                             </h:panelGrid> 
                             <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                            <p:commandButton value="Move application to status" styleClass="button button-fill" actionListener="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@all" process="#{_objectInContext}Grid">
+                            <p:commandButton value="Move application to status" styleClass="button button-fill" actionListener="#{forwardAndRewindServiceRequestBean.performApplicationStatusMoveRequest(app)}" update="@form" process="#{_objectInContext}Grid">
                                 <p:confirm header="Confirmation" message="Are you sure that you want to move the application the selected status? Warning: If rewinding any information pertaining to rewinded stages will be removed permanently." icon="ui-icon-alert"/>
                             </p:commandButton>                           
                         </p:panel>

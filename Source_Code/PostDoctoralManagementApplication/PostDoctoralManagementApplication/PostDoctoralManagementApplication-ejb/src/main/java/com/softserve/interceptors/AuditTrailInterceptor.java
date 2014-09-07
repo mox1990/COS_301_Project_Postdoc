@@ -32,71 +32,78 @@ public class AuditTrailInterceptor {
         System.out.println("=====================Audit interceptor launching: " + context.getMethod().getName());
         Object result = null;
         String excptionMessage = "";
+        Exception exception = null;
         try
         {
             result = context.proceed();
-            System.out.println("=====================Audit interceptor continuing: " + context.getMethod().getName());
+            System.out.println("=====================Audit interceptor method success: " + context.getMethod().getName());
         }
         catch(Exception ex)
         {
+            System.out.println("=====================Audit interceptor caught method exception: " + context.getMethod().getName());
             excptionMessage = " [ Exception = " + ex.toString() + "]";
-            throw ex;            
+            exception = ex;            
         }
-        finally
+        
+        System.out.println("Audit interceptor processing annotation: " + context.getMethod().getName());
+
+        AuditableMethod[] auditableMethodAnnotations = context.getMethod().getDeclaredAnnotationsByType(AuditableMethod.class);        
+
+        if(auditableMethodAnnotations.length > 0)
         {
-            System.out.println("Audit interceptor processing annotation: " + context.getMethod().getName());
-            
-            AuditableMethod[] auditableMethodAnnotations = context.getMethod().getDeclaredAnnotationsByType(AuditableMethod.class);        
+            System.out.println("Auditing enabled: " + context.getMethod().getName());
 
-            if(auditableMethodAnnotations.length > 0)
+            Session session = null;
+
+            for(Object parameter : context.getParameters())
             {
-                System.out.println("Auditing enabled: " + context.getMethod().getName());
-                
-                Session session = null;
-
-                for(Object parameter : context.getParameters())
+                if(parameter.getClass() == Session.class)
                 {
-                    if(parameter.getClass() == Session.class)
-                    {
-                        session = (Session) parameter;
-                        break;
-                    }
+                    session = (Session) parameter;
+                    break;
                 }
-                
-                if(session != null)
-                {               
-                    DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
-                    String logString = auditableMethodAnnotations[0].message();
-                    if(auditableMethodAnnotations[0].logMethodName())
-                    {
-                        logString += " [ Method = " + context.getMethod().getName() + " ]";
-                    }
-                    if(auditableMethodAnnotations[0].logMethodParameters())
-                    {
-                        logString += " [ Parameters: ";
-                        for(Object parameter : context.getParameters())
-                        {
-                            logString += parameter.toString() + "; ";
-                        }
+            }
 
-                        logString += "]";
-                    }
-                    logString += excptionMessage;
-                    System.out.println("Auditied : " + context.getMethod().getName());
-                    AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy(logString, session.getUser());
-                    System.out.println("Auditmessage : " + auditLog.getAction());
-                    auditTrailServiceLocal.logAction(auditLog);
-                }
-                else
+            if(session != null)
+            {               
+                DBEntitiesFactory dBEntitiesFactory = new DBEntitiesFactory();
+                String logString = auditableMethodAnnotations[0].message();
+                if(auditableMethodAnnotations[0].logMethodName())
                 {
-                    throw new Exception("Cannot log a method that does not contain a session parameter");
-                }            
+                    logString += " [ Method = " + context.getMethod().getName() + " ]";
+                }
+                if(auditableMethodAnnotations[0].logMethodParameters())
+                {
+                    logString += " [ Parameters: ";
+                    for(Object parameter : context.getParameters())
+                    {
+                        logString += parameter.toString() + "; ";
+                    }
+
+                    logString += "]";
+                }
+                logString += excptionMessage;
+                System.out.println("Auditied : " + context.getMethod().getName());
+                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy(logString, session.getUser());
+                System.out.println("Auditmessage : " + auditLog.getAction());
+                auditTrailServiceLocal.logAction(auditLog);
             }
             else
             {
-                System.out.println("Auditing disabled: " + context.getMethod().getName());
-            }
-            
+                throw new Exception("Cannot log a method that does not contain a session parameter");
+            }            
+        }
+        else
+        {
+            System.out.println("Auditing disabled: " + context.getMethod().getName());
+        }       
+        
+        if(exception != null)
+        {
+            throw exception;
+        }
+        else
+        {
             return result;
         }
         

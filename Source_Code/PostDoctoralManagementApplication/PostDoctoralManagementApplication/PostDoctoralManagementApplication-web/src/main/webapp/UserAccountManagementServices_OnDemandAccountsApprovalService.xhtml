@@ -27,11 +27,11 @@
                     <ui:decorate template="templates/accountsListing_Comoponent.xhtml">
                         <ui:param name="userAccounts" value="#{pendingUserAccountsSelectionBean.personFilterDependBean.filteredList}"/>
                         <ui:define name="commandButtons" >
-                            <p:commandButton value="Approve on-demand user account" styleClass="button-fill button" action="#{pendingUserAccountsSelectionBean.approveOndemandAccount(account)}" update="@all">
+                            <p:commandButton value="Approve on-demand user account" styleClass="button-fill button" action="#{pendingUserAccountsSelectionBean.approveOndemandAccount(account)}" update="@form">
                                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                                 <p:confirm header="Confirmation" message="Are you sure that you approve this on-demand account?." icon="ui-icon-alert"/>
                             </p:commandButton>                            
-                            <p:commandButton value="Decline on-demand user account" styleClass="button-fill button" action="#{pendingUserAccountsSelectionBean.declineOndemandAccount(account)}" update="@all">
+                            <p:commandButton value="Decline on-demand user account" styleClass="button-fill button" action="#{pendingUserAccountsSelectionBean.declineOndemandAccount(account)}" update="@form">
                                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                                 <p:confirm header="Confirmation" message="Are you sure that you decline this on-demand account? Warning: This will remove the account permanently from the system." icon="ui-icon-alert"/>
                             </p:commandButton>

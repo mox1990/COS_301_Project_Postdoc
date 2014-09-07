@@ -17,10 +17,14 @@
                 <h:outputText value="#{experience.organisation}"/>
             </p:column>
             <p:column headerText="Start date">
-                <h:outputText value="#{experience.startDate}"/>
+                <h:outputText value="#{experience.startDate}">
+                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:outputText>
             </p:column>    
             <p:column headerText="End date">
-                <h:outputText value="#{experience.endDate}"/>
+                <h:outputText value="#{experience.endDate}">
+                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:outputText>
             </p:column> 
         </p:dataTable>
     </ui:component>

@@ -76,6 +76,7 @@ public class PendingUserAccountsSelectionBean implements Serializable {
         try 
         {
             userAccountManagementServiceLocal.approveOnDemandAccount(sessionManagerBean.getSession(), person);
+            conversationManagerBean.deregisterConversation(conversation);
         } 
         catch (Exception ex) 
         {
@@ -91,6 +92,7 @@ public class PendingUserAccountsSelectionBean implements Serializable {
         try 
         {
             userAccountManagementServiceLocal.declineOnDemandAccount(sessionManagerBean.getSession(), person);
+            conversationManagerBean.deregisterConversation(conversation);
         } 
         catch (Exception ex) 
         {

@@ -9,7 +9,18 @@
         <h:form>
             <p:outputPanel id="qualifications">
                 <div>
-
+                        <p:outputPanel id="qualificationsTable">
+                            <ui:decorate template="academicQualificationDataTableInput_Component.xhtml">
+                                <ui:param name="header" value="Academic qualifications already added"/>
+                                <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
+                                <ui:param name="selectedAcademicQualificationList" value="#{selectedAcademicQualificationList}"/>
+                            </ui:decorate>
+                        </p:outputPanel>
+                        
+                        <p:commandButton ajax="true" update="qualifications" actionListener="#{bean[beanActionRemove]}" value="Remove selected qualifications" styleClass="button button-fill" process="@this qualificationsTable">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                        </p:commandButton>
+                    
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Name:" for="qname"/>                                
                             <p:inputText id="qname" value="#{currentQualification.name}" required="true"/>
@@ -38,17 +49,7 @@
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                         </p:commandButton>
                         
-                        <p:outputPanel id="qualificationsTable">
-                            <ui:decorate template="academicQualificationDataTableInput_Component.xhtml">
-                                <ui:param name="header" value="Academic qualifications already added"/>
-                                <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
-                                <ui:param name="selectedAcademicQualificationList" value="#{selectedAcademicQualificationList}"/>
-                            </ui:decorate>
-                        </p:outputPanel>
                         
-                        <p:commandButton ajax="true" update="qualifications" actionListener="#{bean[beanActionRemove]}" value="Remove selected qualifications" styleClass="button button-fill" process="@this qualificationsTable">
-                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                        </p:commandButton>
                 </div>
             </p:outputPanel>
         </h:form>

@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -73,6 +74,9 @@ public class CommitteeMeeting implements Serializable {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany
     private List<Application> applicationList;
+    @JoinColumn(name = "_organiser", referencedColumnName = "_systemID")
+    @ManyToOne(optional = false)
+    private Person organiser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "meeting")
     private List<MinuteComment> minuteCommentList;
 
@@ -139,6 +143,14 @@ public class CommitteeMeeting implements Serializable {
 
     public void setApplicationList(List<Application> applicationList) {
         this.applicationList = applicationList;
+    }
+
+    public Person getOrganiser() {
+        return organiser;
+    }
+
+    public void setOrganiser(Person organiser) {
+        this.organiser = organiser;
     }
 
     @XmlTransient

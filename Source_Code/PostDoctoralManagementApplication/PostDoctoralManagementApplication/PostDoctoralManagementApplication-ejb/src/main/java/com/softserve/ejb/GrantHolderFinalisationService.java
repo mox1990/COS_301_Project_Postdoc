@@ -316,12 +316,17 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public void requestSpecificHODtoReview(Session session, Application application, Person hod) throws Exception 
     {        
-        List<Person> requestAlreadyFound = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
-        
-        if(requestAlreadyFound != null & requestAlreadyFound.size() > 0)
+        List<ApplicationReviewRequest> applicationReviewRequests = getApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
+        if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
         {
-            throw new Exception("A request for HOD reviewal has already been made");
+            for(ApplicationReviewRequest applicationReviewRequest : applicationReviewRequests)
+            {
+                applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
+            }
         }
+        
+        application = getApplicationDAO().findApplication(application.getApplicationID());
         
         hod.setUpEmployee(true);
         if(hod.getEmployeeInformation() == null)
@@ -339,7 +344,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         }
         else
         {
-            application = getApplicationDAO().findApplication(application.getApplicationID());
+            
             hod = getPersonDAO().findPerson(hod.getSystemID());
             System.out.println(hod.toString() + " " + application.getFellow().toString() + " " + application.getGrantHolder().toString() + " " + application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD));
             if(!application.getFellow().equals(hod) && (!application.getGrantHolder().equals(hod) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD)) && !application.getPersonList().contains(hod))

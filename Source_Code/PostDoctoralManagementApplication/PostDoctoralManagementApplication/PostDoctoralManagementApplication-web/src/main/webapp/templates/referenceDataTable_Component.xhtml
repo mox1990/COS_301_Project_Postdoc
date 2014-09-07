@@ -17,7 +17,9 @@
                 <h:outputText value="#{reference.publicationName}"/>
             </p:column>
             <p:column headerText="Published date">
-                <h:outputText value="#{reference.publicationDate}"/>
+                <h:outputText value="#{reference.publicationDate}">
+                    <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
+                </h:outputText>
             </p:column>
             <p:column headerText="Publisher">
                 <h:outputText value="#{reference.publisher}"/>

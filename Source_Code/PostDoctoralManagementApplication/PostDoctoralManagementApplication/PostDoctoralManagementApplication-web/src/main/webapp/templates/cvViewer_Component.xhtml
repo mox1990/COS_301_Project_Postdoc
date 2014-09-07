@@ -11,7 +11,9 @@
                     <h:outputText styleClass="text-label" value="ID number:"/>
                     <h:outputText value="#{cv.idNumber}"/>
                     <h:outputText styleClass="text-label" value="Date of birth:"/>
-                    <h:outputText value="#{cv.dateOfBirth}"/>
+                    <h:outputText value="#{cv.dateOfBirth}">
+                        <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+                    </h:outputText>
                     <h:outputText styleClass="text-label" value="Citizenship:"/>
                     <h:outputText value="#{cv.citizenship}"/>
                     <h:outputText styleClass="text-label" value="Race:"/>

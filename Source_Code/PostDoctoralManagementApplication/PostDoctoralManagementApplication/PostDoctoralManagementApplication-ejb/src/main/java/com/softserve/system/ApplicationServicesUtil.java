@@ -140,7 +140,17 @@ public class ApplicationServicesUtil {
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
             Department userDepartment = user.getEmployeeInformation().getDepartment();
+            List<Application> tempOutput = new ArrayList<Application>(); 
             output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+            for(Application application : output)
+            {
+                if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+                {
+                    tempOutput.add(application);
+                }
+            }
+            
+            output = tempOutput;
             
             if(output.size() < 1)
             {
@@ -167,7 +177,17 @@ public class ApplicationServicesUtil {
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
             Faculty userFaculty = user.getEmployeeInformation().getDepartment().getFaculty();
+            List<Application> tempOutput = new ArrayList<Application>(); 
             output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            for(Application application : output)
+            {
+                if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+                {
+                    tempOutput.add(application);
+                }
+            }
+            
+            output = tempOutput;
             
             if(output.size() < 1)
             {
@@ -287,7 +307,7 @@ public class ApplicationServicesUtil {
         
         //Set application status
         application.setSubmissionDate(getGregorianCalendar().getTime());
-        if(application.getRefereeReportList().size() == application.getPersonList().size())
+        if(!application.getFundingType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC) || application.getRefereeReportList().size() == application.getPersonList().size())
         {
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }

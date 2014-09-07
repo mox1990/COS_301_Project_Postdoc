@@ -14,7 +14,9 @@
                 <h:outputText value="#{qualification.name}"/>
             </p:column>
             <p:column headerText="Year obtained">
-                <h:outputText value="#{qualification.yearObtained}"/>
+                <h:outputText value="#{qualification.yearObtained}">
+                    <f:convertDateTime pattern="yyyy"/>
+                </h:outputText>
             </p:column>
             <p:column headerText="Institution">
                 <h:outputText value="#{qualification.institution}"/>

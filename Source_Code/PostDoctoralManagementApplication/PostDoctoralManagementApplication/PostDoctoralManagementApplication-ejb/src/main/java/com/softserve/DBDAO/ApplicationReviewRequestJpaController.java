@@ -9,6 +9,12 @@ package com.softserve.DBDAO;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.PreexistingEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
+import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.ApplicationReviewRequestPK;
@@ -251,6 +257,16 @@ public class ApplicationReviewRequestJpaController implements Serializable {
        
         List<Person> people = q.getResultList();
         return (people != null)?people:new ArrayList<Person>();
+    }
+    
+    public List<ApplicationReviewRequest> findAllRequestsThatHaveBeenRequestForApplicationAs(Application application, String type)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<ApplicationReviewRequest> q = em.createQuery("SELECT r FROM ApplicationReviewRequest r WHERE r.application1 = :app AND r.applicationReviewRequestPK.type = :type", ApplicationReviewRequest.class).setParameter("app", application).setParameter("type", type);
+       
+        List<ApplicationReviewRequest> applicationReviewRequests = q.getResultList();
+        return (applicationReviewRequests != null)?applicationReviewRequests:new ArrayList<ApplicationReviewRequest>();
     }
     
 }

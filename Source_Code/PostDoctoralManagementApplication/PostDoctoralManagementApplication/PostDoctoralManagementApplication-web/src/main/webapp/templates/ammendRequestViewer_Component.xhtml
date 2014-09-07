@@ -2,11 +2,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">
             <h:outputText styleClass="text-label" value="Report creation date:"/>
-            <h:outputText value="#{ammendRequest.timestamp}"/> 
+            <h:outputText value="#{ammendRequest.timestamp}">
+                <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+            </h:outputText> 
             <h:outputText styleClass="text-label" value="Authority name:"/>
             <h:outputText value="#{ammendRequest.creator.completeName}"/>    
             <h:outputText styleClass="text-label" value="Reason:"/>

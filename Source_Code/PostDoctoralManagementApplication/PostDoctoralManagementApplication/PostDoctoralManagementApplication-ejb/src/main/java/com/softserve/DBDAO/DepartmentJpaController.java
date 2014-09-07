@@ -299,6 +299,6 @@ public class DepartmentJpaController implements Serializable {
         TypedQuery<Department> q = em.createQuery("SELECT d FROM Department d WHERE d.faculty = :fac", Department.class).setParameter("fac", faculty);
         
         return q.getResultList();
-    }
+}
     
 }

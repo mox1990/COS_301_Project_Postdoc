@@ -37,7 +37,7 @@
                         <p:inputText value="#{indexBean.password}"/>
                         <br/>
                         <p:growl sticky="true" showSummary="true" showDetail="true" globalOnly="false"/>
-                        <p:commandButton id="loginButton" styleClass="button" value="Login" action="#{indexBean.performLoginRequest()}" update="loginForm"/>
+                        <p:commandButton id="loginButton" styleClass="button" value="Login" action="#{indexBean.performLoginRequest()}" process="@form" update="@form"/>
                         <br/>
                     </h:form>  
                 </div>

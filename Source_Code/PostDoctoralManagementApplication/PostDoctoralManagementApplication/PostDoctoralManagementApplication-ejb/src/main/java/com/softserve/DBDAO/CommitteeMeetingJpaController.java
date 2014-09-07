@@ -58,6 +58,11 @@ public class CommitteeMeetingJpaController implements Serializable {
         try {
             utx.begin();
             em = getEntityManager();
+            Person organiser = committeeMeeting.getOrganiser();
+            if (organiser != null) {
+                organiser = em.getReference(organiser.getClass(), organiser.getSystemID());
+                committeeMeeting.setOrganiser(organiser);
+            }
             List<Person> attachedPersonList = new ArrayList<Person>();
             for (Person personListPersonToAttach : committeeMeeting.getPersonList()) {
                 personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
@@ -77,6 +82,10 @@ public class CommitteeMeetingJpaController implements Serializable {
             }
             committeeMeeting.setMinuteCommentList(attachedMinuteCommentList);
             em.persist(committeeMeeting);
+            if (organiser != null) {
+                organiser.getCommitteeMeetingList1().add(committeeMeeting);
+                organiser = em.merge(organiser);
+            }
             for (Person personListPerson : committeeMeeting.getPersonList()) {
                 personListPerson.getCommitteeMeetingList().add(committeeMeeting);
                 personListPerson = em.merge(personListPerson);
@@ -115,6 +124,8 @@ public class CommitteeMeetingJpaController implements Serializable {
             utx.begin();
             em = getEntityManager();
             CommitteeMeeting persistentCommitteeMeeting = em.find(CommitteeMeeting.class, committeeMeeting.getMeetingID());
+            Person organiserOld = persistentCommitteeMeeting.getOrganiser();
+            Person organiserNew = committeeMeeting.getOrganiser();
             List<Person> personListOld = persistentCommitteeMeeting.getPersonList();
             List<Person> personListNew = committeeMeeting.getPersonList();
             List<Application> applicationListOld = persistentCommitteeMeeting.getApplicationList();
@@ -132,6 +143,10 @@ public class CommitteeMeetingJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            if (organiserNew != null) {
+                organiserNew = em.getReference(organiserNew.getClass(), organiserNew.getSystemID());
+                committeeMeeting.setOrganiser(organiserNew);
             }
             List<Person> attachedPersonListNew = new ArrayList<Person>();
             for (Person personListNewPersonToAttach : personListNew) {
@@ -155,6 +170,14 @@ public class CommitteeMeetingJpaController implements Serializable {
             minuteCommentListNew = attachedMinuteCommentListNew;
             committeeMeeting.setMinuteCommentList(minuteCommentListNew);
             committeeMeeting = em.merge(committeeMeeting);
+            if (organiserOld != null && !organiserOld.equals(organiserNew)) {
+                organiserOld.getCommitteeMeetingList1().remove(committeeMeeting);
+                organiserOld = em.merge(organiserOld);
+            }
+            if (organiserNew != null && !organiserNew.equals(organiserOld)) {
+                organiserNew.getCommitteeMeetingList1().add(committeeMeeting);
+                organiserNew = em.merge(organiserNew);
+            }
             for (Person personListOldPerson : personListOld) {
                 if (!personListNew.contains(personListOldPerson)) {
                     personListOldPerson.getCommitteeMeetingList().remove(committeeMeeting);
@@ -234,6 +257,11 @@ public class CommitteeMeetingJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Person organiser = committeeMeeting.getOrganiser();
+            if (organiser != null) {
+                organiser.getCommitteeMeetingList1().remove(committeeMeeting);
+                organiser = em.merge(organiser);
             }
             List<Person> personList = committeeMeeting.getPersonList();
             for (Person personListPerson : personList) {

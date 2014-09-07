@@ -70,9 +70,15 @@
                             </ui:decorate>                            
                         </p:outputPanel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="false"/>
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" update="gencreateFrom" process="@form">
+                        <p:commandButton styleClass="button" value="Create user account" id="createUser" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" process="@all" update="@all">                            
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                            <p:confirm header="Account creation confirmation" message="Are you sure you wish to create the following user account?" icon="ui-icon-alert"/>
                         </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
                     </center>
                 </h:form>
             </div>

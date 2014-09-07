@@ -6,7 +6,13 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2">
-            <h:outputText styleClass="text-label" value="Start date and time:"/>
+            <h:outputText styleClass="text-label" value="Name:"/>            
+            <h:outputText value="#{meeting.name}"/>
+            <h:outputText styleClass="text-label" value="Organiser:"/>            
+            <h:outputText value="#{meeting.organiser}"/>
+            <h:outputText styleClass="text-label" value="Venue:"/>            
+            <h:outputText value="#{meeting.venue}"/>
+            <h:outputText styleClass="text-label" value="Start date and time:"/>            
             <h:outputText value="#{meeting.startDate}">
                 <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
             </h:outputText>

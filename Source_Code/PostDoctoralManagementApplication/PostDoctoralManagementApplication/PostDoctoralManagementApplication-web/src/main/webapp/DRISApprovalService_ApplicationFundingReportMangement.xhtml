@@ -1,12 +1,81 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Application funding approval"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Application funding approval menu</h1>
+                <h2>Fill in the details to complete the funding approval for the application</h2>
+            </div>
+            <div>
+                <p:panel header="Funding report">
+                    <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
+                        <ui:param name="bean" value="#{dirsApplicationFundingEditBean.fundingReportCreationDependBean}"/>
+                        <ui:param name="beanActionAdd" value="addFundingCostToList()"/>
+                        <ui:param name="beanActionRemove" value="addFundingCostFromList()"/>
+                        <ui:param name="selectedFundingCosts" value="#{dirsApplicationFundingEditBean.fundingReportCreationDependBean.selectedFundingCosts}"/>
+                    </ui:decorate>
+                </p:panel>
+                
+                <h:form id="formMain">
+                    
+                    <p:panel header="Application details">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
+                            <p:calendar id="startDate" value="#{dirsApplicationFundingEditBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
+                            <p:message for="startDate" styleClass="fieldErrorMessage"/>
+                            
+                            <p:outputLabel value="Application duration (Years):" for="sliderVal"/>                             
+                            <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
+                                <p:ajax event="slideEnd" listener="#{dirsApplicationFundingEditBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
+                            </p:slider>
+                            <h:inputHidden id="sliderVal" value="#{dirsApplicationFundingEditBean.noOfYears}" />
+                            
+                            <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
+                            <p:calendar id="endDate" value="#{dirsApplicationFundingEditBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true"/>
+                            <p:message for="endDate" styleClass="fieldErrorMessage"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:panel header="Research fellow details">
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="Insitution assigned student number:" for="institutionAssignedID"/>                                
+                            <p:inputText id="institutionAssignedID" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedID}"/>
+                            <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
+                            
+                            <p:outputLabel value="Insitution assigned email:" for="institutionAssignedEmail"/>                                
+                            <p:inputText id="institutionAssignedEmail" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedEmail}"/>
+                            <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
+                            
+                            
+                        </h:panelGrid>   
+                        <center>
+                            <ui:decorate template="templates/LocationSelection_Component.xhtml">
+                                <ui:param name="locationBean" value="#{dirsApplicationFundingEditBean.locationFinderDependBean}"/>
+                                <ui:param name="departmentField" value="#{dirsApplicationFundingEditBean.researchFellowInformation.department}"/>
+                            </ui:decorate>
+                        </center>
+                    </p:panel>  
+                    
+                    <p:growl sticky="true" globalOnly="true" showDetail="true" showSummary="true"/>
+                    <p:commandButton value="Save changes" action="#{dirsApplicationFundingEditBean.preformFundingEditRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                        <p:confirm header="Edit confirmation" message="Are you sure you wish to save the changes to the application funding?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

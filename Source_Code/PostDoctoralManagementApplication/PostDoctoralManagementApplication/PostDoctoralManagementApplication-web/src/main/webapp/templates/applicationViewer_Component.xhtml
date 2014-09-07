@@ -4,27 +4,38 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <div>
             <p:panel header="Application #{selectedApplication.applicationID} - #{selectedApplication.projectTitle}">
                 <h:panelGrid columns="2" cellpadding="10px">
                     <h:outputText styleClass="text-label" value="Application type:"/>
                     <h:outputText value="#{selectedApplication.type}"/>
+                    <h:outputText styleClass="text-label" value="Application funding type:"/>
+                    <h:outputText value="#{selectedApplication.fundingType}"/>
                     <h:outputText styleClass="text-label" value="Application Status:"/>
                     <h:outputText value="#{selectedApplication.status}"/>
                     <h:outputText styleClass="text-label" value="Application creation date"/>
-                    <h:outputText value="#{selectedApplication.timestamp}"/>
+                    <h:outputText value="#{selectedApplication.timestamp}">
+                        <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+                    </h:outputText>
                     <h:outputText styleClass="text-label" value="Fellow name:"/>
                     <h:outputText value="#{selectedApplication.fellow.completeName}"/>
                     <h:outputText styleClass="text-label" value="Grant holder name:"/>
                     <h:outputText value="#{selectedApplication.grantHolder.completeName}"/>
                     <h:outputText styleClass="text-label" value="Finalisation date of application" rendered="#{selectedApplication.finalisationDate != null}"/>
-                    <h:outputText value="#{selectedApplication.finalisationDate}"/>
+                    <h:outputText value="#{selectedApplication.finalisationDate}">
+                        <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+                    </h:outputText>
                     <h:outputText styleClass="text-label" value="Application commencement date:" rendered="#{selectedApplication.startDate != null}"/>
-                    <h:outputText value="#{selectedApplication.startDate}"/>
+                    <h:outputText value="#{selectedApplication.startDate}">
+                        <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+                    </h:outputText>
                     <h:outputText styleClass="text-label" value="Application expiry date:" rendered="#{selectedApplication.endDate != null}"/>
-                    <h:outputText value="#{selectedApplication.endDate}"/>
+                    <h:outputText value="#{selectedApplication.endDate}">
+                        <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
+                    </h:outputText>
                     
                 </h:panelGrid>
                 <p:tabView>

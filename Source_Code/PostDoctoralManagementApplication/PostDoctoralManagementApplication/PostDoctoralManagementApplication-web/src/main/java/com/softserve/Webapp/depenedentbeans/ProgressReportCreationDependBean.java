@@ -11,9 +11,11 @@ import auto.softserve.XMLEntities.fellow.Reference;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.Webapp.util.MessageUtil;
 import java.io.Serializable;
-import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.faces.application.FacesMessage;
+import javax.inject.Named;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -28,8 +30,11 @@ public class ProgressReportCreationDependBean implements Serializable {
     private ProgressReport progressReport;
     private ProgressReportContent progressReportContent;
     
+    private List<Reference> selectedReferenceList;
     private Reference currentReference;
+    private List<String> selectedAimList;    
     private String currentAttainedAim;
+    private List<String> selectedOutcomeList;
     private String currentAttainedOutcome;
     
     /**
@@ -94,12 +99,50 @@ public class ProgressReportCreationDependBean implements Serializable {
     public void setProgressReportContent(ProgressReportContent progressReportContent) {
         this.progressReportContent = progressReportContent;
     }
-    
+
+    public List<String> getSelectedAimList() {
+        return selectedAimList;
+    }
+
+    public void setSelectedAimList(List<String> selectedAimList) {
+        this.selectedAimList = selectedAimList;
+    }
+
+    public List<String> getSelectedOutcomeList() {
+        return selectedOutcomeList;
+    }
+
+    public void setSelectedOutcomeList(List<String> selectedOutcomeList) {
+        this.selectedOutcomeList = selectedOutcomeList;
+    }
+
+    public List<Reference> getSelectedReferenceList() {
+        return selectedReferenceList;
+    }
+
+    public void setSelectedReferenceList(List<Reference> selectedReferenceList) {
+        this.selectedReferenceList = selectedReferenceList;
+    }
+            
     public void addToAttainedAimsList()
     {
         progressReportContent.getProjectAimsAttainment().getAimAttainment().add(currentAttainedAim);
         currentAttainedAim = "";
         MessageUtil.CreateGlobalFacesMessage("Attained aim added!", "The project attained aim has been added to the list!", FacesMessage.SEVERITY_INFO);
+    }
+    
+    public void removeFromAttainedAimsList()
+    {
+        if(selectedAimList.size() > 0)
+        {
+            progressReportContent.getProjectAimsAttainment().getAimAttainment().removeAll(selectedAimList);
+            selectedAimList = new ArrayList<String>();
+            MessageUtil.CreateGlobalFacesMessage("Attained aims removed!","The selected attained aims have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No attained aims selected!", "You have to select attained aims which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
     }
     
     public void addToAttainedOutcomesList()
@@ -109,11 +152,64 @@ public class ProgressReportCreationDependBean implements Serializable {
         MessageUtil.CreateGlobalFacesMessage("Attained outcome added!", "The attained outcome has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
+    public void removeFroAttainedOutcomesList()
+    {
+        if(selectedOutcomeList.size() > 0)
+        {
+            progressReportContent.getProjectOutcomesAttainment().getOutcomeAttainment().removeAll(selectedOutcomeList);
+            selectedOutcomeList = new ArrayList<String>();
+            MessageUtil.CreateGlobalFacesMessage("Attained outcomes removed!","The selected attained outcomes have been removed from the list.", FacesMessage.SEVERITY_INFO);
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No attained outcomes selected!", "You have to select attained outcomes which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
+    }
+    
     public void addToResearchOutputList()
     {
         progressReportContent.getResearchOutput().getReferences().add(currentReference);
         currentReference = new Reference();
         MessageUtil.CreateGlobalFacesMessage("Reference added!", "The research output reference has been added to the list!", FacesMessage.SEVERITY_INFO);        
+    }
+    
+    public void removeFromResearchOutputReferences()
+    {
+        if(selectedReferenceList.size() > 0)
+        {                        
+            ArrayList<Reference> newReferences = new ArrayList<Reference>();
+            
+            for(Reference reference : progressReportContent.getResearchOutput().getReferences())
+            {
+                String removeValue = reference.getType() + " " + reference.getPublicationName() + " " + reference.getPublisher()+ " " + reference.getPublicationISBN();
+                
+                boolean found = false;
+                
+                for(Reference reference1 : selectedReferenceList)
+                {                    
+                    String value = reference1.getType() + " " + reference1.getPublicationName() + " " + reference1.getPublisher()+ " " + reference1.getPublicationISBN();
+                    if(removeValue.equals(value))
+                    {
+                       found = true;
+                    }
+                }
+                
+                if(!found)
+                {
+                    newReferences.add(reference);
+                }
+            }
+            
+            progressReportContent.getResearchOutput().getReferences().clear();
+            progressReportContent.getResearchOutput().getReferences().addAll(newReferences);
+            
+            selectedReferenceList = new ArrayList<Reference>();
+            MessageUtil.CreateGlobalFacesMessage("References removed!", "The selected research output references have been removed from the list!", FacesMessage.SEVERITY_INFO);    
+        }
+        else
+        {
+            MessageUtil.CreateGlobalFacesMessage("No references selected!", "You have to select research output references which need to be removed from the list!", FacesMessage.SEVERITY_WARN);
+        }
     }
     
     public void addInfromation()

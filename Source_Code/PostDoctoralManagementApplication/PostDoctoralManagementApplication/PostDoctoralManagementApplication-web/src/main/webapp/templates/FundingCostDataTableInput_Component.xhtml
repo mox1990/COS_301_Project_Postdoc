@@ -6,10 +6,11 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:dataTable value="#{fundingCosts}" var="fundingCost">
+        <p:dataTable value="#{fundingCosts}" selection="#{selectedFundingCosts}" var="fundingCost" rowKey="#{fundingCost.amount} #{fundingCost.type} #{fundingCost.provider}">
             <f:facet name="header">
                 #{header}
             </f:facet>
+            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
             <p:column headerText="Amount (ZAR)">
                 <h:outputText value="#{fundingCost.amount}"/>
             </p:column>
@@ -22,3 +23,6 @@
         </p:dataTable>
     </ui:component>
 </html>
+
+
+

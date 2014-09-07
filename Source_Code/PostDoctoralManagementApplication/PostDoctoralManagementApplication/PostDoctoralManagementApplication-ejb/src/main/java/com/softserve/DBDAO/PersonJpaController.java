@@ -92,6 +92,9 @@ public class PersonJpaController implements Serializable {
         if (person.getAmmendRequestList() == null) {
             person.setAmmendRequestList(new ArrayList<AmmendRequest>());
         }
+        if (person.getCommitteeMeetingList1() == null) {
+            person.setCommitteeMeetingList1(new ArrayList<CommitteeMeeting>());
+        }
         if (person.getAuditLogList() == null) {
             person.setAuditLogList(new ArrayList<AuditLog>());
         }
@@ -200,6 +203,12 @@ public class PersonJpaController implements Serializable {
                 attachedAmmendRequestList.add(ammendRequestListAmmendRequestToAttach);
             }
             person.setAmmendRequestList(attachedAmmendRequestList);
+            List<CommitteeMeeting> attachedCommitteeMeetingList1 = new ArrayList<CommitteeMeeting>();
+            for (CommitteeMeeting committeeMeetingList1CommitteeMeetingToAttach : person.getCommitteeMeetingList1()) {
+                committeeMeetingList1CommitteeMeetingToAttach = em.getReference(committeeMeetingList1CommitteeMeetingToAttach.getClass(), committeeMeetingList1CommitteeMeetingToAttach.getMeetingID());
+                attachedCommitteeMeetingList1.add(committeeMeetingList1CommitteeMeetingToAttach);
+            }
+            person.setCommitteeMeetingList1(attachedCommitteeMeetingList1);
             List<AuditLog> attachedAuditLogList = new ArrayList<AuditLog>();
             for (AuditLog auditLogListAuditLogToAttach : person.getAuditLogList()) {
                 auditLogListAuditLogToAttach = em.getReference(auditLogListAuditLogToAttach.getClass(), auditLogListAuditLogToAttach.getEntryID());
@@ -355,6 +364,15 @@ public class PersonJpaController implements Serializable {
                     oldCreatorOfAmmendRequestListAmmendRequest = em.merge(oldCreatorOfAmmendRequestListAmmendRequest);
                 }
             }
+            for (CommitteeMeeting committeeMeetingList1CommitteeMeeting : person.getCommitteeMeetingList1()) {
+                Person oldOrganiserOfCommitteeMeetingList1CommitteeMeeting = committeeMeetingList1CommitteeMeeting.getOrganiser();
+                committeeMeetingList1CommitteeMeeting.setOrganiser(person);
+                committeeMeetingList1CommitteeMeeting = em.merge(committeeMeetingList1CommitteeMeeting);
+                if (oldOrganiserOfCommitteeMeetingList1CommitteeMeeting != null) {
+                    oldOrganiserOfCommitteeMeetingList1CommitteeMeeting.getCommitteeMeetingList1().remove(committeeMeetingList1CommitteeMeeting);
+                    oldOrganiserOfCommitteeMeetingList1CommitteeMeeting = em.merge(oldOrganiserOfCommitteeMeetingList1CommitteeMeeting);
+                }
+            }
             for (AuditLog auditLogListAuditLog : person.getAuditLogList()) {
                 Person oldPersonOfAuditLogListAuditLog = auditLogListAuditLog.getPerson();
                 auditLogListAuditLog.setPerson(person);
@@ -479,6 +497,8 @@ public class PersonJpaController implements Serializable {
             List<Notification> notificationList1New = person.getNotificationList1();
             List<AmmendRequest> ammendRequestListOld = persistentPerson.getAmmendRequestList();
             List<AmmendRequest> ammendRequestListNew = person.getAmmendRequestList();
+            List<CommitteeMeeting> committeeMeetingList1Old = persistentPerson.getCommitteeMeetingList1();
+            List<CommitteeMeeting> committeeMeetingList1New = person.getCommitteeMeetingList1();
             List<AuditLog> auditLogListOld = persistentPerson.getAuditLogList();
             List<AuditLog> auditLogListNew = person.getAuditLogList();
             List<RecommendationReport> recommendationReportListOld = persistentPerson.getRecommendationReportList();
@@ -568,6 +588,14 @@ public class PersonJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain AmmendRequest " + ammendRequestListOldAmmendRequest + " since its creator field is not nullable.");
+                }
+            }
+            for (CommitteeMeeting committeeMeetingList1OldCommitteeMeeting : committeeMeetingList1Old) {
+                if (!committeeMeetingList1New.contains(committeeMeetingList1OldCommitteeMeeting)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain CommitteeMeeting " + committeeMeetingList1OldCommitteeMeeting + " since its organiser field is not nullable.");
                 }
             }
             for (AuditLog auditLogListOldAuditLog : auditLogListOld) {
@@ -715,6 +743,13 @@ public class PersonJpaController implements Serializable {
             }
             ammendRequestListNew = attachedAmmendRequestListNew;
             person.setAmmendRequestList(ammendRequestListNew);
+            List<CommitteeMeeting> attachedCommitteeMeetingList1New = new ArrayList<CommitteeMeeting>();
+            for (CommitteeMeeting committeeMeetingList1NewCommitteeMeetingToAttach : committeeMeetingList1New) {
+                committeeMeetingList1NewCommitteeMeetingToAttach = em.getReference(committeeMeetingList1NewCommitteeMeetingToAttach.getClass(), committeeMeetingList1NewCommitteeMeetingToAttach.getMeetingID());
+                attachedCommitteeMeetingList1New.add(committeeMeetingList1NewCommitteeMeetingToAttach);
+            }
+            committeeMeetingList1New = attachedCommitteeMeetingList1New;
+            person.setCommitteeMeetingList1(committeeMeetingList1New);
             List<AuditLog> attachedAuditLogListNew = new ArrayList<AuditLog>();
             for (AuditLog auditLogListNewAuditLogToAttach : auditLogListNew) {
                 auditLogListNewAuditLogToAttach = em.getReference(auditLogListNewAuditLogToAttach.getClass(), auditLogListNewAuditLogToAttach.getEntryID());
@@ -920,6 +955,17 @@ public class PersonJpaController implements Serializable {
                     }
                 }
             }
+            for (CommitteeMeeting committeeMeetingList1NewCommitteeMeeting : committeeMeetingList1New) {
+                if (!committeeMeetingList1Old.contains(committeeMeetingList1NewCommitteeMeeting)) {
+                    Person oldOrganiserOfCommitteeMeetingList1NewCommitteeMeeting = committeeMeetingList1NewCommitteeMeeting.getOrganiser();
+                    committeeMeetingList1NewCommitteeMeeting.setOrganiser(person);
+                    committeeMeetingList1NewCommitteeMeeting = em.merge(committeeMeetingList1NewCommitteeMeeting);
+                    if (oldOrganiserOfCommitteeMeetingList1NewCommitteeMeeting != null && !oldOrganiserOfCommitteeMeetingList1NewCommitteeMeeting.equals(person)) {
+                        oldOrganiserOfCommitteeMeetingList1NewCommitteeMeeting.getCommitteeMeetingList1().remove(committeeMeetingList1NewCommitteeMeeting);
+                        oldOrganiserOfCommitteeMeetingList1NewCommitteeMeeting = em.merge(oldOrganiserOfCommitteeMeetingList1NewCommitteeMeeting);
+                    }
+                }
+            }
             for (AuditLog auditLogListNewAuditLog : auditLogListNew) {
                 if (!auditLogListOld.contains(auditLogListNewAuditLog)) {
                     Person oldPersonOfAuditLogListNewAuditLog = auditLogListNewAuditLog.getPerson();
@@ -1118,6 +1164,13 @@ public class PersonJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the AmmendRequest " + ammendRequestListOrphanCheckAmmendRequest + " in its ammendRequestList field has a non-nullable creator field.");
+            }
+            List<CommitteeMeeting> committeeMeetingList1OrphanCheck = person.getCommitteeMeetingList1();
+            for (CommitteeMeeting committeeMeetingList1OrphanCheckCommitteeMeeting : committeeMeetingList1OrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Person (" + person + ") cannot be destroyed since the CommitteeMeeting " + committeeMeetingList1OrphanCheckCommitteeMeeting + " in its committeeMeetingList1 field has a non-nullable organiser field.");
             }
             List<AuditLog> auditLogListOrphanCheck = person.getAuditLogList();
             for (AuditLog auditLogListOrphanCheckAuditLog : auditLogListOrphanCheck) {

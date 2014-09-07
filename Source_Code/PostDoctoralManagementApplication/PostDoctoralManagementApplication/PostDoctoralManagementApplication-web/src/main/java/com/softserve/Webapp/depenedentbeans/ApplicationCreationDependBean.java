@@ -214,19 +214,33 @@ public class ApplicationCreationDependBean implements Serializable{
     {
         if(selectedMemberList.size() > 0)
         {
-            for(Member member : selectedMemberList)
+            
+            ArrayList<Member> newMembers = new ArrayList<Member>();
+            
+            for(Member member : informationXMLEntity.getTeamMembers().getMember())
             {
                 String removeValue = member.getTitle()+ " " + member.getFullName() + " " + member.getSurname() + " " + member.getDegreeType();
-                for(int i = 0; i < informationXMLEntity.getTeamMembers().getMember().size(); i++)
-                {
-                    Member member1 = informationXMLEntity.getTeamMembers().getMember().get(i);
+                
+                boolean found = false;
+                
+                for(Member member1 : selectedMemberList)
+                {                    
                     String value = member1.getTitle()+ " " + member1.getFullName() + " " + member1.getSurname() + " " + member1.getDegreeType();
                     if(removeValue.equals(value))
                     {
-                        informationXMLEntity.getTeamMembers().getMember().remove(i);
+                       found = true;
                     }
                 }
+                
+                if(!found)
+                {
+                    newMembers.add(member);
+                }
             }
+            
+            informationXMLEntity.getTeamMembers().getMember().clear();
+            informationXMLEntity.getTeamMembers().getMember().addAll(newMembers);
+            
             selectedMemberList = new ArrayList<Member>();
             MessageUtil.CreateGlobalFacesMessage("Team members removed!","The selected team members have been removed from the list.", FacesMessage.SEVERITY_INFO);
         }
