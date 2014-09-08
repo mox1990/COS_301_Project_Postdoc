@@ -815,6 +815,26 @@ public class ApplicationJpaController implements Serializable {
         return (applications != null)?applications:new ArrayList<Application>();
     }
     
+    public List<Application> findAllNewApplicationsWithStatus(String applicationStatus, int startRecord, int maxRecords)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.type = :type", Application.class).setParameter("status", applicationStatus).setParameter("type", com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_NEW).setFirstResult(startRecord).setMaxResults(maxRecords);
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
+    }
+    
+    public List<Application> findAllRenewalApplicationsWithStatus(String applicationStatus, int startRecord, int maxRecords)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.type = :type", Application.class).setParameter("status", applicationStatus).setParameter("type", com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL).setFirstResult(startRecord).setMaxResults(maxRecords);
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
+    }
+    
     public List<Application> findAllApplicationsWithStatusAndReferee(String applicationStatus, Person referee, int startRecord, int maxRecords)
     {
         EntityManager em = getEntityManager();
@@ -945,11 +965,11 @@ public class ApplicationJpaController implements Serializable {
         return q.getSingleResult();
     }
     
-    public List<Application> getAllApplicationsForFellowWithEndDateInBetween(Person fellow, Date rangeStart, Date rangeEnd)
+    public List<Application> getAllNewApplicationsForFellowWithEndDateInBetween(Person fellow, Date rangeStart, Date rangeEnd)
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE (a.fellow = :fellow) AND (a.endDate BETWEEN :rangeStart AND :rangeEnd)", Application.class).setParameter("rangeStart", rangeStart).setParameter("rangeEnd", rangeEnd).setParameter("fellow", fellow);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE (a.fellow = :fellow) AND (a.type = :type) AND (a.endDate BETWEEN :rangeStart AND :rangeEnd)", Application.class).setParameter("rangeStart", rangeStart).setParameter("rangeEnd", rangeEnd).setParameter("fellow", fellow).setParameter("type", com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
         
         List<Application> applications = q.getResultList();
         return (applications != null)?applications:new ArrayList<Application>();

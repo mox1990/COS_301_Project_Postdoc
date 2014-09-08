@@ -71,8 +71,9 @@ public class DRISApplicationSelectionBean implements Serializable {
         }
         catch(Exception ex)
         {
-            ExceptionUtil.logException(null, ex);
+            ExceptionUtil.logException(DRISApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

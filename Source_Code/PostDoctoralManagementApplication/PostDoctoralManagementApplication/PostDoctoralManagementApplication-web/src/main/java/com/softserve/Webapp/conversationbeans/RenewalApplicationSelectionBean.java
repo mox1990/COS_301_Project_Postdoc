@@ -65,6 +65,7 @@ public class RenewalApplicationSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(RenewalApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

@@ -169,6 +169,7 @@ public class SessionManagerBean implements Serializable {
     
     public <T> T getObjectFromSessionStorage(int index, Class<T> objectClass)
     {
+        System.out.println("================Session storage: " + sessionStorage.toString());
         try
         {
             T temp = null;

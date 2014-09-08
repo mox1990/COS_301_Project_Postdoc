@@ -105,25 +105,25 @@
                         </p:accordionPanel>
                     </p:tab>
                     
-                    <p:tab title="HOD Recommendation report" rendered="#{selectedApplication.recommendationReport != null}">
+                    <p:tab title="HOD Recommendation report" rendered="#{(selectedApplication.recommendationReport != null and applicationViewerRequestBean.HODOrDeanOrDRISMember)}">
                         <ui:decorate template="recommendationReportViewer_Component.xhtml">
                             <ui:param name="recommendationReport" value="#{selectedApplication.recommendationReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Dean Endorsement" rendered="#{selectedApplication.endorsement != null}">
+                    <p:tab title="Dean Endorsement" rendered="#{(selectedApplication.endorsement != null and applicationViewerRequestBean.deanOrDRISMember)}">
                         <ui:decorate template="endorsementViewer_Component.xhtml">
                             <ui:param name="endorsement" value="#{selectedApplication.endorsement}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Eligiblity report" rendered="#{selectedApplication.eligiblityReport != null}">
+                    <p:tab title="Eligiblity report" rendered="#{selectedApplication.eligiblityReport != null and applicationViewerRequestBean.DRISMember}">
                         <ui:decorate template="eligibityReportViewer_Component.xhtml">
                             <ui:param name="eligiblityReport" value="#{selectedApplication.eligiblityReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Committee meeting comments" rendered="#{selectedApplication.committeeMeetingList.size() > 0}">
+                    <p:tab title="Committee meeting comments" rendered="#{selectedApplication.committeeMeetingList.size() > 0 and applicationViewerRequestBean.DRISMember}">
                         <p:accordionPanel value="#{selectedApplication.committeeMeetingList}" var="meeting">
                             <p:tab title="Meeting - #{meeting.meetingID}" rendered="#{meeting.endDate != null}">
                                 <ui:decorate template="MeetingViewer_Component.xhtml">

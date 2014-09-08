@@ -37,6 +37,8 @@ public class ForwardAndRewindServiceApplicationSelectionBean implements Serializ
     @Inject
     private SessionManagerBean sessionManagerBean;
     @Inject
+    private NavigationManagerBean navigationManagerBean;
+    @Inject
     private ConversationManagerBean conversationManagerBean;
     @Inject
     private ApplicationFilterDependBean applicationFilterDependBean;
@@ -69,6 +71,7 @@ public class ForwardAndRewindServiceApplicationSelectionBean implements Serializ
         {
             ExceptionUtil.logException(ForwardAndRewindServiceApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }  
     }
     

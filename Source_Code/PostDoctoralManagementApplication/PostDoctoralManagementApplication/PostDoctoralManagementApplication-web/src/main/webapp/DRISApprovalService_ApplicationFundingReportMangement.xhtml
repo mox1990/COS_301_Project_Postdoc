@@ -17,8 +17,8 @@
                 <p:panel header="Funding report">
                     <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
                         <ui:param name="bean" value="#{dirsApplicationFundingEditBean.fundingReportCreationDependBean}"/>
-                        <ui:param name="beanActionAdd" value="addFundingCostToList()"/>
-                        <ui:param name="beanActionRemove" value="addFundingCostFromList()"/>
+                        <ui:param name="beanActionAdd" value="addFundingCostToList"/>
+                        <ui:param name="beanActionRemove" value="removeFundingCostFromList"/>
                         <ui:param name="selectedFundingCosts" value="#{dirsApplicationFundingEditBean.fundingReportCreationDependBean.selectedFundingCosts}"/>
                     </ui:decorate>
                 </p:panel>
@@ -28,9 +28,9 @@
                     <p:panel header="Application details">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
-                            <p:calendar id="startDate" value="#{dirsApplicationFundingEditBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
+                            <p:calendar mask="true" id="startDate" value="#{dirsApplicationFundingEditBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
                             <p:message for="startDate" styleClass="fieldErrorMessage"/>
-                            
+                              
                             <p:outputLabel value="Application duration (Years):" for="sliderVal"/>                             
                             <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
                                 <p:ajax event="slideEnd" listener="#{dirsApplicationFundingEditBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
@@ -38,7 +38,7 @@
                             <h:inputHidden id="sliderVal" value="#{dirsApplicationFundingEditBean.noOfYears}" />
                             
                             <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
-                            <p:calendar id="endDate" value="#{dirsApplicationFundingEditBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true"/>
+                            <p:calendar mask="true" id="endDate" value="#{dirsApplicationFundingEditBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true"/>
                             <p:message for="endDate" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
                     </p:panel>

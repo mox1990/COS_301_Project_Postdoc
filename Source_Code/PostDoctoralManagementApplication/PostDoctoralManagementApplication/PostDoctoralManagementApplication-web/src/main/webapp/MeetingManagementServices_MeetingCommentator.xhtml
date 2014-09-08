@@ -22,14 +22,28 @@
                             <ui:param name="header" value="Meeting minutes/comments"/>
                             <ui:param name="comments" value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.minuteCommentList}"/>
                         </ui:decorate>
-                    
-                        <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="Comment:" for="comment"/>                                
-                            <p:inputTextarea id="comment" value="#{meetingCommentatorRequestBean.minuteComment.comment}"/>
-                            <p:message for="comment" styleClass="fieldErrorMessage"/>                                                                        
-                        </h:panelGrid>
+                        <p:panel header="Comment on meeting">
+                            <center>
+                                <h:panelGrid columns="2" cellpadding="5">                               
+                                    <p:inputTextarea id="comment" value="#{meetingCommentatorRequestBean.minuteComment.comment}" style="width:800px"/>
+                                    <p:message for="comment" styleClass="fieldErrorMessage"/>                                                                        
+                                </h:panelGrid>
+                            </center>
+                            <p:growl sticky="true" globalOnly="false" showDetail="true"/>
+                            <p:commandButton value="Save comment" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill">
+                                <p:confirm header="Confirmation" message="Are you sure that you save this comment on this meeting now?" icon="ui-icon-alert"/>
+                            </p:commandButton>
+                        </p:panel>
                     </p:outputPanel>
-                    <p:commandButton value="Save comment" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill"/>
+                    
+                    <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingCommentatorRequestBean.closeMeeting()}" rendered="#{meetingCommentatorRequestBean.isOrganiserOfMeeting()}" update="@form">                        
+                        <p:confirm header="Confirmation" message="Are you sure that you wish to conclude this meeting now?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                    
                 </h:form>
             </div>
         </ui:define>

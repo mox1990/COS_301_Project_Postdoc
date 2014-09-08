@@ -39,9 +39,7 @@ public class DeanEndorseRequestBean {
     
     @EJB
     private DeansEndorsementServiceLocal deansEndorsementServiceLocal;
-    
-    private UIComponent errorContainer; 
-    
+        
     private Endorsement endorsement = null;
     
     /**
@@ -59,15 +57,7 @@ public class DeanEndorseRequestBean {
     
     public Application getSelectedApplication()
     {
-        return sessionManagerBean.getObjectFromSessionStorage(0, Application.class);
-    }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
+        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
     }
 
     public Endorsement getEndorsement() {

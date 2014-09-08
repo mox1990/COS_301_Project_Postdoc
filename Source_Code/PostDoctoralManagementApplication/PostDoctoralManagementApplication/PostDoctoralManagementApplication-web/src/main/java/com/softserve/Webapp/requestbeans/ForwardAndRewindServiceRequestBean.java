@@ -33,8 +33,6 @@ public class ForwardAndRewindServiceRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
-    @Inject
-    private ConversationManagerBean conversationManagerBean;
     
     @EJB
     private ForwardAndRewindServicesLocal forwardAndRewindServicesLocal;

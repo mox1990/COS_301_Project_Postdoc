@@ -64,7 +64,20 @@ public class ProgressReportCreationBean implements Serializable{
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
-        progressReportCreationDependBean.init();
+        try
+        {
+            if(getSelectedApplication() == null)
+            {
+                throw new Exception("No application selected");
+            }
+            progressReportCreationDependBean.init();
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(ProgressReportCreationBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToProgressReportManagementServiceApplicationSelectionView());
+        }
     }
     
     public Application getSelectedApplication()

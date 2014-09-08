@@ -82,17 +82,17 @@ public class generalInformationBean {
         degreeTypeItems.add(new SelectItem("Honours (Hon)","Honours (Hon)"));
         
         genderItems = new ArrayList<SelectItem>();
-        genderItems.add(new SelectItem("Male",com.softserve.constants.PersistenceConstants.CV_GENDER_MALE));
-        genderItems.add(new SelectItem("Female",com.softserve.constants.PersistenceConstants.CV_GENDER_FEMALE));
-        genderItems.add(new SelectItem("Other",com.softserve.constants.PersistenceConstants.CV_GENDER_OTHER));
+        genderItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_GENDER_MALE,"Male"));
+        genderItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_GENDER_FEMALE,"Female"));
+        genderItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_GENDER_OTHER,"Other"));
         
         fundingCostTypeItems = new ArrayList<SelectItem>();
-        fundingCostTypeItems.add(new SelectItem("Fellowship",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_FELLOWSHIP));
-        fundingCostTypeItems.add(new SelectItem("Travel",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_TRAVEL));
-        fundingCostTypeItems.add(new SelectItem("Equipment",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_EQUIPMENT));
-        fundingCostTypeItems.add(new SelectItem("Operating",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_OPERATING));
-        fundingCostTypeItems.add(new SelectItem("Running",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_RUNNING));
-        fundingCostTypeItems.add(new SelectItem("Conference",com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE));
+        fundingCostTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_FELLOWSHIP,"Fellowship"));
+        fundingCostTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_TRAVEL,"Travel"));
+        fundingCostTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_EQUIPMENT,"Equipment"));
+        fundingCostTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_OPERATING,"Operating"));
+        fundingCostTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_RUNNING,"Running"));
+        fundingCostTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE,"Conference"));
         
         fundingTypeItems = new ArrayList<SelectItem>();
         fundingTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_EXTERNALLYFUNDED,com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_EXTERNALLYFUNDED));
@@ -100,20 +100,20 @@ public class generalInformationBean {
         fundingTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC,com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC));
         
         raceItems = new ArrayList<SelectItem>();
-        raceItems.add(new SelectItem("White",com.softserve.constants.PersistenceConstants.CV_RACE_WHITE));
-        raceItems.add(new SelectItem("Black",com.softserve.constants.PersistenceConstants.CV_RACE_BLACK));
-        raceItems.add(new SelectItem("Coloured",com.softserve.constants.PersistenceConstants.CV_RACE_COLOURED));
-        raceItems.add(new SelectItem("Asian",com.softserve.constants.PersistenceConstants.CV_RACE_ASIAN));
-        raceItems.add(new SelectItem("Indian",com.softserve.constants.PersistenceConstants.CV_RACE_INDIAN));
-        raceItems.add(new SelectItem("Other",com.softserve.constants.PersistenceConstants.CV_RACE_OTHER));
+        raceItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_RACE_WHITE,"White"));
+        raceItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_RACE_BLACK,"Black"));
+        raceItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_RACE_COLOURED,"Coloured"));
+        raceItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_RACE_ASIAN,"Asian"));
+        raceItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_RACE_INDIAN,"Indian"));
+        raceItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_RACE_OTHER,"Other"));
         
         appointmentStatusItems = new ArrayList<SelectItem>();
-        appointmentStatusItems.add(new SelectItem("Full time",com.softserve.constants.PersistenceConstants.EMPLOYEE_APPOINTMENT_STATUS_FULLTIME));
-        appointmentStatusItems.add(new SelectItem("Part time",com.softserve.constants.PersistenceConstants.EMPLOYEE_APPOINTMENT_STATUS_PARTTIME));
+        appointmentStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.EMPLOYEE_APPOINTMENT_STATUS_FULLTIME,"Full time"));
+        appointmentStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.EMPLOYEE_APPOINTMENT_STATUS_PARTTIME,"Part time"));
         
         citizenshipTypeItems = new ArrayList<SelectItem>();
-        citizenshipTypeItems.add(new SelectItem("South African",com.softserve.constants.PersistenceConstants.CV_CITIZENSHIP_SOUTHAFRICAN));
-        citizenshipTypeItems.add(new SelectItem("Other",com.softserve.constants.PersistenceConstants.CV_CITIZENSHIP_OTHER));
+        citizenshipTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_CITIZENSHIP_SOUTHAFRICAN,"South African"));
+        citizenshipTypeItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_CITIZENSHIP_OTHER,"Other"));
         
         nrfRatingsItems = new ArrayList<SelectItem>();
         nrfRatingsItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_NRF_RATING_A,com.softserve.constants.PersistenceConstants.CV_NRF_RATING_A));

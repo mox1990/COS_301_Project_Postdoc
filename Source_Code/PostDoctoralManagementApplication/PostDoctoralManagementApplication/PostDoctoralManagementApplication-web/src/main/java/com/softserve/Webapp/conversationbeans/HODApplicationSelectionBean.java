@@ -63,6 +63,7 @@ public class HODApplicationSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(HODApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

@@ -70,11 +70,6 @@ public class ProgressReportManagementMockUnit extends ProgressReportManagementSe
         return aDAO;
     }
     
-     @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aTEJB;
-    }
     
     protected PersonJpaController getPersonDAO()
     {
@@ -86,12 +81,7 @@ public class ProgressReportManagementMockUnit extends ProgressReportManagementSe
     {
         return dBEntitities;
     }
-    
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
+
     
     protected NotificationService getNotificationServiceEJB()
     {

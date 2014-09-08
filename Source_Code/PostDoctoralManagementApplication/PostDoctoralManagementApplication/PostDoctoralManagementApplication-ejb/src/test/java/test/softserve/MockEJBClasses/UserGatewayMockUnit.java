@@ -51,15 +51,4 @@ public class UserGatewayMockUnit extends UserGateway
         this.cal = cal;
     }
     
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB() 
-    {
-        return atsEJB;
-    }
-
-    @Override
-    protected DBEntitiesFactory getDBEntitiesFactory() 
-    {
-        return dbFactory;
-    }
 }

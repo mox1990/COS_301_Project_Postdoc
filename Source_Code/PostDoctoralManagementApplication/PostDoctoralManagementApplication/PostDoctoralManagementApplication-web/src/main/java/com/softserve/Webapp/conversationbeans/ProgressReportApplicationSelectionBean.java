@@ -63,6 +63,7 @@ public class ProgressReportApplicationSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(ProgressReportApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

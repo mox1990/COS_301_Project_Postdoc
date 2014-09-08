@@ -7,7 +7,7 @@
       <property name="eclipselink.canonicalmodel.subpackage" value="one"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="eclipselink.logging.logger" value="JavaLogger"/>
-      <property name="eclipselink.logging.level" value="ALL"/>
+      <property name="eclipselink.logging.level" value="FINE"/>
       <property name="eclipselink.persistence-context.flush-mode" value="auto"/>
     </properties>
   </persistence-unit>

@@ -58,15 +58,26 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         conversationManagerBean.startConversation(conversation);
         try
         {
+            
             Session session = sessionManagerBean.getSession();
-            applicationFilterDependBeanFellow.init(session.getUser().getApplicationList1());
-            applicationFilterDependBeanGrantHolder.init(session.getUser().getApplicationList2());
-            applicationFilterDependBeanAll.init(applicationProgressViewerServiceLocal.getAllApplications(session));
+            if(isFellowApplicationDisplayable())
+            {
+                applicationFilterDependBeanFellow.init(session.getUser().getApplicationList1());
+            }
+            if(isGrantHolderApplicationDisplayable())
+            {
+                applicationFilterDependBeanGrantHolder.init(session.getUser().getApplicationList2());
+            }
+            if(isAllApplicationDisplayable())
+            {
+                applicationFilterDependBeanAll.init(applicationProgressViewerServiceLocal.getAllApplications(session));
+            }
         }
         catch(Exception ex)
         {
             ExceptionUtil.logException(ApplicationProgressViewerSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
     }
 

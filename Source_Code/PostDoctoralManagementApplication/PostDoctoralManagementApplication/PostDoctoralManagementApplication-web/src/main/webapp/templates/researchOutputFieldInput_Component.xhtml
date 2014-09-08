@@ -33,7 +33,7 @@
                         <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate"/>                                
-                        <p:calendar id="#{prefix}refpublicationDate" value="#{currentReference.publicationDate}" pattern="yyyy-MM-dd" disabled="#{!researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}" required="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}">
+                        <p:calendar id="#{prefix}refpublicationDate" mask="true" value="#{currentReference.publicationDate}" pattern="yyyy-MM-dd" disabled="#{!researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}" required="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}">
                             <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                         </p:calendar>
                         <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage"/>

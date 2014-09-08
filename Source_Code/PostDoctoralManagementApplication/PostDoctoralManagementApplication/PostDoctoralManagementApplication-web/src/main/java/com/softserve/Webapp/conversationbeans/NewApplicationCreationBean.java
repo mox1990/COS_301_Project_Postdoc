@@ -71,8 +71,6 @@ public class NewApplicationCreationBean implements Serializable {
     @EJB
     private NewApplicationServiceLocal newApplicationServiceLocal;
     
-    private UIComponent errorContainer;
-    
     private int wizardActiveTab;
     
        
@@ -88,28 +86,22 @@ public class NewApplicationCreationBean implements Serializable {
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
-        Session session = null;
         try 
-        {        
+        {  
+            Session session = null;
+            
             session = sessionManagerBean.getSession();
             ApplicationCreationDependBean.init(newApplicationServiceLocal.getOpenApplication(session));
+        
+            wizardActiveTab = 0;
+            cVCreationDependBean.init(session.getUser().getCv());
         } 
         catch (Exception ex) 
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
-            return;
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationServicesHomeView());
         }
-        wizardActiveTab = 0;
-        cVCreationDependBean.init(session.getUser().getCv());
-    }
-    
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
     }
    
     public int getWizardActiveTab() {
@@ -170,7 +162,7 @@ public class NewApplicationCreationBean implements Serializable {
         catch(Exception ex)
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }        
     }
     
@@ -222,7 +214,7 @@ public class NewApplicationCreationBean implements Serializable {
         catch(Exception ex)
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }
         
     }
@@ -247,7 +239,7 @@ public class NewApplicationCreationBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }
         
         
@@ -271,7 +263,7 @@ public class NewApplicationCreationBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
         }
         
     }
@@ -286,7 +278,7 @@ public class NewApplicationCreationBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(NewApplicationCreationBean.class, ex);
-            ExceptionUtil.handleException(errorContainer, ex);
+            ExceptionUtil.handleException(null, ex);
             return "";
         } 
     }

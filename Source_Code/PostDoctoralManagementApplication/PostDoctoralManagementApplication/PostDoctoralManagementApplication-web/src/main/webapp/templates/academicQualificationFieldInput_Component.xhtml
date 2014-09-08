@@ -31,7 +31,7 @@
                             <p:message for="qfieldofstudy" styleClass="fieldErrorMessage"/>
 
                             <p:outputLabel value="Year Obtained:" for="qyearObtained"/>                                
-                            <p:calendar id="qyearObtained" value="#{currentQualification.yearObtained}" required="true" pattern="yyyy/MM/dd">
+                            <p:calendar id="qyearObtained" mask="true" value="#{currentQualification.yearObtained}" required="true" pattern="yyyy/MM/dd">
                                 <f:convertDateTime pattern="yyyy/MM/dd"/>
                             </p:calendar>
                             <p:message for="qyearObtained" styleClass="fieldErrorMessage"/>

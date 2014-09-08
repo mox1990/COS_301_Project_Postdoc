@@ -35,9 +35,7 @@ public class DeanDeclineRequestBean {
     
     @EJB
     private DeansEndorsementServiceLocal deansEndorsementServiceLocal;
-    
-    private UIComponent errorContainer;
-    
+        
     private String reason = "";
     
     /**
@@ -48,15 +46,7 @@ public class DeanDeclineRequestBean {
     
     public Application getSelectedApplication()
     {
-        return sessionManagerBean.getObjectFromSessionStorage(0, Application.class);
-    }
-
-    public UIComponent getErrorContainer() {
-        return errorContainer;
-    }
-
-    public void setErrorContainer(UIComponent errorContainer) {
-        this.errorContainer = errorContainer;
+        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
     }
             
     public String getReason() {

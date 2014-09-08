@@ -63,6 +63,7 @@ public class GrantHolderApplicationSelectionBean implements Serializable{
         {
             ExceptionUtil.logException(GrantHolderApplicationSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToArchivalServicesHomeView());
         }
     }
 

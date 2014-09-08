@@ -7,7 +7,9 @@
 package com.softserve.interceptors;
 
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
@@ -84,6 +86,14 @@ public class AuthenticationInterceptor {
                     {
                         userGatewayLocal.authenticateUserAsOwner(session, (ProgressReport) objToAuthenticate);
                     }
+                    else if(objToAuthenticate.getClass() == CommitteeMeeting.class)
+                    {
+                        userGatewayLocal.authenticateUserAsOwner(session, (CommitteeMeeting) objToAuthenticate);
+                    }
+                    else if(objToAuthenticate.getClass() == FundingReport.class)
+                    {
+                        userGatewayLocal.authenticateUserAsOwner(session, (FundingReport) objToAuthenticate);
+                    }
                     else
                     {
                         throw new Exception("Invaild ownership object specified");
@@ -114,6 +124,14 @@ public class AuthenticationInterceptor {
                         else if(objToAuthenticate.getClass() == ProgressReport.class)
                         {
                             userGatewayLocal.authenticateUserAsOwner(session, (ProgressReport) objToAuthenticate);
+                        }
+                        else if(objToAuthenticate.getClass() == CommitteeMeeting.class)
+                        {
+                            userGatewayLocal.authenticateUserAsOwner(session, (CommitteeMeeting) objToAuthenticate);
+                        }
+                        else if(objToAuthenticate.getClass() == FundingReport.class)
+                        {
+                            userGatewayLocal.authenticateUserAsOwner(session, (FundingReport) objToAuthenticate);
                         }
                         else
                         {

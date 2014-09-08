@@ -8,6 +8,7 @@ package com.softserve.Webapp.requestbeans;
 
 import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.MinuteComment;
+import com.softserve.Webapp.conversationbeans.MeetingSelectionBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
@@ -59,6 +60,33 @@ public class MeetingCommentatorRequestBean {
     public CommitteeMeeting getSelectedCommitteeMeeting()
     {
         return sessionManagerBean.getObjectFromSessionStorage("MEETING", CommitteeMeeting.class);
+    }
+    
+    public boolean isOrganiserOfMeeting()
+    {
+        try 
+        {
+            return getSelectedCommitteeMeeting().getOrganiser().equals(sessionManagerBean.getSession().getUser());
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }
+    }
+    
+    public String closeMeeting()
+    {
+        try
+        {
+            meetingManagementServiceLocal.endMeeting(sessionManagerBean.getSession(), getSelectedCommitteeMeeting());
+            return navigationManagerBean.goToMeetingManagementServiceMeetingSelectionView();
+        }
+        catch (Exception ex)
+        {
+            ExceptionUtil.logException(MeetingSelectionBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            return "";
+        }
     }
     
     public void preformAddMeetingCommentRequest()

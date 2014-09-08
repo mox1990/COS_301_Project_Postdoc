@@ -8,11 +8,16 @@ package com.softserve.ejb;
 
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.CommitteeMeeting;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
@@ -20,6 +25,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
@@ -28,6 +34,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Carlo
  */
+@Interceptors({AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserGateway implements UserGatewayLocal
@@ -37,22 +44,14 @@ public class UserGateway implements UserGatewayLocal
     private EntityManagerFactory emf;
     
     @EJB
-    private NotificationServiceLocal notificationServiceLocal;
-    @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    
+    private NotificationServiceLocal notificationServiceLocal;    
 
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
     }
     
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
-    }
-    
-     protected UserAccountManagementServiceLocal getUserAccountManagementServicesEJB()
+    protected UserAccountManagementServiceLocal getUserAccountManagementServicesEJB()
     {
         return new UserAccountManagementService(emf);
     }
@@ -63,15 +62,8 @@ public class UserGateway implements UserGatewayLocal
     public UserGateway(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    
-   
-    
-    protected DBEntitiesFactory getDBEntitiesFactory()
-    {
-        return new DBEntitiesFactory();
-    }
-    
-    
+        
+    @AuditableMethod
     @Override
     public void login(Session session) throws AuthenticationException, Exception
     {        
@@ -85,9 +77,7 @@ public class UserGateway implements UserGatewayLocal
         {
             throw new AuthenticationException("User account disabled");
         }
-        
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
+            
         //Check if httpsession systemID has the same as the entities systemID or email address
         if (session.doesHttpSessionUsernameMatchUserUsername() || session.doesHttpSessionUsernameMatchUserEmail())
         {            
@@ -97,9 +87,6 @@ public class UserGateway implements UserGatewayLocal
                 
                 //Set login status to true
                 session.setLoggedInStatus(Boolean.TRUE);
-                //Log action
-                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("User logged in", session.getUser());
-                auditTrailService.logAction(auditLog);
             } 
             else
             {
@@ -114,20 +101,15 @@ public class UserGateway implements UserGatewayLocal
         }
     }
     
+    @AuditableMethod
     @Override
     public void logout(Session session) throws Exception
-    {
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
+    {        
         session.setLoggedInStatus(Boolean.FALSE);
         session.setHttpSessionUsername("");
-        session.setHttpSessionPassword("");
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("User logged out", session.getUser());
-        auditTrailService.logAction(auditLog);
-        
-        
+        session.setHttpSessionPassword("");        
     }
+    
     
     @Override
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException
@@ -143,7 +125,6 @@ public class UserGateway implements UserGatewayLocal
         {
             throw new AuthenticationException("The user does not exist");
         }
-        
     }
     
     /**
@@ -153,11 +134,10 @@ public class UserGateway implements UserGatewayLocal
      * @param role
      * @return int which states the authentication value
      */
+    @AuditableMethod(message = "User authentication")
     @Override
     public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception
     {
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         //Check if user session has been given temporal system level access
         if(session.isSystem())
@@ -187,14 +167,9 @@ public class UserGateway implements UserGatewayLocal
                 {
                     if(allowedRoles.contains(sr))
                     {
-                        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Authenticated user", session.getUser());
-                        auditTrailService.logAction(auditLog);
                         return;
                     }
                 }
-                
-                AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Unable to authenticate user", session.getUser());
-                auditTrailService.logAction(auditLog);
                 
                 throw new AuthenticationException("User does not have the correct priviliges for this section");
             } 
@@ -208,7 +183,8 @@ public class UserGateway implements UserGatewayLocal
             throw new AuthenticationException("User username does not match");
         }
     }
-
+    
+    @AuditableMethod
     @Override
     public void authenticateUserAsOwner(Session session, Person person) throws AuthenticationException, Exception {
         if(session.getUser() == null || !session.getUser().equals(person))
@@ -216,24 +192,43 @@ public class UserGateway implements UserGatewayLocal
             throw new AuthenticationException("You are not the owner of this item");
         }
     } 
-
+    
+    @AuditableMethod
     @Override
     public void authenticateUserAsOwner(Session session, Application application) throws Exception 
     {
         authenticateUserAsOwner(session, application.getFellow());
     }
 
+    @AuditableMethod
     @Override
     public void authenticateUserAsOwner(Session session, Cv cv) throws Exception 
     {
         authenticateUserAsOwner(session, cv.getPerson());
     }
-
+    
+    @AuditableMethod
     @Override
     public void authenticateUserAsOwner(Session session, ProgressReport progressReport) throws Exception 
     {
         authenticateUserAsOwner(session, progressReport.getApplication().getFellow());
     }
+    
+    @AuditableMethod
+    @Override
+    public void authenticateUserAsOwner(Session session, CommitteeMeeting committeeMeeting) throws Exception 
+    {
+        authenticateUserAsOwner(session, committeeMeeting.getOrganiser());
+    }
+    
+    @AuditableMethod
+    @Override
+    public void authenticateUserAsOwner(Session session, FundingReport fundingReport) throws Exception 
+    {
+        authenticateUserAsOwner(session, fundingReport.getDris());
+    }
+    
+    
     
     
 }

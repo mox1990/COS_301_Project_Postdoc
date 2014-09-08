@@ -65,19 +65,33 @@ public class ApplicationRenewalBean implements Serializable {
     {
         conversationManagerBean.registerConversation(convesation);
         conversationManagerBean.startConversation(convesation);
-        oldApplication = sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class); 
-        
-        applicationCreationDependBean.init(new Application());
-        cVCreationDependBean.init(oldApplication.getFellow().getCv());
-        progressReportCreationDependBean.init();        
-        
-        if(applicationRenewalServiceLocal.doesApplicationHaveFinalProgressReport(oldApplication))
-        {
-            wizardActiveTab = 0;
+        try
+        {   
+            oldApplication = sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class); 
+            
+            if(oldApplication == null)
+            {
+                throw new Exception("No application selected");
+            }
+
+            applicationCreationDependBean.init(new Application());
+            cVCreationDependBean.init(oldApplication.getFellow().getCv());
+            progressReportCreationDependBean.init();       
+            
+            if(applicationRenewalServiceLocal.doesApplicationHaveFinalProgressReport(sessionManagerBean.getSession(),oldApplication))
+            {
+                wizardActiveTab = 0;
+            }
+            else
+            {
+                wizardActiveTab = 1;
+            }
         }
-        else
+        catch(Exception exception)
         {
-            wizardActiveTab = 1;
+            ExceptionUtil.logException(ApplicationRenewalBean.class, exception);
+            ExceptionUtil.handleException(null, exception);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToApplicationRenewalServiceApplicationSelectionView());
         }
     }
 
@@ -118,7 +132,7 @@ public class ApplicationRenewalBean implements Serializable {
         try
         {            
             applicationRenewalServiceLocal.createFinalProgressReportForApplication(sessionManagerBean.getSession(), oldApplication, progressReportCreationDependBean.getCombinedProgressReport());
-            wizardActiveTab++;
+            wizardActiveTab = 1;
         }
         catch (Exception ex)
         {
@@ -132,7 +146,7 @@ public class ApplicationRenewalBean implements Serializable {
         try
         {            
             applicationRenewalServiceLocal.updateResearchFellowCV(sessionManagerBean.getSession(),cVCreationDependBean.getCombinedCv());
-            wizardActiveTab++;
+            wizardActiveTab = 2;
         }
         catch (Exception ex)
         {
@@ -146,7 +160,7 @@ public class ApplicationRenewalBean implements Serializable {
         try 
         {            
             applicationRenewalServiceLocal.createRenewalApplication(sessionManagerBean.getSession(), oldApplication, applicationCreationDependBean.getCombinedApplication());
-            wizardActiveTab++;
+            wizardActiveTab = 3;
         } 
         catch (Exception ex) 
         {

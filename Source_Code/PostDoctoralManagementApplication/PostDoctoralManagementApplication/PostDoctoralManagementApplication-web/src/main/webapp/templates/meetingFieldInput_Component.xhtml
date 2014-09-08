@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui">
     <ui:component>        
         <h:panelGrid columns="3" cellpadding="5">
-            <p:outputLabel value="Starting date and time:" for="name"/>                                
+            <p:outputLabel value="Meeting name:" for="name"/>                                
             <p:inputText id="name" value="#{committeeMeeting.name}"/>
             <p:message for="name" styleClass="fieldErrorMessage"/>
             
@@ -15,7 +15,7 @@
             <p:message for="venue" styleClass="fieldErrorMessage"/>           
             
             <p:outputLabel value="Starting date and time:" for="startDate"/>                                
-            <p:calendar id="startDate" value="#{committeeMeeting.startDate}" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
+            <p:calendar id="startDate" mask="true" value="#{committeeMeeting.startDate}" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
             <p:message for="startDate" styleClass="fieldErrorMessage"/>                                                                        
         </h:panelGrid>
     </ui:component>
