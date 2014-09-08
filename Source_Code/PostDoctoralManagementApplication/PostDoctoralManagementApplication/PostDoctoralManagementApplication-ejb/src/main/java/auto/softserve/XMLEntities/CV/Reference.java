@@ -6,7 +6,7 @@
 //
 
 
-package auto.softserve.XMLEntities.CV;
+package auto.softserve.XMLEntities.fellow;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,14 +27,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="publicationName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="publisher" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="publicationDate" type="{http://www.w3.org/2001/XMLSchema}date"/>
- *         &lt;element name="publicationISBN" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="publicationReferenceCode" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="publicationMediumName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="publicationPageLocation" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="publicationMediumName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="publisher" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="publicationReferenceCode" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="publicationISBN" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,36 +45,33 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "reference", propOrder = {
     "type",
-    "status",
     "publicationName",
-    "publisher",
     "publicationDate",
-    "publicationISBN",
-    "publicationReferenceCode",
+    "publicationPageLocation",
     "publicationMediumName",
-    "publicationPageLocation"
+    "publisher",
+    "publicationReferenceCode",
+    "publicationISBN"
 })
 public class Reference {
 
     @XmlElement(required = true)
     protected String type;
     @XmlElement(required = true)
-    protected String status;
-    @XmlElement(required = true)
     protected String publicationName;
-    @XmlElement(required = true)
-    protected String publisher;
     @XmlElement(required = true)
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar publicationDate;
     @XmlElement(required = true)
-    protected String publicationISBN;
-    @XmlElement(required = true)
-    protected String publicationReferenceCode;
+    protected String publicationPageLocation;
     @XmlElement(required = true)
     protected String publicationMediumName;
     @XmlElement(required = true)
-    protected String publicationPageLocation;
+    protected String publisher;
+    @XmlElement(required = true)
+    protected String publicationReferenceCode;
+    @XmlElement(required = true)
+    protected String publicationISBN;
 
     /**
      * Gets the value of the type property.
@@ -99,30 +95,6 @@ public class Reference {
      */
     public void setType(String value) {
         this.type = value;
-    }
-
-    /**
-     * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStatus(String value) {
-        this.status = value;
     }
 
     /**
@@ -150,30 +122,6 @@ public class Reference {
     }
 
     /**
-     * Gets the value of the publisher property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPublisher() {
-        return publisher;
-    }
-
-    /**
-     * Sets the value of the publisher property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPublisher(String value) {
-        this.publisher = value;
-    }
-
-    /**
      * Gets the value of the publicationDate property.
      * 
      * @return
@@ -198,51 +146,27 @@ public class Reference {
     }
 
     /**
-     * Gets the value of the publicationISBN property.
+     * Gets the value of the publicationPageLocation property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPublicationISBN() {
-        return publicationISBN;
+    public String getPublicationPageLocation() {
+        return publicationPageLocation;
     }
 
     /**
-     * Sets the value of the publicationISBN property.
+     * Sets the value of the publicationPageLocation property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPublicationISBN(String value) {
-        this.publicationISBN = value;
-    }
-
-    /**
-     * Gets the value of the publicationReferenceCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPublicationReferenceCode() {
-        return publicationReferenceCode;
-    }
-
-    /**
-     * Sets the value of the publicationReferenceCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPublicationReferenceCode(String value) {
-        this.publicationReferenceCode = value;
+    public void setPublicationPageLocation(String value) {
+        this.publicationPageLocation = value;
     }
 
     /**
@@ -270,27 +194,75 @@ public class Reference {
     }
 
     /**
-     * Gets the value of the publicationPageLocation property.
+     * Gets the value of the publisher property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPublicationPageLocation() {
-        return publicationPageLocation;
+    public String getPublisher() {
+        return publisher;
     }
 
     /**
-     * Sets the value of the publicationPageLocation property.
+     * Sets the value of the publisher property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPublicationPageLocation(String value) {
-        this.publicationPageLocation = value;
+    public void setPublisher(String value) {
+        this.publisher = value;
+    }
+
+    /**
+     * Gets the value of the publicationReferenceCode property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPublicationReferenceCode() {
+        return publicationReferenceCode;
+    }
+
+    /**
+     * Sets the value of the publicationReferenceCode property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPublicationReferenceCode(String value) {
+        this.publicationReferenceCode = value;
+    }
+
+    /**
+     * Gets the value of the publicationISBN property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPublicationISBN() {
+        return publicationISBN;
+    }
+
+    /**
+     * Sets the value of the publicationISBN property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPublicationISBN(String value) {
+        this.publicationISBN = value;
     }
 
 }
