@@ -313,6 +313,30 @@ public class ArchivalService implements ArchivalServiceLocal {
             if(backupPersonJpaController.findPerson(oldPerson.getSystemID()) == null)
             {
                 p = new Person(oldPerson.getSystemID());
+                
+                //Might not need this but just doing it any way...
+                p.setSecurityRoleList(new ArrayList<SecurityRole>());
+                p.setApplicationList(new ArrayList<Application>());
+                p.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
+                p.setDeclineReportList(new ArrayList<DeclineReport>());
+                p.setEndorsementList(new ArrayList<Endorsement>());
+                p.setApplicationReviewRequestList(new ArrayList<ApplicationReviewRequest>());
+                p.setResearchFellowInformation(null);
+                p.setRefereeReportList(new ArrayList<RefereeReport>());
+                p.setEmployeeInformation(null);
+                p.setNotificationList(new ArrayList<Notification>());
+                p.setNotificationList1(new ArrayList<Notification>());
+                p.setAmmendRequestList(new ArrayList<AmmendRequest>());
+                p.setAuditLogList(new ArrayList<AuditLog>());
+                p.setRecommendationReportList(new ArrayList<RecommendationReport>());
+                p.setFundingReportList(new ArrayList<FundingReport>());
+                p.setCv(null);
+                p.setApplicationList1(new ArrayList<Application>());
+                p.setApplicationList2(new ArrayList<Application>());
+                p.setAddressLine1(null);
+                p.setMinuteCommentList(new ArrayList<MinuteComment>());
+                p.setEligiblityReportList(new ArrayList<EligiblityReport>());
+                p.setForwardAndRewindReportList(new ArrayList<ForwardAndRewindReport>());
             }
             else
             {
@@ -335,80 +359,55 @@ public class ArchivalService implements ArchivalServiceLocal {
             
             // Release all other entities from Person...
             List<SecurityRole> securityRoleList = oldPerson.getSecurityRoleList();
-            p.setSecurityRoleList(new ArrayList<SecurityRole>());
             
             List<Application> applicationList = oldPerson.getApplicationList();
-            p.setApplicationList(new ArrayList<Application>());
             
             List<CommitteeMeeting> committeeMeetingList = oldPerson.getCommitteeMeetingList();
-            p.setCommitteeMeetingList(new ArrayList<CommitteeMeeting>());
+            
             
             List<DeclineReport> declineReportList = oldPerson.getDeclineReportList();
-            p.setDeclineReportList(new ArrayList<DeclineReport>());
             
             List<Endorsement> endorsementList = oldPerson.getEndorsementList();
-            p.setEndorsementList(new ArrayList<Endorsement>());
             
             List<ApplicationReviewRequest> applicationReviewRequestList  = oldPerson.getApplicationReviewRequestList();
-            p.setApplicationReviewRequestList(new ArrayList<ApplicationReviewRequest>());
             
             ResearchFellowInformation researchFellowInformation = oldPerson.getResearchFellowInformation();
-            p.setResearchFellowInformation(null);
             
             List<RefereeReport> refereeReportList = oldPerson.getRefereeReportList();
-            p.setRefereeReportList(new ArrayList<RefereeReport>());
             
             EmployeeInformation employeeInformation = oldPerson.getEmployeeInformation();
-            p.setEmployeeInformation(null);
             
             List<Notification> notificationList = oldPerson.getNotificationList();
-            p.setNotificationList(new ArrayList<Notification>());
             
             List<Notification> notificationList1 = oldPerson.getNotificationList1();
-            p.setNotificationList1(new ArrayList<Notification>());
             
             List<AmmendRequest> ammendRequestList = oldPerson.getAmmendRequestList();
-            p.setAmmendRequestList(new ArrayList<AmmendRequest>());
             
             List<AuditLog> auditLogList = oldPerson.getAuditLogList();
-            p.setAuditLogList(new ArrayList<AuditLog>());
             
             List<RecommendationReport> recommendationReportList = oldPerson.getRecommendationReportList();
-            p.setRecommendationReportList(new ArrayList<RecommendationReport>());
             
             List<FundingReport> fundingReportList = oldPerson.getFundingReportList();
-            p.setFundingReportList(new ArrayList<FundingReport>());
             
             Cv cv = oldPerson.getCv();
-            p.setCv(null);
             
             List<Application> applicationList1 = oldPerson.getApplicationList1();
-            p.setApplicationList1(new ArrayList<Application>());
             
             List<Application> applicationList2 = oldPerson.getApplicationList2();
-            p.setApplicationList2(new ArrayList<Application>());
             
             Address addressLine1 = oldPerson.getAddressLine1();
-            p.setAddressLine1(null);
             
             List<MinuteComment> minuteCommentList = oldPerson.getMinuteCommentList();
-            p.setMinuteCommentList(new ArrayList<MinuteComment>());
             
             List<EligiblityReport> eligiblityReportList = oldPerson.getEligiblityReportList();
-            p.setEligiblityReportList(new ArrayList<EligiblityReport>());
             
             List<ForwardAndRewindReport> forwardAndRewindReportList= oldPerson.getForwardAndRewindReportList();
-            p.setForwardAndRewindReportList(new ArrayList<ForwardAndRewindReport>());
             
             try
             {
                 if(backupPersonJpaController.findPerson(p.getSystemID()) == null)
                 {
                     backupPersonJpaController.create(p);
-                }
-                else
-                {
-                    backupPersonJpaController.edit(p);
                 }
                 
                 // Return entities to Person while creating them if need be...
@@ -418,6 +417,8 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupSecurityRoleJpaController.findSecurityRole(s.getRoleID()) == null)
                     {
                         SecurityRole tmp = new SecurityRole(s.getRoleID());
+                        tmp.setName(s.getName());
+                        tmp.setRoleMask(s.getRoleMask());
                         backupSecurityRoleJpaController.create(tmp);
                         securityRoleList.set(securityRoleList.indexOf(s), tmp);
                     }
@@ -601,6 +602,29 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupAuditLogJpaController.findAuditLog(a.getEntryID()) == null)
                     {
                         AuditLog tmp = new AuditLog(a.getEntryID());
+                        tmp.setTimestamp(a.getTimestamp());
+                        tmp.setAction(a.getAction());
+                        if(backupPersonJpaController.findPerson(a.getPerson().getSystemID()) == null)
+                        {
+                            Person actor = new Person(a.getPerson().getSystemID());
+                            actor.setPassword(a.getPerson().getPassword());
+                            actor.setTitle(a.getPerson().getTitle());
+                            actor.setFullName(a.getPerson().getFullName());
+                            actor.setSurname(a.getPerson().getSurname());
+                            actor.setEmail(a.getPerson().getEmail());
+                            actor.setTelephoneNumber(a.getPerson().getTelephoneNumber());
+                            actor.setWorkNumber(a.getPerson().getWorkNumber());
+                            actor.setFaxNumber(a.getPerson().getFaxNumber());
+                            actor.setCellphoneNumber(a.getPerson().getCellphoneNumber());
+                            actor.setUpEmployee(a.getPerson().getUpEmployee());
+                            actor.setAccountStatus(a.getPerson().getAccountStatus());
+                            
+                            tmp.setPerson(actor);
+                        }
+                        else
+                        {
+                            tmp.setPerson(backupPersonJpaController.findPerson(a.getPerson().getSystemID()));
+                        }
                         backupAuditLogJpaController.create(tmp);
                         newAuditLogList.add(tmp);
                     }
@@ -616,6 +640,39 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupRecommendationReportJpaController.findRecommendationReport(r.getReportID()) == null)
                     {
                         RecommendationReport tmp = new RecommendationReport(r.getReportID());
+                        tmp.setTimestamp(r.getTimestamp());
+                        tmp.setContent(r.getContent());
+                        if(backupApplicationJpaController.findApplication(r.getApplication().getApplicationID()) == null)
+                        {
+                            Application app = new Application(r.getApplication().getApplicationID());
+                            tmp.setApplication(app);
+                        }
+                        else
+                        {
+                            tmp.setApplication(backupApplicationJpaController.findApplication(r.getApplication().getApplicationID()));
+                        }
+                        
+                        if(backupPersonJpaController.findPerson(r.getHod().getSystemID()) == null)
+                        {
+                            Person hod = new Person(r.getHod().getSystemID());
+                            hod.setPassword(r.getHod().getPassword());
+                            hod.setTitle(r.getHod().getTitle());
+                            hod.setFullName(r.getHod().getFullName());
+                            hod.setSurname(r.getHod().getSurname());
+                            hod.setEmail(r.getHod().getEmail());
+                            hod.setTelephoneNumber(r.getHod().getTelephoneNumber());
+                            hod.setWorkNumber(r.getHod().getWorkNumber());
+                            hod.setFaxNumber(r.getHod().getFaxNumber());
+                            hod.setCellphoneNumber(r.getHod().getCellphoneNumber());
+                            hod.setUpEmployee(r.getHod().getUpEmployee());
+                            hod.setAccountStatus(r.getHod().getAccountStatus());
+                            
+                            tmp.setHod(hod);
+                        }
+                        else
+                        {
+                            tmp.setHod(backupPersonJpaController.findPerson(r.getHod().getSystemID()));
+                        }
                         backupRecommendationReportJpaController.create(tmp);
                         newRecommendationReportList.add(tmp);
                     }
@@ -631,6 +688,38 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupFundingReportJpaController.findFundingReport(f.getReportID()) == null)
                     {
                         FundingReport tmp = new FundingReport(f.getReportID());
+                        tmp.setTimestamp(f.getTimestamp());
+                        if(backupApplicationJpaController.findApplication(f.getApplication().getApplicationID()) == null)
+                        {
+                            Application app = new Application(f.getApplication().getApplicationID());
+                            tmp.setApplication(app);
+                        }
+                        else
+                        {
+                            tmp.setApplication(backupApplicationJpaController.findApplication(f.getApplication().getApplicationID()));
+                        }
+                        
+                        if(backupPersonJpaController.findPerson(f.getDris().getSystemID()) == null)
+                        {
+                            Person dris = new Person(f.getDris().getSystemID());
+                            dris.setPassword(f.getDris().getPassword());
+                            dris.setTitle(f.getDris().getTitle());
+                            dris.setFullName(f.getDris().getFullName());
+                            dris.setSurname(f.getDris().getSurname());
+                            dris.setEmail(f.getDris().getEmail());
+                            dris.setTelephoneNumber(f.getDris().getTelephoneNumber());
+                            dris.setWorkNumber(f.getDris().getWorkNumber());
+                            dris.setFaxNumber(f.getDris().getFaxNumber());
+                            dris.setCellphoneNumber(f.getDris().getCellphoneNumber());
+                            dris.setUpEmployee(f.getDris().getUpEmployee());
+                            dris.setAccountStatus(f.getDris().getAccountStatus());
+                            
+                            tmp.setDris(dris);
+                        }
+                        else
+                        {
+                            tmp.setDris(backupPersonJpaController.findPerson(f.getDris().getSystemID()));
+                        }
                         backupFundingReportJpaController.create(tmp);
                         newFundingReportList.add(tmp);
                     }
@@ -649,6 +738,31 @@ public class ArchivalService implements ArchivalServiceLocal {
                 else if(backupCvJpaController.findCv(cv.getCvID()) == null)
                 {  
                     Cv tmp = new Cv(cv.getCvID());
+                    tmp.setIdNumber(cv.getIdNumber());
+                    tmp.setDateOfBirth(cv.getDateOfBirth());
+                    
+                    if(backupPersonJpaController.findPerson(cv.getPerson().getSystemID()) == null)
+                        {
+                            Person person = new Person(cv.getPerson().getSystemID());
+                            person.setPassword(cv.getPerson().getPassword());
+                            person.setTitle(cv.getPerson().getTitle());
+                            person.setFullName(cv.getPerson().getFullName());
+                            person.setSurname(cv.getPerson().getSurname());
+                            person.setEmail(cv.getPerson().getEmail());
+                            person.setTelephoneNumber(cv.getPerson().getTelephoneNumber());
+                            person.setWorkNumber(cv.getPerson().getWorkNumber());
+                            person.setFaxNumber(cv.getPerson().getFaxNumber());
+                            person.setCellphoneNumber(cv.getPerson().getCellphoneNumber());
+                            person.setUpEmployee(cv.getPerson().getUpEmployee());
+                            person.setAccountStatus(cv.getPerson().getAccountStatus());
+                            
+                            tmp.setPerson(person);
+                        }
+                        else
+                        {
+                            tmp.setPerson(backupPersonJpaController.findPerson(cv.getPerson().getSystemID()));
+                        }
+                    
                     backupCvJpaController.create(tmp);
                     newCv = tmp;
                 }
@@ -709,6 +823,8 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupMinuteCommentJpaController.findMinuteComment(m.getCommentID()) == null)
                     {
                         MinuteComment tmp = new MinuteComment(m.getCommentID());
+                        tmp.setTimestamp(m.getTimestamp());
+                        tmp.setComment(m.getComment());
                         backupMinuteCommentJpaController.create(tmp);
                         newMinuteCommentList.add(tmp);
                     }
@@ -724,6 +840,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupEligiblityReportJpaController.findEligiblityReport(e.getReportID()) == null)
                     {
                         EligiblityReport tmp = new EligiblityReport(e.getReportID());
+                        tmp.setEligiblityCheckDate(e.getEligiblityCheckDate());
                         backupEligiblityReportJpaController.create(tmp);
                         newEligiblityReportList.add(tmp);
                     }
@@ -739,6 +856,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                     if(backupForwardAndRewindReportJpaController.findForwardAndRewindReport(f.getReportID()) == null)
                     {
                         ForwardAndRewindReport tmp = new ForwardAndRewindReport(f.getReportID());
+                        tmp.setTimestamp(f.getTimestamp());
                         backupForwardAndRewindReportJpaController.create(tmp);
                         newForwardAndRewindReportList.add(tmp);
                     }
