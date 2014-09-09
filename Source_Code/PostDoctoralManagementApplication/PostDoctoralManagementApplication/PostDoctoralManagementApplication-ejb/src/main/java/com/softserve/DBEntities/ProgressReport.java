@@ -6,7 +6,7 @@
 
 package com.softserve.DBEntities;
 
-import auto.softserve.XMLEntities.fellow.ProgressReportContent;
+import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import com.softserve.XMLUtils.XMLMarshaller;
 import com.softserve.XMLUtils.XMLUnmarshaller;
 import java.io.Serializable;

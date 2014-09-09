@@ -16,4 +16,8 @@ public class SystemConstants {
     //Java mail constants
     public final static String MAIL_USERNAME = "uppostdoctoralsystem@gmail.com";
     public final static String MAIL_PASSWORD = "UPSystem";
+    
+    //System constants
+    public final static String VERSION = "0.7 Beta";
+    public final static String DEVELOPER = "Softserve group";
 }

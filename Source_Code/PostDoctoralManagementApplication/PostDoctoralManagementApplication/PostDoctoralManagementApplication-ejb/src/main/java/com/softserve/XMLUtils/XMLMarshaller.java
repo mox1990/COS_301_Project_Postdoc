@@ -7,10 +7,10 @@
 package com.softserve.XMLUtils;
 
 
+import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import auto.softserve.XMLEntities.CV.*;
 import auto.softserve.XMLEntities.HOD.*;
 import auto.softserve.XMLEntities.application.*;
-import auto.softserve.XMLEntities.fellow.*;
 import auto.softserve.XMLEntities.referee.*;
 import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
@@ -59,7 +59,7 @@ public class XMLMarshaller {
     
     public String marshalProgressReportContentObject(ProgressReportContent progressReportContent) throws JAXBException
     {
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Marshaller marshaller = jaxbc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter stringWriter = new StringWriter();

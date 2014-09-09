@@ -6,10 +6,10 @@
 
 package com.softserve.XMLUtils;
 
+import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import auto.softserve.XMLEntities.CV.*;
 import auto.softserve.XMLEntities.HOD.*;
 import auto.softserve.XMLEntities.application.*;
-import auto.softserve.XMLEntities.fellow.*;
 import auto.softserve.XMLEntities.referee.*;
 import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
@@ -71,7 +71,7 @@ public class XMLUnmarshaller {
             return new ProgressReportContent();
         }
         
-        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.fellow");
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (ProgressReportContent) unmarshaller.unmarshal(new StreamSource(new StringReader(progressReportContent)));        
     }

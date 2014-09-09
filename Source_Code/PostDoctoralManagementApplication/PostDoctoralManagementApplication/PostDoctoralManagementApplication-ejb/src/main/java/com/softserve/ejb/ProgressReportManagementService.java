@@ -149,7 +149,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
         GregorianCalendar diffCal = getGregorianCalendarUTIL();
         diffCal.setTimeInMillis(endCal.getTimeInMillis() - startCal.getTimeInMillis());
-        System.out.println("============= " + diffCal.get(GregorianCalendar.YEAR));
-        return diffCal.get(GregorianCalendar.YEAR);
+        System.out.println("============= " + (diffCal.get(GregorianCalendar.YEAR) - 1970));
+        return diffCal.get(GregorianCalendar.YEAR) - 1970;
     }
 }

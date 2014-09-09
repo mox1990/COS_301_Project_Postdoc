@@ -57,6 +57,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
     @NamedQuery(name = "Application.findByProjectTitle", query = "SELECT a FROM Application a WHERE a.projectTitle = :projectTitle")})
 public class Application implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -126,6 +127,12 @@ public class Application implements Serializable {
     private EligiblityReport eligiblityReport;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "application")
     private List<ForwardAndRewindReport> forwardAndRewindReportList;
+    
+    @JoinColumn(name = "_parentApplication", referencedColumnName = "_applicationID")
+    @OneToOne(optional = true)
+    private Application parentApplication;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "parentApplication")
+    private Application childApplication;
 
     public Application() {
     }
@@ -390,5 +397,22 @@ public class Application implements Serializable {
     public String toString() {
         return "com.softserve.DBEntities.Application[ applicationID=" + applicationID + " ]";
     }
+
+    public Application getParentApplication() {
+        return parentApplication;
+    }
+
+    public void setParentApplication(Application parentApplication) {
+        this.parentApplication = parentApplication;
+    }
+
+    public Application getChildApplication() {
+        return childApplication;
+    }
+
+    public void setChildApplication(Application childApplication) {
+        this.childApplication = childApplication;
+    }
+    
     
 }

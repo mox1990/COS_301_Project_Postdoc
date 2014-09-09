@@ -50,6 +50,8 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     private NotificationServiceLocal notificationServiceLocal;
     @EJB
     private CVManagementServiceLocal cVManagementServiceLocal;
+    @EJB
+    private ProgressReportManagementServiceLocal progressReportManagementServiceLocal;
     
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
@@ -59,6 +61,11 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     protected CVManagementServiceLocal getCVManagementServiceEJB()
     {
         return cVManagementServiceLocal;
+    }
+    
+    protected ProgressReportManagementServiceLocal getProgressReportManagementServiceEJB()
+    {
+        return progressReportManagementServiceLocal;
     }
 
     public ApplicationRenewalService() {
@@ -164,9 +171,9 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     @Override
     public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
     {
-        ProgressReportManagementService progressReportManagementService = getProgressReportMangementEJB();
+        ProgressReportManagementServiceLocal progressReportManagementService = getProgressReportMangementEJB();
         
-        if(progressReportManagementService.getNumberOfProgressReportsRequiredByApplication(session,application) == application.getProgressReportList().size() - 1)
+        if(progressReportManagementService.getNumberOfProgressReportsRequiredByApplication(session,application) - 1 == application.getProgressReportList().size())
         {
             progressReportManagementService.createProgressReport(session, application, progressReport);
         }

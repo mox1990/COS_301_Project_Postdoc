@@ -49,27 +49,27 @@ public class PersistenceConstants {
     public final static SecurityRole SECURITY_ROLE_SYSTEM_ADMINISTRATOR = new SecurityRole((long) 9);
     
     //Account status constants
-    public final static String ACCOUNT_STATUS_ACTIVE = "active";
-    public final static String ACCOUNT_STATUS_DISABLED = "disabled";
-    public final static String ACCOUNT_STATUS_DORMENT = "dorment";
-    public final static String ACCOUNT_STATUS_PENDING = "pending";
+    public final static String ACCOUNT_STATUS_ACTIVE = "Active";
+    public final static String ACCOUNT_STATUS_DISABLED = "Disabled";
+    public final static String ACCOUNT_STATUS_DORMENT = "Dorment";
+    public final static String ACCOUNT_STATUS_PENDING = "Pending";
     
     //Application status constants
-    public final static String APPLICATION_STATUS_OPEN = "open";
-    public final static String APPLICATION_STATUS_SUBMITTED = "submitted";
-    public final static String APPLICATION_STATUS_DECLINED = "declined";
-    public final static String APPLICATION_STATUS_REFERRED = "referred";
-    public final static String APPLICATION_STATUS_FINALISED = "finalised";
-    public final static String APPLICATION_STATUS_RECOMMENDED = "recommended";
-    public final static String APPLICATION_STATUS_ENDORSED = "endorsed";
-    public final static String APPLICATION_STATUS_ELIGIBLE = "eligible";
-    public final static String APPLICATION_STATUS_FUNDED = "funded";
-    public final static String APPLICATION_STATUS_COMPLETED = "completed";
-    public final static String APPLICATION_STATUS_TERMINATED = "terminated";
+    public final static String APPLICATION_STATUS_OPEN = "Open";
+    public final static String APPLICATION_STATUS_SUBMITTED = "Submitted";
+    public final static String APPLICATION_STATUS_DECLINED = "Declined";
+    public final static String APPLICATION_STATUS_REFERRED = "Referred";
+    public final static String APPLICATION_STATUS_FINALISED = "Finalised";
+    public final static String APPLICATION_STATUS_RECOMMENDED = "Recommended";
+    public final static String APPLICATION_STATUS_ENDORSED = "Endorsed";
+    public final static String APPLICATION_STATUS_ELIGIBLE = "Eligible";
+    public final static String APPLICATION_STATUS_FUNDED = "Funded";
+    public final static String APPLICATION_STATUS_COMPLETED = "Completed";
+    public final static String APPLICATION_STATUS_TERMINATED = "Terminated";
     
     //Application type constants
-    public final static String APPLICATION_TYPE_NEW = "new";
-    public final static String APPLICATION_TYPE_RENEWAL = "renewal";
+    public final static String APPLICATION_TYPE_NEW = "New";
+    public final static String APPLICATION_TYPE_RENEWAL = "Renewal";
     
     //Application funding type constants
     public final static String APPLICATION_FUNDINGTYPE_UPPHDPOSTDOC = "UP PhD Postdoc";
@@ -109,21 +109,21 @@ public class PersistenceConstants {
     public final static String PERSON_TITLE_PROF = "Prof";
     
     //Notification email status
-    public final static String NOTIFICATION_EMAIL_STATUS_SENT = "sent";
-    public final static String NOTIFICATION_EMAIL_STATUS_QUEUED = "queued";
-    public final static String NOTIFICATION_EMAIL_STATUS_DISABLED = "disabled";
+    public final static String NOTIFICATION_EMAIL_STATUS_SENT = "Sent";
+    public final static String NOTIFICATION_EMAIL_STATUS_QUEUED = "Queued";
+    public final static String NOTIFICATION_EMAIL_STATUS_DISABLED = "Disabled";
     
     //Funding cost type constants
-    public final static String FUNDINGCOST_TYPE_FELLOWSHIP = "fellowship";
-    public final static String FUNDINGCOST_TYPE_RUNNING = "running";
-    public final static String FUNDINGCOST_TYPE_TRAVEL = "travel";
-    public final static String FUNDINGCOST_TYPE_EQUIPMENT = "equipment";
-    public final static String FUNDINGCOST_TYPE_OPERATING = "operating";
-    public final static String FUNDINGCOST_TYPE_CONFERENCE = "conference";
+    public final static String FUNDINGCOST_TYPE_FELLOWSHIP = "Fellowship";
+    public final static String FUNDINGCOST_TYPE_RUNNING = "Running";
+    public final static String FUNDINGCOST_TYPE_TRAVEL = "Travel";
+    public final static String FUNDINGCOST_TYPE_EQUIPMENT = "Equipment";
+    public final static String FUNDINGCOST_TYPE_OPERATING = "Operating";
+    public final static String FUNDINGCOST_TYPE_CONFERENCE = "Conference";
     
     //Forward and rewind report type constants
-    public final static String FORWARDREWINREPORT_TYPE_FORWARD = "forward";
-    public final static String FORWARDREWINREPORT_TYPE_REWIND = "rewind";
+    public final static String FORWARDREWINREPORT_TYPE_FORWARD = "Forward";
+    public final static String FORWARDREWINREPORT_TYPE_REWIND = "Rewind";
     
     //CV race type constants
     public final static String CV_RACE_WHITE = "White";
