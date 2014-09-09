@@ -162,7 +162,7 @@ public class ForwardAndRewindReportJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -171,7 +171,7 @@ public class ForwardAndRewindReportJpaController implements Serializable {
         try {
             return em.find(ForwardAndRewindReport.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -184,7 +184,7 @@ public class ForwardAndRewindReportJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

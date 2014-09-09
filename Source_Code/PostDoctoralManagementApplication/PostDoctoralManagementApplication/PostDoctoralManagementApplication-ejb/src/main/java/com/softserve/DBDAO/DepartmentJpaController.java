@@ -236,7 +236,7 @@ public class DepartmentJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -245,7 +245,7 @@ public class DepartmentJpaController implements Serializable {
         try {
             return em.find(Department.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -258,7 +258,7 @@ public class DepartmentJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

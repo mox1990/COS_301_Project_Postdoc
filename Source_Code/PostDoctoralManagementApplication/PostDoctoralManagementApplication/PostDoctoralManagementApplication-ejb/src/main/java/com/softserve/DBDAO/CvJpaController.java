@@ -274,7 +274,7 @@ public class CvJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -283,7 +283,7 @@ public class CvJpaController implements Serializable {
         try {
             return em.find(Cv.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -296,7 +296,7 @@ public class CvJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

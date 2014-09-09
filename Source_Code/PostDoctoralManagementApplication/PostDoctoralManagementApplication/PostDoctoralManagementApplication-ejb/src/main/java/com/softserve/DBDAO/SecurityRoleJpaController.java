@@ -149,7 +149,7 @@ public class SecurityRoleJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -158,7 +158,7 @@ public class SecurityRoleJpaController implements Serializable {
         try {
             return em.find(SecurityRole.class, id);
         } finally {
-            em.close();
+           
         }
     }
 
@@ -171,7 +171,7 @@ public class SecurityRoleJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

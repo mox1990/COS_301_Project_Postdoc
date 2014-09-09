@@ -15,14 +15,14 @@ import javax.persistence.EntityManagerFactory;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class DAOFactory {
-    private EntityManagerFactory emf = null;
     private EntityManager em = null;
     
-    public DAOFactory(EntityManagerFactory emf) 
+    public DAOFactory(EntityManager emf) 
     {
-        this.emf = emf;
-        this.em = emf.createEntityManager();
+        this.em = em;
     }
+    
+    
     
     public AcademicQualificationJpaController createAcademicQualificationDAO()
     {

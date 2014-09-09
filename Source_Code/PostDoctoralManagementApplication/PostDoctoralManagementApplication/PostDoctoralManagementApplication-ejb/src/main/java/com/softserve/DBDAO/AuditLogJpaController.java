@@ -132,7 +132,7 @@ public class AuditLogJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -141,7 +141,7 @@ public class AuditLogJpaController implements Serializable {
         try {
             return em.find(AuditLog.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -154,7 +154,7 @@ public class AuditLogJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

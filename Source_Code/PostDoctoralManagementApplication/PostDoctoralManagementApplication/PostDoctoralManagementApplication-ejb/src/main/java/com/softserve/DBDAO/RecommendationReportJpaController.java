@@ -194,7 +194,7 @@ public class RecommendationReportJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -203,7 +203,7 @@ public class RecommendationReportJpaController implements Serializable {
         try {
             return em.find(RecommendationReport.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -216,7 +216,7 @@ public class RecommendationReportJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

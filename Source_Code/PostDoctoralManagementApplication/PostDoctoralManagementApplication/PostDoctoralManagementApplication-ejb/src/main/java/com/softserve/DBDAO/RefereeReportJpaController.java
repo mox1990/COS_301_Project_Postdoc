@@ -165,7 +165,7 @@ public class RefereeReportJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -174,7 +174,7 @@ public class RefereeReportJpaController implements Serializable {
         try {
             return em.find(RefereeReport.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -187,7 +187,7 @@ public class RefereeReportJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

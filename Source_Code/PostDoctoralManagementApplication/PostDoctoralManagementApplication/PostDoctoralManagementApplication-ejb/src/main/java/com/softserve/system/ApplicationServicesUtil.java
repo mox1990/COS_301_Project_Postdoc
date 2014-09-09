@@ -8,6 +8,7 @@ package com.softserve.system;
 
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -26,6 +27,7 @@ import com.softserve.ejb.UserGateway;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 
@@ -36,16 +38,16 @@ import javax.persistence.EntityManagerFactory;
  */
 public class ApplicationServicesUtil {
     
-    private EntityManagerFactory emf;
+    private EntityManager em;
 
-    public ApplicationServicesUtil(EntityManagerFactory emf) 
+    public ApplicationServicesUtil(EntityManager em) 
     {
-        this.emf = emf;
+        this.em = em;
     }
     
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
     
     /**
@@ -56,43 +58,7 @@ public class ApplicationServicesUtil {
     {
         return new DBEntitiesFactory();
     }
-    
-    /**
-     *
-     * @return
-     */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
-    
-    protected DeclineReportJpaController getDeclineReportDAO()
-    {
-        return new DeclineReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
-    {
-        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
+
     
     protected GregorianCalendar getGregorianCalendar()
     {
@@ -101,7 +67,8 @@ public class ApplicationServicesUtil {
     
     public List<Application> loadPendingApplications(Person user, String applicationStatusGroup, int StartIndex, int maxNumberOfRecords)
     {
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
         
         List<Application> output;        
         
@@ -141,7 +108,7 @@ public class ApplicationServicesUtil {
         {
             Department userDepartment = user.getEmployeeInformation().getDepartment();
             List<Application> tempOutput = new ArrayList<Application>(); 
-            output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+            output = dAOFactory.createApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
             for(Application application : output)
             {
                 if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
@@ -178,7 +145,7 @@ public class ApplicationServicesUtil {
         {
             Faculty userFaculty = user.getEmployeeInformation().getDepartment().getFaculty();
             List<Application> tempOutput = new ArrayList<Application>(); 
-            output = getApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            output = dAOFactory.createApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
             for(Application application : output)
             {
                 if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
@@ -226,7 +193,7 @@ public class ApplicationServicesUtil {
     
     public int getTotalNumberOfPendingApplications(Person user, String applicationStatusGroup)
     {
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        ApplicationJpaController applicationJpaController = getDAOFactory().createApplicationDAO();
         
         long output = 0;
         
@@ -261,11 +228,11 @@ public class ApplicationServicesUtil {
     public void declineAppliction(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        DeclineReportJpaController declineReportJpaController = getDeclineReportDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+        DeclineReportJpaController declineReportJpaController = dAOFactory.createDeclineReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+
         
         if(!application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED))
         {
@@ -276,16 +243,12 @@ public class ApplicationServicesUtil {
             DeclineReport declineReport = dBEntitiesFactory.createDeclineReportEntity(application,session.getUser(), reason, getGregorianCalendar().getTime());
             declineReportJpaController.create(declineReport);
 
-            //Log action  
-            AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Declined application " + application.getApplicationID(), session.getUser());
-            auditTrailService.logAction(auditLog);
-
             //Send notification to grant holder and applicatantD
-            Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(notification, true);
+            //Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            //notificationService.sendNotification(notification, true);
 
-            notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(notification, true);
+            //notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            //notificationService.sendNotification(notification, true);
         }
         else
         {
@@ -301,7 +264,8 @@ public class ApplicationServicesUtil {
             throw new Exception("Application is not valid");
         }
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
         
         application = applicationJpaController.findApplication(application.getApplicationID());
         

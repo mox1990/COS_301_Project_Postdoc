@@ -6,8 +6,8 @@
 
 package com.softserve.ejb;
 
-import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -20,9 +20,11 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.interceptors.TransactionInterceptor;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
@@ -64,14 +66,9 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         this.emf = emf;
     }
     
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected EndorsementJpaController getEndorsementDAO()
-    {
-        return new EndorsementJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf);
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -111,6 +108,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod(message = "Dean declined")
+    @TransactionMethod
     @Override
     public void declineApplication(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {        
@@ -120,11 +118,13 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod(message = "Dean endorsed application")
+    @TransactionMethod
     @Override
     public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws AuthenticationException, RollbackFailureException, NonexistentEntityException, Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        EndorsementJpaController endorsementJpaController = getEndorsementDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+        EndorsementJpaController endorsementJpaController = dAOFactory.createEndorsementDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         

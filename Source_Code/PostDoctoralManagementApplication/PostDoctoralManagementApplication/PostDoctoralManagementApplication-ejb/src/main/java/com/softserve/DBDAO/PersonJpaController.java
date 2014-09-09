@@ -1255,7 +1255,7 @@ public class PersonJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -1264,7 +1264,7 @@ public class PersonJpaController implements Serializable {
         try {
             return em.find(Person.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -1277,7 +1277,7 @@ public class PersonJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

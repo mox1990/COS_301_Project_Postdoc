@@ -27,6 +27,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -64,9 +65,9 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         this.emf = emf;
     }
     
-    protected DAOFactory getDAOFactory()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(emf);
+        return new DAOFactory(em);
     }
     
     protected List<ApplicationStageStatus> getApplicationStageStatus()
@@ -74,17 +75,27 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         return new ArrayList<ApplicationStageStatus>();
     }
     
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(em);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
-    public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception 
+    public List<Application> getAllApplications(Session session) throws Exception 
     {   
-        return getDAOFactory().createApplicationDAO().findApplicationEntities();
+        EntityManager em = emf.createEntityManager();
+        DAOFactory dAOFactory = getDAOFactory(em);
+        try
+        {
+            List<Application> applications = dAOFactory.createApplicationDAO().findApplicationEntities();
+            return applications;
+        }
+        finally
+        {
+            em.close();
+        }       
     }
     
     
@@ -93,11 +104,13 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
     @Override
     public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception
     { 
+        
+        
         List<ApplicationStageStatus> stageStatuses = getApplicationStageStatus();
         
         //Opening information
         stageStatuses.add(new ApplicationStageStatus(application.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, application.getFellow()));
-        ApplicationServicesUtil applicationServicesUtil = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServicesUtil = getApplicationServicesUTIL(null);
         if(applicationServicesUtil.hasApplicationAchivedThisStatus(application, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
             stageStatuses.add(new ApplicationStageStatus(application.getSubmissionDate(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, application.getFellow()));

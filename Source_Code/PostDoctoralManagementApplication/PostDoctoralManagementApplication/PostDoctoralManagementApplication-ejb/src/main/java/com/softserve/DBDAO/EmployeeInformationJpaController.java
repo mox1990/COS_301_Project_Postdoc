@@ -224,7 +224,7 @@ public class EmployeeInformationJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -233,7 +233,7 @@ public class EmployeeInformationJpaController implements Serializable {
         try {
             return em.find(EmployeeInformation.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -246,7 +246,7 @@ public class EmployeeInformationJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

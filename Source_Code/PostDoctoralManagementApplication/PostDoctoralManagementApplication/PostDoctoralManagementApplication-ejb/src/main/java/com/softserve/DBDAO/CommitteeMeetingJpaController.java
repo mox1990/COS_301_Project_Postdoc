@@ -275,7 +275,7 @@ public class CommitteeMeetingJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -284,7 +284,7 @@ public class CommitteeMeetingJpaController implements Serializable {
         try {
             return em.find(CommitteeMeeting.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -297,7 +297,7 @@ public class CommitteeMeetingJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

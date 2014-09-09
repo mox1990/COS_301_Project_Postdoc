@@ -25,6 +25,7 @@ import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -34,6 +35,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -41,7 +43,7 @@ import javax.persistence.PersistenceUnit;
  *
  * @author K
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
@@ -77,14 +79,17 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     public ApplicationRenewalService(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    
+    protected DAOFactory getDAOFactory(EntityManager em)
+    {
+        return new DAOFactory(em);
+    }
     /**
      *
      * @return
      */
-    protected DAOFactory getDAOFactory()
+    protected TransactionController getTransactionController()
     {
-        return new DAOFactory(emf);
+        return new TransactionController(emf);
     }
     
     /**
@@ -96,9 +101,9 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return new DBEntitiesFactory();
     }
         
-    protected ApplicationServicesUtil getApplicationServicesUtil()
+    protected ApplicationServicesUtil getApplicationServicesUtil(EntityManager em)
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(em);
     }
     
     protected GregorianCalendar getGregorianCalendarUTIL()
@@ -108,29 +113,38 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
-    @TransactionMethod
     @Override
     public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws Exception
     {
+        EntityManager em = emf.createEntityManager();
         
-        ApplicationJpaController applicationJpaController = getDAOFactory().createApplicationDAO();
-        
-        List<Application> applications = applicationJpaController.findAllRenewalApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
-        if(applications.isEmpty())
+        try
         {
-            GregorianCalendar startDate = getGregorianCalendarUTIL();
-            GregorianCalendar endDate = getGregorianCalendarUTIL();
+            DAOFactory dAOFactory = getDAOFactory(em);
+            
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
 
-            final int NUMBER_OF_DAYS = 365;
+            List<Application> applications  = applicationJpaController.findAllRenewalApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
+            
+            if(applications.isEmpty())
+            {
+                GregorianCalendar startDate = getGregorianCalendarUTIL();
+                GregorianCalendar endDate = getGregorianCalendarUTIL();
 
-            endDate.add(GregorianCalendar.DAY_OF_YEAR, NUMBER_OF_DAYS);
-        
-            return applicationJpaController.getAllNewApplicationsForFellowWithEndDateInBetween(fellow, startDate.getTime(), endDate.getTime());
+                final int NUMBER_OF_DAYS = 365;
+
+                endDate.add(GregorianCalendar.DAY_OF_YEAR, NUMBER_OF_DAYS);
+                applications = applicationJpaController.getAllNewApplicationsForFellowWithEndDateInBetween(fellow, startDate.getTime(), endDate.getTime());
+            }
+            
+            return applications;            
         }
-        else
+        finally
         {
-            return applications;
+            em.close();
         }
+        
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
@@ -181,20 +195,34 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
-    @TransactionMethod
     @Override
     public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception
     {
-        
-        ApplicationJpaController applicationJpaController = getDAOFactory().createApplicationDAO();
-        
-        application.setTimestamp(getGregorianCalendarUTIL().getTime());
-        application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
-        application.setFellow(oldApplication.getFellow());
-        application.setGrantHolder(oldApplication.getGrantHolder());
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
-        
-        applicationJpaController.create(application);
+        TransactionController transactionController = getTransactionController();
+        try
+        {
+            DAOFactory dAOFactory = getDAOFactory(transactionController.StartTransaction());
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+
+            application.setTimestamp(getGregorianCalendarUTIL().getTime());
+            application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
+            application.setFellow(oldApplication.getFellow());
+            application.setGrantHolder(oldApplication.getGrantHolder());
+            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+
+            applicationJpaController.create(application);
+            
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -202,6 +230,21 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     @Override
     public void submitApplication(Session session, Application application) throws Exception
     {  
-        getApplicationServicesUtil().submitApplication(application);
+        TransactionController transactionController = getTransactionController();
+        try
+        {
+            getApplicationServicesUtil(transactionController.StartTransaction()).submitApplication(application);
+            
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
     }
 }

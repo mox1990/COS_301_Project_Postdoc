@@ -137,7 +137,7 @@ public class ProgressReportJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -146,7 +146,7 @@ public class ProgressReportJpaController implements Serializable {
         try {
             return em.find(ProgressReport.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -159,7 +159,7 @@ public class ProgressReportJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

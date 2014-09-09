@@ -138,7 +138,7 @@ public class AcademicQualificationJpaController implements Serializable {
             }
             return q.getResultList();
         } finally {
-            em.close();
+            
         }
     }
 
@@ -147,7 +147,7 @@ public class AcademicQualificationJpaController implements Serializable {
         try {
             return em.find(AcademicQualification.class, id);
         } finally {
-            em.close();
+            
         }
     }
 
@@ -160,7 +160,7 @@ public class AcademicQualificationJpaController implements Serializable {
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
         } finally {
-            em.close();
+            
         }
     }
     

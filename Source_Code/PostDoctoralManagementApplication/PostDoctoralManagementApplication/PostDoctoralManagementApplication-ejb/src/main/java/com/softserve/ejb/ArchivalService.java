@@ -94,7 +94,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ArchivalService implements ArchivalServiceLocal {
