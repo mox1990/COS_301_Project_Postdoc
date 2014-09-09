@@ -33,18 +33,17 @@ import javax.transaction.UserTransaction;
  */
 public class CommitteeMeetingJpaController implements Serializable {
 
-    public CommitteeMeetingJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public CommitteeMeetingJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(CommitteeMeeting committeeMeeting) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, CommitteeMeeting committeeMeeting) throws RollbackFailureException, Exception {
         if (committeeMeeting.getPersonList() == null) {
             committeeMeeting.setPersonList(new ArrayList<Person>());
         }
@@ -54,239 +53,191 @@ public class CommitteeMeetingJpaController implements Serializable {
         if (committeeMeeting.getMinuteCommentList() == null) {
             committeeMeeting.setMinuteCommentList(new ArrayList<MinuteComment>());
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Person organiser = committeeMeeting.getOrganiser();
-            if (organiser != null) {
-                organiser = em.getReference(organiser.getClass(), organiser.getSystemID());
-                committeeMeeting.setOrganiser(organiser);
-            }
-            List<Person> attachedPersonList = new ArrayList<Person>();
-            for (Person personListPersonToAttach : committeeMeeting.getPersonList()) {
-                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
-                attachedPersonList.add(personListPersonToAttach);
-            }
-            committeeMeeting.setPersonList(attachedPersonList);
-            List<Application> attachedApplicationList = new ArrayList<Application>();
-            for (Application applicationListApplicationToAttach : committeeMeeting.getApplicationList()) {
-                applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
-                attachedApplicationList.add(applicationListApplicationToAttach);
-            }
-            committeeMeeting.setApplicationList(attachedApplicationList);
-            List<MinuteComment> attachedMinuteCommentList = new ArrayList<MinuteComment>();
-            for (MinuteComment minuteCommentListMinuteCommentToAttach : committeeMeeting.getMinuteCommentList()) {
-                minuteCommentListMinuteCommentToAttach = em.getReference(minuteCommentListMinuteCommentToAttach.getClass(), minuteCommentListMinuteCommentToAttach.getCommentID());
-                attachedMinuteCommentList.add(minuteCommentListMinuteCommentToAttach);
-            }
-            committeeMeeting.setMinuteCommentList(attachedMinuteCommentList);
-            em.persist(committeeMeeting);
-            if (organiser != null) {
-                organiser.getCommitteeMeetingList1().add(committeeMeeting);
-                organiser = em.merge(organiser);
-            }
-            for (Person personListPerson : committeeMeeting.getPersonList()) {
-                personListPerson.getCommitteeMeetingList().add(committeeMeeting);
-                personListPerson = em.merge(personListPerson);
-            }
-            for (Application applicationListApplication : committeeMeeting.getApplicationList()) {
-                applicationListApplication.getCommitteeMeetingList().add(committeeMeeting);
-                applicationListApplication = em.merge(applicationListApplication);
-            }
-            for (MinuteComment minuteCommentListMinuteComment : committeeMeeting.getMinuteCommentList()) {
-                CommitteeMeeting oldMeetingOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getMeeting();
-                minuteCommentListMinuteComment.setMeeting(committeeMeeting);
-                minuteCommentListMinuteComment = em.merge(minuteCommentListMinuteComment);
-                if (oldMeetingOfMinuteCommentListMinuteComment != null) {
-                    oldMeetingOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
-                    oldMeetingOfMinuteCommentListMinuteComment = em.merge(oldMeetingOfMinuteCommentListMinuteComment);
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        Person organiser = committeeMeeting.getOrganiser();
+        if (organiser != null) {
+            organiser = em.getReference(organiser.getClass(), organiser.getSystemID());
+            committeeMeeting.setOrganiser(organiser);
         }
+        List<Person> attachedPersonList = new ArrayList<Person>();
+        for (Person personListPersonToAttach : committeeMeeting.getPersonList()) {
+            personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+            attachedPersonList.add(personListPersonToAttach);
+        }
+        committeeMeeting.setPersonList(attachedPersonList);
+        List<Application> attachedApplicationList = new ArrayList<Application>();
+        for (Application applicationListApplicationToAttach : committeeMeeting.getApplicationList()) {
+            applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationID());
+            attachedApplicationList.add(applicationListApplicationToAttach);
+        }
+        committeeMeeting.setApplicationList(attachedApplicationList);
+        List<MinuteComment> attachedMinuteCommentList = new ArrayList<MinuteComment>();
+        for (MinuteComment minuteCommentListMinuteCommentToAttach : committeeMeeting.getMinuteCommentList()) {
+            minuteCommentListMinuteCommentToAttach = em.getReference(minuteCommentListMinuteCommentToAttach.getClass(), minuteCommentListMinuteCommentToAttach.getCommentID());
+            attachedMinuteCommentList.add(minuteCommentListMinuteCommentToAttach);
+        }
+        committeeMeeting.setMinuteCommentList(attachedMinuteCommentList);
+        em.persist(committeeMeeting);
+        if (organiser != null) {
+            organiser.getCommitteeMeetingList1().add(committeeMeeting);
+            organiser = em.merge(organiser);
+        }
+        for (Person personListPerson : committeeMeeting.getPersonList()) {
+            personListPerson.getCommitteeMeetingList().add(committeeMeeting);
+            personListPerson = em.merge(personListPerson);
+        }
+        for (Application applicationListApplication : committeeMeeting.getApplicationList()) {
+            applicationListApplication.getCommitteeMeetingList().add(committeeMeeting);
+            applicationListApplication = em.merge(applicationListApplication);
+        }
+        for (MinuteComment minuteCommentListMinuteComment : committeeMeeting.getMinuteCommentList()) {
+            CommitteeMeeting oldMeetingOfMinuteCommentListMinuteComment = minuteCommentListMinuteComment.getMeeting();
+            minuteCommentListMinuteComment.setMeeting(committeeMeeting);
+            minuteCommentListMinuteComment = em.merge(minuteCommentListMinuteComment);
+            if (oldMeetingOfMinuteCommentListMinuteComment != null) {
+                oldMeetingOfMinuteCommentListMinuteComment.getMinuteCommentList().remove(minuteCommentListMinuteComment);
+                oldMeetingOfMinuteCommentListMinuteComment = em.merge(oldMeetingOfMinuteCommentListMinuteComment);
+            }
+        }        
     }
 
-    public void edit(CommitteeMeeting committeeMeeting) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            CommitteeMeeting persistentCommitteeMeeting = em.find(CommitteeMeeting.class, committeeMeeting.getMeetingID());
-            Person organiserOld = persistentCommitteeMeeting.getOrganiser();
-            Person organiserNew = committeeMeeting.getOrganiser();
-            List<Person> personListOld = persistentCommitteeMeeting.getPersonList();
-            List<Person> personListNew = committeeMeeting.getPersonList();
-            List<Application> applicationListOld = persistentCommitteeMeeting.getApplicationList();
-            List<Application> applicationListNew = committeeMeeting.getApplicationList();
-            List<MinuteComment> minuteCommentListOld = persistentCommitteeMeeting.getMinuteCommentList();
-            List<MinuteComment> minuteCommentListNew = committeeMeeting.getMinuteCommentList();
-            List<String> illegalOrphanMessages = null;
-            for (MinuteComment minuteCommentListOldMinuteComment : minuteCommentListOld) {
-                if (!minuteCommentListNew.contains(minuteCommentListOldMinuteComment)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its meeting field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (organiserNew != null) {
-                organiserNew = em.getReference(organiserNew.getClass(), organiserNew.getSystemID());
-                committeeMeeting.setOrganiser(organiserNew);
-            }
-            List<Person> attachedPersonListNew = new ArrayList<Person>();
-            for (Person personListNewPersonToAttach : personListNew) {
-                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
-                attachedPersonListNew.add(personListNewPersonToAttach);
-            }
-            personListNew = attachedPersonListNew;
-            committeeMeeting.setPersonList(personListNew);
-            List<Application> attachedApplicationListNew = new ArrayList<Application>();
-            for (Application applicationListNewApplicationToAttach : applicationListNew) {
-                applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
-                attachedApplicationListNew.add(applicationListNewApplicationToAttach);
-            }
-            applicationListNew = attachedApplicationListNew;
-            committeeMeeting.setApplicationList(applicationListNew);
-            List<MinuteComment> attachedMinuteCommentListNew = new ArrayList<MinuteComment>();
-            for (MinuteComment minuteCommentListNewMinuteCommentToAttach : minuteCommentListNew) {
-                minuteCommentListNewMinuteCommentToAttach = em.getReference(minuteCommentListNewMinuteCommentToAttach.getClass(), minuteCommentListNewMinuteCommentToAttach.getCommentID());
-                attachedMinuteCommentListNew.add(minuteCommentListNewMinuteCommentToAttach);
-            }
-            minuteCommentListNew = attachedMinuteCommentListNew;
-            committeeMeeting.setMinuteCommentList(minuteCommentListNew);
-            committeeMeeting = em.merge(committeeMeeting);
-            if (organiserOld != null && !organiserOld.equals(organiserNew)) {
-                organiserOld.getCommitteeMeetingList1().remove(committeeMeeting);
-                organiserOld = em.merge(organiserOld);
-            }
-            if (organiserNew != null && !organiserNew.equals(organiserOld)) {
-                organiserNew.getCommitteeMeetingList1().add(committeeMeeting);
-                organiserNew = em.merge(organiserNew);
-            }
-            for (Person personListOldPerson : personListOld) {
-                if (!personListNew.contains(personListOldPerson)) {
-                    personListOldPerson.getCommitteeMeetingList().remove(committeeMeeting);
-                    personListOldPerson = em.merge(personListOldPerson);
-                }
-            }
-            for (Person personListNewPerson : personListNew) {
-                if (!personListOld.contains(personListNewPerson)) {
-                    personListNewPerson.getCommitteeMeetingList().add(committeeMeeting);
-                    personListNewPerson = em.merge(personListNewPerson);
-                }
-            }
-            for (Application applicationListOldApplication : applicationListOld) {
-                if (!applicationListNew.contains(applicationListOldApplication)) {
-                    applicationListOldApplication.getCommitteeMeetingList().remove(committeeMeeting);
-                    applicationListOldApplication = em.merge(applicationListOldApplication);
-                }
-            }
-            for (Application applicationListNewApplication : applicationListNew) {
-                if (!applicationListOld.contains(applicationListNewApplication)) {
-                    applicationListNewApplication.getCommitteeMeetingList().add(committeeMeeting);
-                    applicationListNewApplication = em.merge(applicationListNewApplication);
-                }
-            }
-            for (MinuteComment minuteCommentListNewMinuteComment : minuteCommentListNew) {
-                if (!minuteCommentListOld.contains(minuteCommentListNewMinuteComment)) {
-                    CommitteeMeeting oldMeetingOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getMeeting();
-                    minuteCommentListNewMinuteComment.setMeeting(committeeMeeting);
-                    minuteCommentListNewMinuteComment = em.merge(minuteCommentListNewMinuteComment);
-                    if (oldMeetingOfMinuteCommentListNewMinuteComment != null && !oldMeetingOfMinuteCommentListNewMinuteComment.equals(committeeMeeting)) {
-                        oldMeetingOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
-                        oldMeetingOfMinuteCommentListNewMinuteComment = em.merge(oldMeetingOfMinuteCommentListNewMinuteComment);
-                    }
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = committeeMeeting.getMeetingID();
-                if (findCommitteeMeeting(id) == null) {
-                    throw new NonexistentEntityException("The committeeMeeting with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, CommitteeMeeting committeeMeeting) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+        Long id = committeeMeeting.getMeetingID();
+        if (findCommitteeMeeting(id) == null) {
+            throw new NonexistentEntityException("The committeeMeeting with id " + id + " no longer exists.");
         }
-    }
-
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            CommitteeMeeting committeeMeeting;
-            try {
-                committeeMeeting = em.getReference(CommitteeMeeting.class, id);
-                committeeMeeting.getMeetingID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The committeeMeeting with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<MinuteComment> minuteCommentListOrphanCheck = committeeMeeting.getMinuteCommentList();
-            for (MinuteComment minuteCommentListOrphanCheckMinuteComment : minuteCommentListOrphanCheck) {
+                
+        CommitteeMeeting persistentCommitteeMeeting = em.find(CommitteeMeeting.class, committeeMeeting.getMeetingID());
+        Person organiserOld = persistentCommitteeMeeting.getOrganiser();
+        Person organiserNew = committeeMeeting.getOrganiser();
+        List<Person> personListOld = persistentCommitteeMeeting.getPersonList();
+        List<Person> personListNew = committeeMeeting.getPersonList();
+        List<Application> applicationListOld = persistentCommitteeMeeting.getApplicationList();
+        List<Application> applicationListNew = committeeMeeting.getApplicationList();
+        List<MinuteComment> minuteCommentListOld = persistentCommitteeMeeting.getMinuteCommentList();
+        List<MinuteComment> minuteCommentListNew = committeeMeeting.getMinuteCommentList();
+        List<String> illegalOrphanMessages = null;
+        for (MinuteComment minuteCommentListOldMinuteComment : minuteCommentListOld) {
+            if (!minuteCommentListNew.contains(minuteCommentListOldMinuteComment)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This CommitteeMeeting (" + committeeMeeting + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable meeting field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Person organiser = committeeMeeting.getOrganiser();
-            if (organiser != null) {
-                organiser.getCommitteeMeetingList1().remove(committeeMeeting);
-                organiser = em.merge(organiser);
-            }
-            List<Person> personList = committeeMeeting.getPersonList();
-            for (Person personListPerson : personList) {
-                personListPerson.getCommitteeMeetingList().remove(committeeMeeting);
-                personListPerson = em.merge(personListPerson);
-            }
-            List<Application> applicationList = committeeMeeting.getApplicationList();
-            for (Application applicationListApplication : applicationList) {
-                applicationListApplication.getCommitteeMeetingList().remove(committeeMeeting);
-                applicationListApplication = em.merge(applicationListApplication);
-            }
-            em.remove(committeeMeeting);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("You must retain MinuteComment " + minuteCommentListOldMinuteComment + " since its meeting field is not nullable.");
             }
         }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (organiserNew != null) {
+            organiserNew = em.getReference(organiserNew.getClass(), organiserNew.getSystemID());
+            committeeMeeting.setOrganiser(organiserNew);
+        }
+        List<Person> attachedPersonListNew = new ArrayList<Person>();
+        for (Person personListNewPersonToAttach : personListNew) {
+            personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+            attachedPersonListNew.add(personListNewPersonToAttach);
+        }
+        personListNew = attachedPersonListNew;
+        committeeMeeting.setPersonList(personListNew);
+        List<Application> attachedApplicationListNew = new ArrayList<Application>();
+        for (Application applicationListNewApplicationToAttach : applicationListNew) {
+            applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationID());
+            attachedApplicationListNew.add(applicationListNewApplicationToAttach);
+        }
+        applicationListNew = attachedApplicationListNew;
+        committeeMeeting.setApplicationList(applicationListNew);
+        List<MinuteComment> attachedMinuteCommentListNew = new ArrayList<MinuteComment>();
+        for (MinuteComment minuteCommentListNewMinuteCommentToAttach : minuteCommentListNew) {
+            minuteCommentListNewMinuteCommentToAttach = em.getReference(minuteCommentListNewMinuteCommentToAttach.getClass(), minuteCommentListNewMinuteCommentToAttach.getCommentID());
+            attachedMinuteCommentListNew.add(minuteCommentListNewMinuteCommentToAttach);
+        }
+        minuteCommentListNew = attachedMinuteCommentListNew;
+        committeeMeeting.setMinuteCommentList(minuteCommentListNew);
+        committeeMeeting = em.merge(committeeMeeting);
+        if (organiserOld != null && !organiserOld.equals(organiserNew)) {
+            organiserOld.getCommitteeMeetingList1().remove(committeeMeeting);
+            organiserOld = em.merge(organiserOld);
+        }
+        if (organiserNew != null && !organiserNew.equals(organiserOld)) {
+            organiserNew.getCommitteeMeetingList1().add(committeeMeeting);
+            organiserNew = em.merge(organiserNew);
+        }
+        for (Person personListOldPerson : personListOld) {
+            if (!personListNew.contains(personListOldPerson)) {
+                personListOldPerson.getCommitteeMeetingList().remove(committeeMeeting);
+                personListOldPerson = em.merge(personListOldPerson);
+            }
+        }
+        for (Person personListNewPerson : personListNew) {
+            if (!personListOld.contains(personListNewPerson)) {
+                personListNewPerson.getCommitteeMeetingList().add(committeeMeeting);
+                personListNewPerson = em.merge(personListNewPerson);
+            }
+        }
+        for (Application applicationListOldApplication : applicationListOld) {
+            if (!applicationListNew.contains(applicationListOldApplication)) {
+                applicationListOldApplication.getCommitteeMeetingList().remove(committeeMeeting);
+                applicationListOldApplication = em.merge(applicationListOldApplication);
+            }
+        }
+        for (Application applicationListNewApplication : applicationListNew) {
+            if (!applicationListOld.contains(applicationListNewApplication)) {
+                applicationListNewApplication.getCommitteeMeetingList().add(committeeMeeting);
+                applicationListNewApplication = em.merge(applicationListNewApplication);
+            }
+        }
+        for (MinuteComment minuteCommentListNewMinuteComment : minuteCommentListNew) {
+            if (!minuteCommentListOld.contains(minuteCommentListNewMinuteComment)) {
+                CommitteeMeeting oldMeetingOfMinuteCommentListNewMinuteComment = minuteCommentListNewMinuteComment.getMeeting();
+                minuteCommentListNewMinuteComment.setMeeting(committeeMeeting);
+                minuteCommentListNewMinuteComment = em.merge(minuteCommentListNewMinuteComment);
+                if (oldMeetingOfMinuteCommentListNewMinuteComment != null && !oldMeetingOfMinuteCommentListNewMinuteComment.equals(committeeMeeting)) {
+                    oldMeetingOfMinuteCommentListNewMinuteComment.getMinuteCommentList().remove(minuteCommentListNewMinuteComment);
+                    oldMeetingOfMinuteCommentListNewMinuteComment = em.merge(oldMeetingOfMinuteCommentListNewMinuteComment);
+                }
+            }
+        }
+
+                
+
+    }
+
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+        CommitteeMeeting committeeMeeting;
+        try {
+            committeeMeeting = em.getReference(CommitteeMeeting.class, id);
+            committeeMeeting.getMeetingID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The committeeMeeting with id " + id + " no longer exists.", enfe);
+        }
+        List<String> illegalOrphanMessages = null;
+        List<MinuteComment> minuteCommentListOrphanCheck = committeeMeeting.getMinuteCommentList();
+        for (MinuteComment minuteCommentListOrphanCheckMinuteComment : minuteCommentListOrphanCheck) {
+            if (illegalOrphanMessages == null) {
+                illegalOrphanMessages = new ArrayList<String>();
+            }
+            illegalOrphanMessages.add("This CommitteeMeeting (" + committeeMeeting + ") cannot be destroyed since the MinuteComment " + minuteCommentListOrphanCheckMinuteComment + " in its minuteCommentList field has a non-nullable meeting field.");
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        Person organiser = committeeMeeting.getOrganiser();
+        if (organiser != null) {
+            organiser.getCommitteeMeetingList1().remove(committeeMeeting);
+            organiser = em.merge(organiser);
+        }
+        List<Person> personList = committeeMeeting.getPersonList();
+        for (Person personListPerson : personList) {
+            personListPerson.getCommitteeMeetingList().remove(committeeMeeting);
+            personListPerson = em.merge(personListPerson);
+        }
+        List<Application> applicationList = committeeMeeting.getApplicationList();
+        for (Application applicationListApplication : applicationList) {
+            applicationListApplication.getCommitteeMeetingList().remove(committeeMeeting);
+            applicationListApplication = em.merge(applicationListApplication);
+        }
+        em.remove(committeeMeeting);
+
     }
 
     public List<CommitteeMeeting> findCommitteeMeetingEntities() {

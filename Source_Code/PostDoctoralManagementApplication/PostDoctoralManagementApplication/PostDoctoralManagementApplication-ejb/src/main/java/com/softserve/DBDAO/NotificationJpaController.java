@@ -28,149 +28,104 @@ import javax.transaction.UserTransaction;
  */
 public class NotificationJpaController implements Serializable {
 
-    public NotificationJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public NotificationJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Notification notification) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Person sender = notification.getSender();
-            if (sender != null) {
-                sender = em.getReference(sender.getClass(), sender.getSystemID());
-                notification.setSender(sender);
-            }
-            Person reciever = notification.getReciever();
-            if (reciever != null) {
-                reciever = em.getReference(reciever.getClass(), reciever.getSystemID());
-                notification.setReciever(reciever);
-            }
-            em.persist(notification);
-            if (sender != null) {
-                sender.getNotificationList().add(notification);
-                sender = em.merge(sender);
-            }
-            if (reciever != null) {
-                reciever.getNotificationList1().add(notification);
-                reciever = em.merge(reciever);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, Notification notification) throws RollbackFailureException, Exception {
+
+        Person sender = notification.getSender();
+        if (sender != null) {
+            sender = em.getReference(sender.getClass(), sender.getSystemID());
+            notification.setSender(sender);
         }
+        Person reciever = notification.getReciever();
+        if (reciever != null) {
+            reciever = em.getReference(reciever.getClass(), reciever.getSystemID());
+            notification.setReciever(reciever);
+        }
+        em.persist(notification);
+        if (sender != null) {
+            sender.getNotificationList().add(notification);
+            sender = em.merge(sender);
+        }
+        if (reciever != null) {
+            reciever.getNotificationList1().add(notification);
+            reciever = em.merge(reciever);
+        }
+            
     }
 
-    public void edit(Notification notification) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Notification persistentNotification = em.find(Notification.class, notification.getNotificationID());
-            Person senderOld = persistentNotification.getSender();
-            Person senderNew = notification.getSender();
-            Person recieverOld = persistentNotification.getReciever();
-            Person recieverNew = notification.getReciever();
-            if (senderNew != null) {
-                senderNew = em.getReference(senderNew.getClass(), senderNew.getSystemID());
-                notification.setSender(senderNew);
-            }
-            if (recieverNew != null) {
-                recieverNew = em.getReference(recieverNew.getClass(), recieverNew.getSystemID());
-                notification.setReciever(recieverNew);
-            }
-            notification = em.merge(notification);
-            if (senderOld != null && !senderOld.equals(senderNew)) {
-                senderOld.getNotificationList().remove(notification);
-                senderOld = em.merge(senderOld);
-            }
-            if (senderNew != null && !senderNew.equals(senderOld)) {
-                senderNew.getNotificationList().add(notification);
-                senderNew = em.merge(senderNew);
-            }
-            if (recieverOld != null && !recieverOld.equals(recieverNew)) {
-                recieverOld.getNotificationList1().remove(notification);
-                recieverOld = em.merge(recieverOld);
-            }
-            if (recieverNew != null && !recieverNew.equals(recieverOld)) {
-                recieverNew.getNotificationList1().add(notification);
-                recieverNew = em.merge(recieverNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = notification.getNotificationID();
-                if (findNotification(id) == null) {
-                    throw new NonexistentEntityException("The notification with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, Notification notification) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = notification.getNotificationID();
+        if (findNotification(id) == null) {
+            throw new NonexistentEntityException("The notification with id " + id + " no longer exists.");
         }
+        
+        Notification persistentNotification = em.find(Notification.class, notification.getNotificationID());
+        Person senderOld = persistentNotification.getSender();
+        Person senderNew = notification.getSender();
+        Person recieverOld = persistentNotification.getReciever();
+        Person recieverNew = notification.getReciever();
+        if (senderNew != null) {
+            senderNew = em.getReference(senderNew.getClass(), senderNew.getSystemID());
+            notification.setSender(senderNew);
+        }
+        if (recieverNew != null) {
+            recieverNew = em.getReference(recieverNew.getClass(), recieverNew.getSystemID());
+            notification.setReciever(recieverNew);
+        }
+        notification = em.merge(notification);
+        if (senderOld != null && !senderOld.equals(senderNew)) {
+            senderOld.getNotificationList().remove(notification);
+            senderOld = em.merge(senderOld);
+        }
+        if (senderNew != null && !senderNew.equals(senderOld)) {
+            senderNew.getNotificationList().add(notification);
+            senderNew = em.merge(senderNew);
+        }
+        if (recieverOld != null && !recieverOld.equals(recieverNew)) {
+            recieverOld.getNotificationList1().remove(notification);
+            recieverOld = em.merge(recieverOld);
+        }
+        if (recieverNew != null && !recieverNew.equals(recieverOld)) {
+            recieverNew.getNotificationList1().add(notification);
+            recieverNew = em.merge(recieverNew);
+        }
+            
+                
+           
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        
+        Notification notification;
         try {
-            utx.begin();
-            em = getEntityManager();
-            Notification notification;
-            try {
-                notification = em.getReference(Notification.class, id);
-                notification.getNotificationID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The notification with id " + id + " no longer exists.", enfe);
-            }
-            Person sender = notification.getSender();
-            if (sender != null) {
-                sender.getNotificationList().remove(notification);
-                sender = em.merge(sender);
-            }
-            Person reciever = notification.getReciever();
-            if (reciever != null) {
-                reciever.getNotificationList1().remove(notification);
-                reciever = em.merge(reciever);
-            }
-            em.remove(notification);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            notification = em.getReference(Notification.class, id);
+            notification.getNotificationID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The notification with id " + id + " no longer exists.", enfe);
         }
+        Person sender = notification.getSender();
+        if (sender != null) {
+            sender.getNotificationList().remove(notification);
+            sender = em.merge(sender);
+        }
+        Person reciever = notification.getReciever();
+        if (reciever != null) {
+            reciever.getNotificationList1().remove(notification);
+            reciever = em.merge(reciever);
+        }
+        em.remove(notification);
+            
     }
 
     public List<Notification> findNotificationEntities() {

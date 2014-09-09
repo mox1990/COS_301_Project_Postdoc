@@ -29,191 +29,154 @@ import javax.transaction.UserTransaction;
  */
 public class AddressJpaController implements Serializable {
 
-    public AddressJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public AddressJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Address address) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Address address) throws RollbackFailureException, Exception 
+    {
         if (address.getEmployeeInformationList() == null) {
             address.setEmployeeInformationList(new ArrayList<EmployeeInformation>());
         }
         if (address.getPersonList() == null) {
             address.setPersonList(new ArrayList<Person>());
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            List<EmployeeInformation> attachedEmployeeInformationList = new ArrayList<EmployeeInformation>();
-            for (EmployeeInformation employeeInformationListEmployeeInformationToAttach : address.getEmployeeInformationList()) {
-                employeeInformationListEmployeeInformationToAttach = em.getReference(employeeInformationListEmployeeInformationToAttach.getClass(), employeeInformationListEmployeeInformationToAttach.getEmployeeID());
-                attachedEmployeeInformationList.add(employeeInformationListEmployeeInformationToAttach);
-            }
-            address.setEmployeeInformationList(attachedEmployeeInformationList);
-            List<Person> attachedPersonList = new ArrayList<Person>();
-            for (Person personListPersonToAttach : address.getPersonList()) {
-                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
-                attachedPersonList.add(personListPersonToAttach);
-            }
-            address.setPersonList(attachedPersonList);
-            em.persist(address);
-            for (EmployeeInformation employeeInformationListEmployeeInformation : address.getEmployeeInformationList()) {
-                Address oldPhysicalAddressOfEmployeeInformationListEmployeeInformation = employeeInformationListEmployeeInformation.getPhysicalAddress();
-                employeeInformationListEmployeeInformation.setPhysicalAddress(address);
-                employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
-                if (oldPhysicalAddressOfEmployeeInformationListEmployeeInformation != null) {
-                    oldPhysicalAddressOfEmployeeInformationListEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListEmployeeInformation);
-                    oldPhysicalAddressOfEmployeeInformationListEmployeeInformation = em.merge(oldPhysicalAddressOfEmployeeInformationListEmployeeInformation);
-                }
-            }
-            for (Person personListPerson : address.getPersonList()) {
-                Address oldAddressLine1OfPersonListPerson = personListPerson.getAddressLine1();
-                personListPerson.setAddressLine1(address);
-                personListPerson = em.merge(personListPerson);
-                if (oldAddressLine1OfPersonListPerson != null) {
-                    oldAddressLine1OfPersonListPerson.getPersonList().remove(personListPerson);
-                    oldAddressLine1OfPersonListPerson = em.merge(oldAddressLine1OfPersonListPerson);
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+
+        //Replace references to with actual db references
+        List<EmployeeInformation> attachedEmployeeInformationList = new ArrayList<EmployeeInformation>();
+        for (EmployeeInformation employeeInformationListEmployeeInformationToAttach : address.getEmployeeInformationList()) {
+            employeeInformationListEmployeeInformationToAttach = em.getReference(employeeInformationListEmployeeInformationToAttach.getClass(), employeeInformationListEmployeeInformationToAttach.getEmployeeID());
+            attachedEmployeeInformationList.add(employeeInformationListEmployeeInformationToAttach);
+        }
+        address.setEmployeeInformationList(attachedEmployeeInformationList);
+        List<Person> attachedPersonList = new ArrayList<Person>();
+        for (Person personListPersonToAttach : address.getPersonList()) {
+            personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+            attachedPersonList.add(personListPersonToAttach);
+        }
+        address.setPersonList(attachedPersonList);
+        
+        em.persist(address);
+        
+        //Update references of old enties
+        for (EmployeeInformation employeeInformationListEmployeeInformation : address.getEmployeeInformationList()) {
+            Address oldPhysicalAddressOfEmployeeInformationListEmployeeInformation = employeeInformationListEmployeeInformation.getPhysicalAddress();
+            employeeInformationListEmployeeInformation.setPhysicalAddress(address);
+            employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
+            if (oldPhysicalAddressOfEmployeeInformationListEmployeeInformation != null) {
+                oldPhysicalAddressOfEmployeeInformationListEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListEmployeeInformation);
+                oldPhysicalAddressOfEmployeeInformationListEmployeeInformation = em.merge(oldPhysicalAddressOfEmployeeInformationListEmployeeInformation);
             }
         }
+        for (Person personListPerson : address.getPersonList()) {
+            Address oldAddressLine1OfPersonListPerson = personListPerson.getAddressLine1();
+            personListPerson.setAddressLine1(address);
+            personListPerson = em.merge(personListPerson);
+            if (oldAddressLine1OfPersonListPerson != null) {
+                oldAddressLine1OfPersonListPerson.getPersonList().remove(personListPerson);
+                oldAddressLine1OfPersonListPerson = em.merge(oldAddressLine1OfPersonListPerson);
+            }
+        }
+
     }
 
-    public void edit(Address address) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Address persistentAddress = em.find(Address.class, address.getAddressID());
-            List<EmployeeInformation> employeeInformationListOld = persistentAddress.getEmployeeInformationList();
-            List<EmployeeInformation> employeeInformationListNew = address.getEmployeeInformationList();
-            List<Person> personListOld = persistentAddress.getPersonList();
-            List<Person> personListNew = address.getPersonList();
-            List<EmployeeInformation> attachedEmployeeInformationListNew = new ArrayList<EmployeeInformation>();
-            for (EmployeeInformation employeeInformationListNewEmployeeInformationToAttach : employeeInformationListNew) {
-                employeeInformationListNewEmployeeInformationToAttach = em.getReference(employeeInformationListNewEmployeeInformationToAttach.getClass(), employeeInformationListNewEmployeeInformationToAttach.getEmployeeID());
-                attachedEmployeeInformationListNew.add(employeeInformationListNewEmployeeInformationToAttach);
-            }
-            employeeInformationListNew = attachedEmployeeInformationListNew;
-            address.setEmployeeInformationList(employeeInformationListNew);
-            List<Person> attachedPersonListNew = new ArrayList<Person>();
-            for (Person personListNewPersonToAttach : personListNew) {
-                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
-                attachedPersonListNew.add(personListNewPersonToAttach);
-            }
-            personListNew = attachedPersonListNew;
-            address.setPersonList(personListNew);
-            address = em.merge(address);
-            for (EmployeeInformation employeeInformationListOldEmployeeInformation : employeeInformationListOld) {
-                if (!employeeInformationListNew.contains(employeeInformationListOldEmployeeInformation)) {
-                    employeeInformationListOldEmployeeInformation.setPhysicalAddress(null);
-                    employeeInformationListOldEmployeeInformation = em.merge(employeeInformationListOldEmployeeInformation);
-                }
-            }
-            for (EmployeeInformation employeeInformationListNewEmployeeInformation : employeeInformationListNew) {
-                if (!employeeInformationListOld.contains(employeeInformationListNewEmployeeInformation)) {
-                    Address oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation = employeeInformationListNewEmployeeInformation.getPhysicalAddress();
-                    employeeInformationListNewEmployeeInformation.setPhysicalAddress(address);
-                    employeeInformationListNewEmployeeInformation = em.merge(employeeInformationListNewEmployeeInformation);
-                    if (oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation != null && !oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation.equals(address)) {
-                        oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListNewEmployeeInformation);
-                        oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation = em.merge(oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation);
-                    }
-                }
-            }
-            for (Person personListOldPerson : personListOld) {
-                if (!personListNew.contains(personListOldPerson)) {
-                    personListOldPerson.setAddressLine1(null);
-                    personListOldPerson = em.merge(personListOldPerson);
-                }
-            }
-            for (Person personListNewPerson : personListNew) {
-                if (!personListOld.contains(personListNewPerson)) {
-                    Address oldAddressLine1OfPersonListNewPerson = personListNewPerson.getAddressLine1();
-                    personListNewPerson.setAddressLine1(address);
-                    personListNewPerson = em.merge(personListNewPerson);
-                    if (oldAddressLine1OfPersonListNewPerson != null && !oldAddressLine1OfPersonListNewPerson.equals(address)) {
-                        oldAddressLine1OfPersonListNewPerson.getPersonList().remove(personListNewPerson);
-                        oldAddressLine1OfPersonListNewPerson = em.merge(oldAddressLine1OfPersonListNewPerson);
-                    }
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = address.getAddressID();
-                if (findAddress(id) == null) {
-                    throw new NonexistentEntityException("The address with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+    public void edit(EntityManager em, Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        Long id = address.getAddressID();
+        if (findAddress(id) == null) {
+            throw new NonexistentEntityException("The address with id " + id + " no longer exists.");
+        }
+        
+        Address persistentAddress = em.find(Address.class, address.getAddressID());
+
+        //Update references with actual and maintain old and new changes
+        List<EmployeeInformation> employeeInformationListOld = persistentAddress.getEmployeeInformationList();
+        List<EmployeeInformation> employeeInformationListNew = address.getEmployeeInformationList();
+        List<Person> personListOld = persistentAddress.getPersonList();
+        List<Person> personListNew = address.getPersonList();
+        List<EmployeeInformation> attachedEmployeeInformationListNew = new ArrayList<EmployeeInformation>();
+
+        for (EmployeeInformation employeeInformationListNewEmployeeInformationToAttach : employeeInformationListNew) {
+            employeeInformationListNewEmployeeInformationToAttach = em.getReference(employeeInformationListNewEmployeeInformationToAttach.getClass(), employeeInformationListNewEmployeeInformationToAttach.getEmployeeID());
+            attachedEmployeeInformationListNew.add(employeeInformationListNewEmployeeInformationToAttach);
+        }
+        employeeInformationListNew = attachedEmployeeInformationListNew;
+        address.setEmployeeInformationList(employeeInformationListNew);
+        List<Person> attachedPersonListNew = new ArrayList<Person>();
+        for (Person personListNewPersonToAttach : personListNew) {
+            personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+            attachedPersonListNew.add(personListNewPersonToAttach);
+        }
+        personListNew = attachedPersonListNew;
+        address.setPersonList(personListNew);
+
+        address = em.merge(address);
+
+        //Update references of old enties
+        for (EmployeeInformation employeeInformationListOldEmployeeInformation : employeeInformationListOld) {
+            if (!employeeInformationListNew.contains(employeeInformationListOldEmployeeInformation)) {
+                employeeInformationListOldEmployeeInformation.setPhysicalAddress(null);
+                employeeInformationListOldEmployeeInformation = em.merge(employeeInformationListOldEmployeeInformation);
             }
         }
+        for (EmployeeInformation employeeInformationListNewEmployeeInformation : employeeInformationListNew) {
+            if (!employeeInformationListOld.contains(employeeInformationListNewEmployeeInformation)) {
+                Address oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation = employeeInformationListNewEmployeeInformation.getPhysicalAddress();
+                employeeInformationListNewEmployeeInformation.setPhysicalAddress(address);
+                employeeInformationListNewEmployeeInformation = em.merge(employeeInformationListNewEmployeeInformation);
+                if (oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation != null && !oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation.equals(address)) {
+                    oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListNewEmployeeInformation);
+                    oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation = em.merge(oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation);
+                }
+            }
+        }
+        for (Person personListOldPerson : personListOld) {
+            if (!personListNew.contains(personListOldPerson)) {
+                personListOldPerson.setAddressLine1(null);
+                personListOldPerson = em.merge(personListOldPerson);
+            }
+        }
+        for (Person personListNewPerson : personListNew) {
+            if (!personListOld.contains(personListNewPerson)) {
+                Address oldAddressLine1OfPersonListNewPerson = personListNewPerson.getAddressLine1();
+                personListNewPerson.setAddressLine1(address);
+                personListNewPerson = em.merge(personListNewPerson);
+                if (oldAddressLine1OfPersonListNewPerson != null && !oldAddressLine1OfPersonListNewPerson.equals(address)) {
+                    oldAddressLine1OfPersonListNewPerson.getPersonList().remove(personListNewPerson);
+                    oldAddressLine1OfPersonListNewPerson = em.merge(oldAddressLine1OfPersonListNewPerson);
+                }
+            }
+        }
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+
+        Address address;
         try {
-            utx.begin();
-            em = getEntityManager();
-            Address address;
-            try {
-                address = em.getReference(Address.class, id);
-                address.getAddressID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The address with id " + id + " no longer exists.", enfe);
-            }
-            List<EmployeeInformation> employeeInformationList = address.getEmployeeInformationList();
-            for (EmployeeInformation employeeInformationListEmployeeInformation : employeeInformationList) {
-                employeeInformationListEmployeeInformation.setPhysicalAddress(null);
-                employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
-            }
-            List<Person> personList = address.getPersonList();
-            for (Person personListPerson : personList) {
-                personListPerson.setAddressLine1(null);
-                personListPerson = em.merge(personListPerson);
-            }
-            em.remove(address);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            address = em.getReference(Address.class, id);
+            address.getAddressID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The address with id " + id + " no longer exists.", enfe);
         }
+        List<EmployeeInformation> employeeInformationList = address.getEmployeeInformationList();
+        for (EmployeeInformation employeeInformationListEmployeeInformation : employeeInformationList) {
+            employeeInformationListEmployeeInformation.setPhysicalAddress(null);
+            employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
+        }
+        List<Person> personList = address.getPersonList();
+        for (Person personListPerson : personList) {
+            personListPerson.setAddressLine1(null);
+            personListPerson = em.merge(personListPerson);
+        }
+        em.remove(address);
+            
     }
 
     public List<Address> findAddressEntities() {

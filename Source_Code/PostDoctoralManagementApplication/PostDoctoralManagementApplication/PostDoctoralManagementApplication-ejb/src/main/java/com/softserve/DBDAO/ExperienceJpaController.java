@@ -27,121 +27,74 @@ import javax.transaction.UserTransaction;
  */
 public class ExperienceJpaController implements Serializable {
 
-    public ExperienceJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ExperienceJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Experience experience) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Cv cv = experience.getCv();
-            if (cv != null) {
-                cv = em.getReference(cv.getClass(), cv.getCvID());
-                experience.setCv(cv);
-            }
-            em.persist(experience);
-            if (cv != null) {
-                cv.getExperienceList().add(experience);
-                cv = em.merge(cv);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, Experience experience) throws RollbackFailureException, Exception {
+        Cv cv = experience.getCv();
+        if (cv != null) {
+            cv = em.getReference(cv.getClass(), cv.getCvID());
+            experience.setCv(cv);
         }
+        em.persist(experience);
+        if (cv != null) {
+            cv.getExperienceList().add(experience);
+            cv = em.merge(cv);
+        }
+
     }
 
-    public void edit(Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Experience persistentExperience = em.find(Experience.class, experience.getExperienceID());
-            Cv cvOld = persistentExperience.getCv();
-            Cv cvNew = experience.getCv();
-            if (cvNew != null) {
-                cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
-                experience.setCv(cvNew);
-            }
-            experience = em.merge(experience);
-            if (cvOld != null && !cvOld.equals(cvNew)) {
-                cvOld.getExperienceList().remove(experience);
-                cvOld = em.merge(cvOld);
-            }
-            if (cvNew != null && !cvNew.equals(cvOld)) {
-                cvNew.getExperienceList().add(experience);
-                cvNew = em.merge(cvNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = experience.getExperienceID();
-                if (findExperience(id) == null) {
-                    throw new NonexistentEntityException("The experience with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception {
+        
+        Long id = experience.getExperienceID();
+        if (findExperience(id) == null) {
+            throw new NonexistentEntityException("The experience with id " + id + " no longer exists.");
         }
+        
+        Experience persistentExperience = em.find(Experience.class, experience.getExperienceID());
+        Cv cvOld = persistentExperience.getCv();
+        Cv cvNew = experience.getCv();
+        if (cvNew != null) {
+            cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
+            experience.setCv(cvNew);
+        }
+        experience = em.merge(experience);
+        if (cvOld != null && !cvOld.equals(cvNew)) {
+            cvOld.getExperienceList().remove(experience);
+            cvOld = em.merge(cvOld);
+        }
+        if (cvNew != null && !cvNew.equals(cvOld)) {
+            cvNew.getExperienceList().add(experience);
+            cvNew = em.merge(cvNew);
+        }
+            
+            
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        Experience experience;
         try {
-            utx.begin();
-            em = getEntityManager();
-            Experience experience;
-            try {
-                experience = em.getReference(Experience.class, id);
-                experience.getExperienceID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The experience with id " + id + " no longer exists.", enfe);
-            }
-            Cv cv = experience.getCv();
-            if (cv != null) {
-                cv.getExperienceList().remove(experience);
-                cv = em.merge(cv);
-            }
-            em.remove(experience);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            experience = em.getReference(Experience.class, id);
+            experience.getExperienceID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The experience with id " + id + " no longer exists.", enfe);
         }
+        Cv cv = experience.getCv();
+        if (cv != null) {
+            cv.getExperienceList().remove(experience);
+            cv = em.merge(cv);
+        }
+        em.remove(experience);
+            
     }
 
     public List<Experience> findExperienceEntities() {

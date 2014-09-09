@@ -31,18 +31,17 @@ import javax.transaction.UserTransaction;
  */
 public class RecommendationReportJpaController implements Serializable {
 
-    public RecommendationReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public RecommendationReportJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(RecommendationReport recommendationReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = recommendationReport.getApplication();
         if (applicationOrphanCheck != null) {
@@ -57,153 +56,105 @@ public class RecommendationReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application application = recommendationReport.getApplication();
-            if (application != null) {
-                application = em.getReference(application.getClass(), application.getApplicationID());
-                recommendationReport.setApplication(application);
-            }
-            Person hod = recommendationReport.getHod();
-            if (hod != null) {
-                hod = em.getReference(hod.getClass(), hod.getSystemID());
-                recommendationReport.setHod(hod);
-            }
-            em.persist(recommendationReport);
-            if (application != null) {
-                application.setRecommendationReport(recommendationReport);
-                application = em.merge(application);
-            }
-            if (hod != null) {
-                hod.getRecommendationReportList().add(recommendationReport);
-                hod = em.merge(hod);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findRecommendationReport(recommendationReport.getReportID()) != null) {
-                throw new PreexistingEntityException("RecommendationReport " + recommendationReport + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        Application application = recommendationReport.getApplication();
+        if (application != null) {
+            application = em.getReference(application.getClass(), application.getApplicationID());
+            recommendationReport.setApplication(application);
         }
+        Person hod = recommendationReport.getHod();
+        if (hod != null) {
+            hod = em.getReference(hod.getClass(), hod.getSystemID());
+            recommendationReport.setHod(hod);
+        }
+        em.persist(recommendationReport);
+        if (application != null) {
+            application.setRecommendationReport(recommendationReport);
+            application = em.merge(application);
+        }
+        if (hod != null) {
+            hod.getRecommendationReportList().add(recommendationReport);
+            hod = em.merge(hod);
+        }
+
     }
 
-    public void edit(RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            RecommendationReport persistentRecommendationReport = em.find(RecommendationReport.class, recommendationReport.getReportID());
-            Application applicationOld = persistentRecommendationReport.getApplication();
-            Application applicationNew = recommendationReport.getApplication();
-            Person hodOld = persistentRecommendationReport.getHod();
-            Person hodNew = recommendationReport.getHod();
-            List<String> illegalOrphanMessages = null;
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                RecommendationReport oldRecommendationReportOfApplication = applicationNew.getRecommendationReport();
-                if (oldRecommendationReportOfApplication != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type RecommendationReport whose application column cannot be null. Please make another selection for the application field.");
+    public void edit(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = recommendationReport.getReportID();
+        if (findRecommendationReport(id) == null) {
+            throw new NonexistentEntityException("The recommendationReport with id " + id + " no longer exists.");
+        }
+        
+        RecommendationReport persistentRecommendationReport = em.find(RecommendationReport.class, recommendationReport.getReportID());
+        Application applicationOld = persistentRecommendationReport.getApplication();
+        Application applicationNew = recommendationReport.getApplication();
+        Person hodOld = persistentRecommendationReport.getHod();
+        Person hodNew = recommendationReport.getHod();
+        List<String> illegalOrphanMessages = null;
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            RecommendationReport oldRecommendationReportOfApplication = applicationNew.getRecommendationReport();
+            if (oldRecommendationReportOfApplication != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
                 }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (applicationNew != null) {
-                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                recommendationReport.setApplication(applicationNew);
-            }
-            if (hodNew != null) {
-                hodNew = em.getReference(hodNew.getClass(), hodNew.getSystemID());
-                recommendationReport.setHod(hodNew);
-            }
-            recommendationReport = em.merge(recommendationReport);
-            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.setRecommendationReport(null);
-                applicationOld = em.merge(applicationOld);
-            }
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.setRecommendationReport(recommendationReport);
-                applicationNew = em.merge(applicationNew);
-            }
-            if (hodOld != null && !hodOld.equals(hodNew)) {
-                hodOld.getRecommendationReportList().remove(recommendationReport);
-                hodOld = em.merge(hodOld);
-            }
-            if (hodNew != null && !hodNew.equals(hodOld)) {
-                hodNew.getRecommendationReportList().add(recommendationReport);
-                hodNew = em.merge(hodNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = recommendationReport.getReportID();
-                if (findRecommendationReport(id) == null) {
-                    throw new NonexistentEntityException("The recommendationReport with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type RecommendationReport whose application column cannot be null. Please make another selection for the application field.");
             }
         }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (applicationNew != null) {
+            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+            recommendationReport.setApplication(applicationNew);
+        }
+        if (hodNew != null) {
+            hodNew = em.getReference(hodNew.getClass(), hodNew.getSystemID());
+            recommendationReport.setHod(hodNew);
+        }
+        recommendationReport = em.merge(recommendationReport);
+        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+            applicationOld.setRecommendationReport(null);
+            applicationOld = em.merge(applicationOld);
+        }
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            applicationNew.setRecommendationReport(recommendationReport);
+            applicationNew = em.merge(applicationNew);
+        }
+        if (hodOld != null && !hodOld.equals(hodNew)) {
+            hodOld.getRecommendationReportList().remove(recommendationReport);
+            hodOld = em.merge(hodOld);
+        }
+        if (hodNew != null && !hodNew.equals(hodOld)) {
+            hodNew.getRecommendationReportList().add(recommendationReport);
+            hodNew = em.merge(hodNew);
+        }
+
+                
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        RecommendationReport recommendationReport;
         try {
-            utx.begin();
-            em = getEntityManager();
-            RecommendationReport recommendationReport;
-            try {
-                recommendationReport = em.getReference(RecommendationReport.class, id);
-                recommendationReport.getReportID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The recommendationReport with id " + id + " no longer exists.", enfe);
-            }
-            Application application = recommendationReport.getApplication();
-            if (application != null) {
-                application.setRecommendationReport(null);
-                application = em.merge(application);
-            }
-            Person hod = recommendationReport.getHod();
-            if (hod != null) {
-                hod.getRecommendationReportList().remove(recommendationReport);
-                hod = em.merge(hod);
-            }
-            em.remove(recommendationReport);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            recommendationReport = em.getReference(RecommendationReport.class, id);
+            recommendationReport.getReportID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The recommendationReport with id " + id + " no longer exists.", enfe);
         }
+        Application application = recommendationReport.getApplication();
+        if (application != null) {
+            application.setRecommendationReport(null);
+            application = em.merge(application);
+        }
+        Person hod = recommendationReport.getHod();
+        if (hod != null) {
+            hod.getRecommendationReportList().remove(recommendationReport);
+            hod = em.merge(hod);
+        }
+        em.remove(recommendationReport);
+            
     }
 
     public List<RecommendationReport> findRecommendationReportEntities() {

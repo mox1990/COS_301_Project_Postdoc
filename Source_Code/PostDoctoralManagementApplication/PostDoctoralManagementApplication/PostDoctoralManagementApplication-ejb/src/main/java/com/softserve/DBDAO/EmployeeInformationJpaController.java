@@ -32,18 +32,17 @@ import javax.transaction.UserTransaction;
  */
 public class EmployeeInformationJpaController implements Serializable {
 
-    public EmployeeInformationJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public EmployeeInformationJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(EmployeeInformation employeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
         Person personOrphanCheck = employeeInformation.getPerson();
         if (personOrphanCheck != null) {
@@ -58,181 +57,133 @@ public class EmployeeInformationJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Person person = employeeInformation.getPerson();
-            if (person != null) {
-                person = em.getReference(person.getClass(), person.getSystemID());
-                employeeInformation.setPerson(person);
-            }
-            Department department = employeeInformation.getDepartment();
-            if (department != null) {
-                department = em.getReference(department.getClass(), department.getDepartmentID());
-                employeeInformation.setDepartment(department);
-            }
-            Address physicalAddress = employeeInformation.getPhysicalAddress();
-            if (physicalAddress != null) {
-                physicalAddress = em.getReference(physicalAddress.getClass(), physicalAddress.getAddressID());
-                employeeInformation.setPhysicalAddress(physicalAddress);
-            }
-            em.persist(employeeInformation);
-            if (person != null) {
-                person.setEmployeeInformation(employeeInformation);
-                person = em.merge(person);
-            }
-            if (department != null) {
-                department.getEmployeeInformationList().add(employeeInformation);
-                department = em.merge(department);
-            }
-            if (physicalAddress != null) {
-                physicalAddress.getEmployeeInformationList().add(employeeInformation);
-                physicalAddress = em.merge(physicalAddress);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findEmployeeInformation(employeeInformation.getEmployeeID()) != null) {
-                throw new PreexistingEntityException("EmployeeInformation " + employeeInformation + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        Person person = employeeInformation.getPerson();
+        if (person != null) {
+            person = em.getReference(person.getClass(), person.getSystemID());
+            employeeInformation.setPerson(person);
         }
+        Department department = employeeInformation.getDepartment();
+        if (department != null) {
+            department = em.getReference(department.getClass(), department.getDepartmentID());
+            employeeInformation.setDepartment(department);
+        }
+        Address physicalAddress = employeeInformation.getPhysicalAddress();
+        if (physicalAddress != null) {
+            physicalAddress = em.getReference(physicalAddress.getClass(), physicalAddress.getAddressID());
+            employeeInformation.setPhysicalAddress(physicalAddress);
+        }
+        em.persist(employeeInformation);
+        if (person != null) {
+            person.setEmployeeInformation(employeeInformation);
+            person = em.merge(person);
+        }
+        if (department != null) {
+            department.getEmployeeInformationList().add(employeeInformation);
+            department = em.merge(department);
+        }
+        if (physicalAddress != null) {
+            physicalAddress.getEmployeeInformationList().add(employeeInformation);
+            physicalAddress = em.merge(physicalAddress);
+        }
+            
     }
 
-    public void edit(EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            EmployeeInformation persistentEmployeeInformation = em.find(EmployeeInformation.class, employeeInformation.getEmployeeID());
-            Person personOld = persistentEmployeeInformation.getPerson();
-            Person personNew = employeeInformation.getPerson();
-            Department departmentOld = persistentEmployeeInformation.getDepartment();
-            Department departmentNew = employeeInformation.getDepartment();
-            Address physicalAddressOld = persistentEmployeeInformation.getPhysicalAddress();
-            Address physicalAddressNew = employeeInformation.getPhysicalAddress();
-            List<String> illegalOrphanMessages = null;
-            if (personNew != null && !personNew.equals(personOld)) {
-                EmployeeInformation oldEmployeeInformationOfPerson = personNew.getEmployeeInformation();
-                if (oldEmployeeInformationOfPerson != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Person " + personNew + " already has an item of type EmployeeInformation whose person column cannot be null. Please make another selection for the person field.");
+    public void edit(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        String id = employeeInformation.getEmployeeID();
+        if (findEmployeeInformation(id) == null) {
+            throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.");
+        }
+        
+        EmployeeInformation persistentEmployeeInformation = em.find(EmployeeInformation.class, employeeInformation.getEmployeeID());
+        Person personOld = persistentEmployeeInformation.getPerson();
+        Person personNew = employeeInformation.getPerson();
+        Department departmentOld = persistentEmployeeInformation.getDepartment();
+        Department departmentNew = employeeInformation.getDepartment();
+        Address physicalAddressOld = persistentEmployeeInformation.getPhysicalAddress();
+        Address physicalAddressNew = employeeInformation.getPhysicalAddress();
+        List<String> illegalOrphanMessages = null;
+        if (personNew != null && !personNew.equals(personOld)) {
+            EmployeeInformation oldEmployeeInformationOfPerson = personNew.getEmployeeInformation();
+            if (oldEmployeeInformationOfPerson != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
                 }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (personNew != null) {
-                personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-                employeeInformation.setPerson(personNew);
-            }
-            if (departmentNew != null) {
-                departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
-                employeeInformation.setDepartment(departmentNew);
-            }
-            if (physicalAddressNew != null) {
-                physicalAddressNew = em.getReference(physicalAddressNew.getClass(), physicalAddressNew.getAddressID());
-                employeeInformation.setPhysicalAddress(physicalAddressNew);
-            }
-            employeeInformation = em.merge(employeeInformation);
-            if (personOld != null && !personOld.equals(personNew)) {
-                personOld.setEmployeeInformation(null);
-                personOld = em.merge(personOld);
-            }
-            if (personNew != null && !personNew.equals(personOld)) {
-                personNew.setEmployeeInformation(employeeInformation);
-                personNew = em.merge(personNew);
-            }
-            if (departmentOld != null && !departmentOld.equals(departmentNew)) {
-                departmentOld.getEmployeeInformationList().remove(employeeInformation);
-                departmentOld = em.merge(departmentOld);
-            }
-            if (departmentNew != null && !departmentNew.equals(departmentOld)) {
-                departmentNew.getEmployeeInformationList().add(employeeInformation);
-                departmentNew = em.merge(departmentNew);
-            }
-            if (physicalAddressOld != null && !physicalAddressOld.equals(physicalAddressNew)) {
-                physicalAddressOld.getEmployeeInformationList().remove(employeeInformation);
-                physicalAddressOld = em.merge(physicalAddressOld);
-            }
-            if (physicalAddressNew != null && !physicalAddressNew.equals(physicalAddressOld)) {
-                physicalAddressNew.getEmployeeInformationList().add(employeeInformation);
-                physicalAddressNew = em.merge(physicalAddressNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                String id = employeeInformation.getEmployeeID();
-                if (findEmployeeInformation(id) == null) {
-                    throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("The Person " + personNew + " already has an item of type EmployeeInformation whose person column cannot be null. Please make another selection for the person field.");
             }
         }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (personNew != null) {
+            personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
+            employeeInformation.setPerson(personNew);
+        }
+        if (departmentNew != null) {
+            departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
+            employeeInformation.setDepartment(departmentNew);
+        }
+        if (physicalAddressNew != null) {
+            physicalAddressNew = em.getReference(physicalAddressNew.getClass(), physicalAddressNew.getAddressID());
+            employeeInformation.setPhysicalAddress(physicalAddressNew);
+        }
+        employeeInformation = em.merge(employeeInformation);
+        if (personOld != null && !personOld.equals(personNew)) {
+            personOld.setEmployeeInformation(null);
+            personOld = em.merge(personOld);
+        }
+        if (personNew != null && !personNew.equals(personOld)) {
+            personNew.setEmployeeInformation(employeeInformation);
+            personNew = em.merge(personNew);
+        }
+        if (departmentOld != null && !departmentOld.equals(departmentNew)) {
+            departmentOld.getEmployeeInformationList().remove(employeeInformation);
+            departmentOld = em.merge(departmentOld);
+        }
+        if (departmentNew != null && !departmentNew.equals(departmentOld)) {
+            departmentNew.getEmployeeInformationList().add(employeeInformation);
+            departmentNew = em.merge(departmentNew);
+        }
+        if (physicalAddressOld != null && !physicalAddressOld.equals(physicalAddressNew)) {
+            physicalAddressOld.getEmployeeInformationList().remove(employeeInformation);
+            physicalAddressOld = em.merge(physicalAddressOld);
+        }
+        if (physicalAddressNew != null && !physicalAddressNew.equals(physicalAddressOld)) {
+            physicalAddressNew.getEmployeeInformationList().add(employeeInformation);
+            physicalAddressNew = em.merge(physicalAddressNew);
+        }
+            
+                
+           
     }
 
-    public void destroy(String id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, String id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        EmployeeInformation employeeInformation;
         try {
-            utx.begin();
-            em = getEntityManager();
-            EmployeeInformation employeeInformation;
-            try {
-                employeeInformation = em.getReference(EmployeeInformation.class, id);
-                employeeInformation.getEmployeeID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.", enfe);
-            }
-            Person person = employeeInformation.getPerson();
-            if (person != null) {
-                person.setEmployeeInformation(null);
-                person = em.merge(person);
-            }
-            Department department = employeeInformation.getDepartment();
-            if (department != null) {
-                department.getEmployeeInformationList().remove(employeeInformation);
-                department = em.merge(department);
-            }
-            Address physicalAddress = employeeInformation.getPhysicalAddress();
-            if (physicalAddress != null) {
-                physicalAddress.getEmployeeInformationList().remove(employeeInformation);
-                physicalAddress = em.merge(physicalAddress);
-            }
-            em.remove(employeeInformation);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            employeeInformation = em.getReference(EmployeeInformation.class, id);
+            employeeInformation.getEmployeeID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.", enfe);
         }
+        Person person = employeeInformation.getPerson();
+        if (person != null) {
+            person.setEmployeeInformation(null);
+            person = em.merge(person);
+        }
+        Department department = employeeInformation.getDepartment();
+        if (department != null) {
+            department.getEmployeeInformationList().remove(employeeInformation);
+            department = em.merge(department);
+        }
+        Address physicalAddress = employeeInformation.getPhysicalAddress();
+        if (physicalAddress != null) {
+            physicalAddress.getEmployeeInformationList().remove(employeeInformation);
+            physicalAddress = em.merge(physicalAddress);
+        }
+        em.remove(employeeInformation);
+            
     }
 
     public List<EmployeeInformation> findEmployeeInformationEntities() {

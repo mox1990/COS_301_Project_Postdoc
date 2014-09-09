@@ -29,149 +29,106 @@ import javax.transaction.UserTransaction;
  */
 public class AmmendRequestJpaController implements Serializable {
 
-    public AmmendRequestJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public AmmendRequestJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(AmmendRequest ammendRequest) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application application = ammendRequest.getApplication();
-            if (application != null) {
-                application = em.getReference(application.getClass(), application.getApplicationID());
-                ammendRequest.setApplication(application);
-            }
-            Person creator = ammendRequest.getCreator();
-            if (creator != null) {
-                creator = em.getReference(creator.getClass(), creator.getSystemID());
-                ammendRequest.setCreator(creator);
-            }
-            em.persist(ammendRequest);
-            if (application != null) {
-                application.getAmmendRequestList().add(ammendRequest);
-                application = em.merge(application);
-            }
-            if (creator != null) {
-                creator.getAmmendRequestList().add(ammendRequest);
-                creator = em.merge(creator);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, AmmendRequest ammendRequest) throws RollbackFailureException, Exception {
+
+        em = getEntityManager();
+        Application application = ammendRequest.getApplication();
+        if (application != null) {
+            application = em.getReference(application.getClass(), application.getApplicationID());
+            ammendRequest.setApplication(application);
         }
+        Person creator = ammendRequest.getCreator();
+        if (creator != null) {
+            creator = em.getReference(creator.getClass(), creator.getSystemID());
+            ammendRequest.setCreator(creator);
+        }
+        em.persist(ammendRequest);
+        if (application != null) {
+            application.getAmmendRequestList().add(ammendRequest);
+            application = em.merge(application);
+        }
+        if (creator != null) {
+            creator.getAmmendRequestList().add(ammendRequest);
+            creator = em.merge(creator);
+        }
+  
     }
 
-    public void edit(AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            AmmendRequest persistentAmmendRequest = em.find(AmmendRequest.class, ammendRequest.getRequestID());
-            Application applicationOld = persistentAmmendRequest.getApplication();
-            Application applicationNew = ammendRequest.getApplication();
-            Person creatorOld = persistentAmmendRequest.getCreator();
-            Person creatorNew = ammendRequest.getCreator();
-            if (applicationNew != null) {
-                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                ammendRequest.setApplication(applicationNew);
-            }
-            if (creatorNew != null) {
-                creatorNew = em.getReference(creatorNew.getClass(), creatorNew.getSystemID());
-                ammendRequest.setCreator(creatorNew);
-            }
-            ammendRequest = em.merge(ammendRequest);
-            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.getAmmendRequestList().remove(ammendRequest);
-                applicationOld = em.merge(applicationOld);
-            }
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.getAmmendRequestList().add(ammendRequest);
-                applicationNew = em.merge(applicationNew);
-            }
-            if (creatorOld != null && !creatorOld.equals(creatorNew)) {
-                creatorOld.getAmmendRequestList().remove(ammendRequest);
-                creatorOld = em.merge(creatorOld);
-            }
-            if (creatorNew != null && !creatorNew.equals(creatorOld)) {
-                creatorNew.getAmmendRequestList().add(ammendRequest);
-                creatorNew = em.merge(creatorNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = ammendRequest.getRequestID();
-                if (findAmmendRequest(id) == null) {
-                    throw new NonexistentEntityException("The ammendRequest with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {        
+        Long id = ammendRequest.getRequestID();
+        if (findAmmendRequest(id) == null) {
+            throw new NonexistentEntityException("The ammendRequest with id " + id + " no longer exists.");
         }
+        
+        AmmendRequest persistentAmmendRequest = em.find(AmmendRequest.class, ammendRequest.getRequestID());
+        Application applicationOld = persistentAmmendRequest.getApplication();
+        Application applicationNew = ammendRequest.getApplication();
+        Person creatorOld = persistentAmmendRequest.getCreator();
+        Person creatorNew = ammendRequest.getCreator();
+        if (applicationNew != null) {
+            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+            ammendRequest.setApplication(applicationNew);
+        }
+        if (creatorNew != null) {
+            creatorNew = em.getReference(creatorNew.getClass(), creatorNew.getSystemID());
+            ammendRequest.setCreator(creatorNew);
+        }
+        
+        ammendRequest = em.merge(ammendRequest);
+        
+        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+            applicationOld.getAmmendRequestList().remove(ammendRequest);
+            applicationOld = em.merge(applicationOld);
+        }
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            applicationNew.getAmmendRequestList().add(ammendRequest);
+            applicationNew = em.merge(applicationNew);
+        }
+        if (creatorOld != null && !creatorOld.equals(creatorNew)) {
+            creatorOld.getAmmendRequestList().remove(ammendRequest);
+            creatorOld = em.merge(creatorOld);
+        }
+        if (creatorNew != null && !creatorNew.equals(creatorOld)) {
+            creatorNew.getAmmendRequestList().add(ammendRequest);
+            creatorNew = em.merge(creatorNew);
+        }  
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        AmmendRequest ammendRequest;
         try {
-            utx.begin();
-            em = getEntityManager();
-            AmmendRequest ammendRequest;
-            try {
-                ammendRequest = em.getReference(AmmendRequest.class, id);
-                ammendRequest.getRequestID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The ammendRequest with id " + id + " no longer exists.", enfe);
-            }
-            Application application = ammendRequest.getApplication();
-            if (application != null) {
-                application.getAmmendRequestList().remove(ammendRequest);
-                application = em.merge(application);
-            }
-            Person creator = ammendRequest.getCreator();
-            if (creator != null) {
-                creator.getAmmendRequestList().remove(ammendRequest);
-                creator = em.merge(creator);
-            }
-            em.remove(ammendRequest);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            ammendRequest = em.getReference(AmmendRequest.class, id);
+            ammendRequest.getRequestID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The ammendRequest with id " + id + " no longer exists.", enfe);
         }
+        
+        Application application = ammendRequest.getApplication();
+        
+        if (application != null) {
+            application.getAmmendRequestList().remove(ammendRequest);
+            application = em.merge(application);
+        }
+        Person creator = ammendRequest.getCreator();
+        if (creator != null) {
+            creator.getAmmendRequestList().remove(ammendRequest);
+            creator = em.merge(creator);
+        }
+        em.remove(ammendRequest);
+
     }
 
     public List<AmmendRequest> findAmmendRequestEntities() {

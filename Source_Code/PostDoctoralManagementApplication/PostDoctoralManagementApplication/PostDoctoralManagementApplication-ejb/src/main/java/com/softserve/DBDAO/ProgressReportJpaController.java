@@ -27,121 +27,76 @@ import javax.transaction.UserTransaction;
  */
 public class ProgressReportJpaController implements Serializable {
 
-    public ProgressReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ProgressReportJpaController(EntityManagerFactory emf) {
+
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(ProgressReport progressReport) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application application = progressReport.getApplication();
-            if (application != null) {
-                application = em.getReference(application.getClass(), application.getApplicationID());
-                progressReport.setApplication(application);
-            }
-            em.persist(progressReport);
-            if (application != null) {
-                application.getProgressReportList().add(progressReport);
-                application = em.merge(application);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, ProgressReport progressReport) throws RollbackFailureException, Exception {
+
+        Application application = progressReport.getApplication();
+        if (application != null) {
+            application = em.getReference(application.getClass(), application.getApplicationID());
+            progressReport.setApplication(application);
         }
+        em.persist(progressReport);
+        if (application != null) {
+            application.getProgressReportList().add(progressReport);
+            application = em.merge(application);
+        }
+
     }
 
-    public void edit(ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            ProgressReport persistentProgressReport = em.find(ProgressReport.class, progressReport.getReportID());
-            Application applicationOld = persistentProgressReport.getApplication();
-            Application applicationNew = progressReport.getApplication();
-            if (applicationNew != null) {
-                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                progressReport.setApplication(applicationNew);
-            }
-            progressReport = em.merge(progressReport);
-            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.getProgressReportList().remove(progressReport);
-                applicationOld = em.merge(applicationOld);
-            }
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.getProgressReportList().add(progressReport);
-                applicationNew = em.merge(applicationNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = progressReport.getReportID();
-                if (findProgressReport(id) == null) {
-                    throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = progressReport.getReportID();
+        if (findProgressReport(id) == null) {
+            throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.");
         }
+        
+        ProgressReport persistentProgressReport = em.find(ProgressReport.class, progressReport.getReportID());
+        Application applicationOld = persistentProgressReport.getApplication();
+        Application applicationNew = progressReport.getApplication();
+        if (applicationNew != null) {
+            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+            progressReport.setApplication(applicationNew);
+        }
+        progressReport = em.merge(progressReport);
+        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+            applicationOld.getProgressReportList().remove(progressReport);
+            applicationOld = em.merge(applicationOld);
+        }
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            applicationNew.getProgressReportList().add(progressReport);
+            applicationNew = em.merge(applicationNew);
+        }
+           
+                
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        ProgressReport progressReport;
         try {
-            utx.begin();
-            em = getEntityManager();
-            ProgressReport progressReport;
-            try {
-                progressReport = em.getReference(ProgressReport.class, id);
-                progressReport.getReportID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.", enfe);
-            }
-            Application application = progressReport.getApplication();
-            if (application != null) {
-                application.getProgressReportList().remove(progressReport);
-                application = em.merge(application);
-            }
-            em.remove(progressReport);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            progressReport = em.getReference(ProgressReport.class, id);
+            progressReport.getReportID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.", enfe);
         }
+        Application application = progressReport.getApplication();
+        if (application != null) {
+            application.getProgressReportList().remove(progressReport);
+            application = em.merge(application);
+        }
+        em.remove(progressReport);
+
     }
 
     public List<ProgressReport> findProgressReportEntities() {

@@ -28,149 +28,103 @@ import javax.transaction.UserTransaction;
  */
 public class RefereeReportJpaController implements Serializable {
 
-    public RefereeReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public RefereeReportJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(RefereeReport refereeReport) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application applicationID = refereeReport.getApplicationID();
-            if (applicationID != null) {
-                applicationID = em.getReference(applicationID.getClass(), applicationID.getApplicationID());
-                refereeReport.setApplicationID(applicationID);
-            }
-            Person referee = refereeReport.getReferee();
-            if (referee != null) {
-                referee = em.getReference(referee.getClass(), referee.getSystemID());
-                refereeReport.setReferee(referee);
-            }
-            em.persist(refereeReport);
-            if (applicationID != null) {
-                applicationID.getRefereeReportList().add(refereeReport);
-                applicationID = em.merge(applicationID);
-            }
-            if (referee != null) {
-                referee.getRefereeReportList().add(refereeReport);
-                referee = em.merge(referee);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, RefereeReport refereeReport) throws RollbackFailureException, Exception {
+
+        Application applicationID = refereeReport.getApplicationID();
+        if (applicationID != null) {
+            applicationID = em.getReference(applicationID.getClass(), applicationID.getApplicationID());
+            refereeReport.setApplicationID(applicationID);
         }
+        Person referee = refereeReport.getReferee();
+        if (referee != null) {
+            referee = em.getReference(referee.getClass(), referee.getSystemID());
+            refereeReport.setReferee(referee);
+        }
+        em.persist(refereeReport);
+        if (applicationID != null) {
+            applicationID.getRefereeReportList().add(refereeReport);
+            applicationID = em.merge(applicationID);
+        }
+        if (referee != null) {
+            referee.getRefereeReportList().add(refereeReport);
+            referee = em.merge(referee);
+        }
+            
     }
 
-    public void edit(RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            RefereeReport persistentRefereeReport = em.find(RefereeReport.class, refereeReport.getReportID());
-            Application applicationIDOld = persistentRefereeReport.getApplicationID();
-            Application applicationIDNew = refereeReport.getApplicationID();
-            Person refereeOld = persistentRefereeReport.getReferee();
-            Person refereeNew = refereeReport.getReferee();
-            if (applicationIDNew != null) {
-                applicationIDNew = em.getReference(applicationIDNew.getClass(), applicationIDNew.getApplicationID());
-                refereeReport.setApplicationID(applicationIDNew);
-            }
-            if (refereeNew != null) {
-                refereeNew = em.getReference(refereeNew.getClass(), refereeNew.getSystemID());
-                refereeReport.setReferee(refereeNew);
-            }
-            refereeReport = em.merge(refereeReport);
-            if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
-                applicationIDOld.getRefereeReportList().remove(refereeReport);
-                applicationIDOld = em.merge(applicationIDOld);
-            }
-            if (applicationIDNew != null && !applicationIDNew.equals(applicationIDOld)) {
-                applicationIDNew.getRefereeReportList().add(refereeReport);
-                applicationIDNew = em.merge(applicationIDNew);
-            }
-            if (refereeOld != null && !refereeOld.equals(refereeNew)) {
-                refereeOld.getRefereeReportList().remove(refereeReport);
-                refereeOld = em.merge(refereeOld);
-            }
-            if (refereeNew != null && !refereeNew.equals(refereeOld)) {
-                refereeNew.getRefereeReportList().add(refereeReport);
-                refereeNew = em.merge(refereeNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = refereeReport.getReportID();
-                if (findRefereeReport(id) == null) {
-                    throw new NonexistentEntityException("The refereeReport with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+        
+        Long id = refereeReport.getReportID();
+        if (findRefereeReport(id) == null) {
+            throw new NonexistentEntityException("The refereeReport with id " + id + " no longer exists.");
         }
+        
+        RefereeReport persistentRefereeReport = em.find(RefereeReport.class, refereeReport.getReportID());
+        Application applicationIDOld = persistentRefereeReport.getApplicationID();
+        Application applicationIDNew = refereeReport.getApplicationID();
+        Person refereeOld = persistentRefereeReport.getReferee();
+        Person refereeNew = refereeReport.getReferee();
+        if (applicationIDNew != null) {
+            applicationIDNew = em.getReference(applicationIDNew.getClass(), applicationIDNew.getApplicationID());
+            refereeReport.setApplicationID(applicationIDNew);
+        }
+        if (refereeNew != null) {
+            refereeNew = em.getReference(refereeNew.getClass(), refereeNew.getSystemID());
+            refereeReport.setReferee(refereeNew);
+        }
+        refereeReport = em.merge(refereeReport);
+        if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
+            applicationIDOld.getRefereeReportList().remove(refereeReport);
+            applicationIDOld = em.merge(applicationIDOld);
+        }
+        if (applicationIDNew != null && !applicationIDNew.equals(applicationIDOld)) {
+            applicationIDNew.getRefereeReportList().add(refereeReport);
+            applicationIDNew = em.merge(applicationIDNew);
+        }
+        if (refereeOld != null && !refereeOld.equals(refereeNew)) {
+            refereeOld.getRefereeReportList().remove(refereeReport);
+            refereeOld = em.merge(refereeOld);
+        }
+        if (refereeNew != null && !refereeNew.equals(refereeOld)) {
+            refereeNew.getRefereeReportList().add(refereeReport);
+            refereeNew = em.merge(refereeNew);
+        }
+            
+        
+            
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+        
+        RefereeReport refereeReport;
         try {
-            utx.begin();
-            em = getEntityManager();
-            RefereeReport refereeReport;
-            try {
-                refereeReport = em.getReference(RefereeReport.class, id);
-                refereeReport.getReportID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The refereeReport with id " + id + " no longer exists.", enfe);
-            }
-            Application applicationID = refereeReport.getApplicationID();
-            if (applicationID != null) {
-                applicationID.getRefereeReportList().remove(refereeReport);
-                applicationID = em.merge(applicationID);
-            }
-            Person referee = refereeReport.getReferee();
-            if (referee != null) {
-                referee.getRefereeReportList().remove(refereeReport);
-                referee = em.merge(referee);
-            }
-            em.remove(refereeReport);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            refereeReport = em.getReference(RefereeReport.class, id);
+            refereeReport.getReportID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The refereeReport with id " + id + " no longer exists.", enfe);
         }
+        Application applicationID = refereeReport.getApplicationID();
+        if (applicationID != null) {
+            applicationID.getRefereeReportList().remove(refereeReport);
+            applicationID = em.merge(applicationID);
+        }
+        Person referee = refereeReport.getReferee();
+        if (referee != null) {
+            referee.getRefereeReportList().remove(refereeReport);
+            referee = em.merge(referee);
+        }
+        em.remove(refereeReport);
+            
     }
 
     public List<RefereeReport> findRefereeReportEntities() {

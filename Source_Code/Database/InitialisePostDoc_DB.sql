@@ -63,7 +63,7 @@ CREATE TABLE person (
 	_cellphoneNumber CHAR(20),	
 	_addressLine1 BIGINT UNSIGNED,
 	_upEmployee BOOLEAN NOT NULL,
-	_accountStatus ENUM('active', 'pending', 'disabled', 'dorment'),
+	_accountStatus ENUM('Active', 'Pending', 'Disabled', 'Dorment'),
 	
 	
 	PRIMARY KEY (_systemID),	
@@ -116,7 +116,7 @@ CREATE TABLE notification (
 	_notificationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_subject VARCHAR(200),
 	_message TEXT,
-	_emailStatus ENUM('sent', 'queued', 'disabled'),
+	_emailStatus ENUM('Sent', 'Queued', 'Disabled'),
 	_timestamp DATETIME NOT NULL,
 	_sender CHAR(9) NOT NULL,
 	_reciever	CHAR(9) NOT NULL,
@@ -130,8 +130,8 @@ CREATE TABLE notification (
 
 CREATE TABLE application (
     _applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    _type ENUM('new', 'renewal'),
-    _status ENUM('open', 'submitted', 'declined', 'referred', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
+    _type ENUM('New', 'Renewal'),
+    _status ENUM('Open', 'Submitted', 'Declined', 'Referred', 'Finalised', 'Recommended', 'Endorsed', 'Eligible', 'Funded', 'Completed', 'Terminated'),
 	_fundingType ENUM('UP PhD Postdoc', 'UP Postdoc', 'Externally funded'),
     _timestamp DATETIME NOT NULL,
 	_submissionDate DATETIME,
@@ -142,9 +142,11 @@ CREATE TABLE application (
     _information TEXT,
     _fellow CHAR(9) NOT NULL,
     _grantHolder CHAR(9),
+	_parentApplication BIGINT UNSIGNED,
     PRIMARY KEY (_applicationID),
-    FOREIGN KEY (_fellow) REFERENCES person (_systemID),
-    FOREIGN KEY (_grantHolder) REFERENCES person (_systemID)
+    FOREIGN KEY (_fellow) REFERENCES person(_systemID),
+    FOREIGN KEY (_grantHolder) REFERENCES person(_systemID),
+	FOREIGN KEY (_parentApplication) REFERENCES application(_applicationID)
 )  ENGINE=InnoDB;
 
 CREATE TABLE application_review_request (
@@ -225,7 +227,7 @@ CREATE TABLE funding_cost (
 	_fundingReport BIGINT UNSIGNED NOT NULL,
 	_amount FLOAT,
 	_provider VARCHAR(100),
-	_type ENUM('fellowship','running','travel','equipment','operating','conference'),
+	_type ENUM('Fellowship','Running','Travel','Equipment','Operating','Conference'),
 
 	PRIMARY KEY (_costID),
 	FOREIGN KEY (_fundingReport) REFERENCES funding_report(_reportID)
@@ -273,10 +275,10 @@ CREATE TABLE forward_and_rewind_report (
 	_application BIGINT UNSIGNED NOT NULL,
 	_dris CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_type ENUM('forward', 'rewind') NOT NULL,
+	_type ENUM('Forward', 'Rewind') NOT NULL,
 	_reason TEXT,
-	_fromStatus ENUM('open', 'submitted', 'declined', 'referred', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
-	_toStatus ENUM('open', 'submitted', 'declined', 'referred', 'finalised', 'recommended', 'endorsed', 'eligible', 'funded', 'completed', 'terminated'),
+	_fromStatus ENUM('Open', 'Submitted', 'Declined', 'Referred', 'Finalised', 'Recommended', 'Endorsed', 'Eligible', 'Funded', 'Completed', 'Terminated'),
+	_toStatus ENUM('Open', 'Submitted', 'Declined', 'Referred', 'Finalised', 'Recommended', 'Endorsed', 'Eligible', 'Funded', 'Completed', 'Terminated'),
 
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_application) REFERENCES application(_applicationID),

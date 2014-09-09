@@ -31,18 +31,17 @@ import javax.transaction.UserTransaction;
  */
 public class ResearchFellowInformationJpaController implements Serializable {
 
-    public ResearchFellowInformationJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ResearchFellowInformationJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
         Person personOrphanCheck = researchFellowInformation.getPerson();
         if (personOrphanCheck != null) {
@@ -57,153 +56,105 @@ public class ResearchFellowInformationJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Person person = researchFellowInformation.getPerson();
-            if (person != null) {
-                person = em.getReference(person.getClass(), person.getSystemID());
-                researchFellowInformation.setPerson(person);
-            }
-            Department department = researchFellowInformation.getDepartment();
-            if (department != null) {
-                department = em.getReference(department.getClass(), department.getDepartmentID());
-                researchFellowInformation.setDepartment(department);
-            }
-            em.persist(researchFellowInformation);
-            if (person != null) {
-                person.setResearchFellowInformation(researchFellowInformation);
-                person = em.merge(person);
-            }
-            if (department != null) {
-                department.getResearchFellowInformationList().add(researchFellowInformation);
-                department = em.merge(department);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findResearchFellowInformation(researchFellowInformation.getSystemAssignedID()) != null) {
-                throw new PreexistingEntityException("ResearchFellowInformation " + researchFellowInformation + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+  
+        Person person = researchFellowInformation.getPerson();
+        if (person != null) {
+            person = em.getReference(person.getClass(), person.getSystemID());
+            researchFellowInformation.setPerson(person);
         }
+        Department department = researchFellowInformation.getDepartment();
+        if (department != null) {
+            department = em.getReference(department.getClass(), department.getDepartmentID());
+            researchFellowInformation.setDepartment(department);
+        }
+        em.persist(researchFellowInformation);
+        if (person != null) {
+            person.setResearchFellowInformation(researchFellowInformation);
+            person = em.merge(person);
+        }
+        if (department != null) {
+            department.getResearchFellowInformationList().add(researchFellowInformation);
+            department = em.merge(department);
+        }
+
     }
 
-    public void edit(ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            ResearchFellowInformation persistentResearchFellowInformation = em.find(ResearchFellowInformation.class, researchFellowInformation.getSystemAssignedID());
-            Person personOld = persistentResearchFellowInformation.getPerson();
-            Person personNew = researchFellowInformation.getPerson();
-            Department departmentOld = persistentResearchFellowInformation.getDepartment();
-            Department departmentNew = researchFellowInformation.getDepartment();
-            List<String> illegalOrphanMessages = null;
-            if (personNew != null && !personNew.equals(personOld)) {
-                ResearchFellowInformation oldResearchFellowInformationOfPerson = personNew.getResearchFellowInformation();
-                if (oldResearchFellowInformationOfPerson != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Person " + personNew + " already has an item of type ResearchFellowInformation whose person column cannot be null. Please make another selection for the person field.");
+    public void edit(EntityManager em, ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        String id = researchFellowInformation.getSystemAssignedID();
+        if (findResearchFellowInformation(id) == null) {
+            throw new NonexistentEntityException("The researchFellowInformation with id " + id + " no longer exists.");
+        }
+        
+        ResearchFellowInformation persistentResearchFellowInformation = em.find(ResearchFellowInformation.class, researchFellowInformation.getSystemAssignedID());
+        Person personOld = persistentResearchFellowInformation.getPerson();
+        Person personNew = researchFellowInformation.getPerson();
+        Department departmentOld = persistentResearchFellowInformation.getDepartment();
+        Department departmentNew = researchFellowInformation.getDepartment();
+        List<String> illegalOrphanMessages = null;
+        if (personNew != null && !personNew.equals(personOld)) {
+            ResearchFellowInformation oldResearchFellowInformationOfPerson = personNew.getResearchFellowInformation();
+            if (oldResearchFellowInformationOfPerson != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
                 }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (personNew != null) {
-                personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-                researchFellowInformation.setPerson(personNew);
-            }
-            if (departmentNew != null) {
-                departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
-                researchFellowInformation.setDepartment(departmentNew);
-            }
-            researchFellowInformation = em.merge(researchFellowInformation);
-            if (personOld != null && !personOld.equals(personNew)) {
-                personOld.setResearchFellowInformation(null);
-                personOld = em.merge(personOld);
-            }
-            if (personNew != null && !personNew.equals(personOld)) {
-                personNew.setResearchFellowInformation(researchFellowInformation);
-                personNew = em.merge(personNew);
-            }
-            if (departmentOld != null && !departmentOld.equals(departmentNew)) {
-                departmentOld.getResearchFellowInformationList().remove(researchFellowInformation);
-                departmentOld = em.merge(departmentOld);
-            }
-            if (departmentNew != null && !departmentNew.equals(departmentOld)) {
-                departmentNew.getResearchFellowInformationList().add(researchFellowInformation);
-                departmentNew = em.merge(departmentNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                String id = researchFellowInformation.getSystemAssignedID();
-                if (findResearchFellowInformation(id) == null) {
-                    throw new NonexistentEntityException("The researchFellowInformation with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("The Person " + personNew + " already has an item of type ResearchFellowInformation whose person column cannot be null. Please make another selection for the person field.");
             }
         }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (personNew != null) {
+            personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
+            researchFellowInformation.setPerson(personNew);
+        }
+        if (departmentNew != null) {
+            departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
+            researchFellowInformation.setDepartment(departmentNew);
+        }
+        researchFellowInformation = em.merge(researchFellowInformation);
+        if (personOld != null && !personOld.equals(personNew)) {
+            personOld.setResearchFellowInformation(null);
+            personOld = em.merge(personOld);
+        }
+        if (personNew != null && !personNew.equals(personOld)) {
+            personNew.setResearchFellowInformation(researchFellowInformation);
+            personNew = em.merge(personNew);
+        }
+        if (departmentOld != null && !departmentOld.equals(departmentNew)) {
+            departmentOld.getResearchFellowInformationList().remove(researchFellowInformation);
+            departmentOld = em.merge(departmentOld);
+        }
+        if (departmentNew != null && !departmentNew.equals(departmentOld)) {
+            departmentNew.getResearchFellowInformationList().add(researchFellowInformation);
+            departmentNew = em.merge(departmentNew);
+        }
+            
+                
+
     }
 
-    public void destroy(String id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, String id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        ResearchFellowInformation researchFellowInformation;
         try {
-            utx.begin();
-            em = getEntityManager();
-            ResearchFellowInformation researchFellowInformation;
-            try {
-                researchFellowInformation = em.getReference(ResearchFellowInformation.class, id);
-                researchFellowInformation.getSystemAssignedID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The researchFellowInformation with id " + id + " no longer exists.", enfe);
-            }
-            Person person = researchFellowInformation.getPerson();
-            if (person != null) {
-                person.setResearchFellowInformation(null);
-                person = em.merge(person);
-            }
-            Department department = researchFellowInformation.getDepartment();
-            if (department != null) {
-                department.getResearchFellowInformationList().remove(researchFellowInformation);
-                department = em.merge(department);
-            }
-            em.remove(researchFellowInformation);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            researchFellowInformation = em.getReference(ResearchFellowInformation.class, id);
+            researchFellowInformation.getSystemAssignedID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The researchFellowInformation with id " + id + " no longer exists.", enfe);
         }
+        Person person = researchFellowInformation.getPerson();
+        if (person != null) {
+            person.setResearchFellowInformation(null);
+            person = em.merge(person);
+        }
+        Department department = researchFellowInformation.getDepartment();
+        if (department != null) {
+            department.getResearchFellowInformationList().remove(researchFellowInformation);
+            department = em.merge(department);
+        }
+        em.remove(researchFellowInformation);
+
     }
 
     public List<ResearchFellowInformation> findResearchFellowInformationEntities() {

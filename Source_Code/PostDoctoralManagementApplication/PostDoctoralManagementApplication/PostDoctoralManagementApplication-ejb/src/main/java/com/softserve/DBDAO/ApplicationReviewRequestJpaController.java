@@ -38,159 +38,111 @@ import javax.transaction.UserTransaction;
  */
 public class ApplicationReviewRequestJpaController implements Serializable {
 
-    public ApplicationReviewRequestJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ApplicationReviewRequestJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(ApplicationReviewRequest applicationReviewRequest) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, ApplicationReviewRequest applicationReviewRequest) throws PreexistingEntityException, RollbackFailureException, Exception {
         if (applicationReviewRequest.getApplicationReviewRequestPK() == null) {
             applicationReviewRequest.setApplicationReviewRequestPK(new ApplicationReviewRequestPK());
         }
         applicationReviewRequest.getApplicationReviewRequestPK().setPerson(applicationReviewRequest.getPerson1().getSystemID());
         applicationReviewRequest.getApplicationReviewRequestPK().setApplication(applicationReviewRequest.getApplication1().getApplicationID());
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Person person1 = applicationReviewRequest.getPerson1();
-            if (person1 != null) {
-                person1 = em.getReference(person1.getClass(), person1.getSystemID());
-                applicationReviewRequest.setPerson1(person1);
-            }
-            Application application1 = applicationReviewRequest.getApplication1();
-            if (application1 != null) {
-                application1 = em.getReference(application1.getClass(), application1.getApplicationID());
-                applicationReviewRequest.setApplication1(application1);
-            }
-            em.persist(applicationReviewRequest);
-            if (person1 != null) {
-                person1.getApplicationReviewRequestList().add(applicationReviewRequest);
-                person1 = em.merge(person1);
-            }
-            if (application1 != null) {
-                application1.getApplicationReviewRequestList().add(applicationReviewRequest);
-                application1 = em.merge(application1);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findApplicationReviewRequest(applicationReviewRequest.getApplicationReviewRequestPK()) != null) {
-                throw new PreexistingEntityException("ApplicationReviewRequest " + applicationReviewRequest + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        Person person1 = applicationReviewRequest.getPerson1();
+        if (person1 != null) {
+            person1 = em.getReference(person1.getClass(), person1.getSystemID());
+            applicationReviewRequest.setPerson1(person1);
         }
+        Application application1 = applicationReviewRequest.getApplication1();
+        if (application1 != null) {
+            application1 = em.getReference(application1.getClass(), application1.getApplicationID());
+            applicationReviewRequest.setApplication1(application1);
+        }
+        
+        em.persist(applicationReviewRequest);
+        
+        if (person1 != null) {
+            person1.getApplicationReviewRequestList().add(applicationReviewRequest);
+            person1 = em.merge(person1);
+        }
+        if (application1 != null) {
+            application1.getApplicationReviewRequestList().add(applicationReviewRequest);
+            application1 = em.merge(application1);
+        }
+
     }
 
-    public void edit(ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception {
+        ApplicationReviewRequestPK id = applicationReviewRequest.getApplicationReviewRequestPK();
+        if (findApplicationReviewRequest(id) == null) {
+            throw new NonexistentEntityException("The applicationReviewRequest with id " + id + " no longer exists.");
+        }
+        
         applicationReviewRequest.getApplicationReviewRequestPK().setPerson(applicationReviewRequest.getPerson1().getSystemID());
         applicationReviewRequest.getApplicationReviewRequestPK().setApplication(applicationReviewRequest.getApplication1().getApplicationID());
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            ApplicationReviewRequest persistentApplicationReviewRequest = em.find(ApplicationReviewRequest.class, applicationReviewRequest.getApplicationReviewRequestPK());
-            Person person1Old = persistentApplicationReviewRequest.getPerson1();
-            Person person1New = applicationReviewRequest.getPerson1();
-            Application application1Old = persistentApplicationReviewRequest.getApplication1();
-            Application application1New = applicationReviewRequest.getApplication1();
-            if (person1New != null) {
-                person1New = em.getReference(person1New.getClass(), person1New.getSystemID());
-                applicationReviewRequest.setPerson1(person1New);
-            }
-            if (application1New != null) {
-                application1New = em.getReference(application1New.getClass(), application1New.getApplicationID());
-                applicationReviewRequest.setApplication1(application1New);
-            }
-            applicationReviewRequest = em.merge(applicationReviewRequest);
-            if (person1Old != null && !person1Old.equals(person1New)) {
-                person1Old.getApplicationReviewRequestList().remove(applicationReviewRequest);
-                person1Old = em.merge(person1Old);
-            }
-            if (person1New != null && !person1New.equals(person1Old)) {
-                person1New.getApplicationReviewRequestList().add(applicationReviewRequest);
-                person1New = em.merge(person1New);
-            }
-            if (application1Old != null && !application1Old.equals(application1New)) {
-                application1Old.getApplicationReviewRequestList().remove(applicationReviewRequest);
-                application1Old = em.merge(application1Old);
-            }
-            if (application1New != null && !application1New.equals(application1Old)) {
-                application1New.getApplicationReviewRequestList().add(applicationReviewRequest);
-                application1New = em.merge(application1New);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                ApplicationReviewRequestPK id = applicationReviewRequest.getApplicationReviewRequestPK();
-                if (findApplicationReviewRequest(id) == null) {
-                    throw new NonexistentEntityException("The applicationReviewRequest with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        ApplicationReviewRequest persistentApplicationReviewRequest = em.find(ApplicationReviewRequest.class, applicationReviewRequest.getApplicationReviewRequestPK());
+        Person person1Old = persistentApplicationReviewRequest.getPerson1();
+        Person person1New = applicationReviewRequest.getPerson1();
+        Application application1Old = persistentApplicationReviewRequest.getApplication1();
+        Application application1New = applicationReviewRequest.getApplication1();
+        if (person1New != null) {
+            person1New = em.getReference(person1New.getClass(), person1New.getSystemID());
+            applicationReviewRequest.setPerson1(person1New);
         }
+        if (application1New != null) {
+            application1New = em.getReference(application1New.getClass(), application1New.getApplicationID());
+            applicationReviewRequest.setApplication1(application1New);
+        }
+        
+        applicationReviewRequest = em.merge(applicationReviewRequest);
+        
+        if (person1Old != null && !person1Old.equals(person1New)) {
+            person1Old.getApplicationReviewRequestList().remove(applicationReviewRequest);
+            person1Old = em.merge(person1Old);
+        }
+        if (person1New != null && !person1New.equals(person1Old)) {
+            person1New.getApplicationReviewRequestList().add(applicationReviewRequest);
+            person1New = em.merge(person1New);
+        }
+        if (application1Old != null && !application1Old.equals(application1New)) {
+            application1Old.getApplicationReviewRequestList().remove(applicationReviewRequest);
+            application1Old = em.merge(application1Old);
+        }
+        if (application1New != null && !application1New.equals(application1Old)) {
+            application1New.getApplicationReviewRequestList().add(applicationReviewRequest);
+            application1New = em.merge(application1New);
+        }
+
     }
 
-    public void destroy(ApplicationReviewRequestPK id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, ApplicationReviewRequestPK id) throws NonexistentEntityException, RollbackFailureException, Exception {
+        ApplicationReviewRequest applicationReviewRequest;
         try {
-            utx.begin();
-            em = getEntityManager();
-            ApplicationReviewRequest applicationReviewRequest;
-            try {
-                applicationReviewRequest = em.getReference(ApplicationReviewRequest.class, id);
-                applicationReviewRequest.getApplicationReviewRequestPK();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The applicationReviewRequest with id " + id + " no longer exists.", enfe);
-            }
-            Person person1 = applicationReviewRequest.getPerson1();
-            if (person1 != null) {
-                person1.getApplicationReviewRequestList().remove(applicationReviewRequest);
-                person1 = em.merge(person1);
-            }
-            Application application1 = applicationReviewRequest.getApplication1();
-            if (application1 != null) {
-                application1.getApplicationReviewRequestList().remove(applicationReviewRequest);
-                application1 = em.merge(application1);
-            }
-            em.remove(applicationReviewRequest);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            applicationReviewRequest = em.getReference(ApplicationReviewRequest.class, id);
+            applicationReviewRequest.getApplicationReviewRequestPK();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The applicationReviewRequest with id " + id + " no longer exists.", enfe);
         }
+        Person person1 = applicationReviewRequest.getPerson1();
+        if (person1 != null) {
+            person1.getApplicationReviewRequestList().remove(applicationReviewRequest);
+            person1 = em.merge(person1);
+        }
+        Application application1 = applicationReviewRequest.getApplication1();
+        if (application1 != null) {
+            application1.getApplicationReviewRequestList().remove(applicationReviewRequest);
+            application1 = em.merge(application1);
+        }
+        em.remove(applicationReviewRequest);
+
     }
 
     public List<ApplicationReviewRequest> findApplicationReviewRequestEntities() {

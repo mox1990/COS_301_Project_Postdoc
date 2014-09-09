@@ -27,121 +27,79 @@ import javax.transaction.UserTransaction;
  */
 public class AcademicQualificationJpaController implements Serializable {
 
-    public AcademicQualificationJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public AcademicQualificationJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+    
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(AcademicQualification academicQualification) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Cv cv = academicQualification.getCv();
-            if (cv != null) {
-                cv = em.getReference(cv.getClass(), cv.getCvID());
-                academicQualification.setCv(cv);
-            }
-            em.persist(academicQualification);
-            if (cv != null) {
-                cv.getAcademicQualificationList().add(academicQualification);
-                cv = em.merge(cv);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, AcademicQualification academicQualification) throws RollbackFailureException, Exception 
+    {
+        Cv cv = academicQualification.getCv();
+        if (cv != null) {
+            cv = em.getReference(cv.getClass(), cv.getCvID());
+            academicQualification.setCv(cv);
         }
+        
+        em.persist(academicQualification);
+        
+        if (cv != null) {
+            cv.getAcademicQualificationList().add(academicQualification);
+            cv = em.merge(cv);
+        }
+
     }
 
-    public void edit(AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            AcademicQualification persistentAcademicQualification = em.find(AcademicQualification.class, academicQualification.getQualificationID());
-            Cv cvOld = persistentAcademicQualification.getCv();
-            Cv cvNew = academicQualification.getCv();
-            if (cvNew != null) {
-                cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
-                academicQualification.setCv(cvNew);
-            }
-            academicQualification = em.merge(academicQualification);
-            if (cvOld != null && !cvOld.equals(cvNew)) {
-                cvOld.getAcademicQualificationList().remove(academicQualification);
-                cvOld = em.merge(cvOld);
-            }
-            if (cvNew != null && !cvNew.equals(cvOld)) {
-                cvNew.getAcademicQualificationList().add(academicQualification);
-                cvNew = em.merge(cvNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = academicQualification.getQualificationID();
-                if (findAcademicQualification(id) == null) {
-                    throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+
+        Long id = academicQualification.getQualificationID();
+        if (findAcademicQualification(id) == null) {
+            throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.");
         }
+
+        AcademicQualification persistentAcademicQualification = em.find(AcademicQualification.class, academicQualification.getQualificationID());
+        Cv cvOld = persistentAcademicQualification.getCv();
+        Cv cvNew = academicQualification.getCv();
+        if (cvNew != null) {
+            cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
+            academicQualification.setCv(cvNew);
+        }
+
+        academicQualification = em.merge(academicQualification);
+
+        if (cvOld != null && !cvOld.equals(cvNew)) {
+            cvOld.getAcademicQualificationList().remove(academicQualification);
+            cvOld = em.merge(cvOld);
+        }
+        if (cvNew != null && !cvNew.equals(cvOld)) {
+            cvNew.getAcademicQualificationList().add(academicQualification);
+            cvNew = em.merge(cvNew);
+        }
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        AcademicQualification academicQualification;
         try {
-            utx.begin();
-            em = getEntityManager();
-            AcademicQualification academicQualification;
-            try {
-                academicQualification = em.getReference(AcademicQualification.class, id);
-                academicQualification.getQualificationID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.", enfe);
-            }
-            Cv cv = academicQualification.getCv();
-            if (cv != null) {
-                cv.getAcademicQualificationList().remove(academicQualification);
-                cv = em.merge(cv);
-            }
-            em.remove(academicQualification);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            academicQualification = em.getReference(AcademicQualification.class, id);
+            academicQualification.getQualificationID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.", enfe);
         }
+        
+        Cv cv = academicQualification.getCv();
+        if (cv != null) {
+            cv.getAcademicQualificationList().remove(academicQualification);
+            cv = em.merge(cv);
+        }
+        
+        em.remove(academicQualification);
     }
 
     public List<AcademicQualification> findAcademicQualificationEntities() {

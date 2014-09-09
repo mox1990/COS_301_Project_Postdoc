@@ -28,132 +28,87 @@ import javax.transaction.UserTransaction;
  */
 public class SecurityRoleJpaController implements Serializable {
 
-    public SecurityRoleJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public SecurityRoleJpaController(EntityManagerFactory emf) {
+
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(SecurityRole securityRole) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, SecurityRole securityRole) throws RollbackFailureException, Exception {
         if (securityRole.getPersonList() == null) {
             securityRole.setPersonList(new ArrayList<Person>());
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            List<Person> attachedPersonList = new ArrayList<Person>();
-            for (Person personListPersonToAttach : securityRole.getPersonList()) {
-                personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
-                attachedPersonList.add(personListPersonToAttach);
-            }
-            securityRole.setPersonList(attachedPersonList);
-            em.persist(securityRole);
-            for (Person personListPerson : securityRole.getPersonList()) {
-                personListPerson.getSecurityRoleList().add(securityRole);
-                personListPerson = em.merge(personListPerson);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        List<Person> attachedPersonList = new ArrayList<Person>();
+        for (Person personListPersonToAttach : securityRole.getPersonList()) {
+            personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
+            attachedPersonList.add(personListPersonToAttach);
         }
+        securityRole.setPersonList(attachedPersonList);
+        em.persist(securityRole);
+        for (Person personListPerson : securityRole.getPersonList()) {
+            personListPerson.getSecurityRoleList().add(securityRole);
+            personListPerson = em.merge(personListPerson);
+        }
+            
     }
 
-    public void edit(SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            SecurityRole persistentSecurityRole = em.find(SecurityRole.class, securityRole.getRoleID());
-            List<Person> personListOld = persistentSecurityRole.getPersonList();
-            List<Person> personListNew = securityRole.getPersonList();
-            List<Person> attachedPersonListNew = new ArrayList<Person>();
-            for (Person personListNewPersonToAttach : personListNew) {
-                personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
-                attachedPersonListNew.add(personListNewPersonToAttach);
-            }
-            personListNew = attachedPersonListNew;
-            securityRole.setPersonList(personListNew);
-            securityRole = em.merge(securityRole);
-            for (Person personListOldPerson : personListOld) {
-                if (!personListNew.contains(personListOldPerson)) {
-                    personListOldPerson.getSecurityRoleList().remove(securityRole);
-                    personListOldPerson = em.merge(personListOldPerson);
-                }
-            }
-            for (Person personListNewPerson : personListNew) {
-                if (!personListOld.contains(personListNewPerson)) {
-                    personListNewPerson.getSecurityRoleList().add(securityRole);
-                    personListNewPerson = em.merge(personListNewPerson);
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = securityRole.getRoleID();
-                if (findSecurityRole(id) == null) {
-                    throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+    public void edit(EntityManager em, SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = securityRole.getRoleID();
+        if (findSecurityRole(id) == null) {
+            throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.");
+        }
+        
+        SecurityRole persistentSecurityRole = em.find(SecurityRole.class, securityRole.getRoleID());
+        List<Person> personListOld = persistentSecurityRole.getPersonList();
+        List<Person> personListNew = securityRole.getPersonList();
+        List<Person> attachedPersonListNew = new ArrayList<Person>();
+        for (Person personListNewPersonToAttach : personListNew) {
+            personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
+            attachedPersonListNew.add(personListNewPersonToAttach);
+        }
+        personListNew = attachedPersonListNew;
+        securityRole.setPersonList(personListNew);
+        securityRole = em.merge(securityRole);
+        for (Person personListOldPerson : personListOld) {
+            if (!personListNew.contains(personListOldPerson)) {
+                personListOldPerson.getSecurityRoleList().remove(securityRole);
+                personListOldPerson = em.merge(personListOldPerson);
             }
         }
+        for (Person personListNewPerson : personListNew) {
+            if (!personListOld.contains(personListNewPerson)) {
+                personListNewPerson.getSecurityRoleList().add(securityRole);
+                personListNewPerson = em.merge(personListNewPerson);
+            }
+        }
+            
+                
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        SecurityRole securityRole;
         try {
-            utx.begin();
-            em = getEntityManager();
-            SecurityRole securityRole;
-            try {
-                securityRole = em.getReference(SecurityRole.class, id);
-                securityRole.getRoleID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.", enfe);
-            }
-            List<Person> personList = securityRole.getPersonList();
-            for (Person personListPerson : personList) {
-                personListPerson.getSecurityRoleList().remove(securityRole);
-                personListPerson = em.merge(personListPerson);
-            }
-            em.remove(securityRole);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            securityRole = em.getReference(SecurityRole.class, id);
+            securityRole.getRoleID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.", enfe);
         }
+        List<Person> personList = securityRole.getPersonList();
+        for (Person personListPerson : personList) {
+            personListPerson.getSecurityRoleList().remove(securityRole);
+            personListPerson = em.merge(personListPerson);
+        }
+        em.remove(securityRole);
+
     }
 
     public List<SecurityRole> findSecurityRoleEntities() {

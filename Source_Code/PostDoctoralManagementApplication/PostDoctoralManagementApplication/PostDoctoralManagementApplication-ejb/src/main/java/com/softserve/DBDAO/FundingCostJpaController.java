@@ -28,121 +28,72 @@ import javax.transaction.UserTransaction;
  */
 public class FundingCostJpaController implements Serializable {
 
-    public FundingCostJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public FundingCostJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(FundingCost fundingCost) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            FundingReport fundingReport = fundingCost.getFundingReport();
-            if (fundingReport != null) {
-                fundingReport = em.getReference(fundingReport.getClass(), fundingReport.getReportID());
-                fundingCost.setFundingReport(fundingReport);
-            }
-            em.persist(fundingCost);
-            if (fundingReport != null) {
-                fundingReport.getFundingCostList().add(fundingCost);
-                fundingReport = em.merge(fundingReport);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, FundingCost fundingCost) throws RollbackFailureException, Exception {
+        FundingReport fundingReport = fundingCost.getFundingReport();
+        if (fundingReport != null) {
+            fundingReport = em.getReference(fundingReport.getClass(), fundingReport.getReportID());
+            fundingCost.setFundingReport(fundingReport);
         }
+        em.persist(fundingCost);
+        if (fundingReport != null) {
+            fundingReport.getFundingCostList().add(fundingCost);
+            fundingReport = em.merge(fundingReport);
+        }
+            
     }
 
-    public void edit(FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            FundingCost persistentFundingCost = em.find(FundingCost.class, fundingCost.getCostID());
-            FundingReport fundingReportOld = persistentFundingCost.getFundingReport();
-            FundingReport fundingReportNew = fundingCost.getFundingReport();
-            if (fundingReportNew != null) {
-                fundingReportNew = em.getReference(fundingReportNew.getClass(), fundingReportNew.getReportID());
-                fundingCost.setFundingReport(fundingReportNew);
-            }
-            fundingCost = em.merge(fundingCost);
-            if (fundingReportOld != null && !fundingReportOld.equals(fundingReportNew)) {
-                fundingReportOld.getFundingCostList().remove(fundingCost);
-                fundingReportOld = em.merge(fundingReportOld);
-            }
-            if (fundingReportNew != null && !fundingReportNew.equals(fundingReportOld)) {
-                fundingReportNew.getFundingCostList().add(fundingCost);
-                fundingReportNew = em.merge(fundingReportNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = fundingCost.getCostID();
-                if (findFundingCost(id) == null) {
-                    throw new NonexistentEntityException("The fundingCost with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        Long id = fundingCost.getCostID();
+        if (findFundingCost(id) == null) {
+            throw new NonexistentEntityException("The fundingCost with id " + id + " no longer exists.");
         }
+        
+        FundingCost persistentFundingCost = em.find(FundingCost.class, fundingCost.getCostID());
+        FundingReport fundingReportOld = persistentFundingCost.getFundingReport();
+        FundingReport fundingReportNew = fundingCost.getFundingReport();
+        if (fundingReportNew != null) {
+            fundingReportNew = em.getReference(fundingReportNew.getClass(), fundingReportNew.getReportID());
+            fundingCost.setFundingReport(fundingReportNew);
+        }
+        fundingCost = em.merge(fundingCost);
+        if (fundingReportOld != null && !fundingReportOld.equals(fundingReportNew)) {
+            fundingReportOld.getFundingCostList().remove(fundingCost);
+            fundingReportOld = em.merge(fundingReportOld);
+        }
+        if (fundingReportNew != null && !fundingReportNew.equals(fundingReportOld)) {
+            fundingReportNew.getFundingCostList().add(fundingCost);
+            fundingReportNew = em.merge(fundingReportNew);
+        }       
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        FundingCost fundingCost;
         try {
-            utx.begin();
-            em = getEntityManager();
-            FundingCost fundingCost;
-            try {
-                fundingCost = em.getReference(FundingCost.class, id);
-                fundingCost.getCostID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The fundingCost with id " + id + " no longer exists.", enfe);
-            }
-            FundingReport fundingReport = fundingCost.getFundingReport();
-            if (fundingReport != null) {
-                fundingReport.getFundingCostList().remove(fundingCost);
-                fundingReport = em.merge(fundingReport);
-            }
-            em.remove(fundingCost);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            fundingCost = em.getReference(FundingCost.class, id);
+            fundingCost.getCostID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The fundingCost with id " + id + " no longer exists.", enfe);
         }
+        FundingReport fundingReport = fundingCost.getFundingReport();
+        if (fundingReport != null) {
+            fundingReport.getFundingCostList().remove(fundingCost);
+            fundingReport = em.merge(fundingReport);
+        }
+        em.remove(fundingCost);
+
     }
 
     public List<FundingCost> findFundingCostEntities() {

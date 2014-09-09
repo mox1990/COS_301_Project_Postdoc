@@ -27,121 +27,72 @@ import javax.transaction.UserTransaction;
  */
 public class AuditLogJpaController implements Serializable {
 
-    public AuditLogJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public AuditLogJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(AuditLog auditLog) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Person person = auditLog.getPerson();
-            if (person != null) {
-                person = em.getReference(person.getClass(), person.getSystemID());
-                auditLog.setPerson(person);
-            }
-            em.persist(auditLog);
-            if (person != null) {
-                person.getAuditLogList().add(auditLog);
-                person = em.merge(person);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em,AuditLog auditLog) throws RollbackFailureException, Exception {
+
+        Person person = auditLog.getPerson();
+        if (person != null) {
+            person = em.getReference(person.getClass(), person.getSystemID());
+            auditLog.setPerson(person);
         }
+        em.persist(auditLog);
+        if (person != null) {
+            person.getAuditLogList().add(auditLog);
+            person = em.merge(person);
+        }
+
     }
 
-    public void edit(AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            AuditLog persistentAuditLog = em.find(AuditLog.class, auditLog.getEntryID());
-            Person personOld = persistentAuditLog.getPerson();
-            Person personNew = auditLog.getPerson();
-            if (personNew != null) {
-                personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-                auditLog.setPerson(personNew);
-            }
-            auditLog = em.merge(auditLog);
-            if (personOld != null && !personOld.equals(personNew)) {
-                personOld.getAuditLogList().remove(auditLog);
-                personOld = em.merge(personOld);
-            }
-            if (personNew != null && !personNew.equals(personOld)) {
-                personNew.getAuditLogList().add(auditLog);
-                personNew = em.merge(personNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = auditLog.getEntryID();
-                if (findAuditLog(id) == null) {
-                    throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception {
+        Long id = auditLog.getEntryID();
+        if (findAuditLog(id) == null) {
+            throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.");
         }
+        
+        AuditLog persistentAuditLog = em.find(AuditLog.class, auditLog.getEntryID());
+        Person personOld = persistentAuditLog.getPerson();
+        Person personNew = auditLog.getPerson();
+        if (personNew != null) {
+            personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
+            auditLog.setPerson(personNew);
+        }
+        auditLog = em.merge(auditLog);
+        if (personOld != null && !personOld.equals(personNew)) {
+            personOld.getAuditLogList().remove(auditLog);
+            personOld = em.merge(personOld);
+        }
+        if (personNew != null && !personNew.equals(personOld)) {
+            personNew.getAuditLogList().add(auditLog);
+            personNew = em.merge(personNew);
+        }       
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+        
+        AuditLog auditLog;
         try {
-            utx.begin();
-            em = getEntityManager();
-            AuditLog auditLog;
-            try {
-                auditLog = em.getReference(AuditLog.class, id);
-                auditLog.getEntryID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.", enfe);
-            }
-            Person person = auditLog.getPerson();
-            if (person != null) {
-                person.getAuditLogList().remove(auditLog);
-                person = em.merge(person);
-            }
-            em.remove(auditLog);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            auditLog = em.getReference(AuditLog.class, id);
+            auditLog.getEntryID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.", enfe);
         }
+        Person person = auditLog.getPerson();
+        if (person != null) {
+            person.getAuditLogList().remove(auditLog);
+            person = em.merge(person);
+        }
+        em.remove(auditLog);
+
     }
 
     public List<AuditLog> findAuditLogEntities() {

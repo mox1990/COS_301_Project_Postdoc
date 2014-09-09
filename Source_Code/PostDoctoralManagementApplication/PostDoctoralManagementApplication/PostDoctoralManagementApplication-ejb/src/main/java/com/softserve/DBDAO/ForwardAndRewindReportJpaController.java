@@ -29,149 +29,99 @@ import javax.transaction.UserTransaction;
  */
 public class ForwardAndRewindReportJpaController implements Serializable {
 
-    public ForwardAndRewindReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ForwardAndRewindReportJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application application = forwardAndRewindReport.getApplication();
-            if (application != null) {
-                application = em.getReference(application.getClass(), application.getApplicationID());
-                forwardAndRewindReport.setApplication(application);
-            }
-            Person dris = forwardAndRewindReport.getDris();
-            if (dris != null) {
-                dris = em.getReference(dris.getClass(), dris.getSystemID());
-                forwardAndRewindReport.setDris(dris);
-            }
-            em.persist(forwardAndRewindReport);
-            if (application != null) {
-                application.getForwardAndRewindReportList().add(forwardAndRewindReport);
-                application = em.merge(application);
-            }
-            if (dris != null) {
-                dris.getForwardAndRewindReportList().add(forwardAndRewindReport);
-                dris = em.merge(dris);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void create(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception {
+
+        Application application = forwardAndRewindReport.getApplication();
+        if (application != null) {
+            application = em.getReference(application.getClass(), application.getApplicationID());
+            forwardAndRewindReport.setApplication(application);
         }
+        Person dris = forwardAndRewindReport.getDris();
+        if (dris != null) {
+            dris = em.getReference(dris.getClass(), dris.getSystemID());
+            forwardAndRewindReport.setDris(dris);
+        }
+        em.persist(forwardAndRewindReport);
+        if (application != null) {
+            application.getForwardAndRewindReportList().add(forwardAndRewindReport);
+            application = em.merge(application);
+        }
+        if (dris != null) {
+            dris.getForwardAndRewindReportList().add(forwardAndRewindReport);
+            dris = em.merge(dris);
+        }
+
     }
 
-    public void edit(ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            ForwardAndRewindReport persistentForwardAndRewindReport = em.find(ForwardAndRewindReport.class, forwardAndRewindReport.getReportID());
-            Application applicationOld = persistentForwardAndRewindReport.getApplication();
-            Application applicationNew = forwardAndRewindReport.getApplication();
-            Person drisOld = persistentForwardAndRewindReport.getDris();
-            Person drisNew = forwardAndRewindReport.getDris();
-            if (applicationNew != null) {
-                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                forwardAndRewindReport.setApplication(applicationNew);
-            }
-            if (drisNew != null) {
-                drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
-                forwardAndRewindReport.setDris(drisNew);
-            }
-            forwardAndRewindReport = em.merge(forwardAndRewindReport);
-            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-                applicationOld = em.merge(applicationOld);
-            }
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.getForwardAndRewindReportList().add(forwardAndRewindReport);
-                applicationNew = em.merge(applicationNew);
-            }
-            if (drisOld != null && !drisOld.equals(drisNew)) {
-                drisOld.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-                drisOld = em.merge(drisOld);
-            }
-            if (drisNew != null && !drisNew.equals(drisOld)) {
-                drisNew.getForwardAndRewindReportList().add(forwardAndRewindReport);
-                drisNew = em.merge(drisNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = forwardAndRewindReport.getReportID();
-                if (findForwardAndRewindReport(id) == null) {
-                    throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+        Long id = forwardAndRewindReport.getReportID();
+        if (findForwardAndRewindReport(id) == null) {
+            throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.");
         }
+        ForwardAndRewindReport persistentForwardAndRewindReport = em.find(ForwardAndRewindReport.class, forwardAndRewindReport.getReportID());
+        Application applicationOld = persistentForwardAndRewindReport.getApplication();
+        Application applicationNew = forwardAndRewindReport.getApplication();
+        Person drisOld = persistentForwardAndRewindReport.getDris();
+        Person drisNew = forwardAndRewindReport.getDris();
+        if (applicationNew != null) {
+            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+            forwardAndRewindReport.setApplication(applicationNew);
+        }
+        if (drisNew != null) {
+            drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
+            forwardAndRewindReport.setDris(drisNew);
+        }
+        forwardAndRewindReport = em.merge(forwardAndRewindReport);
+        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+            applicationOld.getForwardAndRewindReportList().remove(forwardAndRewindReport);
+            applicationOld = em.merge(applicationOld);
+        }
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            applicationNew.getForwardAndRewindReportList().add(forwardAndRewindReport);
+            applicationNew = em.merge(applicationNew);
+        }
+        if (drisOld != null && !drisOld.equals(drisNew)) {
+            drisOld.getForwardAndRewindReportList().remove(forwardAndRewindReport);
+            drisOld = em.merge(drisOld);
+        }
+        if (drisNew != null && !drisNew.equals(drisOld)) {
+            drisNew.getForwardAndRewindReportList().add(forwardAndRewindReport);
+            drisNew = em.merge(drisNew);
+        }       
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        ForwardAndRewindReport forwardAndRewindReport;
         try {
-            utx.begin();
-            em = getEntityManager();
-            ForwardAndRewindReport forwardAndRewindReport;
-            try {
-                forwardAndRewindReport = em.getReference(ForwardAndRewindReport.class, id);
-                forwardAndRewindReport.getReportID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.", enfe);
-            }
-            Application application = forwardAndRewindReport.getApplication();
-            if (application != null) {
-                application.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-                application = em.merge(application);
-            }
-            Person dris = forwardAndRewindReport.getDris();
-            if (dris != null) {
-                dris.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-                dris = em.merge(dris);
-            }
-            em.remove(forwardAndRewindReport);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            forwardAndRewindReport = em.getReference(ForwardAndRewindReport.class, id);
+            forwardAndRewindReport.getReportID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.", enfe);
         }
+        Application application = forwardAndRewindReport.getApplication();
+        if (application != null) {
+            application.getForwardAndRewindReportList().remove(forwardAndRewindReport);
+            application = em.merge(application);
+        }
+        Person dris = forwardAndRewindReport.getDris();
+        if (dris != null) {
+            dris.getForwardAndRewindReportList().remove(forwardAndRewindReport);
+            dris = em.merge(dris);
+        }
+        em.remove(forwardAndRewindReport);
+           
     }
 
     public List<ForwardAndRewindReport> findForwardAndRewindReportEntities() {

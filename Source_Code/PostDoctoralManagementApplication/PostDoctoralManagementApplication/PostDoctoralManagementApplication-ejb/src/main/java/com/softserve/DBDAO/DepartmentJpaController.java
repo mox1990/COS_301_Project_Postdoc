@@ -31,219 +31,173 @@ import javax.transaction.UserTransaction;
  */
 public class DepartmentJpaController implements Serializable {
 
-    public DepartmentJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public DepartmentJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Department department) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Department department) throws RollbackFailureException, Exception {
         if (department.getResearchFellowInformationList() == null) {
             department.setResearchFellowInformationList(new ArrayList<ResearchFellowInformation>());
         }
         if (department.getEmployeeInformationList() == null) {
             department.setEmployeeInformationList(new ArrayList<EmployeeInformation>());
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Faculty faculty = department.getFaculty();
-            if (faculty != null) {
-                faculty = em.getReference(faculty.getClass(), faculty.getFacultyID());
-                department.setFaculty(faculty);
-            }
-            List<ResearchFellowInformation> attachedResearchFellowInformationList = new ArrayList<ResearchFellowInformation>();
-            for (ResearchFellowInformation researchFellowInformationListResearchFellowInformationToAttach : department.getResearchFellowInformationList()) {
-                researchFellowInformationListResearchFellowInformationToAttach = em.getReference(researchFellowInformationListResearchFellowInformationToAttach.getClass(), researchFellowInformationListResearchFellowInformationToAttach.getSystemAssignedID());
-                attachedResearchFellowInformationList.add(researchFellowInformationListResearchFellowInformationToAttach);
-            }
-            department.setResearchFellowInformationList(attachedResearchFellowInformationList);
-            List<EmployeeInformation> attachedEmployeeInformationList = new ArrayList<EmployeeInformation>();
-            for (EmployeeInformation employeeInformationListEmployeeInformationToAttach : department.getEmployeeInformationList()) {
-                employeeInformationListEmployeeInformationToAttach = em.getReference(employeeInformationListEmployeeInformationToAttach.getClass(), employeeInformationListEmployeeInformationToAttach.getEmployeeID());
-                attachedEmployeeInformationList.add(employeeInformationListEmployeeInformationToAttach);
-            }
-            department.setEmployeeInformationList(attachedEmployeeInformationList);
-            em.persist(department);
-            if (faculty != null) {
-                faculty.getDepartmentList().add(department);
-                faculty = em.merge(faculty);
-            }
-            for (ResearchFellowInformation researchFellowInformationListResearchFellowInformation : department.getResearchFellowInformationList()) {
-                Department oldDepartmentOfResearchFellowInformationListResearchFellowInformation = researchFellowInformationListResearchFellowInformation.getDepartment();
-                researchFellowInformationListResearchFellowInformation.setDepartment(department);
-                researchFellowInformationListResearchFellowInformation = em.merge(researchFellowInformationListResearchFellowInformation);
-                if (oldDepartmentOfResearchFellowInformationListResearchFellowInformation != null) {
-                    oldDepartmentOfResearchFellowInformationListResearchFellowInformation.getResearchFellowInformationList().remove(researchFellowInformationListResearchFellowInformation);
-                    oldDepartmentOfResearchFellowInformationListResearchFellowInformation = em.merge(oldDepartmentOfResearchFellowInformationListResearchFellowInformation);
-                }
-            }
-            for (EmployeeInformation employeeInformationListEmployeeInformation : department.getEmployeeInformationList()) {
-                Department oldDepartmentOfEmployeeInformationListEmployeeInformation = employeeInformationListEmployeeInformation.getDepartment();
-                employeeInformationListEmployeeInformation.setDepartment(department);
-                employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
-                if (oldDepartmentOfEmployeeInformationListEmployeeInformation != null) {
-                    oldDepartmentOfEmployeeInformationListEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListEmployeeInformation);
-                    oldDepartmentOfEmployeeInformationListEmployeeInformation = em.merge(oldDepartmentOfEmployeeInformationListEmployeeInformation);
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+
+        Faculty faculty = department.getFaculty();
+        if (faculty != null) {
+            faculty = em.getReference(faculty.getClass(), faculty.getFacultyID());
+            department.setFaculty(faculty);
+        }
+        List<ResearchFellowInformation> attachedResearchFellowInformationList = new ArrayList<ResearchFellowInformation>();
+        for (ResearchFellowInformation researchFellowInformationListResearchFellowInformationToAttach : department.getResearchFellowInformationList()) {
+            researchFellowInformationListResearchFellowInformationToAttach = em.getReference(researchFellowInformationListResearchFellowInformationToAttach.getClass(), researchFellowInformationListResearchFellowInformationToAttach.getSystemAssignedID());
+            attachedResearchFellowInformationList.add(researchFellowInformationListResearchFellowInformationToAttach);
+        }
+        department.setResearchFellowInformationList(attachedResearchFellowInformationList);
+        List<EmployeeInformation> attachedEmployeeInformationList = new ArrayList<EmployeeInformation>();
+        for (EmployeeInformation employeeInformationListEmployeeInformationToAttach : department.getEmployeeInformationList()) {
+            employeeInformationListEmployeeInformationToAttach = em.getReference(employeeInformationListEmployeeInformationToAttach.getClass(), employeeInformationListEmployeeInformationToAttach.getEmployeeID());
+            attachedEmployeeInformationList.add(employeeInformationListEmployeeInformationToAttach);
+        }
+        department.setEmployeeInformationList(attachedEmployeeInformationList);
+        em.persist(department);
+        if (faculty != null) {
+            faculty.getDepartmentList().add(department);
+            faculty = em.merge(faculty);
+        }
+        for (ResearchFellowInformation researchFellowInformationListResearchFellowInformation : department.getResearchFellowInformationList()) {
+            Department oldDepartmentOfResearchFellowInformationListResearchFellowInformation = researchFellowInformationListResearchFellowInformation.getDepartment();
+            researchFellowInformationListResearchFellowInformation.setDepartment(department);
+            researchFellowInformationListResearchFellowInformation = em.merge(researchFellowInformationListResearchFellowInformation);
+            if (oldDepartmentOfResearchFellowInformationListResearchFellowInformation != null) {
+                oldDepartmentOfResearchFellowInformationListResearchFellowInformation.getResearchFellowInformationList().remove(researchFellowInformationListResearchFellowInformation);
+                oldDepartmentOfResearchFellowInformationListResearchFellowInformation = em.merge(oldDepartmentOfResearchFellowInformationListResearchFellowInformation);
             }
         }
+        for (EmployeeInformation employeeInformationListEmployeeInformation : department.getEmployeeInformationList()) {
+            Department oldDepartmentOfEmployeeInformationListEmployeeInformation = employeeInformationListEmployeeInformation.getDepartment();
+            employeeInformationListEmployeeInformation.setDepartment(department);
+            employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
+            if (oldDepartmentOfEmployeeInformationListEmployeeInformation != null) {
+                oldDepartmentOfEmployeeInformationListEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListEmployeeInformation);
+                oldDepartmentOfEmployeeInformationListEmployeeInformation = em.merge(oldDepartmentOfEmployeeInformationListEmployeeInformation);
+            }
+        }
+            
     }
 
-    public void edit(Department department) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Department persistentDepartment = em.find(Department.class, department.getDepartmentID());
-            Faculty facultyOld = persistentDepartment.getFaculty();
-            Faculty facultyNew = department.getFaculty();
-            List<ResearchFellowInformation> researchFellowInformationListOld = persistentDepartment.getResearchFellowInformationList();
-            List<ResearchFellowInformation> researchFellowInformationListNew = department.getResearchFellowInformationList();
-            List<EmployeeInformation> employeeInformationListOld = persistentDepartment.getEmployeeInformationList();
-            List<EmployeeInformation> employeeInformationListNew = department.getEmployeeInformationList();
-            if (facultyNew != null) {
-                facultyNew = em.getReference(facultyNew.getClass(), facultyNew.getFacultyID());
-                department.setFaculty(facultyNew);
-            }
-            List<ResearchFellowInformation> attachedResearchFellowInformationListNew = new ArrayList<ResearchFellowInformation>();
-            for (ResearchFellowInformation researchFellowInformationListNewResearchFellowInformationToAttach : researchFellowInformationListNew) {
-                researchFellowInformationListNewResearchFellowInformationToAttach = em.getReference(researchFellowInformationListNewResearchFellowInformationToAttach.getClass(), researchFellowInformationListNewResearchFellowInformationToAttach.getSystemAssignedID());
-                attachedResearchFellowInformationListNew.add(researchFellowInformationListNewResearchFellowInformationToAttach);
-            }
-            researchFellowInformationListNew = attachedResearchFellowInformationListNew;
-            department.setResearchFellowInformationList(researchFellowInformationListNew);
-            List<EmployeeInformation> attachedEmployeeInformationListNew = new ArrayList<EmployeeInformation>();
-            for (EmployeeInformation employeeInformationListNewEmployeeInformationToAttach : employeeInformationListNew) {
-                employeeInformationListNewEmployeeInformationToAttach = em.getReference(employeeInformationListNewEmployeeInformationToAttach.getClass(), employeeInformationListNewEmployeeInformationToAttach.getEmployeeID());
-                attachedEmployeeInformationListNew.add(employeeInformationListNewEmployeeInformationToAttach);
-            }
-            employeeInformationListNew = attachedEmployeeInformationListNew;
-            department.setEmployeeInformationList(employeeInformationListNew);
-            department = em.merge(department);
-            if (facultyOld != null && !facultyOld.equals(facultyNew)) {
-                facultyOld.getDepartmentList().remove(department);
-                facultyOld = em.merge(facultyOld);
-            }
-            if (facultyNew != null && !facultyNew.equals(facultyOld)) {
-                facultyNew.getDepartmentList().add(department);
-                facultyNew = em.merge(facultyNew);
-            }
-            for (ResearchFellowInformation researchFellowInformationListOldResearchFellowInformation : researchFellowInformationListOld) {
-                if (!researchFellowInformationListNew.contains(researchFellowInformationListOldResearchFellowInformation)) {
-                    researchFellowInformationListOldResearchFellowInformation.setDepartment(null);
-                    researchFellowInformationListOldResearchFellowInformation = em.merge(researchFellowInformationListOldResearchFellowInformation);
-                }
-            }
-            for (ResearchFellowInformation researchFellowInformationListNewResearchFellowInformation : researchFellowInformationListNew) {
-                if (!researchFellowInformationListOld.contains(researchFellowInformationListNewResearchFellowInformation)) {
-                    Department oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation = researchFellowInformationListNewResearchFellowInformation.getDepartment();
-                    researchFellowInformationListNewResearchFellowInformation.setDepartment(department);
-                    researchFellowInformationListNewResearchFellowInformation = em.merge(researchFellowInformationListNewResearchFellowInformation);
-                    if (oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation != null && !oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation.equals(department)) {
-                        oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation.getResearchFellowInformationList().remove(researchFellowInformationListNewResearchFellowInformation);
-                        oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation = em.merge(oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation);
-                    }
-                }
-            }
-            for (EmployeeInformation employeeInformationListOldEmployeeInformation : employeeInformationListOld) {
-                if (!employeeInformationListNew.contains(employeeInformationListOldEmployeeInformation)) {
-                    employeeInformationListOldEmployeeInformation.setDepartment(null);
-                    employeeInformationListOldEmployeeInformation = em.merge(employeeInformationListOldEmployeeInformation);
-                }
-            }
-            for (EmployeeInformation employeeInformationListNewEmployeeInformation : employeeInformationListNew) {
-                if (!employeeInformationListOld.contains(employeeInformationListNewEmployeeInformation)) {
-                    Department oldDepartmentOfEmployeeInformationListNewEmployeeInformation = employeeInformationListNewEmployeeInformation.getDepartment();
-                    employeeInformationListNewEmployeeInformation.setDepartment(department);
-                    employeeInformationListNewEmployeeInformation = em.merge(employeeInformationListNewEmployeeInformation);
-                    if (oldDepartmentOfEmployeeInformationListNewEmployeeInformation != null && !oldDepartmentOfEmployeeInformationListNewEmployeeInformation.equals(department)) {
-                        oldDepartmentOfEmployeeInformationListNewEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListNewEmployeeInformation);
-                        oldDepartmentOfEmployeeInformationListNewEmployeeInformation = em.merge(oldDepartmentOfEmployeeInformationListNewEmployeeInformation);
-                    }
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = department.getDepartmentID();
-                if (findDepartment(id) == null) {
-                    throw new NonexistentEntityException("The department with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+    public void edit(EntityManager em, Department department) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = department.getDepartmentID();
+        if (findDepartment(id) == null) {
+            throw new NonexistentEntityException("The department with id " + id + " no longer exists.");
+        }
+        
+        Department persistentDepartment = em.find(Department.class, department.getDepartmentID());
+        Faculty facultyOld = persistentDepartment.getFaculty();
+        Faculty facultyNew = department.getFaculty();
+        List<ResearchFellowInformation> researchFellowInformationListOld = persistentDepartment.getResearchFellowInformationList();
+        List<ResearchFellowInformation> researchFellowInformationListNew = department.getResearchFellowInformationList();
+        List<EmployeeInformation> employeeInformationListOld = persistentDepartment.getEmployeeInformationList();
+        List<EmployeeInformation> employeeInformationListNew = department.getEmployeeInformationList();
+        if (facultyNew != null) {
+            facultyNew = em.getReference(facultyNew.getClass(), facultyNew.getFacultyID());
+            department.setFaculty(facultyNew);
+        }
+        List<ResearchFellowInformation> attachedResearchFellowInformationListNew = new ArrayList<ResearchFellowInformation>();
+        for (ResearchFellowInformation researchFellowInformationListNewResearchFellowInformationToAttach : researchFellowInformationListNew) {
+            researchFellowInformationListNewResearchFellowInformationToAttach = em.getReference(researchFellowInformationListNewResearchFellowInformationToAttach.getClass(), researchFellowInformationListNewResearchFellowInformationToAttach.getSystemAssignedID());
+            attachedResearchFellowInformationListNew.add(researchFellowInformationListNewResearchFellowInformationToAttach);
+        }
+        researchFellowInformationListNew = attachedResearchFellowInformationListNew;
+        department.setResearchFellowInformationList(researchFellowInformationListNew);
+        List<EmployeeInformation> attachedEmployeeInformationListNew = new ArrayList<EmployeeInformation>();
+        for (EmployeeInformation employeeInformationListNewEmployeeInformationToAttach : employeeInformationListNew) {
+            employeeInformationListNewEmployeeInformationToAttach = em.getReference(employeeInformationListNewEmployeeInformationToAttach.getClass(), employeeInformationListNewEmployeeInformationToAttach.getEmployeeID());
+            attachedEmployeeInformationListNew.add(employeeInformationListNewEmployeeInformationToAttach);
+        }
+        employeeInformationListNew = attachedEmployeeInformationListNew;
+        department.setEmployeeInformationList(employeeInformationListNew);
+        department = em.merge(department);
+        if (facultyOld != null && !facultyOld.equals(facultyNew)) {
+            facultyOld.getDepartmentList().remove(department);
+            facultyOld = em.merge(facultyOld);
+        }
+        if (facultyNew != null && !facultyNew.equals(facultyOld)) {
+            facultyNew.getDepartmentList().add(department);
+            facultyNew = em.merge(facultyNew);
+        }
+        for (ResearchFellowInformation researchFellowInformationListOldResearchFellowInformation : researchFellowInformationListOld) {
+            if (!researchFellowInformationListNew.contains(researchFellowInformationListOldResearchFellowInformation)) {
+                researchFellowInformationListOldResearchFellowInformation.setDepartment(null);
+                researchFellowInformationListOldResearchFellowInformation = em.merge(researchFellowInformationListOldResearchFellowInformation);
             }
         }
+        for (ResearchFellowInformation researchFellowInformationListNewResearchFellowInformation : researchFellowInformationListNew) {
+            if (!researchFellowInformationListOld.contains(researchFellowInformationListNewResearchFellowInformation)) {
+                Department oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation = researchFellowInformationListNewResearchFellowInformation.getDepartment();
+                researchFellowInformationListNewResearchFellowInformation.setDepartment(department);
+                researchFellowInformationListNewResearchFellowInformation = em.merge(researchFellowInformationListNewResearchFellowInformation);
+                if (oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation != null && !oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation.equals(department)) {
+                    oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation.getResearchFellowInformationList().remove(researchFellowInformationListNewResearchFellowInformation);
+                    oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation = em.merge(oldDepartmentOfResearchFellowInformationListNewResearchFellowInformation);
+                }
+            }
+        }
+        for (EmployeeInformation employeeInformationListOldEmployeeInformation : employeeInformationListOld) {
+            if (!employeeInformationListNew.contains(employeeInformationListOldEmployeeInformation)) {
+                employeeInformationListOldEmployeeInformation.setDepartment(null);
+                employeeInformationListOldEmployeeInformation = em.merge(employeeInformationListOldEmployeeInformation);
+            }
+        }
+        for (EmployeeInformation employeeInformationListNewEmployeeInformation : employeeInformationListNew) {
+            if (!employeeInformationListOld.contains(employeeInformationListNewEmployeeInformation)) {
+                Department oldDepartmentOfEmployeeInformationListNewEmployeeInformation = employeeInformationListNewEmployeeInformation.getDepartment();
+                employeeInformationListNewEmployeeInformation.setDepartment(department);
+                employeeInformationListNewEmployeeInformation = em.merge(employeeInformationListNewEmployeeInformation);
+                if (oldDepartmentOfEmployeeInformationListNewEmployeeInformation != null && !oldDepartmentOfEmployeeInformationListNewEmployeeInformation.equals(department)) {
+                    oldDepartmentOfEmployeeInformationListNewEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListNewEmployeeInformation);
+                    oldDepartmentOfEmployeeInformationListNewEmployeeInformation = em.merge(oldDepartmentOfEmployeeInformationListNewEmployeeInformation);
+                }
+            }
+        }
+
+               
+            
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+        
+        Department department;
         try {
-            utx.begin();
-            em = getEntityManager();
-            Department department;
-            try {
-                department = em.getReference(Department.class, id);
-                department.getDepartmentID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The department with id " + id + " no longer exists.", enfe);
-            }
-            Faculty faculty = department.getFaculty();
-            if (faculty != null) {
-                faculty.getDepartmentList().remove(department);
-                faculty = em.merge(faculty);
-            }
-            List<ResearchFellowInformation> researchFellowInformationList = department.getResearchFellowInformationList();
-            for (ResearchFellowInformation researchFellowInformationListResearchFellowInformation : researchFellowInformationList) {
-                researchFellowInformationListResearchFellowInformation.setDepartment(null);
-                researchFellowInformationListResearchFellowInformation = em.merge(researchFellowInformationListResearchFellowInformation);
-            }
-            List<EmployeeInformation> employeeInformationList = department.getEmployeeInformationList();
-            for (EmployeeInformation employeeInformationListEmployeeInformation : employeeInformationList) {
-                employeeInformationListEmployeeInformation.setDepartment(null);
-                employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
-            }
-            em.remove(department);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            department = em.getReference(Department.class, id);
+            department.getDepartmentID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The department with id " + id + " no longer exists.", enfe);
         }
+        Faculty faculty = department.getFaculty();
+        if (faculty != null) {
+            faculty.getDepartmentList().remove(department);
+            faculty = em.merge(faculty);
+        }
+        List<ResearchFellowInformation> researchFellowInformationList = department.getResearchFellowInformationList();
+        for (ResearchFellowInformation researchFellowInformationListResearchFellowInformation : researchFellowInformationList) {
+            researchFellowInformationListResearchFellowInformation.setDepartment(null);
+            researchFellowInformationListResearchFellowInformation = em.merge(researchFellowInformationListResearchFellowInformation);
+        }
+        List<EmployeeInformation> employeeInformationList = department.getEmployeeInformationList();
+        for (EmployeeInformation employeeInformationListEmployeeInformation : employeeInformationList) {
+            employeeInformationListEmployeeInformation.setDepartment(null);
+            employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
+        }
+        em.remove(department);
+           
     }
 
     public List<Department> findDepartmentEntities() {

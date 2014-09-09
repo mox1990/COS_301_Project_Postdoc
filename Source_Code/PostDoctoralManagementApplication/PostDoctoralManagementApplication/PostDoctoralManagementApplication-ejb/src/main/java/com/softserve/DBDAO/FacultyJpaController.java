@@ -31,182 +31,136 @@ import javax.transaction.UserTransaction;
  */
 public class FacultyJpaController implements Serializable {
 
-    public FacultyJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public FacultyJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+    
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Faculty faculty) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Faculty faculty) throws RollbackFailureException, Exception {
         if (faculty.getDepartmentList() == null) {
             faculty.setDepartmentList(new ArrayList<Department>());
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Institution institution = faculty.getInstitution();
-            if (institution != null) {
-                institution = em.getReference(institution.getClass(), institution.getInstitutionID());
-                faculty.setInstitution(institution);
-            }
-            List<Department> attachedDepartmentList = new ArrayList<Department>();
-            for (Department departmentListDepartmentToAttach : faculty.getDepartmentList()) {
-                departmentListDepartmentToAttach = em.getReference(departmentListDepartmentToAttach.getClass(), departmentListDepartmentToAttach.getDepartmentID());
-                attachedDepartmentList.add(departmentListDepartmentToAttach);
-            }
-            faculty.setDepartmentList(attachedDepartmentList);
-            em.persist(faculty);
-            if (institution != null) {
-                institution.getFacultyList().add(faculty);
-                institution = em.merge(institution);
-            }
-            for (Department departmentListDepartment : faculty.getDepartmentList()) {
-                Faculty oldFacultyOfDepartmentListDepartment = departmentListDepartment.getFaculty();
-                departmentListDepartment.setFaculty(faculty);
-                departmentListDepartment = em.merge(departmentListDepartment);
-                if (oldFacultyOfDepartmentListDepartment != null) {
-                    oldFacultyOfDepartmentListDepartment.getDepartmentList().remove(departmentListDepartment);
-                    oldFacultyOfDepartmentListDepartment = em.merge(oldFacultyOfDepartmentListDepartment);
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+
+        Institution institution = faculty.getInstitution();
+        if (institution != null) {
+            institution = em.getReference(institution.getClass(), institution.getInstitutionID());
+            faculty.setInstitution(institution);
+        }
+        List<Department> attachedDepartmentList = new ArrayList<Department>();
+        for (Department departmentListDepartmentToAttach : faculty.getDepartmentList()) {
+            departmentListDepartmentToAttach = em.getReference(departmentListDepartmentToAttach.getClass(), departmentListDepartmentToAttach.getDepartmentID());
+            attachedDepartmentList.add(departmentListDepartmentToAttach);
+        }
+        faculty.setDepartmentList(attachedDepartmentList);
+        em.persist(faculty);
+        if (institution != null) {
+            institution.getFacultyList().add(faculty);
+            institution = em.merge(institution);
+        }
+        for (Department departmentListDepartment : faculty.getDepartmentList()) {
+            Faculty oldFacultyOfDepartmentListDepartment = departmentListDepartment.getFaculty();
+            departmentListDepartment.setFaculty(faculty);
+            departmentListDepartment = em.merge(departmentListDepartment);
+            if (oldFacultyOfDepartmentListDepartment != null) {
+                oldFacultyOfDepartmentListDepartment.getDepartmentList().remove(departmentListDepartment);
+                oldFacultyOfDepartmentListDepartment = em.merge(oldFacultyOfDepartmentListDepartment);
             }
         }
+           
     }
 
-    public void edit(Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Faculty persistentFaculty = em.find(Faculty.class, faculty.getFacultyID());
-            Institution institutionOld = persistentFaculty.getInstitution();
-            Institution institutionNew = faculty.getInstitution();
-            List<Department> departmentListOld = persistentFaculty.getDepartmentList();
-            List<Department> departmentListNew = faculty.getDepartmentList();
-            List<String> illegalOrphanMessages = null;
-            for (Department departmentListOldDepartment : departmentListOld) {
-                if (!departmentListNew.contains(departmentListOldDepartment)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Department " + departmentListOldDepartment + " since its faculty field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (institutionNew != null) {
-                institutionNew = em.getReference(institutionNew.getClass(), institutionNew.getInstitutionID());
-                faculty.setInstitution(institutionNew);
-            }
-            List<Department> attachedDepartmentListNew = new ArrayList<Department>();
-            for (Department departmentListNewDepartmentToAttach : departmentListNew) {
-                departmentListNewDepartmentToAttach = em.getReference(departmentListNewDepartmentToAttach.getClass(), departmentListNewDepartmentToAttach.getDepartmentID());
-                attachedDepartmentListNew.add(departmentListNewDepartmentToAttach);
-            }
-            departmentListNew = attachedDepartmentListNew;
-            faculty.setDepartmentList(departmentListNew);
-            faculty = em.merge(faculty);
-            if (institutionOld != null && !institutionOld.equals(institutionNew)) {
-                institutionOld.getFacultyList().remove(faculty);
-                institutionOld = em.merge(institutionOld);
-            }
-            if (institutionNew != null && !institutionNew.equals(institutionOld)) {
-                institutionNew.getFacultyList().add(faculty);
-                institutionNew = em.merge(institutionNew);
-            }
-            for (Department departmentListNewDepartment : departmentListNew) {
-                if (!departmentListOld.contains(departmentListNewDepartment)) {
-                    Faculty oldFacultyOfDepartmentListNewDepartment = departmentListNewDepartment.getFaculty();
-                    departmentListNewDepartment.setFaculty(faculty);
-                    departmentListNewDepartment = em.merge(departmentListNewDepartment);
-                    if (oldFacultyOfDepartmentListNewDepartment != null && !oldFacultyOfDepartmentListNewDepartment.equals(faculty)) {
-                        oldFacultyOfDepartmentListNewDepartment.getDepartmentList().remove(departmentListNewDepartment);
-                        oldFacultyOfDepartmentListNewDepartment = em.merge(oldFacultyOfDepartmentListNewDepartment);
-                    }
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = faculty.getFacultyID();
-                if (findFaculty(id) == null) {
-                    throw new NonexistentEntityException("The faculty with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    public void edit(EntityManager em, Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = faculty.getFacultyID();
+        if (findFaculty(id) == null) {
+            throw new NonexistentEntityException("The faculty with id " + id + " no longer exists.");
         }
-    }
-
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Faculty faculty;
-            try {
-                faculty = em.getReference(Faculty.class, id);
-                faculty.getFacultyID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The faculty with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Department> departmentListOrphanCheck = faculty.getDepartmentList();
-            for (Department departmentListOrphanCheckDepartment : departmentListOrphanCheck) {
+        
+        Faculty persistentFaculty = em.find(Faculty.class, faculty.getFacultyID());
+        Institution institutionOld = persistentFaculty.getInstitution();
+        Institution institutionNew = faculty.getInstitution();
+        List<Department> departmentListOld = persistentFaculty.getDepartmentList();
+        List<Department> departmentListNew = faculty.getDepartmentList();
+        List<String> illegalOrphanMessages = null;
+        for (Department departmentListOldDepartment : departmentListOld) {
+            if (!departmentListNew.contains(departmentListOldDepartment)) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Faculty (" + faculty + ") cannot be destroyed since the Department " + departmentListOrphanCheckDepartment + " in its departmentList field has a non-nullable faculty field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Institution institution = faculty.getInstitution();
-            if (institution != null) {
-                institution.getFacultyList().remove(faculty);
-                institution = em.merge(institution);
-            }
-            em.remove(faculty);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("You must retain Department " + departmentListOldDepartment + " since its faculty field is not nullable.");
             }
         }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (institutionNew != null) {
+            institutionNew = em.getReference(institutionNew.getClass(), institutionNew.getInstitutionID());
+            faculty.setInstitution(institutionNew);
+        }
+        List<Department> attachedDepartmentListNew = new ArrayList<Department>();
+        for (Department departmentListNewDepartmentToAttach : departmentListNew) {
+            departmentListNewDepartmentToAttach = em.getReference(departmentListNewDepartmentToAttach.getClass(), departmentListNewDepartmentToAttach.getDepartmentID());
+            attachedDepartmentListNew.add(departmentListNewDepartmentToAttach);
+        }
+        departmentListNew = attachedDepartmentListNew;
+        faculty.setDepartmentList(departmentListNew);
+        faculty = em.merge(faculty);
+        if (institutionOld != null && !institutionOld.equals(institutionNew)) {
+            institutionOld.getFacultyList().remove(faculty);
+            institutionOld = em.merge(institutionOld);
+        }
+        if (institutionNew != null && !institutionNew.equals(institutionOld)) {
+            institutionNew.getFacultyList().add(faculty);
+            institutionNew = em.merge(institutionNew);
+        }
+        for (Department departmentListNewDepartment : departmentListNew) {
+            if (!departmentListOld.contains(departmentListNewDepartment)) {
+                Faculty oldFacultyOfDepartmentListNewDepartment = departmentListNewDepartment.getFaculty();
+                departmentListNewDepartment.setFaculty(faculty);
+                departmentListNewDepartment = em.merge(departmentListNewDepartment);
+                if (oldFacultyOfDepartmentListNewDepartment != null && !oldFacultyOfDepartmentListNewDepartment.equals(faculty)) {
+                    oldFacultyOfDepartmentListNewDepartment.getDepartmentList().remove(departmentListNewDepartment);
+                    oldFacultyOfDepartmentListNewDepartment = em.merge(oldFacultyOfDepartmentListNewDepartment);
+                }
+            }
+        }
+           
+        
+
+    }
+
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        Faculty faculty;
+        try {
+            faculty = em.getReference(Faculty.class, id);
+            faculty.getFacultyID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The faculty with id " + id + " no longer exists.", enfe);
+        }
+        List<String> illegalOrphanMessages = null;
+        List<Department> departmentListOrphanCheck = faculty.getDepartmentList();
+        for (Department departmentListOrphanCheckDepartment : departmentListOrphanCheck) {
+            if (illegalOrphanMessages == null) {
+                illegalOrphanMessages = new ArrayList<String>();
+            }
+            illegalOrphanMessages.add("This Faculty (" + faculty + ") cannot be destroyed since the Department " + departmentListOrphanCheckDepartment + " in its departmentList field has a non-nullable faculty field.");
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        Institution institution = faculty.getInstitution();
+        if (institution != null) {
+            institution.getFacultyList().remove(faculty);
+            institution = em.merge(institution);
+        }
+        em.remove(faculty);
+            
     }
 
     public List<Faculty> findFacultyEntities() {

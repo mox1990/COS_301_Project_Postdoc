@@ -32,18 +32,17 @@ import javax.transaction.UserTransaction;
  */
 public class FundingReportJpaController implements Serializable {
 
-    public FundingReportJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public FundingReportJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         if (fundingReport.getFundingCostList() == null) {
             fundingReport.setFundingCostList(new ArrayList<FundingCost>());
         }
@@ -61,207 +60,158 @@ public class FundingReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application application = fundingReport.getApplication();
-            if (application != null) {
-                application = em.getReference(application.getClass(), application.getApplicationID());
-                fundingReport.setApplication(application);
-            }
-            Person dris = fundingReport.getDris();
-            if (dris != null) {
-                dris = em.getReference(dris.getClass(), dris.getSystemID());
-                fundingReport.setDris(dris);
-            }
-            List<FundingCost> attachedFundingCostList = new ArrayList<FundingCost>();
-            for (FundingCost fundingCostListFundingCostToAttach : fundingReport.getFundingCostList()) {
-                fundingCostListFundingCostToAttach = em.getReference(fundingCostListFundingCostToAttach.getClass(), fundingCostListFundingCostToAttach.getCostID());
-                attachedFundingCostList.add(fundingCostListFundingCostToAttach);
-            }
-            fundingReport.setFundingCostList(attachedFundingCostList);
-            em.persist(fundingReport);
-            if (application != null) {
-                application.setFundingReport(fundingReport);
-                application = em.merge(application);
-            }
-            if (dris != null) {
-                dris.getFundingReportList().add(fundingReport);
-                dris = em.merge(dris);
-            }
-            for (FundingCost fundingCostListFundingCost : fundingReport.getFundingCostList()) {
-                FundingReport oldFundingReportOfFundingCostListFundingCost = fundingCostListFundingCost.getFundingReport();
-                fundingCostListFundingCost.setFundingReport(fundingReport);
-                fundingCostListFundingCost = em.merge(fundingCostListFundingCost);
-                if (oldFundingReportOfFundingCostListFundingCost != null) {
-                    oldFundingReportOfFundingCostListFundingCost.getFundingCostList().remove(fundingCostListFundingCost);
-                    oldFundingReportOfFundingCostListFundingCost = em.merge(oldFundingReportOfFundingCostListFundingCost);
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findFundingReport(fundingReport.getReportID()) != null) {
-                throw new PreexistingEntityException("FundingReport " + fundingReport + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+
+        Application application = fundingReport.getApplication();
+        if (application != null) {
+            application = em.getReference(application.getClass(), application.getApplicationID());
+            fundingReport.setApplication(application);
+        }
+        Person dris = fundingReport.getDris();
+        if (dris != null) {
+            dris = em.getReference(dris.getClass(), dris.getSystemID());
+            fundingReport.setDris(dris);
+        }
+        List<FundingCost> attachedFundingCostList = new ArrayList<FundingCost>();
+        for (FundingCost fundingCostListFundingCostToAttach : fundingReport.getFundingCostList()) {
+            fundingCostListFundingCostToAttach = em.getReference(fundingCostListFundingCostToAttach.getClass(), fundingCostListFundingCostToAttach.getCostID());
+            attachedFundingCostList.add(fundingCostListFundingCostToAttach);
+        }
+        fundingReport.setFundingCostList(attachedFundingCostList);
+        em.persist(fundingReport);
+        if (application != null) {
+            application.setFundingReport(fundingReport);
+            application = em.merge(application);
+        }
+        if (dris != null) {
+            dris.getFundingReportList().add(fundingReport);
+            dris = em.merge(dris);
+        }
+        for (FundingCost fundingCostListFundingCost : fundingReport.getFundingCostList()) {
+            FundingReport oldFundingReportOfFundingCostListFundingCost = fundingCostListFundingCost.getFundingReport();
+            fundingCostListFundingCost.setFundingReport(fundingReport);
+            fundingCostListFundingCost = em.merge(fundingCostListFundingCost);
+            if (oldFundingReportOfFundingCostListFundingCost != null) {
+                oldFundingReportOfFundingCostListFundingCost.getFundingCostList().remove(fundingCostListFundingCost);
+                oldFundingReportOfFundingCostListFundingCost = em.merge(oldFundingReportOfFundingCostListFundingCost);
             }
         }
     }
 
-    public void edit(FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            FundingReport persistentFundingReport = em.find(FundingReport.class, fundingReport.getReportID());
-            Application applicationOld = persistentFundingReport.getApplication();
-            Application applicationNew = fundingReport.getApplication();
-            Person drisOld = persistentFundingReport.getDris();
-            Person drisNew = fundingReport.getDris();
-            List<FundingCost> fundingCostListOld = persistentFundingReport.getFundingCostList();
-            List<FundingCost> fundingCostListNew = fundingReport.getFundingCostList();
-            List<String> illegalOrphanMessages = null;
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                FundingReport oldFundingReportOfApplication = applicationNew.getFundingReport();
-                if (oldFundingReportOfApplication != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type FundingReport whose application column cannot be null. Please make another selection for the application field.");
-                }
-            }
-            for (FundingCost fundingCostListOldFundingCost : fundingCostListOld) {
-                if (!fundingCostListNew.contains(fundingCostListOldFundingCost)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain FundingCost " + fundingCostListOldFundingCost + " since its fundingReport field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (applicationNew != null) {
-                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                fundingReport.setApplication(applicationNew);
-            }
-            if (drisNew != null) {
-                drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
-                fundingReport.setDris(drisNew);
-            }
-            List<FundingCost> attachedFundingCostListNew = new ArrayList<FundingCost>();
-            for (FundingCost fundingCostListNewFundingCostToAttach : fundingCostListNew) {
-                fundingCostListNewFundingCostToAttach = em.getReference(fundingCostListNewFundingCostToAttach.getClass(), fundingCostListNewFundingCostToAttach.getCostID());
-                attachedFundingCostListNew.add(fundingCostListNewFundingCostToAttach);
-            }
-            fundingCostListNew = attachedFundingCostListNew;
-            fundingReport.setFundingCostList(fundingCostListNew);
-            fundingReport = em.merge(fundingReport);
-            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.setFundingReport(null);
-                applicationOld = em.merge(applicationOld);
-            }
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.setFundingReport(fundingReport);
-                applicationNew = em.merge(applicationNew);
-            }
-            if (drisOld != null && !drisOld.equals(drisNew)) {
-                drisOld.getFundingReportList().remove(fundingReport);
-                drisOld = em.merge(drisOld);
-            }
-            if (drisNew != null && !drisNew.equals(drisOld)) {
-                drisNew.getFundingReportList().add(fundingReport);
-                drisNew = em.merge(drisNew);
-            }
-            for (FundingCost fundingCostListNewFundingCost : fundingCostListNew) {
-                if (!fundingCostListOld.contains(fundingCostListNewFundingCost)) {
-                    FundingReport oldFundingReportOfFundingCostListNewFundingCost = fundingCostListNewFundingCost.getFundingReport();
-                    fundingCostListNewFundingCost.setFundingReport(fundingReport);
-                    fundingCostListNewFundingCost = em.merge(fundingCostListNewFundingCost);
-                    if (oldFundingReportOfFundingCostListNewFundingCost != null && !oldFundingReportOfFundingCostListNewFundingCost.equals(fundingReport)) {
-                        oldFundingReportOfFundingCostListNewFundingCost.getFundingCostList().remove(fundingCostListNewFundingCost);
-                        oldFundingReportOfFundingCostListNewFundingCost = em.merge(oldFundingReportOfFundingCostListNewFundingCost);
-                    }
-                }
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = fundingReport.getReportID();
-                if (findFundingReport(id) == null) {
-                    throw new NonexistentEntityException("The fundingReport with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
+    public void edit(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            FundingReport fundingReport;
-            try {
-                fundingReport = em.getReference(FundingReport.class, id);
-                fundingReport.getReportID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The fundingReport with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<FundingCost> fundingCostListOrphanCheck = fundingReport.getFundingCostList();
-            for (FundingCost fundingCostListOrphanCheckFundingCost : fundingCostListOrphanCheck) {
+        Long id = fundingReport.getReportID();
+        if (findFundingReport(id) == null) {
+            throw new NonexistentEntityException("The fundingReport with id " + id + " no longer exists.");
+        }
+        
+        FundingReport persistentFundingReport = em.find(FundingReport.class, fundingReport.getReportID());
+        Application applicationOld = persistentFundingReport.getApplication();
+        Application applicationNew = fundingReport.getApplication();
+        Person drisOld = persistentFundingReport.getDris();
+        Person drisNew = fundingReport.getDris();
+        List<FundingCost> fundingCostListOld = persistentFundingReport.getFundingCostList();
+        List<FundingCost> fundingCostListNew = fundingReport.getFundingCostList();
+        List<String> illegalOrphanMessages = null;
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            FundingReport oldFundingReportOfApplication = applicationNew.getFundingReport();
+            if (oldFundingReportOfApplication != null) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This FundingReport (" + fundingReport + ") cannot be destroyed since the FundingCost " + fundingCostListOrphanCheckFundingCost + " in its fundingCostList field has a non-nullable fundingReport field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Application application = fundingReport.getApplication();
-            if (application != null) {
-                application.setFundingReport(null);
-                application = em.merge(application);
-            }
-            Person dris = fundingReport.getDris();
-            if (dris != null) {
-                dris.getFundingReportList().remove(fundingReport);
-                dris = em.merge(dris);
-            }
-            em.remove(fundingReport);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type FundingReport whose application column cannot be null. Please make another selection for the application field.");
             }
         }
+        for (FundingCost fundingCostListOldFundingCost : fundingCostListOld) {
+            if (!fundingCostListNew.contains(fundingCostListOldFundingCost)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("You must retain FundingCost " + fundingCostListOldFundingCost + " since its fundingReport field is not nullable.");
+            }
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (applicationNew != null) {
+            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+            fundingReport.setApplication(applicationNew);
+        }
+        if (drisNew != null) {
+            drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
+            fundingReport.setDris(drisNew);
+        }
+        List<FundingCost> attachedFundingCostListNew = new ArrayList<FundingCost>();
+        for (FundingCost fundingCostListNewFundingCostToAttach : fundingCostListNew) {
+            fundingCostListNewFundingCostToAttach = em.getReference(fundingCostListNewFundingCostToAttach.getClass(), fundingCostListNewFundingCostToAttach.getCostID());
+            attachedFundingCostListNew.add(fundingCostListNewFundingCostToAttach);
+        }
+        fundingCostListNew = attachedFundingCostListNew;
+        fundingReport.setFundingCostList(fundingCostListNew);
+        fundingReport = em.merge(fundingReport);
+        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+            applicationOld.setFundingReport(null);
+            applicationOld = em.merge(applicationOld);
+        }
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            applicationNew.setFundingReport(fundingReport);
+            applicationNew = em.merge(applicationNew);
+        }
+        if (drisOld != null && !drisOld.equals(drisNew)) {
+            drisOld.getFundingReportList().remove(fundingReport);
+            drisOld = em.merge(drisOld);
+        }
+        if (drisNew != null && !drisNew.equals(drisOld)) {
+            drisNew.getFundingReportList().add(fundingReport);
+            drisNew = em.merge(drisNew);
+        }
+        for (FundingCost fundingCostListNewFundingCost : fundingCostListNew) {
+            if (!fundingCostListOld.contains(fundingCostListNewFundingCost)) {
+                FundingReport oldFundingReportOfFundingCostListNewFundingCost = fundingCostListNewFundingCost.getFundingReport();
+                fundingCostListNewFundingCost.setFundingReport(fundingReport);
+                fundingCostListNewFundingCost = em.merge(fundingCostListNewFundingCost);
+                if (oldFundingReportOfFundingCostListNewFundingCost != null && !oldFundingReportOfFundingCostListNewFundingCost.equals(fundingReport)) {
+                    oldFundingReportOfFundingCostListNewFundingCost.getFundingCostList().remove(fundingCostListNewFundingCost);
+                    oldFundingReportOfFundingCostListNewFundingCost = em.merge(oldFundingReportOfFundingCostListNewFundingCost);
+                }
+            }
+        }
+            
+                
+           
+    }
+
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        FundingReport fundingReport;
+        try {
+            fundingReport = em.getReference(FundingReport.class, id);
+            fundingReport.getReportID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The fundingReport with id " + id + " no longer exists.", enfe);
+        }
+        List<String> illegalOrphanMessages = null;
+        List<FundingCost> fundingCostListOrphanCheck = fundingReport.getFundingCostList();
+        for (FundingCost fundingCostListOrphanCheckFundingCost : fundingCostListOrphanCheck) {
+            if (illegalOrphanMessages == null) {
+                illegalOrphanMessages = new ArrayList<String>();
+            }
+            illegalOrphanMessages.add("This FundingReport (" + fundingReport + ") cannot be destroyed since the FundingCost " + fundingCostListOrphanCheckFundingCost + " in its fundingCostList field has a non-nullable fundingReport field.");
+        }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        Application application = fundingReport.getApplication();
+        if (application != null) {
+            application.setFundingReport(null);
+            application = em.merge(application);
+        }
+        Person dris = fundingReport.getDris();
+        if (dris != null) {
+            dris.getFundingReportList().remove(fundingReport);
+            dris = em.merge(dris);
+        }
+        em.remove(fundingReport);
+
     }
 
     public List<FundingReport> findFundingReportEntities() {

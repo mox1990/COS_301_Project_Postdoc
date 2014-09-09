@@ -31,18 +31,17 @@ import javax.transaction.UserTransaction;
  */
 public class EndorsementJpaController implements Serializable {
 
-    public EndorsementJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public EndorsementJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private UserTransaction utx = null;
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Endorsement endorsement) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = endorsement.getApplication();
         if (applicationOrphanCheck != null) {
@@ -57,153 +56,105 @@ public class EndorsementJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Application application = endorsement.getApplication();
-            if (application != null) {
-                application = em.getReference(application.getClass(), application.getApplicationID());
-                endorsement.setApplication(application);
-            }
-            Person dean = endorsement.getDean();
-            if (dean != null) {
-                dean = em.getReference(dean.getClass(), dean.getSystemID());
-                endorsement.setDean(dean);
-            }
-            em.persist(endorsement);
-            if (application != null) {
-                application.setEndorsement(endorsement);
-                application = em.merge(application);
-            }
-            if (dean != null) {
-                dean.getEndorsementList().add(endorsement);
-                dean = em.merge(dean);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findEndorsement(endorsement.getEndorsementID()) != null) {
-                throw new PreexistingEntityException("Endorsement " + endorsement + " already exists.", ex);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+
+        Application application = endorsement.getApplication();
+        if (application != null) {
+            application = em.getReference(application.getClass(), application.getApplicationID());
+            endorsement.setApplication(application);
         }
+        Person dean = endorsement.getDean();
+        if (dean != null) {
+            dean = em.getReference(dean.getClass(), dean.getSystemID());
+            endorsement.setDean(dean);
+        }
+        em.persist(endorsement);
+        if (application != null) {
+            application.setEndorsement(endorsement);
+            application = em.merge(application);
+        }
+        if (dean != null) {
+            dean.getEndorsementList().add(endorsement);
+            dean = em.merge(dean);
+        }
+           
     }
 
-    public void edit(Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
-        try {
-            utx.begin();
-            em = getEntityManager();
-            Endorsement persistentEndorsement = em.find(Endorsement.class, endorsement.getEndorsementID());
-            Application applicationOld = persistentEndorsement.getApplication();
-            Application applicationNew = endorsement.getApplication();
-            Person deanOld = persistentEndorsement.getDean();
-            Person deanNew = endorsement.getDean();
-            List<String> illegalOrphanMessages = null;
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                Endorsement oldEndorsementOfApplication = applicationNew.getEndorsement();
-                if (oldEndorsementOfApplication != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type Endorsement whose application column cannot be null. Please make another selection for the application field.");
+    public void edit(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+
+        Long id = endorsement.getEndorsementID();
+        if (findEndorsement(id) == null) {
+            throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.");
+        }
+                
+        Endorsement persistentEndorsement = em.find(Endorsement.class, endorsement.getEndorsementID());
+        Application applicationOld = persistentEndorsement.getApplication();
+        Application applicationNew = endorsement.getApplication();
+        Person deanOld = persistentEndorsement.getDean();
+        Person deanNew = endorsement.getDean();
+        List<String> illegalOrphanMessages = null;
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            Endorsement oldEndorsementOfApplication = applicationNew.getEndorsement();
+            if (oldEndorsementOfApplication != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
                 }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (applicationNew != null) {
-                applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-                endorsement.setApplication(applicationNew);
-            }
-            if (deanNew != null) {
-                deanNew = em.getReference(deanNew.getClass(), deanNew.getSystemID());
-                endorsement.setDean(deanNew);
-            }
-            endorsement = em.merge(endorsement);
-            if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-                applicationOld.setEndorsement(null);
-                applicationOld = em.merge(applicationOld);
-            }
-            if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-                applicationNew.setEndorsement(endorsement);
-                applicationNew = em.merge(applicationNew);
-            }
-            if (deanOld != null && !deanOld.equals(deanNew)) {
-                deanOld.getEndorsementList().remove(endorsement);
-                deanOld = em.merge(deanOld);
-            }
-            if (deanNew != null && !deanNew.equals(deanOld)) {
-                deanNew.getEndorsementList().add(endorsement);
-                deanNew = em.merge(deanNew);
-            }
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = endorsement.getEndorsementID();
-                if (findEndorsement(id) == null) {
-                    throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.");
-                }
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
+                illegalOrphanMessages.add("The Application " + applicationNew + " already has an item of type Endorsement whose application column cannot be null. Please make another selection for the application field.");
             }
         }
+        if (illegalOrphanMessages != null) {
+            throw new IllegalOrphanException(illegalOrphanMessages);
+        }
+        if (applicationNew != null) {
+            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
+            endorsement.setApplication(applicationNew);
+        }
+        if (deanNew != null) {
+            deanNew = em.getReference(deanNew.getClass(), deanNew.getSystemID());
+            endorsement.setDean(deanNew);
+        }
+        endorsement = em.merge(endorsement);
+        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
+            applicationOld.setEndorsement(null);
+            applicationOld = em.merge(applicationOld);
+        }
+        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
+            applicationNew.setEndorsement(endorsement);
+            applicationNew = em.merge(applicationNew);
+        }
+        if (deanOld != null && !deanOld.equals(deanNew)) {
+            deanOld.getEndorsementList().remove(endorsement);
+            deanOld = em.merge(deanOld);
+        }
+        if (deanNew != null && !deanNew.equals(deanOld)) {
+            deanNew.getEndorsementList().add(endorsement);
+            deanNew = em.merge(deanNew);
+        }
+
+                
+
     }
 
-    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
-        EntityManager em = null;
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+
+        Endorsement endorsement;
         try {
-            utx.begin();
-            em = getEntityManager();
-            Endorsement endorsement;
-            try {
-                endorsement = em.getReference(Endorsement.class, id);
-                endorsement.getEndorsementID();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.", enfe);
-            }
-            Application application = endorsement.getApplication();
-            if (application != null) {
-                application.setEndorsement(null);
-                application = em.merge(application);
-            }
-            Person dean = endorsement.getDean();
-            if (dean != null) {
-                dean.getEndorsementList().remove(endorsement);
-                dean = em.merge(dean);
-            }
-            em.remove(endorsement);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+            endorsement = em.getReference(Endorsement.class, id);
+            endorsement.getEndorsementID();
+        } catch (EntityNotFoundException enfe) {
+            throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.", enfe);
         }
+        Application application = endorsement.getApplication();
+        if (application != null) {
+            application.setEndorsement(null);
+            application = em.merge(application);
+        }
+        Person dean = endorsement.getDean();
+        if (dean != null) {
+            dean.getEndorsementList().remove(endorsement);
+            dean = em.merge(dean);
+        }
+        em.remove(endorsement);
+           
     }
 
     public List<Endorsement> findEndorsementEntities() {
