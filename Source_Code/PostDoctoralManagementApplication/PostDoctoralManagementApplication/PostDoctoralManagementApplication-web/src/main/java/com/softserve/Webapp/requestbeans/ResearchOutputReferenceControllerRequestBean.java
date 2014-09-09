@@ -6,7 +6,6 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import auto.softserve.XMLEntities.CV.Reference;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -25,7 +24,7 @@ public class ResearchOutputReferenceControllerRequestBean {
     public ResearchOutputReferenceControllerRequestBean() {
     }
     
-    public boolean doesReferenceHavePubliser(Reference reference)
+    public boolean doesReferenceHavePubliser(auto.softserve.XMLEntities.CV.Reference reference)
     {
         if(reference != null && reference.getStatus() != null && !reference.getStatus().equals(""))
         {            
@@ -37,7 +36,7 @@ public class ResearchOutputReferenceControllerRequestBean {
         }
     }
     
-    public boolean doesReferenceHavePublicationDate(Reference reference)
+    public boolean doesReferenceHavePublicationDate(auto.softserve.XMLEntities.CV.Reference reference)
     {
         if(reference != null && reference.getStatus() != null && !reference.getStatus().equals(""))
         {            
@@ -48,5 +47,6 @@ public class ResearchOutputReferenceControllerRequestBean {
             return false;
         }
     }
+    
     
 }

@@ -513,7 +513,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToApplicationRenewalServiceApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ApplicationRenewalService_ApplicationSelection", "Report creation");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationRenewalService_ApplicationSelection", "Application selection");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);

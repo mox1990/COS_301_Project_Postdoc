@@ -6,8 +6,8 @@
 
 package com.softserve.Webapp.depenedentbeans;
 
-import auto.softserve.XMLEntities.fellow.ProgressReportContent;
-import auto.softserve.XMLEntities.fellow.Reference;
+import auto.softserve.XMLEntities.CV.ProgressReportContent;
+import auto.softserve.XMLEntities.CV.Reference;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.Webapp.util.MessageUtil;
 import java.io.Serializable;
@@ -152,7 +152,7 @@ public class ProgressReportCreationDependBean implements Serializable {
         MessageUtil.CreateGlobalFacesMessage("Attained outcome added!", "The attained outcome has been added to the list!", FacesMessage.SEVERITY_INFO);
     }
     
-    public void removeFroAttainedOutcomesList()
+    public void removeFromAttainedOutcomesList()
     {
         if(selectedOutcomeList.size() > 0)
         {

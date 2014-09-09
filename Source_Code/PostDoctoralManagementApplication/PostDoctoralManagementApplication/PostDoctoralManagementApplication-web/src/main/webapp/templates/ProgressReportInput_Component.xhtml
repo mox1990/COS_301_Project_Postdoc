@@ -6,16 +6,19 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        
-            <h:panelGrid columns="2" cellpadding="10px">            
-                <p:outputLabel value="Self evaluation by fellow:" for="selfE"/>                                
-                <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
-                <p:message for="selfE" styleClass="fieldErrorMessage"/>            
-            </h:panelGrid>
-            <p:growl id="growler" sticky="true" globalOnly="true" showDetail="true"/>
-            <p:commandButton value="Add infromation to progress report" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" update="growler">
-                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-            </p:commandButton>        
+            <h:form>
+                <p:panel header="Progress report information" id="infoProg">
+                    <h:panelGrid columns="2" cellpadding="10px">            
+                        <p:outputLabel value="Self evaluation by fellow:" for="selfE"/>                                
+                        <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
+                        <p:message for="selfE" styleClass="fieldErrorMessage"/>            
+                    </h:panelGrid>
+                    <p:growl id="growler" sticky="true" globalOnly="true" showDetail="true"/>
+                    <p:commandButton value="Add infromation to progress report" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" process="infoProg" update="infoProg">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>  
+                </p:panel>
+            </h:form>
         
             <p:panel header="Research output generated" toggleable="true" collapsed="true">
                 <ui:decorate template="researchOutputFieldInput_Component.xhtml">
@@ -24,7 +27,7 @@
                     <ui:param name="bean" value="#{bean}"/>                
                     <ui:param name="selectedReferenceList" value="#{bean.selectedReferenceList}" />
                     <ui:param name="beanActionAdd" value="addToResearchOutputList"/>
-                    <ui:param name="beanActionRemove" value="removeFromResearchOutputList"/>
+                    <ui:param name="beanActionRemove" value="removeFromResearchOutputReferences"/>
                     <ui:param name="prefix" value="res"/>
                 </ui:decorate>
             </p:panel>

@@ -80,11 +80,11 @@ public class ApplicationRenewalBean implements Serializable {
             
             if(applicationRenewalServiceLocal.doesApplicationHaveFinalProgressReport(sessionManagerBean.getSession(),oldApplication))
             {
-                wizardActiveTab = 0;
+                wizardActiveTab = 1;
             }
             else
             {
-                wizardActiveTab = 1;
+                wizardActiveTab = 0;
             }
         }
         catch(Exception exception)

@@ -6,7 +6,11 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:dataTable value="#{notifications}" var="notification" filteredValue="#{filteredNotifications}" rowKey="#{notification.notificationID}">
+        <p:dataTable value="#{notifications}" var="notification" filteredValue="#{filteredNotifications}" rowKey="#{notification.notificationID}"
+                    paginator="true"
+                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                    rows="25"
+                    rowsPerPageTemplate="25">
             <f:facet name="header">
                 #{header}
             </f:facet>

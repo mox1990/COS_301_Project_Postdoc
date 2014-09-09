@@ -26,11 +26,11 @@
                             <center>
                                 <h2 class="header2">Create your final progress report</h2>
                                                        
-                                <h:form id="progressReportInfo">
+                                
                                     <ui:decorate template="templates/ProgressReportInput_Component.xhtml">
                                         <ui:param name="bean" value="#{applicationRenewalBean.progressReportCreationDependBean}"/>
                                     </ui:decorate>
-                                    
+                                <h:form id="progressReportInfo">    
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                                     <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeFinalProgressReport()}" value="Next" styleClass="button button-fill" process="@this @(#progressReportInfo)">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
@@ -69,6 +69,7 @@
                                     <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeApplicationRenewal()}" value="Next" styleClass="button button-fill">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
+                                </h:form>
                             </center>                        
                         </p:outputPanel>
                     </p:tab>

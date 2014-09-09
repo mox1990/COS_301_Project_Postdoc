@@ -9,6 +9,14 @@
         <h:form>
             <p:outputPanel id="#{prefix}researchoutput">
                 <div>
+                    <p:outputPanel id="#{prefix}researchoutputTable">
+                        <ui:decorate template="referenceDataTableInput_Component.xhtml">
+                            <ui:param name="header" value="Research output already added"/>
+                            <ui:param name="references" value="#{references}"/>
+                            <ui:param name="selectedReferenceList" value="#{selectedReferenceList}" />
+                        </ui:decorate>
+                    </p:outputPanel>
+                    
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="Reference type" for="#{prefix}reftype"/>                                
                         <p:selectOneMenu id="#{prefix}reftype" value="#{currentReference.type}" required="true">
@@ -50,13 +58,7 @@
                     <p:commandButton value="Add reference" actionListener="#{bean[beanActionAdd]}" update="#{prefix}researchoutput" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
-                    <p:outputPanel id="#{prefix}researchoutputTable">
-                        <ui:decorate template="referenceDataTableInput_Component.xhtml">
-                            <ui:param name="header" value="Research output already added"/>
-                            <ui:param name="references" value="#{references}"/>
-                            <ui:param name="selectedReferenceList" value="#{selectedReferenceList}" />
-                        </ui:decorate>
-                    </p:outputPanel>
+                    
                     <p:commandButton value="Remove selected reference" actionListener="#{bean[beanActionRemove]}" update="#{prefix}researchoutput" styleClass="button button-fill" process="@this #{prefix}researchoutputTable">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>

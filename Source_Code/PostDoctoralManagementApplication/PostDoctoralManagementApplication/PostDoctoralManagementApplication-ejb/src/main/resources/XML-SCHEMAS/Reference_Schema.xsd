@@ -1,60 +1,29 @@
 <?xml version="1.0"?>
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://CommonTypesNamespace/RefernceTypes">
     
     <xs:complexType name="reference">
         <xs:sequence>
             <xs:element name="type"
+                        type="xs:string"/>
+            <xs:element name="status"
                         type="xs:string"/>  
             <xs:element name="publicationName"
-                        type="xs:string"/>            
+                        type="xs:string"/> 
+            <xs:element name="publisher"
+                        type="xs:string"/> 
             <xs:element name="publicationDate"
                         type="xs:date"/>
-            <xs:element name="publicationPageLocation"
-                        type="xs:string"/>
-            <xs:element name="publicationMediumName"
-                        type="xs:string"/>
-            <xs:element name="publisher"
+            <xs:element name="publicationISBN"
                         type="xs:string"/>
             <xs:element name="publicationReferenceCode"
-                        type="xs:string"/>  
-            <xs:element name="publicationISBN"
-                        type="xs:string"/>                        
+                        type="xs:string"/>   
+            <xs:element name="publicationMediumName"
+                        type="xs:string"/>
+            <xs:element name="publicationPageLocation"
+                        type="xs:string"/>                         
         </xs:sequence>
     </xs:complexType>
-    
-    <xs:element name="ProgressReportContent"> 
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="projectAimsAttainment">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="aimAttainment" maxOccurs="unbounded" minOccurs="1" type="xs:string"/>                          
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element name="projectOutcomesAttainment">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="outcomeAttainment" maxOccurs="unbounded" minOccurs="1" type="xs:string"/>                          
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element name="researchOutput">
-                    <xs:complexType>
-                        <xs:sequence>
-                           <xs:element name="references"
-                                       type="reference" maxOccurs="unbounded"/>               
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element name="selfEvaluation"
-                            type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
     
 </xs:schema>

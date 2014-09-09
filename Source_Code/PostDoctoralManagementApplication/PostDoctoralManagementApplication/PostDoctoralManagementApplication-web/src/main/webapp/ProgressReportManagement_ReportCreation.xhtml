@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
         <ui:param name="pageTitle" value="Progress report creation"/>
         
@@ -12,12 +13,15 @@
                 <h1 class="header1">Progress report creator</h1>
                 <h2>Complete the progress report details below</h2>
             </div>
+                
+                <p:growl sticky="true" showSummary="true" globalOnly="false"/>
                 <ui:decorate template="templates/ProgressReportInput_Component.xhtml">
                     <ui:param name="bean" value="#{progressReportCreationBean.progressReportCreationDependBean}"/>
                 </ui:decorate>
                 <h:form>
                     <p:growl sticky="true" showDetail="true" globalOnly="true"/>
                     <p:commandButton value="Create progress report" action="#{progressReportCreationBean.preformProgressReportCreationRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                         <p:confirm header="Create progress report confirmation" message="Are you sure you wish to create a progress report for the application? Warning: This report can not be modified after it is created." icon="ui-icon-alert"/>
                     </p:commandButton>
                     

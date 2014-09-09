@@ -79,7 +79,7 @@ public class RenewalApplicationSelectionBean implements Serializable {
         sessionManagerBean.addObjectToSessionStorage("APPLICATION", application);
     }
     
-    public String renewApplicationWizard(Application application)
+    public String viewApplication(Application application)
     {
         selectApplication(application);
         conversationManagerBean.deregisterConversation(conversation);

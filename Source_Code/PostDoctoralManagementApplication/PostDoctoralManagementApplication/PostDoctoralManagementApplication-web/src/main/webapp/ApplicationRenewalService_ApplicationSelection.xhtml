@@ -21,7 +21,7 @@
                 <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                     <ui:param name="pendingApplications" value="#{renewalApplicationSelectionBean.applicationFilterDependBean.filteredList}"/>
                     <ui:define name="commandButtons">
-                        <p:commandButton value="Renew application" styleClass="button-fill" action="#{renewalApplicationSelectionBean.viewApplication(app)}"/> 
+                        <p:commandButton value="Renew application" styleClass="button button-fill" action="#{renewalApplicationSelectionBean.viewApplication(app)}"/> 
                     </ui:define>
                 </ui:decorate>
             </h:form>

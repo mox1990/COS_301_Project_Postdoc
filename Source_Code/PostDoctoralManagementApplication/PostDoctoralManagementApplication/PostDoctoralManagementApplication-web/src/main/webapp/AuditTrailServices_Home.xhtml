@@ -21,7 +21,11 @@
                 
                 <p:outputPanel>
                     <h:form>
-                        <p:dataTable id="AuditLog" value="#{auditTrailTableBean.entries}"  var="entry" widgetVar="AuditLogTable" filteredValue="#{auditTrailTableBean.filteredEntries}" rowKey="#{entry.entryID}" emptyMessage="No records in audit log that match the current filters">
+                        <p:dataTable id="AuditLog" value="#{auditTrailTableBean.entries}"  var="entry" widgetVar="AuditLogTable" filteredValue="#{auditTrailTableBean.filteredEntries}" rowKey="#{entry.entryID}" emptyMessage="No records in audit log that match the current filters"
+                                    paginator="true"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                    rows="25"
+                                    rowsPerPageTemplate="25">
                             <f:facet name="header">
                                 Audit log
                             </f:facet>
@@ -35,9 +39,6 @@
                             </p:column>
                             
                             <p:column headerText="Time stamp" filterBy="#{entry.timestamp}" filterMatchMode="contains">
-                                <f:facet name="filter">
-                                    <p:calendar onmouseup="PF('AuditLogTable').filter()" onchange="PF('AuditLogTable').filter()" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false" styleClass="negate-from-input"/>
-                                </f:facet>
                                 <h:outputText value="#{entry.timestamp}">
                                     <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
                                 </h:outputText>
