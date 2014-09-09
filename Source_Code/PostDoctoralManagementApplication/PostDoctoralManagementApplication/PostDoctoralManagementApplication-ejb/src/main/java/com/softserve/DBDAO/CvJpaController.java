@@ -32,16 +32,22 @@ import javax.transaction.UserTransaction;
  */
 public class CvJpaController implements Serializable {
 
-    public CvJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public CvJpaController(EntityManager em) {
+        this.emm = em;
     }
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(Cv cv) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), cv);
     }
 
-    public void create(EntityManager em, Cv cv) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, Cv cv) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
         if (cv.getExperienceList() == null) {
             cv.setExperienceList(new ArrayList<Experience>());
         }
@@ -104,6 +110,11 @@ public class CvJpaController implements Serializable {
             }
         }
  
+    }
+    
+    public void edit(Cv cv) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), cv);
     }
 
     public void edit(EntityManager em, Cv cv) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
@@ -202,7 +213,12 @@ public class CvJpaController implements Serializable {
                 
 
     }
-
+    
+    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
+        
     public void destroy(EntityManager em, String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
 
         Cv cv;

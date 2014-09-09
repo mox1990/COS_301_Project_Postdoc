@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
+import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Local;
@@ -19,9 +20,5 @@ import javax.ejb.Local;
 @Local
 public interface AuditTrailServiceLocal {
     public void logAction(AuditLog auditLog) throws Exception;
-    public List<AuditLog> findAll();
-    public List<AuditLog> findByTimestamp(Timestamp tStamp);
-    public List<AuditLog> findBetweenRange(Timestamp start, Timestamp end);
-    public AuditLog findByEntryID(Long eID);
-    public List<AuditLog> findByAction(String action);
+    public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception;
 }

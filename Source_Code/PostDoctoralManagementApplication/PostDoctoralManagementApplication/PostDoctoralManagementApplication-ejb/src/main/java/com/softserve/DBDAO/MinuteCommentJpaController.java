@@ -28,17 +28,23 @@ import javax.transaction.UserTransaction;
  */
 public class MinuteCommentJpaController implements Serializable {
 
-    public MinuteCommentJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public MinuteCommentJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em, MinuteComment minuteComment) throws RollbackFailureException, Exception {
+    
+    public void create(MinuteComment minuteComment) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), minuteComment);
+    }
+    
+    public void create(EntityManager em, MinuteComment minuteComment) throws RollbackFailureException, Exception 
+    {
 
         CommitteeMeeting meeting = minuteComment.getMeeting();
         if (meeting != null) {
@@ -61,8 +67,14 @@ public class MinuteCommentJpaController implements Serializable {
         }
 
     }
+    
+    public void edit(MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), minuteComment);
+    }
 
-    public void edit(EntityManager em, MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = minuteComment.getCommentID();
         if (findMinuteComment(id) == null) {
@@ -101,8 +113,14 @@ public class MinuteCommentJpaController implements Serializable {
         }
 
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         MinuteComment minuteComment;
         try {

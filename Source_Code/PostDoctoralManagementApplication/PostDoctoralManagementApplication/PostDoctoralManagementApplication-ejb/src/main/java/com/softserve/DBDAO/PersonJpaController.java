@@ -50,17 +50,23 @@ import javax.transaction.UserTransaction;
  */
 public class PersonJpaController implements Serializable {
 
-    public PersonJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public PersonJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(Person person) throws PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), person);
     }
 
-    public void create(EntityManager em, Person person) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, Person person) throws PreexistingEntityException, RollbackFailureException, Exception 
+    {
         if (person.getSecurityRoleList() == null) {
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
         }
@@ -444,8 +450,14 @@ public class PersonJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(Person person) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), person);
+    }
 
-    public void edit(EntityManager em, Person person) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Person person) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         String id = person.getSystemID();
         if (findPerson(id) == null) {
@@ -1048,8 +1060,14 @@ public class PersonJpaController implements Serializable {
                 
 
     }
+    
+    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, String id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Person person;
         try {

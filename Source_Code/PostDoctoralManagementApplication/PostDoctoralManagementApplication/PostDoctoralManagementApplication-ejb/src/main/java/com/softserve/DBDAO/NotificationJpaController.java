@@ -28,17 +28,23 @@ import javax.transaction.UserTransaction;
  */
 public class NotificationJpaController implements Serializable {
 
-    public NotificationJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public NotificationJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(Notification notification) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), notification);
     }
 
-    public void create(EntityManager em, Notification notification) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Notification notification) throws RollbackFailureException, Exception 
+    {
 
         Person sender = notification.getSender();
         if (sender != null) {
@@ -61,8 +67,14 @@ public class NotificationJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(Notification notification) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), notification);
+    }
 
-    public void edit(EntityManager em, Notification notification) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Notification notification) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = notification.getNotificationID();
         if (findNotification(id) == null) {
@@ -103,8 +115,14 @@ public class NotificationJpaController implements Serializable {
                 
            
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         
         Notification notification;

@@ -33,16 +33,21 @@ import javax.transaction.UserTransaction;
  */
 public class CommitteeMeetingJpaController implements Serializable {
 
-    public CommitteeMeetingJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public CommitteeMeetingJpaController(EntityManager em) {
+        this.emm = em;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
+    
+    public void create(CommitteeMeeting committeeMeeting) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), committeeMeeting);
+    }
+        
     public void create(EntityManager em, CommitteeMeeting committeeMeeting) throws RollbackFailureException, Exception {
         if (committeeMeeting.getPersonList() == null) {
             committeeMeeting.setPersonList(new ArrayList<Person>());
@@ -99,6 +104,11 @@ public class CommitteeMeetingJpaController implements Serializable {
                 oldMeetingOfMinuteCommentListMinuteComment = em.merge(oldMeetingOfMinuteCommentListMinuteComment);
             }
         }        
+    }
+    
+    public void edit(CommitteeMeeting committeeMeeting) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), committeeMeeting);
     }
 
     public void edit(EntityManager em, CommitteeMeeting committeeMeeting) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
@@ -200,6 +210,11 @@ public class CommitteeMeetingJpaController implements Serializable {
 
                 
 
+    }
+    
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
     }
 
     public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {

@@ -17,10 +17,14 @@ import com.softserve.DBEntities.Cv;
 import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.Experience;
 import com.softserve.DBEntities.Person;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.requestWrappers.ExportRequest;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -29,6 +33,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateless
 public class ExportServices implements ExportServicesLocal {
 

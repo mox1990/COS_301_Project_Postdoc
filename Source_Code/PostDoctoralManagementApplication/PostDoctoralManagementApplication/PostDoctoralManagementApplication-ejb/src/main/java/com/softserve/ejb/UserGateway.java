@@ -18,6 +18,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
@@ -34,7 +35,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Carlo
  */
-@Interceptors({AuditTrailInterceptor.class})
+@Interceptors({AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserGateway implements UserGatewayLocal

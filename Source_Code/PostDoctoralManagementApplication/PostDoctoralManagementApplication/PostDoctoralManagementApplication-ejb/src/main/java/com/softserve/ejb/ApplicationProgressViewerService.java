@@ -7,10 +7,16 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.ApplicationStageStatus;
 import com.softserve.system.Session;
@@ -20,6 +26,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -28,6 +35,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationProgressViewerService implements ApplicationProgressViewerServiceLocal {
@@ -43,6 +51,7 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
     @EJB
     private UserGatewayLocal userGatewayLocal;
     
+    
     protected UserGatewayLocal getUserGatewayServiceEJB()
     {
         return userGatewayLocal;
@@ -55,9 +64,9 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         this.emf = emf;
     }
     
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf);
     }
     
     protected List<ApplicationStageStatus> getApplicationStageStatus()
@@ -70,36 +79,20 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         return new ApplicationServicesUtil(emf);
     }
     
-    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
-    public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        return getApplicationDAO().findApplicationEntities();
+    public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception 
+    {   
+        return getDAOFactory().createApplicationDAO().findApplicationEntities();
     }
     
     
-    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception
-    {
-        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
-        try
-        {
-            //Authenticate user ownership of account
-            userGateway.authenticateUserAsOwner(session, application.getFellow());
-        } 
-        catch(AuthenticationException ex)
-        {
-            //Authenticate user privliges
-            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-            userGateway.authenticateUser(session, roles);
-        }
-                
+    { 
         List<ApplicationStageStatus> stageStatuses = getApplicationStageStatus();
         
         //Opening information

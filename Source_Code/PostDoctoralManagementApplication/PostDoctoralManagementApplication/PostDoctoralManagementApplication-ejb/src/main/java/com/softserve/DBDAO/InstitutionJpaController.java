@@ -29,17 +29,23 @@ import javax.transaction.UserTransaction;
  */
 public class InstitutionJpaController implements Serializable {
 
-    public InstitutionJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public InstitutionJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(Institution institution) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), institution);
     }
 
-    public void create(EntityManager em, Institution institution) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Institution institution) throws RollbackFailureException, Exception 
+    {
         if (institution.getFacultyList() == null) {
             institution.setFacultyList(new ArrayList<Faculty>());
         }
@@ -62,8 +68,14 @@ public class InstitutionJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), institution);
+    }
 
-    public void edit(EntityManager em, Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         Long id = institution.getInstitutionID();
         if (findInstitution(id) == null) {
@@ -108,8 +120,14 @@ public class InstitutionJpaController implements Serializable {
                 
 
     }
+    
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Institution institution;
         try {

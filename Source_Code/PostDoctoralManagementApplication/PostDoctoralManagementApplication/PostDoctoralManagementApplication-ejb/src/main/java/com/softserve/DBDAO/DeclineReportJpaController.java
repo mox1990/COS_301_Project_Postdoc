@@ -31,16 +31,21 @@ import javax.transaction.UserTransaction;
  */
 public class DeclineReportJpaController implements Serializable {
 
-    public DeclineReportJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public DeclineReportJpaController(EntityManager em) {
+        this.emm = em;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
+    
+    public void create(DeclineReport declineReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), declineReport);
+    }
+    
     public void create(EntityManager em, DeclineReport declineReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = declineReport.getApplication();
@@ -78,8 +83,14 @@ public class DeclineReportJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), declineReport);
+    }
 
-    public void edit(EntityManager em, DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         Long id = declineReport.getReportID();
         if (findDeclineReport(id) == null) {
@@ -133,8 +144,14 @@ public class DeclineReportJpaController implements Serializable {
                 
 
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         DeclineReport declineReport;
         try {
             declineReport = em.getReference(DeclineReport.class, id);

@@ -28,18 +28,24 @@ import javax.transaction.UserTransaction;
  */
 public class SecurityRoleJpaController implements Serializable {
 
-    public SecurityRoleJpaController(EntityManagerFactory emf) {
+    public SecurityRoleJpaController(EntityManager emm) {
 
-        this.emf = emf;
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(SecurityRole securityRole) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), securityRole);
     }
 
-    public void create(EntityManager em, SecurityRole securityRole) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, SecurityRole securityRole) throws RollbackFailureException, Exception 
+    {
         if (securityRole.getPersonList() == null) {
             securityRole.setPersonList(new ArrayList<Person>());
         }
@@ -57,8 +63,14 @@ public class SecurityRoleJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), securityRole);
+    }
 
-    public void edit(EntityManager em, SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = securityRole.getRoleID();
         if (findSecurityRole(id) == null) {
@@ -92,8 +104,14 @@ public class SecurityRoleJpaController implements Serializable {
                 
 
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         SecurityRole securityRole;
         try {

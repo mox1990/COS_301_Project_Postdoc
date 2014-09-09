@@ -32,17 +32,23 @@ import javax.transaction.UserTransaction;
  */
 public class EmployeeInformationJpaController implements Serializable {
 
-    public EmployeeInformationJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public EmployeeInformationJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    
+    public void create(EmployeeInformation employeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), employeeInformation);
+    }
+    
+    public void create(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
         List<String> illegalOrphanMessages = null;
         Person personOrphanCheck = employeeInformation.getPerson();
         if (personOrphanCheck != null) {
@@ -88,8 +94,14 @@ public class EmployeeInformationJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), employeeInformation);
+    }
 
-    public void edit(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         String id = employeeInformation.getEmployeeID();
         if (findEmployeeInformation(id) == null) {
@@ -157,8 +169,14 @@ public class EmployeeInformationJpaController implements Serializable {
                 
            
     }
+    
+    public void destroy(String id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, String id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, String id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         EmployeeInformation employeeInformation;
         try {

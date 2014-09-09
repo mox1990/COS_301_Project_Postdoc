@@ -49,17 +49,23 @@ import javax.transaction.UserTransaction;
  */
 public class ApplicationJpaController implements Serializable {
 
-    public ApplicationJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public ApplicationJpaController(EntityManager em) {
+        this.emm = em;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(Application application) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), application);
     }
 
-    public void create(EntityManager em, Application application) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Application application) throws RollbackFailureException, Exception 
+    {
         if (application.getPersonList() == null) {
             application.setPersonList(new ArrayList<Person>());
         }
@@ -299,8 +305,14 @@ public class ApplicationJpaController implements Serializable {
         }
 
     }
+    
+    public void edit(Application application) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), application);
+    }
 
-    public void edit(EntityManager em, Application application) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Application application) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
         Long id = application.getApplicationID();
         if (findApplication(id) == null) {
             throw new NonexistentEntityException("The application with id " + id + " no longer exists.");
@@ -669,8 +681,14 @@ public class ApplicationJpaController implements Serializable {
         }
 
     }
+    
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Application application;
         try {

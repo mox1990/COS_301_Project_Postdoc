@@ -22,6 +22,7 @@ import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.sql.Timestamp;
@@ -42,7 +43,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateful
 @TransactionManagement(TransactionManagementType.BEAN)
 public class MeetingManagementService implements MeetingManagementServiceLocal {

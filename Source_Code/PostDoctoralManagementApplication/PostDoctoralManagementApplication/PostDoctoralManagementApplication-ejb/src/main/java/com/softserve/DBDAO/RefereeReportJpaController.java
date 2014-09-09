@@ -28,17 +28,23 @@ import javax.transaction.UserTransaction;
  */
 public class RefereeReportJpaController implements Serializable {
 
-    public RefereeReportJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public RefereeReportJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(RefereeReport refereeReport) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), refereeReport);
     }
 
-    public void create(EntityManager em, RefereeReport refereeReport) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, RefereeReport refereeReport) throws RollbackFailureException, Exception 
+    {
 
         Application applicationID = refereeReport.getApplicationID();
         if (applicationID != null) {
@@ -61,8 +67,14 @@ public class RefereeReportJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), refereeReport);
+    }
 
-    public void edit(EntityManager em, RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         Long id = refereeReport.getReportID();
         if (findRefereeReport(id) == null) {
@@ -103,8 +115,14 @@ public class RefereeReportJpaController implements Serializable {
         
             
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         RefereeReport refereeReport;
         try {

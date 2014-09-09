@@ -27,17 +27,24 @@ import javax.transaction.UserTransaction;
  */
 public class ExperienceJpaController implements Serializable {
 
-    public ExperienceJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public ExperienceJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
+    
+    public void create(Experience experience) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), experience);
+    }
+    
 
-    public void create(EntityManager em, Experience experience) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, Experience experience) throws RollbackFailureException, Exception 
+    {
         Cv cv = experience.getCv();
         if (cv != null) {
             cv = em.getReference(cv.getClass(), cv.getCvID());
@@ -50,8 +57,14 @@ public class ExperienceJpaController implements Serializable {
         }
 
     }
+    
+    public void edit(Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), experience);
+    }
 
-    public void edit(EntityManager em, Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         Long id = experience.getExperienceID();
         if (findExperience(id) == null) {
@@ -78,7 +91,12 @@ public class ExperienceJpaController implements Serializable {
             
 
     }
-
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
+    
     public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
 
         Experience experience;

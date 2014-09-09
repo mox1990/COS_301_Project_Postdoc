@@ -29,19 +29,24 @@ import javax.transaction.UserTransaction;
  */
 public class AmmendRequestJpaController implements Serializable {
 
-    public AmmendRequestJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public AmmendRequestJpaController(EntityManager em) {
+        this.emm = em;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
+    
+    public void create(AmmendRequest ammendRequest) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), ammendRequest);
+    }
+    
     public void create(EntityManager em, AmmendRequest ammendRequest) throws RollbackFailureException, Exception {
 
-        em = getEntityManager();
+
         Application application = ammendRequest.getApplication();
         if (application != null) {
             application = em.getReference(application.getClass(), application.getApplicationID());
@@ -62,6 +67,11 @@ public class AmmendRequestJpaController implements Serializable {
             creator = em.merge(creator);
         }
   
+    }
+    
+    public void edit( AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
+    { 
+        edit(getEntityManager(), ammendRequest);
     }
 
     public void edit(EntityManager em, AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -104,6 +114,11 @@ public class AmmendRequestJpaController implements Serializable {
             creatorNew = em.merge(creatorNew);
         }  
 
+    }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
     }
 
     public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 

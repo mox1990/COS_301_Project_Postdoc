@@ -27,17 +27,23 @@ import javax.transaction.UserTransaction;
  */
 public class AuditLogJpaController implements Serializable {
 
-    public AuditLogJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public AuditLogJpaController(EntityManager em) {
+        this.emm = em;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em,AuditLog auditLog) throws RollbackFailureException, Exception {
+    
+    public void create(AuditLog auditLog) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), auditLog);
+    }
+    
+    public void create(EntityManager em,AuditLog auditLog) throws RollbackFailureException, Exception 
+    {
 
         Person person = auditLog.getPerson();
         if (person != null) {
@@ -51,8 +57,14 @@ public class AuditLogJpaController implements Serializable {
         }
 
     }
+    
+    public void edit(AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception
+    {
+        edit(getEntityManager(), auditLog);
+    }
 
-    public void edit(EntityManager em, AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception
+    {
         Long id = auditLog.getEntryID();
         if (findAuditLog(id) == null) {
             throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.");
@@ -75,6 +87,11 @@ public class AuditLogJpaController implements Serializable {
             personNew = em.merge(personNew);
         }       
 
+    }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager() ,id);
     }
 
     public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {

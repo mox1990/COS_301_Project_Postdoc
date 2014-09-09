@@ -31,17 +31,23 @@ import javax.transaction.UserTransaction;
  */
 public class RecommendationReportJpaController implements Serializable {
 
-    public RecommendationReportJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public RecommendationReportJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(RecommendationReport recommendationReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), recommendationReport);
     }
 
-    public void create(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = recommendationReport.getApplication();
         if (applicationOrphanCheck != null) {
@@ -78,8 +84,14 @@ public class RecommendationReportJpaController implements Serializable {
         }
 
     }
+    
+    public void edit(RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), recommendationReport);
+    }
 
-    public void edit(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = recommendationReport.getReportID();
         if (findRecommendationReport(id) == null) {
@@ -132,6 +144,11 @@ public class RecommendationReportJpaController implements Serializable {
 
                 
 
+    }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
     }
 
     public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 

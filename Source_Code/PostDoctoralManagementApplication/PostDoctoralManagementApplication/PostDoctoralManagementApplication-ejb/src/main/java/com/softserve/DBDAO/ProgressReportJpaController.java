@@ -27,18 +27,24 @@ import javax.transaction.UserTransaction;
  */
 public class ProgressReportJpaController implements Serializable {
 
-    public ProgressReportJpaController(EntityManagerFactory emf) {
+    public ProgressReportJpaController(EntityManager emm) {
 
-        this.emf = emf;
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(ProgressReport progressReport) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), progressReport);
     }
 
-    public void create(EntityManager em, ProgressReport progressReport) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, ProgressReport progressReport) throws RollbackFailureException, Exception 
+    {
 
         Application application = progressReport.getApplication();
         if (application != null) {
@@ -52,8 +58,14 @@ public class ProgressReportJpaController implements Serializable {
         }
 
     }
-
-    public void edit(EntityManager em, ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+    
+    public void edit(ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), progressReport);
+    }
+    
+    public void edit(EntityManager em, ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = progressReport.getReportID();
         if (findProgressReport(id) == null) {
@@ -80,8 +92,14 @@ public class ProgressReportJpaController implements Serializable {
                 
 
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         ProgressReport progressReport;
         try {

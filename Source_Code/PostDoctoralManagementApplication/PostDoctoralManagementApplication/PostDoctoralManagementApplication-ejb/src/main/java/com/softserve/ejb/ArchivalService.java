@@ -14,6 +14,7 @@ import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.AuditLogJpaController;
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.DepartmentJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
@@ -63,6 +64,9 @@ import com.softserve.DBEntities.ResearchFellowInformation;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.constants.PersistenceConstants;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.io.IOException;
@@ -80,6 +84,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceUnit;
@@ -89,6 +94,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ArchivalService implements ArchivalServiceLocal {
@@ -108,139 +114,14 @@ public class ArchivalService implements ArchivalServiceLocal {
     {
     }
     
-    protected AcademicQualificationJpaController getAcademicQualificationJpaController(EntityManagerFactory emf)
+    protected DAOFactory getDAOFactoryWorking()
     {
-        return new AcademicQualificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emfWorking);
     }
     
-    protected AddressJpaController getAddressJpaController(EntityManagerFactory emf)
+    protected DAOFactory getDAOFactoryBackup()
     {
-        return new AddressJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected AmmendRequestJpaController getAmmendRequestJpaController(EntityManagerFactory emf)
-    {
-        return new AmmendRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationJpaController getApplicationJpaController(EntityManagerFactory emf)
-    {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestJpaController(EntityManagerFactory emf)
-    {
-        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected AuditLogJpaController getAuditLogJpaController(EntityManagerFactory emf)
-    {
-        return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected CommitteeMeetingJpaController getCommitteeMeetingJpaController(EntityManagerFactory emf)
-    {
-        return new CommitteeMeetingJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected CvJpaController getCvJpaController(EntityManagerFactory emf)
-    {
-        return new CvJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected DeclineReportJpaController getDeclineReportJpaController(EntityManagerFactory emf)
-    {
-        return new DeclineReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected DepartmentJpaController getDepartmentJpaController(EntityManagerFactory emf)
-    {
-        return new DepartmentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected EligiblityReportJpaController getEligiblityReportJpaController(EntityManagerFactory emf)
-    {
-        return new EligiblityReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected EmployeeInformationJpaController getEmployeeInformationJpaController(EntityManagerFactory emf)
-    {
-        return new EmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected EndorsementJpaController getEndorsementJpaController(EntityManagerFactory emf)
-    {
-        return new EndorsementJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ExperienceJpaController getExperienceJpaController(EntityManagerFactory emf)
-    {
-        return new ExperienceJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected FacultyJpaController getFacultyJpaController(EntityManagerFactory emf)
-    {
-        return new FacultyJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ForwardAndRewindReportJpaController getForwardAndRewindReportJpaController(EntityManagerFactory emf)
-    {
-        return new ForwardAndRewindReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected FundingCostJpaController getFundingCostJpaController(EntityManagerFactory emf)
-    {
-        return new FundingCostJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected FundingReportJpaController getFundingReportJpaController(EntityManagerFactory emf)
-    {
-        return new FundingReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected InstitutionJpaController getInstitutionJpaController(EntityManagerFactory emf)
-    {
-        return new InstitutionJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected MinuteCommentJpaController getMinuteCommentJpaController(EntityManagerFactory emf)
-    {
-        return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected NotificationJpaController getNotificationJpaController(EntityManagerFactory emf)
-    {
-        return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected PersonJpaController getPersonJpaController(EntityManagerFactory emf)
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ProgressReportJpaController getProgressReportJpaController(EntityManagerFactory emf)
-    {
-        return new ProgressReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected RecommendationReportJpaController getRecommendationReportJpaController(EntityManagerFactory emf)
-    {
-        return new RecommendationReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected RefereeReportJpaController getRefereeReportJpaController(EntityManagerFactory emf)
-    {
-        return new RefereeReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ResearchFellowInformationJpaController getResearchFellowInformationJpaController(EntityManagerFactory emf)
-    {
-        return new ResearchFellowInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected SecurityRoleJpaController getSecurityRoleJpaController(EntityManagerFactory emf)
-    {
-        return new SecurityRoleJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emfWorking);
     }
     
     //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
@@ -250,62 +131,65 @@ public class ArchivalService implements ArchivalServiceLocal {
     {
         System.out.println("Running Backup...");
         // Setup Working DAOs...
-        AcademicQualificationJpaController workingAcademicQualificationJpaController = getAcademicQualificationJpaController(emfWorking);
-        AddressJpaController workingAddressJpaController = getAddressJpaController(emfWorking);
-        AmmendRequestJpaController workingAmmendRequestJpaController = getAmmendRequestJpaController(emfWorking);
-        ApplicationJpaController workingApplicationJpaController = getApplicationJpaController(emfWorking);
-        ApplicationReviewRequestJpaController workingApplicationReviewRequestJpaController = getApplicationReviewRequestJpaController(emfWorking);
-        AuditLogJpaController workingAuditLogJpaController = getAuditLogJpaController(emfWorking);
-        CommitteeMeetingJpaController workingCommitteeMeetingJpaController = getCommitteeMeetingJpaController(emfWorking);
-        CvJpaController workingCvJpaController = getCvJpaController(emfWorking);
-        DeclineReportJpaController workingDeclineReportJpaController = getDeclineReportJpaController(emfWorking);
-        DepartmentJpaController workingDepartmentJpaController = getDepartmentJpaController(emfWorking);
-        EligiblityReportJpaController workingEligiblityReportJpaController = getEligiblityReportJpaController(emfWorking);
-        EmployeeInformationJpaController workingEmployeeInformationJpaController = getEmployeeInformationJpaController(emfWorking);
-        EndorsementJpaController workingEndorsementJpaController = getEndorsementJpaController(emfWorking);
-        ExperienceJpaController workingExperienceJpaController = getExperienceJpaController(emfWorking);
-        FacultyJpaController workingFacultyJpaController = getFacultyJpaController(emfWorking);
-        ForwardAndRewindReportJpaController workingForwardAndRewindReportJpaController = getForwardAndRewindReportJpaController(emfWorking);
-        FundingCostJpaController workingFundingCostJpaController = getFundingCostJpaController(emfWorking);
-        FundingReportJpaController workingFundingReportJpaController = getFundingReportJpaController(emfWorking);
-        InstitutionJpaController workingInstitutionJpaController = getInstitutionJpaController(emfWorking);
-        MinuteCommentJpaController workingMinuteCommentJpaController = getMinuteCommentJpaController(emfWorking);
-        NotificationJpaController workingNotificationJpaController = getNotificationJpaController(emfWorking);
-        PersonJpaController workingPersonJpaController = getPersonJpaController(emfWorking);
-        ProgressReportJpaController workingProgressReportJpaController = getProgressReportJpaController(emfWorking);
-        RecommendationReportJpaController workingRecommendationReportJpaController = getRecommendationReportJpaController(emfWorking);
-        RefereeReportJpaController workingRefereeReportJpaController = getRefereeReportJpaController(emfWorking);
-        ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = getResearchFellowInformationJpaController(emfWorking);
-        SecurityRoleJpaController workingSecurityRoleJpaController = getSecurityRoleJpaController(emfWorking);  
+        DAOFactory daoFactoryWorking = getDAOFactoryWorking();
+        AcademicQualificationJpaController workingAcademicQualificationJpaController = daoFactoryWorking.createAcademicQualificationDAO();
+        AddressJpaController workingAddressJpaController = daoFactoryWorking.createAddressDAO();
+        AmmendRequestJpaController workingAmmendRequestJpaController = daoFactoryWorking.createAmmendRequestDAO();
+        ApplicationJpaController workingApplicationJpaController = daoFactoryWorking.createApplicationDAO();
+        ApplicationReviewRequestJpaController workingApplicationReviewRequestJpaController = daoFactoryWorking.createApplicationReviewRequestDAO();
+        AuditLogJpaController workingAuditLogJpaController = daoFactoryWorking.createAuditLogDAO();
+        CommitteeMeetingJpaController workingCommitteeMeetingJpaController = daoFactoryWorking.createCommitteeMeetingDAO();
+        CvJpaController workingCvJpaController = daoFactoryWorking.createCvDAO();
+        DeclineReportJpaController workingDeclineReportJpaController = daoFactoryWorking.createDeclineReportDAO();
+        DepartmentJpaController workingDepartmentJpaController = daoFactoryWorking.createDepartmentDAO();
+        EligiblityReportJpaController workingEligiblityReportJpaController = daoFactoryWorking.createEligiblityReportDAO();
+        EmployeeInformationJpaController workingEmployeeInformationJpaController = daoFactoryWorking.createEmployeeInformationDAO();
+        EndorsementJpaController workingEndorsementJpaController = daoFactoryWorking.createEndorsementDAO();
+        ExperienceJpaController workingExperienceJpaController = daoFactoryWorking.createExperienceDAO();
+        FacultyJpaController workingFacultyJpaController = daoFactoryWorking.createFacultyDAO();
+        ForwardAndRewindReportJpaController workingForwardAndRewindReportJpaController = daoFactoryWorking.createForwardAndRewindReportDAO();
+        FundingCostJpaController workingFundingCostJpaController = daoFactoryWorking.createFundingCostJpaController();
+        FundingReportJpaController workingFundingReportJpaController = daoFactoryWorking.createFundingReportDAO();
+        InstitutionJpaController workingInstitutionJpaController = daoFactoryWorking.createInstitutionDAO();
+        MinuteCommentJpaController workingMinuteCommentJpaController = daoFactoryWorking.createMinuteCommentDAO();
+        NotificationJpaController workingNotificationJpaController = daoFactoryWorking.createNotificationDAO();
+        PersonJpaController workingPersonJpaController = daoFactoryWorking.createPersonDAO();
+        ProgressReportJpaController workingProgressReportJpaController = daoFactoryWorking.createProgressReportDAO();
+        RecommendationReportJpaController workingRecommendationReportJpaController = daoFactoryWorking.createRecommendationReportDAO();
+        RefereeReportJpaController workingRefereeReportJpaController = daoFactoryWorking.createRefereeReportDAO();
+        ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = daoFactoryWorking.createResearchFellowInformationDAO();
+        SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleJpaController();  
         
-        // Setup Back DAOs...
-        AcademicQualificationJpaController backupAcademicQualificationJpaController = getAcademicQualificationJpaController(emfBackup);
-        AddressJpaController backupAddressJpaController = getAddressJpaController(emfBackup);
-        AmmendRequestJpaController backupAmmendRequestJpaController = getAmmendRequestJpaController(emfBackup);
-        ApplicationJpaController backupApplicationJpaController = getApplicationJpaController(emfBackup);
-        ApplicationReviewRequestJpaController backupApplicationReviewRequestJpaController = getApplicationReviewRequestJpaController(emfBackup);
-        AuditLogJpaController backupAuditLogJpaController = getAuditLogJpaController(emfBackup);
-        CommitteeMeetingJpaController backupCommitteeMeetingJpaController = getCommitteeMeetingJpaController(emfBackup);
-        CvJpaController backupCvJpaController = getCvJpaController(emfBackup);
-        DeclineReportJpaController backupDeclineReportJpaController = getDeclineReportJpaController(emfBackup);
-        DepartmentJpaController backupDepartmentJpaController = getDepartmentJpaController(emfBackup);
-        EligiblityReportJpaController backupEligiblityReportJpaController = getEligiblityReportJpaController(emfBackup);
-        EmployeeInformationJpaController backupEmployeeInformationJpaController = getEmployeeInformationJpaController(emfBackup);
-        EndorsementJpaController backupEndorsementJpaController = getEndorsementJpaController(emfBackup);
-        ExperienceJpaController backupExperienceJpaController = getExperienceJpaController(emfBackup);
-        FacultyJpaController backupFacultyJpaController = getFacultyJpaController(emfBackup);
-        ForwardAndRewindReportJpaController backupForwardAndRewindReportJpaController = getForwardAndRewindReportJpaController(emfBackup);
-        FundingCostJpaController backupFundingCostJpaController = getFundingCostJpaController(emfBackup);
-        FundingReportJpaController backupFundingReportJpaController = getFundingReportJpaController(emfBackup);
-        InstitutionJpaController backupInstitutionJpaController = getInstitutionJpaController(emfBackup);
-        MinuteCommentJpaController backupMinuteCommentJpaController = getMinuteCommentJpaController(emfBackup);
-        NotificationJpaController backupNotificationJpaController = getNotificationJpaController(emfBackup);
-        PersonJpaController backupPersonJpaController = getPersonJpaController(emfBackup);
-        ProgressReportJpaController backupProgressReportJpaController = getProgressReportJpaController(emfBackup);
-        RecommendationReportJpaController backupRecommendationReportJpaController = getRecommendationReportJpaController(emfBackup);
-        RefereeReportJpaController backupRefereeReportJpaController = getRefereeReportJpaController(emfBackup);
-        ResearchFellowInformationJpaController backupResearchFellowInformationJpaController = getResearchFellowInformationJpaController(emfBackup);
-        SecurityRoleJpaController backupSecurityRoleJpaController = getSecurityRoleJpaController(emfBackup);
+        DAOFactory daoFactoryBackup = getDAOFactoryBackup();
+        AcademicQualificationJpaController backupAcademicQualificationJpaController = daoFactoryBackup.createAcademicQualificationDAO();
+        AddressJpaController backupAddressJpaController = daoFactoryBackup.createAddressDAO();
+        AmmendRequestJpaController backupAmmendRequestJpaController = daoFactoryBackup.createAmmendRequestDAO();
+        ApplicationJpaController backupApplicationJpaController = daoFactoryBackup.createApplicationDAO();
+        ApplicationReviewRequestJpaController backupApplicationReviewRequestJpaController = daoFactoryBackup.createApplicationReviewRequestDAO();
+        AuditLogJpaController backupAuditLogJpaController = daoFactoryBackup.createAuditLogDAO();
+        CommitteeMeetingJpaController backupCommitteeMeetingJpaController = daoFactoryBackup.createCommitteeMeetingDAO();
+        CvJpaController backupCvJpaController = daoFactoryBackup.createCvDAO();
+        DeclineReportJpaController backupDeclineReportJpaController = daoFactoryBackup.createDeclineReportDAO();
+        DepartmentJpaController backupDepartmentJpaController = daoFactoryBackup.createDepartmentDAO();
+        EligiblityReportJpaController backupEligiblityReportJpaController = daoFactoryBackup.createEligiblityReportDAO();
+        EmployeeInformationJpaController backupEmployeeInformationJpaController = daoFactoryBackup.createEmployeeInformationDAO();
+        EndorsementJpaController backupEndorsementJpaController = daoFactoryBackup.createEndorsementDAO();
+        ExperienceJpaController backupExperienceJpaController = daoFactoryBackup.createExperienceDAO();
+        FacultyJpaController backupFacultyJpaController = daoFactoryBackup.createFacultyDAO();
+        ForwardAndRewindReportJpaController backupForwardAndRewindReportJpaController = daoFactoryBackup.createForwardAndRewindReportDAO();
+        FundingCostJpaController backupFundingCostJpaController = daoFactoryBackup.createFundingCostJpaController();
+        FundingReportJpaController backupFundingReportJpaController = daoFactoryBackup.createFundingReportDAO();
+        InstitutionJpaController backupInstitutionJpaController = daoFactoryBackup.createInstitutionDAO();
+        MinuteCommentJpaController backupMinuteCommentJpaController = daoFactoryBackup.createMinuteCommentDAO();
+        NotificationJpaController backupNotificationJpaController = daoFactoryBackup.createNotificationDAO();
+        PersonJpaController backupPersonJpaController = daoFactoryBackup.createPersonDAO();
+        ProgressReportJpaController backupProgressReportJpaController = daoFactoryBackup.createProgressReportDAO();
+        RecommendationReportJpaController backupRecommendationReportJpaController = daoFactoryBackup.createRecommendationReportDAO();
+        RefereeReportJpaController backupRefereeReportJpaController = daoFactoryBackup.createRefereeReportDAO();
+        ResearchFellowInformationJpaController backupResearchFellowInformationJpaController = daoFactoryBackup.createResearchFellowInformationDAO();
+        SecurityRoleJpaController backupSecurityRoleJpaController = daoFactoryBackup.createSecurityRoleJpaController();  
+        
+   
         
         for(Person oldPerson: workingPersonJpaController.findPersonEntities())
         {
@@ -1276,62 +1160,63 @@ public class ArchivalService implements ArchivalServiceLocal {
     public void restoreBackupToWorkingDatabase(Session session)
     {
         // Setup Working DAOs...
-        AcademicQualificationJpaController workingAcademicQualificationJpaController = getAcademicQualificationJpaController(emfWorking);
-        AddressJpaController workingAddressJpaController = getAddressJpaController(emfWorking);
-        AmmendRequestJpaController workingAmmendRequestJpaController = getAmmendRequestJpaController(emfWorking);
-        ApplicationJpaController workingApplicationJpaController = getApplicationJpaController(emfWorking);
-        ApplicationReviewRequestJpaController workingApplicationReviewRequestJpaController = getApplicationReviewRequestJpaController(emfWorking);
-        AuditLogJpaController workingAuditLogJpaController = getAuditLogJpaController(emfWorking);
-        CommitteeMeetingJpaController workingCommitteeMeetingJpaController = getCommitteeMeetingJpaController(emfWorking);
-        CvJpaController workingCvJpaController = getCvJpaController(emfWorking);
-        DeclineReportJpaController workingDeclineReportJpaController = getDeclineReportJpaController(emfWorking);
-        DepartmentJpaController workingDepartmentJpaController = getDepartmentJpaController(emfWorking);
-        EligiblityReportJpaController workingEligiblityReportJpaController = getEligiblityReportJpaController(emfWorking);
-        EmployeeInformationJpaController workingEmployeeInformationJpaController = getEmployeeInformationJpaController(emfWorking);
-        EndorsementJpaController workingEndorsementJpaController = getEndorsementJpaController(emfWorking);
-        ExperienceJpaController workingExperienceJpaController = getExperienceJpaController(emfWorking);
-        FacultyJpaController workingFacultyJpaController = getFacultyJpaController(emfWorking);
-        ForwardAndRewindReportJpaController workingForwardAndRewindReportJpaController = getForwardAndRewindReportJpaController(emfWorking);
-        FundingCostJpaController workingFundingCostJpaController = getFundingCostJpaController(emfWorking);
-        FundingReportJpaController workingFundingReportJpaController = getFundingReportJpaController(emfWorking);
-        InstitutionJpaController workingInstitutionJpaController = getInstitutionJpaController(emfWorking);
-        MinuteCommentJpaController workingMinuteCommentJpaController = getMinuteCommentJpaController(emfWorking);
-        NotificationJpaController workingNotificationJpaController = getNotificationJpaController(emfWorking);
-        PersonJpaController workingPersonJpaController = getPersonJpaController(emfWorking);
-        ProgressReportJpaController workingProgressReportJpaController = getProgressReportJpaController(emfWorking);
-        RecommendationReportJpaController workingRecommendationReportJpaController = getRecommendationReportJpaController(emfWorking);
-        RefereeReportJpaController workingRefereeReportJpaController = getRefereeReportJpaController(emfWorking);
-        ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = getResearchFellowInformationJpaController(emfWorking);
-        SecurityRoleJpaController workingSecurityRoleJpaController = getSecurityRoleJpaController(emfWorking);  
+        DAOFactory daoFactoryWorking = getDAOFactoryWorking();
+        AcademicQualificationJpaController workingAcademicQualificationJpaController = daoFactoryWorking.createAcademicQualificationDAO();
+        AddressJpaController workingAddressJpaController = daoFactoryWorking.createAddressDAO();
+        AmmendRequestJpaController workingAmmendRequestJpaController = daoFactoryWorking.createAmmendRequestDAO();
+        ApplicationJpaController workingApplicationJpaController = daoFactoryWorking.createApplicationDAO();
+        ApplicationReviewRequestJpaController workingApplicationReviewRequestJpaController = daoFactoryWorking.createApplicationReviewRequestDAO();
+        AuditLogJpaController workingAuditLogJpaController = daoFactoryWorking.createAuditLogDAO();
+        CommitteeMeetingJpaController workingCommitteeMeetingJpaController = daoFactoryWorking.createCommitteeMeetingDAO();
+        CvJpaController workingCvJpaController = daoFactoryWorking.createCvDAO();
+        DeclineReportJpaController workingDeclineReportJpaController = daoFactoryWorking.createDeclineReportDAO();
+        DepartmentJpaController workingDepartmentJpaController = daoFactoryWorking.createDepartmentDAO();
+        EligiblityReportJpaController workingEligiblityReportJpaController = daoFactoryWorking.createEligiblityReportDAO();
+        EmployeeInformationJpaController workingEmployeeInformationJpaController = daoFactoryWorking.createEmployeeInformationDAO();
+        EndorsementJpaController workingEndorsementJpaController = daoFactoryWorking.createEndorsementDAO();
+        ExperienceJpaController workingExperienceJpaController = daoFactoryWorking.createExperienceDAO();
+        FacultyJpaController workingFacultyJpaController = daoFactoryWorking.createFacultyDAO();
+        ForwardAndRewindReportJpaController workingForwardAndRewindReportJpaController = daoFactoryWorking.createForwardAndRewindReportDAO();
+        FundingCostJpaController workingFundingCostJpaController = daoFactoryWorking.createFundingCostJpaController();
+        FundingReportJpaController workingFundingReportJpaController = daoFactoryWorking.createFundingReportDAO();
+        InstitutionJpaController workingInstitutionJpaController = daoFactoryWorking.createInstitutionDAO();
+        MinuteCommentJpaController workingMinuteCommentJpaController = daoFactoryWorking.createMinuteCommentDAO();
+        NotificationJpaController workingNotificationJpaController = daoFactoryWorking.createNotificationDAO();
+        PersonJpaController workingPersonJpaController = daoFactoryWorking.createPersonDAO();
+        ProgressReportJpaController workingProgressReportJpaController = daoFactoryWorking.createProgressReportDAO();
+        RecommendationReportJpaController workingRecommendationReportJpaController = daoFactoryWorking.createRecommendationReportDAO();
+        RefereeReportJpaController workingRefereeReportJpaController = daoFactoryWorking.createRefereeReportDAO();
+        ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = daoFactoryWorking.createResearchFellowInformationDAO();
+        SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleJpaController();  
         
-        // Setup Back DAOs...
-        AcademicQualificationJpaController backupAcademicQualificationJpaController = getAcademicQualificationJpaController(emfBackup);
-        AddressJpaController backupAddressJpaController = getAddressJpaController(emfBackup);
-        AmmendRequestJpaController backupAmmendRequestJpaController = getAmmendRequestJpaController(emfBackup);
-        ApplicationJpaController backupApplicationJpaController = getApplicationJpaController(emfBackup);
-        ApplicationReviewRequestJpaController backupApplicationReviewRequestJpaController = getApplicationReviewRequestJpaController(emfBackup);
-        AuditLogJpaController backupAuditLogJpaController = getAuditLogJpaController(emfBackup);
-        CommitteeMeetingJpaController backupCommitteeMeetingJpaController = getCommitteeMeetingJpaController(emfBackup);
-        CvJpaController backupCvJpaController = getCvJpaController(emfBackup);
-        DeclineReportJpaController backupDeclineReportJpaController = getDeclineReportJpaController(emfBackup);
-        DepartmentJpaController backupDepartmentJpaController = getDepartmentJpaController(emfBackup);
-        EligiblityReportJpaController backupEligiblityReportJpaController = getEligiblityReportJpaController(emfBackup);
-        EmployeeInformationJpaController backupEmployeeInformationJpaController = getEmployeeInformationJpaController(emfBackup);
-        EndorsementJpaController backupEndorsementJpaController = getEndorsementJpaController(emfBackup);
-        ExperienceJpaController backupExperienceJpaController = getExperienceJpaController(emfBackup);
-        FacultyJpaController backupFacultyJpaController = getFacultyJpaController(emfBackup);
-        ForwardAndRewindReportJpaController backupForwardAndRewindReportJpaController = getForwardAndRewindReportJpaController(emfBackup);
-        FundingCostJpaController backupFundingCostJpaController = getFundingCostJpaController(emfBackup);
-        FundingReportJpaController backupFundingReportJpaController = getFundingReportJpaController(emfBackup);
-        InstitutionJpaController backupInstitutionJpaController = getInstitutionJpaController(emfBackup);
-        MinuteCommentJpaController backupMinuteCommentJpaController = getMinuteCommentJpaController(emfBackup);
-        NotificationJpaController backupNotificationJpaController = getNotificationJpaController(emfBackup);
-        PersonJpaController backupPersonJpaController = getPersonJpaController(emfBackup);
-        ProgressReportJpaController backupProgressReportJpaController = getProgressReportJpaController(emfBackup);
-        RecommendationReportJpaController backupRecommendationReportJpaController = getRecommendationReportJpaController(emfBackup);
-        RefereeReportJpaController backupRefereeReportJpaController = getRefereeReportJpaController(emfBackup);
-        ResearchFellowInformationJpaController backupResearchFellowInformationJpaController = getResearchFellowInformationJpaController(emfBackup);
-        SecurityRoleJpaController backupSecurityRoleJpaController = getSecurityRoleJpaController(emfBackup);
+        DAOFactory daoFactoryBackup = getDAOFactoryBackup();
+        AcademicQualificationJpaController backupAcademicQualificationJpaController = daoFactoryBackup.createAcademicQualificationDAO();
+        AddressJpaController backupAddressJpaController = daoFactoryBackup.createAddressDAO();
+        AmmendRequestJpaController backupAmmendRequestJpaController = daoFactoryBackup.createAmmendRequestDAO();
+        ApplicationJpaController backupApplicationJpaController = daoFactoryBackup.createApplicationDAO();
+        ApplicationReviewRequestJpaController backupApplicationReviewRequestJpaController = daoFactoryBackup.createApplicationReviewRequestDAO();
+        AuditLogJpaController backupAuditLogJpaController = daoFactoryBackup.createAuditLogDAO();
+        CommitteeMeetingJpaController backupCommitteeMeetingJpaController = daoFactoryBackup.createCommitteeMeetingDAO();
+        CvJpaController backupCvJpaController = daoFactoryBackup.createCvDAO();
+        DeclineReportJpaController backupDeclineReportJpaController = daoFactoryBackup.createDeclineReportDAO();
+        DepartmentJpaController backupDepartmentJpaController = daoFactoryBackup.createDepartmentDAO();
+        EligiblityReportJpaController backupEligiblityReportJpaController = daoFactoryBackup.createEligiblityReportDAO();
+        EmployeeInformationJpaController backupEmployeeInformationJpaController = daoFactoryBackup.createEmployeeInformationDAO();
+        EndorsementJpaController backupEndorsementJpaController = daoFactoryBackup.createEndorsementDAO();
+        ExperienceJpaController backupExperienceJpaController = daoFactoryBackup.createExperienceDAO();
+        FacultyJpaController backupFacultyJpaController = daoFactoryBackup.createFacultyDAO();
+        ForwardAndRewindReportJpaController backupForwardAndRewindReportJpaController = daoFactoryBackup.createForwardAndRewindReportDAO();
+        FundingCostJpaController backupFundingCostJpaController = daoFactoryBackup.createFundingCostJpaController();
+        FundingReportJpaController backupFundingReportJpaController = daoFactoryBackup.createFundingReportDAO();
+        InstitutionJpaController backupInstitutionJpaController = daoFactoryBackup.createInstitutionDAO();
+        MinuteCommentJpaController backupMinuteCommentJpaController = daoFactoryBackup.createMinuteCommentDAO();
+        NotificationJpaController backupNotificationJpaController = daoFactoryBackup.createNotificationDAO();
+        PersonJpaController backupPersonJpaController = daoFactoryBackup.createPersonDAO();
+        ProgressReportJpaController backupProgressReportJpaController = daoFactoryBackup.createProgressReportDAO();
+        RecommendationReportJpaController backupRecommendationReportJpaController = daoFactoryBackup.createRecommendationReportDAO();
+        RefereeReportJpaController backupRefereeReportJpaController = daoFactoryBackup.createRefereeReportDAO();
+        ResearchFellowInformationJpaController backupResearchFellowInformationJpaController = daoFactoryBackup.createResearchFellowInformationDAO();
+        SecurityRoleJpaController backupSecurityRoleJpaController = daoFactoryBackup.createSecurityRoleJpaController();  
         
         
     }

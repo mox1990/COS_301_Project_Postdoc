@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
@@ -17,8 +18,10 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -38,7 +41,7 @@ import javax.persistence.PersistenceUnit;
  *
  * @author K
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
@@ -79,18 +82,9 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
      *
      * @return
      */
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected ProgressReportManagementService getProgressReportMangementEJB()
-    {
-        return new ProgressReportManagementService(emf);
+        return new DAOFactory(emf);
     }
     
     /**
@@ -114,11 +108,13 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
+    @TransactionMethod
     @Override
     public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws Exception
     {
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        ApplicationJpaController applicationJpaController = getDAOFactory().createApplicationDAO();
+        
         List<Application> applications = applicationJpaController.findAllRenewalApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
         if(applications.isEmpty())
         {
@@ -142,7 +138,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     @Override
     public boolean doesApplicationHaveFinalProgressReport(Session session,Application application) throws Exception
     {
-        return getProgressReportMangementEJB().doesApplicationHaveFinalProgressReport(session,application);
+        return getProgressReportManagementServiceEJB().doesApplicationHaveFinalProgressReport(session,application);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
@@ -171,7 +167,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     @Override
     public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
     {
-        ProgressReportManagementServiceLocal progressReportManagementService = getProgressReportMangementEJB();
+        ProgressReportManagementServiceLocal progressReportManagementService = getProgressReportManagementServiceEJB();
         
         if(progressReportManagementService.getNumberOfProgressReportsRequiredByApplication(session,application) - 1 == application.getProgressReportList().size())
         {
@@ -185,11 +181,12 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
+    @TransactionMethod
     @Override
     public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception
     {
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        ApplicationJpaController applicationJpaController = getDAOFactory().createApplicationDAO();
         
         application.setTimestamp(getGregorianCalendarUTIL().getTime());
         application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);

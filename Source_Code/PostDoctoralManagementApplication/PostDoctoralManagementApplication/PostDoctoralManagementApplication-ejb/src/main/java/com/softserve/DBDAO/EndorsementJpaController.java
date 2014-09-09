@@ -31,17 +31,23 @@ import javax.transaction.UserTransaction;
  */
 public class EndorsementJpaController implements Serializable {
 
-    public EndorsementJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public EndorsementJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    
+    public void create( Endorsement endorsement) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), endorsement);
+    }
+    
+    public void create(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = endorsement.getApplication();
         if (applicationOrphanCheck != null) {
@@ -78,8 +84,14 @@ public class EndorsementJpaController implements Serializable {
         }
            
     }
+    
+    public void edit(Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), endorsement);
+    }
 
-    public void edit(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = endorsement.getEndorsementID();
         if (findEndorsement(id) == null) {
@@ -133,8 +145,14 @@ public class EndorsementJpaController implements Serializable {
                 
 
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Endorsement endorsement;
         try {

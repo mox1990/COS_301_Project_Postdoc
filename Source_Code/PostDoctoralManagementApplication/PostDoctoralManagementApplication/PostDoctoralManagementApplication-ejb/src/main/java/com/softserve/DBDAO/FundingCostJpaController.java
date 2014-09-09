@@ -28,17 +28,23 @@ import javax.transaction.UserTransaction;
  */
 public class FundingCostJpaController implements Serializable {
 
-    public FundingCostJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public FundingCostJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em, FundingCost fundingCost) throws RollbackFailureException, Exception {
+    
+    public void create(FundingCost fundingCost) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), fundingCost);
+    }
+    
+    public void create(EntityManager em, FundingCost fundingCost) throws RollbackFailureException, Exception 
+    {
         FundingReport fundingReport = fundingCost.getFundingReport();
         if (fundingReport != null) {
             fundingReport = em.getReference(fundingReport.getClass(), fundingReport.getReportID());
@@ -50,6 +56,11 @@ public class FundingCostJpaController implements Serializable {
             fundingReport = em.merge(fundingReport);
         }
             
+    }
+    
+    public void edit(FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), fundingCost);
     }
 
     public void edit(EntityManager em, FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -77,8 +88,14 @@ public class FundingCostJpaController implements Serializable {
         }       
 
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         FundingCost fundingCost;
         try {

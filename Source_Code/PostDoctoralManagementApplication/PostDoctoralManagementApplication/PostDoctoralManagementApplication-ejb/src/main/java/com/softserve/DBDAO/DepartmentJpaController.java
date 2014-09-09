@@ -31,16 +31,20 @@ import javax.transaction.UserTransaction;
  */
 public class DepartmentJpaController implements Serializable {
 
-    public DepartmentJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public DepartmentJpaController(EntityManager em) {
+        this.emm = em;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
+    
+    public void create(Department department) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), department);
+    }
     public void create(EntityManager em, Department department) throws RollbackFailureException, Exception {
         if (department.getResearchFellowInformationList() == null) {
             department.setResearchFellowInformationList(new ArrayList<ResearchFellowInformation>());
@@ -91,8 +95,14 @@ public class DepartmentJpaController implements Serializable {
         }
             
     }
-
-    public void edit(EntityManager em, Department department) throws NonexistentEntityException, RollbackFailureException, Exception {
+    
+    public void edit(Department department) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), department);
+    }
+    
+    public void edit(EntityManager em, Department department) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = department.getDepartmentID();
         if (findDepartment(id) == null) {
@@ -171,8 +181,14 @@ public class DepartmentJpaController implements Serializable {
                
             
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         Department department;
         try {

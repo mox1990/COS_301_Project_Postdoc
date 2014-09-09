@@ -29,17 +29,23 @@ import javax.transaction.UserTransaction;
  */
 public class ForwardAndRewindReportJpaController implements Serializable {
 
-    public ForwardAndRewindReportJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public ForwardAndRewindReportJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), forwardAndRewindReport);
     }
 
-    public void create(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception {
+    public void create(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception 
+    {
 
         Application application = forwardAndRewindReport.getApplication();
         if (application != null) {
@@ -62,8 +68,14 @@ public class ForwardAndRewindReportJpaController implements Serializable {
         }
 
     }
-
-    public void edit(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception {
+    
+    public void edit(ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), forwardAndRewindReport);
+    }
+    
+    public void edit(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         Long id = forwardAndRewindReport.getReportID();
         if (findForwardAndRewindReport(id) == null) {
             throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.");
@@ -100,8 +112,14 @@ public class ForwardAndRewindReportJpaController implements Serializable {
         }       
 
     }
-
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
+    
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         ForwardAndRewindReport forwardAndRewindReport;
         try {

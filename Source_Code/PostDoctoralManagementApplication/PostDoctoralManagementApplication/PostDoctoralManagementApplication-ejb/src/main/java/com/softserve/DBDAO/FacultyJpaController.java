@@ -31,17 +31,23 @@ import javax.transaction.UserTransaction;
  */
 public class FacultyJpaController implements Serializable {
 
-    public FacultyJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public FacultyJpaController(EntityManager emm) {
+        this.emm = emm;
     }
     
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em, Faculty faculty) throws RollbackFailureException, Exception {
+    
+    public void create(Faculty faculty) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), faculty);
+    }
+    
+    public void create(EntityManager em, Faculty faculty) throws RollbackFailureException, Exception 
+    {
         if (faculty.getDepartmentList() == null) {
             faculty.setDepartmentList(new ArrayList<Department>());
         }
@@ -73,8 +79,14 @@ public class FacultyJpaController implements Serializable {
         }
            
     }
+    
+    public void edit(Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), faculty);
+    }
 
-    public void edit(EntityManager em, Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = faculty.getFacultyID();
         if (findFaculty(id) == null) {
@@ -133,8 +145,14 @@ public class FacultyJpaController implements Serializable {
         
 
     }
+    
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Faculty faculty;
         try {

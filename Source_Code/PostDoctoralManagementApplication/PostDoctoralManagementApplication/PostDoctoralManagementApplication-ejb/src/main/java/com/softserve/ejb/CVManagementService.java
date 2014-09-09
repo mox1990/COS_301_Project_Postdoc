@@ -8,6 +8,7 @@ package com.softserve.ejb;
 
 import com.softserve.DBDAO.AcademicQualificationJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.ExperienceJpaController;
 import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.AuditLog;
@@ -16,8 +17,10 @@ import com.softserve.DBEntities.Experience;
 import com.softserve.Exceptions.*;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
@@ -34,7 +37,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class CVManagementService implements CVManagementServiceLocal {
@@ -49,20 +52,10 @@ public class CVManagementService implements CVManagementServiceLocal {
         this.emf = emf;
     }
     
-    protected CvJpaController getCVDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new CvJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf);
     } 
-    
-    protected AcademicQualificationJpaController getAcademicQualificationDAO()
-    {
-        return new AcademicQualificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ExperienceJpaController getExperienceDAO()
-    {
-        return new ExperienceJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
     
     @Override
     public boolean hasCV(Session session)
@@ -72,6 +65,7 @@ public class CVManagementService implements CVManagementServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Created CV")
+    @TransactionMethod
     @Override
     public void createCV(Session session, Cv cv) throws AuthenticationException, Exception
     {        
@@ -80,9 +74,10 @@ public class CVManagementService implements CVManagementServiceLocal {
             throw new CVAlreadExistsException("The user already has a cv");
         }
         
-        AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
-        ExperienceJpaController experienceJpaController = getExperienceDAO();
-        CvJpaController cvJpaController = getCVDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+        AcademicQualificationJpaController academicQualificationJpaController = dAOFactory.createAcademicQualificationDAO();
+        ExperienceJpaController experienceJpaController = dAOFactory.createExperienceDAO();
+        CvJpaController cvJpaController = dAOFactory.createCvDAO();
         
         List<Experience> experienceList = cv.getExperienceList();
         List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
@@ -113,10 +108,10 @@ public class CVManagementService implements CVManagementServiceLocal {
     public void updateCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
         
-        AcademicQualificationJpaController academicQualificationJpaController = getAcademicQualificationDAO();
-        ExperienceJpaController experienceJpaController = getExperienceDAO();
-        
-        CvJpaController cvJpaController = getCVDAO();        
+        DAOFactory dAOFactory = getDAOFactory();
+        AcademicQualificationJpaController academicQualificationJpaController = dAOFactory.createAcademicQualificationDAO();
+        ExperienceJpaController experienceJpaController = dAOFactory.createExperienceDAO();
+        CvJpaController cvJpaController = dAOFactory.createCvDAO();        
 
         for(Experience experience : cv.getExperienceList())
         {

@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingCostJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
@@ -27,8 +28,10 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -49,7 +52,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DRISApprovalService implements DRISApprovalServiceLocal {
@@ -76,39 +79,10 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      *
      * @return
      */
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ResearchFellowInformationJpaController getResearchFellowInformationDAO()
-    {
-        return new ResearchFellowInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected FundingReportJpaController getFundingReportDAO()
-    {
-        return new FundingReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected FundingCostJpaController getFundingCostDAO()
-    {
-        return new FundingCostJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected EligiblityReportJpaController getEligiblityReportDAO()
-    {
-        return new EligiblityReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
+        return new DAOFactory(emf);
+    } 
     
     /**
      *
@@ -143,6 +117,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         return false;
     }
+    
     
     protected boolean hasObtainedPhDInLast5Years(Application application)
     {     
@@ -228,6 +203,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      *
      * @param session
      * @param application
+     * @return 
      * @throws AuthenticationException
      * @throws NonexistentEntityException
      * @throws RollbackFailureException
@@ -258,13 +234,14 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
+    @TransactionMethod
     @Override
     public void setApplicationEligibleStatus(Session session, Application application, boolean isElgible) throws Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+        EligiblityReportJpaController eligiblityReportJpaController = dAOFactory.createEligiblityReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        EligiblityReportJpaController eligiblityReportJpaController = getEligiblityReportDAO();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         if(application.getEligiblityReport() == null)
         {
@@ -303,6 +280,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      */
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
+    @TransactionMethod
     @Override
     public void denyFunding(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {        
@@ -324,14 +302,20 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      */
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
+    @TransactionMethod
     @Override
     public void approveFunding(Session session, Application application, ResearchFellowInformation researchFellowInformation, FundingReport fundingReport, String applicantMessage, Notification cscMesssage, Notification finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        FundingReportJpaController fundingReportJpaController = getFundingReportDAO();
+        
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        FundingCostJpaController fundingCostJpaController = getFundingCostDAO();
+        
+        DAOFactory dAOFactory = getDAOFactory();
+        FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+        FundingReportJpaController fundingReportJpaController = dAOFactory.createFundingReportDAO();
+        PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+        ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
         
         Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());
                 
@@ -360,7 +344,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }
   
         
-        PersonJpaController personJpaController = getPersonDAO();
+        
         Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
         if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
         {
@@ -373,11 +357,11 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         if(fellow.getResearchFellowInformation() == null)
         {
-            getResearchFellowInformationDAO().create(researchFellowInformation);
+            researchFellowInformationJpaController.create(researchFellowInformation);
         }
         else
         {
-            getResearchFellowInformationDAO().edit(researchFellowInformation);
+            researchFellowInformationJpaController.edit(researchFellowInformation);
         }       
         
 
@@ -406,11 +390,17 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
+    @TransactionMethod
     @Override
     public void updateFundingInformation(Session session, Application application) throws Exception 
     {
-        FundingReportJpaController fundingReportJpaController = getFundingReportDAO();
-        FundingCostJpaController fundingCostJpaController = getFundingCostDAO();
+        DAOFactory dAOFactory = getDAOFactory();
+                
+        FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
+        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+        FundingReportJpaController fundingReportJpaController = dAOFactory.createFundingReportDAO();
+        PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+        ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
         
         ResearchFellowInformation researchFellowInformation = application.getFellow().getResearchFellowInformation();
         FundingReport fundingReport = application.getFundingReport();       
@@ -445,7 +435,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             fundingCostJpaController.destroy(fundingCost.getCostID());
         }
         
-        PersonJpaController personJpaController = getPersonDAO();
+        
         Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
         if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
         {
@@ -457,19 +447,19 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         if(fellow.getResearchFellowInformation() == null)
         {
-            getResearchFellowInformationDAO().create(researchFellowInformation);
+            researchFellowInformationJpaController.create(researchFellowInformation);
         }
         else
         {
-            getResearchFellowInformationDAO().edit(researchFellowInformation);
+            researchFellowInformationJpaController.edit(researchFellowInformation);
         } 
         
-        Application oldApplication  = getApplicationDAO().findApplication(application.getApplicationID());                
+        Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());                
         
         oldApplication.setStartDate(application.getStartDate());
         oldApplication.setEndDate(application.getEndDate());       
         
-        getApplicationDAO().edit(oldApplication);
+        applicationJpaController.edit(oldApplication);
 
     }
     

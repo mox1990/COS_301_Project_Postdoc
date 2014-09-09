@@ -32,17 +32,23 @@ import javax.transaction.UserTransaction;
  */
 public class FundingReportJpaController implements Serializable {
 
-    public FundingReportJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public FundingReportJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
-    public void create(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    
+    public void create(FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), fundingReport);
+    }
+    
+    public void create(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
         if (fundingReport.getFundingCostList() == null) {
             fundingReport.setFundingCostList(new ArrayList<FundingCost>());
         }
@@ -96,8 +102,14 @@ public class FundingReportJpaController implements Serializable {
             }
         }
     }
-
-    public void edit(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    
+    public void edit(FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), fundingReport);
+    }
+    
+    public void edit(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         Long id = fundingReport.getReportID();
         if (findFundingReport(id) == null) {
@@ -180,7 +192,13 @@ public class FundingReportJpaController implements Serializable {
            
     }
 
-    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
+    
+    public void destroy(EntityManager em, Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
 
         FundingReport fundingReport;
         try {

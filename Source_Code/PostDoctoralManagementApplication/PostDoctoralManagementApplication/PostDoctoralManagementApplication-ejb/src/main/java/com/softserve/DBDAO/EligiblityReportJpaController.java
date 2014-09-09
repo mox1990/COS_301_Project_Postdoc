@@ -31,17 +31,23 @@ import javax.transaction.UserTransaction;
  */
 public class EligiblityReportJpaController implements Serializable {
 
-    public EligiblityReportJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public EligiblityReportJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(EligiblityReport eligiblityReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), eligiblityReport);
     }
 
-    public void create(EntityManager em, EligiblityReport eligiblityReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(EntityManager em, EligiblityReport eligiblityReport) throws IllegalOrphanException, PreexistingEntityException, RollbackFailureException, Exception 
+    {
         List<String> illegalOrphanMessages = null;
         Application applicationOrphanCheck = eligiblityReport.getApplication();
         if (applicationOrphanCheck != null) {
@@ -78,8 +84,14 @@ public class EligiblityReportJpaController implements Serializable {
         }
             
     }
+    
+    public void edit(EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), eligiblityReport);
+    }
 
-    public void edit(EntityManager em, EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(EntityManager em, EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         Long id = eligiblityReport.getReportID();
         if (findEligiblityReport(id) == null) {
@@ -134,8 +146,14 @@ public class EligiblityReportJpaController implements Serializable {
                 
           
     }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         
         EligiblityReport eligiblityReport;
         try {

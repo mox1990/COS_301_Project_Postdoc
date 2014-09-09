@@ -38,14 +38,19 @@ import javax.transaction.UserTransaction;
  */
 public class ApplicationReviewRequestJpaController implements Serializable {
 
-    public ApplicationReviewRequestJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public ApplicationReviewRequestJpaController(EntityManager emm) {
+        this.emm = emm;
     }
 
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(ApplicationReviewRequest applicationReviewRequest) throws PreexistingEntityException, RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), applicationReviewRequest);
     }
 
     public void create(EntityManager em, ApplicationReviewRequest applicationReviewRequest) throws PreexistingEntityException, RollbackFailureException, Exception {
@@ -78,7 +83,12 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         }
 
     }
-
+    
+    public void edit(ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), applicationReviewRequest);
+    }
+    
     public void edit(EntityManager em, ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception {
         ApplicationReviewRequestPK id = applicationReviewRequest.getApplicationReviewRequestPK();
         if (findApplicationReviewRequest(id) == null) {
@@ -122,8 +132,14 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         }
 
     }
+    
+    public void destroy(ApplicationReviewRequestPK id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
+    }
 
-    public void destroy(EntityManager em, ApplicationReviewRequestPK id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(EntityManager em, ApplicationReviewRequestPK id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
         ApplicationReviewRequest applicationReviewRequest;
         try {
             applicationReviewRequest = em.getReference(ApplicationReviewRequest.class, id);

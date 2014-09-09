@@ -27,16 +27,22 @@ import javax.transaction.UserTransaction;
  */
 public class AcademicQualificationJpaController implements Serializable {
 
-    public AcademicQualificationJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public AcademicQualificationJpaController(EntityManager em) {
+        this.emm = em;
     }
     
-    private EntityManagerFactory emf = null;
+
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
     }
-
+    
+    public void create(AcademicQualification academicQualification) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), academicQualification);
+    }
+    
     public void create(EntityManager em, AcademicQualification academicQualification) throws RollbackFailureException, Exception 
     {
         Cv cv = academicQualification.getCv();
@@ -53,7 +59,12 @@ public class AcademicQualificationJpaController implements Serializable {
         }
 
     }
-
+    
+    public void edit(AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), academicQualification);
+    }
+    
     public void edit(EntityManager em, AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
 
@@ -81,6 +92,11 @@ public class AcademicQualificationJpaController implements Serializable {
             cvNew = em.merge(cvNew);
         }
 
+    }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
     }
 
     public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 

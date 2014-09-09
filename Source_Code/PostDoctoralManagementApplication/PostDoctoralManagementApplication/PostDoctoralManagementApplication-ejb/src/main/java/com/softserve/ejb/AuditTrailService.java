@@ -7,13 +7,22 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.AuditLogJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
+import com.softserve.annotations.TransactionMethod;
+import com.softserve.interceptors.AuditTrailInterceptor;
+import com.softserve.interceptors.AuthenticationInterceptor;
+import com.softserve.interceptors.TransactionInterceptor;
+import com.softserve.system.Session;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -22,6 +31,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@Interceptors({AuditTrailInterceptor.class, AuthenticationInterceptor.class,TransactionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class AuditTrailService implements AuditTrailServiceLocal {
@@ -37,12 +47,13 @@ public class AuditTrailService implements AuditTrailServiceLocal {
         this.emf = emf;
     }
     
-    protected AuditLogJpaController getAuditLogDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }  
+        return new DAOFactory(emf);
+    } 
     
     //Just changed it so that it recieves the auditLog object not creates which should be hanadled by the calling function
+    @TransactionMethod
     @Override
     public void logAction(AuditLog auditLog) throws Exception
     {        
@@ -51,36 +62,15 @@ public class AuditTrailService implements AuditTrailServiceLocal {
         {
             auditLog.setAction(auditLog.getAction().substring(0, 500));
         }
-        getAuditLogDAO().create(auditLog);
+        getDAOFactory().createAuditLogDAO().create(auditLog);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
-    public List<AuditLog> findAll()
+    public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception
     {
-        return getAuditLogDAO().findAuditLogEntities();
+        return getDAOFactory().createAuditLogDAO().findAuditLogEntities();
     }
-    
-    @Override
-    public List<AuditLog> findByTimestamp(Timestamp tStamp)
-    {
-        return emf.createEntityManager().createNamedQuery("AuditLog.findByTimestamp", AuditLog.class).setParameter("timestamp", tStamp).getResultList();
-    }
-    
-    @Override
-    public List<AuditLog> findBetweenRange(Timestamp start, Timestamp end)
-    {
-        return emf.createEntityManager().createNamedQuery("AuditLog.findBetweenRange", AuditLog.class).setParameter("start", start).setParameter("end", end).getResultList();
-    }
-    
-    @Override
-    public AuditLog findByEntryID(Long eID)
-    {
-        return emf.createEntityManager().createNamedQuery("AuditLog.findByEntryID", AuditLog.class).setParameter("entryID", eID).getSingleResult();
-    }
-    
-    @Override
-    public List<AuditLog> findByAction(String action)
-    {
-        return emf.createEntityManager().createNamedQuery("AuditLog.findByAction", AuditLog.class).setParameter("action", action).getResultList();
-    }
+
 }

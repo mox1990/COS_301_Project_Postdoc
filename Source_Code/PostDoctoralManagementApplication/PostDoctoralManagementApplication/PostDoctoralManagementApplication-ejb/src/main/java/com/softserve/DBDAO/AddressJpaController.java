@@ -29,13 +29,18 @@ import javax.transaction.UserTransaction;
  */
 public class AddressJpaController implements Serializable {
 
-    public AddressJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public AddressJpaController(EntityManager em) {
+        this.emm = em;
     }
-    private EntityManagerFactory emf = null;
+    private EntityManager emm = null;
 
     public EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return emm;
+    }
+    
+    public void create(Address address) throws RollbackFailureException, Exception 
+    {
+        create(getEntityManager(), address);
     }
 
     public void create(EntityManager em, Address address) throws RollbackFailureException, Exception 
@@ -83,6 +88,11 @@ public class AddressJpaController implements Serializable {
             }
         }
 
+    }
+    
+    public void edit(Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        edit(getEntityManager(), address);
     }
 
     public void edit(EntityManager em, Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -153,6 +163,11 @@ public class AddressJpaController implements Serializable {
             }
         }
 
+    }
+    
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
+    {
+        destroy(getEntityManager(), id);
     }
 
     public void destroy(EntityManager em, Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
