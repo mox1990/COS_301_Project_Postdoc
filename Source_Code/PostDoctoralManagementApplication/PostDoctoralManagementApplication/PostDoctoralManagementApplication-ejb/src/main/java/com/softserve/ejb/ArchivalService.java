@@ -857,6 +857,7 @@ public class ArchivalService implements ArchivalServiceLocal {
                     {
                         ForwardAndRewindReport tmp = new ForwardAndRewindReport(f.getReportID());
                         tmp.setTimestamp(f.getTimestamp());
+                        tmp.setType(f.getType());
                         backupForwardAndRewindReportJpaController.create(tmp);
                         newForwardAndRewindReportList.add(tmp);
                     }
@@ -899,7 +900,360 @@ public class ArchivalService implements ArchivalServiceLocal {
             }
         }
         
-        // Enter all entities not related to Person
+        for(Application oldApplication: workingApplicationJpaController.findApplicationEntities())
+        {
+            Application a;
+            if(backupApplicationJpaController.findApplication(oldApplication.getApplicationID()) == null)
+            {
+                a = new Application(oldApplication.getApplicationID());
+            }
+            else
+            {
+                a = backupApplicationJpaController.findApplication(oldApplication.getApplicationID());
+            }
+            // Copy data over...
+            
+            a.setType(oldApplication.getType());
+            a.setStatus(oldApplication.getStatus());
+            a.setFundingType(oldApplication.getFundingType());
+            a.setTimestamp(oldApplication.getTimestamp());
+            a.setSubmissionDate(oldApplication.getSubmissionDate());
+            a.setFinalisationDate(oldApplication.getFinalisationDate());
+            a.setStartDate(oldApplication.getStartDate());
+            a.setEndDate(oldApplication.getEndDate());
+            a.setProjectTitle(oldApplication.getProjectTitle());
+            a.setInformation(oldApplication.getInformation());
+            
+            // Release all other entities from Person...                        
+            List<Person> personList = oldApplication.getPersonList();
+            
+            List<CommitteeMeeting> committeeMeetingList = oldApplication.getCommitteeMeetingList();
+            
+            DeclineReport declineReport = oldApplication.getDeclineReport();
+            
+            Endorsement endorsement = oldApplication.getEndorsement();
+            
+            List<ApplicationReviewRequest> applicationReviewRequestList  = oldApplication.getApplicationReviewRequestList();
+            
+            List<RefereeReport> refereeReportList = oldApplication.getRefereeReportList();
+            
+            List<AmmendRequest> ammendRequestList = oldApplication.getAmmendRequestList();
+            
+            RecommendationReport recommendationReport = oldApplication.getRecommendationReport();
+                   
+            FundingReport fundingReport = oldApplication.getFundingReport();
+            
+            Person fellow = oldApplication.getFellow();
+            
+            Person grantHolder = oldApplication.getGrantHolder();
+            
+            List<ProgressReport> progressReportList = oldApplication.getProgressReportList();
+            
+            EligiblityReport eligiblityReport = oldApplication.getEligiblityReport();
+            
+            List<ForwardAndRewindReport> forwardAndRewindReportList= oldApplication.getForwardAndRewindReportList();
+            
+            try
+            {
+                if(backupApplicationJpaController.findApplication(a.getApplicationID()) == null)
+                {
+                    backupApplicationJpaController.create(a);
+                }
+                
+                List<Person> newPersonList = new ArrayList<Person>();
+                for(Person p: personList)
+                {
+                    if(backupPersonJpaController.findPerson(p.getSystemID()) == null)
+                    {
+                        Person tmp = new Person(p.getSystemID());
+                        
+                        tmp.setPassword(p.getPassword());
+                        tmp.setTitle(p.getTitle());
+                        tmp.setFullName(p.getFullName());
+                        tmp.setSurname(p.getSurname());
+                        tmp.setEmail(p.getEmail());
+                        tmp.setTelephoneNumber(p.getTelephoneNumber());
+                        tmp.setWorkNumber(p.getWorkNumber());
+                        tmp.setFaxNumber(p.getFaxNumber());
+                        tmp.setCellphoneNumber(p.getCellphoneNumber());
+                        tmp.setUpEmployee(p.getUpEmployee());
+                        tmp.setAccountStatus(p.getAccountStatus());
+                    
+                        backupPersonJpaController.create(tmp);
+                        newPersonList.add(tmp);
+                    }
+                    else
+                    {
+                        newPersonList.add(backupPersonJpaController.findPerson(p.getSystemID()));
+                    }
+                }
+                
+                List<CommitteeMeeting> newCommitteeMeetingList = new ArrayList<CommitteeMeeting>();
+                for(CommitteeMeeting c: committeeMeetingList)
+                {
+                    if(backupCommitteeMeetingJpaController.findCommitteeMeeting(c.getMeetingID()) == null)
+                    {
+                        CommitteeMeeting tmp = new CommitteeMeeting(c.getMeetingID());
+                        backupCommitteeMeetingJpaController.create(tmp);
+                        newCommitteeMeetingList.add(tmp);
+                    }
+                    else
+                    {
+                        newCommitteeMeetingList.add(backupCommitteeMeetingJpaController.findCommitteeMeeting(c.getMeetingID()));
+                    }
+                }
+                
+                DeclineReport newDeclineReport;
+                if(declineReport == null)
+                {
+                    newDeclineReport = null;
+                }
+                else if(backupDeclineReportJpaController.findDeclineReport(declineReport.getReportID()) == null)
+                {
+                    DeclineReport tmp = new DeclineReport(declineReport.getReportID());
+                    tmp.setTimestamp(declineReport.getTimestamp());
+                    backupDeclineReportJpaController.create(tmp);
+                    newDeclineReport = tmp;
+                }
+                else
+                {
+                    newDeclineReport = backupDeclineReportJpaController.findDeclineReport(declineReport.getReportID());
+                }
+                
+                Endorsement newEndorsement;
+                if(endorsement == null)
+                {
+                    newEndorsement = null;
+                }
+                else if(backupEndorsementJpaController.findEndorsement(endorsement.getEndorsementID()) == null)
+                {
+                    Endorsement tmp = new Endorsement(endorsement.getEndorsementID());
+                    
+                    tmp.setTimestamp(endorsement.getTimestamp());
+                    tmp.setRank(endorsement.getRank());
+                    tmp.setMotivation(endorsement.getMotivation());
+                    
+                    backupEndorsementJpaController.create(tmp);
+                    newEndorsement = tmp;
+                }
+                else
+                {
+                    newEndorsement = backupEndorsementJpaController.findEndorsement(endorsement.getEndorsementID());
+                }
+                
+                List<ApplicationReviewRequest> newApplicationReviewRequestList = new ArrayList<ApplicationReviewRequest>();
+                for(ApplicationReviewRequest aR: applicationReviewRequestList)
+                {
+                    if(backupApplicationReviewRequestJpaController.findApplicationReviewRequest(aR.getApplicationReviewRequestPK()) == null)
+                    {
+                        ApplicationReviewRequest tmp = new ApplicationReviewRequest(aR.getApplicationReviewRequestPK());
+                        backupApplicationReviewRequestJpaController.create(tmp);
+                        newApplicationReviewRequestList.add(tmp);
+                    }
+                    else
+                    {
+                        newApplicationReviewRequestList.add(backupApplicationReviewRequestJpaController.findApplicationReviewRequest(aR.getApplicationReviewRequestPK()));
+                    }
+                }
+                
+                List<RefereeReport> newRefereeReportList = new ArrayList<RefereeReport>();
+                for(RefereeReport r: refereeReportList)
+                {
+                    if(backupRefereeReportJpaController.findRefereeReport(r.getReportID()) == null)
+                    {
+                        RefereeReport tmp = new RefereeReport(r.getReportID());
+                        tmp.setTimestamp(r.getTimestamp());
+                        tmp.setContent(r.getContent());
+                        backupRefereeReportJpaController.create(tmp);
+                        
+                        newRefereeReportList.add(tmp);
+                    }
+                    else
+                    {
+                        newRefereeReportList.add(backupRefereeReportJpaController.findRefereeReport(r.getReportID()));
+                    }
+                }
+                
+                List<AmmendRequest> newAmmendRequestList = new ArrayList<AmmendRequest>();
+                for(AmmendRequest aR: ammendRequestList)
+                {
+                    if(backupAmmendRequestJpaController.findAmmendRequest(aR.getRequestID()) == null)
+                    {
+                        AmmendRequest tmp = new AmmendRequest(aR.getRequestID());
+                        tmp.setTimestamp(aR.getTimestamp());
+                        backupAmmendRequestJpaController.create(tmp);
+                        newAmmendRequestList.add(tmp);
+                    }
+                    else
+                    {
+                        newAmmendRequestList.add(backupAmmendRequestJpaController.findAmmendRequest(aR.getRequestID()));
+                    }
+                }
+                
+                RecommendationReport newRecommendationReport;
+                if(recommendationReport == null)
+                {
+                    newRecommendationReport = null;
+                }
+                else if(backupRecommendationReportJpaController.findRecommendationReport(recommendationReport.getReportID()) == null)
+                {
+                    RecommendationReport tmp = new RecommendationReport(recommendationReport.getReportID());
+                    tmp.setTimestamp(recommendationReport.getTimestamp());
+                    tmp.setContent(recommendationReport.getContent());
+                    backupRecommendationReportJpaController.create(tmp);
+                    newRecommendationReport = tmp;
+                }
+                else
+                {
+                    newRecommendationReport = backupRecommendationReportJpaController.findRecommendationReport(recommendationReport.getReportID());
+                }
+                
+                FundingReport newFundingReport;
+                if(fundingReport == null)
+                {
+                    newFundingReport = null;
+                }
+                else if(backupFundingReportJpaController.findFundingReport(fundingReport.getReportID()) == null)
+                {
+                    FundingReport tmp = new FundingReport(fundingReport.getReportID());
+                    tmp.setTimestamp(fundingReport.getTimestamp());
+                    backupFundingReportJpaController.create(tmp);
+                    newFundingReport = tmp;
+                }
+                else
+                {
+                    newFundingReport = backupFundingReportJpaController.findFundingReport(fundingReport.getReportID());
+                }
+                
+                Person newFellow;
+                if(fellow == null)
+                {
+                    newFellow = null;
+                }
+                else if(backupPersonJpaController.findPerson(fellow.getSystemID()) == null)
+                {
+                    Person tmp = new Person(fellow.getSystemID());
+                    
+                    tmp.setPassword(fellow.getPassword());
+                    tmp.setTitle(fellow.getTitle());
+                    tmp.setFullName(fellow.getFullName());
+                    tmp.setSurname(fellow.getSurname());
+                    tmp.setEmail(fellow.getEmail());
+                    tmp.setTelephoneNumber(fellow.getTelephoneNumber());
+                    tmp.setWorkNumber(fellow.getWorkNumber());
+                    tmp.setFaxNumber(fellow.getFaxNumber());
+                    tmp.setCellphoneNumber(fellow.getCellphoneNumber());
+                    tmp.setUpEmployee(fellow.getUpEmployee());
+                    tmp.setAccountStatus(fellow.getAccountStatus());
+                            
+                    backupPersonJpaController.create(tmp);
+                    newFellow = tmp;
+                }
+                else
+                {
+                    newFellow = backupPersonJpaController.findPerson(fellow.getSystemID());
+                }
+                
+                Person newGrantHolder;
+                if(grantHolder == null)
+                {
+                    newGrantHolder = null;
+                }
+                else if(backupPersonJpaController.findPerson(grantHolder.getSystemID()) == null)
+                {
+                    Person tmp = new Person(grantHolder.getSystemID());
+                    
+                    tmp.setPassword(grantHolder.getPassword());
+                    tmp.setTitle(grantHolder.getTitle());
+                    tmp.setFullName(grantHolder.getFullName());
+                    tmp.setSurname(grantHolder.getSurname());
+                    tmp.setEmail(grantHolder.getEmail());
+                    tmp.setTelephoneNumber(grantHolder.getTelephoneNumber());
+                    tmp.setWorkNumber(grantHolder.getWorkNumber());
+                    tmp.setFaxNumber(grantHolder.getFaxNumber());
+                    tmp.setCellphoneNumber(grantHolder.getCellphoneNumber());
+                    tmp.setUpEmployee(grantHolder.getUpEmployee());
+                    tmp.setAccountStatus(grantHolder.getAccountStatus());
+                            
+                    backupPersonJpaController.create(tmp);
+                    newGrantHolder = tmp;
+                }
+                else
+                {
+                    newGrantHolder = backupPersonJpaController.findPerson(grantHolder.getSystemID());
+                }
+                
+                List<ProgressReport> newProgressReportList = new ArrayList<ProgressReport>();
+                for(ProgressReport p: progressReportList)
+                {
+                    if(backupProgressReportJpaController.findProgressReport(p.getReportID()) == null)
+                    {
+                        ProgressReport tmp = new ProgressReport(p.getReportID());
+                        tmp.setTimestamp(p.getTimestamp());
+                        tmp.setContent(p.getContent());
+                        backupProgressReportJpaController.create(tmp);
+                        newProgressReportList.add(tmp);
+                    }
+                    else
+                    {
+                        newProgressReportList.add(backupProgressReportJpaController.findProgressReport(p.getReportID()));
+                    }
+                }
+                
+                EligiblityReport newEligiblityReport;
+                if(eligiblityReport == null)
+                {
+                    newEligiblityReport = null;
+                }
+                else if(backupEligiblityReportJpaController.findEligiblityReport(eligiblityReport.getReportID()) == null)
+                {
+                    EligiblityReport tmp = new EligiblityReport(eligiblityReport.getReportID());
+                    tmp.setEligiblityCheckDate(eligiblityReport.getEligiblityCheckDate());
+                    backupEligiblityReportJpaController.create(tmp);
+                    newEligiblityReport = tmp;
+                }
+                else
+                {
+                    newEligiblityReport = backupEligiblityReportJpaController.findEligiblityReport(eligiblityReport.getReportID());
+                }
+                
+                List<ForwardAndRewindReport> newForwardAndRewindReportList = new ArrayList<ForwardAndRewindReport>();
+                for(ForwardAndRewindReport f: forwardAndRewindReportList)
+                {
+                    if(backupForwardAndRewindReportJpaController.findForwardAndRewindReport(f.getReportID()) == null)
+                    {
+                        ForwardAndRewindReport tmp = new ForwardAndRewindReport(f.getReportID());
+                        tmp.setTimestamp(f.getTimestamp());
+                        tmp.setType(f.getType());
+                        backupForwardAndRewindReportJpaController.create(tmp);
+                        newForwardAndRewindReportList.add(tmp);
+                    }
+                    else
+                    {
+                        newForwardAndRewindReportList.add(backupForwardAndRewindReportJpaController.findForwardAndRewindReport(f.getReportID()));
+                    }
+                }
+                
+                // Return it all to person...
+                a.setPersonList(newPersonList);
+                a.setCommitteeMeetingList(newCommitteeMeetingList);
+                a.setDeclineReport(newDeclineReport);
+                a.setEndorsement(newEndorsement);
+                a.setApplicationReviewRequestList(newApplicationReviewRequestList);
+                a.setRefereeReportList(newRefereeReportList);
+                a.setAmmendRequestList(newAmmendRequestList);
+                a.setRecommendationReport(newRecommendationReport);
+                a.setEligiblityReport(newEligiblityReport);
+                a.setForwardAndRewindReportList(newForwardAndRewindReportList);
+                
+                // Edit person
+                backupApplicationJpaController.edit(a);
+            }
+            catch (Exception ex)
+            {
+                backUpFailed(a, ex);
+            }
+        }
     }    
     
     //@Schedule(dayOfWeek="Sat", hour="2", info = "Daily backup of the database.")
