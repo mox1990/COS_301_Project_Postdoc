@@ -69,18 +69,6 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     }
     
     @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
-    protected RecommendationReportJpaController getRecommmendationReportDAO()
-    {
-        return rRDAO;
-    }
-    
-    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntities;
@@ -90,18 +78,6 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
-    }
-    
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
-    
-    @Override
-    protected AmmendRequestJpaController getAmmendRequestDAO()
-    {
-        return aRDAO;
     }
     
     @Override

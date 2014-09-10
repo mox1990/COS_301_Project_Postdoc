@@ -116,12 +116,17 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     protected DAOFactory getDAOFactoryWorking()
     {
-        return new DAOFactory(emfWorking);
+        return new DAOFactory(emfWorking.createEntityManager());
     }
     
     protected DAOFactory getDAOFactoryBackup()
     {
-        return new DAOFactory(emfWorking);
+        return new DAOFactory(emfBackup.createEntityManager());
+    }
+    
+    protected DAOFactory getDAOFactoryArchive()
+    {
+        return new DAOFactory(emfArchive.createEntityManager());
     }
     
     //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
@@ -158,7 +163,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         RecommendationReportJpaController workingRecommendationReportJpaController = daoFactoryWorking.createRecommendationReportDAO();
         RefereeReportJpaController workingRefereeReportJpaController = daoFactoryWorking.createRefereeReportDAO();
         ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = daoFactoryWorking.createResearchFellowInformationDAO();
-        SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleJpaController();  
+        SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleDAO();  
         
         DAOFactory daoFactoryBackup = getDAOFactoryBackup();
         AcademicQualificationJpaController backupAcademicQualificationJpaController = daoFactoryBackup.createAcademicQualificationDAO();
@@ -187,7 +192,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         RecommendationReportJpaController backupRecommendationReportJpaController = daoFactoryBackup.createRecommendationReportDAO();
         RefereeReportJpaController backupRefereeReportJpaController = daoFactoryBackup.createRefereeReportDAO();
         ResearchFellowInformationJpaController backupResearchFellowInformationJpaController = daoFactoryBackup.createResearchFellowInformationDAO();
-        SecurityRoleJpaController backupSecurityRoleJpaController = daoFactoryBackup.createSecurityRoleJpaController();  
+        SecurityRoleJpaController backupSecurityRoleJpaController = daoFactoryBackup.createSecurityRoleDAO();  
         
    
         
@@ -1187,7 +1192,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         RecommendationReportJpaController workingRecommendationReportJpaController = daoFactoryWorking.createRecommendationReportDAO();
         RefereeReportJpaController workingRefereeReportJpaController = daoFactoryWorking.createRefereeReportDAO();
         ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = daoFactoryWorking.createResearchFellowInformationDAO();
-        SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleJpaController();  
+        SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleDAO();  
         
         DAOFactory daoFactoryBackup = getDAOFactoryBackup();
         AcademicQualificationJpaController backupAcademicQualificationJpaController = daoFactoryBackup.createAcademicQualificationDAO();
@@ -1216,7 +1221,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         RecommendationReportJpaController backupRecommendationReportJpaController = daoFactoryBackup.createRecommendationReportDAO();
         RefereeReportJpaController backupRefereeReportJpaController = daoFactoryBackup.createRefereeReportDAO();
         ResearchFellowInformationJpaController backupResearchFellowInformationJpaController = daoFactoryBackup.createResearchFellowInformationDAO();
-        SecurityRoleJpaController backupSecurityRoleJpaController = daoFactoryBackup.createSecurityRoleJpaController();  
+        SecurityRoleJpaController backupSecurityRoleJpaController = daoFactoryBackup.createSecurityRoleDAO();  
         
         
     }

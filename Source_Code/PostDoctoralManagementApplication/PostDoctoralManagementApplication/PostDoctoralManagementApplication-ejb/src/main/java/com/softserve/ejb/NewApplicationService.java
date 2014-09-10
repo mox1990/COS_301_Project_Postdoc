@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
@@ -31,6 +32,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -75,20 +77,20 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     public NewApplicationService(EntityManagerFactory emf) {
         this.emf = emf;
     }
-            
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
     
+    protected DAOFactory getDAOFactory()
+    {
+        return new DAOFactory(emf.createEntityManager());
+    }
+            
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
     }
     
-    protected ApplicationServicesUtil getApplicationServicesUtil()
+    protected ApplicationServicesUtil getApplicationServicesUtil(EntityManager em)
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(em);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -122,12 +124,13 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public void createNewApplication(Session session, Application application) throws AuthenticationException, Exception
     {  
+        DAOFactory daoFactory = getDAOFactory();
         if(application == null)
         {
             throw new Exception("Application is not valid");
         }
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
         
         //Set status and application type
         if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
@@ -147,13 +150,14 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @AuditableMethod(message = "Linked grant holder to new application")
     @Override
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception
-    {        
+    {    
+        DAOFactory daoFactory = getDAOFactory();
         if(grantHolder == null)
         {
             throw new Exception("Grant holder is not valid");
         }
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
         UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
         
         //Check if grant holder already exists
@@ -191,14 +195,14 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
     {
-        
+        DAOFactory daoFactory = getDAOFactory();
         if(referee == null)
         {
             throw new Exception("Referee is not valid");
         }        
         
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
         UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
         
         //Check if referee already exists
@@ -246,13 +250,14 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public void submitApplication(Session session, Application application) throws Exception
     {        
-        getApplicationServicesUtil().submitApplication(application);        
+        getApplicationServicesUtil(emf.createEntityManager()).submitApplication(application);        
     }
     
     @Override
     public boolean canFellowOpenANewApplication(Person fellow)
     {
-        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(fellow);
+        DAOFactory daoFactory = getDAOFactory();
+        List<Application> applications = daoFactory.createApplicationDAO().findAllApplicationsWhosFellowIs(fellow);
         for(Application application: applications)
         {
             if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
@@ -269,7 +274,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public Application getOpenApplication(Session session) throws AuthenticationException, Exception
     {
-        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
+        DAOFactory daoFactory = getDAOFactory();
+        List<Application> applications = daoFactory.createApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
         for(Application application: applications)
         {
             if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))

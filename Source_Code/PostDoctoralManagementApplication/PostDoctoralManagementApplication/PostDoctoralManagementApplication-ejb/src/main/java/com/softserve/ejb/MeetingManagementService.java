@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.MinuteCommentJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
@@ -72,29 +73,9 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         this.emf = emf;
     }
     
-    /**
-     *This function creates an instance of the PersonJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
-     * of the UserAccountManagementServices in the unit testing 
-     * @return An instance of PersonJpaController
-     */
-    protected CommitteeMeetingJpaController getCommitteeMeetingDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new CommitteeMeetingJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected MinuteCommentJpaController getMinuteCommentDAO()
-    {
-        return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     /**
@@ -125,8 +106,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
-        
-        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        CommitteeMeetingJpaController committeeMeetingJpaController = daoFactory.createCommitteeMeetingDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -160,8 +141,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
-        
-        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        CommitteeMeetingJpaController committeeMeetingJpaController = daoFactory.createCommitteeMeetingDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -189,8 +170,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
     {
-        
-        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        CommitteeMeetingJpaController committeeMeetingJpaController = daoFactory.createCommitteeMeetingDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -230,11 +211,11 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
     {
-        
+        DAOFactory daoFactory = getDAOFactory();
         if(committeeMeeting.getEndDate() == null)
         {
             committeeMeeting.setStartDate(getGregorianCalendar().getTime());
-            getCommitteeMeetingDAO().edit(committeeMeeting);
+            daoFactory.createCommitteeMeetingDAO().edit(committeeMeeting);
         }
         else
         {
@@ -254,11 +235,11 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
     {
-        
+        DAOFactory daoFactory = getDAOFactory();
         if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()))
         {
             committeeMeeting.setEndDate(getGregorianCalendar().getTime());
-            getCommitteeMeetingDAO().edit(committeeMeeting);
+            daoFactory.createCommitteeMeetingDAO().edit(committeeMeeting);
         }
         else
         {
@@ -280,13 +261,13 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void addMinuteComment(Session session, MinuteComment minuteComment) throws Exception 
     {
-        
+        DAOFactory daoFactory = getDAOFactory();
         if(minuteComment.getMeeting().getStartDate().before(getGregorianCalendar().getTime()) && minuteComment.getMeeting().getEndDate() == null)
         {
             minuteComment.setAttendee(session.getUser());
             minuteComment.setTimestamp(getGregorianCalendar().getTime());
 
-            getMinuteCommentDAO().create(minuteComment);
+            daoFactory.createMinuteCommentDAO().create(minuteComment);
         }
         else
         {
@@ -295,7 +276,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
         //This is already handled by the DAO
         //cMeeting.getMinuteCommentList().add(min);
-        //getCommitteeMeetingDAO().edit(cMeeting);
+        //daoFactory.createCommitteeMeetingDAO().edit(cMeeting);
     }
     
     /**
@@ -310,7 +291,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllMeetings(Session session) throws Exception 
     {        
-        return getCommitteeMeetingDAO().findCommitteeMeetingEntities();
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createCommitteeMeetingDAO().findCommitteeMeetingEntities();
     }
     
     /**
@@ -325,7 +307,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws Exception 
     {   
-        return getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
@@ -333,8 +316,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllActiveMeetingsForWhichUserIsToAttend(Session session) throws Exception 
     {   
-        
-        List<CommitteeMeeting> committeeMeetings = getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
+        DAOFactory daoFactory = getDAOFactory();
+        List<CommitteeMeeting> committeeMeetings = daoFactory.createCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
         List<CommitteeMeeting> outcommitteeMeetings = new ArrayList<CommitteeMeeting>();
         
         for(CommitteeMeeting committeeMeeting : committeeMeetings)
@@ -357,8 +340,9 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws Exception 
-    {        
-        return getCommitteeMeetingDAO().findAllConcludedCommitteeMeetings();
+    {    
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createCommitteeMeetingDAO().findAllConcludedCommitteeMeetings();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -366,7 +350,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<Person> getAllPostDocCommitteeMembers(Session session) throws Exception 
     {        
-        List<Person> persons = getPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        DAOFactory daoFactory = getDAOFactory();
+        List<Person> persons = daoFactory.createPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
         persons.remove(session.getUser());
         return persons;
     }
@@ -376,7 +361,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws Exception 
     {       
-        return getCommitteeMeetingDAO().findAllStillToBeHeldCommitteeMeetings();
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createCommitteeMeetingDAO().findAllStillToBeHeldCommitteeMeetings();
     }
     
 }

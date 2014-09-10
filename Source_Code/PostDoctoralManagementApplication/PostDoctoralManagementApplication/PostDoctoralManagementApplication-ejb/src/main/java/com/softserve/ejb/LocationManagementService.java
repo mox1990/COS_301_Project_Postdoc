@@ -6,6 +6,7 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DepartmentJpaController;
 import com.softserve.DBDAO.FacultyJpaController;
 import com.softserve.DBDAO.InstitutionJpaController;
@@ -57,19 +58,9 @@ public class LocationManagementService implements LocationManagementServiceLocal
         this.emf = emf;
     }
             
-    protected InstitutionJpaController getInstitutionDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new InstitutionJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected FacultyJpaController getFacultyDAO()
-    {
-        return new FacultyJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected DepartmentJpaController getDepartmentDAO()
-    {
-        return new DepartmentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -81,11 +72,13 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public void createInstitution(Session session, Institution institution) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
+        
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        InstitutionJpaController institutionJpaController = getInstitutionDAO();
+        InstitutionJpaController institutionJpaController = daoFactory.createInstitutionDAO();
         
         institutionJpaController.create(institution);
     }
@@ -93,11 +86,12 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public void createFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        FacultyJpaController facultyJpaController = getFacultyDAO();
+        FacultyJpaController facultyJpaController = daoFactory.createFacultyDAO();
         
         facultyJpaController.create(faculty);
     }
@@ -105,11 +99,12 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public void createDepartment(Session session, Department department) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        DepartmentJpaController departmentJpaController = daoFactory.createDepartmentDAO();
         
         departmentJpaController.create(department);
     }
@@ -117,11 +112,12 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public void updateInstitution(Session session, Institution institution) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        InstitutionJpaController institutionJpaController = getInstitutionDAO();
+        InstitutionJpaController institutionJpaController = daoFactory.createInstitutionDAO();
         
         institutionJpaController.edit(institution);
     }
@@ -129,11 +125,12 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public void updateFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        FacultyJpaController facultyJpaController = getFacultyDAO();
+        FacultyJpaController facultyJpaController = daoFactory.createFacultyDAO();
         
         facultyJpaController.edit(faculty);
     }
@@ -141,11 +138,12 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public void updateDepartment(Session session, Department department) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        DepartmentJpaController departmentJpaController = daoFactory.createDepartmentDAO();
         
         departmentJpaController.edit(department);
     }
@@ -153,7 +151,8 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public List<Institution> getAllInstitutions() throws AuthenticationException, Exception
     {
-        InstitutionJpaController institutionJpaController = getInstitutionDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        InstitutionJpaController institutionJpaController = daoFactory.createInstitutionDAO();
         
         return institutionJpaController.findInstitutionEntities();
     }
@@ -161,7 +160,8 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public List<Faculty> getAllFacultiesInInstitution(Institution institution) throws AuthenticationException, Exception
     {
-        FacultyJpaController facultyJpaController = getFacultyDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        FacultyJpaController facultyJpaController = daoFactory.createFacultyDAO();
         
         return facultyJpaController.findAllFacultiesInInstitution(institution);
     }
@@ -169,7 +169,8 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public List<Department> getAllDepartmentForFaculty(Faculty faculty) throws AuthenticationException, Exception
     {
-        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        DepartmentJpaController departmentJpaController = daoFactory.createDepartmentDAO();
         
         return departmentJpaController.findAllDepartmentsInFaculty(faculty);
     }
@@ -177,18 +178,21 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public Institution getInstitution(Long institution) throws Exception
     {
-        return getInstitutionDAO().findInstitution(institution);
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createInstitutionDAO().findInstitution(institution);
     }
     
     @Override
     public Faculty getFaculty(Long faculty) throws Exception
     {
-        return getFacultyDAO().findFaculty(faculty);
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createFacultyDAO().findFaculty(faculty);
     }
     
     @Override
     public Department getDepartment(Long department) throws Exception
     {
-        return getDepartmentDAO().findDepartment(department);
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createDepartmentDAO().findDepartment(department);
     }
 }

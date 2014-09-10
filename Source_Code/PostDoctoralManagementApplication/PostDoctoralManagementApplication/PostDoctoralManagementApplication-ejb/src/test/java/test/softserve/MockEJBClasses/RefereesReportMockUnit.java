@@ -68,12 +68,6 @@ public class RefereesReportMockUnit extends RefereeReportService
     }
     
     @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntitities;
@@ -97,12 +91,6 @@ public class RefereesReportMockUnit extends RefereeReportService
         return aTEJB;
     }
     
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
-
     public void setaDAO(ApplicationJpaController mockApplicationJpaController)
     {
        this.setaDAO(mockApplicationJpaController);

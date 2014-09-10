@@ -21,10 +21,4 @@ public class NotificationServiceMockUnit extends NotificationService {
     {
         this.nDAO = nDAO;
     }
-    
-    @Override
-    protected NotificationJpaController getNotificationDAO()
-    {
-        return nDAO;
-    }
 }

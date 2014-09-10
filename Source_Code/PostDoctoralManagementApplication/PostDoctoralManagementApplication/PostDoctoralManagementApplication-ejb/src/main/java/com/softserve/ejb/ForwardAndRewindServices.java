@@ -79,13 +79,13 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(emf.createEntityManager());
         
     }
     
     protected DAOFactory getDAOFactory()
     {
-        return new DAOFactory(emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -301,7 +301,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
         dAOFactory.createApplicationDAO().edit(application);
         dAOFactory.createForwardAndRewindReportDAO().create(forwardAndRewindReport);
-        dAOFactory.CloseEntityManager();
+        //dAOFactory.CloseEntityManager();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -348,7 +348,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
         dAOFactory.createApplicationDAO().edit(application);
         dAOFactory.createForwardAndRewindReportDAO().create(forwardAndRewindReport);
-        dAOFactory.CloseEntityManager();
+        //dAOFactory.CloseEntityManager();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -369,7 +369,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, 0, Integer.MAX_VALUE));
         applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, 0, Integer.MAX_VALUE));
         
-        dAOFactory.CloseEntityManager();
+        //dAOFactory.CloseEntityManager();
         return applications;
     }
     

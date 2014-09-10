@@ -81,7 +81,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      */
     protected DAOFactory getDAOFactory()
     {
-        return new DAOFactory(emf);
+        return new DAOFactory(emf.createEntityManager());
     } 
     
     /**
@@ -95,7 +95,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(emf.createEntityManager());
     }
     
     protected GregorianCalendar getGregorianCalendar()

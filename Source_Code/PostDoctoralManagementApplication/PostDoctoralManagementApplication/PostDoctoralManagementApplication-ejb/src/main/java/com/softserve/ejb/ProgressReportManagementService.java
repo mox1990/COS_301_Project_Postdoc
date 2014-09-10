@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.ProgressReportJpaController;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
@@ -52,14 +53,9 @@ public class ProgressReportManagementService implements ProgressReportManagement
         this.emf = emf;
     }
     
-    protected ProgressReportJpaController getProgressReportDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ProgressReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
         
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -78,7 +74,8 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws Exception
     {        
-        ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        ProgressReportJpaController progressReportJpaController = daoFactory.createProgressReportDAO();
         
         progressReport.setApplication(application);
         progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
@@ -90,7 +87,8 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public void updateProgressReport(Session session, ProgressReport progressReport) throws Exception
     {        
-        ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        ProgressReportJpaController progressReportJpaController = daoFactory.createProgressReportDAO();
         
         progressReportJpaController.edit(progressReport);
     }
@@ -100,9 +98,10 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
     {        
+        DAOFactory daoFactory = getDAOFactory();
         List<Application> output = new ArrayList<Application>();
         
-        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
+        List<Application> applications = daoFactory.createApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
         GregorianCalendar curCal = getGregorianCalendarUTIL();
         
         for(Application application : applications)

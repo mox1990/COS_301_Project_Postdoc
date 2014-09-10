@@ -10,6 +10,7 @@ import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
@@ -43,6 +44,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -81,37 +83,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         this.emf = emf;
     }
     
-    /**
-     *
-     * @return
-     */
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected RecommendationReportJpaController getRecommmendationReportDAO()
-    {
-        return new RecommendationReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected AmmendRequestJpaController getAmmendRequestDAO()
-    {
-        return new AmmendRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
-    {
-        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     /**
@@ -127,9 +101,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      *
      * @return
      */
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(em);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -150,7 +124,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(emf.createEntityManager());
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
     }
@@ -160,7 +134,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
     { 
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(emf.createEntityManager());
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
     }
@@ -180,7 +154,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void declineAppliction(Session session, Application application, String reason) throws Exception
     {        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(emf.createEntityManager());
         applicationServices.declineAppliction(session, application, reason);               
     }
     
@@ -199,8 +173,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
+        AmmendRequestJpaController ammendRequestJpaController = daoFactory.createAmmendRequestDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -234,9 +209,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception
     {
-       
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        RecommendationReportJpaController recommendationReportJpaController = getRecommmendationReportDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
+        RecommendationReportJpaController recommendationReportJpaController = daoFactory.createRecommendationReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -277,7 +252,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public List<Person> getDeansOfApplication(Session session, Application application) throws Exception
     {
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
         
         List<Person> Deans = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
         
@@ -289,8 +265,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
     {        
-        List<ApplicationReviewRequest> applicationReviewRequests = getApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
-        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        List<ApplicationReviewRequest> applicationReviewRequests = daoFactory.createApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = daoFactory.createApplicationReviewRequestDAO();
         if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
         {
             for(ApplicationReviewRequest applicationReviewRequest : applicationReviewRequests)
@@ -299,7 +276,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             }
         }
         
-        application = getApplicationDAO().findApplication(application.getApplicationID());
+        application = daoFactory.createApplicationDAO().findApplication(application.getApplicationID());
         
         dean.setUpEmployee(true);
         if(dean.getEmployeeInformation() == null)
@@ -307,7 +284,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             dean.setEmployeeInformation(new EmployeeInformation());
             dean.getEmployeeInformation().setPhysicalAddress(new Address());
         }
-        if(getPersonDAO().findUserBySystemIDOrEmail(dean.getSystemID()) == null)
+        if(daoFactory.createPersonDAO().findUserBySystemIDOrEmail(dean.getSystemID()) == null)
         {
             
             dean.setSecurityRoleList(new ArrayList<SecurityRole>());
@@ -317,7 +294,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         else
         {
             
-            dean = getPersonDAO().findPerson(dean.getSystemID());
+            dean = daoFactory.createPersonDAO().findPerson(dean.getSystemID());
             
             if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
             {

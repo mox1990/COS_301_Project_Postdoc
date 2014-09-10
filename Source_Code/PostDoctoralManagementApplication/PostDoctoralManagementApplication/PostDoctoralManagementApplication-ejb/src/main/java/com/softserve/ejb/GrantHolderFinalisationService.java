@@ -10,6 +10,7 @@ import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
@@ -86,41 +87,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         this.emf = emf;
     }
     
-    /**
-     *
-     * @return
-     */
-    protected PersonJpaController getPersonDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected CvJpaController getCVDAO()
-    {
-        return new CvJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
-    {
-        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected AmmendRequestJpaController getAmmendRequestDAO()
-    {
-        return new AmmendRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     /**
@@ -143,7 +112,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      */
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(emf.createEntityManager());
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -216,7 +185,8 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public void saveChangesToApplication(Session session, Application application) throws Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory daoFactoryWorking = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactoryWorking.createApplicationDAO();
         
         applicationJpaController.edit(application);
     }
@@ -245,8 +215,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
+        DAOFactory daoFactoryWorking = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactoryWorking.createApplicationDAO();
+        AmmendRequestJpaController ammendRequestJpaController = daoFactoryWorking.createAmmendRequestDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -277,8 +248,8 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public void finaliseApplication(Session session, Application application) throws Exception
     {
-        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory daoFactoryWorking = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactoryWorking.createApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
@@ -290,7 +261,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         applicationJpaController.edit(application);
                 
         //Send notification to HOD       
-        List<Person> HODs = getApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+        List<Person> HODs = daoFactoryWorking.createApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         ArrayList<Notification> notifications = new ArrayList<Notification>();
         for(Person p : HODs)
         {
@@ -304,8 +275,8 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public List<Person> getHODsOfApplication(Session session, Application application) throws Exception 
     {
-        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        DAOFactory daoFactoryWorking = getDAOFactory();
+        ApplicationJpaController applicationJpaController = daoFactoryWorking.createApplicationDAO();
         
         List<Person> HODs = applicationJpaController.findAllHODsWhoCanRecommendApplication(application);
         
@@ -317,8 +288,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public void requestSpecificHODtoReview(Session session, Application application, Person hod) throws Exception 
     {        
-        List<ApplicationReviewRequest> applicationReviewRequests = getApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
-        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
+        DAOFactory daoFactoryWorking = getDAOFactory();
+        List<ApplicationReviewRequest> applicationReviewRequests = daoFactoryWorking.createApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = daoFactoryWorking.createApplicationReviewRequestDAO();
         if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
         {
             for(ApplicationReviewRequest applicationReviewRequest : applicationReviewRequests)
@@ -327,7 +299,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             }
         }
         
-        application = getApplicationDAO().findApplication(application.getApplicationID());
+        application = daoFactoryWorking.createApplicationDAO().findApplication(application.getApplicationID());
         
         hod.setUpEmployee(true);
         if(hod.getEmployeeInformation() == null)
@@ -336,7 +308,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             hod.getEmployeeInformation().setPhysicalAddress(new Address());
         }
         
-        if(getPersonDAO().findUserBySystemIDOrEmail(hod.getSystemID()) == null)
+        if(daoFactoryWorking.createPersonDAO().findUserBySystemIDOrEmail(hod.getSystemID()) == null)
         {
             
             hod.setSecurityRoleList(new ArrayList<SecurityRole>());
@@ -346,7 +318,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         else
         {
             
-            hod = getPersonDAO().findPerson(hod.getSystemID());
+            hod = daoFactoryWorking.createPersonDAO().findPerson(hod.getSystemID());
             System.out.println(hod.toString() + " " + application.getFellow().toString() + " " + application.getGrantHolder().toString() + " " + application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD));
             if(!application.getFellow().equals(hod) && (!application.getGrantHolder().equals(hod) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD)) && !application.getPersonList().contains(hod))
             {
@@ -365,7 +337,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, hod, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
         
-        getApplicationReviewRequestDAO().create(applicationReviewRequest);
+        daoFactoryWorking.createApplicationReviewRequestDAO().create(applicationReviewRequest);
 
     }
         

@@ -49,7 +49,7 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     
     protected DAOFactory getDAOFactory()
     {
-        return new DAOFactory(emf);
+        return new DAOFactory(emf.createEntityManager());
     } 
     
     //Just changed it so that it recieves the auditLog object not creates which should be hanadled by the calling function

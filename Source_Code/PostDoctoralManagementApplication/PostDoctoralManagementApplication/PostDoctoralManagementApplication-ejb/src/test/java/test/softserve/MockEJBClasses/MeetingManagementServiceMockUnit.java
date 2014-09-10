@@ -56,28 +56,6 @@ public class MeetingManagementServiceMockUnit extends MeetingManagementService {
         this.aService = aService;
     }
     /**
-     *This function creates an instance of the PersonJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
-     * of the UserAccountManagementServices in the unit testing 
-     * @return An instance of PersonJpaController
-     */
-    @Override
-    protected CommitteeMeetingJpaController getCommitteeMeetingDAO()
-    {
-        return cMDAO;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected MinuteCommentJpaController getMinuteCommentDAO()
-    {
-        return mCDAO;
-    }
-    
-    /**
      *
      * @return
      */

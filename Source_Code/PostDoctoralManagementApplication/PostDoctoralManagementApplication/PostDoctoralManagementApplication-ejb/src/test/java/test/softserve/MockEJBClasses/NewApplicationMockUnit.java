@@ -80,11 +80,6 @@ public class NewApplicationMockUnit extends NewApplicationService
         return cVDAO;
     }
     
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()

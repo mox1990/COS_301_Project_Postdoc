@@ -6,6 +6,7 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
@@ -60,9 +61,9 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         this.emf = emf;
     }
     
-    protected NotificationJpaController getNotificationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     /**
@@ -128,9 +129,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @Asynchronous
     public void sendNotification(Notification notification, boolean sendEmail)
     {   
+        DAOFactory daoFactory = getDAOFactory();
         try 
         {
-            NotificationJpaController notificationJpaController = getNotificationDAO();
+            NotificationJpaController notificationJpaController = daoFactory.createNotificationDAO();
             
             //Set as current time
             notification.setTimestamp(new Timestamp(new Date().getTime()));
@@ -207,6 +209,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @Override
     public List<Notification> getAllNotificationsForPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         UserGateway userGateway = getUserGatewayServiceEJB();
         try
         {
@@ -221,7 +224,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
             userGateway.authenticateUser(session, roles);
         } 
         
-        NotificationJpaController notificationJpaController = getNotificationDAO();
+        NotificationJpaController notificationJpaController = daoFactory.createNotificationDAO();
         
         return notificationJpaController.findAllNotificationsWhosRecieverIs(person);
     }
@@ -229,6 +232,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @Override
     public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         UserGateway userGateway = getUserGatewayServiceEJB();
         try
         {
@@ -243,104 +247,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
             userGateway.authenticateUser(session, roles);
         } 
         
-        NotificationJpaController notificationJpaController = getNotificationDAO();
+        NotificationJpaController notificationJpaController = daoFactory.createNotificationDAO();
         
         return notificationJpaController.findAllNotificationsWhosSenderIs(person);
     }
-    
-    //Note this function is not percisly to the spec. It should be that a notification sends a notification plus an email or not
-    //Also the notification entity renders the notification request class a bit useless. 
-    /*@Override
-    public void sendNotification(NotificationRequest nRequest) throws Exception
-    {
-        switch(nRequest.nType)
-        {
-            case NotificationRequest.EMAIL:
-                sendEmail(nRequest.message, nRequest.subject, nRequest.recipients, nRequest.sender);
-                break;
-            case NotificationRequest.SYSTEM:
-                for(Person recipient: nRequest.recipients)
-                {
-                    sendSystemNotification(nRequest.message, nRequest.subject, recipient, nRequest.sender);
-                }
-                break;
-            default:
-                throw new MessagingException("Cannot construct such a notification.");
-        }
-    }*/
-    
-    
-    
-    //This is unessary modularity
-    /*
-    private void sendSystemNotification(Notification notification) throws Exception
-    {           
-        getNotificationDAO().create(notification);
-        
-    }*/
-    
-    //Use the notification object it will work better and plus it already contains the data
-    //The service shouldn't provide multi recipient ids since one notification represents only one email
-    /*
-    @Override
-    public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException
-    {
-        final String username = "iterativeKak@gmail.com";
-        final String password = "********";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true"); 
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props,
-          new javax.mail.Authenticator() 
-          {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() 
-            {
-                    return new PasswordAuthentication(username, password);
-            }
-          });
-
-        
-        int rSize = recipients.size();
-        Address[] addresses = new Address[rSize];
-        for(int i = 0; i < rSize; i++)
-        {
-            addresses[i] = new InternetAddress(recipients.get(i).getEmail());
-        }
-
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(sender.getEmail()));
-        message.setSubject(subject);
-        message.setRecipients(Message.RecipientType.TO, addresses);
-        message.setText(mess);
-
-        Transport.send(message);
-        
-    }*/
-    
-    
-    
-    //Not part of specification. Remember this EJB is to carry out the business logic not create the entities required for the business logic thats the managed beans job
-    /*
-    @Override
-    public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception
-    {
-        List<Notification> notifications = new ArrayList<>();
-        
-        for(Person recipient: recipients)
-        {
-            notifications.add(sendSystemNotification(message, subject, recipient, sender));
-        }
-        
-        return notifications;
-    }*/
-    
-   
-    
     
     @Override
     public List<Notification> findAll()

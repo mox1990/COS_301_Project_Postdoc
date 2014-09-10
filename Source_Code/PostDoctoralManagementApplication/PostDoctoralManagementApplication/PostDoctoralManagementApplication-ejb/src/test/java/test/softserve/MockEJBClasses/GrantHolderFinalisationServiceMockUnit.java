@@ -82,24 +82,6 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
     }
     
     @Override
-    protected PersonJpaController getPersonDAO()
-    {
-        return pDAO;
-    }
-    
-    @Override
-    protected CvJpaController getCVDAO()
-    {
-        return cVDAO;
-    }
-    
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntitities;
@@ -127,11 +109,5 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
     protected GregorianCalendar getGregorianCalendar()
     {
         return gCal;
-    }
-    
-    @Override
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
-    {
-        return aRDAO;
     }
 }

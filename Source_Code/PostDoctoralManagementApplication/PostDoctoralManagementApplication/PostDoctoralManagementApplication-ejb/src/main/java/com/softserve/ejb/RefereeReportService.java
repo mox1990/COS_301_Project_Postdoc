@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.RefereeReportJpaController;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
@@ -28,6 +29,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -73,22 +75,9 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         this.emf = emf;
     }
     
-    /**
-     *
-     * @return
-     */
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected RefereeReportJpaController getRefereeReportDAO()
-    {
-        return new RefereeReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     /**
@@ -104,9 +93,9 @@ public class RefereeReportService implements RefereeReportServiceLocal {
      *
      * @return
      */
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(em);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -130,7 +119,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(emf.createEntityManager());
         
         return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, StartIndex, maxNumberOfRecords);
     }
@@ -143,7 +132,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(emf.createEntityManager());
         
         return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
     }
@@ -160,13 +149,14 @@ public class RefereeReportService implements RefereeReportServiceLocal {
     @Override
     public void submitReferralReport(Session session, Application application, RefereeReport refereeReport) throws AuthenticationException, RollbackFailureException, Exception
     {
+        DAOFactory daoFactory = getDAOFactory();
         //Authenticate user privliges
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        RefereeReportJpaController refereeReportJpaController = getRefereeReportDAO();
+        ApplicationJpaController applicationJpaController = daoFactory.createApplicationDAO();
+        RefereeReportJpaController refereeReportJpaController = daoFactory.createRefereeReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         NotificationServiceLocal notificationService = getNotificationServiceEJB();

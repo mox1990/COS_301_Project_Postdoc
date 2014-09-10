@@ -57,18 +57,6 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
     }
     
     @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
-    protected EndorsementJpaController getEndorsementDAO()
-    {
-        return eDAO;
-    }
-    
-    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntities;

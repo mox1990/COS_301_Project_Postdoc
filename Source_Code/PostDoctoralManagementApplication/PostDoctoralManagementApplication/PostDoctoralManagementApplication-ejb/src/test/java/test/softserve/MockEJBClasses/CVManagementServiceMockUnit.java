@@ -51,19 +51,6 @@ public class CVManagementServiceMockUnit extends CVManagementService {
         this.dBEntities = dBEntities;
     }
     
-    protected CvJpaController getCVDAO()
-    {
-        return cVDAO;
-    }    
-    
-
-    
-    @Override
-    protected AcademicQualificationJpaController getAcademicQualificationDAO()
-    {
-        return aQDAO;
-    }
-    
     protected ExperienceJpaController getExperienceDAO()
     {
         return eDAO;

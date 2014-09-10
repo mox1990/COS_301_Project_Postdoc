@@ -68,7 +68,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     
     protected DAOFactory getDAOFactory()
     {
-        return new DAOFactory(emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -78,7 +78,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     
     protected ApplicationServicesUtil getApplicationServicesUTIL()
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(emf.createEntityManager());
     }
     
     protected GregorianCalendar getGregorianCalendar()

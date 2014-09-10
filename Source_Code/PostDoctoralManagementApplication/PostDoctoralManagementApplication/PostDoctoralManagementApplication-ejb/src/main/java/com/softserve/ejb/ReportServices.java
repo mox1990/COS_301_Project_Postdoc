@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
@@ -108,50 +109,41 @@ public class ReportServices implements ReportServicesLocal
         dynamicPersonReport = JRXmlLoader.load(dynamicPersonInputStream);
     }
     
-    /**
-     *
-     * @return
-     */
-    protected PersonJpaController getPersonDAO()
+    protected DAOFactory getDAOFactory()
     {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(emf.createEntityManager());
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersons(Session session)
     {
-        return getPersonDAO().findPersonEntities();
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createPersonDAO().findPersonEntities();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersonsWithSecurityRole(Session session, Long role)
     {
-        return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Application> getAllApplications(Session session)
     {
-        return getApplicationDAO().findApplicationEntities();
+        DAOFactory daoFactory = getDAOFactory();
+        return daoFactory.createApplicationDAO().findApplicationEntities();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Application> getAllApplicationsWithStatus(Session session, String status)
     {
-        ApplicationJpaController a = getApplicationDAO();
+        DAOFactory daoFactory = getDAOFactory();
+        ApplicationJpaController a = daoFactory.createApplicationDAO();
         return a.findAllApplicationsWithStatus(status, 0, (int) a.countAllApplicationsWithStatus(status));
     }
     

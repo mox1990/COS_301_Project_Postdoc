@@ -23,11 +23,4 @@ public class AuditTrailServiceMockUnit extends AuditTrailService {
         this.aDAO = aDAO;
     }
     
-    
-    @Override
-    protected AuditLogJpaController getAuditLogDAO()
-    {
-        return aDAO;
-    }  
-    
 }

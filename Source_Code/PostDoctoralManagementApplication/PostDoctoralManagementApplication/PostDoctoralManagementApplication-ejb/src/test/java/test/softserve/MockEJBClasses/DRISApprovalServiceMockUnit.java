@@ -86,18 +86,6 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     
     
     @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
-    protected FundingReportJpaController getFundingReportDAO()
-    {
-        return fRDAO;
-    }
-    
-    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntities;
@@ -116,29 +104,10 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     {
         return aSEJB;
     }
-    
-    @Override
-    protected EligiblityReportJpaController getEligiblityReportDAO()
-    {
-        return eDAO;
-    }
-    
     @Override
     protected GregorianCalendar getGregorianCalendar()
     {
         return gCal;
-    }
-    
-    @Override
-    protected PersonJpaController getPersonDAO()
-    {
-        return pDAO;
-    }
-    
-    @Override
-    protected FundingCostJpaController getFundingCostDAO()
-    {
-        return fCDAO;
     }
     
     /** TODO: Implement work around...

@@ -54,7 +54,7 @@ public class CVManagementService implements CVManagementServiceLocal {
     
     protected DAOFactory getDAOFactory()
     {
-        return new DAOFactory(emf);
+        return new DAOFactory(emf.createEntityManager());
     } 
     
     @Override

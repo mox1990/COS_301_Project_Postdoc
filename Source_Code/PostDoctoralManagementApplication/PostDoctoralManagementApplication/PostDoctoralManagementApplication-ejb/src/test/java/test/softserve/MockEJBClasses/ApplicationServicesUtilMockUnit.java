@@ -14,6 +14,7 @@ import com.softserve.ejb.UserGateway;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -33,8 +34,8 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
         super(null);
     }
 
-    public ApplicationServicesUtilMockUnit(EntityManagerFactory emf) {
-        super(emf);
+    public ApplicationServicesUtilMockUnit(EntityManager em) {
+        super(em);
     }
 
     public void setaDAO(ApplicationJpaController aDAO) {
@@ -65,7 +66,6 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
         this.gCal = gCal;
     }
     
-    @Override
     protected ApplicationJpaController getApplicationDAO()
     {
         return aDAO;
@@ -85,7 +85,6 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
      *
      * @return
      */
-    @Override
     protected UserGateway getUserGatewayServiceEJB()
     {
         return uEJB;
@@ -95,7 +94,6 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
      *
      * @return
      */
-    @Override
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
@@ -105,13 +103,11 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
      *
      * @return
      */
-    @Override
     protected AuditTrailService getAuditTrailServiceEJB()
     {
         return aTEJB;
     }
     
-    @Override
     protected DeclineReportJpaController getDeclineReportDAO()
     {
         return dRDAO;
