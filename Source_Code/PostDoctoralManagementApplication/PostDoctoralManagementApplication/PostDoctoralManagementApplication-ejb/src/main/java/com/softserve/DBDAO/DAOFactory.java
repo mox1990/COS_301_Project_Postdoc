@@ -152,7 +152,7 @@ public class DAOFactory {
         return new ResearchFellowInformationJpaController(em);
     }
     
-    public SecurityRoleJpaController createSecurityRoleJpaController()
+    public SecurityRoleJpaController createSecurityRoleDAO()
     {
         return new SecurityRoleJpaController(em);
     }

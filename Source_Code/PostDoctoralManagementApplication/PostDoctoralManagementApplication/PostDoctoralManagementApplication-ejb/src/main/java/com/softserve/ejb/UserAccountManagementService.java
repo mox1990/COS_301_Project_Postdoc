@@ -226,6 +226,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user) throws Exception
     {     
+
         /* NB DISABLED FOR TESTING PURPOSE
         if(findUserBySystemIDOrEmail(user.getEmail()) != null)
         {
