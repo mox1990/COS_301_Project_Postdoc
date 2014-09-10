@@ -45,35 +45,15 @@ public class MinuteCommentJpaController implements Serializable {
     
     public void create(EntityManager em, MinuteComment minuteComment) throws RollbackFailureException, Exception 
     {
-
-        CommitteeMeeting meeting = minuteComment.getMeeting();
-        if (meeting != null) {
-            meeting = em.getReference(meeting.getClass(), meeting.getMeetingID());
-            minuteComment.setMeeting(meeting);
-        }
-        Person attendee = minuteComment.getAttendee();
-        if (attendee != null) {
-            attendee = em.getReference(attendee.getClass(), attendee.getSystemID());
-            minuteComment.setAttendee(attendee);
-        }
         em.persist(minuteComment);
-        if (meeting != null) {
-            meeting.getMinuteCommentList().add(minuteComment);
-            meeting = em.merge(meeting);
-        }
-        if (attendee != null) {
-            attendee.getMinuteCommentList().add(minuteComment);
-            attendee = em.merge(attendee);
-        }
-
     }
     
-    public void edit(MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public MinuteComment edit(MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), minuteComment);
+        return edit(getEntityManager(), minuteComment);
     }
 
-    public void edit(EntityManager em, MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public MinuteComment edit(EntityManager em, MinuteComment minuteComment) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = minuteComment.getCommentID();
@@ -81,37 +61,7 @@ public class MinuteCommentJpaController implements Serializable {
             throw new NonexistentEntityException("The minuteComment with id " + id + " no longer exists.");
         }
                 
-        MinuteComment persistentMinuteComment = em.find(MinuteComment.class, minuteComment.getCommentID());
-        CommitteeMeeting meetingOld = persistentMinuteComment.getMeeting();
-        CommitteeMeeting meetingNew = minuteComment.getMeeting();
-        Person attendeeOld = persistentMinuteComment.getAttendee();
-        Person attendeeNew = minuteComment.getAttendee();
-        if (meetingNew != null) {
-            meetingNew = em.getReference(meetingNew.getClass(), meetingNew.getMeetingID());
-            minuteComment.setMeeting(meetingNew);
-        }
-        if (attendeeNew != null) {
-            attendeeNew = em.getReference(attendeeNew.getClass(), attendeeNew.getSystemID());
-            minuteComment.setAttendee(attendeeNew);
-        }
-        minuteComment = em.merge(minuteComment);
-        if (meetingOld != null && !meetingOld.equals(meetingNew)) {
-            meetingOld.getMinuteCommentList().remove(minuteComment);
-            meetingOld = em.merge(meetingOld);
-        }
-        if (meetingNew != null && !meetingNew.equals(meetingOld)) {
-            meetingNew.getMinuteCommentList().add(minuteComment);
-            meetingNew = em.merge(meetingNew);
-        }
-        if (attendeeOld != null && !attendeeOld.equals(attendeeNew)) {
-            attendeeOld.getMinuteCommentList().remove(minuteComment);
-            attendeeOld = em.merge(attendeeOld);
-        }
-        if (attendeeNew != null && !attendeeNew.equals(attendeeOld)) {
-            attendeeNew.getMinuteCommentList().add(minuteComment);
-            attendeeNew = em.merge(attendeeNew);
-        }
-
+        return em.merge(minuteComment);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -129,18 +79,8 @@ public class MinuteCommentJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The minuteComment with id " + id + " no longer exists.", enfe);
         }
-        CommitteeMeeting meeting = minuteComment.getMeeting();
-        if (meeting != null) {
-            meeting.getMinuteCommentList().remove(minuteComment);
-            meeting = em.merge(meeting);
-        }
-        Person attendee = minuteComment.getAttendee();
-        if (attendee != null) {
-            attendee.getMinuteCommentList().remove(minuteComment);
-            attendee = em.merge(attendee);
-        }
-        em.remove(minuteComment);
-            
+
+        em.remove(minuteComment);            
     }
 
     public List<MinuteComment> findMinuteCommentEntities() {

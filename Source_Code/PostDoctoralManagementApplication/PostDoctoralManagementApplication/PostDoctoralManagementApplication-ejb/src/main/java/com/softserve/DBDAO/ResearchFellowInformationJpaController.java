@@ -62,35 +62,16 @@ public class ResearchFellowInformationJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-  
-        Person person = researchFellowInformation.getPerson();
-        if (person != null) {
-            person = em.getReference(person.getClass(), person.getSystemID());
-            researchFellowInformation.setPerson(person);
-        }
-        Department department = researchFellowInformation.getDepartment();
-        if (department != null) {
-            department = em.getReference(department.getClass(), department.getDepartmentID());
-            researchFellowInformation.setDepartment(department);
-        }
+        
         em.persist(researchFellowInformation);
-        if (person != null) {
-            person.setResearchFellowInformation(researchFellowInformation);
-            person = em.merge(person);
-        }
-        if (department != null) {
-            department.getResearchFellowInformationList().add(researchFellowInformation);
-            department = em.merge(department);
-        }
-
     }
     
-    public void edit(ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public ResearchFellowInformation edit(ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), researchFellowInformation);
+        return edit(getEntityManager(), researchFellowInformation);
     }
 
-    public void edit(EntityManager em, ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public ResearchFellowInformation edit(EntityManager em, ResearchFellowInformation researchFellowInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         String id = researchFellowInformation.getSystemAssignedID();
@@ -116,34 +97,8 @@ public class ResearchFellowInformationJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (personNew != null) {
-            personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-            researchFellowInformation.setPerson(personNew);
-        }
-        if (departmentNew != null) {
-            departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
-            researchFellowInformation.setDepartment(departmentNew);
-        }
-        researchFellowInformation = em.merge(researchFellowInformation);
-        if (personOld != null && !personOld.equals(personNew)) {
-            personOld.setResearchFellowInformation(null);
-            personOld = em.merge(personOld);
-        }
-        if (personNew != null && !personNew.equals(personOld)) {
-            personNew.setResearchFellowInformation(researchFellowInformation);
-            personNew = em.merge(personNew);
-        }
-        if (departmentOld != null && !departmentOld.equals(departmentNew)) {
-            departmentOld.getResearchFellowInformationList().remove(researchFellowInformation);
-            departmentOld = em.merge(departmentOld);
-        }
-        if (departmentNew != null && !departmentNew.equals(departmentOld)) {
-            departmentNew.getResearchFellowInformationList().add(researchFellowInformation);
-            departmentNew = em.merge(departmentNew);
-        }
-            
-                
 
+        return em.merge(researchFellowInformation);
     }
     
     public void destroy(String id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -161,16 +116,7 @@ public class ResearchFellowInformationJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The researchFellowInformation with id " + id + " no longer exists.", enfe);
         }
-        Person person = researchFellowInformation.getPerson();
-        if (person != null) {
-            person.setResearchFellowInformation(null);
-            person = em.merge(person);
-        }
-        Department department = researchFellowInformation.getDepartment();
-        if (department != null) {
-            department.getResearchFellowInformationList().remove(researchFellowInformation);
-            department = em.merge(department);
-        }
+
         em.remove(researchFellowInformation);
 
     }

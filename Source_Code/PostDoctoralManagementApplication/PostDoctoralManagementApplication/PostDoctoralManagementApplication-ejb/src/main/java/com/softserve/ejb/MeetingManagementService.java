@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.MinuteCommentJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
@@ -22,9 +23,9 @@ import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,7 @@ import javax.ejb.Stateful;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -43,7 +45,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateful
 @TransactionManagement(TransactionManagementType.BEAN)
 public class MeetingManagementService implements MeetingManagementServiceLocal {
@@ -78,24 +80,16 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * of the UserAccountManagementServices in the unit testing 
      * @return An instance of PersonJpaController
      */
-    protected CommitteeMeetingJpaController getCommitteeMeetingDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new CommitteeMeetingJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
-    
-    /**
-     *
-     * @return
-     */
-    protected MinuteCommentJpaController getMinuteCommentDAO()
+
+    protected TransactionController getTransactionController()
     {
-        return new MinuteCommentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new TransactionController(emf);
     }
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
+
     
     /**
      *
@@ -126,24 +120,44 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
         
-        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        
-        ArrayList<Notification> notifications = new ArrayList<Notification>();
-        
-        //Create notifications for each attendee
-        for(Person p : committeeMeeting.getPersonList())
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            CommitteeMeetingJpaController committeeMeetingJpaController = dAOFactory.createCommitteeMeetingDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+
+            //Create notifications for each attendee
+            for(Person p : committeeMeeting.getPersonList())
+            {
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
+            }
+            committeeMeeting.setOrganiser(session.getUser());
+            //Create the meeting
+            committeeMeeting.setEndDate(null);
+            committeeMeetingJpaController.create(committeeMeeting);
+
+            //Send notification batch to attendees
+            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+
+            transactionController.CommitTransaction();
         }
-        committeeMeeting.setOrganiser(session.getUser());
-        //Create the meeting
-        committeeMeeting.setEndDate(null);
-        committeeMeetingJpaController.create(committeeMeeting);
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
         
-        //Send notification batch to attendees
-        notificationService.sendBatchNotifications(notifications, true);
+        
     }
     
     /**
@@ -161,27 +175,47 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
         
-        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        
-        CommitteeMeeting cm = committeeMeetingJpaController.findCommitteeMeeting(committeeMeeting.getMeetingID());
-        
-        if(cm.getEndDate() != null || cm.getStartDate().before(getGregorianCalendar().getTime()))
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            throw new Exception("Meeting has already started or been concluded");
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            CommitteeMeetingJpaController committeeMeetingJpaController = dAOFactory.createCommitteeMeetingDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+
+            CommitteeMeeting cm = committeeMeetingJpaController.findCommitteeMeeting(committeeMeeting.getMeetingID());
+
+            if(cm.getEndDate() != null || cm.getStartDate().before(getGregorianCalendar().getTime()))
+            {
+                throw new Exception("Meeting has already started or been concluded");
+            }
+
+            committeeMeetingJpaController.edit(committeeMeeting);
+
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+
+            for(Person p : committeeMeeting.getPersonList())
+            {
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
+            }
+
+            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        committeeMeetingJpaController.edit(committeeMeeting);
         
-        ArrayList<Notification> notifications = new ArrayList<Notification>();
-        
-        for(Person p : committeeMeeting.getPersonList())
-        {
-            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
-        }
-        
-        notificationService.sendBatchNotifications(notifications, true);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -190,27 +224,45 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
     {
         
-        CommitteeMeetingJpaController committeeMeetingJpaController = getCommitteeMeetingDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        
-        if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()) || committeeMeeting.getMinuteCommentList().size() > 0)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            throw new Exception("Commitee meeting is already active or held");
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            CommitteeMeetingJpaController committeeMeetingJpaController = dAOFactory.createCommitteeMeetingDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+
+            if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()) || committeeMeeting.getMinuteCommentList().size() > 0)
+            {
+                throw new Exception("Commitee meeting is already active or held");
+            }
+
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+
+            for(Person p : committeeMeeting.getPersonList())
+            {
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
+            }
+
+            committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());        
+
+            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        ArrayList<Notification> notifications = new ArrayList<Notification>();
         
-        for(Person p : committeeMeeting.getPersonList())
-        {
-            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
-        }
-        
-        committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());
-        
-        
-        
-        notificationService.sendBatchNotifications(notifications, true);
         
     }
     
@@ -231,15 +283,35 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
     {
         
-        if(committeeMeeting.getEndDate() == null)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            committeeMeeting.setStartDate(getGregorianCalendar().getTime());
-            getCommitteeMeetingDAO().edit(committeeMeeting);
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            if(committeeMeeting.getEndDate() == null)
+            {
+                committeeMeeting.setStartDate(getGregorianCalendar().getTime());
+                dAOFactory.createCommitteeMeetingDAO().edit(committeeMeeting);
+            }
+            else
+            {
+                throw new Exception("Meeting has already been concluded");
+            }
+
+            transactionController.CommitTransaction();
         }
-        else
+        catch(Exception ex)
         {
-            throw new Exception("Meeting has already been concluded");
+            transactionController.RollbackTransaction();
+            throw ex;
         }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
+        
     }
     
     /**
@@ -254,16 +326,35 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
     {
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()))
+            {
+                committeeMeeting.setEndDate(getGregorianCalendar().getTime());
+                dAOFactory.createCommitteeMeetingDAO().edit(committeeMeeting);
+            }
+            else
+            {
+                throw new Exception("Meeting has not yet started");
+            }
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
         
-        if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()))
-        {
-            committeeMeeting.setEndDate(getGregorianCalendar().getTime());
-            getCommitteeMeetingDAO().edit(committeeMeeting);
-        }
-        else
-        {
-            throw new Exception("Meeting has not yet started");
-        }
+        
     }
     
     //The changes are to make the function more inline with the specification
@@ -280,18 +371,37 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void addMinuteComment(Session session, MinuteComment minuteComment) throws Exception 
     {
-        
-        if(minuteComment.getMeeting().getStartDate().before(getGregorianCalendar().getTime()) && minuteComment.getMeeting().getEndDate() == null)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            minuteComment.setAttendee(session.getUser());
-            minuteComment.setTimestamp(getGregorianCalendar().getTime());
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            if(minuteComment.getMeeting().getStartDate().before(getGregorianCalendar().getTime()) && minuteComment.getMeeting().getEndDate() == null)
+            {
+                minuteComment.setAttendee(session.getUser());
+                minuteComment.setTimestamp(getGregorianCalendar().getTime());
 
-            getMinuteCommentDAO().create(minuteComment);
+                dAOFactory.createMinuteCommentDAO().create(minuteComment);
+            }
+            else
+            {
+                throw new Exception("Meeting is not active");
+            }
+
+            transactionController.CommitTransaction();
         }
-        else
+        catch(Exception ex)
         {
-            throw new Exception("Meeting is not active");
+            transactionController.RollbackTransaction();
+            throw ex;
         }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
+        
         
         //This is already handled by the DAO
         //cMeeting.getMinuteCommentList().add(min);
@@ -310,7 +420,18 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllMeetings(Session session) throws Exception 
     {        
-        return getCommitteeMeetingDAO().findCommitteeMeetingEntities();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createCommitteeMeetingDAO().findCommitteeMeetingEntities();
+        }
+        finally
+        {
+            em.close();
+        }
+        
+        
     }
     
     /**
@@ -325,7 +446,17 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws Exception 
     {   
-        return getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
@@ -333,23 +464,33 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllActiveMeetingsForWhichUserIsToAttend(Session session) throws Exception 
     {   
-        
-        List<CommitteeMeeting> committeeMeetings = getCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
-        List<CommitteeMeeting> outcommitteeMeetings = new ArrayList<CommitteeMeeting>();
-        
-        for(CommitteeMeeting committeeMeeting : committeeMeetings)
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            if(committeeMeeting.getOrganiser().equals(session.getUser()) )
+            List<CommitteeMeeting> committeeMeetings = getDAOFactory(em).createCommitteeMeetingDAO().findAllActiveCommitteeMeetings();
+            List<CommitteeMeeting> outcommitteeMeetings = new ArrayList<CommitteeMeeting>();
+
+            for(CommitteeMeeting committeeMeeting : committeeMeetings)
             {
-                outcommitteeMeetings.add(committeeMeeting);
+                if(committeeMeeting.getOrganiser().equals(session.getUser()) )
+                {
+                    outcommitteeMeetings.add(committeeMeeting);
+                }
+                else if(committeeMeeting.getPersonList().contains(session.getUser()) )
+                {
+                    outcommitteeMeetings.add(committeeMeeting);
+                }                
             }
-            else if(committeeMeeting.getPersonList().contains(session.getUser()) )
-            {
-                outcommitteeMeetings.add(committeeMeeting);
-            }                
+
+            return outcommitteeMeetings;
+        }
+        finally
+        {
+            em.close();
         }
         
-        return outcommitteeMeetings;
+        
         
     }
     
@@ -357,8 +498,19 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws Exception 
-    {        
-        return getCommitteeMeetingDAO().findAllConcludedCommitteeMeetings();
+    {   
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createCommitteeMeetingDAO().findAllConcludedCommitteeMeetings();
+        }
+        finally
+        {
+            em.close();
+        }
+        
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -366,9 +518,19 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<Person> getAllPostDocCommitteeMembers(Session session) throws Exception 
     {        
-        List<Person> persons = getPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-        persons.remove(session.getUser());
-        return persons;
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            List<Person> persons = getDAOFactory(em).createPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+            persons.remove(session.getUser());
+            return persons;
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -376,7 +538,17 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws Exception 
     {       
-        return getCommitteeMeetingDAO().findAllStillToBeHeldCommitteeMeetings();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createCommitteeMeetingDAO().findAllStillToBeHeldCommitteeMeetings();
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
     
 }

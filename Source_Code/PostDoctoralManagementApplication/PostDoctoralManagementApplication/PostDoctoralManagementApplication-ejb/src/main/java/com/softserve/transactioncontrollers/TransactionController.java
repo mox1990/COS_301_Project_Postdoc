@@ -7,6 +7,7 @@
 package com.softserve.transactioncontrollers;
 
 import com.softserve.DBDAO.DAOFactory;
+import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.RollbackException;
@@ -51,7 +52,17 @@ public class TransactionController {
     {
         if(userTransaction != null)
         {
-            userTransaction.rollback();
+            try
+            {
+                System.out.println("=================Before rollback");
+                userTransaction.rollback();
+                
+            }
+            catch(Exception ex)
+            {
+                System.out.println("=================Exception");
+                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", ex);
+            }
         }
         else
         {
@@ -79,10 +90,6 @@ public class TransactionController {
             entityManager.close();
             entityManager = null;
         }
-        else
-        {
-            throw new Exception("Transcation controller cannot close a null entity manager");
-        }
     }
     
     public DAOFactory getDAOFactoryForTransaction() throws Exception
@@ -96,5 +103,12 @@ public class TransactionController {
             throw new Exception("Transcation controller cannot find a vaild entity manager");
         }
     }
+
+    public EntityManager getEntityManager() 
+    {
+        return entityManager;
+    }
+    
+    
     
 }

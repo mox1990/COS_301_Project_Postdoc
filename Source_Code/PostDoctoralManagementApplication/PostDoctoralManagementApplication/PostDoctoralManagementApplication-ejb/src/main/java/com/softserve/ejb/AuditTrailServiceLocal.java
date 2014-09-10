@@ -19,6 +19,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface AuditTrailServiceLocal {
-    public void logAction(AuditLog auditLog) throws Exception;
+    public void logAction(Session session, AuditLog auditLog) throws Exception;
     public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception;
 }

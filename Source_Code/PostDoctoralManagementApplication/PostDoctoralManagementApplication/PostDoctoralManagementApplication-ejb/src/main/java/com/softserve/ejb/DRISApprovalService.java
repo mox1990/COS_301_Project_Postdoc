@@ -28,13 +28,12 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
-import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -44,6 +43,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -52,7 +52,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DRISApprovalService implements DRISApprovalServiceLocal {
@@ -79,10 +79,15 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      *
      * @return
      */
-    protected DAOFactory getDAOFactory()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(emf);
-    } 
+        return new DAOFactory(em);
+    }
+
+    protected TransactionController getTransactionController()
+    {
+        return new TransactionController(emf);
+    }
     
     /**
      *
@@ -93,9 +98,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         return new DBEntitiesFactory();
     }
     
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return new ApplicationServicesUtil(emf);
+        return new ApplicationServicesUtil(em);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -157,9 +162,19 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public List<Application> loadPendingEndorsedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
+            return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,StartIndex,maxNumberOfRecords);
+        }
+        finally
+        {
+            em.close();
+        }
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,StartIndex,maxNumberOfRecords);
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -167,9 +182,17 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public int countTotalPendingEndorsedApplications(Session session) throws Exception 
     {        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        
-        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
+            return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        }
+        finally
+        {
+            em.close();
+        }
     }  
     
     /**
@@ -184,9 +207,18 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public List<Application> loadPendingEligibleApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, StartIndex, maxNumberOfRecords);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
+            return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, StartIndex, maxNumberOfRecords);
+        }
+        finally
+        {
+            em.close();
+        }        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -194,9 +226,17 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public int countTotalPendingEligibleApplications(Session session) throws AuthenticationException, Exception 
     {       
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        
-        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
+            return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+        }
+        finally
+        {
+            em.close();
+        }        
     }
     
     /**
@@ -234,38 +274,59 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
-    @TransactionMethod
     @Override
     public void setApplicationEligibleStatus(Session session, Application application, boolean isElgible) throws Exception
     {        
-        DAOFactory dAOFactory = getDAOFactory();
-        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
-        EligiblityReportJpaController eligiblityReportJpaController = dAOFactory.createEligiblityReportDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
-        if(application.getEligiblityReport() == null)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            if(isElgible)
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            EligiblityReportJpaController eligiblityReportJpaController = dAOFactory.createEligiblityReportDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+
+            if(application.getEligiblityReport() == null)
             {
-                application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
-                applicationJpaController.edit(application);
+                if(isElgible)
+                {
+                    application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+                    applicationJpaController.edit(application);
+                    
+                    Notification notification = getDBEntitiesFactory().createNotificationEntity(session.getUser(), application.getFellow(), "Application is eligible", "Your application has been checked for eligiblity and found that that is eligible");
+                    getNotificationServiceEJB().sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
+                }
+                else
+                {
+                    //Send notification to grant holder and applicatantD
+                    String reason = "Prospective fellow does not meet the eligiblity requirement";
+
+                    ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.getEntityManager());
+                    applicationServices.declineAppliction(session, application, reason);
+                }
+
+                EligiblityReport eligiblityReport = dBEntitiesFactory.createEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
+                eligiblityReportJpaController.create(eligiblityReport);
             }
             else
             {
-                //Send notification to grant holder and applicatantD
-                String reason = "Prospective fellow does not meet the eligiblity requirement";
-
-                ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-                applicationServices.declineAppliction(session, application, reason);
+                throw new Exception("Application already checked for eligiblity.");
             }
-            
-            EligiblityReport eligiblityReport = dBEntitiesFactory.createEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
-            eligiblityReportJpaController.create(eligiblityReport);
+
+            transactionController.CommitTransaction();
         }
-        else
+        catch(Exception ex)
         {
-            throw new Exception("Application already checked for eligiblity.");
+            transactionController.RollbackTransaction();
+            throw ex;
         }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
+        
     }
     
     /**
@@ -280,12 +341,27 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      */
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
-    @TransactionMethod
     @Override
     public void denyFunding(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
     {        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        applicationServices.declineAppliction(session, application, reason);   
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.getEntityManager());
+            applicationServices.declineAppliction(session, application, reason);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }  
     }
     
     /**
@@ -302,82 +378,97 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      */
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
-    @TransactionMethod
     @Override
     public void approveFunding(Session session, Application application, ResearchFellowInformation researchFellowInformation, FundingReport fundingReport, String applicantMessage, Notification cscMesssage, Notification finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
     {        
         
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
-        DAOFactory dAOFactory = getDAOFactory();
-        FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
-        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
-        FundingReportJpaController fundingReportJpaController = dAOFactory.createFundingReportDAO();
-        PersonJpaController personJpaController = dAOFactory.createPersonDAO();
-        ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
-        
-        Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());
-                
-        
-        //Set application status to funded
-        oldApplication.setStartDate(application.getStartDate());
-        oldApplication.setEndDate(application.getEndDate());
-        oldApplication.setFundingReport(null);
-        oldApplication.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
-        applicationJpaController.edit(oldApplication);
-        
-        List<FundingCost> fundingCosts = fundingReport.getFundingCostList();
-        
-        //Create funding report
-        fundingReport.setApplication(application);
-        fundingReport.setReportID(application.getApplicationID());
-        fundingReport.setDris(session.getUser());
-        fundingReport.setTimestamp(getGregorianCalendar().getTime());
-        fundingReport.setFundingCostList(null);
-        fundingReportJpaController.create(fundingReport);
-        
-        for(FundingCost fundingCost : fundingCosts)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            fundingCost.setFundingReport(fundingReport);
-            fundingCostJpaController.create(fundingCost);
-        }
-  
-        
-        
-        Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
-        if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
-        {
-            fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
-        }
-        
-        
-        researchFellowInformation.setPerson(fellow);
-        researchFellowInformation.setSystemAssignedID(fellow.getSystemID());
-        
-        if(fellow.getResearchFellowInformation() == null)
-        {
-            researchFellowInformationJpaController.create(researchFellowInformation);
-        }
-        else
-        {
-            researchFellowInformationJpaController.edit(researchFellowInformation);
-        }       
-        
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
 
-        //Send notification to CSC, Finance, grant holder and applicatant
-        ArrayList<Notification> notifications = new ArrayList<Notification>();        
-        notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
-        notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
-        
-        notificationService.sendBatchNotifications(notifications, true);
-        
-        //CSC and finance person
-        cscMesssage.setSubject("Application funding approved");
-        finaceMessage.setSubject(cscMesssage.getSubject());
-        notificationService.sendOnlyEmail(cscMesssage);
-        notificationService.sendOnlyEmail(finaceMessage);        
-        
+
+            FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            FundingReportJpaController fundingReportJpaController = dAOFactory.createFundingReportDAO();
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
+
+            Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());
+
+
+            //Set application status to funded
+            oldApplication.setStartDate(application.getStartDate());
+            oldApplication.setEndDate(application.getEndDate());
+            oldApplication.setFundingReport(null);
+            oldApplication.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
+            applicationJpaController.edit(oldApplication);
+
+            List<FundingCost> fundingCosts = fundingReport.getFundingCostList();
+
+            //Create funding report
+            fundingReport.setApplication(application);
+            fundingReport.setReportID(application.getApplicationID());
+            fundingReport.setDris(session.getUser());
+            fundingReport.setTimestamp(getGregorianCalendar().getTime());
+            fundingReport.setFundingCostList(null);
+            fundingReportJpaController.create(fundingReport);
+
+            for(FundingCost fundingCost : fundingCosts)
+            {
+                fundingCost.setFundingReport(fundingReport);
+                fundingCostJpaController.create(fundingCost);
+            }
+
+
+
+            Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
+            if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
+            {
+                fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
+            }
+
+
+            researchFellowInformation.setPerson(fellow);
+            researchFellowInformation.setSystemAssignedID(fellow.getSystemID());
+
+            if(fellow.getResearchFellowInformation() == null)
+            {
+                researchFellowInformationJpaController.create(researchFellowInformation);
+            }
+            else
+            {
+                researchFellowInformationJpaController.edit(researchFellowInformation);
+            }  
+            
+            //Send notification to CSC, Finance, grant holder and applicatant
+            ArrayList<Notification> notifications = new ArrayList<Notification>();        
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
+
+            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+
+            //CSC and finance person
+            cscMesssage.setSubject("Application funding approved");
+            finaceMessage.setSubject(cscMesssage.getSubject());
+            notificationService.sendOnlyEmail(new Session(session.getHttpSession(),session.getUser(),true),cscMesssage);
+            notificationService.sendOnlyEmail(new Session(session.getHttpSession(),session.getUser(),true),finaceMessage);  
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
@@ -385,81 +476,107 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public List<Application> loadFundedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception 
     {
-        return getApplicationServicesUTIL().loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, StartIndex, maxNumberOfRecords);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, StartIndex, maxNumberOfRecords);
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
-    @TransactionMethod
     @Override
     public void updateFundingInformation(Session session, Application application) throws Exception 
     {
-        DAOFactory dAOFactory = getDAOFactory();
-                
-        FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
-        ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
-        FundingReportJpaController fundingReportJpaController = dAOFactory.createFundingReportDAO();
-        PersonJpaController personJpaController = dAOFactory.createPersonDAO();
-        ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
-        
-        ResearchFellowInformation researchFellowInformation = application.getFellow().getResearchFellowInformation();
-        FundingReport fundingReport = application.getFundingReport();       
-        
-        FundingReport fundingReport1 = fundingReportJpaController.findFundingReport(fundingReport.getReportID());
-        List<FundingCost> fundingCosts = fundingReport.getFundingCostList();
-        
-        for(FundingCost fundingCost : fundingCosts)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            if(!fundingReport1.getFundingCostList().contains(fundingCost))
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            FundingReportJpaController fundingReportJpaController = dAOFactory.createFundingReportDAO();
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
+
+            ResearchFellowInformation researchFellowInformation = application.getFellow().getResearchFellowInformation();
+            FundingReport fundingReport = application.getFundingReport();       
+
+            FundingReport fundingReport1 = fundingReportJpaController.findFundingReport(fundingReport.getReportID());
+            List<FundingCost> fundingCosts = fundingReport.getFundingCostList();
+
+            for(FundingCost fundingCost : fundingCosts)
             {
-                fundingCost.setFundingReport(fundingReport);
-                fundingCostJpaController.create(fundingCost);
+                if(!fundingReport1.getFundingCostList().contains(fundingCost))
+                {
+                    fundingCost.setFundingReport(fundingReport);
+                    fundingCostJpaController.create(fundingCost);
+                }
+                else
+                {
+                    fundingCostJpaController.edit(fundingCost);
+                }
+            }
+
+            List<FundingCost> toDelete = new ArrayList<FundingCost>();
+            for(FundingCost fundingCost : fundingReport1.getFundingCostList())
+            {
+                if(!fundingCosts.contains(fundingCost))
+                {
+                    toDelete.add(fundingCost);                
+                }
+            }
+
+            for(FundingCost fundingCost : toDelete)
+            {
+                fundingCostJpaController.destroy(fundingCost.getCostID());
+            }
+
+
+            Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
+            if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
+            {
+                fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
+            }
+
+            researchFellowInformation.setPerson(fellow);
+            researchFellowInformation.setSystemAssignedID(fellow.getSystemID());
+
+            if(fellow.getResearchFellowInformation() == null)
+            {
+                researchFellowInformationJpaController.create(researchFellowInformation);
             }
             else
             {
-                fundingCostJpaController.edit(fundingCost);
-            }
+                researchFellowInformationJpaController.edit(researchFellowInformation);
+            } 
+
+            Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());                
+
+            oldApplication.setStartDate(application.getStartDate());
+            oldApplication.setEndDate(application.getEndDate());       
+
+            applicationJpaController.edit(oldApplication);
+
+            transactionController.CommitTransaction();
         }
-        
-        List<FundingCost> toDelete = new ArrayList<FundingCost>();
-        for(FundingCost fundingCost : fundingReport1.getFundingCostList())
+        catch(Exception ex)
         {
-            if(!fundingCosts.contains(fundingCost))
-            {
-                toDelete.add(fundingCost);                
-            }
+            transactionController.RollbackTransaction();
+            throw ex;
         }
-        
-        for(FundingCost fundingCost : toDelete)
+        finally
         {
-            fundingCostJpaController.destroy(fundingCost.getCostID());
+            transactionController.CloseEntityManagerForTransaction();
         }
+                
         
-        
-        Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
-        if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
-        {
-            fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
-        }
-        
-        researchFellowInformation.setPerson(fellow);
-        researchFellowInformation.setSystemAssignedID(fellow.getSystemID());
-        
-        if(fellow.getResearchFellowInformation() == null)
-        {
-            researchFellowInformationJpaController.create(researchFellowInformation);
-        }
-        else
-        {
-            researchFellowInformationJpaController.edit(researchFellowInformation);
-        } 
-        
-        Application oldApplication  = applicationJpaController.findApplication(application.getApplicationID());                
-        
-        oldApplication.setStartDate(application.getStartDate());
-        oldApplication.setEndDate(application.getEndDate());       
-        
-        applicationJpaController.edit(oldApplication);
 
     }
     

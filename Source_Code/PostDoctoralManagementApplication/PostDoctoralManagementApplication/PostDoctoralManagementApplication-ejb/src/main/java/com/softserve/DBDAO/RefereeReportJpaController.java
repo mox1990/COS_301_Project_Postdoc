@@ -45,35 +45,15 @@ public class RefereeReportJpaController implements Serializable {
 
     public void create(EntityManager em, RefereeReport refereeReport) throws RollbackFailureException, Exception 
     {
-
-        Application applicationID = refereeReport.getApplicationID();
-        if (applicationID != null) {
-            applicationID = em.getReference(applicationID.getClass(), applicationID.getApplicationID());
-            refereeReport.setApplicationID(applicationID);
-        }
-        Person referee = refereeReport.getReferee();
-        if (referee != null) {
-            referee = em.getReference(referee.getClass(), referee.getSystemID());
-            refereeReport.setReferee(referee);
-        }
         em.persist(refereeReport);
-        if (applicationID != null) {
-            applicationID.getRefereeReportList().add(refereeReport);
-            applicationID = em.merge(applicationID);
-        }
-        if (referee != null) {
-            referee.getRefereeReportList().add(refereeReport);
-            referee = em.merge(referee);
-        }
-            
     }
     
-    public void edit(RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public RefereeReport edit(RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), refereeReport);
+        return edit(getEntityManager(), refereeReport);
     }
 
-    public void edit(EntityManager em, RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public RefereeReport edit(EntityManager em, RefereeReport refereeReport) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
         
         Long id = refereeReport.getReportID();
@@ -81,39 +61,7 @@ public class RefereeReportJpaController implements Serializable {
             throw new NonexistentEntityException("The refereeReport with id " + id + " no longer exists.");
         }
         
-        RefereeReport persistentRefereeReport = em.find(RefereeReport.class, refereeReport.getReportID());
-        Application applicationIDOld = persistentRefereeReport.getApplicationID();
-        Application applicationIDNew = refereeReport.getApplicationID();
-        Person refereeOld = persistentRefereeReport.getReferee();
-        Person refereeNew = refereeReport.getReferee();
-        if (applicationIDNew != null) {
-            applicationIDNew = em.getReference(applicationIDNew.getClass(), applicationIDNew.getApplicationID());
-            refereeReport.setApplicationID(applicationIDNew);
-        }
-        if (refereeNew != null) {
-            refereeNew = em.getReference(refereeNew.getClass(), refereeNew.getSystemID());
-            refereeReport.setReferee(refereeNew);
-        }
-        refereeReport = em.merge(refereeReport);
-        if (applicationIDOld != null && !applicationIDOld.equals(applicationIDNew)) {
-            applicationIDOld.getRefereeReportList().remove(refereeReport);
-            applicationIDOld = em.merge(applicationIDOld);
-        }
-        if (applicationIDNew != null && !applicationIDNew.equals(applicationIDOld)) {
-            applicationIDNew.getRefereeReportList().add(refereeReport);
-            applicationIDNew = em.merge(applicationIDNew);
-        }
-        if (refereeOld != null && !refereeOld.equals(refereeNew)) {
-            refereeOld.getRefereeReportList().remove(refereeReport);
-            refereeOld = em.merge(refereeOld);
-        }
-        if (refereeNew != null && !refereeNew.equals(refereeOld)) {
-            refereeNew.getRefereeReportList().add(refereeReport);
-            refereeNew = em.merge(refereeNew);
-        }
-            
-        
-            
+        return em.merge(refereeReport);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -131,18 +79,8 @@ public class RefereeReportJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The refereeReport with id " + id + " no longer exists.", enfe);
         }
-        Application applicationID = refereeReport.getApplicationID();
-        if (applicationID != null) {
-            applicationID.getRefereeReportList().remove(refereeReport);
-            applicationID = em.merge(applicationID);
-        }
-        Person referee = refereeReport.getReferee();
-        if (referee != null) {
-            referee.getRefereeReportList().remove(refereeReport);
-            referee = em.merge(referee);
-        }
-        em.remove(refereeReport);
-            
+        
+        em.remove(refereeReport);            
     }
 
     public List<RefereeReport> findRefereeReportEntities() {

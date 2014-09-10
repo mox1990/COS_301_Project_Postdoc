@@ -45,51 +45,24 @@ public class ExperienceJpaController implements Serializable {
 
     public void create(EntityManager em, Experience experience) throws RollbackFailureException, Exception 
     {
-        Cv cv = experience.getCv();
-        if (cv != null) {
-            cv = em.getReference(cv.getClass(), cv.getCvID());
-            experience.setCv(cv);
-        }
-        em.persist(experience);
-        if (cv != null) {
-            cv.getExperienceList().add(experience);
-            cv = em.merge(cv);
-        }
 
+        em.persist(experience);
     }
     
-    public void edit(Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public Experience edit(Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), experience);
+        return edit(getEntityManager(), experience);
     }
 
-    public void edit(EntityManager em, Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public Experience edit(EntityManager em, Experience experience) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
         
         Long id = experience.getExperienceID();
         if (findExperience(id) == null) {
             throw new NonexistentEntityException("The experience with id " + id + " no longer exists.");
         }
-        
-        Experience persistentExperience = em.find(Experience.class, experience.getExperienceID());
-        Cv cvOld = persistentExperience.getCv();
-        Cv cvNew = experience.getCv();
-        if (cvNew != null) {
-            cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
-            experience.setCv(cvNew);
-        }
-        experience = em.merge(experience);
-        if (cvOld != null && !cvOld.equals(cvNew)) {
-            cvOld.getExperienceList().remove(experience);
-            cvOld = em.merge(cvOld);
-        }
-        if (cvNew != null && !cvNew.equals(cvOld)) {
-            cvNew.getExperienceList().add(experience);
-            cvNew = em.merge(cvNew);
-        }
-            
-            
 
+        return em.merge(experience);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -106,11 +79,7 @@ public class ExperienceJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The experience with id " + id + " no longer exists.", enfe);
         }
-        Cv cv = experience.getCv();
-        if (cv != null) {
-            cv.getExperienceList().remove(experience);
-            cv = em.merge(cv);
-        }
+
         em.remove(experience);
             
     }

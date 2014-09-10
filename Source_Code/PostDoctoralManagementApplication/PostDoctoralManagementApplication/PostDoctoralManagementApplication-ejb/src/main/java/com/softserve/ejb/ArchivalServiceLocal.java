@@ -17,8 +17,8 @@ import javax.ejb.Local;
  */
 @Local
 public interface ArchivalServiceLocal {
-    public void backupDatabase(Session session);
-    public void archiveOldInformation(Session session);
-    public void retrieveArchievedInformation(Session session);
-    public void restoreBackupToWorkingDatabase(Session session);
+    public void backupDatabase(Session session) throws Exception;
+    public void archiveOldInformation(Session session) throws Exception;
+    public void retrieveArchievedInformation(Session session) throws Exception;
+    public void restoreBackupToWorkingDatabase(Session session) throws Exception;
 }

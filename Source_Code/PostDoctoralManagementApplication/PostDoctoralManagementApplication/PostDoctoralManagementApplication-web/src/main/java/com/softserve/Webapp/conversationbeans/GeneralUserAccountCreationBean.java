@@ -93,7 +93,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
 
             locationFinderDependBean.init(null);
 
-            sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();
+            sourceRoles = com.softserve.constants.PersistenceConstants.getAllSecurityRoles();
             sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
 
             targetRoles = new ArrayList<SecurityRole>();

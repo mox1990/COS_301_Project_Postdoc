@@ -23,17 +23,11 @@ import javax.mail.MessagingException;
  */
 @Local
 public interface NotificationServiceLocal {
-    public void sendBatchNotifications(List<Notification> notifications, boolean sendEmail) throws Exception;
-    public void sendNotification(Notification notification, boolean sendEmail) throws Exception;
+    public void sendBatchNotifications(com.softserve.system.Session session, List<Notification> notifications, boolean sendEmail) throws Exception;
+    public void sendNotification(com.softserve.system.Session session, Notification notification, boolean sendEmail) throws Exception;
+    public void sendOnlyEmail(com.softserve.system.Session session, Notification notification);
     public List<Notification> getAllNotificationsForPerson(Session session, Person person) throws AuthenticationException, Exception;
     public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception;
-    public void sendOnlyEmail(Notification notification);
-    //public List<Notification> sendSystemNotification(String message, String subject, List<Person> recipients, Person sender) throws Exception;
-    //public Notification sendSystemNotification(String message, String subject, Person recipient, Person sender) throws Exception;
-    //public void sendEmail(String mess, String subject, List<Person> recipients, Person sender) throws MessagingException;
-    public List<Notification> findAll();
-    public List<Notification> findByNotificationID(Long nID);
-    public List<Notification> findBySubject(String subject);
-    public List<Notification> findByTimestamp(Timestamp tStamp);
-    public List<Notification> findBetweenRange(Timestamp start, Timestamp end);
+    
+
 }

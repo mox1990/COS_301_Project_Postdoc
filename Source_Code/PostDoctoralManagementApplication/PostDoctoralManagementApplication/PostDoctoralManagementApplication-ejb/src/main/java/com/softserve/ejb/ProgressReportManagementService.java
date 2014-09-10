@@ -6,29 +6,25 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.ProgressReportJpaController;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -37,7 +33,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ProgressReportManagementService implements ProgressReportManagementServiceLocal {
@@ -52,14 +48,14 @@ public class ProgressReportManagementService implements ProgressReportManagement
         this.emf = emf;
     }
     
-    protected ProgressReportJpaController getProgressReportDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new ProgressReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
-    
-    protected ApplicationJpaController getApplicationDAO()
+
+    protected TransactionController getTransactionController()
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new TransactionController(emf);
     }
         
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -78,11 +74,31 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws Exception
     {        
-        ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            ProgressReportJpaController progressReportJpaController = dAOFactory.createProgressReportDAO();
         
-        progressReport.setApplication(application);
-        progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
-        progressReportJpaController.create(progressReport);
+            progressReport.setApplication(application);
+            progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
+            progressReportJpaController.create(progressReport);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -90,9 +106,24 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public void updateProgressReport(Session session, ProgressReport progressReport) throws Exception
     {        
-        ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            dAOFactory.createProgressReportDAO().edit(progressReport);
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }        
         
-        progressReportJpaController.edit(progressReport);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
@@ -100,33 +131,43 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
     {        
-        List<Application> output = new ArrayList<Application>();
+        EntityManager em = emf.createEntityManager();
         
-        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
-        GregorianCalendar curCal = getGregorianCalendarUTIL();
+        try
+        {
+            List<Application> output = new ArrayList<Application>();
         
-        for(Application application : applications)
-        {        
-            GregorianCalendar startCal = getGregorianCalendarUTIL();
-            startCal.setTime(application.getStartDate());            
-            
-            GregorianCalendar endCal = getGregorianCalendarUTIL();
-            endCal.setTime(application.getEndDate());
-            
-            System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
-            
-            if(startCal.before(curCal) && endCal.after(curCal))
-            {
-                System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
-                if(getNumberOfProgressReportsRequiredByApplication(session,application) > application.getProgressReportList().size())
+            List<Application> applications = getDAOFactory(em).createApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
+            GregorianCalendar curCal = getGregorianCalendarUTIL();
+
+            for(Application application : applications)
+            {        
+                GregorianCalendar startCal = getGregorianCalendarUTIL();
+                startCal.setTime(application.getStartDate());            
+
+                GregorianCalendar endCal = getGregorianCalendarUTIL();
+                endCal.setTime(application.getEndDate());
+
+                System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
+
+                if(startCal.before(curCal) && endCal.after(curCal))
                 {
-                    System.out.println("Added" + application.toString());
-                    output.add(application);
+                    System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
+                    if(getNumberOfProgressReportsRequiredByApplication(session,application) > application.getProgressReportList().size())
+                    {
+                        System.out.println("Added" + application.toString());
+                        output.add(application);
+                    }
                 }
             }
+            System.out.println("====" + output.toString());
+            return output;
         }
-        System.out.println("====" + output.toString());
-        return output;
+        finally
+        {
+            em.close();
+        }
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})

@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.RefereeReportJpaController;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
@@ -14,12 +15,14 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -28,6 +31,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -36,7 +40,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]o
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class RefereeReportService implements RefereeReportServiceLocal {
@@ -46,24 +50,10 @@ public class RefereeReportService implements RefereeReportServiceLocal {
     
     @EJB
     private NotificationServiceLocal notificationServiceLocal;
-    @EJB
-    private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
 
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
-    
-    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
-    {
-        return auditTrailServiceLocal;
     }
     
     public RefereeReportService() {
@@ -77,18 +67,19 @@ public class RefereeReportService implements RefereeReportServiceLocal {
      *
      * @return
      */
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
-    
-    /**
-     *
-     * @return
-     */
-    protected RefereeReportJpaController getRefereeReportDAO()
+
+    protected TransactionController getTransactionController()
     {
-        return new RefereeReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new TransactionController(emf);
+    }
+
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
+    {
+        return new ApplicationServicesUtil(em);
     }
     
     /**
@@ -98,15 +89,6 @@ public class RefereeReportService implements RefereeReportServiceLocal {
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return new ApplicationServicesUtil(emf);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -122,30 +104,38 @@ public class RefereeReportService implements RefereeReportServiceLocal {
      * @throws com.softserve.Exceptions.AuthenticationException
      * @throws java.lang.Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, StartIndex, maxNumberOfRecords);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, StartIndex, maxNumberOfRecords);
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        
-        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     /**
@@ -157,49 +147,62 @@ public class RefereeReportService implements RefereeReportServiceLocal {
      * @throws RollbackFailureException
      * @throws Exception
      */
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public void submitReferralReport(Session session, Application application, RefereeReport refereeReport) throws AuthenticationException, RollbackFailureException, Exception
     {
-        //Authenticate user privliges
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        RefereeReportJpaController refereeReportJpaController = getRefereeReportDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        
-        refereeReport.setTimestamp(getGregorianCalendar().getTime());
-        refereeReport.setApplicationID(application);
-        refereeReportJpaController.create(refereeReport);
-        
-        //Log action        
-        AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Application refereed" + application.getApplicationID(), session.getUser());
-        auditTrailService.logAction(auditLog);
-        
-        application = applicationJpaController.findApplication(application.getApplicationID());
-        System.out.println("====Number of referees: " + application.getPersonList().size());
-        System.out.println("====Number of reports: " + application.getRefereeReportList().size());
-        if(application.getPersonList().size() == application.getRefereeReportList().size())
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
-        
-            try
-            {
-                applicationJpaController.edit(application);
-            }
-            catch(Exception ex)
-            {
-                //If an error occurs during update of application the recommendation report must be removed as well
-                refereeReportJpaController.destroy(refereeReport.getReportID());
-                throw ex;
-            }
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
-            //Send notification to Grant holder
-            notificationService.sendNotification(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            RefereeReportJpaController refereeReportJpaController = dAOFactory.createRefereeReportDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+
+            refereeReport.setTimestamp(getGregorianCalendar().getTime());
+            refereeReport.setApplicationID(application);
+            refereeReportJpaController.create(refereeReport);
+
+
+            application = applicationJpaController.findApplication(application.getApplicationID());
+            System.out.println("====Number of referees: " + application.getPersonList().size());
+            System.out.println("====Number of reports: " + application.getRefereeReportList().size());
+            if(application.getPersonList().size() == application.getRefereeReportList().size())
+            {
+                application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+
+                try
+                {
+                    applicationJpaController.edit(application);
+                }
+                catch(Exception ex)
+                {
+                    //If an error occurs during update of application the recommendation report must be removed as well
+                    refereeReportJpaController.destroy(refereeReport.getReportID());
+                    throw ex;
+                }
+
+                //Send notification to Grant holder
+                notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
+            }
+
+            transactionController.CommitTransaction();
         }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
+        
     }
     
 }

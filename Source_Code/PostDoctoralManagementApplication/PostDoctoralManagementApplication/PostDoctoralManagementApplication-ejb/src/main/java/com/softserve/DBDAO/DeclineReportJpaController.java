@@ -61,35 +61,16 @@ public class DeclineReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-
-        Application application = declineReport.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            declineReport.setApplication(application);
-        }
-        Person creator = declineReport.getCreator();
-        if (creator != null) {
-            creator = em.getReference(creator.getClass(), creator.getSystemID());
-            declineReport.setCreator(creator);
-        }
-        em.persist(declineReport);
-        if (application != null) {
-            application.setDeclineReport(declineReport);
-            application = em.merge(application);
-        }
-        if (creator != null) {
-            creator.getDeclineReportList().add(declineReport);
-            creator = em.merge(creator);
-        }
-            
+        
+        em.persist(declineReport);            
     }
     
-    public void edit(DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public DeclineReport edit(DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), declineReport);
+        return edit(getEntityManager(), declineReport);
     }
 
-    public void edit(EntityManager em, DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public DeclineReport edit(EntityManager em, DeclineReport declineReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
         
         Long id = declineReport.getReportID();
@@ -100,8 +81,7 @@ public class DeclineReportJpaController implements Serializable {
         DeclineReport persistentDeclineReport = em.find(DeclineReport.class, declineReport.getReportID());
         Application applicationOld = persistentDeclineReport.getApplication();
         Application applicationNew = declineReport.getApplication();
-        Person creatorOld = persistentDeclineReport.getCreator();
-        Person creatorNew = declineReport.getCreator();
+
         List<String> illegalOrphanMessages = null;
         if (applicationNew != null && !applicationNew.equals(applicationOld)) {
             DeclineReport oldDeclineReportOfApplication = applicationNew.getDeclineReport();
@@ -115,34 +95,8 @@ public class DeclineReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            declineReport.setApplication(applicationNew);
-        }
-        if (creatorNew != null) {
-            creatorNew = em.getReference(creatorNew.getClass(), creatorNew.getSystemID());
-            declineReport.setCreator(creatorNew);
-        }
-        declineReport = em.merge(declineReport);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.setDeclineReport(null);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.setDeclineReport(declineReport);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (creatorOld != null && !creatorOld.equals(creatorNew)) {
-            creatorOld.getDeclineReportList().remove(declineReport);
-            creatorOld = em.merge(creatorOld);
-        }
-        if (creatorNew != null && !creatorNew.equals(creatorOld)) {
-            creatorNew.getDeclineReportList().add(declineReport);
-            creatorNew = em.merge(creatorNew);
-        }
-            
-                
 
+        return em.merge(declineReport);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -159,16 +113,7 @@ public class DeclineReportJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The declineReport with id " + id + " no longer exists.", enfe);
         }
-        Application application = declineReport.getApplication();
-        if (application != null) {
-            application.setDeclineReport(null);
-            application = em.merge(application);
-        }
-        Person creator = declineReport.getCreator();
-        if (creator != null) {
-            creator.getDeclineReportList().remove(declineReport);
-            creator = em.merge(creator);
-        }
+
         em.remove(declineReport);
            
     }

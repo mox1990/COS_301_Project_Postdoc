@@ -24,14 +24,16 @@ import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Generator;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -40,15 +42,18 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserAccountManagementService implements UserAccountManagementServiceLocal {     
@@ -111,57 +116,15 @@ public class UserAccountManagementService implements UserAccountManagementServic
         this.emf = emf;
     }
     
-    /**
-     *This function creates an instance of the PersonJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
- of the UserAccountManagementService in the unit testing 
-     * @return An instance of PersonJpaController
-     */
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
     
-    /**
-     *This function creates an instance of the AddressJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
- of the UserAccountManagementService in the unit testing 
-     * @return An instance of AddressJpaController
-     */
-    protected AddressJpaController getAddressDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new AddressJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
-    
-    /**
-     *This function creates an instance of the UpEmployeeInformationJpaController. 
-     * Note this function's secondary goal is to simplify the subclass mocking 
- of the UserAccountManagementService in the unit testing 
-     * @return An instance of UpEmployeeInformationJpaController
-     */
-    protected EmployeeInformationJpaController getEmployeeInfoDAO()
+
+    protected TransactionController getTransactionController()
     {
-        return new EmployeeInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ResearchFellowInformationJpaController getResearchFellowInformationDAO()
-    {
-        return new ResearchFellowInformationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected SecurityRoleJpaController getSecurityRoleDAO()
-    {
-        return new SecurityRoleJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected NotificationJpaController getNotificationDAO()
-    {
-        return new NotificationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected AuditLogJpaController getAuditLogDAO()
-    {
-        return new AuditLogJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new TransactionController(emf);
     }
     
     /**
@@ -199,37 +162,47 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @AuditableMethod
     protected String generateSystemID(char prefix)
     {
-        PersonJpaController personJpaController = getPersonDAO();
-        GregorianCalendar cal = new GregorianCalendar();        
-        
-        String newID = "";
-        
-        int curYear = cal.get(Calendar.YEAR);        
-        
-        int lastestIDValue = personJpaController.getMaxSystemIDForYear(curYear, prefix);
-        
-        lastestIDValue++;
-        
-        newID += prefix;        
-        
-        if(curYear > 9)
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            String sYear = Integer.toString(curYear);
-            newID += sYear.charAt(sYear.length() - 2);
-            newID += sYear.charAt(sYear.length() - 1);
+            PersonJpaController personJpaController = getDAOFactory(em).createPersonDAO();
+            GregorianCalendar cal = new GregorianCalendar();        
+
+            String newID = "";
+
+            int curYear = cal.get(Calendar.YEAR);        
+
+            int lastestIDValue = personJpaController.getMaxSystemIDForYear(curYear, prefix);
+
+            lastestIDValue++;
+
+            newID += prefix;        
+
+            if(curYear > 9)
+            {
+                String sYear = Integer.toString(curYear);
+                newID += sYear.charAt(sYear.length() - 2);
+                newID += sYear.charAt(sYear.length() - 1);
+            }
+            else
+            {
+                newID += "0";
+                newID += Integer.toString(curYear);
+            }
+            while(newID.length() + Integer.toString(lastestIDValue).length() < 9)
+            {
+                newID += "0";
+            }
+            newID += Integer.toString(lastestIDValue);
+
+            return newID;
         }
-        else
+        finally
         {
-            newID += "0";
-            newID += Integer.toString(curYear);
+            em.close();
         }
-        while(newID.length() + Integer.toString(lastestIDValue).length() < 9)
-        {
-            newID += "0";
-        }
-        newID += Integer.toString(lastestIDValue);
         
-        return newID;
     }
     
     /**
@@ -264,83 +237,119 @@ public class UserAccountManagementService implements UserAccountManagementServic
             throw new UserAlreadyExistsException("This employee ID is already in use by a user account");
         }
         
-        //Prep the DAOs
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();  
-        PersonJpaController personJpaController = getPersonDAO();
-        EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
-        AddressJpaController addressJpaController = getAddressDAO();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        
-        Address userAddress = user.getAddressLine1(); 
-        EmployeeInformation userEmployeeInfo = user.getEmployeeInformation();
-        Address upAddress = (userEmployeeInfo != null)?userEmployeeInfo.getPhysicalAddress():null;
-        ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
-        
-        //Check if automatic systemID generation is required
-        if(!useManualSystemIDSpecification)
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
-            if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
-            {
-                user.setSystemID(generateSystemID('a'));
-            }
-            else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
-            {
-                user.setSystemID(generateSystemID('f'));
-            }
-            else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
-            {
-                user.setSystemID(generateSystemID('r'));
-            }
-            else
-            {
-                throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");
-            }
+            //Prep the DAOs
             
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            EmployeeInformationJpaController employeeInformationJpaController = dAOFactory.createEmployeeInformationDAO();
+            AddressJpaController addressJpaController = dAOFactory.createAddressDAO();
+            
+
+            Address userAddress = user.getAddressLine1(); 
+            EmployeeInformation userEmployeeInfo = user.getEmployeeInformation();
+            Address upAddress = (userEmployeeInfo != null)?userEmployeeInfo.getPhysicalAddress():null;
+            ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
+
+            //Check if automatic systemID generation is required
+            if(!useManualSystemIDSpecification)
+            {
+
+                if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
+                {
+                    user.setSystemID(generateSystemID('a'));
+                }
+                else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
+                {
+                    user.setSystemID(generateSystemID('f'));
+                }
+                else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
+                {
+                    user.setSystemID(generateSystemID('r'));
+                }
+                else
+                {
+                    throw new AutomaticSystemIDGenerationException("An error occured while generating a systemID for the person " + user.getFullName() + ".");
+                }
+
+                if(userEmployeeInfo != null)
+                {
+                    userEmployeeInfo.setEmployeeID(user.getSystemID());
+                }
+            }
+
+            if(userAddress == null)
+            {
+                userAddress = new Address();
+            }
+
+            //Store address in database
+            addressJpaController.create(userAddress);
+            //Link to unpersisted person
+            user.setAddressLine1(userAddress);       
+            user.setEmployeeInformation(null);
+            user.setResearchFellowInformation(null);
+            //******Possible concurrency issue if multiple automaic System IDs are generated******
+            personJpaController.create(user);        
+
             if(userEmployeeInfo != null)
             {
+                addressJpaController.create(upAddress);
+                userEmployeeInfo.setPhysicalAddress(upAddress);
+                userEmployeeInfo.setPerson(user);
                 userEmployeeInfo.setEmployeeID(user.getSystemID());
+                employeeInformationJpaController.create(userEmployeeInfo);
             }
+
+
+            if(researchFellowInformation != null)
+            {
+                researchFellowInformation.setPerson(user);
+                researchFellowInformation.setSystemAssignedID(user.getSystemID());
+                dAOFactory.createResearchFellowInformationDAO().create(researchFellowInformation);
+            }
+            System.out.println("=================Before commit");
+            transactionController.CommitTransaction();
+            System.out.println("=================After commit");
         }
-        
-        if(userAddress == null)
+        catch(Exception ex)
         {
-            userAddress = new Address();
+            System.out.println("=================Exception " + ex.getClass().toString() + " " + ex.getCause() );
+            if(ex.getCause().getClass() == ConstraintViolationException.class)
+            {
+                ConstraintViolationException e = (ConstraintViolationException)ex.getCause();
+                Set<ConstraintViolation<?>> s = e.getConstraintViolations();
+                Iterator<ConstraintViolation<?>> i = s.iterator();
+                while (i.hasNext()) {
+                        ConstraintViolation<?> cv = i.next();
+                        System.out.println("CV Message: === +++ ===: " + cv.getMessage() + " " + cv.getInvalidValue() + " " + cv.getLeafBean() + " " + cv.getPropertyPath() );
+                }
+            }
+            
+            
+            System.out.println("=================Before rollback");
+            transactionController.RollbackTransaction();
+            throw ex;
         }
-        
-        //Store address in database
-        addressJpaController.create(userAddress);
-        //Link to unpersisted person
-        user.setAddressLine1(userAddress);       
-        user.setEmployeeInformation(null);
-        user.setResearchFellowInformation(null);
-        //******Possible concurrency issue if multiple automaic System IDs are generated******
-        personJpaController.create(user);        
-        
-        if(userEmployeeInfo != null)
+        finally
         {
-            addressJpaController.create(upAddress);
-            userEmployeeInfo.setPhysicalAddress(upAddress);
-            userEmployeeInfo.setPerson(user);
-            userEmployeeInfo.setEmployeeID(user.getSystemID());
-            employeeInformationJpaController.create(userEmployeeInfo);
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        
-        if(researchFellowInformation != null)
-        {
-            researchFellowInformation.setPerson(user);
-            researchFellowInformation.setSystemAssignedID(user.getSystemID());
-            getResearchFellowInformationDAO().create(researchFellowInformation);
-        }
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();  
         
         //Log action
         AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy("Created new user account", (session.getUser() == null && session.isSystem())  ? user : session.getUser()); //This is a isolated instance when a prospective fellow creates a new account
-        auditTrailService.logAction(auditLog);
+        auditTrailService.logAction(new Session(session.getHttpSession(),session.getUser(),true),auditLog);
         
         Notification notification = dBEntitiesFactory.createNotificationEntity(user, user, "Created account", "Account has been created for you");
-        notificationService.sendNotification(notification, true);
+        notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
     }
     
     /**
@@ -361,88 +370,108 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public void updateUserAccount(Session session, Person user) throws Exception
     {
-        PersonJpaController personJpaController = getPersonDAO();
-        AddressJpaController addressJpaController = getAddressDAO();
-        ResearchFellowInformationJpaController researchFellowInformationJpaController = getResearchFellowInformationDAO();
-        EmployeeInformationJpaController employeeInformationJpaController = getEmployeeInfoDAO();
         
-        Address userAddress = user.getAddressLine1(); 
-        EmployeeInformation userUPInfo = user.getEmployeeInformation();
-        Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
-        ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
-        System.out.println("=====" + user.getEmail() + " " + user.toString() + " " + getUserBySystemIDOrEmail(user.getEmail()));
-        if(!getUserBySystemIDOrEmail(user.getEmail()).equals(user))
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            throw new UserAlreadyExistsException("This email is already in use by a user account");
-        }
-        
-        if(getUserBySystemIDOrEmail(user.getSystemID()) == null)
-        {
-            throw new Exception("There is no user account for the specified user.");
-        }
-        
-        if(userAddress != null)
-        {
-            addressJpaController.edit(userAddress); 
-        }
-        
-        if(userUPInfo != null)
-        {   
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
-            if(employeeInformationJpaController.findEmployeeInformation(userUPInfo.getEmployeeID()) != null)
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            AddressJpaController addressJpaController = dAOFactory.createAddressDAO();
+            ResearchFellowInformationJpaController researchFellowInformationJpaController = dAOFactory.createResearchFellowInformationDAO();
+            EmployeeInformationJpaController employeeInformationJpaController = dAOFactory.createEmployeeInformationDAO();
+
+            Address userAddress = user.getAddressLine1(); 
+            EmployeeInformation userUPInfo = user.getEmployeeInformation();
+            Address upAddress = (userUPInfo != null)?userUPInfo.getPhysicalAddress():null;
+            ResearchFellowInformation researchFellowInformation = user.getResearchFellowInformation();
+            System.out.println("=====" + user.getEmail() + " " + user.toString() + " " + getUserBySystemIDOrEmail(user.getEmail()));
+            if(!getUserBySystemIDOrEmail(user.getEmail()).equals(user))
             {
-                addressJpaController.edit(userUPInfo.getPhysicalAddress());
-                userUPInfo.setPhysicalAddress(upAddress);
-                employeeInformationJpaController.edit(userUPInfo);
+                throw new UserAlreadyExistsException("This email is already in use by a user account");
+            }
+
+            if(getUserBySystemIDOrEmail(user.getSystemID()) == null)
+            {
+                throw new Exception("There is no user account for the specified user.");
+            }
+
+            if(userAddress != null)
+            {
+                addressJpaController.edit(userAddress); 
+            }
+
+            if(userUPInfo != null)
+            {   
+
+                if(employeeInformationJpaController.findEmployeeInformation(userUPInfo.getEmployeeID()) != null)
+                {
+                    addressJpaController.edit(userUPInfo.getPhysicalAddress());
+                    userUPInfo.setPhysicalAddress(upAddress);
+                    employeeInformationJpaController.edit(userUPInfo);
+                }
+                else
+                {
+                    addressJpaController.create(upAddress);
+                    userUPInfo.setPhysicalAddress(upAddress);
+                    employeeInformationJpaController.create(userUPInfo);
+                    user.setEmployeeInformation(userUPInfo);
+                }
             }
             else
             {
-                addressJpaController.create(upAddress);
-                userUPInfo.setPhysicalAddress(upAddress);
-                employeeInformationJpaController.create(userUPInfo);
-                user.setEmployeeInformation(userUPInfo);
+                if(employeeInformationJpaController.findEmployeeInformation(user.getSystemID()) != null)
+                {
+                    user.setUpEmployee(false);
+                    user.setEmployeeInformation(null);
+                    userUPInfo = employeeInformationJpaController.findEmployeeInformation(user.getSystemID());
+                    Long id = userUPInfo.getPhysicalAddress().getAddressID();
+                    employeeInformationJpaController.destroy(userUPInfo.getEmployeeID());
+                    addressJpaController.destroy(id);
+                }
             }
-        }
-        else
-        {
-            if(employeeInformationJpaController.findEmployeeInformation(user.getSystemID()) != null)
-            {
-                user.setUpEmployee(false);
-                user.setEmployeeInformation(null);
-                userUPInfo = employeeInformationJpaController.findEmployeeInformation(user.getSystemID());
-                Long id = userUPInfo.getPhysicalAddress().getAddressID();
-                employeeInformationJpaController.destroy(userUPInfo.getEmployeeID());
-                addressJpaController.destroy(id);
-            }
-        }
-        
-        if(researchFellowInformation != null)
-        {   
-            
-            if(researchFellowInformationJpaController.findResearchFellowInformation(researchFellowInformation.getSystemAssignedID()) != null)
-            {
-                researchFellowInformationJpaController.edit(researchFellowInformation);
+
+            if(researchFellowInformation != null)
+            {   
+
+                if(researchFellowInformationJpaController.findResearchFellowInformation(researchFellowInformation.getSystemAssignedID()) != null)
+                {
+                    researchFellowInformationJpaController.edit(researchFellowInformation);
+                }
+                else
+                {
+                    researchFellowInformation.setPerson(user);
+                    researchFellowInformation.setSystemAssignedID(user.getSystemID());
+                    researchFellowInformationJpaController.create(researchFellowInformation);
+                    user.setResearchFellowInformation(researchFellowInformation);
+                }
             }
             else
             {
-                researchFellowInformation.setPerson(user);
-                researchFellowInformation.setSystemAssignedID(user.getSystemID());
-                researchFellowInformationJpaController.create(researchFellowInformation);
-                user.setResearchFellowInformation(researchFellowInformation);
+                if(researchFellowInformationJpaController.findResearchFellowInformation(user.getSystemID()) != null)
+                {
+                    user.setResearchFellowInformation(null);
+                    researchFellowInformation = researchFellowInformationJpaController.findResearchFellowInformation(user.getSystemID());
+                    researchFellowInformationJpaController.destroy(researchFellowInformation.getSystemAssignedID());
+                }
             }
+
+
+            personJpaController.edit(user);
+
+            transactionController.CommitTransaction();
         }
-        else
+        catch(Exception ex)
         {
-            if(researchFellowInformationJpaController.findResearchFellowInformation(user.getSystemID()) != null)
-            {
-                user.setResearchFellowInformation(null);
-                researchFellowInformation = researchFellowInformationJpaController.findResearchFellowInformation(user.getSystemID());
-                researchFellowInformationJpaController.destroy(researchFellowInformation.getSystemAssignedID());
-            }
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        
-        personJpaController.edit(user);
     }
     
     /**
@@ -456,24 +485,39 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @AuditableMethod
     @Override
     public void removeUserAccount(Session session, String systemID) throws Exception
-    {
-        //Authenticate user privliges
-        
+    {        
         if(session.getUser().getSystemID().equals(systemID))
         {
             throw new Exception("You cannot delete your own account");
         }
         
-        PersonJpaController personJpaController = getPersonDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+
         
-        //Find person object
-        Person user = personJpaController.findPerson(systemID);
-        
-        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
-        personJpaController.edit(user);
-        
+            //Find person object
+            Person user = personJpaController.findPerson(systemID);
+
+            user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+            personJpaController.edit(user);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+                
     }
     
     /**
@@ -491,26 +535,25 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user) throws Exception
     {
-        //Use this to create a new account
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        
+         
         if(getUserBySystemIDOrEmail(user.getEmail()) != null)
         {
             throw new UserAlreadyExistsException("This email is already in use by a user account");
         }
-        
+
         //Set account to dorment
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
         //Set new random password
         user.setPassword(getGeneratorUTIL().generateRandomHexString());
-        
+
         //Create a user account using a system level system authentication
         createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user);
         
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
+        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         //Notify the new user
         Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
-        notificationService.sendNotification(notification, true);
+        notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
         
     }
     
@@ -524,11 +567,12 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public void activateOnDemandAccount(Session session, Person user) throws Exception
     {        
+                
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
         updateUserAccount(session, user);  
         
         AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Activated user account", user); //This is a isolated instance when a user activates a new account
-        getAuditTrailServiceEJB().logAction(auditLog);
+        getAuditTrailServiceEJB().logAction(new Session(session.getHttpSession(),session.getUser(),true),auditLog);
     }    
     
     /**
@@ -541,9 +585,15 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception
     {        
-        PersonJpaController personJpaController = getPersonDAO();
-        
-        return personJpaController.findPersonEntities();        
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            return getDAOFactory(em).createPersonDAO().findPersonEntities();
+        }
+        finally
+        {
+            em.close();
+        }   
     }
     
     /**
@@ -554,9 +604,15 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public Person getUserBySystemIDOrEmail(String intput)
     {
-        PersonJpaController personJpaController = getPersonDAO();
-        
-        return personJpaController.findUserBySystemIDOrEmail(intput);
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            return getDAOFactory(em).createPersonDAO().findUserBySystemIDOrEmail(intput);
+        }
+        finally
+        {
+            em.close();
+        } 
     }
     
     /**
@@ -564,34 +620,52 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param systemID
      * @return
      */
+    @Override
     public Person getUserBySystemID(String systemID)
     {
-        return getPersonDAO().findPerson(systemID);
-    }
-    
-    @Override
-    public List<SecurityRole> getAllSecurityRoles()
-    {
+        EntityManager em = emf.createEntityManager();
         try
         {
-            return getSecurityRoleDAO().findSecurityRoleEntities();
+            return getDAOFactory(em).createPersonDAO().findPerson(systemID);
         }
-        catch(Exception ex)
+        finally
         {
-            return new ArrayList<SecurityRole>();
-        }
+            em.close();
+        } 
     }
+    
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public void approveOnDemandAccount(Session session, Person account) throws Exception 
     {        
-        PersonJpaController personJpaController = getPersonDAO();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            account = personJpaController.findPerson(account.getSystemID());
         
-        account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+            account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+
+            personJpaController.edit(account);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
         
-        personJpaController.edit(account);
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
@@ -599,59 +673,79 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public void declineOnDemandAccount(Session session, Person account) throws Exception 
     { 
-        PersonJpaController personJpaController = getPersonDAO();
-        NotificationJpaController notificationJpaController = getNotificationDAO();
-        AuditLogJpaController auditLogJpaController = getAuditLogDAO();
-        
-        account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
-        
-        for(Notification notification: account.getNotificationList())
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            try
-            {
-                notificationJpaController.destroy(notification.getNotificationID());
-            }
-            catch(Exception ex)
-            {
-                
-            }
-        }
-        
-        for(Notification notification: account.getNotificationList1())
-        {
-            try
-            {
-                notificationJpaController.destroy(notification.getNotificationID());
-            }
-            catch(Exception ex)
-            {
-                
-            }
-        }
-        
-        for(AuditLog auditLog : account.getAuditLogList())
-        {
-            auditLogJpaController.destroy(auditLog.getEntryID());
-        }
-        
-        if(account.getEmployeeInformation()!= null)
-        {
-            Address address = account.getEmployeeInformation().getPhysicalAddress();
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
-            getEmployeeInfoDAO().destroy(account.getEmployeeInformation().getEmployeeID());
-            
-            if(address != null)
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            NotificationJpaController notificationJpaController = dAOFactory.createNotificationDAO();
+            AuditLogJpaController auditLogJpaController = dAOFactory.createAuditLogDAO();
+
+            account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+
+            for(Notification notification: account.getNotificationList())
             {
-                getAddressDAO().destroy(account.getEmployeeInformation().getPhysicalAddress().getAddressID());
+                try
+                {
+                    notificationJpaController.destroy(notification.getNotificationID());
+                }
+                catch(Exception ex)
+                {
+
+                }
             }
+
+            for(Notification notification: account.getNotificationList1())
+            {
+                try
+                {
+                    notificationJpaController.destroy(notification.getNotificationID());
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
+
+            for(AuditLog auditLog : account.getAuditLogList())
+            {
+                auditLogJpaController.destroy(auditLog.getEntryID());
+            }
+
+            if(account.getEmployeeInformation()!= null)
+            {
+                Address address = account.getEmployeeInformation().getPhysicalAddress();
+
+                dAOFactory.createEmployeeInformationDAO().destroy(account.getEmployeeInformation().getEmployeeID());
+
+                if(address != null)
+                {
+                    dAOFactory.createAddressDAO().destroy(account.getEmployeeInformation().getPhysicalAddress().getAddressID());
+                }
+            }
+
+            if(account.getAddressLine1() != null)
+            {
+                dAOFactory.createAddressDAO().destroy(account.getAddressLine1().getAddressID());
+            }
+
+            personJpaController.destroy(account.getSystemID());
+
+            transactionController.CommitTransaction();
         }
-        
-        if(account.getAddressLine1() != null)
+        catch(Exception ex)
         {
-            getAddressDAO().destroy(account.getAddressLine1().getAddressID());
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        personJpaController.destroy(account.getSystemID());
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
@@ -659,7 +753,16 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception 
     {        
-        return getPersonDAO().findAllUsersWhichHaveAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createPersonDAO().findAllUsersWhichHaveAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     

@@ -88,7 +88,7 @@ public class AuditTrailInterceptor {
                     System.out.println("Auditied : " + context.getMethod().getName());
                     AuditLog auditLog = dBEntitiesFactory.createAduitLogEntitiy(logString, session.getUser());
                     System.out.println("Auditmessage : " + auditLog.getAction());
-                    auditTrailServiceLocal.logAction(auditLog);
+                    auditTrailServiceLocal.logAction(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE),auditLog);
                 }
                 else
                 {

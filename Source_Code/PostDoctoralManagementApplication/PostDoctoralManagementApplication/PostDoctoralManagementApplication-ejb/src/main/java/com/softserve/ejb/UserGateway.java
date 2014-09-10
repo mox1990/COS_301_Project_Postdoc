@@ -6,6 +6,7 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.CommitteeMeeting;
@@ -18,7 +19,6 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.List;
@@ -27,6 +27,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpSession;
@@ -35,7 +36,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Carlo
  */
-@Interceptors({AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserGateway implements UserGatewayLocal
@@ -50,11 +51,11 @@ public class UserGateway implements UserGatewayLocal
     protected NotificationServiceLocal getNotificationServiceEJB()
     {
         return notificationServiceLocal;
-    }
+    }    
     
-    protected UserAccountManagementServiceLocal getUserAccountManagementServicesEJB()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new UserAccountManagementService(emf);
+        return new DAOFactory(em);
     }
 
     public UserGateway() {
@@ -115,17 +116,25 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException
     {
-        UserAccountManagementServiceLocal accounts = getUserAccountManagementServicesEJB();
-        Person user = accounts.getUserBySystemIDOrEmail((String) httpSession.getAttribute("username"));
-        
-        if(user != null)
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            return new Session(httpSession, user);
+            Person user = getDAOFactory(em).createPersonDAO().findUserBySystemIDOrEmail((String) httpSession.getAttribute("username"));
+            
+            if(user != null)
+            {
+                return new Session(httpSession, user);
+            }
+            else
+            {
+                throw new AuthenticationException("The user does not exist");
+            }
         }
-        else
+        finally
         {
-            throw new AuthenticationException("The user does not exist");
-        }
+            em.close();
+        }        
     }
     
     /**
@@ -135,7 +144,7 @@ public class UserGateway implements UserGatewayLocal
      * @param role
      * @return int which states the authentication value
      */
-    @AuditableMethod(message = "User authentication")
+    //@AuditableMethod(message = "User authentication")
     @Override
     public void authenticateUser(Session session, List<SecurityRole> allowedRoles) throws AuthenticationException, Exception
     {
@@ -228,8 +237,5 @@ public class UserGateway implements UserGatewayLocal
     {
         authenticateUserAsOwner(session, fundingReport.getDris());
     }
-    
-    
-    
     
 }

@@ -63,34 +63,16 @@ public class EligiblityReportJpaController implements Serializable {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
 
-        Application application = eligiblityReport.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            eligiblityReport.setApplication(application);
-        }
-        Person eligiblityChecker = eligiblityReport.getEligiblityChecker();
-        if (eligiblityChecker != null) {
-            eligiblityChecker = em.getReference(eligiblityChecker.getClass(), eligiblityChecker.getSystemID());
-            eligiblityReport.setEligiblityChecker(eligiblityChecker);
-        }
         em.persist(eligiblityReport);
-        if (application != null) {
-            application.setEligiblityReport(eligiblityReport);
-            application = em.merge(application);
-        }
-        if (eligiblityChecker != null) {
-            eligiblityChecker.getEligiblityReportList().add(eligiblityReport);
-            eligiblityChecker = em.merge(eligiblityChecker);
-        }
             
     }
     
-    public void edit(EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public EligiblityReport edit(EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), eligiblityReport);
+        return edit(getEntityManager(), eligiblityReport);
     }
 
-    public void edit(EntityManager em, EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public EligiblityReport edit(EntityManager em, EligiblityReport eligiblityReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
         
         Long id = eligiblityReport.getReportID();
@@ -101,8 +83,7 @@ public class EligiblityReportJpaController implements Serializable {
         EligiblityReport persistentEligiblityReport = em.find(EligiblityReport.class, eligiblityReport.getReportID());
         Application applicationOld = persistentEligiblityReport.getApplication();
         Application applicationNew = eligiblityReport.getApplication();
-        Person eligiblityCheckerOld = persistentEligiblityReport.getEligiblityChecker();
-        Person eligiblityCheckerNew = eligiblityReport.getEligiblityChecker();
+
         List<String> illegalOrphanMessages = null;
         if (applicationNew != null && !applicationNew.equals(applicationOld)) {
             EligiblityReport oldEligiblityReportOfApplication = applicationNew.getEligiblityReport();
@@ -116,35 +97,8 @@ public class EligiblityReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            eligiblityReport.setApplication(applicationNew);
-        }
-        if (eligiblityCheckerNew != null) {
-            eligiblityCheckerNew = em.getReference(eligiblityCheckerNew.getClass(), eligiblityCheckerNew.getSystemID());
-            eligiblityReport.setEligiblityChecker(eligiblityCheckerNew);
-        }
-        eligiblityReport = em.merge(eligiblityReport);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.setEligiblityReport(null);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.setEligiblityReport(eligiblityReport);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (eligiblityCheckerOld != null && !eligiblityCheckerOld.equals(eligiblityCheckerNew)) {
-            eligiblityCheckerOld.getEligiblityReportList().remove(eligiblityReport);
-            eligiblityCheckerOld = em.merge(eligiblityCheckerOld);
-        }
-        if (eligiblityCheckerNew != null && !eligiblityCheckerNew.equals(eligiblityCheckerOld)) {
-            eligiblityCheckerNew.getEligiblityReportList().add(eligiblityReport);
-            eligiblityCheckerNew = em.merge(eligiblityCheckerNew);
-        }
-            
 
-                
-          
+        return em.merge(eligiblityReport);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -162,16 +116,7 @@ public class EligiblityReportJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The eligiblityReport with id " + id + " no longer exists.", enfe);
         }
-        Application application = eligiblityReport.getApplication();
-        if (application != null) {
-            application.setEligiblityReport(null);
-            application = em.merge(application);
-        }
-        Person eligiblityChecker = eligiblityReport.getEligiblityChecker();
-        if (eligiblityChecker != null) {
-            eligiblityChecker.getEligiblityReportList().remove(eligiblityReport);
-            eligiblityChecker = em.merge(eligiblityChecker);
-        }
+ 
         em.remove(eligiblityReport);
             
     }

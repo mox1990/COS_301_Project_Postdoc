@@ -6,12 +6,7 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
@@ -32,7 +27,6 @@ public interface UserAccountManagementServiceLocal {
     public void declineOnDemandAccount(Session session, Person account) throws Exception;
     public void activateOnDemandAccount(Session session, Person user) throws Exception;
     public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception;
-    public List<SecurityRole> getAllSecurityRoles();
     public Person getUserBySystemIDOrEmail(String intput);
     public Person getUserBySystemID(String systemID);
 }

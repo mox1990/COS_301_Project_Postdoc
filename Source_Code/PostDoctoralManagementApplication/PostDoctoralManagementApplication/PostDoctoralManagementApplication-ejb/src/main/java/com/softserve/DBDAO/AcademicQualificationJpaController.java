@@ -44,28 +44,16 @@ public class AcademicQualificationJpaController implements Serializable {
     }
     
     public void create(EntityManager em, AcademicQualification academicQualification) throws RollbackFailureException, Exception 
-    {
-        Cv cv = academicQualification.getCv();
-        if (cv != null) {
-            cv = em.getReference(cv.getClass(), cv.getCvID());
-            academicQualification.setCv(cv);
-        }
-        
+    {        
         em.persist(academicQualification);
-        
-        if (cv != null) {
-            cv.getAcademicQualificationList().add(academicQualification);
-            cv = em.merge(cv);
-        }
-
     }
     
-    public void edit(AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public AcademicQualification edit(AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), academicQualification);
+        return edit(getEntityManager(), academicQualification);
     }
     
-    public void edit(EntityManager em, AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public AcademicQualification edit(EntityManager em, AcademicQualification academicQualification) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = academicQualification.getQualificationID();
@@ -73,25 +61,7 @@ public class AcademicQualificationJpaController implements Serializable {
             throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.");
         }
 
-        AcademicQualification persistentAcademicQualification = em.find(AcademicQualification.class, academicQualification.getQualificationID());
-        Cv cvOld = persistentAcademicQualification.getCv();
-        Cv cvNew = academicQualification.getCv();
-        if (cvNew != null) {
-            cvNew = em.getReference(cvNew.getClass(), cvNew.getCvID());
-            academicQualification.setCv(cvNew);
-        }
-
-        academicQualification = em.merge(academicQualification);
-
-        if (cvOld != null && !cvOld.equals(cvNew)) {
-            cvOld.getAcademicQualificationList().remove(academicQualification);
-            cvOld = em.merge(cvOld);
-        }
-        if (cvNew != null && !cvNew.equals(cvOld)) {
-            cvNew.getAcademicQualificationList().add(academicQualification);
-            cvNew = em.merge(cvNew);
-        }
-
+        return em.merge(academicQualification);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -108,13 +78,7 @@ public class AcademicQualificationJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The academicQualification with id " + id + " no longer exists.", enfe);
         }
-        
-        Cv cv = academicQualification.getCv();
-        if (cv != null) {
-            cv.getAcademicQualificationList().remove(academicQualification);
-            cv = em.merge(cv);
-        }
-        
+         
         em.remove(academicQualification);
     }
 

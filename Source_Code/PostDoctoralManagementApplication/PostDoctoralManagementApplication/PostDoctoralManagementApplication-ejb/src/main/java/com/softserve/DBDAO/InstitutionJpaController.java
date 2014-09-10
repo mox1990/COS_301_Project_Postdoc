@@ -50,31 +50,16 @@ public class InstitutionJpaController implements Serializable {
             institution.setFacultyList(new ArrayList<Faculty>());
         }
 
-        List<Faculty> attachedFacultyList = new ArrayList<Faculty>();
-        for (Faculty facultyListFacultyToAttach : institution.getFacultyList()) {
-            facultyListFacultyToAttach = em.getReference(facultyListFacultyToAttach.getClass(), facultyListFacultyToAttach.getFacultyID());
-            attachedFacultyList.add(facultyListFacultyToAttach);
-        }
-        institution.setFacultyList(attachedFacultyList);
         em.persist(institution);
-        for (Faculty facultyListFaculty : institution.getFacultyList()) {
-            Institution oldInstitutionOfFacultyListFaculty = facultyListFaculty.getInstitution();
-            facultyListFaculty.setInstitution(institution);
-            facultyListFaculty = em.merge(facultyListFaculty);
-            if (oldInstitutionOfFacultyListFaculty != null) {
-                oldInstitutionOfFacultyListFaculty.getFacultyList().remove(facultyListFaculty);
-                oldInstitutionOfFacultyListFaculty = em.merge(oldInstitutionOfFacultyListFaculty);
-            }
-        }
             
     }
     
-    public void edit(Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public Institution edit(Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), institution);
+        return edit(getEntityManager(), institution);
     }
 
-    public void edit(EntityManager em, Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public Institution edit(EntityManager em, Institution institution) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
         
         Long id = institution.getInstitutionID();
@@ -97,27 +82,8 @@ public class InstitutionJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        List<Faculty> attachedFacultyListNew = new ArrayList<Faculty>();
-        for (Faculty facultyListNewFacultyToAttach : facultyListNew) {
-            facultyListNewFacultyToAttach = em.getReference(facultyListNewFacultyToAttach.getClass(), facultyListNewFacultyToAttach.getFacultyID());
-            attachedFacultyListNew.add(facultyListNewFacultyToAttach);
-        }
-        facultyListNew = attachedFacultyListNew;
-        institution.setFacultyList(facultyListNew);
-        institution = em.merge(institution);
-        for (Faculty facultyListNewFaculty : facultyListNew) {
-            if (!facultyListOld.contains(facultyListNewFaculty)) {
-                Institution oldInstitutionOfFacultyListNewFaculty = facultyListNewFaculty.getInstitution();
-                facultyListNewFaculty.setInstitution(institution);
-                facultyListNewFaculty = em.merge(facultyListNewFaculty);
-                if (oldInstitutionOfFacultyListNewFaculty != null && !oldInstitutionOfFacultyListNewFaculty.equals(institution)) {
-                    oldInstitutionOfFacultyListNewFaculty.getFacultyList().remove(facultyListNewFaculty);
-                    oldInstitutionOfFacultyListNewFaculty = em.merge(oldInstitutionOfFacultyListNewFaculty);
-                }
-            }
-        }
-            
-                
+
+        return em.merge(institution);
 
     }
     

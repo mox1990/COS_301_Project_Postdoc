@@ -62,35 +62,16 @@ public class EndorsementJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-
-        Application application = endorsement.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            endorsement.setApplication(application);
-        }
-        Person dean = endorsement.getDean();
-        if (dean != null) {
-            dean = em.getReference(dean.getClass(), dean.getSystemID());
-            endorsement.setDean(dean);
-        }
-        em.persist(endorsement);
-        if (application != null) {
-            application.setEndorsement(endorsement);
-            application = em.merge(application);
-        }
-        if (dean != null) {
-            dean.getEndorsementList().add(endorsement);
-            dean = em.merge(dean);
-        }
-           
+ 
+        em.persist(endorsement);           
     }
     
-    public void edit(Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public Endorsement edit(Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), endorsement);
+        return edit(getEntityManager(), endorsement);
     }
 
-    public void edit(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public Endorsement edit(EntityManager em, Endorsement endorsement) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = endorsement.getEndorsementID();
@@ -101,8 +82,7 @@ public class EndorsementJpaController implements Serializable {
         Endorsement persistentEndorsement = em.find(Endorsement.class, endorsement.getEndorsementID());
         Application applicationOld = persistentEndorsement.getApplication();
         Application applicationNew = endorsement.getApplication();
-        Person deanOld = persistentEndorsement.getDean();
-        Person deanNew = endorsement.getDean();
+
         List<String> illegalOrphanMessages = null;
         if (applicationNew != null && !applicationNew.equals(applicationOld)) {
             Endorsement oldEndorsementOfApplication = applicationNew.getEndorsement();
@@ -116,34 +96,8 @@ public class EndorsementJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            endorsement.setApplication(applicationNew);
-        }
-        if (deanNew != null) {
-            deanNew = em.getReference(deanNew.getClass(), deanNew.getSystemID());
-            endorsement.setDean(deanNew);
-        }
-        endorsement = em.merge(endorsement);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.setEndorsement(null);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.setEndorsement(endorsement);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (deanOld != null && !deanOld.equals(deanNew)) {
-            deanOld.getEndorsementList().remove(endorsement);
-            deanOld = em.merge(deanOld);
-        }
-        if (deanNew != null && !deanNew.equals(deanOld)) {
-            deanNew.getEndorsementList().add(endorsement);
-            deanNew = em.merge(deanNew);
-        }
 
-                
-
+        return em.merge(endorsement);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -161,16 +115,7 @@ public class EndorsementJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The endorsement with id " + id + " no longer exists.", enfe);
         }
-        Application application = endorsement.getApplication();
-        if (application != null) {
-            application.setEndorsement(null);
-            application = em.merge(application);
-        }
-        Person dean = endorsement.getDean();
-        if (dean != null) {
-            dean.getEndorsementList().remove(endorsement);
-            dean = em.merge(dean);
-        }
+
         em.remove(endorsement);
            
     }

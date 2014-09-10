@@ -60,36 +60,17 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         applicationReviewRequest.getApplicationReviewRequestPK().setPerson(applicationReviewRequest.getPerson1().getSystemID());
         applicationReviewRequest.getApplicationReviewRequestPK().setApplication(applicationReviewRequest.getApplication1().getApplicationID());
 
-        Person person1 = applicationReviewRequest.getPerson1();
-        if (person1 != null) {
-            person1 = em.getReference(person1.getClass(), person1.getSystemID());
-            applicationReviewRequest.setPerson1(person1);
-        }
-        Application application1 = applicationReviewRequest.getApplication1();
-        if (application1 != null) {
-            application1 = em.getReference(application1.getClass(), application1.getApplicationID());
-            applicationReviewRequest.setApplication1(application1);
-        }
         
         em.persist(applicationReviewRequest);
-        
-        if (person1 != null) {
-            person1.getApplicationReviewRequestList().add(applicationReviewRequest);
-            person1 = em.merge(person1);
-        }
-        if (application1 != null) {
-            application1.getApplicationReviewRequestList().add(applicationReviewRequest);
-            application1 = em.merge(application1);
-        }
 
     }
     
-    public void edit(ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public ApplicationReviewRequest edit(ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), applicationReviewRequest);
+        return edit(getEntityManager(), applicationReviewRequest);
     }
     
-    public void edit(EntityManager em, ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public ApplicationReviewRequest edit(EntityManager em, ApplicationReviewRequest applicationReviewRequest) throws NonexistentEntityException, RollbackFailureException, Exception {
         ApplicationReviewRequestPK id = applicationReviewRequest.getApplicationReviewRequestPK();
         if (findApplicationReviewRequest(id) == null) {
             throw new NonexistentEntityException("The applicationReviewRequest with id " + id + " no longer exists.");
@@ -98,38 +79,9 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         applicationReviewRequest.getApplicationReviewRequestPK().setPerson(applicationReviewRequest.getPerson1().getSystemID());
         applicationReviewRequest.getApplicationReviewRequestPK().setApplication(applicationReviewRequest.getApplication1().getApplicationID());
 
-        ApplicationReviewRequest persistentApplicationReviewRequest = em.find(ApplicationReviewRequest.class, applicationReviewRequest.getApplicationReviewRequestPK());
-        Person person1Old = persistentApplicationReviewRequest.getPerson1();
-        Person person1New = applicationReviewRequest.getPerson1();
-        Application application1Old = persistentApplicationReviewRequest.getApplication1();
-        Application application1New = applicationReviewRequest.getApplication1();
-        if (person1New != null) {
-            person1New = em.getReference(person1New.getClass(), person1New.getSystemID());
-            applicationReviewRequest.setPerson1(person1New);
-        }
-        if (application1New != null) {
-            application1New = em.getReference(application1New.getClass(), application1New.getApplicationID());
-            applicationReviewRequest.setApplication1(application1New);
-        }
         
-        applicationReviewRequest = em.merge(applicationReviewRequest);
+        return em.merge(applicationReviewRequest);
         
-        if (person1Old != null && !person1Old.equals(person1New)) {
-            person1Old.getApplicationReviewRequestList().remove(applicationReviewRequest);
-            person1Old = em.merge(person1Old);
-        }
-        if (person1New != null && !person1New.equals(person1Old)) {
-            person1New.getApplicationReviewRequestList().add(applicationReviewRequest);
-            person1New = em.merge(person1New);
-        }
-        if (application1Old != null && !application1Old.equals(application1New)) {
-            application1Old.getApplicationReviewRequestList().remove(applicationReviewRequest);
-            application1Old = em.merge(application1Old);
-        }
-        if (application1New != null && !application1New.equals(application1Old)) {
-            application1New.getApplicationReviewRequestList().add(applicationReviewRequest);
-            application1New = em.merge(application1New);
-        }
 
     }
     
@@ -147,16 +99,7 @@ public class ApplicationReviewRequestJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The applicationReviewRequest with id " + id + " no longer exists.", enfe);
         }
-        Person person1 = applicationReviewRequest.getPerson1();
-        if (person1 != null) {
-            person1.getApplicationReviewRequestList().remove(applicationReviewRequest);
-            person1 = em.merge(person1);
-        }
-        Application application1 = applicationReviewRequest.getApplication1();
-        if (application1 != null) {
-            application1.getApplicationReviewRequestList().remove(applicationReviewRequest);
-            application1 = em.merge(application1);
-        }
+
         em.remove(applicationReviewRequest);
 
     }

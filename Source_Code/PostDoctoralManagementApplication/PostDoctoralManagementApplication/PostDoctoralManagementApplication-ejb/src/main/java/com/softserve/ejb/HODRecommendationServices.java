@@ -6,10 +6,10 @@
 
 package com.softserve.ejb;
 
-import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.RecommendationReportJpaController;
@@ -31,9 +31,10 @@ import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -43,6 +44,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -51,7 +53,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class HODRecommendationServices implements HODRecommendationServicesLocal {
@@ -85,33 +87,19 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      *
      * @return
      */
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
-    
-    /**
-     *
-     * @return
-     */
-    protected RecommendationReportJpaController getRecommmendationReportDAO()
+
+    protected TransactionController getTransactionController()
     {
-        return new RecommendationReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new TransactionController(emf);
     }
-    
-    protected AmmendRequestJpaController getAmmendRequestDAO()
+
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return new AmmendRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
-    {
-        return new ApplicationReviewRequestJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new ApplicationServicesUtil(em);
     }
     
     /**
@@ -121,15 +109,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return new ApplicationServicesUtil(emf);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -150,9 +129,18 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
+        }
+        finally
+        {
+            em.close();
+        }
         
-        return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
@@ -160,9 +148,16 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
     { 
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        
-        return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+        }
+        finally
+        {
+            em.close();
+        }        
     }
     
     /**
@@ -180,8 +175,24 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void declineAppliction(Session session, Application application, String reason) throws Exception
     {        
-        ApplicationServicesUtil applicationServices = getApplicationServicesUTIL();
-        applicationServices.declineAppliction(session, application, reason);               
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.StartTransaction());
+            applicationServices.declineAppliction(session, application, reason);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }              
     }
     
     /**
@@ -199,24 +210,43 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
     {        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            AmmendRequestJpaController ammendRequestJpaController = dAOFactory.createAmmendRequestDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+
+            //Ammend application
+            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
+            applicationJpaController.edit(application);
+
+            AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
+            ammendRequestJpaController.create(ammendRequest);
+
+            //Send notification to grant holder and applicatantD        
+            Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
+
+            notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
         
-        //Ammend application
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
-        applicationJpaController.edit(application);
         
-        AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
-        ammendRequestJpaController.create(ammendRequest);
-        
-        //Send notification to grant holder and applicatantD        
-        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
-        
-        notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-        notificationService.sendNotification(notification, true);
     }
     
     /**
@@ -235,41 +265,61 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception
     {
        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        RecommendationReportJpaController recommendationReportJpaController = getRecommmendationReportDAO();
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        NotificationServiceLocal notificationService = getNotificationServiceEJB();
-        
-        recommendationReport.setReportID(application.getApplicationID());
-        recommendationReport.setHod(session.getUser());
-        recommendationReport.setTimestamp(getGregorianCalendar().getTime());
-        recommendationReport.setApplication(application);
-        recommendationReportJpaController.create(recommendationReport);
-        
-        application = applicationJpaController.findApplication(application.getApplicationID());
-        
-        application.setRecommendationReport(recommendationReport);
-        application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
-        
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
         try
         {
-            applicationJpaController.edit(application);
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            RecommendationReportJpaController recommendationReportJpaController = dAOFactory.createRecommendationReportDAO();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+
+            recommendationReport.setReportID(application.getApplicationID());
+            recommendationReport.setHod(session.getUser());
+            recommendationReport.setTimestamp(getGregorianCalendar().getTime());
+            recommendationReport.setApplication(application);
+            recommendationReportJpaController.create(recommendationReport);
+
+            application = applicationJpaController.findApplication(application.getApplicationID());
+
+            application.setRecommendationReport(recommendationReport);
+            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+
+            try
+            {
+                applicationJpaController.edit(application);
+            }
+            catch(Exception ex)
+            {
+                //If an error occurs during update of application the recommendation report must be removed as well
+                recommendationReportJpaController.destroy(recommendationReport.getReportID());
+                throw ex;
+            }
+
+            //Send notification to Deans office
+            List<Person> DeansOfficeMembers = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            for(Person p : DeansOfficeMembers)
+            {
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+            }
+            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+
+            transactionController.CommitTransaction();
         }
         catch(Exception ex)
         {
-            //If an error occurs during update of application the recommendation report must be removed as well
-            recommendationReportJpaController.destroy(recommendationReport.getReportID());
+            transactionController.RollbackTransaction();
             throw ex;
         }
-        
-        //Send notification to Deans office
-        List<Person> DeansOfficeMembers = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
-        ArrayList<Notification> notifications = new ArrayList<Notification>();
-        for(Person p : DeansOfficeMembers)
+        finally
         {
-            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+            transactionController.CloseEntityManagerForTransaction();
         }
-        notificationService.sendBatchNotifications(notifications, true);
+        
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
@@ -277,11 +327,17 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public List<Person> getDeansOfApplication(Session session, Application application) throws Exception
     {
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createApplicationDAO().findAllDeansOfficeMembersWhoCanEndorseApplication(application);
+        }
+        finally
+        {
+            em.close();
+        }
         
-        List<Person> Deans = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
-        
-        return Deans;
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
@@ -289,53 +345,83 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
     {        
-        List<ApplicationReviewRequest> applicationReviewRequests = getApplicationReviewRequestDAO().findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
-        ApplicationReviewRequestJpaController applicationReviewRequestJpaController = getApplicationReviewRequestDAO();
-        if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            for(ApplicationReviewRequest applicationReviewRequest : applicationReviewRequests)
+            DAOFactory dAOFactory = getDAOFactory(em);
+            ApplicationReviewRequestJpaController applicationReviewRequestJpaController = dAOFactory.createApplicationReviewRequestDAO();
+            PersonJpaController personJpaController = dAOFactory.createPersonDAO();
+            List<ApplicationReviewRequest> applicationReviewRequests = applicationReviewRequestJpaController.findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+
+            if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
             {
-                applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
-            }
-        }
-        
-        application = getApplicationDAO().findApplication(application.getApplicationID());
-        
-        dean.setUpEmployee(true);
-        if(dean.getEmployeeInformation() == null)
-        {
-            dean.setEmployeeInformation(new EmployeeInformation());
-            dean.getEmployeeInformation().setPhysicalAddress(new Address());
-        }
-        if(getPersonDAO().findUserBySystemIDOrEmail(dean.getSystemID()) == null)
-        {
-            
-            dean.setSecurityRoleList(new ArrayList<SecurityRole>());
-            dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-            getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a postdoc fellowship as an Dean", true, dean);
-        }
-        else
-        {
-            
-            dean = getPersonDAO().findPerson(dean.getSystemID());
-            
-            if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
-            {
-                if(!dean.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER))
+                for(ApplicationReviewRequest applicationReviewRequest : applicationReviewRequests)
                 {
-                    dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-                    getUserAccountManagementServiceEJB().updateUserAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), dean);
+                    applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
                 }
+            }
+
+            application = dAOFactory.createApplicationDAO().findApplication(application.getApplicationID());
+
+            dean.setUpEmployee(true);
+            if(dean.getEmployeeInformation() == null)
+            {
+                dean.setEmployeeInformation(new EmployeeInformation());
+                dean.getEmployeeInformation().setPhysicalAddress(new Address());
+            }
+            if(personJpaController.findUserBySystemIDOrEmail(dean.getSystemID()) == null)
+            {
+
+                dean.setSecurityRoleList(new ArrayList<SecurityRole>());
+                dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+                getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a postdoc fellowship as an Dean", true, dean);
             }
             else
             {
-                throw new Exception("You cannot, nor the fellow, nor the referees of your application can be requested to review application");
+
+                dean = personJpaController.findPerson(dean.getSystemID());
+
+                if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
+                {
+                    if(!dean.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER))
+                    {
+                        dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+                        getUserAccountManagementServiceEJB().updateUserAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), dean);
+                    }
+                }
+                else
+                {
+                    throw new Exception("You cannot, nor the fellow, nor the referees of your application can be requested to review application");
+                }
             }
         }
+        finally
+        {
+            em.close();
+        }
         
-        DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, dean, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
-        
-        applicationReviewRequestJpaController.create(applicationReviewRequest);
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+            ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, dean, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+
+            dAOFactory.createApplicationReviewRequestDAO().create(applicationReviewRequest);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
     }
 }

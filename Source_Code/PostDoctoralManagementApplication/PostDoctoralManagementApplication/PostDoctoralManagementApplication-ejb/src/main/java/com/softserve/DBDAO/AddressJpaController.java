@@ -52,117 +52,23 @@ public class AddressJpaController implements Serializable {
             address.setPersonList(new ArrayList<Person>());
         }
 
-        //Replace references to with actual db references
-        List<EmployeeInformation> attachedEmployeeInformationList = new ArrayList<EmployeeInformation>();
-        for (EmployeeInformation employeeInformationListEmployeeInformationToAttach : address.getEmployeeInformationList()) {
-            employeeInformationListEmployeeInformationToAttach = em.getReference(employeeInformationListEmployeeInformationToAttach.getClass(), employeeInformationListEmployeeInformationToAttach.getEmployeeID());
-            attachedEmployeeInformationList.add(employeeInformationListEmployeeInformationToAttach);
-        }
-        address.setEmployeeInformationList(attachedEmployeeInformationList);
-        List<Person> attachedPersonList = new ArrayList<Person>();
-        for (Person personListPersonToAttach : address.getPersonList()) {
-            personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
-            attachedPersonList.add(personListPersonToAttach);
-        }
-        address.setPersonList(attachedPersonList);
         
         em.persist(address);
-        
-        //Update references of old enties
-        for (EmployeeInformation employeeInformationListEmployeeInformation : address.getEmployeeInformationList()) {
-            Address oldPhysicalAddressOfEmployeeInformationListEmployeeInformation = employeeInformationListEmployeeInformation.getPhysicalAddress();
-            employeeInformationListEmployeeInformation.setPhysicalAddress(address);
-            employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
-            if (oldPhysicalAddressOfEmployeeInformationListEmployeeInformation != null) {
-                oldPhysicalAddressOfEmployeeInformationListEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListEmployeeInformation);
-                oldPhysicalAddressOfEmployeeInformationListEmployeeInformation = em.merge(oldPhysicalAddressOfEmployeeInformationListEmployeeInformation);
-            }
-        }
-        for (Person personListPerson : address.getPersonList()) {
-            Address oldAddressLine1OfPersonListPerson = personListPerson.getAddressLine1();
-            personListPerson.setAddressLine1(address);
-            personListPerson = em.merge(personListPerson);
-            if (oldAddressLine1OfPersonListPerson != null) {
-                oldAddressLine1OfPersonListPerson.getPersonList().remove(personListPerson);
-                oldAddressLine1OfPersonListPerson = em.merge(oldAddressLine1OfPersonListPerson);
-            }
-        }
-
     }
     
-    public void edit(Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public Address edit(Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), address);
+        return edit(getEntityManager(), address);
     }
 
-    public void edit(EntityManager em, Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public Address edit(EntityManager em, Address address) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
         Long id = address.getAddressID();
         if (findAddress(id) == null) {
             throw new NonexistentEntityException("The address with id " + id + " no longer exists.");
         }
-        
-        Address persistentAddress = em.find(Address.class, address.getAddressID());
-
-        //Update references with actual and maintain old and new changes
-        List<EmployeeInformation> employeeInformationListOld = persistentAddress.getEmployeeInformationList();
-        List<EmployeeInformation> employeeInformationListNew = address.getEmployeeInformationList();
-        List<Person> personListOld = persistentAddress.getPersonList();
-        List<Person> personListNew = address.getPersonList();
-        List<EmployeeInformation> attachedEmployeeInformationListNew = new ArrayList<EmployeeInformation>();
-
-        for (EmployeeInformation employeeInformationListNewEmployeeInformationToAttach : employeeInformationListNew) {
-            employeeInformationListNewEmployeeInformationToAttach = em.getReference(employeeInformationListNewEmployeeInformationToAttach.getClass(), employeeInformationListNewEmployeeInformationToAttach.getEmployeeID());
-            attachedEmployeeInformationListNew.add(employeeInformationListNewEmployeeInformationToAttach);
-        }
-        employeeInformationListNew = attachedEmployeeInformationListNew;
-        address.setEmployeeInformationList(employeeInformationListNew);
-        List<Person> attachedPersonListNew = new ArrayList<Person>();
-        for (Person personListNewPersonToAttach : personListNew) {
-            personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
-            attachedPersonListNew.add(personListNewPersonToAttach);
-        }
-        personListNew = attachedPersonListNew;
-        address.setPersonList(personListNew);
-
-        address = em.merge(address);
-
-        //Update references of old enties
-        for (EmployeeInformation employeeInformationListOldEmployeeInformation : employeeInformationListOld) {
-            if (!employeeInformationListNew.contains(employeeInformationListOldEmployeeInformation)) {
-                employeeInformationListOldEmployeeInformation.setPhysicalAddress(null);
-                employeeInformationListOldEmployeeInformation = em.merge(employeeInformationListOldEmployeeInformation);
-            }
-        }
-        for (EmployeeInformation employeeInformationListNewEmployeeInformation : employeeInformationListNew) {
-            if (!employeeInformationListOld.contains(employeeInformationListNewEmployeeInformation)) {
-                Address oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation = employeeInformationListNewEmployeeInformation.getPhysicalAddress();
-                employeeInformationListNewEmployeeInformation.setPhysicalAddress(address);
-                employeeInformationListNewEmployeeInformation = em.merge(employeeInformationListNewEmployeeInformation);
-                if (oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation != null && !oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation.equals(address)) {
-                    oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation.getEmployeeInformationList().remove(employeeInformationListNewEmployeeInformation);
-                    oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation = em.merge(oldPhysicalAddressOfEmployeeInformationListNewEmployeeInformation);
-                }
-            }
-        }
-        for (Person personListOldPerson : personListOld) {
-            if (!personListNew.contains(personListOldPerson)) {
-                personListOldPerson.setAddressLine1(null);
-                personListOldPerson = em.merge(personListOldPerson);
-            }
-        }
-        for (Person personListNewPerson : personListNew) {
-            if (!personListOld.contains(personListNewPerson)) {
-                Address oldAddressLine1OfPersonListNewPerson = personListNewPerson.getAddressLine1();
-                personListNewPerson.setAddressLine1(address);
-                personListNewPerson = em.merge(personListNewPerson);
-                if (oldAddressLine1OfPersonListNewPerson != null && !oldAddressLine1OfPersonListNewPerson.equals(address)) {
-                    oldAddressLine1OfPersonListNewPerson.getPersonList().remove(personListNewPerson);
-                    oldAddressLine1OfPersonListNewPerson = em.merge(oldAddressLine1OfPersonListNewPerson);
-                }
-            }
-        }
-
+    
+        return em.merge(address);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -180,16 +86,7 @@ public class AddressJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The address with id " + id + " no longer exists.", enfe);
         }
-        List<EmployeeInformation> employeeInformationList = address.getEmployeeInformationList();
-        for (EmployeeInformation employeeInformationListEmployeeInformation : employeeInformationList) {
-            employeeInformationListEmployeeInformation.setPhysicalAddress(null);
-            employeeInformationListEmployeeInformation = em.merge(employeeInformationListEmployeeInformation);
-        }
-        List<Person> personList = address.getPersonList();
-        for (Person personListPerson : personList) {
-            personListPerson.setAddressLine1(null);
-            personListPerson = em.merge(personListPerson);
-        }
+
         em.remove(address);
             
     }

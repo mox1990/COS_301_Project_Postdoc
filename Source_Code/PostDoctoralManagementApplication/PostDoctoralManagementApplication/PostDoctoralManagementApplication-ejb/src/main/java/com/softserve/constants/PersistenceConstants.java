@@ -37,6 +37,7 @@ public class PersistenceConstants {
     public final static long SECURITY_ROLE_ID_DRIS_MEMBER = 7;
     public final static long SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER = 8;
     public final static long SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR = 9;
+    public final static long[] SECURITY_ROLE_ID_ALL = {1,2,3,4,5,6,7,8,9};
     
     public final static SecurityRole SECURITY_ROLE_PROSPECTIVE_FELLOW = new SecurityRole((long) 1);
     public final static SecurityRole SECURITY_ROLE_REFEREE = new SecurityRole((long) 2);
@@ -165,6 +166,9 @@ public class PersistenceConstants {
         
         return list;
     }
+    
+
+    
     
     public static String getSecurityRoleName(Long id)
     {

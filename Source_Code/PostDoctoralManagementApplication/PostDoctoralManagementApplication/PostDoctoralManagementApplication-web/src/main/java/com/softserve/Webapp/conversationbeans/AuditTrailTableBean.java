@@ -10,6 +10,7 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.AuditTrailServiceLocal;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -33,6 +34,8 @@ public class AuditTrailTableBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
+    @Inject 
+    private NavigationManagerBean navigationManagerBean;
     @Inject
     private ConversationManagerBean conversationManagerBean;
     
@@ -57,12 +60,22 @@ public class AuditTrailTableBean implements Serializable {
     {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
+        try
+        {
+            entries = auditTrailServiceLocal.loadAllAuditLogEntries(sessionManagerBean.getSession());
+            filteredEntries = new ArrayList<AuditLog>();
+            filteredEntries.addAll(entries);
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(DRISApplicationFundingEditBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToWelcomeView());
+        }
         
-        entries = auditTrailServiceLocal.findAll();
-        filteredEntries = new ArrayList<AuditLog>();
-        filteredEntries.addAll(entries);
         
-        System.out.println("Entires " + entries.size() );
+        
+        
         
     }
 

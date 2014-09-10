@@ -45,48 +45,23 @@ public class AuditLogJpaController implements Serializable {
     public void create(EntityManager em,AuditLog auditLog) throws RollbackFailureException, Exception 
     {
 
-        Person person = auditLog.getPerson();
-        if (person != null) {
-            person = em.getReference(person.getClass(), person.getSystemID());
-            auditLog.setPerson(person);
-        }
-        em.persist(auditLog);
-        if (person != null) {
-            person.getAuditLogList().add(auditLog);
-            person = em.merge(person);
-        }
+        em.persist(auditLog); 
 
     }
     
-    public void edit(AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception
+    public AuditLog edit(AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception
     {
-        edit(getEntityManager(), auditLog);
+        return edit(getEntityManager(), auditLog);
     }
 
-    public void edit(EntityManager em, AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception
+    public AuditLog edit(EntityManager em, AuditLog auditLog) throws NonexistentEntityException, RollbackFailureException, Exception
     {
         Long id = auditLog.getEntryID();
         if (findAuditLog(id) == null) {
             throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.");
         }
-        
-        AuditLog persistentAuditLog = em.find(AuditLog.class, auditLog.getEntryID());
-        Person personOld = persistentAuditLog.getPerson();
-        Person personNew = auditLog.getPerson();
-        if (personNew != null) {
-            personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-            auditLog.setPerson(personNew);
-        }
-        auditLog = em.merge(auditLog);
-        if (personOld != null && !personOld.equals(personNew)) {
-            personOld.getAuditLogList().remove(auditLog);
-            personOld = em.merge(personOld);
-        }
-        if (personNew != null && !personNew.equals(personOld)) {
-            personNew.getAuditLogList().add(auditLog);
-            personNew = em.merge(personNew);
-        }       
 
+        return em.merge(auditLog); 
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -103,11 +78,7 @@ public class AuditLogJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The auditLog with id " + id + " no longer exists.", enfe);
         }
-        Person person = auditLog.getPerson();
-        if (person != null) {
-            person.getAuditLogList().remove(auditLog);
-            person = em.merge(person);
-        }
+
         em.remove(auditLog);
 
     }

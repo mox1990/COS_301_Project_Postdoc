@@ -64,43 +64,17 @@ public class EmployeeInformationJpaController implements Serializable {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
 
-        Person person = employeeInformation.getPerson();
-        if (person != null) {
-            person = em.getReference(person.getClass(), person.getSystemID());
-            employeeInformation.setPerson(person);
-        }
-        Department department = employeeInformation.getDepartment();
-        if (department != null) {
-            department = em.getReference(department.getClass(), department.getDepartmentID());
-            employeeInformation.setDepartment(department);
-        }
-        Address physicalAddress = employeeInformation.getPhysicalAddress();
-        if (physicalAddress != null) {
-            physicalAddress = em.getReference(physicalAddress.getClass(), physicalAddress.getAddressID());
-            employeeInformation.setPhysicalAddress(physicalAddress);
-        }
+
         em.persist(employeeInformation);
-        if (person != null) {
-            person.setEmployeeInformation(employeeInformation);
-            person = em.merge(person);
-        }
-        if (department != null) {
-            department.getEmployeeInformationList().add(employeeInformation);
-            department = em.merge(department);
-        }
-        if (physicalAddress != null) {
-            physicalAddress.getEmployeeInformationList().add(employeeInformation);
-            physicalAddress = em.merge(physicalAddress);
-        }
             
     }
     
-    public void edit(EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public EmployeeInformation edit(EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), employeeInformation);
+        return edit(getEntityManager(), employeeInformation);
     }
 
-    public void edit(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public EmployeeInformation edit(EntityManager em, EmployeeInformation employeeInformation) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         String id = employeeInformation.getEmployeeID();
@@ -111,10 +85,7 @@ public class EmployeeInformationJpaController implements Serializable {
         EmployeeInformation persistentEmployeeInformation = em.find(EmployeeInformation.class, employeeInformation.getEmployeeID());
         Person personOld = persistentEmployeeInformation.getPerson();
         Person personNew = employeeInformation.getPerson();
-        Department departmentOld = persistentEmployeeInformation.getDepartment();
-        Department departmentNew = employeeInformation.getDepartment();
-        Address physicalAddressOld = persistentEmployeeInformation.getPhysicalAddress();
-        Address physicalAddressNew = employeeInformation.getPhysicalAddress();
+
         List<String> illegalOrphanMessages = null;
         if (personNew != null && !personNew.equals(personOld)) {
             EmployeeInformation oldEmployeeInformationOfPerson = personNew.getEmployeeInformation();
@@ -128,43 +99,9 @@ public class EmployeeInformationJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (personNew != null) {
-            personNew = em.getReference(personNew.getClass(), personNew.getSystemID());
-            employeeInformation.setPerson(personNew);
-        }
-        if (departmentNew != null) {
-            departmentNew = em.getReference(departmentNew.getClass(), departmentNew.getDepartmentID());
-            employeeInformation.setDepartment(departmentNew);
-        }
-        if (physicalAddressNew != null) {
-            physicalAddressNew = em.getReference(physicalAddressNew.getClass(), physicalAddressNew.getAddressID());
-            employeeInformation.setPhysicalAddress(physicalAddressNew);
-        }
-        employeeInformation = em.merge(employeeInformation);
-        if (personOld != null && !personOld.equals(personNew)) {
-            personOld.setEmployeeInformation(null);
-            personOld = em.merge(personOld);
-        }
-        if (personNew != null && !personNew.equals(personOld)) {
-            personNew.setEmployeeInformation(employeeInformation);
-            personNew = em.merge(personNew);
-        }
-        if (departmentOld != null && !departmentOld.equals(departmentNew)) {
-            departmentOld.getEmployeeInformationList().remove(employeeInformation);
-            departmentOld = em.merge(departmentOld);
-        }
-        if (departmentNew != null && !departmentNew.equals(departmentOld)) {
-            departmentNew.getEmployeeInformationList().add(employeeInformation);
-            departmentNew = em.merge(departmentNew);
-        }
-        if (physicalAddressOld != null && !physicalAddressOld.equals(physicalAddressNew)) {
-            physicalAddressOld.getEmployeeInformationList().remove(employeeInformation);
-            physicalAddressOld = em.merge(physicalAddressOld);
-        }
-        if (physicalAddressNew != null && !physicalAddressNew.equals(physicalAddressOld)) {
-            physicalAddressNew.getEmployeeInformationList().add(employeeInformation);
-            physicalAddressNew = em.merge(physicalAddressNew);
-        }
+
+        return em.merge(employeeInformation);
+        
             
                 
            
@@ -185,23 +122,8 @@ public class EmployeeInformationJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The employeeInformation with id " + id + " no longer exists.", enfe);
         }
-        Person person = employeeInformation.getPerson();
-        if (person != null) {
-            person.setEmployeeInformation(null);
-            person = em.merge(person);
-        }
-        Department department = employeeInformation.getDepartment();
-        if (department != null) {
-            department.getEmployeeInformationList().remove(employeeInformation);
-            department = em.merge(department);
-        }
-        Address physicalAddress = employeeInformation.getPhysicalAddress();
-        if (physicalAddress != null) {
-            physicalAddress.getEmployeeInformationList().remove(employeeInformation);
-            physicalAddress = em.merge(physicalAddress);
-        }
-        em.remove(employeeInformation);
-            
+
+        em.remove(employeeInformation);            
     }
 
     public List<EmployeeInformation> findEmployeeInformationEntities() {

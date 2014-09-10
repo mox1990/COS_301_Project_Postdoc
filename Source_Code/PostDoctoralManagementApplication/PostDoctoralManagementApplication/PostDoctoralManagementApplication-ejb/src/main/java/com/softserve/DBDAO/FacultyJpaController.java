@@ -51,41 +51,16 @@ public class FacultyJpaController implements Serializable {
         if (faculty.getDepartmentList() == null) {
             faculty.setDepartmentList(new ArrayList<Department>());
         }
-
-        Institution institution = faculty.getInstitution();
-        if (institution != null) {
-            institution = em.getReference(institution.getClass(), institution.getInstitutionID());
-            faculty.setInstitution(institution);
-        }
-        List<Department> attachedDepartmentList = new ArrayList<Department>();
-        for (Department departmentListDepartmentToAttach : faculty.getDepartmentList()) {
-            departmentListDepartmentToAttach = em.getReference(departmentListDepartmentToAttach.getClass(), departmentListDepartmentToAttach.getDepartmentID());
-            attachedDepartmentList.add(departmentListDepartmentToAttach);
-        }
-        faculty.setDepartmentList(attachedDepartmentList);
-        em.persist(faculty);
-        if (institution != null) {
-            institution.getFacultyList().add(faculty);
-            institution = em.merge(institution);
-        }
-        for (Department departmentListDepartment : faculty.getDepartmentList()) {
-            Faculty oldFacultyOfDepartmentListDepartment = departmentListDepartment.getFaculty();
-            departmentListDepartment.setFaculty(faculty);
-            departmentListDepartment = em.merge(departmentListDepartment);
-            if (oldFacultyOfDepartmentListDepartment != null) {
-                oldFacultyOfDepartmentListDepartment.getDepartmentList().remove(departmentListDepartment);
-                oldFacultyOfDepartmentListDepartment = em.merge(oldFacultyOfDepartmentListDepartment);
-            }
-        }
-           
+        
+        em.persist(faculty);           
     }
     
-    public void edit(Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public Faculty edit(Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), faculty);
+        return edit(getEntityManager(), faculty);
     }
 
-    public void edit(EntityManager em, Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public Faculty edit(EntityManager em, Faculty faculty) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = faculty.getFacultyID();
@@ -94,8 +69,7 @@ public class FacultyJpaController implements Serializable {
         }
         
         Faculty persistentFaculty = em.find(Faculty.class, faculty.getFacultyID());
-        Institution institutionOld = persistentFaculty.getInstitution();
-        Institution institutionNew = faculty.getInstitution();
+
         List<Department> departmentListOld = persistentFaculty.getDepartmentList();
         List<Department> departmentListNew = faculty.getDepartmentList();
         List<String> illegalOrphanMessages = null;
@@ -110,40 +84,9 @@ public class FacultyJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (institutionNew != null) {
-            institutionNew = em.getReference(institutionNew.getClass(), institutionNew.getInstitutionID());
-            faculty.setInstitution(institutionNew);
-        }
-        List<Department> attachedDepartmentListNew = new ArrayList<Department>();
-        for (Department departmentListNewDepartmentToAttach : departmentListNew) {
-            departmentListNewDepartmentToAttach = em.getReference(departmentListNewDepartmentToAttach.getClass(), departmentListNewDepartmentToAttach.getDepartmentID());
-            attachedDepartmentListNew.add(departmentListNewDepartmentToAttach);
-        }
-        departmentListNew = attachedDepartmentListNew;
-        faculty.setDepartmentList(departmentListNew);
-        faculty = em.merge(faculty);
-        if (institutionOld != null && !institutionOld.equals(institutionNew)) {
-            institutionOld.getFacultyList().remove(faculty);
-            institutionOld = em.merge(institutionOld);
-        }
-        if (institutionNew != null && !institutionNew.equals(institutionOld)) {
-            institutionNew.getFacultyList().add(faculty);
-            institutionNew = em.merge(institutionNew);
-        }
-        for (Department departmentListNewDepartment : departmentListNew) {
-            if (!departmentListOld.contains(departmentListNewDepartment)) {
-                Faculty oldFacultyOfDepartmentListNewDepartment = departmentListNewDepartment.getFaculty();
-                departmentListNewDepartment.setFaculty(faculty);
-                departmentListNewDepartment = em.merge(departmentListNewDepartment);
-                if (oldFacultyOfDepartmentListNewDepartment != null && !oldFacultyOfDepartmentListNewDepartment.equals(faculty)) {
-                    oldFacultyOfDepartmentListNewDepartment.getDepartmentList().remove(departmentListNewDepartment);
-                    oldFacultyOfDepartmentListNewDepartment = em.merge(oldFacultyOfDepartmentListNewDepartment);
-                }
-            }
-        }
-           
-        
 
+        return em.merge(faculty);
+        
     }
     
     public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
@@ -172,11 +115,7 @@ public class FacultyJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        Institution institution = faculty.getInstitution();
-        if (institution != null) {
-            institution.getFacultyList().remove(faculty);
-            institution = em.merge(institution);
-        }
+
         em.remove(faculty);
             
     }

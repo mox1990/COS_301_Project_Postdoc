@@ -18,10 +18,8 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
-import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
@@ -203,14 +201,22 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         {
             DAOFactory dAOFactory = getDAOFactory(transactionController.StartTransaction());
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            
+            if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
+            {
 
-            application.setTimestamp(getGregorianCalendarUTIL().getTime());
-            application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
-            application.setFellow(oldApplication.getFellow());
-            application.setGrantHolder(oldApplication.getGrantHolder());
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+                application.setTimestamp(getGregorianCalendarUTIL().getTime());
+                application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
+                application.setFellow(oldApplication.getFellow());
+                application.setGrantHolder(oldApplication.getGrantHolder());
+                application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
 
-            applicationJpaController.create(application);
+                applicationJpaController.create(application);
+            }
+            else
+            {
+                applicationJpaController.edit(application);
+            }
             
             transactionController.CommitTransaction();
         }

@@ -64,7 +64,10 @@ public class AuthenticationInterceptor {
                 if(roles.size() >= 0 && !securedMethodAnnotations[0].ownerAuthentication())
                 {
                     System.out.println("Normal authentication : " + context.getMethod().getName());
+                    System.out.println("Allowed Security roles: " + roles.toString());
+                    System.out.println("User Security roles: " + session.getUser().getSecurityRoleList().toString());
                     userGatewayLocal.authenticateUser(session, roles);
+                    
                 }//Normal owner authentication
                 else if(roles.isEmpty() && securedMethodAnnotations[0].ownerAuthentication())
                 {                    
@@ -139,7 +142,7 @@ public class AuthenticationInterceptor {
                         }
                     }
                 }
-                
+                System.out.println("Authentication successful: " + context.getMethod().getName());
                 result = context.proceed();
             }
             else

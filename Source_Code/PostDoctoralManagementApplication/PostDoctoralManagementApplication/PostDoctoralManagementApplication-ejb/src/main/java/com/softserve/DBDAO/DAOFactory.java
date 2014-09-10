@@ -17,12 +17,10 @@ import javax.persistence.EntityManagerFactory;
 public class DAOFactory {
     private EntityManager em = null;
     
-    public DAOFactory(EntityManager emf) 
+    public DAOFactory(EntityManager em) 
     {
         this.em = em;
     }
-    
-    
     
     public AcademicQualificationJpaController createAcademicQualificationDAO()
     {

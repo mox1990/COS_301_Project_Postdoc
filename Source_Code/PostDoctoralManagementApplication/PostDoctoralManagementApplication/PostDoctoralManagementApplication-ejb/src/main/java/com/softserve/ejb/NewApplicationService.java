@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
@@ -19,10 +20,10 @@ import com.softserve.annotations.SecuredMethod;
 import com.softserve.constants.PersistenceConstants.*;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -31,6 +32,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -39,7 +41,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class NewApplicationService implements  NewApplicationServiceLocal{
@@ -76,19 +78,24 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         this.emf = emf;
     }
             
-    protected ApplicationJpaController getApplicationDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
+    }
+
+    protected TransactionController getTransactionController()
+    {
+        return new TransactionController(emf);
+    }
+
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
+    {
+        return new ApplicationServicesUtil(em);
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    protected ApplicationServicesUtil getApplicationServicesUtil()
-    {
-        return new ApplicationServicesUtil(emf);
     }
     
     protected GregorianCalendar getGregorianCalendar()
@@ -127,20 +134,39 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             throw new Exception("Application is not valid");
         }
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
         
-        //Set status and application type
-        if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
-        {
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
-            application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
-            application.setTimestamp(getGregorianCalendar().getTime());
-            applicationJpaController.create(application);
+            //Set status and application type
+            if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
+            {
+                application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+                application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
+                application.setTimestamp(getGregorianCalendar().getTime());
+                applicationJpaController.create(application);
+            }
+            else
+            {
+                applicationJpaController.edit(application);
+            } 
+
+            transactionController.CommitTransaction();
         }
-        else
+        catch(Exception ex)
         {
-            applicationJpaController.edit(application);
-        }                
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+                       
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -153,37 +179,69 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             throw new Exception("Grant holder is not valid");
         }
         
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
-        
-        //Check if grant holder already exists
-        if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()) != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            grantHolder.setAddressLine1(new Address());
-                            
-            List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-            grantHolder.setSecurityRoleList(securityRoles);
-            
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", true, grantHolder);
-        }
-        else if(grantHolder.getSystemID() != null)
-        {
-            if(!grantHolder.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER))
+            ApplicationJpaController applicationJpaController = getDAOFactory(em).createApplicationDAO();
+            UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
+
+            //Check if grant holder already exists
+            if(!(grantHolder.getSystemID() != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()) != null && accountManagementServices.getUserBySystemID(grantHolder.getSystemID()).equals(grantHolder)))
             {
-                grantHolder.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-                accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), grantHolder);
-            }            
+                grantHolder.setAddressLine1(new Address());
+
+                List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+                securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+                grantHolder.setSecurityRoleList(securityRoles);
+
+                accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", true, grantHolder);
+            }
+            else if(grantHolder.getSystemID() != null)
+            {
+                if(!grantHolder.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER))
+                {
+                    grantHolder.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+                    accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), grantHolder);
+                }            
+            }
+        }
+        finally
+        {
+            em.close();
         }
         
-        Application a = applicationJpaController.findApplication(application.getApplicationID());
         
-        if(a.getGrantHolder() == null || !a.getGrantHolder().equals(grantHolder))
+        
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            //Link grant holder to application
-            a.setGrantHolder(grantHolder);
-            applicationJpaController.edit(a);
-        }        
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            
+            Application a = applicationJpaController.findApplication(application.getApplicationID());
+        
+            if(a.getGrantHolder() == null || !a.getGrantHolder().equals(grantHolder))
+            {
+                //Link grant holder to application
+                a.setGrantHolder(grantHolder);
+                applicationJpaController.edit(a);
+            } 
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
+               
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -195,50 +253,78 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         if(referee == null)
         {
             throw new Exception("Referee is not valid");
-        }        
+        }  
         
-        
-        ApplicationJpaController applicationJpaController = getApplicationDAO();
-        UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
-        
-        //Check if referee already exists
-        if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()) != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            referee.setAddressLine1(new Address());
-              
-            List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-            referee.setSecurityRoleList(securityRoles);
-            
-            accountManagementServices.generateOnDemandAccount(session, session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee);
-        }
-        else if(referee.getSystemID() != null)
-        {
-            if(!referee.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
+            ApplicationJpaController applicationJpaController = getDAOFactory(em).createApplicationDAO();
+            UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
+
+            //Check if referee already exists
+            if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()) != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
             {
-                referee.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-                accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), referee);
-            }            
+                referee.setAddressLine1(new Address());
+
+                List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+                securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                referee.setSecurityRoleList(securityRoles);
+
+                accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee);
+            }
+            else if(referee.getSystemID() != null)
+            {
+                if(!referee.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
+                {
+                    referee.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                    accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), referee);
+                }            
+            }
         }
-        
-        Application a = applicationJpaController.findApplication(application.getApplicationID());
-        
-        if(a.getPersonList() == null)
+        finally
         {
-            a.setPersonList(new ArrayList<Person>());
+            em.close();
         }
         
-        System.out.println(referee.toString());
-        System.out.println("=======Contains: " + application.getPersonList().contains(referee));
-        
-        if(!a.getPersonList().contains(referee))
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
         {
-            System.out.println("=======Linking referee " + referee.toString());
-            System.out.println("=======Linking referee to " + a.toString());
-            //Link referee to application
-            a.getPersonList().add(referee);
-            applicationJpaController.edit(a);
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            
+            Application a = applicationJpaController.findApplication(application.getApplicationID());
+        
+            if(a.getPersonList() == null)
+            {
+                a.setPersonList(new ArrayList<Person>());
+            }
+
+            System.out.println(referee.toString());
+            System.out.println("=======Contains: " + application.getPersonList().contains(referee));
+
+            if(!a.getPersonList().contains(referee))
+            {
+                System.out.println("=======Linking referee " + referee.toString());
+                System.out.println("=======Linking referee to " + a.toString());
+                //Link referee to application
+                a.getPersonList().add(referee);
+                applicationJpaController.edit(a);
+            }
+
+            transactionController.CommitTransaction();
         }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -246,22 +332,50 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public void submitApplication(Session session, Application application) throws Exception
     {        
-        getApplicationServicesUtil().submitApplication(application);        
+          
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {            
+            getApplicationServicesUTIL(transactionController.getEntityManager()).submitApplication(application); 
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
     }
     
     @Override
     public boolean canFellowOpenANewApplication(Person fellow)
     {
-        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(fellow);
-        for(Application application: applications)
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
+            List<Application> applications = getDAOFactory(em).createApplicationDAO().findAllApplicationsWhosFellowIs(fellow);
+            for(Application application: applications)
             {
-                return false;
+                if(!(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
+                {
+                    return false;
+                }
             }
+
+            return true;
+        }
+        finally
+        {
+            em.close();
         }
         
-        return true;
+        
     }   
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
@@ -269,16 +383,26 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     @Override
     public Application getOpenApplication(Session session) throws AuthenticationException, Exception
     {
-        List<Application> applications = getApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
-        for(Application application: applications)
+        EntityManager em = emf.createEntityManager();
+
+        try
         {
-            if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+            List<Application> applications = getDAOFactory(em).createApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
+            for(Application application: applications)
             {
-                return application;
+                if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+                {
+                    return application;
+                }
             }
+
+            return null;
+        }
+        finally
+        {
+            em.close();
         }
         
-        return null;
     }
     
 }

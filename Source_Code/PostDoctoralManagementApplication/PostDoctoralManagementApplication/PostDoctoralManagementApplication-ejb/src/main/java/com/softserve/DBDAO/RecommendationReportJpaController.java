@@ -62,35 +62,15 @@ public class RecommendationReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-
-        Application application = recommendationReport.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            recommendationReport.setApplication(application);
-        }
-        Person hod = recommendationReport.getHod();
-        if (hod != null) {
-            hod = em.getReference(hod.getClass(), hod.getSystemID());
-            recommendationReport.setHod(hod);
-        }
-        em.persist(recommendationReport);
-        if (application != null) {
-            application.setRecommendationReport(recommendationReport);
-            application = em.merge(application);
-        }
-        if (hod != null) {
-            hod.getRecommendationReportList().add(recommendationReport);
-            hod = em.merge(hod);
-        }
-
+        em.persist(recommendationReport); 
     }
     
-    public void edit(RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public RecommendationReport edit(RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), recommendationReport);
+        return edit(getEntityManager(), recommendationReport);
     }
 
-    public void edit(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public RecommendationReport edit(EntityManager em, RecommendationReport recommendationReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = recommendationReport.getReportID();
@@ -101,8 +81,6 @@ public class RecommendationReportJpaController implements Serializable {
         RecommendationReport persistentRecommendationReport = em.find(RecommendationReport.class, recommendationReport.getReportID());
         Application applicationOld = persistentRecommendationReport.getApplication();
         Application applicationNew = recommendationReport.getApplication();
-        Person hodOld = persistentRecommendationReport.getHod();
-        Person hodNew = recommendationReport.getHod();
         List<String> illegalOrphanMessages = null;
         if (applicationNew != null && !applicationNew.equals(applicationOld)) {
             RecommendationReport oldRecommendationReportOfApplication = applicationNew.getRecommendationReport();
@@ -116,34 +94,8 @@ public class RecommendationReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            recommendationReport.setApplication(applicationNew);
-        }
-        if (hodNew != null) {
-            hodNew = em.getReference(hodNew.getClass(), hodNew.getSystemID());
-            recommendationReport.setHod(hodNew);
-        }
-        recommendationReport = em.merge(recommendationReport);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.setRecommendationReport(null);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.setRecommendationReport(recommendationReport);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (hodOld != null && !hodOld.equals(hodNew)) {
-            hodOld.getRecommendationReportList().remove(recommendationReport);
-            hodOld = em.merge(hodOld);
-        }
-        if (hodNew != null && !hodNew.equals(hodOld)) {
-            hodNew.getRecommendationReportList().add(recommendationReport);
-            hodNew = em.merge(hodNew);
-        }
 
-                
-
+        return em.merge(recommendationReport);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -160,18 +112,8 @@ public class RecommendationReportJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The recommendationReport with id " + id + " no longer exists.", enfe);
         }
-        Application application = recommendationReport.getApplication();
-        if (application != null) {
-            application.setRecommendationReport(null);
-            application = em.merge(application);
-        }
-        Person hod = recommendationReport.getHod();
-        if (hod != null) {
-            hod.getRecommendationReportList().remove(recommendationReport);
-            hod = em.merge(hod);
-        }
-        em.remove(recommendationReport);
-            
+
+        em.remove(recommendationReport);            
     }
 
     public List<RecommendationReport> findRecommendationReportEntities() {

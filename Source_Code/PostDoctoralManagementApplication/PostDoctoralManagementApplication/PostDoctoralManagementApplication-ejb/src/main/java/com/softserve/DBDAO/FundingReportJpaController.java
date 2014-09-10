@@ -67,48 +67,16 @@ public class FundingReportJpaController implements Serializable {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
 
-        Application application = fundingReport.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            fundingReport.setApplication(application);
-        }
-        Person dris = fundingReport.getDris();
-        if (dris != null) {
-            dris = em.getReference(dris.getClass(), dris.getSystemID());
-            fundingReport.setDris(dris);
-        }
-        List<FundingCost> attachedFundingCostList = new ArrayList<FundingCost>();
-        for (FundingCost fundingCostListFundingCostToAttach : fundingReport.getFundingCostList()) {
-            fundingCostListFundingCostToAttach = em.getReference(fundingCostListFundingCostToAttach.getClass(), fundingCostListFundingCostToAttach.getCostID());
-            attachedFundingCostList.add(fundingCostListFundingCostToAttach);
-        }
-        fundingReport.setFundingCostList(attachedFundingCostList);
         em.persist(fundingReport);
-        if (application != null) {
-            application.setFundingReport(fundingReport);
-            application = em.merge(application);
-        }
-        if (dris != null) {
-            dris.getFundingReportList().add(fundingReport);
-            dris = em.merge(dris);
-        }
-        for (FundingCost fundingCostListFundingCost : fundingReport.getFundingCostList()) {
-            FundingReport oldFundingReportOfFundingCostListFundingCost = fundingCostListFundingCost.getFundingReport();
-            fundingCostListFundingCost.setFundingReport(fundingReport);
-            fundingCostListFundingCost = em.merge(fundingCostListFundingCost);
-            if (oldFundingReportOfFundingCostListFundingCost != null) {
-                oldFundingReportOfFundingCostListFundingCost.getFundingCostList().remove(fundingCostListFundingCost);
-                oldFundingReportOfFundingCostListFundingCost = em.merge(oldFundingReportOfFundingCostListFundingCost);
-            }
-        }
+
     }
     
-    public void edit(FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public FundingReport edit(FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), fundingReport);
+        return edit(getEntityManager(), fundingReport);
     }
     
-    public void edit(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
+    public FundingReport edit(EntityManager em, FundingReport fundingReport) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = fundingReport.getReportID();
@@ -144,52 +112,9 @@ public class FundingReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            fundingReport.setApplication(applicationNew);
-        }
-        if (drisNew != null) {
-            drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
-            fundingReport.setDris(drisNew);
-        }
-        List<FundingCost> attachedFundingCostListNew = new ArrayList<FundingCost>();
-        for (FundingCost fundingCostListNewFundingCostToAttach : fundingCostListNew) {
-            fundingCostListNewFundingCostToAttach = em.getReference(fundingCostListNewFundingCostToAttach.getClass(), fundingCostListNewFundingCostToAttach.getCostID());
-            attachedFundingCostListNew.add(fundingCostListNewFundingCostToAttach);
-        }
-        fundingCostListNew = attachedFundingCostListNew;
-        fundingReport.setFundingCostList(fundingCostListNew);
-        fundingReport = em.merge(fundingReport);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.setFundingReport(null);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.setFundingReport(fundingReport);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (drisOld != null && !drisOld.equals(drisNew)) {
-            drisOld.getFundingReportList().remove(fundingReport);
-            drisOld = em.merge(drisOld);
-        }
-        if (drisNew != null && !drisNew.equals(drisOld)) {
-            drisNew.getFundingReportList().add(fundingReport);
-            drisNew = em.merge(drisNew);
-        }
-        for (FundingCost fundingCostListNewFundingCost : fundingCostListNew) {
-            if (!fundingCostListOld.contains(fundingCostListNewFundingCost)) {
-                FundingReport oldFundingReportOfFundingCostListNewFundingCost = fundingCostListNewFundingCost.getFundingReport();
-                fundingCostListNewFundingCost.setFundingReport(fundingReport);
-                fundingCostListNewFundingCost = em.merge(fundingCostListNewFundingCost);
-                if (oldFundingReportOfFundingCostListNewFundingCost != null && !oldFundingReportOfFundingCostListNewFundingCost.equals(fundingReport)) {
-                    oldFundingReportOfFundingCostListNewFundingCost.getFundingCostList().remove(fundingCostListNewFundingCost);
-                    oldFundingReportOfFundingCostListNewFundingCost = em.merge(oldFundingReportOfFundingCostListNewFundingCost);
-                }
-            }
-        }
-            
-                
-           
+
+        return em.merge(fundingReport);
+ 
     }
 
     public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception 
@@ -218,16 +143,7 @@ public class FundingReportJpaController implements Serializable {
         if (illegalOrphanMessages != null) {
             throw new IllegalOrphanException(illegalOrphanMessages);
         }
-        Application application = fundingReport.getApplication();
-        if (application != null) {
-            application.setFundingReport(null);
-            application = em.merge(application);
-        }
-        Person dris = fundingReport.getDris();
-        if (dris != null) {
-            dris.getFundingReportList().remove(fundingReport);
-            dris = em.merge(dris);
-        }
+
         em.remove(fundingReport);
 
     }

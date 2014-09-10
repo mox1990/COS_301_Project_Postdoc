@@ -6,6 +6,7 @@
 
 package com.softserve.ejb;
 
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DepartmentJpaController;
 import com.softserve.DBDAO.FacultyJpaController;
 import com.softserve.DBDAO.InstitutionJpaController;
@@ -14,11 +15,13 @@ import com.softserve.DBEntities.Faculty;
 import com.softserve.DBEntities.Institution;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
+import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -26,6 +29,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -34,7 +38,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class LocationManagementService implements LocationManagementServiceLocal {
@@ -57,19 +61,14 @@ public class LocationManagementService implements LocationManagementServiceLocal
         this.emf = emf;
     }
             
-    protected InstitutionJpaController getInstitutionDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new InstitutionJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
-    
-    protected FacultyJpaController getFacultyDAO()
+
+    protected TransactionController getTransactionController()
     {
-        return new FacultyJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    protected DepartmentJpaController getDepartmentDAO()
-    {
-        return new DepartmentJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new TransactionController(emf);
     }
     
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -77,118 +76,259 @@ public class LocationManagementService implements LocationManagementServiceLocal
         return new DBEntitiesFactory();
     }
     
-    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void createInstitution(Session session, Institution institution) throws AuthenticationException, Exception
     {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
         
-        InstitutionJpaController institutionJpaController = getInstitutionDAO();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            dAOFactory.createInstitutionDAO().create(institution);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        } 
         
-        institutionJpaController.create(institution);
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void createFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception
-    {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        FacultyJpaController facultyJpaController = getFacultyDAO();
-        
-        facultyJpaController.create(faculty);
+    {        
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            dAOFactory.createFacultyDAO().create(faculty);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        } 
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void createDepartment(Session session, Department department) throws AuthenticationException, Exception
-    {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        DepartmentJpaController departmentJpaController = getDepartmentDAO();
-        
-        departmentJpaController.create(department);
+    {        
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            dAOFactory.createDepartmentDAO().create(department);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void updateInstitution(Session session, Institution institution) throws AuthenticationException, Exception
-    {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        InstitutionJpaController institutionJpaController = getInstitutionDAO();
-        
-        institutionJpaController.edit(institution);
+    {   
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            dAOFactory.createInstitutionDAO().edit(institution);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        } 
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void updateFaculty(Session session, Faculty faculty) throws AuthenticationException, Exception
-    {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        FacultyJpaController facultyJpaController = getFacultyDAO();
-        
-        facultyJpaController.edit(faculty);
+    { 
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            dAOFactory.createFacultyDAO().edit(faculty);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        } 
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
     @Override
     public void updateDepartment(Session session, Department department) throws AuthenticationException, Exception
     {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        getUserGatewayServiceEJB().authenticateUser(session, roles);
-        
-        DepartmentJpaController departmentJpaController = getDepartmentDAO();
-        
-        departmentJpaController.edit(department);
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            
+            dAOFactory.createDepartmentDAO().edit(department);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
     }
-        
+    
+
+
     @Override
     public List<Institution> getAllInstitutions() throws AuthenticationException, Exception
     {
-        InstitutionJpaController institutionJpaController = getInstitutionDAO();
-        
-        return institutionJpaController.findInstitutionEntities();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createInstitutionDAO().findInstitutionEntities();
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     @Override
     public List<Faculty> getAllFacultiesInInstitution(Institution institution) throws AuthenticationException, Exception
     {
-        FacultyJpaController facultyJpaController = getFacultyDAO();
-        
-        return facultyJpaController.findAllFacultiesInInstitution(institution);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createFacultyDAO().findAllFacultiesInInstitution(institution);
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     @Override
     public List<Department> getAllDepartmentForFaculty(Faculty faculty) throws AuthenticationException, Exception
     {
-        DepartmentJpaController departmentJpaController = getDepartmentDAO();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createDepartmentDAO().findAllDepartmentsInFaculty(faculty);
+        }
+        finally
+        {
+            em.close();
+        }
         
-        return departmentJpaController.findAllDepartmentsInFaculty(faculty);
     }
     
+
     @Override
     public Institution getInstitution(Long institution) throws Exception
     {
-        return getInstitutionDAO().findInstitution(institution);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createInstitutionDAO().findInstitution(institution);
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
     
+
     @Override
     public Faculty getFaculty(Long faculty) throws Exception
     {
-        return getFacultyDAO().findFaculty(faculty);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createFacultyDAO().findFaculty(faculty);
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
     
     @Override
     public Department getDepartment(Long department) throws Exception
     {
-        return getDepartmentDAO().findDepartment(department);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createDepartmentDAO().findDepartment(department);
+        }
+        finally
+        {
+            em.close();
+        }
+        
     }
 }

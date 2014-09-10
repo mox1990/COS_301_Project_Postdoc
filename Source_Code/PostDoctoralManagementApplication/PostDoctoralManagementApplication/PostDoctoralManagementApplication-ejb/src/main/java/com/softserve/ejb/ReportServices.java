@@ -7,6 +7,7 @@
 package com.softserve.ejb;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
@@ -16,7 +17,6 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.jasper.DynamicColumnDataSource;
 import com.softserve.jasper.DynamicReportBuilder;
 import com.softserve.system.Session;
@@ -71,7 +71,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ReportServices implements ReportServicesLocal 
@@ -112,47 +112,73 @@ public class ReportServices implements ReportServicesLocal
      *
      * @return
      */
-    protected PersonJpaController getPersonDAO()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+        return new DAOFactory(em);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersons(Session session)
     {
-        return getPersonDAO().findPersonEntities();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createPersonDAO().findPersonEntities();
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersonsWithSecurityRole(Session session, Long role)
     {
-        return getPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Application> getAllApplications(Session session)
     {
-        return getApplicationDAO().findApplicationEntities();
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createApplicationDAO().findApplicationEntities();
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Application> getAllApplicationsWithStatus(Session session, String status)
     {
-        ApplicationJpaController a = getApplicationDAO();
-        return a.findAllApplicationsWithStatus(status, 0, (int) a.countAllApplicationsWithStatus(status));
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createApplicationDAO().findAllApplicationsWithStatus(status, 0, Integer.MAX_VALUE);
+        }
+        finally
+        {
+            em.close();
+        }
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})

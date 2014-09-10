@@ -44,75 +44,24 @@ public class AmmendRequestJpaController implements Serializable {
         create(getEntityManager(), ammendRequest);
     }
     
-    public void create(EntityManager em, AmmendRequest ammendRequest) throws RollbackFailureException, Exception {
-
-
-        Application application = ammendRequest.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            ammendRequest.setApplication(application);
-        }
-        Person creator = ammendRequest.getCreator();
-        if (creator != null) {
-            creator = em.getReference(creator.getClass(), creator.getSystemID());
-            ammendRequest.setCreator(creator);
-        }
-        em.persist(ammendRequest);
-        if (application != null) {
-            application.getAmmendRequestList().add(ammendRequest);
-            application = em.merge(application);
-        }
-        if (creator != null) {
-            creator.getAmmendRequestList().add(ammendRequest);
-            creator = em.merge(creator);
-        }
-  
+    public void create(EntityManager em, AmmendRequest ammendRequest) throws RollbackFailureException, Exception 
+    {
+        em.persist(ammendRequest); 
     }
     
-    public void edit( AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public AmmendRequest edit( AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
     { 
-        edit(getEntityManager(), ammendRequest);
+        return edit(getEntityManager(), ammendRequest);
     }
 
-    public void edit(EntityManager em, AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public AmmendRequest edit(EntityManager em, AmmendRequest ammendRequest) throws NonexistentEntityException, RollbackFailureException, Exception 
     {        
         Long id = ammendRequest.getRequestID();
         if (findAmmendRequest(id) == null) {
             throw new NonexistentEntityException("The ammendRequest with id " + id + " no longer exists.");
-        }
+        }        
         
-        AmmendRequest persistentAmmendRequest = em.find(AmmendRequest.class, ammendRequest.getRequestID());
-        Application applicationOld = persistentAmmendRequest.getApplication();
-        Application applicationNew = ammendRequest.getApplication();
-        Person creatorOld = persistentAmmendRequest.getCreator();
-        Person creatorNew = ammendRequest.getCreator();
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            ammendRequest.setApplication(applicationNew);
-        }
-        if (creatorNew != null) {
-            creatorNew = em.getReference(creatorNew.getClass(), creatorNew.getSystemID());
-            ammendRequest.setCreator(creatorNew);
-        }
-        
-        ammendRequest = em.merge(ammendRequest);
-        
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.getAmmendRequestList().remove(ammendRequest);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.getAmmendRequestList().add(ammendRequest);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (creatorOld != null && !creatorOld.equals(creatorNew)) {
-            creatorOld.getAmmendRequestList().remove(ammendRequest);
-            creatorOld = em.merge(creatorOld);
-        }
-        if (creatorNew != null && !creatorNew.equals(creatorOld)) {
-            creatorNew.getAmmendRequestList().add(ammendRequest);
-            creatorNew = em.merge(creatorNew);
-        }  
+        return em.merge(ammendRequest);
 
     }
     
@@ -131,17 +80,6 @@ public class AmmendRequestJpaController implements Serializable {
             throw new NonexistentEntityException("The ammendRequest with id " + id + " no longer exists.", enfe);
         }
         
-        Application application = ammendRequest.getApplication();
-        
-        if (application != null) {
-            application.getAmmendRequestList().remove(ammendRequest);
-            application = em.merge(application);
-        }
-        Person creator = ammendRequest.getCreator();
-        if (creator != null) {
-            creator.getAmmendRequestList().remove(ammendRequest);
-            creator = em.merge(creator);
-        }
         em.remove(ammendRequest);
 
     }

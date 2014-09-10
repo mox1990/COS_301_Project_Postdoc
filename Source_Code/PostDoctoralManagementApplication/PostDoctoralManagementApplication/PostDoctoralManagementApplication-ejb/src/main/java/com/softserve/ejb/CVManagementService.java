@@ -17,18 +17,18 @@ import com.softserve.DBEntities.Experience;
 import com.softserve.Exceptions.*;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
-import com.softserve.annotations.TransactionMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -37,7 +37,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, TransactionInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class CVManagementService implements CVManagementServiceLocal {
@@ -52,10 +52,15 @@ public class CVManagementService implements CVManagementServiceLocal {
         this.emf = emf;
     }
     
-    protected DAOFactory getDAOFactory()
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(emf);
-    } 
+	return new DAOFactory(em);
+    }
+
+    protected TransactionController getTransactionController()
+    {
+        return new TransactionController(emf);
+    }
     
     @Override
     public boolean hasCV(Session session)
@@ -65,7 +70,6 @@ public class CVManagementService implements CVManagementServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Created CV")
-    @TransactionMethod
     @Override
     public void createCV(Session session, Cv cv) throws AuthenticationException, Exception
     {        
@@ -74,32 +78,50 @@ public class CVManagementService implements CVManagementServiceLocal {
             throw new CVAlreadExistsException("The user already has a cv");
         }
         
-        DAOFactory dAOFactory = getDAOFactory();
-        AcademicQualificationJpaController academicQualificationJpaController = dAOFactory.createAcademicQualificationDAO();
-        ExperienceJpaController experienceJpaController = dAOFactory.createExperienceDAO();
-        CvJpaController cvJpaController = dAOFactory.createCvDAO();
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
         
-        List<Experience> experienceList = cv.getExperienceList();
-        List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
-        
-        cv.setAcademicQualificationList(null);
-        cv.setExperienceList(null);
-        
-        cv.setCvID(session.getUser().getSystemID());
-        cv.setPerson(session.getUser());
-        cvJpaController.create(cv);
-        
-        for(Experience experience : experienceList)
+        try
         {
-            experience.setCv(cv);
-            experienceJpaController.create(experience);
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            AcademicQualificationJpaController academicQualificationJpaController = dAOFactory.createAcademicQualificationDAO();
+            ExperienceJpaController experienceJpaController = dAOFactory.createExperienceDAO();
+            CvJpaController cvJpaController = dAOFactory.createCvDAO();
+
+            List<Experience> experienceList = cv.getExperienceList();
+            List<AcademicQualification> academicQualificationsList = cv.getAcademicQualificationList();
+
+            cv.setAcademicQualificationList(null);
+            cv.setExperienceList(null);
+
+            cv.setCvID(session.getUser().getSystemID());
+            cv.setPerson(session.getUser());
+            cvJpaController.create(cv);
+
+            for(Experience experience : experienceList)
+            {
+                experience.setCv(cv);
+                experienceJpaController.create(experience);
+            }
+
+            for(AcademicQualification academicQualification : academicQualificationsList)
+            {
+                academicQualification.setCv(cv);
+                academicQualificationJpaController.create(academicQualification);
+            }
+            
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        for(AcademicQualification academicQualification : academicQualificationsList)
-        {
-            academicQualification.setCv(cv);
-            academicQualificationJpaController.create(academicQualification);
-        }
     }
     
     @SecuredMethod(AllowedSecurityRoles = {}, ownerAuthentication = true, ownerParameterIndex = 1)
@@ -108,38 +130,55 @@ public class CVManagementService implements CVManagementServiceLocal {
     public void updateCV(Session session, Cv cv) throws AuthenticationException, Exception
     {
         
-        DAOFactory dAOFactory = getDAOFactory();
-        AcademicQualificationJpaController academicQualificationJpaController = dAOFactory.createAcademicQualificationDAO();
-        ExperienceJpaController experienceJpaController = dAOFactory.createExperienceDAO();
-        CvJpaController cvJpaController = dAOFactory.createCvDAO();        
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            AcademicQualificationJpaController academicQualificationJpaController = dAOFactory.createAcademicQualificationDAO();
+            ExperienceJpaController experienceJpaController = dAOFactory.createExperienceDAO();
+            CvJpaController cvJpaController = dAOFactory.createCvDAO();   
+            
+            for(Experience experience : cv.getExperienceList())
+            {
+                try
+                {
+                    experienceJpaController.findExperience(experience.getExperienceID());
+                }
+                catch(Exception ex)
+                {
+                    experience.setCv(cv);
+                    experienceJpaController.create(experience);
+                }
+            }
 
-        for(Experience experience : cv.getExperienceList())
+            for(AcademicQualification academicQualification : cv.getAcademicQualificationList())
+            {
+                try
+                {
+                    academicQualificationJpaController.findAcademicQualification(academicQualification.getQualificationID());
+                }
+                catch(Exception ex)
+                {
+                    academicQualification.setCv(cv);
+                    academicQualificationJpaController.create(academicQualification);
+                }
+            }
+
+            cv.setCvID(session.getUser().getSystemID());
+            cvJpaController.edit(cv);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
         {
-            try
-            {
-                experienceJpaController.findExperience(experience.getExperienceID());
-            }
-            catch(Exception ex)
-            {
-                experience.setCv(cv);
-                experienceJpaController.create(experience);
-            }
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
         }
         
-        for(AcademicQualification academicQualification : cv.getAcademicQualificationList())
-        {
-            try
-            {
-                academicQualificationJpaController.findAcademicQualification(academicQualification.getQualificationID());
-            }
-            catch(Exception ex)
-            {
-                academicQualification.setCv(cv);
-                academicQualificationJpaController.create(academicQualification);
-            }
-        }
-        
-        cv.setCvID(session.getUser().getSystemID());
-        cvJpaController.edit(cv);
     }
 }

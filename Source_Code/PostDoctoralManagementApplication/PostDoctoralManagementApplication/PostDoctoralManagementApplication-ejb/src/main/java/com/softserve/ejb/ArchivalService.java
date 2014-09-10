@@ -66,9 +66,9 @@ import com.softserve.annotations.SecuredMethod;
 import com.softserve.constants.PersistenceConstants;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.interceptors.TransactionInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -85,6 +85,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceUnit;
@@ -114,24 +115,37 @@ public class ArchivalService implements ArchivalServiceLocal {
     {
     }
     
-    protected DAOFactory getDAOFactoryWorking()
+
+    
+    protected DAOFactory getDAOFactoryWorking(EntityManager em)
     {
-        return new DAOFactory(emfWorking);
+        return new DAOFactory(em);
+    }
+    protected DAOFactory getDAOFactoryBackup(EntityManager em)
+    {
+        return new DAOFactory(em);
     }
     
-    protected DAOFactory getDAOFactoryBackup()
+    protected TransactionController getTransactionControllerWorking()
     {
-        return new DAOFactory(emfWorking);
+        return new TransactionController(emfWorking);
+    }
+    
+    protected TransactionController getTransactionControllerBackup()
+    {
+        return new TransactionController(emfBackup);
     }
     
     //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
     @Override
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
-    public void backupDatabase(Session session)
+    public void backupDatabase(Session session) throws Exception
     {
         System.out.println("Running Backup...");
         // Setup Working DAOs...
-        DAOFactory daoFactoryWorking = getDAOFactoryWorking();
+        TransactionController transactionControllerWorking = getTransactionControllerWorking();
+        transactionControllerWorking.StartTransaction();
+        DAOFactory daoFactoryWorking = transactionControllerWorking.getDAOFactoryForTransaction();
         AcademicQualificationJpaController workingAcademicQualificationJpaController = daoFactoryWorking.createAcademicQualificationDAO();
         AddressJpaController workingAddressJpaController = daoFactoryWorking.createAddressDAO();
         AmmendRequestJpaController workingAmmendRequestJpaController = daoFactoryWorking.createAmmendRequestDAO();
@@ -160,7 +174,10 @@ public class ArchivalService implements ArchivalServiceLocal {
         ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = daoFactoryWorking.createResearchFellowInformationDAO();
         SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleJpaController();  
         
-        DAOFactory daoFactoryBackup = getDAOFactoryBackup();
+        TransactionController transactionControllerBackup = getTransactionControllerBackup();
+        transactionControllerBackup.StartTransaction();
+        DAOFactory daoFactoryBackup = transactionControllerBackup.getDAOFactoryForTransaction();
+        
         AcademicQualificationJpaController backupAcademicQualificationJpaController = daoFactoryBackup.createAcademicQualificationDAO();
         AddressJpaController backupAddressJpaController = daoFactoryBackup.createAddressDAO();
         AmmendRequestJpaController backupAmmendRequestJpaController = daoFactoryBackup.createAmmendRequestDAO();
@@ -1157,10 +1174,12 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
-    public void restoreBackupToWorkingDatabase(Session session)
+    public void restoreBackupToWorkingDatabase(Session session) throws Exception
     {
         // Setup Working DAOs...
-        DAOFactory daoFactoryWorking = getDAOFactoryWorking();
+        TransactionController transactionControllerWorking = getTransactionControllerWorking();
+        transactionControllerWorking.StartTransaction();
+        DAOFactory daoFactoryWorking = transactionControllerWorking.getDAOFactoryForTransaction();
         AcademicQualificationJpaController workingAcademicQualificationJpaController = daoFactoryWorking.createAcademicQualificationDAO();
         AddressJpaController workingAddressJpaController = daoFactoryWorking.createAddressDAO();
         AmmendRequestJpaController workingAmmendRequestJpaController = daoFactoryWorking.createAmmendRequestDAO();
@@ -1189,7 +1208,10 @@ public class ArchivalService implements ArchivalServiceLocal {
         ResearchFellowInformationJpaController workingResearchFellowInformationJpaController = daoFactoryWorking.createResearchFellowInformationDAO();
         SecurityRoleJpaController workingSecurityRoleJpaController = daoFactoryWorking.createSecurityRoleJpaController();  
         
-        DAOFactory daoFactoryBackup = getDAOFactoryBackup();
+        TransactionController transactionControllerBackup = getTransactionControllerBackup();
+        transactionControllerBackup.StartTransaction();
+        DAOFactory daoFactoryBackup = transactionControllerBackup.getDAOFactoryForTransaction();
+        
         AcademicQualificationJpaController backupAcademicQualificationJpaController = daoFactoryBackup.createAcademicQualificationDAO();
         AddressJpaController backupAddressJpaController = daoFactoryBackup.createAddressDAO();
         AmmendRequestJpaController backupAmmendRequestJpaController = daoFactoryBackup.createAmmendRequestDAO();
@@ -1221,7 +1243,7 @@ public class ArchivalService implements ArchivalServiceLocal {
         
     }
     
-    private void backUpFailed(Object object, Exception ex)
+    private void backUpFailed(Object object, Exception ex) 
     {
         System.out.println("Failed to back up: " + object.toString());
         ex.printStackTrace();

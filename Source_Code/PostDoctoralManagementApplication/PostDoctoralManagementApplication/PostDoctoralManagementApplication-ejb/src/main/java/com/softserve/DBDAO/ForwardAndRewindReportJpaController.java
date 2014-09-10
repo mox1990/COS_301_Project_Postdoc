@@ -46,71 +46,22 @@ public class ForwardAndRewindReportJpaController implements Serializable {
 
     public void create(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws RollbackFailureException, Exception 
     {
-
-        Application application = forwardAndRewindReport.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            forwardAndRewindReport.setApplication(application);
-        }
-        Person dris = forwardAndRewindReport.getDris();
-        if (dris != null) {
-            dris = em.getReference(dris.getClass(), dris.getSystemID());
-            forwardAndRewindReport.setDris(dris);
-        }
         em.persist(forwardAndRewindReport);
-        if (application != null) {
-            application.getForwardAndRewindReportList().add(forwardAndRewindReport);
-            application = em.merge(application);
-        }
-        if (dris != null) {
-            dris.getForwardAndRewindReportList().add(forwardAndRewindReport);
-            dris = em.merge(dris);
-        }
-
     }
     
-    public void edit(ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public ForwardAndRewindReport edit(ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), forwardAndRewindReport);
+        return edit(getEntityManager(), forwardAndRewindReport);
     }
     
-    public void edit(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public ForwardAndRewindReport edit(EntityManager em, ForwardAndRewindReport forwardAndRewindReport) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
         Long id = forwardAndRewindReport.getReportID();
         if (findForwardAndRewindReport(id) == null) {
             throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.");
         }
-        ForwardAndRewindReport persistentForwardAndRewindReport = em.find(ForwardAndRewindReport.class, forwardAndRewindReport.getReportID());
-        Application applicationOld = persistentForwardAndRewindReport.getApplication();
-        Application applicationNew = forwardAndRewindReport.getApplication();
-        Person drisOld = persistentForwardAndRewindReport.getDris();
-        Person drisNew = forwardAndRewindReport.getDris();
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            forwardAndRewindReport.setApplication(applicationNew);
-        }
-        if (drisNew != null) {
-            drisNew = em.getReference(drisNew.getClass(), drisNew.getSystemID());
-            forwardAndRewindReport.setDris(drisNew);
-        }
-        forwardAndRewindReport = em.merge(forwardAndRewindReport);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.getForwardAndRewindReportList().add(forwardAndRewindReport);
-            applicationNew = em.merge(applicationNew);
-        }
-        if (drisOld != null && !drisOld.equals(drisNew)) {
-            drisOld.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-            drisOld = em.merge(drisOld);
-        }
-        if (drisNew != null && !drisNew.equals(drisOld)) {
-            drisNew.getForwardAndRewindReportList().add(forwardAndRewindReport);
-            drisNew = em.merge(drisNew);
-        }       
 
+        return em.merge(forwardAndRewindReport);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -128,16 +79,7 @@ public class ForwardAndRewindReportJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The forwardAndRewindReport with id " + id + " no longer exists.", enfe);
         }
-        Application application = forwardAndRewindReport.getApplication();
-        if (application != null) {
-            application.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-            application = em.merge(application);
-        }
-        Person dris = forwardAndRewindReport.getDris();
-        if (dris != null) {
-            dris.getForwardAndRewindReportList().remove(forwardAndRewindReport);
-            dris = em.merge(dris);
-        }
+
         em.remove(forwardAndRewindReport);
            
     }

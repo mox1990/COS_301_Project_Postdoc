@@ -49,60 +49,24 @@ public class SecurityRoleJpaController implements Serializable {
         if (securityRole.getPersonList() == null) {
             securityRole.setPersonList(new ArrayList<Person>());
         }
-
-        List<Person> attachedPersonList = new ArrayList<Person>();
-        for (Person personListPersonToAttach : securityRole.getPersonList()) {
-            personListPersonToAttach = em.getReference(personListPersonToAttach.getClass(), personListPersonToAttach.getSystemID());
-            attachedPersonList.add(personListPersonToAttach);
-        }
-        securityRole.setPersonList(attachedPersonList);
-        em.persist(securityRole);
-        for (Person personListPerson : securityRole.getPersonList()) {
-            personListPerson.getSecurityRoleList().add(securityRole);
-            personListPerson = em.merge(personListPerson);
-        }
-            
+        
+        em.persist(securityRole);            
     }
     
-    public void edit(SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public SecurityRole edit(SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), securityRole);
+        return edit(getEntityManager(), securityRole);
     }
 
-    public void edit(EntityManager em, SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public SecurityRole edit(EntityManager em, SecurityRole securityRole) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = securityRole.getRoleID();
         if (findSecurityRole(id) == null) {
             throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.");
         }
-        
-        SecurityRole persistentSecurityRole = em.find(SecurityRole.class, securityRole.getRoleID());
-        List<Person> personListOld = persistentSecurityRole.getPersonList();
-        List<Person> personListNew = securityRole.getPersonList();
-        List<Person> attachedPersonListNew = new ArrayList<Person>();
-        for (Person personListNewPersonToAttach : personListNew) {
-            personListNewPersonToAttach = em.getReference(personListNewPersonToAttach.getClass(), personListNewPersonToAttach.getSystemID());
-            attachedPersonListNew.add(personListNewPersonToAttach);
-        }
-        personListNew = attachedPersonListNew;
-        securityRole.setPersonList(personListNew);
-        securityRole = em.merge(securityRole);
-        for (Person personListOldPerson : personListOld) {
-            if (!personListNew.contains(personListOldPerson)) {
-                personListOldPerson.getSecurityRoleList().remove(securityRole);
-                personListOldPerson = em.merge(personListOldPerson);
-            }
-        }
-        for (Person personListNewPerson : personListNew) {
-            if (!personListOld.contains(personListNewPerson)) {
-                personListNewPerson.getSecurityRoleList().add(securityRole);
-                personListNewPerson = em.merge(personListNewPerson);
-            }
-        }
-            
-                
 
+        return em.merge(securityRole);
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -120,11 +84,7 @@ public class SecurityRoleJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The securityRole with id " + id + " no longer exists.", enfe);
         }
-        List<Person> personList = securityRole.getPersonList();
-        for (Person personListPerson : personList) {
-            personListPerson.getSecurityRoleList().remove(securityRole);
-            personListPerson = em.merge(personListPerson);
-        }
+
         em.remove(securityRole);
 
     }

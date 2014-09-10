@@ -106,7 +106,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
             }
             employeeInformation.setEmployeeID(person.getSystemID());
 
-            sourceRoles = userAccountManagementServiceLocal.getAllSecurityRoles();        
+            sourceRoles = com.softserve.constants.PersistenceConstants.getAllSecurityRoles();        
             sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
 
             targetRoles = person.getSecurityRoleList();

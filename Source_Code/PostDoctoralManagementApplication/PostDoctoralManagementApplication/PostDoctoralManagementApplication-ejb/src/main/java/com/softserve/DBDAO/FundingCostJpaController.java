@@ -44,49 +44,23 @@ public class FundingCostJpaController implements Serializable {
     }
     
     public void create(EntityManager em, FundingCost fundingCost) throws RollbackFailureException, Exception 
-    {
-        FundingReport fundingReport = fundingCost.getFundingReport();
-        if (fundingReport != null) {
-            fundingReport = em.getReference(fundingReport.getClass(), fundingReport.getReportID());
-            fundingCost.setFundingReport(fundingReport);
-        }
-        em.persist(fundingCost);
-        if (fundingReport != null) {
-            fundingReport.getFundingCostList().add(fundingCost);
-            fundingReport = em.merge(fundingReport);
-        }
-            
+    { 
+        em.persist(fundingCost);               
     }
     
-    public void edit(FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public FundingCost edit(FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), fundingCost);
+        return edit(getEntityManager(), fundingCost);
     }
 
-    public void edit(EntityManager em, FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public FundingCost edit(EntityManager em, FundingCost fundingCost) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
         Long id = fundingCost.getCostID();
         if (findFundingCost(id) == null) {
             throw new NonexistentEntityException("The fundingCost with id " + id + " no longer exists.");
         }
-        
-        FundingCost persistentFundingCost = em.find(FundingCost.class, fundingCost.getCostID());
-        FundingReport fundingReportOld = persistentFundingCost.getFundingReport();
-        FundingReport fundingReportNew = fundingCost.getFundingReport();
-        if (fundingReportNew != null) {
-            fundingReportNew = em.getReference(fundingReportNew.getClass(), fundingReportNew.getReportID());
-            fundingCost.setFundingReport(fundingReportNew);
-        }
-        fundingCost = em.merge(fundingCost);
-        if (fundingReportOld != null && !fundingReportOld.equals(fundingReportNew)) {
-            fundingReportOld.getFundingCostList().remove(fundingCost);
-            fundingReportOld = em.merge(fundingReportOld);
-        }
-        if (fundingReportNew != null && !fundingReportNew.equals(fundingReportOld)) {
-            fundingReportNew.getFundingCostList().add(fundingCost);
-            fundingReportNew = em.merge(fundingReportNew);
-        }       
 
+        return em.merge(fundingCost);    
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -104,11 +78,7 @@ public class FundingCostJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The fundingCost with id " + id + " no longer exists.", enfe);
         }
-        FundingReport fundingReport = fundingCost.getFundingReport();
-        if (fundingReport != null) {
-            fundingReport.getFundingCostList().remove(fundingCost);
-            fundingReport = em.merge(fundingReport);
-        }
+ 
         em.remove(fundingCost);
 
     }

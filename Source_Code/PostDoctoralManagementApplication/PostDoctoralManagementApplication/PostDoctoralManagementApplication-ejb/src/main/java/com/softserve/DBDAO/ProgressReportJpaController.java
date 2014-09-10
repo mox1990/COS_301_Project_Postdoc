@@ -45,52 +45,23 @@ public class ProgressReportJpaController implements Serializable {
 
     public void create(EntityManager em, ProgressReport progressReport) throws RollbackFailureException, Exception 
     {
-
-        Application application = progressReport.getApplication();
-        if (application != null) {
-            application = em.getReference(application.getClass(), application.getApplicationID());
-            progressReport.setApplication(application);
-        }
         em.persist(progressReport);
-        if (application != null) {
-            application.getProgressReportList().add(progressReport);
-            application = em.merge(application);
-        }
-
     }
     
-    public void edit(ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public ProgressReport edit(ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
-        edit(getEntityManager(), progressReport);
+        return edit(getEntityManager(), progressReport);
     }
     
-    public void edit(EntityManager em, ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception 
+    public ProgressReport edit(EntityManager em, ProgressReport progressReport) throws NonexistentEntityException, RollbackFailureException, Exception 
     {
 
         Long id = progressReport.getReportID();
         if (findProgressReport(id) == null) {
             throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.");
         }
-        
-        ProgressReport persistentProgressReport = em.find(ProgressReport.class, progressReport.getReportID());
-        Application applicationOld = persistentProgressReport.getApplication();
-        Application applicationNew = progressReport.getApplication();
-        if (applicationNew != null) {
-            applicationNew = em.getReference(applicationNew.getClass(), applicationNew.getApplicationID());
-            progressReport.setApplication(applicationNew);
-        }
-        progressReport = em.merge(progressReport);
-        if (applicationOld != null && !applicationOld.equals(applicationNew)) {
-            applicationOld.getProgressReportList().remove(progressReport);
-            applicationOld = em.merge(applicationOld);
-        }
-        if (applicationNew != null && !applicationNew.equals(applicationOld)) {
-            applicationNew.getProgressReportList().add(progressReport);
-            applicationNew = em.merge(applicationNew);
-        }
-           
-                
 
+        return em.merge(progressReport); 
     }
     
     public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception 
@@ -108,13 +79,8 @@ public class ProgressReportJpaController implements Serializable {
         } catch (EntityNotFoundException enfe) {
             throw new NonexistentEntityException("The progressReport with id " + id + " no longer exists.", enfe);
         }
-        Application application = progressReport.getApplication();
-        if (application != null) {
-            application.getProgressReportList().remove(progressReport);
-            application = em.merge(application);
-        }
+ 
         em.remove(progressReport);
-
     }
 
     public List<ProgressReport> findProgressReportEntities() {
