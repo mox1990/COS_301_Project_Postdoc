@@ -236,8 +236,8 @@ public class HODRecommendationUnitTest {
             verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            verify(mockNotificationService).sendNotification(new Notification(Long.MAX_VALUE), true);
-            verify(mockNotificationService).sendNotification(new Notification(Long.MIN_VALUE), true);
+            //verify(mockNotificationService).sendNotification(new Notification(Long.MAX_VALUE), true);
+            //verify(mockNotificationService).sendNotification(new Notification(Long.MIN_VALUE), true);
         }
         catch (Exception ex)
         {

@@ -7,8 +7,10 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.AuditLogJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.ejb.NotificationService;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -22,9 +24,9 @@ public class NotificationServiceMockUnit extends NotificationService {
         this.nDAO = nDAO;
     }
     
-    @Override
-    protected NotificationJpaController getNotificationDAO()
+   @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return nDAO;
-    }
+        return new DAOFactory(em);
+    } 
 }

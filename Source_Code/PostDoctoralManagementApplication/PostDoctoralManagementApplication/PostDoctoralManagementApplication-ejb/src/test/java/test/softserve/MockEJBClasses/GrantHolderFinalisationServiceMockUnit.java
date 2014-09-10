@@ -11,6 +11,7 @@ import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.CVManagementService;
@@ -19,6 +20,7 @@ import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -81,23 +83,12 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
         this.aSEJB = aSEJB;
     }
     
-    @Override
-    protected PersonJpaController getPersonDAO()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return pDAO;
-    }
+        return new DAOFactory(em);
+    } 
     
-    @Override
-    protected CvJpaController getCVDAO()
-    {
-        return cVDAO;
-    }
-    
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -117,11 +108,7 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
         return cVEJB;
     }
     
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
+    
     
     @Override
     protected GregorianCalendar getGregorianCalendar()
@@ -129,9 +116,5 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
         return gCal;
     }
     
-    @Override
-    protected ApplicationReviewRequestJpaController getApplicationReviewRequestDAO()
-    {
-        return aRDAO;
-    }
+   
 }

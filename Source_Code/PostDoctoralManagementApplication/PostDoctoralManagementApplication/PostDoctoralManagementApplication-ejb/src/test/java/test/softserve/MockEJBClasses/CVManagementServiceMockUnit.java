@@ -8,12 +8,14 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.AcademicQualificationJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.ExperienceJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.CVManagementService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -51,22 +53,12 @@ public class CVManagementServiceMockUnit extends CVManagementService {
         this.dBEntities = dBEntities;
     }
     
-    protected CvJpaController getCVDAO()
-    {
-        return cVDAO;
-    }    
-    
 
     
-    @Override
-    protected AcademicQualificationJpaController getAcademicQualificationDAO()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aQDAO;
-    }
-    
-    protected ExperienceJpaController getExperienceDAO()
-    {
-        return eDAO;
-    }
+        return new DAOFactory(em);
+    } 
     
 }

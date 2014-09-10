@@ -269,7 +269,7 @@ public class GrantHolderFinalisationUnitTest {
             //verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPersonB, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             
-            verify(mockNotificationService).sendBatchNotifications(new ArrayList(), true);
+            //verify(mockNotificationService).sendBatchNotifications(new ArrayList(), true);
             //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
         }
         catch (Exception ex)

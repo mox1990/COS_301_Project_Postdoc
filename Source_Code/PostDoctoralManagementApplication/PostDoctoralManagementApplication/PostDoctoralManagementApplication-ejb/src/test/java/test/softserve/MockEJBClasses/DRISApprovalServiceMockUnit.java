@@ -8,6 +8,7 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingCostJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
@@ -21,6 +22,7 @@ import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -85,17 +87,11 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     }
     
     
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aDAO;
-    }
-    
-    @Override
-    protected FundingReportJpaController getFundingReportDAO()
-    {
-        return fRDAO;
-    }
+        return new DAOFactory(em);
+    } 
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -111,35 +107,7 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     }
     
     
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
-    
-    @Override
-    protected EligiblityReportJpaController getEligiblityReportDAO()
-    {
-        return eDAO;
-    }
-    
-    @Override
-    protected GregorianCalendar getGregorianCalendar()
-    {
-        return gCal;
-    }
-    
-    @Override
-    protected PersonJpaController getPersonDAO()
-    {
-        return pDAO;
-    }
-    
-    @Override
-    protected FundingCostJpaController getFundingCostDAO()
-    {
-        return fCDAO;
-    }
+
     
     /** TODO: Implement work around...
     protected boolean hasPhD(Application application)

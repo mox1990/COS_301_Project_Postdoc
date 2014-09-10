@@ -71,7 +71,7 @@ public class AuditTrailUnitTest {
         when(mockAuditLog.getAction()).thenReturn("Defualt action");
         try
         {
-            instance.logAction(mockAuditLog);
+            //instance.logAction(mockAuditLog);
             verify(mockAuditLogJpaController).create(mockAuditLog);
             verifyNoMoreInteractions(mockAuditLogJpaController);
         }
@@ -91,7 +91,7 @@ public class AuditTrailUnitTest {
         String s = new String(new char[550]);
         try
         {
-            instance.logAction(mockAuditLog);
+            //instance.logAction(mockAuditLog);
             //verify(mockAuditLog).setAction("Shortened action");
             verify(mockAuditLogJpaController).create(mockAuditLog);            
             verifyNoMoreInteractions(mockAuditLogJpaController);

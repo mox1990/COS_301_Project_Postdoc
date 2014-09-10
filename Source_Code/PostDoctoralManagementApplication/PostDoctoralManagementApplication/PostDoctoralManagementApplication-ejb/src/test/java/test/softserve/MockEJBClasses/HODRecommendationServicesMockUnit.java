@@ -9,6 +9,7 @@ package test.softserve.MockEJBClasses;
 import com.softserve.DBDAO.AmmendRequestJpaController;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.HODRecommendationServices;
@@ -16,6 +17,7 @@ import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -68,17 +70,7 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
         this.aSEJB = aSEJB;
     }
     
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
-    protected RecommendationReportJpaController getRecommmendationReportDAO()
-    {
-        return rRDAO;
-    }
+   
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -92,21 +84,9 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
         return nEJB;
     }
     
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aSEJB;
-    }
-    
-    @Override
-    protected AmmendRequestJpaController getAmmendRequestDAO()
-    {
-        return aRDAO;
-    }
-    
-    @Override
-    protected GregorianCalendar getGregorianCalendar()
-    {
-        return gCal;
-    }
+        return new DAOFactory(em);
+    } 
 }

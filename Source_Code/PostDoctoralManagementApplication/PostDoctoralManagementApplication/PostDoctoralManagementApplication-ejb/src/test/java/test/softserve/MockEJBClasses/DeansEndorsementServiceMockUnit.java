@@ -8,12 +8,14 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.EndorsementJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.DeansEndorsementService;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -56,17 +58,11 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
         this.aSEJB = aSEJB;
     }
     
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aDAO;
-    }
-    
-    @Override
-    protected EndorsementJpaController getEndorsementDAO()
-    {
-        return eDAO;
-    }
+        return new DAOFactory(em);
+    } 
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -79,10 +75,4 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
     {
         return nEJB;
     }    
-    
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
 }

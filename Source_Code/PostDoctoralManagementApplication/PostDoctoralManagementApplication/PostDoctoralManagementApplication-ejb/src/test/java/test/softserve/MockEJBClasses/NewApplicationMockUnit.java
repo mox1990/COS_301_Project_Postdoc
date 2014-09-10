@@ -10,6 +10,7 @@ package test.softserve.MockEJBClasses;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.CVManagementService;
@@ -17,6 +18,7 @@ import com.softserve.ejb.NewApplicationService;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -80,11 +82,11 @@ public class NewApplicationMockUnit extends NewApplicationService
         return cVDAO;
     }
     
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aDAO;
-    }
+        return new DAOFactory(em);
+    } 
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()

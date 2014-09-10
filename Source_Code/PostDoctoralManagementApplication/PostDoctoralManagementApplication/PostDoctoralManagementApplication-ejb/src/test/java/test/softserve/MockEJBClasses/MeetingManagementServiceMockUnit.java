@@ -7,12 +7,14 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.MinuteCommentJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.MeetingManagementService;
 import com.softserve.ejb.NotificationService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -61,21 +63,7 @@ public class MeetingManagementServiceMockUnit extends MeetingManagementService {
      * of the UserAccountManagementServices in the unit testing 
      * @return An instance of PersonJpaController
      */
-    @Override
-    protected CommitteeMeetingJpaController getCommitteeMeetingDAO()
-    {
-        return cMDAO;
-    }
     
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected MinuteCommentJpaController getMinuteCommentDAO()
-    {
-        return mCDAO;
-    }
     
     /**
      *
@@ -106,4 +94,10 @@ public class MeetingManagementServiceMockUnit extends MeetingManagementService {
      *
      * @return
      */
+    
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
+    {
+        return new DAOFactory(em);
+    } 
 }

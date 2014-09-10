@@ -7,11 +7,15 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.ejb.ApplicationProgressViewerService;
 import com.softserve.ejb.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.ApplicationStageStatus;
+import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -34,12 +38,16 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
         this.lASS = lASS;
     }
     
-    
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
+    {
+        return new DAOFactory(em);
+    }    
     
     @Override
-    protected ApplicationJpaController getApplicationDAO()
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return aDAO;
+        return new ApplicationServicesUtil(em);
     }
     
     @Override

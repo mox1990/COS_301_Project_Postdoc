@@ -7,6 +7,7 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.DeclineReportJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.NotificationService;
@@ -14,6 +15,7 @@ import com.softserve.ejb.UserGateway;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -33,8 +35,8 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
         super(null);
     }
 
-    public ApplicationServicesUtilMockUnit(EntityManagerFactory emf) {
-        super(emf);
+    public ApplicationServicesUtilMockUnit(EntityManager em) {
+        super(em);
     }
 
     public void setaDAO(ApplicationJpaController aDAO) {
@@ -65,11 +67,11 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
         this.gCal = gCal;
     }
     
-    @Override
-    protected ApplicationJpaController getApplicationDAO()
+    @Override    
+    protected DAOFactory getDAOFactory()
     {
-        return aDAO;
-    }
+        return super.getDAOFactory();
+    }    
     
     /**
      *
@@ -80,42 +82,7 @@ public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
     {
         return dBEntities;
     }
-    
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return nEJB;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return aTEJB;
-    }
-    
-    @Override
-    protected DeclineReportJpaController getDeclineReportDAO()
-    {
-        return dRDAO;
-    }
+
     
     @Override
     protected GregorianCalendar getGregorianCalendar()

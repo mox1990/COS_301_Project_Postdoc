@@ -7,7 +7,10 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.AuditLogJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.ejb.AuditTrailService;
+import com.softserve.transactioncontrollers.TransactionController;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -23,11 +26,11 @@ public class AuditTrailServiceMockUnit extends AuditTrailService {
         this.aDAO = aDAO;
     }
     
-    
-    @Override
-    protected AuditLogJpaController getAuditLogDAO()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aDAO;
-    }  
+        return new DAOFactory(em);
+    }   
+    
     
 }

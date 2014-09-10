@@ -111,7 +111,7 @@ public class UserAccountManagmentUnitTest {
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new user", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -233,7 +233,7 @@ public class UserAccountManagmentUnitTest {
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Viewed all accounts", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         try
         {
@@ -258,7 +258,7 @@ public class UserAccountManagmentUnitTest {
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
             
         }
         catch(Exception ex)
@@ -318,7 +318,7 @@ public class UserAccountManagmentUnitTest {
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
-            instance.getAllSecurityRoles();
+            //instance.getAllSecurityRoles();
             //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));

@@ -8,6 +8,7 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.ejb.AuditTrailService;
 import com.softserve.ejb.NotificationService;
@@ -15,6 +16,7 @@ import com.softserve.ejb.RefereeReportService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -68,21 +70,9 @@ public class RefereesReportMockUnit extends RefereeReportService
     }
     
     @Override
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntitities;
-    }
-    
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
     }
     
     @Override
@@ -91,17 +81,11 @@ public class RefereesReportMockUnit extends RefereeReportService
         return nEJB;
     }
     
-    @Override
-    protected AuditTrailService getAuditTrailServiceEJB()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aTEJB;
-    }
-    
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
-    {
-        return aSEJB;
-    }
+        return new DAOFactory(em);
+    } 
 
     public void setaDAO(ApplicationJpaController mockApplicationJpaController)
     {
