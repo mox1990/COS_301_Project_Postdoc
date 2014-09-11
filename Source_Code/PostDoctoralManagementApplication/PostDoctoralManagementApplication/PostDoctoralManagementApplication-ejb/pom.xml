@@ -152,21 +152,7 @@
                             <packageName>auto.softserve.XMLEntities.CV</packageName>
                             <outputDirectory>${basedir}/src/main/java/</outputDirectory>
                             <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
-                            <schemaFiles>CV_additionalInformationSchema.xsd,CV_otherContributionsSchema.xsd,CV_researchOutputSchema.xsd</schemaFiles>
-                            <clearOutputDir>FALSE</clearOutputDir>
-                        </configuration>
-                    </execution>
-                    
-                    <execution>
-                        <id>Fellow entities</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                        <configuration>
-                            <packageName>auto.softserve.XMLEntities.fellow</packageName>
-                            <outputDirectory>${basedir}/src/main/java/</outputDirectory>
-                            <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
-                            <schemaFiles>Fellow_progressReportContentSchema.xsd</schemaFiles>
+                            <schemaFiles>Fellow_progressReportContentSchema.xsd, CV_additionalInformationSchema.xsd,CV_otherContributionsSchema.xsd,CV_researchOutputSchema.xsd</schemaFiles>
                             <clearOutputDir>FALSE</clearOutputDir>
                         </configuration>
                     </execution>
