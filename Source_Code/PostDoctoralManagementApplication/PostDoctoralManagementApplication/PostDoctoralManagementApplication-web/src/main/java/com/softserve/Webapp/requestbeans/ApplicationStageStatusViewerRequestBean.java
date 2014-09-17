@@ -11,7 +11,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.ApplicationProgressViewerServiceLocal;
-import com.softserve.system.ApplicationStageStatus;
+import com.softserve.auxillary.ApplicationStageStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
