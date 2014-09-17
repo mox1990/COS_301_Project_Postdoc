@@ -17,7 +17,7 @@ import com.softserve.annotations.SecuredMethod;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.ApplicationStageStatus;
+import com.softserve.auxillary.ApplicationStageStatus;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.List;

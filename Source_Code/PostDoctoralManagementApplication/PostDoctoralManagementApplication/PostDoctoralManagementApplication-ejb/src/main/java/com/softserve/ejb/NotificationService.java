@@ -167,6 +167,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                     catch(MessagingException ex)
                     {
                         notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_QUEUED);
+                        
                     }
                 }
                 else
@@ -174,6 +175,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                     notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_DISABLED);
                 }
 
+                notification.setEmailRetryCount(0);
                 notificationJpaController.create(notification);
 
                 transactionController.CommitTransaction();
@@ -272,7 +274,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         }        
     }
     
-    @Schedule(second = "*/10")
+    @Schedule(second = "*/10", minute = "*", hour = "*")
     @Asynchronous
     public void sendAllEmailsOfQueuedNotifications()
     {
@@ -285,8 +287,41 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                 List<Notification> notifications = getDAOFactory(em).createNotificationDAO().findAllQueuedNotifications();
                 for(Notification notification : notifications)
                 {
-                    sendEmail(notification);
+                    try
+                    {
+                        sendEmail(notification);
+                    }
+                    catch(Exception ex)
+                    {
+                        notification.setEmailRetryCount(notification.getEmailRetryCount() + 1);
+                        
+                        if(notification.getEmailRetryCount() > com.softserve.constants.PersistenceConstants.EMAIL_RETRY_THRESHOLD)
+                        {
+                            notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_FAILED);
+                        }
+                        
+                        TransactionController transactionController = new TransactionController(emf);
+                        transactionController.StartTransaction();                        
+                        try
+                        {
+                            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+                            
+                            dAOFactory.createNotificationDAO().edit(notification);
+                            transactionController.CommitTransaction();
+                        }
+                        catch(Exception eex)
+                        {
+                            transactionController.RollbackTransaction();                            
+                        }
+                        finally
+                        {
+                            transactionController.CloseEntityManagerForTransaction();
+                        }
+                               
+                    }
                 }
+                
+                
             }
             finally
             {

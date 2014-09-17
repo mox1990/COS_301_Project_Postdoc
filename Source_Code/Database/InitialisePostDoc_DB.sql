@@ -116,9 +116,10 @@ CREATE TABLE notification (
 	_notificationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_subject VARCHAR(200),
 	_message TEXT,
-	_emailStatus ENUM('Sent', 'Queued', 'Disabled'),
+	_emailStatus ENUM('Sent', 'Queued', 'Failed', 'Disabled'),
+	_emailRetryCount INT,
 	_timestamp DATETIME NOT NULL,
-	_sender CHAR(9) NOT NULL,
+	_sender CHAR(9),
 	_reciever	CHAR(9) NOT NULL,
 	
 	PRIMARY KEY (_notificationID),
@@ -405,6 +406,17 @@ CREATE TABLE experience (
 	FOREIGN KEY (_cv) REFERENCES cv(_cvID)
 ) ENGINE=InnoDB;
 
+CREATE TABLE announcement (
+	_announcementID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_timestamp DATETIME NOT NULL,
+	_message TEXT NOT NULL,
+	_startDate DATETIME,
+	_endDate DATETIME,
+
+	PRIMARY KEY (_announcementID)
+	
+) ENGINE=InnoDB;
+
 
 INSERT INTO postdoc_db.security_role (_name, _roleMask) VALUES("Prospective fellow",0), 
 															("Referee",1),
@@ -508,6 +520,8 @@ CREATE TABLE academic_qualification  LIKE postdoc_db.academic_qualification;
 
 CREATE TABLE experience LIKE postdoc_db.experience;
 
+CREATE TABLE announcement LIKE postdoc_db.announcement;
+
 USE PostDoc_BackUp_DB;
 
 CREATE TABLE address  LIKE postdoc_db.address;
@@ -569,4 +583,6 @@ CREATE TABLE cv  LIKE postdoc_db.cv;
 CREATE TABLE academic_qualification  LIKE postdoc_db.academic_qualification;
 
 CREATE TABLE experience LIKE postdoc_db.experience;
+
+CREATE TABLE announcement LIKE postdoc_db.announcement;
 

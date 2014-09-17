@@ -112,7 +112,10 @@ public class PersistenceConstants {
     //Notification email status
     public final static String NOTIFICATION_EMAIL_STATUS_SENT = "Sent";
     public final static String NOTIFICATION_EMAIL_STATUS_QUEUED = "Queued";
+    public final static String NOTIFICATION_EMAIL_STATUS_FAILED = "Failed";
     public final static String NOTIFICATION_EMAIL_STATUS_DISABLED = "Disabled";
+    
+    public final static int EMAIL_RETRY_THRESHOLD = 3;
     
     //Funding cost type constants
     public final static String FUNDINGCOST_TYPE_FELLOWSHIP = "Fellowship";

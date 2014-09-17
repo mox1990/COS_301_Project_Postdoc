@@ -148,14 +148,14 @@ public class ProgressReportManagementService implements ProgressReportManagement
                 GregorianCalendar endCal = getGregorianCalendarUTIL();
                 endCal.setTime(application.getEndDate());
 
-                System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
+                //System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
 
                 if(startCal.before(curCal) && endCal.after(curCal))
                 {
-                    System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
+                    //System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
                     if(getNumberOfProgressReportsRequiredByApplication(session,application) > application.getProgressReportList().size())
                     {
-                        System.out.println("Added" + application.toString());
+                        //System.out.println("Added" + application.toString());
                         output.add(application);
                     }
                 }

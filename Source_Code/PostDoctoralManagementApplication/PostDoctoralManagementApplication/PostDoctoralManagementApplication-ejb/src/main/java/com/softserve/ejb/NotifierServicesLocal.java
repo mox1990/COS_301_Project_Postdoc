@@ -6,9 +6,8 @@
 
 package com.softserve.ejb;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.auxillary.ApplicationStageStatus;
+import com.softserve.DBEntities.Person;
+import com.softserve.auxillary.Issue;
 import com.softserve.system.Session;
 import java.util.List;
 import javax.ejb.Local;
@@ -19,7 +18,9 @@ import javax.ejb.Local;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Local
-public interface ApplicationProgressViewerServiceLocal {
-    public List<Application> getAllApplications(Session session) throws AuthenticationException, Exception;
-    public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception;
+public interface NotifierServicesLocal {
+    public List<Issue> loadAllPendingIssuesForSession(Session session) throws Exception;
+    public List<Issue> loadAllPendingIssuesForUser(Session session, Person person) throws Exception;
+    
+    
 }

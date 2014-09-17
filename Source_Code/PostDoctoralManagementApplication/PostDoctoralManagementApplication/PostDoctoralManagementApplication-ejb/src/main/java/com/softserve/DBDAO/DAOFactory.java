@@ -22,6 +22,11 @@ public class DAOFactory {
         this.em = em;
     }
     
+    public AnnouncementJpaController createAnnouncementDAO()
+    {
+        return new AnnouncementJpaController(em);
+    }
+    
     public AcademicQualificationJpaController createAcademicQualificationDAO()
     {
         return new AcademicQualificationJpaController(em);

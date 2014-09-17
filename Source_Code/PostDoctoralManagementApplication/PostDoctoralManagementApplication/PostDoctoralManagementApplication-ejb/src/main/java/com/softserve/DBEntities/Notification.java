@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Notification.findByEmailStatus", query = "SELECT n FROM Notification n WHERE n.emailStatus = :emailStatus"),
     @NamedQuery(name = "Notification.findByTimestamp", query = "SELECT n FROM Notification n WHERE n.timestamp = :timestamp")})
 public class Notification implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,13 +58,15 @@ public class Notification implements Serializable {
     @Size(max = 8)
     @Column(name = "_emailStatus")
     private String emailStatus;
+    @Column(name = "_emailRetryCount")
+    private Integer emailRetryCount;
     @Basic(optional = false)
     @NotNull
     @Column(name = "_timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
     @JoinColumn(name = "_sender", referencedColumnName = "_systemID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Person sender;
     @JoinColumn(name = "_reciever", referencedColumnName = "_systemID")
     @ManyToOne(optional = false)
@@ -160,6 +163,14 @@ public class Notification implements Serializable {
     @Override
     public String toString() {
         return "com.softserve.DBEntities.Notification[ notificationID=" + notificationID + " ]";
+    }
+
+    public Integer getEmailRetryCount() {
+        return emailRetryCount;
+    }
+
+    public void setEmailRetryCount(Integer emailRetryCount) {
+        this.emailRetryCount = emailRetryCount;
     }
     
 }

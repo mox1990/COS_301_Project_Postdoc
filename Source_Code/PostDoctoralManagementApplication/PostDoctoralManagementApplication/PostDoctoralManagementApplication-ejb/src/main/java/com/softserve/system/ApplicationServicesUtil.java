@@ -78,7 +78,7 @@ public class ApplicationServicesUtil {
             System.out.println("===============" + output.toString());
             System.out.println("===============" + user.toString());
             List<Application> temp = new ArrayList<Application>();
-//Possible optimization. Can use user.getApplicationListX() to get list
+            //Possible optimization. Can use user.getApplicationListX() to get list
             for(int i = 0; i < output.size(); i++)
             {
                 boolean found = false;
@@ -209,13 +209,82 @@ public class ApplicationServicesUtil {
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
-            Department userDepartment = user.getEmployeeInformation().getDepartment();            
-            output = applicationJpaController.countAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment);
+            Department userDepartment = user.getEmployeeInformation().getDepartment();
+            List<Application> tempOutput = new ArrayList<Application>(); 
+            List<Application> Output = getDAOFactory().createApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+            for(Application application : Output)
+            {
+                if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+                {
+                    tempOutput.add(application);
+                }
+            }
+            
+            output = tempOutput.size();
+            
+            if(output < 1)
+            {
+                Output.clear();
+                List<Application> temp = applicationJpaController.findAllApplicationsWithStatusAndDepartment(applicationStatusGroup,userDepartment,0,Integer.MAX_VALUE);
+                for(Application application: temp)
+                {
+                    boolean found = false;
+                    for(ApplicationReviewRequest reviewRequest : application.getApplicationReviewRequestList())
+                    {
+                        if(reviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD))
+                        {                            
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found)
+                    {
+                        Output.add(application);
+                    }
+                }
+                output = Output.size();
+            }
         }
         else if(applicationStatusGroup.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
             Faculty userFaculty = user.getEmployeeInformation().getDepartment().getFaculty();
-            output = applicationJpaController.countAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty);
+            List<Application> tempOutput = new ArrayList<Application>(); 
+            List<Application> Output = getDAOFactory().createApplicationReviewRequestDAO().findAllApplicationsRequestForPersonAs(user, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            for(Application application : Output)
+            {
+                if(application.getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+                {
+                    tempOutput.add(application);
+                }
+            }
+            
+            output = tempOutput.size();
+            
+            if(output < 1)
+            {
+                Output.clear();
+                List<Application> temp = applicationJpaController.findAllApplicationsWithStatusAndFaculty(applicationStatusGroup,userFaculty,0,Integer.MAX_VALUE);
+                for(Application application: temp)
+                {
+                    boolean found = false;
+                    for(ApplicationReviewRequest reviewRequest : application.getApplicationReviewRequestList())
+                    {
+                        if(reviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN))
+                        {                            
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found)
+                    {
+                        Output.add(application);
+                    }
+                }
+                
+                output = Output.size();
+            }
         }
         else
         {

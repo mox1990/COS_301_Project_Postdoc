@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.system;
+package com.softserve.auxillary;
 
 import com.softserve.DBEntities.Person;
 import java.util.Date;

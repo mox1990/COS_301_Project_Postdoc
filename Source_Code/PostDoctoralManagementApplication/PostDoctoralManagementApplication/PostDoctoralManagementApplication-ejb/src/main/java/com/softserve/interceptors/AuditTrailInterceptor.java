@@ -92,7 +92,14 @@ public class AuditTrailInterceptor {
                 }
                 else
                 {
-                    System.out.println("Audit interceptor skipping as session user null: " + context.getMethod().getName());
+                    if(session.isSystem())
+                    {
+                        System.out.println("Audit interceptor skipping as session is system level: " + context.getMethod().getName());
+                    }
+                    else
+                    {
+                        System.out.println("Audit interceptor skipping as invalid session is found: " + context.getMethod().getName());
+                    }
                 }
                 
             }

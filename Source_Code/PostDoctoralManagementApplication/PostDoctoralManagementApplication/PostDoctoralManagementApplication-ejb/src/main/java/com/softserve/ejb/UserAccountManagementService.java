@@ -45,6 +45,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
@@ -519,6 +520,40 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
                 
     }
+
+    @Override
+    public void accountReset(Person user) throws Exception 
+    {
+        if(user.getSystemID() != null || user.getEmail() != null)
+        {
+            Person account = getUserBySystemID(user.getSystemID());
+            
+            if(account != null)
+            {
+                if(account.getEmail().equals(user.getEmail()))
+                {
+                    String pass = getGeneratorUTIL().generateRandomHexString();
+                    account.setPassword(pass);
+                    Notification notification = getDBEntitiesFactory().createNotificationEntity(null, user, "Account password reset", "You have requested a password reset on your account. The password has been changed to " + pass +". If you did not do so please contact the DRIS immditately as your account may have been hijacked");
+                    getNotificationServiceEJB().sendOnlyEmail(new Session(null, null, Boolean.TRUE), notification);
+                }
+                else
+                {
+                    throw new Exception("User account reset failed: The email supplied was incorrect");
+                }
+            }
+            else
+            {
+                throw new Exception("User account reset failed: The user account does not exist");
+            }            
+        }
+        else
+        {
+            throw new Exception("User account reset failed: The user account does not exist");
+        }
+    }
+    
+    
     
     /**
      *
