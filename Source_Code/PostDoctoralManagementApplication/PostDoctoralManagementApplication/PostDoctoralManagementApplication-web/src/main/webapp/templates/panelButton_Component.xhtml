@@ -11,7 +11,7 @@
                 <p:commandButton action="#{buttonBean[buttonAction]}" onmouseover="#{showFunction}" onmouseout="#{hideFunction}" styleClass="button button-fill" value="#{buttonName}" ajax="flase"  />
             </h:form>
             <div id="#{infoContainerID}" class="informationContainer">
-                <h1 class="informationContainerHeader1">Information:</h1>
+                <h1 class="informationContainerHeader1">#{lang['InformationHeading']}</h1>
                 <ui:insert name="informationContent"/>
             </div>
         </p:outputPanel>

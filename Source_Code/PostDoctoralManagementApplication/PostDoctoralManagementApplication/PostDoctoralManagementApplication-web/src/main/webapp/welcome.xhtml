@@ -17,21 +17,20 @@
         
         <ui:define name="pageBody">
                 <div>
-                    <h1 class="header1"> Welcome #{sessionManagerBean.session.user.completeName}. </h1>
-                    <h2>Please select the service you wish to use</h2>
+                    <h1 class="header1">#{lang['WelcomeUser']} #{sessionManagerBean.session.user.completeName}. </h1>
+                    <h2>#{lang['InitServicePrompt']}</h2>
                 </div>
                 <div>
                     <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{true}"/>
                         <ui:param name="showFunction" value="showInfoDiv(1)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
-                        <ui:param name="buttonName" value="Application services"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeApplicationServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToApplicationServicesHomeView"/>
                         <ui:param name="infoContainerID" value="info1"/>
                         <ui:define name="informationContent">
-                            Selecting application services will give you access to the various sections of the application process that you have security clearence for.
-                            You can use these services to open a new application or renew an old one if you are prospective or current fellow.   
+                            #{lang['WelcomeApplicationServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
                     
@@ -39,12 +38,12 @@
                         <ui:param name="isPanelRendered" value="#{welcomeBean.reportServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(2)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
-                        <ui:param name="buttonName" value="Report services"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeReportServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToReportServicesHomeView"/>
                         <ui:param name="infoContainerID" value="info2"/>
                         <ui:define name="informationContent">
-                            The user account management service allows you to manage your user account.
+                            #{lang['WelcomeReportServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
                     
@@ -52,12 +51,12 @@
                         <ui:param name="isPanelRendered" value="#{true}"/>
                         <ui:param name="showFunction" value="showInfoDiv(3)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
-                        <ui:param name="buttonName" value="User account management services"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeUserAccountManagementServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToUserAccountManagementServicesHomeView"/>
                         <ui:param name="infoContainerID" value="info3"/>
                         <ui:define name="informationContent">
-                            The user account management service allows you to manage your user account.
+                            #{lang['WelcomeUserAccountManagementServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
                     
@@ -65,12 +64,12 @@
                         <ui:param name="isPanelRendered" value="#{welcomeBean.dataImportExportServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(4)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
-                        <ui:param name="buttonName" value="Data import and export services"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeDataImportAndExportServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToDataImportAndExportServicesHomeView"/>
                         <ui:param name="infoContainerID" value="info4"/>
                         <ui:define name="informationContent">
-                            This service allows one to back up the database and any old data
+                            #{lang['WelcomeDataImportAndExportServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
 
@@ -78,12 +77,12 @@
                         <ui:param name="isPanelRendered" value="#{welcomeBean.auditTrailServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(5)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(5)"/>
-                        <ui:param name="buttonName" value="Audit trail services"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeAuditTrailServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToAduitTrailServicesHomeView"/>
                         <ui:param name="infoContainerID" value="info5"/>
                         <ui:define name="informationContent">
-                            This service allows one to back up the database and any old data
+                            #{lang['WelcomeAuditTrailServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
                     
@@ -91,12 +90,12 @@
                         <ui:param name="isPanelRendered" value="#{welcomeBean.archivalServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(6)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
-                        <ui:param name="buttonName" value="Archival services"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeArchivalServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToArchivalServicesHomeView"/>
                         <ui:param name="infoContainerID" value="info6"/>
                         <ui:define name="informationContent">
-                            This service allows one to back up the database and any old data
+                            #{lang['WelcomeArchivalServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
                     
@@ -104,12 +103,12 @@
                         <ui:param name="isPanelRendered" value="#{true}"/>
                         <ui:param name="showFunction" value="showInfoDiv(7)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(7)"/>
-                        <ui:param name="buttonName" value="Notification inbox"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeNotificationServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToNotificationServiceNotificationManagementView"/>
                         <ui:param name="infoContainerID" value="info7"/>
                         <ui:define name="informationContent">
-                            This service allows you to view any notifications you may have received via the system 
+                            #{lang['WelcomeNotificationServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
                 </div>
