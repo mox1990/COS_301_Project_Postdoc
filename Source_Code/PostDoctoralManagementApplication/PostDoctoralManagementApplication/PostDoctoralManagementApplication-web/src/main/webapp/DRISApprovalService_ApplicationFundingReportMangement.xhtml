@@ -10,11 +10,11 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Application funding approval menu</h1>
-                <h2>Fill in the details to complete the funding approval for the application</h2>
+                <h1 class="header1">#{lang['ApplicationFundingApprovalMenuHeader']}</h1>
+                <h2>#{lang['ApplicationFundingApprovalMenuHeaderPrompt']}</h2>
             </div>
             <div>
-                <p:panel header="Funding report">
+                <p:panel header="#{lang['FundingReportHeader']}">
                     <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
                         <ui:param name="bean" value="#{dirsApplicationFundingEditBean.fundingReportCreationDependBean}"/>
                         <ui:param name="beanActionAdd" value="addFundingCostToList"/>
@@ -25,31 +25,31 @@
                 
                 <h:form id="formMain">
                     
-                    <p:panel header="Application details">
+                    <p:panel header="#{lang['ApplicationDetailsHeader']}">
                         <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
+                            <p:outputLabel value="#{lang['StartOfFellowship']}" for="startDate"/>                                
                             <p:calendar mask="true" id="startDate" value="#{dirsApplicationFundingEditBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
                             <p:message for="startDate" styleClass="fieldErrorMessage"/>
                               
-                            <p:outputLabel value="Application duration (Years):" for="sliderVal"/>                             
+                            <p:outputLabel value="#{lang['ApplicationDuration']}" for="sliderVal"/>                             
                             <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
                                 <p:ajax event="slideEnd" listener="#{dirsApplicationFundingEditBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
                             </p:slider>
                             <h:inputHidden id="sliderVal" value="#{dirsApplicationFundingEditBean.noOfYears}" />
                             
-                            <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
+                            <p:outputLabel value="#{lang['EndDateOfFellowship']}" for="endDate"/>                                
                             <p:calendar mask="true" id="endDate" value="#{dirsApplicationFundingEditBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true"/>
                             <p:message for="endDate" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
                     </p:panel>
                     
-                    <p:panel header="Research fellow details">
+                    <p:panel header="#{lang['ResearchFellowDetailsHeader']}">
                         <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="Insitution assigned student number:" for="institutionAssignedID"/>                                
+                            <p:outputLabel value="#{lang['InstituteAssignedStudentNumber']}" for="institutionAssignedID"/>                                
                             <p:inputText id="institutionAssignedID" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedID}"/>
                             <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
                             
-                            <p:outputLabel value="Insitution assigned email:" for="institutionAssignedEmail"/>                                
+                            <p:outputLabel value="#{lang['InstituteAssignedEmail']}" for="institutionAssignedEmail"/>                                
                             <p:inputText id="institutionAssignedEmail" value="#{dirsApplicationFundingEditBean.researchFellowInformation.institutionAssignedEmail}"/>
                             <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
                             
@@ -64,14 +64,14 @@
                     </p:panel>  
                     
                     <p:growl sticky="true" globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton value="Save changes" action="#{dirsApplicationFundingEditBean.preformFundingEditRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['SavechangesButton']}" action="#{dirsApplicationFundingEditBean.preformFundingEditRequest()}" process="@form" update="@all" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                        <p:confirm header="Edit confirmation" message="Are you sure you wish to save the changes to the application funding?" icon="ui-icon-alert"/>
+                        <p:confirm header="#{lang['EditConfirmationHeader']}" message="#{lang['EditConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

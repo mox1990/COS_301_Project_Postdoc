@@ -14,40 +14,40 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Audit log viewer</h1>
+                <h1 class="header1">#{lang['AuditLogViewerHeader']}</h1>
                 <h2></h2>
             </div>
             <div>
                 
                 <p:outputPanel>
                     <h:form>
-                        <p:dataTable id="AuditLog" value="#{auditTrailTableBean.entries}"  var="entry" widgetVar="AuditLogTable" filteredValue="#{auditTrailTableBean.filteredEntries}" rowKey="#{entry.entryID}" emptyMessage="No records in audit log that match the current filters"
+                        <p:dataTable id="AuditLog" value="#{auditTrailTableBean.entries}"  var="entry" widgetVar="AuditLogTable" filteredValue="#{auditTrailTableBean.filteredEntries}" rowKey="#{entry.entryID}" emptyMessage="#{lang['AuditLogEmptyMessage']}"
                                     paginator="true"
                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                                     rows="25"
                                     rowsPerPageTemplate="25">
                             <f:facet name="header">
-                                Audit log
+                                #{lang['AuditLogHeader']}
                             </f:facet>
                             
-                            <p:column headerText="Entry ID" filterBy="#{entry.entryID}" filterMatchMode="exact"  >
+                            <p:column headerText="#{lang['EntryID']}" filterBy="#{entry.entryID}" filterMatchMode="exact"  >
                                 <h:outputText value="#{entry.entryID}"/>
                             </p:column>
                             
-                            <p:column headerText="Action" filterBy="#{entry.action}" filterMatchMode="contains">
+                            <p:column headerText="#{lang['Action']}" filterBy="#{entry.action}" filterMatchMode="contains">
                                 <h:outputText value="#{entry.action}"/>
                             </p:column>
                             
-                            <p:column headerText="Time stamp" filterBy="#{entry.timestamp}" filterMatchMode="contains">
+                            <p:column headerText="#{lang['Timestamp']}" filterBy="#{entry.timestamp}" filterMatchMode="contains">
                                 <h:outputText value="#{entry.timestamp}">
                                     <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
                                 </h:outputText>
                             </p:column>
                             
-                            <p:column headerText="Person system ID" filterBy="#{entry.person.systemID}" filterMatchMode="contains">
+                            <p:column headerText="#{lang['PersonSystemID']}" filterBy="#{entry.person.systemID}" filterMatchMode="contains">
                                 <h:outputText value="#{entry.person.systemID}"/>
                             </p:column>
-                            <p:column headerText="Person name" filterBy="#{entry.person.completeName}" filterMatchMode="contains">
+                            <p:column headerText="#{lang['PersonName']}" filterBy="#{entry.person.completeName}" filterMatchMode="contains">
                                 <h:outputText value="#{entry.person.completeName}"/>
                             </p:column>
                         </p:dataTable>

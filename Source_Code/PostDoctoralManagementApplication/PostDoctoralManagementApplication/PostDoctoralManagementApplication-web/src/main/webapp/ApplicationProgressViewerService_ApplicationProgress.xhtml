@@ -9,8 +9,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Viewing application - #{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle}</h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['Viewing']}#{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle}</h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>
             <center>
                 <ui:decorate template="templates/ApplicationStageStatusViewer_Component.xhtml"/>

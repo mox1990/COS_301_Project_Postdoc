@@ -9,12 +9,12 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Applications Progress viewer</h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['ProgressViewerHeader']}</h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>
             <p:outputPanel rendered="#{applicationProgressViewerSelectionBean.fellowApplicationDisplayable}"> 
-                <h1 class="header1-1">Applications for which you are the fellow</h1>
-                <p:panel  toggleable="true" header="Click to collapse or expand list"> 
+                <h1 class="header1-1">#{lang['ApplicationsOwnedByUserHeader']}</h1>
+                <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}"> 
 
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
                         <ui:param name="prefix" value=""/>
@@ -25,7 +25,7 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanFellow.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplicationButton']}" styleClass="button button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>
@@ -33,8 +33,8 @@
             </p:outputPanel>
             
             <p:outputPanel rendered="#{applicationProgressViewerSelectionBean.grantHolderApplicationDisplayable}"> 
-                <h1 class="header1-1">Applications for which you are the Grant holder</h1>
-                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                <h1 class="header1-1">#{lang['ApplicationsByUserAsGrantholderHeader']}</h1>
+                <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
                         <ui:param name="prefix" value=""/>
                         <ui:param name="updatableItems" value=":pendingGrantHolderApplications"/>
@@ -44,7 +44,7 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanGrantHolder.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application progress" styleClass="button button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplicationButton']}" styleClass="button button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>
@@ -52,8 +52,8 @@
             </p:outputPanel>
             
             <p:outputPanel rendered="#{applicationProgressViewerSelectionBean.allApplicationDisplayable}">
-                <h1 class="header1-1">All applications</h1>
-                <p:panel  toggleable="true" header="Click to collapse or expand list">                
+                <h1 class="header1-1">#{lang['AllApplicationsHeader']}</h1>
+                <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">                
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
                         <ui:param name="prefix" value=""/>
                         <ui:param name="updatableItems" value=":pendingAllApplications"/>
@@ -63,7 +63,7 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{applicationProgressViewerSelectionBean.applicationFilterDependBeanAll.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application progress" styleClass="button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplicationButton']}" styleClass="button-fill" action="#{applicationProgressViewerSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>

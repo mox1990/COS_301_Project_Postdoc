@@ -32,7 +32,7 @@
                                     </ui:decorate>
                                 <h:form id="progressReportInfo">    
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeFinalProgressReport()}" value="Next" styleClass="button button-fill" process="@this @(#progressReportInfo)">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeFinalProgressReport()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this @(#progressReportInfo)">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                 </h:form>
@@ -74,20 +74,20 @@
                         </p:outputPanel>
                     </p:tab>
                     
-                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 3}" title="Step 4: Submit renewal application">
+                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 3}" title="#{lang['SubmitRenewalApplicationTab']}">
                         <p:outputPanel rendered="#{applicationRenewalBean.wizardActiveTab == 3}">
                             <center>
-                                <h2 class="header2">Submit application</h2>
+                                <h2 class="header2">#{lang['SubmitApplicationHeader']}</h2>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.submitApplicationRenewal()}" value="Confirm application submission for renewal" styleClass="button button-fill">
+                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.submitApplicationRenewal()}" value="#{lang['ConfirmRenewalSubmission']}" styleClass="button button-fill">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Application renewal submission confirmation" message="Are you sure you wish to submit this application? Note: Sumbitting this application means you agree with the DRIS fellowship application policy and that the information is correct. Warning: Once submitted the application cannot be edited by you." icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['ApplicationRenewalSubmissionConfirmation']}" message="#{lang['RenewalConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                     </p:confirmDialog>
                                 </h:form>
                             </center>                        
