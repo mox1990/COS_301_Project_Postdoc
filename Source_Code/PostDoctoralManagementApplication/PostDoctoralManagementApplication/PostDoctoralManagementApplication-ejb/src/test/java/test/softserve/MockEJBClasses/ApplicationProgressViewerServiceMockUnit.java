@@ -11,7 +11,6 @@ import com.softserve.DBDAO.DAOFactory;
 import com.softserve.ejb.ApplicationProgressViewerService;
 import com.softserve.ejb.UserGateway;
 import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.ApplicationStageStatus;
 import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,6 @@ import javax.persistence.EntityManager;
 public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgressViewerService {
     private ApplicationJpaController aDAO;
     private UserGateway uEJB;
-    private List<ApplicationStageStatus> lASS;
 
     public void setaDAO(ApplicationJpaController aDAO) {
         this.aDAO = aDAO;
@@ -34,9 +32,6 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
         this.uEJB = uEJB;
     }
     
-    public void setlASS(List<ApplicationStageStatus> lASS) {
-        this.lASS = lASS;
-    }
     
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)
@@ -54,11 +49,5 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
     protected UserGateway getUserGatewayServiceEJB()
     {
         return uEJB;
-    }
-    
-    @Override
-    protected List<ApplicationStageStatus> getApplicationStageStatus()
-    {
-        return lASS;
     }
 }

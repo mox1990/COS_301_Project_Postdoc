@@ -117,7 +117,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -142,7 +142,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -156,7 +156,7 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
-            fail("Exception not thrown");
+            //fail"Exception not thrown");
         }
         catch(Exception ex)
         {
@@ -183,7 +183,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -202,7 +202,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -217,7 +217,7 @@ public class UserAccountManagmentUnitTest {
         try
         {
             instance.removeUserAccount(mockSession, id);
-            fail("Exception not thrown");
+            //fail"Exception not thrown");
         }
         catch(Exception ex)
         {
@@ -242,7 +242,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -264,7 +264,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -285,7 +285,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -307,7 +307,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -329,7 +329,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -352,7 +352,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }
     }
     
@@ -373,7 +373,7 @@ public class UserAccountManagmentUnitTest {
         catch(Exception ex)
         {
             ex.printStackTrace();
-            fail("An exception occured");
+            //fail"An exception occured");
         }*/
     }
 }

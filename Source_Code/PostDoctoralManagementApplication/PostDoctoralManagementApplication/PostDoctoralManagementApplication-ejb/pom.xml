@@ -164,6 +164,9 @@
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
+                            <arguments>
+                                -disableXmlSecurity
+                            </arguments>
                             <packageName>auto.softserve.XMLEntities.CV</packageName>
                             <outputDirectory>${basedir}/src/main/java/</outputDirectory>
                             <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
