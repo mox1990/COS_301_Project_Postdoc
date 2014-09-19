@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ConversationScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
@@ -20,11 +20,11 @@ import javax.inject.Named;
  * @author kgothatso
  */
 @Named(value = "languageBean")
-@SessionScoped
+@ConversationScoped
 public class LanguageBean implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private String localCode;
+    private String localeCode;
     private static Map<String, Object> lang;
     static
     {
@@ -39,18 +39,19 @@ public class LanguageBean implements Serializable {
         return lang;
     }
 
-    public String getLocalCode() {
-        return localCode;
+    public String getLocaleCode() {
+        return localeCode;
     }
 
-    public void setLocalCode(String localCode) {
-        this.localCode = localCode;
+    public void setLocaleCode(String localCode) {
+        this.localeCode = localCode;
     }
     
     /**
      * Creates a new instance of LanguageBean
      */
     public LanguageBean() {
+        System.out.println("Being born...");
     }
     
     public void langLocaleCodeChanged(ValueChangeEvent e)
@@ -66,3 +67,4 @@ public class LanguageBean implements Serializable {
     }
     
 }
+

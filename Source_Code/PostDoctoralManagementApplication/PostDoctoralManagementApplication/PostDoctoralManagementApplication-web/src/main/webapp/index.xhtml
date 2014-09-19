@@ -15,7 +15,6 @@
         <ui:define name="CSSStyleSheets">
             <link rel="stylesheet" type="text/css" href="CSS/loginScreenLayout.css"/>
         </ui:define>
-        
         <ui:define name="pageBody">
             <div class="subContainer">
                 <div id="header">
@@ -40,6 +39,17 @@
                         <p:commandButton id="loginButton" styleClass="button" value="#{lang['Login']}" action="#{indexBean.performLoginRequest()}" process="@form" update="@form"/>
                         <br/>
                     </h:form>  
+                    <!-- This is the only place in can get it to be visible. 
+                    Wanted to put it in the header though. 
+                    Might even end in the breadcrumb....-->
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            Language : 
+                            <p:selectOneMenu value="#{languageBean.localeCode}" onchange="submit()" valueChangeListener="#{languageBean.langLocaleCodeChanged}">
+                                <f:selectItems value="#{languageBean.langaugesInMap}" /> 
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:form>
                 </div>
             </div>
         </ui:define>
