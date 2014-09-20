@@ -14,6 +14,7 @@ import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
@@ -48,6 +49,7 @@ public class LocationViewerBean implements Serializable {
     public LocationViewerBean() {
     }
     
+    @PostConstruct
     public void init()
     {
         conversationManagerBean.registerConversation(conversation);
@@ -93,17 +95,39 @@ public class LocationViewerBean implements Serializable {
         {
             loadDepartmentNodes(node);
         }
+        
+        TreeNode parent = node;
+        
+        while(parent != null)
+        {            
+            parent.setExpanded(true);
+            parent = parent.getParent();
+        }
     }
     
     public void loadFacultyNodes(TreeNode node)
     {
         if(node.getData().getClass() == Institution.class)
         {                        
-            locationFinderDependBean.populateFaculties((Institution) ((TreeNodeWrapper)node.getData()).getObject());
+            locationFinderDependBean.populateFaculties((Institution) node.getData());
             
             for(Faculty faculty : locationFinderDependBean.getFaculties())
             {
-                TreeNode child = new DefaultTreeNode("Faculty",faculty, node);
+                boolean found = false;
+                for(TreeNode childIn : node.getChildren())
+                {
+                    if(childIn.getData().equals(faculty))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if(!found)
+                {                
+                    TreeNode child = new DefaultTreeNode("Faculty",faculty, node);
+                }
+                
             }
             
             /*for(Faculty faculty : locationFinderDependBean.getFaculties())
@@ -129,12 +153,25 @@ public class LocationViewerBean implements Serializable {
     {
         if(node.getData().getClass() == Faculty.class)
         {                        
-            locationFinderDependBean.populateDepartments((Faculty) ((TreeNodeWrapper)node.getData()).getObject());
+            locationFinderDependBean.populateDepartments((Faculty) node.getData());
             
             for(Department department : locationFinderDependBean.getDepartments())
             {
+                boolean found = false;
+                for(TreeNode childIn : node.getChildren())
+                {
+                    if(childIn.getData().equals(department))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
                 
-                TreeNode child = new DefaultTreeNode("Department",department, node);
+                if(!found)
+                {
+                    TreeNode child = new DefaultTreeNode("Department",department, node);
+                }
+
             } 
             
             

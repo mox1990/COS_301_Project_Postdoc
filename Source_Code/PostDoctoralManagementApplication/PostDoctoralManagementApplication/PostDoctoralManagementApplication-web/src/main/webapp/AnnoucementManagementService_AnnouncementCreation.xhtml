@@ -17,13 +17,13 @@
                 <h:form enctype="multipart/form-data">
                     <p:growl globalOnly="false" showDetail="true"/>
                     
-                        <ui:decorate template="templates/announcementFieldInput_Component.xhtml">
-                            <ui:param name="announcement" value="#{announcementCreationBean.announcementCreationDependBean.announcement}"/>
-                            <ui:param name="file" value="#{announcementCreationBean.announcementCreationDependBean.fileUpload}"/>
-                        </ui:decorate>
+                    <ui:decorate template="templates/announcementFieldInput_Component.xhtml">
+                        <ui:param name="announcement" value="#{announcementCreationBean.announcementCreationDependBean.announcement}"/>
+                        <ui:param name="file" value="#{announcementCreationBean.announcementCreationDependBean.fileUpload}"/>
+                    </ui:decorate>
                     
                     
-                    <p:commandButton value="Publish announcement" action="#{announcementCreationBean.preformCreationAnnouncmentRequest()}" process="@form" ajax="false" styleClass="button button-fill">
+                    <p:commandButton value="Publish announcement" actionListener="#{announcementCreationBean.preformCreationAnnouncmentRequest()}" process="@form" ajax="false" styleClass="button button-fill">
                         <p:confirm header="Create confirmation" message="Are you sure you want to publish this announcment?" icon="ui-icon-alert"/>
                     </p:commandButton>
                     

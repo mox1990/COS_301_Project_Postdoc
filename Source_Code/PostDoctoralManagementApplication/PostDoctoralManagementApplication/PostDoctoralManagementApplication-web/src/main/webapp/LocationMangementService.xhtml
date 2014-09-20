@@ -13,7 +13,7 @@
                 <p:tree orientation="horizontal" value="#{locationViewerBean.root}" selection="#{locationViewerBean.selectedNode}" selectionMode="single" var="node" >
                    <p:ajax event="select" update="@form" listener="#{locationViewerBean.onNodeSelect}" />
                     <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
-                        <h:outputText value="#{node.toString}"/>
+                        <h:outputText value="#{node}"/>
                     </p:treeNode>        
                     <p:treeNode type="Institution" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
                         <h:outputText value="#{node.name}"/>

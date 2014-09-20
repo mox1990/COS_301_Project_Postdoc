@@ -160,7 +160,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param prefix The prefix to be used for the 9 character systemID
      * @return The newly generated SystemID as a string
      */
-    @AuditableMethod
     protected String generateSystemID(char prefix)
     {
         EntityManager em = emf.createEntityManager();

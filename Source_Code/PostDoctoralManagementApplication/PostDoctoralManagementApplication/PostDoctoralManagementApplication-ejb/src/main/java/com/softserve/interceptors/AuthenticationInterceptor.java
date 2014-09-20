@@ -65,7 +65,14 @@ public class AuthenticationInterceptor {
                 {
                     System.out.println("Normal authentication : " + context.getMethod().getName());
                     System.out.println("Allowed Security roles: " + roles.toString());
-                    System.out.println("User Security roles: " + session.getUser().getSecurityRoleList().toString());
+                    if(session.isSystem())
+                    {
+                        System.out.println("System level session");
+                    }
+                    else
+                    {
+                        System.out.println("User Security roles: " + session.getUser().getSecurityRoleList().toString());
+                    }
                     userGatewayLocal.authenticateUser(session, roles);
                     
                 }//Normal owner authentication
