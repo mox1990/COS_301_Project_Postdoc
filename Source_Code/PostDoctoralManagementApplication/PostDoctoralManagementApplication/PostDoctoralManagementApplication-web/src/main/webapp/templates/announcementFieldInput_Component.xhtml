@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:component>
+        <h:panelGrid columns="3" cellspacing="5px" cellpadding="5px">
+            <p:outputLabel value="Headline:" for="headline"/>                                
+            <p:inputText id="headline" value="#{annoucement.headline}" required="true"/>
+            <p:message for="headline" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Message:" for="message"/>                                
+            <p:inputTextarea id="message" value="#{annoucement.message}" required="true"/>
+            <p:message for="message" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="Start date:" for="startDate"/>                                
+            <p:calendar id="startDate" mask="true" value="#{annoucement.startDate}" pattern="yyyy/MM/dd" required="true">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+            </p:calendar>
+            <p:message for="startDate" styleClass="fieldErrorMessage"/>
+
+            <p:outputLabel value="End date:" for="endDate"/>                                
+            <p:calendar id="endDate" mask="true" value="#{annoucement.endDate}" pattern="yyyy/MM/dd" required="true">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+            </p:calendar>
+            <p:message for="endDate" styleClass="fieldErrorMessage"/>
+        </h:panelGrid>
+        
+        <p:outputLabel value="Image file:" for="file"/>                                
+        <p:fileUpload id="file" value="#{file}" required="true" sizeLimit="30000" mode="simple" />
+        <p:message for="file" styleClass="fieldErrorMessage"/>
+    </ui:component>
+</html>
+

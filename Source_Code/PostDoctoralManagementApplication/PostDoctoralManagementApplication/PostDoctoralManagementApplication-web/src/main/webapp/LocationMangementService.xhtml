@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Meeting commentator"/>
+        
+        <ui:define name="pageBody">
+            <h:form>
+                <p:tree orientation="horizontal" value="#{locationViewerBean.root}" selection="#{locationViewerBean.selectedNode}" selectionMode="single" var="node" >
+                   <p:ajax event="select" update="@form" listener="#{locationViewerBean.onNodeSelect}" />
+                    <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                        <h:outputText value="#{node.toString}"/>
+                    </p:treeNode>        
+                    <p:treeNode type="Institution" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                        <h:outputText value="#{node.name}"/>
+                    </p:treeNode>
+                    <p:treeNode type="Faculty" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                        <h:outputText value="#{node.name}"/>
+                    </p:treeNode>
+                    <p:treeNode type="Department" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                        <h:outputText value="#{node.name}"/>
+                    </p:treeNode> 
+                </p:tree>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+
+

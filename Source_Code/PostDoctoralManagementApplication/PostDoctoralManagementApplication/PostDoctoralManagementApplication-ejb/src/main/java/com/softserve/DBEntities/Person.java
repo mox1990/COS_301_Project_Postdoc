@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -105,7 +106,7 @@ public class Person implements Serializable {
     @JoinTable(name = "person_security_role", joinColumns = {
         @JoinColumn(name = "_personID", referencedColumnName = "_systemID")}, inverseJoinColumns = {
         @JoinColumn(name = "_roleID", referencedColumnName = "_roleID")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<SecurityRole> securityRoleList;
     @JoinTable(name = "referee_application", joinColumns = {
         @JoinColumn(name = "_refereeID", referencedColumnName = "_systemID")}, inverseJoinColumns = {

@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:insert name="pageEvents"/>
     <h:head>
         <title>UP Post doctoral application management system - #{pageTitle}</title>
@@ -13,7 +14,54 @@
         <ui:insert name="JSScripts"/>
     </h:head>
     <h:body>
+        
         <div class="background">
+                <div class="notice-controller">
+                    <h:form>
+                        <p:commandButton type="button" styleClass="button-fill button" value="Toggle notification bar" onclick="PF('notifications').toggle()" icon="ui-icon-arrow-1-s"/>
+                    </h:form>
+                </div>
+                
+                <p:notificationBar position="top" widgetVar="notifications" >
+                    <h:form>
+                        <p:dataTable value="#{notificationBarRequestBean.outstandingIssues}" var="issue">
+                            <f:facet name="header">
+                                Outstanding issues to attend to
+                            </f:facet>
+                            <p:column headerText="Issue description">
+                                <h:outputText value="#{issue.message}"/>
+                            </p:column>
+                            <p:column headerText="Number outstanding">
+                                <h:outputText value="#{issue.count}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:carousel autoPlayInterval="15" circular="true" headerText="Announcements" value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" vertical="true">
+                            <p:tab>
+                                <f:facet name="header">
+                                    <h:outputText value="#{announcement.headline}"/>
+                                </f:facet>
+
+                                <c:if test="#{notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
+                                    <h:panelGrid cellpadding="5px" columns="2">
+                                        <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.loadImageForAnnoucement(announcement)}" width="150" height="250">
+
+                                        </p:graphicImage>
+                                        <h:outputText value="#{announcement.message}" styleClass="text-label"/>
+                                    </h:panelGrid>
+                                </c:if>
+
+                                <c:if test="#{not notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
+                                    <h:panelGrid cellpadding="5px" columns="1">
+                                        <h:outputText value="#{announcement.message}" styleClass="text-label"/>
+                                    </h:panelGrid>
+                                </c:if>
+                            </p:tab>
+                        </p:carousel>
+                    </h:form>
+                </p:notificationBar>
+            
+            
             <div class="sideNavBar"></div>
             <div class="container">
                 <div class="containerHeader">

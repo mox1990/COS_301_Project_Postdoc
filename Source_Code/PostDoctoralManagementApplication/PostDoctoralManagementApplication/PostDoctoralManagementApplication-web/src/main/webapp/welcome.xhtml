@@ -111,6 +111,32 @@
                             #{lang['WelcomeNotificationServicesInformationContent']}
                         </ui:define>
                     </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
+                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(8)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
+                        <ui:param name="buttonName" value="Announcement management service"/>
+                        <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                        <ui:param name="buttonAction" value="goToAnnouncementServiceHomeView"/>
+                        <ui:param name="infoContainerID" value="info8"/>
+                        <ui:define name="informationContent">
+                            This option allows you to view and create new announcements that can be viewed by any logged in user. 
+                        </ui:define>
+                    </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
+                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(9)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(9)"/>
+                        <ui:param name="buttonName" value="Location management service"/>
+                        <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                        <ui:param name="buttonAction" value="goToLocationMangementServiceView"/>
+                        <ui:param name="infoContainerID" value="info9"/>
+                        <ui:define name="informationContent">
+                            This option allows you to view and create new institutions, faculties and departments that the system can recognise. 
+                        </ui:define>
+                    </ui:decorate>
                 </div>
         </ui:define>
     </ui:composition>

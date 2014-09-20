@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Announcement.findByStartDate", query = "SELECT a FROM Announcement a WHERE a.startDate = :startDate"),
     @NamedQuery(name = "Announcement.findByEndDate", query = "SELECT a FROM Announcement a WHERE a.endDate = :endDate")})
 public class Announcement implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +63,12 @@ public class Announcement implements Serializable {
     @Column(name = "_endDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
+    @Size(max = 100)
+    @Column(name = "_headline")
+    private String headline;
+    @Lob
+    @Column(name = "_image")
+    private byte[] image;
 
     public Announcement() {
     }
@@ -139,6 +146,22 @@ public class Announcement implements Serializable {
     @Override
     public String toString() {
         return "com.softserve.DBEntities.Announcement[ announcementID=" + announcementID + " ]";
+    }
+
+    public String getHeadline() {
+        return headline;
+    }
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
     
 }

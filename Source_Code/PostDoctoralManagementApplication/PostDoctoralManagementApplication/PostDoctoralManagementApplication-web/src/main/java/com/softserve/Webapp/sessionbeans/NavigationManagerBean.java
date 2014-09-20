@@ -551,5 +551,44 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToAnnouncementServiceAnnouncementCreationView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementCreation", "Announcement creation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToAnnouncementServiceAnnouncementSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementSelection", "Announcement selection");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToAnnouncementServiceAnnouncementEditView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementEdit", "Announcement edit");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToAnnouncementServiceHomeView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_Home", "Announcement home");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToLocationMangementServiceView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("LocationMangementService", "Location management");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
     
 }

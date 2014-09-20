@@ -11,11 +11,14 @@ import com.softserve.DBEntities.Faculty;
 import com.softserve.DBEntities.Institution;
 import com.softserve.Webapp.TreeNodeWrapper;
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
+import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import java.io.Serializable;
 import java.util.List;
+import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -28,6 +31,11 @@ import org.primefaces.model.TreeNode;
 @ConversationScoped
 public class LocationViewerBean implements Serializable {
 
+    @Inject
+    private ConversationManagerBean conversationManagerBean;
+    @Inject
+    private Conversation conversation;
+    
     @Inject
     private LocationFinderDependBean locationFinderDependBean;
     
@@ -42,11 +50,21 @@ public class LocationViewerBean implements Serializable {
     
     public void init()
     {
+        conversationManagerBean.registerConversation(conversation);
+        conversationManagerBean.startConversation(conversation);
+        
         root = new DefaultTreeNode("Instiutions", null);
         locationFinderDependBean.init(null);
         List<Institution> institutions = locationFinderDependBean.getInstitutions();
         
         for(Institution institution : institutions)
+        {            
+            TreeNode node = new DefaultTreeNode("Institution",institution, root);
+        }
+        
+        System.out.println("============================================Location viewer");
+        
+        /*for(Institution institution : institutions)
         {
             TreeNodeWrapper treeNodeWrapper = new TreeNodeWrapper() {
 
@@ -59,7 +77,21 @@ public class LocationViewerBean implements Serializable {
             treeNodeWrapper.setObject(institution);
             treeNodeWrapper.setLevel(1);
             
-            TreeNode node = new DefaultTreeNode(treeNodeWrapper, root);
+            TreeNode node = new DefaultTreeNode("Institution",treeNodeWrapper, root);
+        }*/
+    }
+    
+    public void onNodeSelect(NodeSelectEvent event)
+    {
+        TreeNode node = event.getTreeNode();
+        
+        if(node.getType().equals("Institution"))
+        {
+            loadFacultyNodes(node);
+        }
+        else if(node.getType().equals("Faculty"))
+        {
+            loadDepartmentNodes(node);
         }
     }
     
@@ -70,6 +102,11 @@ public class LocationViewerBean implements Serializable {
             locationFinderDependBean.populateFaculties((Institution) ((TreeNodeWrapper)node.getData()).getObject());
             
             for(Faculty faculty : locationFinderDependBean.getFaculties())
+            {
+                TreeNode child = new DefaultTreeNode("Faculty",faculty, node);
+            }
+            
+            /*for(Faculty faculty : locationFinderDependBean.getFaculties())
             {
                 TreeNodeWrapper treeNodeWrapper = new TreeNodeWrapper() {
 
@@ -82,8 +119,8 @@ public class LocationViewerBean implements Serializable {
                 treeNodeWrapper.setObject(faculty);
                 treeNodeWrapper.setLevel(2);
                 
-                TreeNode child = new DefaultTreeNode(treeNodeWrapper, node);
-            }
+                TreeNode child = new DefaultTreeNode("Faculty",treeNodeWrapper, node);
+            }*/
             
         }
     }
@@ -96,6 +133,13 @@ public class LocationViewerBean implements Serializable {
             
             for(Department department : locationFinderDependBean.getDepartments())
             {
+                
+                TreeNode child = new DefaultTreeNode("Department",department, node);
+            } 
+            
+            
+            /*for(Department department : locationFinderDependBean.getDepartments())
+            {
                 TreeNodeWrapper treeNodeWrapper = new TreeNodeWrapper() {
 
                     @Override
@@ -107,8 +151,8 @@ public class LocationViewerBean implements Serializable {
                 treeNodeWrapper.setObject(department);
                 treeNodeWrapper.setLevel(3);
                 
-                TreeNode child = new DefaultTreeNode(treeNodeWrapper, node);
-            }            
+                TreeNode child = new DefaultTreeNode("Department",treeNodeWrapper, node);
+            }     */       
         }
     }
 
@@ -118,6 +162,14 @@ public class LocationViewerBean implements Serializable {
 
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    public TreeNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeNode root) {
+        this.root = root;
     }
     
     
