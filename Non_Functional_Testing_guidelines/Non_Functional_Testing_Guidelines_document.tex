@@ -217,8 +217,30 @@ Step & Action & Expected System response \\
 The administrator is logged on to the system.
 
 \subsubsection*{Postconditions}
-The user account is now created in the system identified as a prospective fellow.
+The user account is now created in the system identified as one of the stakeholders.
 
+\subsubsection{Generating On Demand user account}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user specifies the email and details of their referee who does not have account on the system. & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue. \\
+\hline
+2 & Once all the fields are checked as valid by the system the user can now submit their account. & The system will now create the users account in the system database. An email notification will be sent to the specified user. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The administrator is logged on to the system.
+
+\subsubsection*{Postconditions}
+The user account is now created in the system identified as a referee.
 \subsection{New Application}
 
 \subsubsection{Prospective Fellow Creates new application}
@@ -327,7 +349,441 @@ The stakeholder is logged on to the system. The application has been approved an
 \subsubsection*{Postconditions}
 The application is now available to the DRIS consideration.
 
+\subsubsection{Application approval by HOD}
 
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The HOD of the department, decides whether or not recommend the report. The HOD will create a recommendation report. \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be recommended. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The HOD is logged on to the system. The application has been approved and finalized by the grant holder and prospective fellow.
+
+\subsubsection*{Postconditions}
+The application is now available to the Dean's approval.
+
+\subsubsection{Application approval by Dean}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & A member of the Dean's office will endorse or deny the applications as they wish and give motivation as well as providing motivation. \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be endorsed. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The a member of the Dean's office is logged on to the system. The application has been approved and finalized by the HOD.
+
+\subsubsection*{Postconditions}
+The application is now available to the DRIS consideration.
+
+\subsubsection{Application approval by DRIS}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & A member of the DRIS will check the eligibility of the application and approve or deny the application. The DRIS member should also be able to create meetings to discuss the pending applications and funding. \\
+\hline
+2 & Once all the meetings and the applications are approved or denied, all the stakeholders will be sent notifications and the application will be set to Funded. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The a member of the DRIS is logged on to the system. The application has been approved and endorsed by the Dean.
+
+\subsubsection*{Postconditions}
+The application has been funded.
+
+\subsection{Application Renewal}
+
+\subsubsection{Fellow applies of Renewal}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user creates a progress report. & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The user is logged on to the system and is a fellow.
+
+\subsubsection*{Postconditions}
+The application renewal is created and available to be viewed by all the parties involved in the application process.
+
+\subsubsection{Referees submit Motivation}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The user enters their relevant details in CV form.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+1 & The user specifies their intended supervisor.  & The system will check that all fields were filled as expected and that no necessary fields were skipped. If all fields are valid the user is allowed to continue \\
+\hline
+2 & The user enters the details/documents of their referees.  & The system will store the documents or check the validity of the referes details binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+\hline
+3 & The user enters their previous academic experience(s), attaching the supporting documents.  & The system will store the documents binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+\hline
+4 & The user enters their previous work experience(s), attaching the supporting documents.  & The system will store the documents binding them to the applicants application. If all fields are valid the user is allowed to continue \\
+5 & Once the user has completed all the above steps they will be allowed to submit the application.  & The system will now process the application to the specified supervisor and let the user know that the application is under way. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The user is on the website through a supported web client and logged on to the system.
+
+\subsubsection*{Postconditions}
+The user is on the website through a supported web client and logged on to the system.
+
+\subsubsection{Grant holder validation of application}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & Grant holder verifies and finalizes the application. & The systems accepts the verifications \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be processed. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The grant holder is logged on to the system. The application has instantiated by the prospective fellow.
+
+\subsubsection*{Postconditions}
+The application is now available to the stakeholders.
+
+\subsubsection{Application approval by stakeholder}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & Stakeholder verifies and finalizes the application or leaves suggestion for the application. & The systems accepts the verifications. \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be processed. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The stakeholder is logged on to the system. The application has been approved and finalized by the grant holder.
+
+\subsubsection*{Postconditions}
+The application is now available to the DRIS consideration.
+
+\subsubsection{Application approval by HOD}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The HOD of the department, decides whether or not recommend the report. The HOD will create a recommendation report. & System will accept the changes \\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be recommended. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The HOD is logged on to the system. The application has been approved and finalized by the grant holder and prospective fellow.
+
+\subsubsection*{Postconditions}
+The application is now available to the Dean's approval.
+
+\subsubsection{Application approval by Dean}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & A member of the Dean's office will endorse or deny the applications as they wish and give motivation as well as providing motivation.  & System will validate and accept the changes\\
+\hline
+2 & Once all the reports and referrals have been submitted the application can now be sent through  & The system now sets the application to be endorsed. A notification is sent to the DRIS. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The a member of the Dean's office is logged on to the system. The application has been approved and finalized by the HOD.
+
+\subsubsection*{Postconditions}
+The application is now available to the DRIS consideration.
+
+\subsubsection{Application approval by DRIS}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & A member of the DRIS will check the eligibility of the application and approve or deny the application. The DRIS member should also be able to create meetings to discuss the pending applications and funding. &  System will create a Eligibility report \\
+\hline
+2 & Once all the meetings and the applications are approved or denied, all the stakeholders will be sent notifications and the application will be set to Funded. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The a member of the DRIS is logged on to the system. The application has been approved and endorsed by the Dean.
+
+\subsubsection*{Postconditions}
+The application has been funded.
+
+\subsection{Application progress viewer}
+\subsubsection{Fellow}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The research fellow will review the progress of the application. & The system will show the progress of the application \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+A fellow is logged on to the system.
+
+\subsubsection*{Postconditions}
+The application progress is shown.
+
+\subsection{Application progress viewer}
+\subsubsection{Fellow}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The research fellow will review the progress of the application. & The system will show the progress of the application \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+A fellow is logged on to the system.
+
+\subsubsection*{Postconditions}
+The application progress is shown.
+
+\subsubsection{Grant Holder}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The Grant Holder will review the progress of the application. & The system will show the progress of the application \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+A Grant Holder is logged on to the system.
+
+\subsubsection*{Postconditions}
+The application progress is shown.
+
+\subsection{Progress Reports}
+\subsubsection{Fellow}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & The research fellow will check if there are any pending reports. & The system will show the pending progress reports \\
+\hline
+
+2 & The research fellow will create any pending reports. & The system validate the report and save it\\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+A fellow is logged on to the system and they have pending reports.
+
+\subsubsection*{Postconditions}
+The fellow will have no pending reports.
+
+\subsection{Forward and Rewind of Application}
+\subsubsection{DRIS}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & A DRIS will forward a application. & The system will move an application further into the application process \\
+\hline
+
+1 & A DRIS will rewind a application. & The system will move an application further back the application process \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+A DRIS member is logged on to the system.
+
+\subsubsection*{Postconditions}
+The application will have a new state.
+
+\subsection{Reporting}
+
+\subsubsection{DRIS}
+
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & A DRIS will access the report generating tool and specify the type of report required. & The system will generate the report from the specified input. \\
+\hline
+
+1 & A DRIS will have the choice to export the report. & The system will export the report in the required format\\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+A DRIS member is logged on to the system.
+
+\subsubsection*{Postconditions}
+The application will have a new state.
+
+
+\subsection{Notifications}
+The system will need to generate automated notifications that are sent internally and to
+the corresponding email of the recipient. To prevent spamming the system will only allow
+users with the correct security roles to make use of the service. It is important that this
+service runs asynchronously after it has been engaged since the service makes use of external
+systems that may be un-responsive. In case where the external systems fail this services
+needs to handle it.
+\begin{itemize}
+\item
+The system must be able to create a new notification.
+\item
+The system must be able to send notifications.
+\item
+The system must be able to allow the user to specify the recipients and senders.
+\item
+The system must be able to send batch notifications.
+\end{itemize}
+
+\subsection{Audit-Trail}
+\subsubsection{System Administrator or DRIS member}
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & Users will access the system. & The system will record all actions done by all the users. \\
+\hline
+
+
+2 & A DRIS and/or system administrator will request for a report record all actions done in the system required. & The system will generate the report via reporting services. \\
+\hline
+
+\subsection{CV Management}
+\subsubsection{Prospective Fellow, Grant Holder and Research Fellow}
+\begin{center}
+\begin{tabular}{|l|p{6cm}|p{8cm}|}
+\hline
+% \multicolumn{3}{|c|}{\bf Change log} \\
+%\hline
+Step & Action & Expected System response \\
+\hline
+1 & Any one of the specified users will be able to create and/or update their CV. & The system will validate the CV and save it. \\
+\hline
+
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsubsection*{Preconditions}
+The user is the owner of the account.
+
+\subsubsection*{Postconditions}
+The CV will be created or updated.
 \newpage
 \section{Glossary:}
 \vspace{0.2in}
