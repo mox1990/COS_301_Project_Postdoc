@@ -162,9 +162,11 @@ public class PersistenceConstants {
     {
         List<SecurityRole> list = new ArrayList<SecurityRole>();
         
-        for(long i = 1; i < 10; i++)
+        for(long i: SECURITY_ROLE_ID_ALL)
         {
-            list.add(new SecurityRole((long) i));
+            SecurityRole s = new SecurityRole(i);
+            s.setName(getSecurityRoleName(i));
+            list.add(s);
         }
         
         return list;
