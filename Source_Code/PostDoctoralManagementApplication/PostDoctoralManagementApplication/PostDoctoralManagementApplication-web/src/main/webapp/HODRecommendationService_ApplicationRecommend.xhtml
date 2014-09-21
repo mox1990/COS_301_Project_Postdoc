@@ -10,64 +10,64 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Application recommendation</h1>
-                <h2>Fill in the details for to complete the recommendation</h2>
+                <h1 class="header1">#{lang['RecommendationMenuHeader']}</h1>
+                <h2>#{lang['FillDetailsForRecommendation']}</h2>
             </div>
             <div>
                 <h:form>
-                    <h2 class="header2">Recommendation report</h2>
+                    <h2 class="header2">#{lang['RecommendationReport']}</h2>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Is candidate suitable for project:" for="doesCandidateFit"/>                                
+                        <p:outputLabel value="#{lang['CandidateSuitableForProject']}" for="doesCandidateFit"/>                                
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="doesCandidateFit" value="#{hodRecommendRequestBean.recommendationReportContent.doesCandidateFit}"/>
                         <p:message for="doesCandidateFit" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Does candidate meet age requirement::" for="candidateMeetsAgeRequirment"/>                                
+                        <p:outputLabel value="#{lang['CandidateMetAgeRequirement']}" for="candidateMeetsAgeRequirment"/>                                
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="candidateMeetsAgeRequirment" value="#{hodRecommendRequestBean.recommendationReportContent.candidateMeetsAgeRequirment}"/>
                         <p:message for="candidateMeetsAgeRequirment" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Has the candidate obtained their PhD in the last five years:" for="candidateMeetsPhDAgeRequirement"/>                                
+                        <p:outputLabel value="#{lang['ObtainedPhDInLastFiveYears']}" for="candidateMeetsPhDAgeRequirement"/>                                
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="candidateMeetsPhDAgeRequirement" value="#{hodRecommendRequestBean.recommendationReportContent.candidateMeetsPhDAgeRequirement}"/>
                         <p:message for="candidateMeetsPhDAgeRequirement" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Candidate academic merit and suitability:" for="academicMeritAndSuitablityOfCandidate"/>                                
+                        <p:outputLabel value="#{lang['AcademicMeritSuitable']}" for="academicMeritAndSuitablityOfCandidate"/>                                
                         <p:inputText id="academicMeritAndSuitablityOfCandidate" value="#{hodRecommendRequestBean.recommendationReportContent.academicMeritAndSuitablityOfCandidate}"/>
                         <p:message for="academicMeritAndSuitablityOfCandidate" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Candidate age motivation:" for="candidateAgeMotivation"/>                                
+                        <p:outputLabel value="#{lang['AgeMotivation']}" for="candidateAgeMotivation"/>                                
                         <p:inputTextarea id="candidateAgeMotivation" value="#{hodRecommendRequestBean.recommendationReportContent.candidateAgeMotivation}"/>
                         <p:message for="candidateAgeMotivation" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Is Research leader a full time staff member:" for="fulltimeAcademicStaffMember"/>                                
+                        <p:outputLabel value="#{lang['ResearchLeaderFullTime']}" for="fulltimeAcademicStaffMember"/>                                
                         <p:selectBooleanButton offLabel="No" onLabel="Yes" id="fulltimeAcademicStaffMember" value="#{hodRecommendRequestBean.recommendationReportContent.fulltimeAcademicStaffMember}"/>
                         <p:message for="fulltimeAcademicStaffMember" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Research leader academic merit and suitability:" for="academicMeritOfResearchLeader"/>                                
+                        <p:outputLabel value="#{lang['ResearchLeaderAcademicMeritSuitable']}" for="academicMeritOfResearchLeader"/>                                
                         <p:inputTextarea id="academicMeritOfResearchLeader" value="#{hodRecommendRequestBean.recommendationReportContent.academicMeritOfResearchLeader}"/>
                         <p:message for="academicMeritOfResearchLeader" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Scientific merit of application:" for="scientificMeritOfApplication"/>                                
+                        <p:outputLabel value="#{lang['ScientificMeritOfApplication']}" for="scientificMeritOfApplication"/>                                
                         <p:inputTextarea id="scientificMeritOfApplication" value="#{hodRecommendRequestBean.recommendationReportContent.scientificMeritOfApplication}"/>
                         <p:message for="scientificMeritOfApplication" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Infrastructure availablility for project:" for="infrastructureAvailability"/>                                
+                        <p:outputLabel value="#{lang['InfrastructureAvailibilty']}" for="infrastructureAvailability"/>                                
                         <p:inputTextarea id="infrastructureAvailability" value="#{hodRecommendRequestBean.recommendationReportContent.infrastructureAvailability}"/>
                         <p:message for="infrastructureAvailability" styleClass="fieldErrorMessage"/>                                                
                     </h:panelGrid>
-                    <h2 class="header2">Specify Deans office member</h2>
+                    <h2 class="header2">#{lang['SpecifyDeansOffice']}</h2>
                     <ui:decorate template="templates/OndemandPersonSelectionInput_Component.xhtml">                                        
                         <ui:param name="header" value="The system identified the following Deans. Please select one"/>
                         <ui:param name="bean" value="#{hodRecommendRequestBean.applicationReviewRequestCreationDependBean}"/>
                     </ui:decorate> 
                     
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Recommend application" action="#{hodRecommendRequestBean.preformRecommendRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['RecommendApplication']}" action="#{hodRecommendRequestBean.preformRecommendRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to recommend this application?" icon="ui-icon-alert"/>
+                        <p:confirm header="#{lang['RecommendApplcationConfirmation']}" message="#{lang['RecommendApplcationConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

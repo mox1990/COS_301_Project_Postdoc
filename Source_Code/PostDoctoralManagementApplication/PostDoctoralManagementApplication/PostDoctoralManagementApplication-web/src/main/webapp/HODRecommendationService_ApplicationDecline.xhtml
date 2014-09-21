@@ -9,24 +9,24 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Application decline menu</h1>
-                <h2>Fill in the details for to complete the declining for the application</h2>
+                <h1 class="header1">#{lang['DeclineMenuHeader']}</h1>
+                <h2>#{lang['FillDeclineDetails']}</h2>
             </div>
             <div>
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Reason for declining:" for="reason"/>                                
+                        <p:outputLabel value="#{lang['ReasonForDecline']}" for="reason"/>                                
                         <p:inputTextarea id="reason" value="#{hodDeclineRequestBean.reason}"/>
                         <p:message for="reason" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Decline application" action="#{hodDeclineRequestBean.preformDeclineRequest()}" process="@form" update="@all" styleClass="button button-fill">
-                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to decline this application? Warning: Once declined the application will no longer be active." icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['DeclineApplication']}" action="#{hodDeclineRequestBean.preformDeclineRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <p:confirm header="#{lang['DeclineConfirmation']}" message="#{lang['DeclineConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

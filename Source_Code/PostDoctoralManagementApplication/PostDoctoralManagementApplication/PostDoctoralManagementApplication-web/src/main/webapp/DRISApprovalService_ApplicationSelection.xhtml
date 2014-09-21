@@ -9,12 +9,12 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">DRIS Approval service application selection</h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['DRISApplicationSelectionMenuHeader']}</h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>
             <p:outputPanel>                
-                <h1 class="header1-1">Applications pending for eligiblity check</h1>
-                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                <h1 class="header1-1">#{lang['ApplicationsPendingEligibilty']}</h1>
+                <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
                         <ui:param name="prefix" value="End"/>
                         <ui:param name="updatableItems" value=":pendingEndorsedApplications"/>
@@ -24,7 +24,7 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEndorsed.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application for reviewal" styleClass="button button-fill" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplicationReview']}" styleClass="button button-fill" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>
@@ -32,8 +32,8 @@
             </p:outputPanel>
             
             <p:outputPanel>
-                <h1 class="header1-1">Applications pending for funding approval</h1>
-                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                <h1 class="header1-1">#{lang['ApplicationsPendingEligibilty']}</h1>
+                <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
                         <ui:param name="prefix" value="Eli"/>
                         <ui:param name="updatableItems" value=":pendingEligibleApplications"/>
@@ -43,7 +43,7 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanEligible.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application for funding consideration" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplicationForFundingCon']}" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>
@@ -51,8 +51,8 @@
             </p:outputPanel>
             
             <p:outputPanel>
-                <h1 class="header1-1">Applications that are funded and in progress</h1>
-                <p:panel  toggleable="true" header="Click to collapse or expand list">
+                <h1 class="header1-1">#{lang['FundedLiveApplications']}</h1>
+                <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
                         <ui:param name="prefix" value="fp"/>
                         <ui:param name="updatableItems" value=":fundedApplications"/>
@@ -62,7 +62,7 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanFunded.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="View application" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplication']}" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>

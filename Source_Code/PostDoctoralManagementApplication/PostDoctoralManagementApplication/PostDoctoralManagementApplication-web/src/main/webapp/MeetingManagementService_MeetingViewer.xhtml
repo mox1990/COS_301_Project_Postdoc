@@ -9,8 +9,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Meeting reviewer</h1>
-                <h2>Review the comments/minutes of the selected meeting below</h2>
+                <h1 class="header1">#{lang['MeetingReviewer']}</h1>
+                <h2>#{lang['ReviewMinutesOfMeeting']}</h2>
             </div>
             <div>
                 <h:form>                    
@@ -18,7 +18,7 @@
                         <ui:param name="meeting" value="#{meetingViewerRequestBean.selectedCommitteeMeeting}"/>
                     </ui:decorate>
                     <ui:decorate template="templates/MeetingCommentsTable_Component.xhtml">
-                        <ui:param name="header" value="Meeting minutes/comments"/>
+                        <ui:param name="header" value="#{lang['MeetingMinutes']}"/>
                         <ui:param name="comments" value="#{meetingViewerRequestBean.selectedCommitteeMeeting.minuteCommentList}"/>
                     </ui:decorate>
                 </h:form>

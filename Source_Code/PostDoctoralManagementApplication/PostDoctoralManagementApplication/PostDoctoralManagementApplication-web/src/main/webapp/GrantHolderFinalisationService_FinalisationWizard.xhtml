@@ -15,40 +15,40 @@
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">Finalise application wizard</h1>
-                 <h2>Please review and updated the information inorder to finalise the application</h2>
+                <h1 class="header1">#{lang['FinalisationWizard']}</h1>
+                <h2>#{lang['FinalisationPrompt']}</h2>
             </div>
             
             <div>
                 <p:tabView activeIndex="#{grantHolderFinalisationWizardBean.wizardActiveTab}" id="wizardTab">
-                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 0}" title="Step 1: CV details">
+                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 0}" title="#{lang['FinalsationCVTab']}">
                         <p:outputPanel rendered="#{grantHolderFinalisationWizardBean.wizardActiveTab == 0}">
                             <center>
-                                <h2 class="header2">Create or update your CV</h2>
+                                <h2 class="header2">#{lang['UpdateCVHeader']}</h2>
                                 <ui:decorate template="templates/cvFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="bean" value="#{grantHolderFinalisationWizardBean.CVCreationDependBean}"/>
                                 </ui:decorate>                        
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{grantHolderFinalisationWizardBean.completeCV()}" value="Next" styleClass="button button-fill">
+                                    <p:commandButton update=":wizardTab" action="#{grantHolderFinalisationWizardBean.completeCV()}" value="#{lang['NextButton']}" styleClass="button button-fill">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 1}" title="Step 2: Application details">
+                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 1}" title="#{lang['FinalsationApplicationDetailsTab']}">
                         <p:outputPanel rendered="#{grantHolderFinalisationWizardBean.wizardActiveTab == 1}">
                             <center>
-                                <h2 class="header2">Complete application form</h2>
+                                <h2 class="header2">#{lang['CompleteApplicationFormHeader']}</h2>
                                 <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="bean" value="#{grantHolderFinalisationWizardBean.applicationCreationDependBean}"/>
                                 </ui:decorate>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{grantHolderFinalisationWizardBean.completeApplication()}" value="Next" styleClass="button button-fill">
+                                    <p:commandButton update=":wizardTab" action="#{grantHolderFinalisationWizardBean.completeApplication()}" value="#{lang['NextButton']}" styleClass="button button-fill">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                 </h:form>
@@ -56,26 +56,26 @@
                         </p:outputPanel>
                     </p:tab>
                     
-                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 2}" title="Step 3: Finalise application">
+                    <p:tab disabled="#{grantHolderFinalisationWizardBean.wizardActiveTab != 2}" title="#{lang['FinalsationFinalseTab']}">
                         <p:outputPanel rendered="#{grantHolderFinalisationWizardBean.wizardActiveTab == 2}">
                             <center>
-                                <h2 class="header2">Finalise application</h2>
+                                <h2 class="header2">#{lang['FinaliseApplicaiton']}</h2>
                                 <h:form>
                                     
                                     <ui:decorate template="templates/OndemandPersonSelectionInput_Component.xhtml">                                        
-                                        <ui:param name="header" value="The system identified the following HODs. Please select one"/>
+                                        <ui:param name="header" value="#{lang['HODListingPrompt']}"/>
                                         <ui:param name="bean" value="#{grantHolderFinalisationWizardBean.applicationReviewRequestCreationDependBean}"/>
                                     </ui:decorate>                                    
                                     
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                                     <p:commandButton process="@form" update="@form" action="#{grantHolderFinalisationWizardBean.finaliseApplication()}" value="Confirm application finalisation" styleClass="button button-fill">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Application submission confirmation" message="Are you sure you wish to finalise this application? Note: Finalising this application means you agree with the DRIS fellowship application policy and that the information is correct. Warning: Once finalised the application cannot be edited by you." icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['ApplicationSubmissionConfirmation']}" message="#{lang['ApplicationSubmissionConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                     </p:confirmDialog>
                                 </h:form>
                             </center>                        

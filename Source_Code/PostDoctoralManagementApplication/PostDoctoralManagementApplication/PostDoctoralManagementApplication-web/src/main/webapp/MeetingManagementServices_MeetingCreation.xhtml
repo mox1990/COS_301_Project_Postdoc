@@ -10,8 +10,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Meeting creation</h1>
-                <h2>Complete the field details below to schedule a meeting</h2>
+                <h1 class="header1">#{lang['MeetingCreation']}</h1>
+                <h2>#{lang['CreateMeetingPrompt']}</h2>
             </div>
             <div>
                 <h:form>
@@ -26,14 +26,14 @@
                         <ui:param name="applicationsSelectionList" value="#{meetingCreationBean.appliationSelectionList}"/>
                         <ui:param name="selectedApplications" value="#{meetingCreationBean.selectedApplicationList}"/>
                     </ui:decorate>
-                    <p:commandButton value="Schedule meeting" action="#{meetingCreationBean.performMeetingCreationRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['ScheduleMeeting']}" action="#{meetingCreationBean.performMeetingCreationRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                        <p:confirm header="Create confirmation" message="Are you sure you schedule this meeting?" icon="ui-icon-alert"/>
+                        <p:confirm header="#{lang['ScheduleMeetingConfirmation']}" message="#{lang['ScheduleMeetingConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

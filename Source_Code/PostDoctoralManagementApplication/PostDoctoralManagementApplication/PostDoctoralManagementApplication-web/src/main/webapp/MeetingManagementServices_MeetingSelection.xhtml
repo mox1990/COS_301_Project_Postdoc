@@ -10,12 +10,12 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Meeting selection menu</h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['MeetingSelectionMenuHeader']}</h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>              
             <p:outputPanel id="meetingsLists">
                     <p:outputPanel rendered="#{meetingSelectionBean.userDRIS}">
-                        <h1 class="header1-1">Meetings that have not been held</h1>
+                        <h1 class="header1-1">#{lang['PendingMeetings']}</h1>
                         <p:panel  toggleable="true" header="Click to collapse or expand list">
                             <ui:decorate template="templates/filterSearch_Component.xhtml">
                                 <ui:param name="prefix" value="NH"/>
@@ -27,29 +27,29 @@
                                     <ui:param name="meetingsList" value="#{meetingSelectionBean.meetingFilterDependBeanStillToBeHeld.filteredList}"/>
                                     <ui:define name="commandButtons">
                                         <p:outputPanel rendered="#{meetingSelectionBean.isOrganiserOfMeeting(meeting)}">
-                                            <p:commandButton value="Edit meeting" styleClass="button button-fill" action="#{meetingSelectionBean.editMeeting(meeting)}" ajax="false" />
-                                            <p:commandButton value="Cancel meeting" styleClass="button button-fill" action="#{meetingSelectionBean.cancelMeeting(meeting)}" update=":meetingsLists">
+                                            <p:commandButton value="#{lang['EditMeeting']}" styleClass="button button-fill" action="#{meetingSelectionBean.editMeeting(meeting)}" ajax="false" />
+                                            <p:commandButton value="#{lang['CancelMeeting']}" styleClass="button button-fill" action="#{meetingSelectionBean.cancelMeeting(meeting)}" update=":meetingsLists">
                                                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                                                <p:confirm header="Confirmation" message="Are you sure that you wish to cancel this meeting?" icon="ui-icon-alert"/>
+                                                <p:confirm header="#{lang['Confirmation']}" message="#{lang['CancelMeetingConfirmationMessage']}" icon="ui-icon-alert"/>
                                             </p:commandButton>
-                                            <p:commandButton value="Start meeting now" styleClass="button button-fill" action="#{meetingSelectionBean.openMeeting(meeting)}" update=":meetingsLists">
+                                            <p:commandButton value="#{lang['StartMeeting']}" styleClass="button button-fill" action="#{meetingSelectionBean.openMeeting(meeting)}" update=":meetingsLists">
                                                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                                                <p:confirm header="Confirmation" message="Are you sure that you wish to start this meeting now?" icon="ui-icon-alert"/>
+                                                <p:confirm header="#{lang['Confirmation']}" message="#{lang['StartMeetingConfirmationMessage']}" icon="ui-icon-alert"/>
                                             </p:commandButton>
                                         </p:outputPanel>
                                     </ui:define>
                                 </ui:decorate>
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                    <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                 </p:confirmDialog>
                             </h:form>
                         </p:panel>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{true}">
-                        <h1 class="header1-1">Meetings that are currently active</h1>
-                        <p:panel  toggleable="true" header="Click to collapse or expand list">
+                        <h1 class="header1-1">#{lang['ActiveMeetings']}</h1>
+                        <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">
                             <ui:decorate template="templates/filterSearch_Component.xhtml">
                                 <ui:param name="prefix" value="ACT"/>
                                 <ui:param name="updatableItems" value=":activeMeetings"/>
@@ -59,24 +59,24 @@
                                 <ui:decorate template="templates/MeetingLister_Component.xhtml">
                                     <ui:param name="meetingsList" value="#{meetingSelectionBean.meetingFilterDependBeanActive.filteredList}"/>
                                     <ui:define name="commandButtons">
-                                        <p:commandButton value="Comment on meeting" styleClass="button button-fill" action="#{meetingSelectionBean.commentOnMeeting(meeting)}" ajax="false" rendered="#{(meetingSelectionBean.isAttendeeOfMeeting(meeting) or meetingSelectionBean.isOrganiserOfMeeting(meeting))}"/>
-                                        <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingSelectionBean.closeMeeting(meeting)}" update=":meetingsLists" rendered="#{meetingSelectionBean.isOrganiserOfMeeting(meeting)}">
+                                        <p:commandButton value="#{lang['CommentOnMeeting']}" styleClass="button button-fill" action="#{meetingSelectionBean.commentOnMeeting(meeting)}" ajax="false" rendered="#{(meetingSelectionBean.isAttendeeOfMeeting(meeting) or meetingSelectionBean.isOrganiserOfMeeting(meeting))}"/>
+                                        <p:commandButton value="#{lang['ConcludeMeeting']}" styleClass="button button-fill" action="#{meetingSelectionBean.closeMeeting(meeting)}" update=":meetingsLists" rendered="#{meetingSelectionBean.isOrganiserOfMeeting(meeting)}">
                                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                                            <p:confirm header="Confirmation" message="Are you sure that you wish to conclude this meeting now?" icon="ui-icon-alert"/>
+                                            <p:confirm header="#{lang['Confirmation']}" message="#{lang['ConcludeMeetingConfirmationMessage']}" icon="ui-icon-alert"/>
                                         </p:commandButton>
                                     </ui:define>
                                 </ui:decorate>
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                    <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                 </p:confirmDialog>
                             </h:form>
                         </p:panel>
                     </p:outputPanel>
 
                     <p:outputPanel rendered="#{meetingSelectionBean.userDRIS}">
-                        <h1 class="header1-1">Meetings that have been concluded</h1>
-                        <p:panel  toggleable="true" header="Click to collapse or expand list">
+                        <h1 class="header1-1">#{lang['ConcludedMeetings']}</h1>
+                        <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}">
                             <ui:decorate template="templates/filterSearch_Component.xhtml">
                                 <ui:param name="prefix" value="CON"/>
                                 <ui:param name="updatableItems" value=":concludedMeetings"/>
@@ -86,7 +86,7 @@
                                 <ui:decorate template="templates/MeetingLister_Component.xhtml">
                                     <ui:param name="meetingsList" value="#{meetingSelectionBean.meetingFilterDependBeanConcluded.filteredList}"/>
                                     <ui:define name="commandButtons">
-                                        <p:commandButton value="View meeting" styleClass="button button-fill" action="#{meetingSelectionBean.viewMeeting(meeting)}" ajax="false"/> 
+                                        <p:commandButton value="#{lang['ViewMeeting']}" styleClass="button button-fill" action="#{meetingSelectionBean.viewMeeting(meeting)}" ajax="false"/> 
                                     </ui:define>
                                 </ui:decorate>
                             </h:form>

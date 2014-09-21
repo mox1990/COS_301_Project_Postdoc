@@ -9,8 +9,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Meeting commentator</h1>
-                <h2>Review the comments/minutes of the meeting</h2>
+                <h1 class="header1">#{lang['MeetingCommentor']}</h1>
+                <h2>#{lang['ReviewCommentsInMeeting']}</h2>
             </div>
             <div>
                 <h:form>                    
@@ -19,10 +19,10 @@
                     </ui:decorate>
                     <p:outputPanel id="Commentss">
                         <ui:decorate template="templates/MeetingCommentsTable_Component.xhtml">
-                            <ui:param name="header" value="Meeting minutes/comments"/>
+                            <ui:param name="header" value="#{lang['MeetingMinutes']}"/>
                             <ui:param name="comments" value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.minuteCommentList}"/>
                         </ui:decorate>
-                        <p:panel header="Comment on meeting">
+                        <p:panel header="#{lang['CommentOnMeeting']}">
                             <center>
                                 <h:panelGrid columns="2" cellpadding="5">                               
                                     <p:inputTextarea id="comment" value="#{meetingCommentatorRequestBean.minuteComment.comment}" style="width:800px"/>
@@ -30,18 +30,18 @@
                                 </h:panelGrid>
                             </center>
                             <p:growl sticky="true" globalOnly="false" showDetail="true"/>
-                            <p:commandButton value="Save comment" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill">
-                                <p:confirm header="Confirmation" message="Are you sure that you save this comment on this meeting now?" icon="ui-icon-alert"/>
+                            <p:commandButton value="#{lang['SaveComment']}" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill">
+                                <p:confirm header="#{lang['Confirmation']}" message="#{lang['SaveCommentConfirmationMessage']}" icon="ui-icon-alert"/>
                             </p:commandButton>
                         </p:panel>
                     </p:outputPanel>
                     
-                    <p:commandButton value="Conclude meeting now" styleClass="button button-fill" action="#{meetingCommentatorRequestBean.closeMeeting()}" rendered="#{meetingCommentatorRequestBean.isOrganiserOfMeeting()}" update="@form">                        
-                        <p:confirm header="Confirmation" message="Are you sure that you wish to conclude this meeting now?" icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['ConcludeMeeting']}" styleClass="button button-fill" action="#{meetingCommentatorRequestBean.closeMeeting()}" rendered="#{meetingCommentatorRequestBean.isOrganiserOfMeeting()}" update="@form">                        
+                        <p:confirm header="#{lang['Confirmation']}" message="#{lang['ConcludeMeetingConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                     
                 </h:form>

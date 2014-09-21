@@ -14,8 +14,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">User accounts viewer</h1>
-                <h2>Click on the user accounts to view more details and options</h2>
+                <h1 class="header1">#{lang['UserAccountsViewer']}</h1>
+                <h2>#{lang['ClickUserAccount']}</h2>
             </div>
             <div>
                 <ui:decorate template="templates/filterSearch_Component.xhtml">
@@ -27,16 +27,16 @@
                     <ui:decorate template="templates/accountsListing_Comoponent.xhtml">
                         <ui:param name="userAccounts" value="#{userAccountsViewerBean.personFilterDependBean.filteredList}"/>
                         <ui:define name="commandButtons" >
-                            <p:commandButton value="Edit user account" styleClass="button-fill button" action="#{userAccountsViewerBean.editUserAccount(account)}" rendered="#{!userAccountsViewerBean.isOwnerOfAccount(account)}"/>
-                            <p:commandButton value="Remove (Disable) user account" styleClass="button-fill button" action="#{userAccountsViewerBean.removeUserAccount(account)}" rendered="#{(userAccountsViewerBean.isUserAccountRemovable(account))}">   
+                            <p:commandButton value="#{lang['EditUserAccount']}" styleClass="button-fill button" action="#{userAccountsViewerBean.editUserAccount(account)}" rendered="#{!userAccountsViewerBean.isOwnerOfAccount(account)}"/>
+                            <p:commandButton value="#{lang['RemoveUserAccount']}" styleClass="button-fill button" action="#{userAccountsViewerBean.removeUserAccount(account)}" rendered="#{(userAccountsViewerBean.isUserAccountRemovable(account))}">   
                                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                                <p:confirm header="Confirmation" message="Are you sure that you wish to disable this user account?" icon="ui-icon-alert"/>
+                                <p:confirm header="#{lang['Confirmation']}" message="#{lang['RemoveUserAccountConfirmationMessage']}" icon="ui-icon-alert"/>
                             </p:commandButton>
                         </ui:define>
                     </ui:decorate>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

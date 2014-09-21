@@ -9,42 +9,42 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Referral report creation</h1>
-                <h2>Fill in the details for to complete the referral report for Application - #{refereeReportCreationRequestBean.selectedApplication.applicationID} - #{refereeReportCreationRequestBean.selectedApplication.projectTitle}</h2>
+                <h1 class="header1">#{lang['ReferralReportCreator']}</h1>
+                <h2>#{lang['FillReferralDetails']}#{refereeReportCreationRequestBean.selectedApplication.applicationID} - #{refereeReportCreationRequestBean.selectedApplication.projectTitle}</h2>
             </div>
             <div>
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
                         
-                        <p:outputLabel value="Referee and candidate association:" for="rassociation"/>                                
+                        <p:outputLabel value="#{lang['RefereeCandidateAssociation']}" for="rassociation"/>                                
                         <p:inputText id="rassociation" value="#{refereeReportCreationRequestBean.referalReport.refereeAndCandidateAssociation}" required="true"/>
                         <p:message for="rassociation" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Candidate project title under referee:" for="rtitle"/>                                
+                        <p:outputLabel value="#{lang['CandidateProjectTitleUnderReview']}" for="rtitle"/>                                
                         <p:inputText id="rtitle" value="#{refereeReportCreationRequestBean.referalReport.projectTitle}" required="true"/>
                         <p:message for="rtitle" styleClass="fieldErrorMessage"/>
                                                 
-                        <p:outputLabel value="Candidate project summary under referee:" for="rsummary"/>                                
+                        <p:outputLabel value="#{lang['CandidateProjectSummaryUnderReferee']}" for="rsummary"/>                                
                         <p:inputTextarea id="rsummary" value="#{refereeReportCreationRequestBean.referalReport.projectSummary}" required="true"/>
                         <p:message for="rsummary" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Candidate evaluation" for="rcevaluation"/>                                
+                        <p:outputLabel value="#{lang['CandidateEvaluation']}" for="rcevaluation"/>                                
                         <p:inputTextarea id="rcevaluation" value="#{refereeReportCreationRequestBean.referalReport.evaluationOfCandidateSelf}" required="true"/>
                         <p:message for="rcevaluation" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Candidate evaluation towards proposed project" for="rctevaluation"/>                                
+                        <p:outputLabel value="#{lang['CandidateEvaluationTowardsProposedProject']}" for="rctevaluation"/>                                
                         <p:inputTextarea id="rctevaluation" value="#{refereeReportCreationRequestBean.referalReport.evaluationOfCandidateTowardsProposedProject}" required="true"/>
                         <p:message for="rctevaluation" styleClass="fieldErrorMessage"/>
                                                                  
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Refer application" action="#{refereeReportCreationRequestBean.preformRefereeReportCreationRequest()}" styleClass="button button-fill" process="@all" update="@all">                            
-                        <p:confirm header="Referral confirmation" message="Are you sure you wish create a referral report for the application?" icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['ReferApplication']}" action="#{refereeReportCreationRequestBean.preformRefereeReportCreationRequest()}" styleClass="button button-fill" process="@all" update="@all">                            
+                        <p:confirm header="#{lang['ReferApplicationConfirmation']}" message="#{lang['ReferApplicationConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

@@ -14,8 +14,8 @@
 
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Viewing user account - #{userAccountsGeneralAccountEditBean.person.completeName}</h1>
-                 <h2>Please update the fields below</h2>
+                <h1 class="header1">#{lang['ViewingUserAccount']}#{userAccountsGeneralAccountEditBean.person.completeName}</h1>
+                <h2>#{lang['PleaseUpdaTheFieldsBelow']}</h2>
             </div>
 
             <div>
@@ -28,7 +28,7 @@
                             <ui:param name="employeeEnabled" value="#{true}"/>
                             <ui:param name="retypePasswordValue" value="#{userAccountsGeneralAccountEditBean.reTypePassword}"/>
                             <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Person information"/>
+                                <h:outputText styleClass="header2" value="#{lang['PersonInformation']}"/>
                             </ui:define>
                         </ui:decorate>
 
@@ -37,7 +37,7 @@
                             <ui:param name="renderAttribute" value="#{true}"/>
                             <ui:param name="prefix" value="r"/>
                             <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Residential address"/>
+                                <h:outputText styleClass="header2" value="#{lang['ResidentialAddress']}"/>
                             </ui:define>
                         </ui:decorate>                        
                         
@@ -46,7 +46,7 @@
                             <ui:param name="booleanValue" value="#{userAccountsGeneralAccountEditBean.isSystemAdmin}"/>
                             <ui:param name="disabledAttribute" value="#{userAccountsGeneralAccountEditBean.isSystemAdmin}"/>
                             <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Select Security roles"/>
+                                <h:outputText styleClass="header2" value="#{lang['SelectSecurityRoles']}"/>
                             </ui:define>
                         </ui:decorate> 
                         
@@ -57,7 +57,7 @@
                                 <ui:param name="employeeInformation" value="#{userAccountsGeneralAccountEditBean.employeeInformation}"/>
                                 <ui:param name="renderAttribute" value="#{userAccountsGeneralAccountEditBean.person.upEmployee}"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
+                                    <h:outputText styleClass="header2" value="#{lang['UPEmploymentInformation']}"/>
                                 </ui:define>
                             </ui:decorate>
                             
@@ -66,19 +66,19 @@
                                 <ui:param name="renderAttribute" value="#{userAccountsGeneralAccountEditBean.person.upEmployee}"/>
                                 <ui:param name="prefix" value="e"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="UP office address"/>
+                                    <h:outputText styleClass="header2" value="#{lang['UPOfficeAddress']}"/>
                                 </ui:define>
                             </ui:decorate>                            
                         </p:outputPanel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="false"/>
-                        <p:commandButton styleClass="button" value="Save changes" id="saveChanges" action="#{userAccountsGeneralAccountEditBean.performGeneralUserAccountEditRequest()}" process="@all" update="@all">                            
+                        <p:commandButton styleClass="button" value="#{lang['SaveChanges']}" id="saveChanges" action="#{userAccountsGeneralAccountEditBean.performGeneralUserAccountEditRequest()}" process="@all" update="@all">                            
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                            <p:confirm header="User account update confirmation" message="Are you sure you wish to save changes to the following user account?" icon="ui-icon-alert"/>
+                            <p:confirm header="#{lang['UserAccountUpdateConfirmation']}" message="#{lang['UserAccountUpdateConfirmationMessage']}" icon="ui-icon-alert"/>
                         </p:commandButton>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                         </p:confirmDialog>
                     </center>
                 </h:form>

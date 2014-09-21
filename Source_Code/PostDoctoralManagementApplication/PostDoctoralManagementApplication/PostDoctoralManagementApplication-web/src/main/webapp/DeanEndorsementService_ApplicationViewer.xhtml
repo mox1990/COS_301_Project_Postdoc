@@ -9,15 +9,15 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Viewing application - #{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle} </h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['Viewing']}#{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle} </h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>
             <ui:decorate template="templates/applicationViewer_Component.xhtml">
                 <ui:param name="selectedApplication" value="#{applicationViewerRequestBean.selectedApplication}"/>
             </ui:decorate>
             <h:form>
-                <p:commandButton value="Recommend application" styleClass="button button-fill" action="#{navigationManagerBean.goToDeanEndorseView()}" ajax="false"/> 
-                <p:commandButton value="Decline application" styleClass="button button-fill" action="#{navigationManagerBean.goToDeanDeclineView()}" ajax="false"/>
+                <p:commandButton value="#{lang['RecommendApplication']}" styleClass="button button-fill" action="#{navigationManagerBean.goToDeanEndorseView()}" ajax="false"/> 
+                <p:commandButton value="#{lang['DeclineApplication']}" styleClass="button button-fill" action="#{navigationManagerBean.goToDeanDeclineView()}" ajax="false"/>
             </h:form>            
         </ui:define>
     </ui:composition>

@@ -9,8 +9,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Applications pending for recommendation</h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['PendingForRecommendationHeader']}</h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>
             <ui:decorate template="templates/filterSearch_Component.xhtml">
                 <ui:param name="prefix" value=""/>
@@ -21,7 +21,7 @@
                 <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                     <ui:param name="pendingApplications" value="#{hodApplicationSelectionBean.applicationFilterDependBean.filteredList}"/>
                     <ui:define name="commandButtons">
-                        <p:commandButton value="View application for consideration" styleClass="button button-fill" action="#{hodApplicationSelectionBean.viewApplication(app)}"/> 
+                        <p:commandButton value="#{lang['ViewForConsideration']}" styleClass="button button-fill" action="#{hodApplicationSelectionBean.viewApplication(app)}"/> 
                     </ui:define>
                 </ui:decorate>
             </h:form>

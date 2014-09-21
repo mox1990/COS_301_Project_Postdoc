@@ -9,28 +9,28 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Application endorsement</h1>
-                <h2>Fill in the details for to complete the endorsement</h2>
+                <h1 class="header1">#{lang['ApplicationEndorsement']}</h1>
+                <h2>#{lang['FillEndorsementDetails']}</h2>
             </div>
             <div>
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Score the application from 1 to 10: " for="rank"/>                                
+                        <p:outputLabel value="#{lang['ScoreApplication']}" for="rank"/>                                
                         <p:spinner max="10" min="1" id="rank" value="#{deanEndorseRequestBean.endorsement.rank}"/>
                         <p:message for="rank" styleClass="fieldErrorMessage"/>
                                                 
-                        <p:outputLabel value="Endorsement motivation:" for="motivation"/>                                
+                        <p:outputLabel value="#{lang['EndorsementMotivation']}" for="motivation"/>                                
                         <p:inputTextarea id="motivation" value="#{deanEndorseRequestBean.endorsement.motivation}"/>
                         <p:message for="motivation" styleClass="fieldErrorMessage"/>                                                                 
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Endorse application" action="#{deanEndorseRequestBean.preformEndorseRequest()}" process="@form" update="@all" styleClass="button button-fill">
-                        <p:confirm header="Application decline confirmation" message="Are you sure you wish to endorse this application?" icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['EndorseApplication']}" action="#{deanEndorseRequestBean.preformEndorseRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                        <p:confirm header="#{lang['EndorseApplicationConfirmation']}" message="#{lang['EndorseApplicationConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

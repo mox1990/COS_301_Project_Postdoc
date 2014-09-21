@@ -9,40 +9,40 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Viewing application - #{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle}</h1>
-                <h2>Click on the application for more details</h2>
+                <h1 class="header1">#{lang['Viewing']}#{applicationViewerRequestBean.selectedApplication.applicationID} - #{applicationViewerRequestBean.selectedApplication.projectTitle}</h1>
+                <h2>#{lang['ClickApplication']}</h2>
             </div>
             <ui:decorate template="templates/applicationViewer_Component.xhtml">
                 <ui:param name="selectedApplication" value="#{applicationViewerRequestBean.selectedApplication}"/>
             </ui:decorate>
             <h:form>
                 <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                <p:commandButton value="Check application elgiblity" styleClass="button button-fill" type="button"  onclick="PF('dlg#{_objectInContext}').show()" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}"/> 
+                <p:commandButton value="#{lang['CheckEligibility']}" styleClass="button button-fill" type="button"  onclick="PF('dlg#{_objectInContext}').show()" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}"/> 
                 
-                <p:dialog header="Eligiblity checker" widgetVar="dlg#{_objectInContext}" minHeight="40" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}" modal="true">
+                <p:dialog header="#{lang['EligibiltyChecker']}" widgetVar="dlg#{_objectInContext}" minHeight="40" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}" modal="true">
                     <h:panelGrid columns="1" cellpadding="5px">
-                        <h:outputText value="The application has been checked for eligiblity and found that the application is:" />
+                        <h:outputText value="#{lang['CheckedEligibiltyAndFound']}" />
                         <h:outputText styleClass="text-label" value="#{drisApplicationViewerRequestBean.automaticEligiblityApprovalResult}"/>
-                        <h:outputText value="Please choose an option:" />
+                        <h:outputText value="#{lang['ChooseOptionPrompt']}" />
                     </h:panelGrid>
                     
-                    <p:commandButton value="Make application elgible" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityApproval()}" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}">
-                        <p:confirm header="Application elgiblity confirmation" message="Are you sure you wish to make this application eligible?" icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['MakeEligible']}" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityApproval()}" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}">
+                        <p:confirm header="#{lang['EligibiltyConfirmation']}" message="#{lang['EligibiltyConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
-                    <p:commandButton value="Decline application elgiblity" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityDecline()}" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}">
-                        <p:confirm header="Application elgiblity confirmation" message="Are you sure you wish to decline the eligiblity of this application?" icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['DeclineEligibilty']}" styleClass="button button-fill" action="#{drisApplicationViewerRequestBean.manualEligiblityDecline()}" rendered="#{drisApplicationViewerRequestBean.applicationEndorsed}">
+                        <p:confirm header="#{lang['EligibiltyConfirmation']}" message="#{lang['DeclineEligibiltyConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                 </p:dialog>
                 
-                <p:commandButton value="Approve funding for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApproveFundingSelectionView()}" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/> 
-                <p:commandButton value="Decline funding for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceDeclineFundingSelectionView()}" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/>        
+                <p:commandButton value="#{lang['ApproveFunding']}" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApproveFundingSelectionView()}" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/> 
+                <p:commandButton value="#{lang['DeclineFunding']}" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceDeclineFundingSelectionView()}" rendered="#{drisApplicationViewerRequestBean.applicationEligible}"/>        
                     
-                <p:commandButton value="Edit funding information for application" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApplicationFundingReportMangementView()}" rendered="#{drisApplicationViewerRequestBean.applicationFunded}"/>                
+                <p:commandButton value="#{lang['EditFunding']}" styleClass="button button-fill" action="#{navigationManagerBean.goToDRISApprovalServiceApplicationFundingReportMangementView()}" rendered="#{drisApplicationViewerRequestBean.applicationFunded}"/>                
                 
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>
             </h:form>            
         </ui:define>

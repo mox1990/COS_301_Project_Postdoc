@@ -9,8 +9,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Meeting editor</h1>
-                <h2>Edit any of the details below</h2>
+                <h1 class="header1">#{lang['MeetingEditor']}</h1>
+                <h2>#{lang['EditDetails']}</h2>
             </div>
             <div>
                 <h:form>
@@ -27,13 +27,13 @@
                         <ui:param name="selectedApplications" value="#{meetingEditBean.selectedApplicationList}"/>
                     </ui:decorate>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="Save changes" action="#{meetingEditBean.performMeetingUpdateRequest()}" process="@form" update="@form" styleClass="button button-fill">
-                        <p:confirm header="Save changes confirmation" message="Are you sure you wish to save changes for this meeting?" icon="ui-icon-alert"/>
+                    <p:commandButton value="#{lang['SaveChanges']}" action="#{meetingEditBean.performMeetingUpdateRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                        <p:confirm header="#{lang['SaveChangeConfirmation']}" message="#{lang['SaveChangeConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>
