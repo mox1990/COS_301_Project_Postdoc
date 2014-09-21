@@ -14,7 +14,7 @@
                 </div>
             </c:if>
             <c:if test="#{pendingApplications.size() > 0}">                
-                <p:accordionPanel dynamic="true" cache="true" value="#{pendingApplications}" var="app" styleClass="box-round">
+                <p:accordionPanel dynamic="true" cache="true" value="#{pendingApplications}" var="app" styleClass="box-round" activeIndex="">
                     <p:tab title="Application - #{app.applicationID} - #{app.projectTitle}" >
                         <h:panelGrid columns="2">
                             <h:outputText styleClass="text-label" value="Application type:"/>
