@@ -36,27 +36,22 @@
                             </p:column>
                         </p:dataTable>
 
-                        <p:carousel autoPlayInterval="15" circular="true" headerText="Announcements" value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" vertical="true">
-                            <p:tab>
-                                <f:facet name="header">
-                                    <h:outputText value="#{announcement.headline}"/>
-                                </f:facet>
-
-                                <c:if test="#{notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
-                                    <h:panelGrid cellpadding="5px" columns="2">
-                                        <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.loadImageForAnnoucement(announcement)}" width="150" height="250">
-
-                                        </p:graphicImage>
-                                        <h:outputText value="#{announcement.message}" styleClass="text-label"/>
-                                    </h:panelGrid>
-                                </c:if>
+                        <p:carousel autoPlayInterval="15" circular="true" itemStyle="height:200px;width:100%!important;"  headerText="Announcements" value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" vertical="false" numVisible="1">
+                            <p:panel header="#{announcement.headline}">                         
 
                                 <c:if test="#{not notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
-                                    <h:panelGrid cellpadding="5px" columns="1">
+                                    <h:panelGrid cellpadding="10px" columns="2">
+                                        <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.loadImageForAnnoucement(announcement)}" width="150" height="250"/>
                                         <h:outputText value="#{announcement.message}" styleClass="text-label"/>
                                     </h:panelGrid>
                                 </c:if>
-                            </p:tab>
+
+                                <c:if test="#{notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
+                                    <h:panelGrid cellpadding="10px" columns="1">                                        
+                                        <h:outputText value="#{announcement.message}" styleClass="text-label"/>
+                                    </h:panelGrid>
+                                </c:if>
+                            </p:panel>
                         </p:carousel>
                     </h:form>
                 </p:notificationBar>
@@ -74,6 +69,7 @@
                     <ui:insert name="pageBody"/>
                 </div>
                 <div class="containerFooter">
+                    #{generalInformationBean.JSFVersion}
                     <ui:insert name="pageFooter"/>
                 </div>
             </div>            

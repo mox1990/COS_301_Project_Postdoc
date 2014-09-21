@@ -28,7 +28,7 @@
                     <p:panel header="#{lang['ApplicationDetailsHeader']}">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="#{lang['StartOfFellowship']}" for="startDate"/>                                
-                            <p:calendar mask="true" id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true">
+                            <p:calendar mask="true" id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" navigator="true" required="true">
                                 <f:convertDateTime pattern="yyyy/MM/dd"/>
                             </p:calendar>
                             <p:message for="startDate" styleClass="fieldErrorMessage"/>

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
@@ -185,4 +186,14 @@ public class generalInformationBean {
         return referneceStatusItems;
     }
         
+    public String getVersion()
+    {
+        return com.softserve.constants.SystemConstants.VERSION;
+    }
+    
+    public String getJSFVersion()
+    {
+        return "JSF Implementation: " + FacesContext.class.getPackage().getImplementationVendor()+ " " + FacesContext.class.getPackage().getImplementationTitle() + " " + FacesContext.class.getPackage().getImplementationVersion();
+    }
+    
 }

@@ -10,6 +10,7 @@ import com.softserve.DBEntities.Announcement;
 import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import org.primefaces.model.DefaultUploadedFile;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -39,7 +40,7 @@ public class AnnouncementCreationDependBean implements Serializable{
         else
         {
             this.announcement = announcement;
-        }        
+        } 
     }
 
     public Announcement getAnnouncement() {
@@ -60,7 +61,21 @@ public class AnnouncementCreationDependBean implements Serializable{
     
     public Announcement getCombinedAnnouncement()
     {
-        announcement.setImage(fileUpload.getContents());
-        return announcement;
+        System.out.println("==============FIle " + fileUpload);
+        Announcement a = new Announcement();
+        if(fileUpload != null)
+        {        
+            System.out.println("==============FIle " + fileUpload.getFileName() + " " + fileUpload.getContentType());
+            a.setImage(fileUpload.getContents());
+        }
+        
+        a.setEndDate(announcement.getEndDate());
+        a.setHeadline(announcement.getHeadline());
+        a.setStartDate(announcement.getStartDate());
+        a.setMessage(announcement.getMessage());
+        
+        System.out.println("==============Announcement " + a.getHeadline()+ " " + a.getMessage());
+        
+        return a;
     }
 }

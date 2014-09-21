@@ -71,6 +71,21 @@ public class LocationFinderDependBean implements Serializable {
                
     }
     
+    public List<Institution> loadAllInstitutions()
+    {
+        System.out.println("Populate Institutions==============================");
+        
+        try
+        {   
+            return locationManagementServiceLocal.getAllInstitutions();
+        }
+        catch(Exception ex)
+        {
+            return new ArrayList<Institution>();
+        }
+
+    }
+    
     public void populateFaculties(Institution institution)
     {
         System.out.println("Populate Faculties==============================");

@@ -10,9 +10,10 @@
         
         <ui:define name="pageBody">
             <h:form>
-                <p:tree orientation="horizontal" value="#{locationViewerBean.root}" selection="#{locationViewerBean.selectedNode}" selectionMode="single" var="node" >
+                <p:growl globalOnly="false" showDetail="true"/>
+                <p:tree  orientation="horizontal" value="#{locationViewerBean.root}" selection="#{locationViewerBean.selectedNode}" selectionMode="single" var="node" datakey="#{node}">
                    <p:ajax event="select" update="@form" listener="#{locationViewerBean.onNodeSelect}" />
-                    <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                    <p:treeNode type="Institutions" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
                         <h:outputText value="#{node}"/>
                     </p:treeNode>        
                     <p:treeNode type="Institution" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
@@ -25,6 +26,52 @@
                         <h:outputText value="#{node.name}"/>
                     </p:treeNode> 
                 </p:tree>
+                <p:panel id="seleceted" header="Currently selected - #{locationViewerBean.selectedNode.type}" rendered="#{(locationViewerBean.selectedNode != null) and (locationViewerBean.currentNodeActive())}">
+                    <h:panelGrid columns="3" cellspacing="5px" rendered="#{locationViewerBean.selectedAsInstitution != null}">
+                        <p:outputLabel value="Insititution name:" for="Insititutionname"/>                                
+                        <p:inputText id="Insititutionname" value="#{locationViewerBean.selectedAsInstitution.name}" required="true"/>
+                        <p:message for="Insititutionname" styleClass="fieldErrorMessage"/> 
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" cellspacing="5px" rendered="#{locationViewerBean.selectedAsFaculty != null}">
+                        <p:outputLabel value="Faculty name:" for="Facultyname"/>                                
+                        <p:inputText id="Facultyname" value="#{locationViewerBean.selectedAsFaculty.name}" required="true"/>
+                        <p:message for="Facultyname" styleClass="fieldErrorMessage"/> 
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" cellspacing="5px" rendered="#{locationViewerBean.selectedAsDepartment != null}">
+                        <p:outputLabel value="Department name:" for="Departmentname"/>                                
+                        <p:inputText id="Departmentname" value="#{locationViewerBean.selectedAsDepartment.name}" required="true"/>
+                        <p:message for="Departmentname" styleClass="fieldErrorMessage"/> 
+                    </h:panelGrid>
+                    <p:commandButton actionListener="#{locationViewerBean.preformUpdateOfSelectedNode()}" process="seleceted" update="@form" value="Save changes to name" styleClass="button button-fill">
+                        <p:confirm header="Location update" message="Are you sure you wish to save changes to this location?" />
+                    </p:commandButton>
+                </p:panel>
+                
+                <p:panel id="creatation" header="Create a new #{locationViewerBean.nextType} under #{locationViewerBean.selectedNode.type}" rendered="#{((locationViewerBean.selectedNode != null) and (locationViewerBean.nodeBelow()))}" >
+                    <h:panelGrid columns="3" cellspacing="5px" rendered="#{locationViewerBean.selectedNode == locationViewerBean.root}">
+                        <p:outputLabel value="Insititution name:" for="Insititutionname1"/>                                
+                        <p:inputText id="Insititutionname1" value="#{locationViewerBean.name}" required="true"/>
+                        <p:message for="Insititutionname1" styleClass="fieldErrorMessage"/> 
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" cellspacing="5px" rendered="#{locationViewerBean.selectedAsInstitution != null}">
+                        <p:outputLabel value="Faculty name:" for="Facultyname1"/>                                
+                        <p:inputText id="Facultyname1" value="#{locationViewerBean.name}" required="true"/>
+                        <p:message for="Facultyname1" styleClass="fieldErrorMessage"/> 
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" cellspacing="5px" rendered="#{locationViewerBean.selectedAsFaculty != null}">
+                        <p:outputLabel value="Department name:" for="Departmentname1"/>                                
+                        <p:inputText id="Departmentname1" value="#{locationViewerBean.name}" required="true"/>
+                        <p:message for="Departmentname1" styleClass="fieldErrorMessage"/> 
+                    </h:panelGrid>
+                    <p:commandButton actionListener="#{locationViewerBean.preformCreationOfNewLocation()}" process="creatation" update="@form" value="Create new location" styleClass="button button-fill">
+                        <p:confirm header="Location creation" message="Are you sure you wish to create this location?" />
+                    </p:commandButton>
+                            
+                </p:panel>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </ui:define>
     </ui:composition>

@@ -25,7 +25,7 @@
                         <p:message for="#{prefix}itemlocation" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Item date:" for="#{prefix}itemdate"/>                                
-                        <p:calendar id="#{prefix}itemdate" mask="true" value="#{currentItem.date}" pattern="yyyy-MM-dd" required="true">
+                        <p:calendar id="#{prefix}itemdate" mask="true" value="#{currentItem.date}" navigator="true" pattern="yyyy-MM-dd" required="true">
                             <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                         </p:calendar>
                         <p:message for="#{prefix}itemdate" styleClass="fieldErrorMessage"/>

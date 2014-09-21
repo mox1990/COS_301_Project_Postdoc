@@ -21,55 +21,61 @@
             <div>
                 <h:form id="gencreateFrom">
                     <center>
-                        <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
-                            <ui:param name="person" value="#{generalUserAccountCreationBean.person}"/>
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="emailEditable" value="#{true}"/>
-                            <ui:param name="retypePasswordValue" value="#{generalUserAccountCreationBean.reTypePassword}"/>
-                            <ui:param name="employeeEnabled" value="#{true}"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="#{lang['PersonInformation']}"/>
-                            </ui:define>
-                        </ui:decorate>
-
-                        <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                            <ui:param name="address" value="#{generalUserAccountCreationBean.address}"/>
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="prefix" value="r"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="#{lang['ResidentialAddress']}"/>
-                            </ui:define>
-                        </ui:decorate>                        
-                        
-                        <ui:decorate template="templates/securityFieldInput_Template.xhtml">
-                            <ui:param name="securityRoles" value="#{generalUserAccountCreationBean.securityRoles}"/>
-                            <ui:param name="booleanValue" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
-                            <ui:param name="disabledAttribute" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="#{lang['SelectSecurityRoles']}"/>
-                            </ui:define>
-                        </ui:decorate> 
-                        
-                        <p:outputPanel id="upEmployeeInfoPanel">
-                            <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
-                                <ui:param name="employeeInformation" value="#{generalUserAccountCreationBean.employeeInformation}"/>
-                                <ui:param name="locationBean" value="#{generalUserAccountCreationBean.locationFinderDependBean}"/>
-                                <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
-                                <ui:param name="employeeIDEditable" value="#{true}"/>
+                        <p:panel header="#{lang['PersonInformation']}">
+                            <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
+                                <ui:param name="person" value="#{generalUserAccountCreationBean.person}"/>
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="emailEditable" value="#{true}"/>
+                                <ui:param name="retypePasswordValue" value="#{generalUserAccountCreationBean.reTypePassword}"/>
+                                <ui:param name="employeeEnabled" value="#{true}"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="#{lang['UPEmploymentInformation']}"/>
                                 </ui:define>
                             </ui:decorate>
-                            
+                        </p:panel>
+                        
+                        <p:panel header="#{lang['ResidentialAddress']}">
                             <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                                <ui:param name="address" value="#{generalUserAccountCreationBean.upAddress}"/>
-                                <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
-                                <ui:param name="prefix" value="e"/>
+                                <ui:param name="address" value="#{generalUserAccountCreationBean.address}"/>
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="prefix" value="r"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="#{lang['UPOfficeAddress']}"/>
                                 </ui:define>
-                            </ui:decorate>                            
-                        </p:outputPanel>
+                            </ui:decorate>  
+                        </p:panel>
+                        
+                        <p:panel header="#{lang['SelectSecurityRoles']}">
+                            <ui:decorate template="templates/securityFieldInput_Template.xhtml">
+                                <ui:param name="securityRoles" value="#{generalUserAccountCreationBean.securityRoles}"/>
+                                <ui:param name="booleanValue" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
+                                <ui:param name="disabledAttribute" value="#{generalUserAccountCreationBean.isSystemAdmin}"/>
+                                <ui:define name="header">
+                                </ui:define>
+                            </ui:decorate> 
+                        </p:panel>
+                        
+                        
+                        <p:panel id="upEmployeeInfoPanel" header="Insitatute employement information" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                            <p:panel header="#{lang['UPEmploymentInformation']}">
+                                <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
+                                    <ui:param name="employeeInformation" value="#{generalUserAccountCreationBean.employeeInformation}"/>
+                                    <ui:param name="locationBean" value="#{generalUserAccountCreationBean.locationFinderDependBean}"/>
+                                    <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
+                                    <ui:param name="employeeIDEditable" value="#{true}"/>
+                                    <ui:define name="header">
+                                    </ui:define>
+                                </ui:decorate>
+                            </p:panel>
+                            
+                            <p:panel header="#{lang['UPOfficeAddress']}">
+                                <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
+                                    <ui:param name="address" value="#{generalUserAccountCreationBean.upAddress}"/>
+                                    <ui:param name="renderAttribute" value="#{generalUserAccountCreationBean.person.upEmployee}"/>
+                                    <ui:param name="prefix" value="e"/>
+                                    <ui:define name="header">
+                                    </ui:define>
+                                </ui:decorate>
+                            </p:panel>
+                        </p:panel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="false"/>
                         <p:commandButton styleClass="button" value="#{lang['CreateUserAccount']}" id="createUser" action="#{generalUserAccountCreationBean.performGeneralUserAccountCreationRequest()}" process="@all" update="@all">                            
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>

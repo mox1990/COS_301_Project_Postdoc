@@ -56,16 +56,21 @@ public class NotificationBarRequestBean {
     
     public List<Issue> getOutstandingIssues()
     {
+        System.out.println("====================================================================================================Start Notification bar init");
         try 
         {
-            return notifierServicesLocal.loadAllPendingIssuesForSession(sessionManagerBean.getSession());
+            List<Issue> issues = notifierServicesLocal.loadAllPendingIssuesForSession(sessionManagerBean.getSession());
+            System.out.println("====================================================================================================End Notification bar init");
+            return issues;
         } 
         catch (Exception ex) 
         {
             ExceptionUtil.handleException(null, ex);
             ExceptionUtil.logException(NotificationBarRequestBean.class, ex);
+            System.out.println("====================================================================================================End Notification bar init");
             return new ArrayList<Issue>();
         }
+        
     }
 
     public AnnouncementViewerDependBean getAnnouncementViewerDependBean() {

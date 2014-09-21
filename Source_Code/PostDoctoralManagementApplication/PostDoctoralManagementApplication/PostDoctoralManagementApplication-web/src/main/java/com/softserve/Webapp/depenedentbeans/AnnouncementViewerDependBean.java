@@ -42,7 +42,7 @@ public class AnnouncementViewerDependBean implements Serializable {
     
     public boolean isImageEmpty(Announcement announcement)
     {
-        return announcement == null || isEmpty(announcement.getImage());
+        return announcement == null || announcement.getImage() == null || isEmpty(announcement.getImage());
     }
     
     public StreamedContent loadImageForAnnoucement(Announcement announcement)

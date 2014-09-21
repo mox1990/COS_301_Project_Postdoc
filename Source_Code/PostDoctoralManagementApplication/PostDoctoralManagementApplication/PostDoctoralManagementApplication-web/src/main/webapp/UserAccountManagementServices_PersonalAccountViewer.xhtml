@@ -21,46 +21,51 @@
             <div>
                 <h:form id="personalAccFrom">
                     <center>
-                        <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
-                            <ui:param name="person" value="#{userAccountsPersonalAccountEditBean.person}"/>
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="emailEditable" value="#{false}"/>
-                            <ui:param name="employeeEnabled" value="#{true}"/>
-                            <ui:param name="retypePasswordValue" value="#{userAccountsPersonalAccountEditBean.reTypePassword}"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Person information"/>
-                            </ui:define>
-                        </ui:decorate>
-
-                        <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                            <ui:param name="address" value="#{userAccountsPersonalAccountEditBean.address}"/>
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="prefix" value="r"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Residential address"/>
-                            </ui:define>
-                        </ui:decorate>                        
-                                                
-                        <p:outputPanel id="upEmployeeInfoPanel">
-                            <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
-                                <ui:param name="employeeInformation" value="#{userAccountsPersonalAccountEditBean.employeeInformation}"/>
-                                <ui:param name="locationBean" value="#{userAccountsPersonalAccountEditBean.locationFinderDependBean}"/>
-                                <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
-                                <ui:param name="employeeIDEditable" value="#{false}"/>
+                        <p:panel header="#{lang['PersonInformation']}">
+                            <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
+                                <ui:param name="person" value="#{userAccountsPersonalAccountEditBean.person}"/>
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="emailEditable" value="#{false}"/>
+                                <ui:param name="employeeEnabled" value="#{true}"/>
+                                <ui:param name="retypePasswordValue" value="#{userAccountsPersonalAccountEditBean.reTypePassword}"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
                                 </ui:define>
                             </ui:decorate>
-                            
+                        </p:panel>
+                        
+                        <p:panel header="#{lang['ResidentialAddress']}">
                             <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                                <ui:param name="address" value="#{userAccountsPersonalAccountEditBean.upAddress}"/>
-                                <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
-                                <ui:param name="prefix" value="e"/>
+                                <ui:param name="address" value="#{userAccountsPersonalAccountEditBean.address}"/>
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="prefix" value="r"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="UP office address"/>
                                 </ui:define>
-                            </ui:decorate>                            
-                        </p:outputPanel>
+                            </ui:decorate>    
+                        </p:panel>
+                                                
+                        <p:panel id="upEmployeeInfoPanel" header="Insitatute employement information" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                            <p:panel header="#{lang['UPEmploymentInformation']}">
+                                <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
+                                    <ui:param name="employeeInformation" value="#{userAccountsPersonalAccountEditBean.employeeInformation}"/>
+                                    <ui:param name="locationBean" value="#{userAccountsPersonalAccountEditBean.locationFinderDependBean}"/>
+                                    <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
+                                    <ui:param name="employeeIDEditable" value="#{false}"/>
+                                    <ui:define name="header">
+                                    </ui:define>
+                                </ui:decorate>
+                            </p:panel>
+                            
+                            <p:panel header="#{lang['UPOfficeAddress']}">
+                                <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
+                                    <ui:param name="address" value="#{userAccountsPersonalAccountEditBean.upAddress}"/>
+                                    <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
+                                    <ui:param name="prefix" value="e"/>
+                                    <ui:define name="header">
+                                        <h:outputText styleClass="header2" value="UP office address"/>
+                                    </ui:define>
+                                </ui:decorate>
+                            </p:panel>
+                        </p:panel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
                         <p:commandButton styleClass="button" value="Save changes" id="saveChanges" action="#{userAccountsPersonalAccountEditBean.performPersonalUserAccountEditRequest()}" process="@form" update="@form" >
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>

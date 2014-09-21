@@ -20,13 +20,13 @@
                         <p:message for="eorganisation" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="Start date:" for="estartDate"/>                                
-                        <p:calendar id="estartDate" mask="true" value="#{currentExperience.startDate}" required="true" pattern="yyyy/MM/dd">
+                        <p:calendar id="estartDate" mask="true" value="#{currentExperience.startDate}" required="true" pattern="yyyy/MM/dd" navigator="true">
                             <f:convertDateTime pattern="yyyy/MM/dd"/>
                         </p:calendar>
                         <p:message for="estartDate" styleClass="fieldErrorMessage"/>
 
                         <p:outputLabel value="End date:" for="eendDate"/>                                
-                        <p:calendar id="eendDate" mask="true" value="#{currentExperience.endDate}" required="true" pattern="yyyy/MM/dd">
+                        <p:calendar id="eendDate" mask="true" value="#{currentExperience.endDate}" required="true" pattern="yyyy/MM/dd" navigator="true">
                             <f:convertDateTime pattern="yyyy/MM/dd"/>
                         </p:calendar>
                         <p:message for="eendDate" styleClass="eendDate"/>

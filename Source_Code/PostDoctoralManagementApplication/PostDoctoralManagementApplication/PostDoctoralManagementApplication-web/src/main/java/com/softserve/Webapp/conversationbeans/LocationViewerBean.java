@@ -12,13 +12,18 @@ import com.softserve.DBEntities.Institution;
 import com.softserve.Webapp.TreeNodeWrapper;
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
+import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.ejb.LocationManagementServiceLocal;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.component.tree.Tree;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -33,15 +38,20 @@ import org.primefaces.model.TreeNode;
 public class LocationViewerBean implements Serializable {
 
     @Inject
+    private SessionManagerBean sessionManagerBean;
+    @Inject
     private ConversationManagerBean conversationManagerBean;
     @Inject
     private Conversation conversation;
+    @EJB
+    private LocationManagementServiceLocal locationManagementServiceLocal;
     
     @Inject
     private LocationFinderDependBean locationFinderDependBean;
     
     private TreeNode root;
     private TreeNode selectedNode;
+    private String name;
     
     /**
      * Creates a new instance of LocationViewerBean
@@ -55,7 +65,7 @@ public class LocationViewerBean implements Serializable {
         conversationManagerBean.registerConversation(conversation);
         conversationManagerBean.startConversation(conversation);
         
-        root = new DefaultTreeNode("Instiutions", null);
+        root = new DefaultTreeNode("Institutions","Instiutions", null);
         locationFinderDependBean.init(null);
         List<Institution> institutions = locationFinderDependBean.getInstitutions();
         
@@ -85,15 +95,21 @@ public class LocationViewerBean implements Serializable {
     
     public void onNodeSelect(NodeSelectEvent event)
     {
-        TreeNode node = event.getTreeNode();
-        
-        if(node.getType().equals("Institution"))
-        {
-            loadFacultyNodes(node);
-        }
-        else if(node.getType().equals("Faculty"))
-        {
-            loadDepartmentNodes(node);
+        expand(event.getTreeNode());
+    }
+    
+    private void expand(TreeNode node)
+    {
+        switch (node.getType()) {
+            case "Institution":
+                loadFacultyNodes(node);
+                break;
+            case "Faculty":
+                loadDepartmentNodes(node);
+                break;
+            case "Institutions":
+                loadInstitutionNode(node);
+                break;
         }
         
         TreeNode parent = node;
@@ -102,6 +118,30 @@ public class LocationViewerBean implements Serializable {
         {            
             parent.setExpanded(true);
             parent = parent.getParent();
+        }
+    }
+    
+    public void loadInstitutionNode(TreeNode node)
+    {
+        List<Institution> institutions = locationFinderDependBean.loadAllInstitutions();
+        
+        for(Institution institution : institutions)
+        {            
+            boolean found = false;
+            for(TreeNode childIn : node.getChildren())
+            {
+                if(childIn.getData().equals(institution))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {                
+                TreeNode child = new DefaultTreeNode("Institution",institution, root);
+            }           
+            
         }
     }
     
@@ -209,6 +249,152 @@ public class LocationViewerBean implements Serializable {
         this.root = root;
     }
     
+    public Institution getSelectedAsInstitution()
+    {
+        if(selectedNode.getData().getClass() == Institution.class)
+        {
+            return (Institution) selectedNode.getData();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public Faculty getSelectedAsFaculty()
+    {
+        if(selectedNode.getData().getClass() == Faculty.class)
+        {
+            return (Faculty) selectedNode.getData();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public Department getSelectedAsDepartment()
+    {
+        if(selectedNode.getData().getClass() == Department.class)
+        {
+            return (Department) selectedNode.getData();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public String getNextType()
+    {
+        switch (selectedNode.getType()) {
+            case "Institutions":
+                return "Institution";
+            case "Institution":
+                return "Faculty";
+            case "Faculty":
+                return "Department";
+        }
+        
+        return "";
+    }
+    
+    public boolean nodeBelow()
+    {
+        return selectedNode != null && !selectedNode.getType().equals("Department");
+    }
+    
+    public boolean currentNodeActive()
+    {
+        return selectedNode != null && !selectedNode.getType().equals("Institutions");
+    }
+    
+    public void preformUpdateOfSelectedNode()
+    {
+        try
+        {
+            if(getSelectedAsDepartment() != null)
+            {
+                
+                Department department = locationManagementServiceLocal.getDepartment(getSelectedAsDepartment().getDepartmentID());
+                department.setName(getSelectedAsDepartment().getName());
+                locationManagementServiceLocal.updateDepartment(sessionManagerBean.getSession(), department);
+            }
+            else if (getSelectedAsFaculty() != null)
+            {
+                Faculty faculty = locationManagementServiceLocal.getFaculty(getSelectedAsFaculty().getFacultyID());
+                faculty.setName(getSelectedAsFaculty().getName());
+                locationManagementServiceLocal.updateFaculty(sessionManagerBean.getSession(), faculty);
+            }
+            else if(getSelectedAsInstitution() != null)
+            {
+                Institution institution = locationManagementServiceLocal.getInstitution(getSelectedAsInstitution().getInstitutionID());
+                institution.setName(getSelectedAsFaculty().getName());
+                locationManagementServiceLocal.updateInstitution(sessionManagerBean.getSession(),institution);
+            }
+            else
+            {
+                throw new Exception("Invalid selection to preform update on");
+            }
+            
+            expand(selectedNode);
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.handleException(null, ex);
+            ExceptionUtil.logException(LocationViewerBean.class, ex);
+        }
+    }
+    
+    public void preformCreationOfNewLocation()
+    {
+        try
+        {
+            if(getSelectedAsFaculty() != null)
+            {
+                Faculty faculty = locationManagementServiceLocal.getFaculty(getSelectedAsFaculty().getFacultyID());
+                
+                Department department = new Department();
+                department.setName(name);
+                department.setFaculty(faculty);
+                locationManagementServiceLocal.createDepartment(sessionManagerBean.getSession(), department);
+            }
+            else if (getSelectedAsInstitution() != null)
+            {
+                Institution institution = locationManagementServiceLocal.getInstitution(getSelectedAsInstitution().getInstitutionID());
+                
+                Faculty faculty = new Faculty();
+                faculty.setInstitution(institution);
+                faculty.setName(name);
+                locationManagementServiceLocal.createFaculty(sessionManagerBean.getSession(), faculty);
+            }
+            else if(selectedNode == root)
+            {
+                Institution institution = new Institution();
+                institution.setName(name);
+                locationManagementServiceLocal.createInstitution(sessionManagerBean.getSession(),institution);
+            }
+            else
+            {
+                throw new Exception("Invalid selection to creation under");
+            }
+            
+            expand(selectedNode);
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.handleException(null, ex);
+            ExceptionUtil.logException(LocationViewerBean.class, ex);
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     
     
 }

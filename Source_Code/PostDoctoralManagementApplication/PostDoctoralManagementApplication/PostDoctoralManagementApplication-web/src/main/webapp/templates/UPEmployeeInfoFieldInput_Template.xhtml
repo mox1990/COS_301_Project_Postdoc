@@ -14,8 +14,10 @@
             <p:inputText id="systemID" value="#{employeeInformation.employeeID}" disabled="#{!employeeIDEditable}"/>
             <p:message for="systemID" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Date of employeement" for="dateOfAppointment"/>                                
-            <p:calendar id="dateOfAppointment" value="#{employeeInformation.dateOfAppointment}" navigator="true" pattern="yyyy-mm-dd"/>
+            <p:outputLabel value="Date of employeement" for="dateOfAppointment:"/>                                
+            <p:calendar id="dateOfAppointment" value="#{employeeInformation.dateOfAppointment}" navigator="true" pattern="yyyy/MM/dd" mask="true" required="true">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+            </p:calendar>
             <p:message for="dateOfAppointment" styleClass="fieldErrorMessage"/>
 
             <p:outputLabel value="Appointment status:" for="appointmentStatus"/>                                
@@ -26,12 +28,13 @@
             <p:inputText id="position" value="#{employeeInformation.position}"/>
             <p:message for="position" styleClass="fieldErrorMessage"/>
             
-            <ui:decorate template="LocationSelection_Component.xhtml">
-                <ui:param name="locationBean" value="#{locationBean}"/>
-                <ui:param name="departmentField" value="#{employeeInformation.department}"/>
-            </ui:decorate>
+            
             
         </h:panelGrid>
+        <ui:decorate template="LocationSelection_Component.xhtml">
+            <ui:param name="locationBean" value="#{locationBean}"/>
+            <ui:param name="departmentField" value="#{employeeInformation.department}"/>
+        </ui:decorate>
     </ui:component>
 </html>
 

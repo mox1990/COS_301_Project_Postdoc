@@ -11,14 +11,17 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.ejb.AnnouncementManagementServiceLocal;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -61,6 +64,19 @@ public class AnnouncementCreationBean implements Serializable {
 
     public AnnouncementCreationDependBean getAnnouncementCreationDependBean() {
         return announcementCreationDependBean;
+    }
+
+    public void setAnnouncementCreationDependBean(AnnouncementCreationDependBean announcementCreationDependBean) {
+        this.announcementCreationDependBean = announcementCreationDependBean;
+    }
+    
+    public void uploadEvent(FileUploadEvent event)
+    {
+        if(event.getFile() != null)
+        {
+            announcementCreationDependBean.setFileUpload(event.getFile());
+            MessageUtil.CreateGlobalFacesMessage("Uploaded", announcementCreationDependBean.getFileUpload().toString(),FacesMessage.SEVERITY_INFO);
+        }
     }
     
     public String preformCreationAnnouncmentRequest()

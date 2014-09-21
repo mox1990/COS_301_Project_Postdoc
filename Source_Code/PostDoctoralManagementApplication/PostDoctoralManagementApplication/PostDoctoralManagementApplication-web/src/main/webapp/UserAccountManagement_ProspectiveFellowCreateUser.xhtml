@@ -37,45 +37,49 @@
             <div>
                 <h:form id="createForm">
                     <center>
-                        <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
-                            <ui:param name="person" value="#{prospectiveUserAccountCreationBean.person}"/>
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="emailEditable" value="#{true}"/>
-                            <ui:param name="employeeEnabled" value="#{true}"/>
-                            <ui:param name="retypePasswordValue" value="#{prospectiveUserAccountCreationBean.reTypePassword}"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Person information"/>
-                            </ui:define>
-                        </ui:decorate>
-
-                        <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                            <ui:param name="address" value="#{prospectiveUserAccountCreationBean.address}"/>
-                            <ui:param name="renderAttribute" value="#{true}"/>
-                            <ui:param name="prefix" value="r"/>
-                            <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Residential address"/>
-                            </ui:define>
-                        </ui:decorate>
-
-                        <p:panel id="upEmployeeInfoPanel">
-                            <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
-                                <ui:param name="employeeInformation" value="#{prospectiveUserAccountCreationBean.employeeInformation}"/>
-                                <ui:param name="locationBean" value="#{prospectiveUserAccountCreationBean.locationFinderDependBean}"/>
-                                <ui:param name="renderAttribute" value="#{prospectiveUserAccountCreationBean.person.upEmployee}"/>
-                                <ui:param name="employeeIDEditable" value="#{true}"/>
+                        <p:panel header="Person information">
+                            <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
+                                <ui:param name="person" value="#{prospectiveUserAccountCreationBean.person}"/>
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="emailEditable" value="#{true}"/>
+                                <ui:param name="employeeEnabled" value="#{true}"/>
+                                <ui:param name="retypePasswordValue" value="#{prospectiveUserAccountCreationBean.reTypePassword}"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
                                 </ui:define>
                             </ui:decorate>
-                            
+                        </p:panel>
+                        
+                        <p:panel header="Residential address">
                             <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
-                                <ui:param name="address" value="#{prospectiveUserAccountCreationBean.upAddress}"/>
-                                <ui:param name="renderAttribute" value="#{prospectiveUserAccountCreationBean.person.upEmployee}"/>
-                                <ui:param name="prefix" value="e"/>
+                                <ui:param name="address" value="#{prospectiveUserAccountCreationBean.address}"/>
+                                <ui:param name="renderAttribute" value="#{true}"/>
+                                <ui:param name="prefix" value="r"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="UP office address"/>
                                 </ui:define>
-                            </ui:decorate>                            
+                            </ui:decorate>
+                        </p:panel>
+
+                        <p:panel id="upEmployeeInfoPanel" header="Insitatute employement information" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                            <p:panel header="University of Pretoria employment information" rendered="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                                <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
+                                    <ui:param name="employeeInformation" value="#{prospectiveUserAccountCreationBean.employeeInformation}"/>
+                                    <ui:param name="locationBean" value="#{prospectiveUserAccountCreationBean.locationFinderDependBean}"/>
+                                    <ui:param name="renderAttribute" value="#{prospectiveUserAccountCreationBean.person.upEmployee}"/>
+                                    <ui:param name="employeeIDEditable" value="#{true}"/>
+                                    <ui:define name="header">
+                                    </ui:define>
+                                </ui:decorate>
+                            </p:panel>
+                            
+                            <p:panel header="UP office address" rendered="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                                <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
+                                    <ui:param name="address" value="#{prospectiveUserAccountCreationBean.upAddress}"/>
+                                    <ui:param name="renderAttribute" value="#{prospectiveUserAccountCreationBean.person.upEmployee}"/>
+                                    <ui:param name="prefix" value="e"/>
+                                    <ui:define name="header">
+                                    </ui:define>
+                                </ui:decorate>
+                            </p:panel>
                         </p:panel>
                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                         <p:commandButton styleClass="button" value="Create user account" id="createUser"  action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" update="createForm" process="@form">

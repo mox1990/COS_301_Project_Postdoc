@@ -131,7 +131,7 @@ public class AnnouncementJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Announcement> q = em.createQuery("SELECT a FROM Announcement a WHERE a.startDate >= CURRENT_TIMESTAMP AND a.endDate < CURRENT_TIMESTAMP", Announcement.class);
+        TypedQuery<Announcement> q = em.createQuery("SELECT a FROM Announcement a WHERE a.startDate <= CURRENT_TIMESTAMP AND a.endDate >= CURRENT_TIMESTAMP", Announcement.class);
         
         return q.getResultList();
     }

@@ -15,7 +15,7 @@
             <p:message for="venue" styleClass="fieldErrorMessage"/>           
             
             <p:outputLabel value="Starting date and time:" for="startDate"/>                                
-            <p:calendar id="startDate" mask="true" value="#{committeeMeeting.startDate}" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
+            <p:calendar id="startDate" mask="true" value="#{committeeMeeting.startDate}" navigator="true" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
             <p:message for="startDate" styleClass="fieldErrorMessage"/>                                                                        
         </h:panelGrid>
     </ui:component>

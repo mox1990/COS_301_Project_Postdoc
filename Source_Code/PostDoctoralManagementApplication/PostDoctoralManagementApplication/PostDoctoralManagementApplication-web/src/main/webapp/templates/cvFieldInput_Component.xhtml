@@ -15,7 +15,7 @@
                     <p:message for="idNumber" styleClass="fieldErrorMessage"/>
 
                     <p:outputLabel value="Date of birth:" for="dateOfBirth"/>                                
-                    <p:calendar id="dateOfBirth" mask="true" value="#{bean.cv.dateOfBirth}" pattern="yyyy/MM/dd" required="true">
+                    <p:calendar id="dateOfBirth" mask="true" value="#{bean.cv.dateOfBirth}" pattern="yyyy/MM/dd" navigator="true" required="true">
                         <f:convertDateTime pattern="yyyy/MM/dd"/>
                     </p:calendar>
                     <p:message for="dateOfBirth" styleClass="fieldErrorMessage"/>
