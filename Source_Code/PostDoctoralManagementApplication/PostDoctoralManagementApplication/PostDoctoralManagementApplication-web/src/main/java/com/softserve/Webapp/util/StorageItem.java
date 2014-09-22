@@ -53,7 +53,7 @@ public class StorageItem implements Serializable {
 
     @Override
     public String toString() {
-        return key + " = " + object.toString();
+        return key + " = " + object;
     }
     
 }

@@ -13,6 +13,7 @@ import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.auxillary.Issue;
 import com.softserve.ejb.AnnouncementManagementServiceLocal;
 import com.softserve.ejb.NotifierServicesLocal;
+import com.softserve.system.Session;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,37 @@ public class NotificationBarRequestBean {
     public NotificationBarRequestBean() {
     }
     
+    public boolean isUserLoggedIn()
+    {
+        try
+        {               
+            return sessionManagerBean.getSession().getLoggedInStatus();
+        }
+        catch(Exception ex)
+        {
+            return false;
+        }
+    }
+    
+    public String getUserGreeting()
+    {
+        try
+        { 
+            Session session = sessionManagerBean.getSession();
+            if(session.getLoggedInStatus())
+            {
+                return "You are logged in as " + session.getUser().getCompleteName() + " (" + session.getUser().getSystemID() + ")";
+            }
+            else
+            {
+                return "Please login to view details";
+            }
+        }
+        catch(Exception ex)
+        {
+            return "Please login to view details";
+        }
+    }
     
     public List<Issue> getOutstandingIssues()
     {

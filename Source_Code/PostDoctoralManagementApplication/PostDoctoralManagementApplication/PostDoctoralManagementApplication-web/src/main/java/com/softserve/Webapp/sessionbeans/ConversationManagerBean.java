@@ -35,6 +35,8 @@ public class ConversationManagerBean implements Serializable {
     @PostConstruct
     public void init()
     {
+        System.out.println("=============Conversation manager: Starting manager");
+        
         trackedConversations = new ArrayList<Conversation>();
     }
     
@@ -46,6 +48,7 @@ public class ConversationManagerBean implements Serializable {
         }
         else
         {
+            System.out.println("=============Conversation manager: Cannot find as Conversation at index " + index + " is not being tracked");
             throw new ArrayIndexOutOfBoundsException();
         }
     }
@@ -56,17 +59,18 @@ public class ConversationManagerBean implements Serializable {
         {
             if(!isConversationActive(index))
             {
+                System.out.println("=============Conversation manager: Starting conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + "...");
                 trackedConversations.get(index).begin();
-                System.out.println("Conversation has started");
+                System.out.println("=============Conversation manager: Conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + " started");
             }
             else
             {
-                System.out.println("Conversation has already been started");
+                System.out.println("=============Conversation manager: Conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + " is already active");
             }
         }
         else
         {
-            throw new ArrayIndexOutOfBoundsException();
+            System.out.println("=============Conversation manager: Cannot start as Conversation at index " + index + " is not being tracked");
         }
     }
     
@@ -81,12 +85,18 @@ public class ConversationManagerBean implements Serializable {
         {
             if(isConversationActive(index))
             {
+                System.out.println("=============Conversation manager: Stopping conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + "...");
                 trackedConversations.get(index).end();
+                System.out.println("=============Conversation manager: Conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + " stopped");
+            }
+            else
+            {
+                System.out.println("=============Conversation manager: Conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + " has already been stopped");
             }
         }
         else
         {
-            throw new ArrayIndexOutOfBoundsException();
+            System.out.println("=============Conversation manager:  Cannot stop as  Conversation at index " + index + " is not being tracked");
         }
     }
     
@@ -103,6 +113,7 @@ public class ConversationManagerBean implements Serializable {
         }
         else
         {
+            System.out.println("=============Conversation manager: Cannot check activity as Conversation at index " + index + " is not being tracked");
             throw new ArrayIndexOutOfBoundsException();
         }
     }
@@ -111,18 +122,19 @@ public class ConversationManagerBean implements Serializable {
     {
         if(!isConversationRegistered(conversation))
         {
+            System.out.println("=============Conversation manager: Registering conversation (cid = " + conversation.getId() + ")...");
             trackedConversations.add(conversation);
-            System.out.println("Conversation registered");
+            System.out.println("=============Conversation manager: Conversation (cid = " + trackedConversations.get(trackedConversations.size() - 1).getId() + ") at index " +  (trackedConversations.size() - 1) + " registered");
         }
         else
         {
-            System.out.println("Conversation has already been registered");
+            System.out.println("=============Conversation manager: Conversation (cid = " + conversation.getId() + ") has already been registered");
         }
     }
         
     public void deregisterConversation(int index) throws ArrayIndexOutOfBoundsException
     {
-        System.out.println("=================next");
+        
         if(index > -1 && index < trackedConversations.size())
         {
              
@@ -130,12 +142,14 @@ public class ConversationManagerBean implements Serializable {
             {
                 stopConversation(index);
             }
-            
+            System.out.println("=============Conversation manager: Deregistering conversation (cid = " + trackedConversations.get(index).getId() + ") at index " +  index + "...");
+            Conversation c = trackedConversations.get(index);
             trackedConversations.remove(index);
+            System.out.println("=============Conversation manager: Conversation (cid = " + c.getId() + ") at index " +  index + " dergistered");
         }
         else
         {
-            System.out.println("Conversation is not being tracked");
+            System.out.println("=============Conversation manager: Cannot deregister as Conversation at index " + index + " is not being tracked");
         }
     }
     

@@ -34,7 +34,9 @@
                                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                             </h:outputText>
                             <h:outputText styleClass="text-label" value="Image:"/>
-                            <p:graphicImage value="#{announcementViewerDependBean.loadImageForAnnoucement(annouce)}" width="150" height="250"/>
+                            <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.imageForAnnoucement}" width="150" height="250">
+                                <f:param name="announceID" value="#{annouce.announcementID}"/>
+                            </p:graphicImage>
                         </h:panelGrid>
 
                         <ui:insert name="commandButtons"/>                            

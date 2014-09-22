@@ -20,6 +20,7 @@ import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -67,6 +68,8 @@ public class AnnouncementEditBean implements Serializable {
             }
 
             announcementCreationDependBean.init(announcement);
+            
+            sessionManagerBean.addObjectToSessionStorage("FILEUPLOAD", null);
         }
         catch(Exception ex)
         {
@@ -84,7 +87,12 @@ public class AnnouncementEditBean implements Serializable {
     {
         try
         {
-            announcementManagementServiceLocal.createAnnouncement(sessionManagerBean.getSession(), announcementCreationDependBean.getCombinedAnnouncement());
+            if(announcementCreationDependBean.getFileUpload() == null)
+            {
+                announcementCreationDependBean.setFileUpload(sessionManagerBean.getObjectFromSessionStorage("FILEUPLOAD", UploadedFile.class));
+            }
+            
+            announcementManagementServiceLocal.updateAnnouncement(sessionManagerBean.getSession(), announcementCreationDependBean.getCombinedAnnouncement());
             return navigationManagerBean.goToAnnouncementServiceHomeView();
         }
         catch(Exception ex)

@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
@@ -20,7 +21,7 @@ import javax.inject.Named;
  * @author kgothatso
  */
 @Named(value = "languageBean")
-@ConversationScoped
+@SessionScoped
 public class LanguageBean implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -51,8 +52,9 @@ public class LanguageBean implements Serializable {
      * Creates a new instance of LanguageBean
      */
     public LanguageBean() {
-        System.out.println("Being born...");
     }
+    
+    
     
     public void langLocaleCodeChanged(ValueChangeEvent e)
     {

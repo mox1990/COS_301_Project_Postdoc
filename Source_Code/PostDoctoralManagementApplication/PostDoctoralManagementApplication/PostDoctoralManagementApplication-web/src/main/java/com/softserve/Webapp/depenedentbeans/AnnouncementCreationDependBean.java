@@ -7,9 +7,14 @@
 package com.softserve.Webapp.depenedentbeans;
 
 import com.softserve.DBEntities.Announcement;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import org.codehaus.plexus.util.IOUtil;
 import org.primefaces.model.DefaultUploadedFile;
 import org.primefaces.model.UploadedFile;
 
@@ -61,12 +66,32 @@ public class AnnouncementCreationDependBean implements Serializable{
     
     public Announcement getCombinedAnnouncement()
     {
-        System.out.println("==============FIle " + fileUpload);
+        System.out.println("==============Combined announcment " + fileUpload);
         Announcement a = new Announcement();
+        
         if(fileUpload != null)
         {        
-            System.out.println("==============FIle " + fileUpload.getFileName() + " " + fileUpload.getContentType());
-            a.setImage(fileUpload.getContents());
+            System.out.println("==============Using file " + fileUpload.getFileName() + " " + fileUpload.getContentType());
+            
+            System.out.println("==============file content " + Arrays.toString(fileUpload.getContents()));
+            if(fileUpload.getContents() == null)
+            {
+                try 
+                {
+                    a.setImage(IOUtil.toByteArray(fileUpload.getInputstream()));
+                } 
+                catch (IOException ex) 
+                {
+                    Logger.getLogger(AnnouncementCreationDependBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else
+            {
+                a.setImage(fileUpload.getContents());
+            }
+            
+            
+            System.out.println("==============file content in announcement" + Arrays.toString(a.getImage()));
         }
         
         a.setEndDate(announcement.getEndDate());
