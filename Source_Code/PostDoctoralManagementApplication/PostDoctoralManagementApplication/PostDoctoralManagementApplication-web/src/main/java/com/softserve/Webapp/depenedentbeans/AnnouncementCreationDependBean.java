@@ -91,15 +91,24 @@ public class AnnouncementCreationDependBean implements Serializable{
             }
             
             
-            System.out.println("==============file content in announcement" + Arrays.toString(a.getImage()));
+            
         }
         
+        if(a.getImage() == null)
+        {
+            a.setImage(announcement.getImage());
+        }
+        
+        System.out.println("==============file content in announcement" + Arrays.toString(a.getImage()));
+        
+        a.setAnnouncementID(announcement.getAnnouncementID());
+        a.setTimestamp(announcement.getTimestamp());
         a.setEndDate(announcement.getEndDate());
         a.setHeadline(announcement.getHeadline());
         a.setStartDate(announcement.getStartDate());
         a.setMessage(announcement.getMessage());
         
-        System.out.println("==============Announcement " + a.getHeadline()+ " " + a.getMessage());
+        System.out.println("==============Announcement " + a.getHeadline()+ " " + a.getMessage() + " " + a);
         
         return a;
     }

@@ -87,11 +87,12 @@ public class AnnouncementEditBean implements Serializable {
     {
         try
         {
-            if(announcementCreationDependBean.getFileUpload() == null)
+            UploadedFile uploadedFile = sessionManagerBean.getObjectFromSessionStorage("FILEUPLOAD", UploadedFile.class);
+            if(uploadedFile != null)
             {
-                announcementCreationDependBean.setFileUpload(sessionManagerBean.getObjectFromSessionStorage("FILEUPLOAD", UploadedFile.class));
+                announcementCreationDependBean.setFileUpload(uploadedFile);
             }
-            
+            System.out.println("===Announce " + announcementCreationDependBean.getAnnouncement().getAnnouncementID());
             announcementManagementServiceLocal.updateAnnouncement(sessionManagerBean.getSession(), announcementCreationDependBean.getCombinedAnnouncement());
             return navigationManagerBean.goToAnnouncementServiceHomeView();
         }

@@ -53,7 +53,7 @@
 
                 <p:dialog header="Announcements" modal="true" widgetVar="announceDialog">
                     <h:form>
-                        <p:tabView value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" orientation="left">
+                        <p:tabView value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" orientation="top">
                             <p:tab title="#{announcement.headline}" > 
                                 <h:panelGrid cellpadding="10px" columns="2">                                        
                                     <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.imageForAnnoucement}" width="150" height="250">
