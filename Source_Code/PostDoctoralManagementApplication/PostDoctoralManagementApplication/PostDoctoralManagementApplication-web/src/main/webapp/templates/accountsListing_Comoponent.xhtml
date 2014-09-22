@@ -13,7 +13,7 @@
                 </div>
             </c:if>
             <c:if test="#{userAccounts.size() > 0}">  
-                <p:accordionPanel dynamic="true" cache="true" value="#{userAccounts}" var="account" styleClass="box-round">
+                <p:accordionPanel dynamic="true" cache="true" value="#{userAccounts}" var="account" styleClass="box-round" activeIndex="">
                     <p:tab title="User account - #{account.systemID} - #{account.completeName}" >
                         <h:panelGrid columns="2">
                             <h:outputText styleClass="text-label" value="Full name:"/>

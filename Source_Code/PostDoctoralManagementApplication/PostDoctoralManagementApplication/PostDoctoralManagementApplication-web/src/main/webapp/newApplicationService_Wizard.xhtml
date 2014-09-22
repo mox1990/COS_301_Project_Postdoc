@@ -11,16 +11,16 @@
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">Open new application wizard</h1>
-                 <h2>Please complete follow the below wizard to open a new application</h2>
+                <h1 class="header1">#{lang['OpenApplicationWizard']}</h1>
+                 <h2>#{lang['OpenApplicationWizardPrompt']}</h2>
             </div>
             
             <div>
                 <p:tabView activeIndex="#{newApplicationCreationBean.wizardActiveTab}" id="wizardTab">
-                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 0}" title="Step 1: CV details">
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 0}" title="#{lang['OpenApplicationCVTab']}">
                         <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 0}">
                             <center>
-                                <h2 class="header2">Create or update your CV</h2>
+                                <h2 class="header2">#{lang['UpdateCVHeader']}</h2>
                                 <ui:decorate template="templates/cvFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="bean" value="#{newApplicationCreationBean.CVCreationDependBean}"/>
@@ -34,10 +34,10 @@
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 1}" title="Step 2: Application details">
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 1}" title="#{lang['OpenApplicationApplicationDetailsTab']}">
                         <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 1}">
                             <center>
-                                <h2 class="header2">Complete application form</h2>
+                                <h2 class="header2">#{lang['CompleteApplicationFormHeader']}</h2>
                                 <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="bean" value="#{newApplicationCreationBean.applicationCreationDependBean}"/>
@@ -51,10 +51,10 @@
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 2}" title="Step 3: Grant holder details">
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 2}" title="#{lang['OpenApplicationGrantHolderTab']}">
                         <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 2}">
                             <center>
-                                <h2 class="header2">Specify grant holder</h2>
+                                <h2 class="header2">#{lang['SpecifyGrantHolder']}</h2>
                                 <h:form>
                                     <ui:decorate template="templates/personOnDemandFieldInputEmployee_Component.xhtml">
                                         <ui:param name="renderAttribute" value="#{true}"/>
@@ -70,10 +70,10 @@
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 3}" title="Step 4: Referees details">
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 3}" title="#{lang['OpenApplicationRefereesTab']}">
                         <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 3}">
                             <center>
-                                <h2 class="header2">Specify referees</h2>
+                                <h2 class="header2">#{lang['SpecifyReferees']}</h2>
                                 <h:form>
                                     <p:outputPanel id="referees">
                                         <p:outputPanel id="refereesTable">
@@ -110,19 +110,19 @@
                             </center>                        
                         </p:outputPanel>    
                     </p:tab>
-                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 4}" title="Step 5: Sumbit new application">
+                    <p:tab disabled="#{newApplicationCreationBean.wizardActiveTab != 4}" title="#{lang['OpenApplicationSubmitTab']}">
                         <p:outputPanel rendered="#{newApplicationCreationBean.wizardActiveTab == 4}">
                             <center>
-                                <h2 class="header2">Submit application</h2>
+                                <h2 class="header2">#{lang['SubmitApplicationHeader']}</h2>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                                     <p:commandButton process="@this" update="@form" action="#{newApplicationCreationBean.submitApplication()}" value="Confirm application submission" styleClass="button button-fill">
-                                        <p:confirm header="Application submission confirmation" message="Are you sure you wish to submit this application? Note: Sumbitting this application means you agree with the DRIS fellowship application policy and that the information is correct. Warning: Once submitted the application cannot be edited by you." icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['ApplicationSubmissionConfirmation']}" message="#{lang['RenewalConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                                     </p:confirmDialog>
                                 </h:form>
                             </center>                        

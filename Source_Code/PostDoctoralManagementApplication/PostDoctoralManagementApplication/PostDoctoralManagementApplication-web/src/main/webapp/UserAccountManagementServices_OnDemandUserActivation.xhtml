@@ -14,8 +14,8 @@
 
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">On demand user account activation #{userAccountsPersonalAccountEditBean.person.completeName}</h1>
-                 <h2>Please update the fields below to activate</h2>
+                <h1 class="header1">#{lang['OnDemandUserActivation']}#{userAccountsPersonalAccountEditBean.person.completeName}</h1>
+                <h2>#{lang['UpdateAccountFieldsPrompt']}</h2>
             </div>
 
             <div>
@@ -28,7 +28,7 @@
                             <ui:param name="employeeEnabled" value="#{userAccountsPersonalAccountEditBean.isUserEmployee(userAccountsPersonalAccountEditBean.person)}"/>
                             <ui:param name="retypePasswordValue" value="#{userAccountsPersonalAccountEditBean.reTypePassword}"/>
                             <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Person information"/>
+                                <h:outputText styleClass="header2" value="#{lang['PersonInformation']}"/>
                             </ui:define>
                         </ui:decorate>
 
@@ -37,7 +37,7 @@
                             <ui:param name="renderAttribute" value="#{true}"/>
                             <ui:param name="prefix" value="r"/>
                             <ui:define name="header">
-                                <h:outputText styleClass="header2" value="Residential address"/>
+                                <h:outputText styleClass="header2" value="#{lang['ResidentialAddress']}"/>
                             </ui:define>
                         </ui:decorate>                        
                                                 
@@ -48,7 +48,7 @@
                                 <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
                                 <ui:param name="employeeIDEditable" value="#{false}"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="University of Pretoria employment information"/>
+                                    <h:outputText styleClass="header2" value="#{lang['UPEmploymentInformation']}"/>
                                 </ui:define>
                             </ui:decorate>
                             
@@ -57,19 +57,19 @@
                                 <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
                                 <ui:param name="prefix" value="e"/>
                                 <ui:define name="header">
-                                    <h:outputText styleClass="header2" value="UP office address"/>
+                                    <h:outputText styleClass="header2" value="#{lang['UPOfficeAddress']}"/>
                                 </ui:define>
                             </ui:decorate>                            
                         </p:outputPanel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                        <p:commandButton styleClass="button" value="Activate account" id="Activate" action="#{userAccountsPersonalAccountEditBean.performUserAccountActivation()}" process="@form" update="@form">                            
+                        <p:commandButton styleClass="button" value="#{lang['ActivateAccount']}" id="Activate" action="#{userAccountsPersonalAccountEditBean.performUserAccountActivation()}" process="@form" update="@form">                            
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                            <p:confirm header="Activation confirmation" message="Are you sure you wish to activate your account with the following details?" icon="ui-icon-alert"/>
+                            <p:confirm header="#{lang['ActivateAccountConfirmation']}" message="#{lang['ActivateAccountConfirmationMessage']}" icon="ui-icon-alert"/>
                         </p:commandButton>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                         </p:confirmDialog>
                     </center>
                 </h:form>
