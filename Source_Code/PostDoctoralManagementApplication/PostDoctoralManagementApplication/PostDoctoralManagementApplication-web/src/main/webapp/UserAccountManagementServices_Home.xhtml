@@ -15,20 +15,20 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1"> User account management services menu</h1>
-                <h2>Please select the service you wish to use</h2>
+                <h1 class="header1">#{lang['UserAccountManagementServicesMenu']}</h1>
+                <h2>#{lang['InitServicePrompt']}</h2>
             </div>
             <div>
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{true}"/>
                     <ui:param name="showFunction" value="showInfoDiv(1)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
-                    <ui:param name="buttonName" value="Upadate personal user account"/>
+                    <ui:param name="buttonName" value="#{lang['UpdatePersonalAccount']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToUserAccountManagementPersonalAccountViewer"/>
                     <ui:param name="infoContainerID" value="info1"/>
                     <ui:define name="informationContent">
-                        This option allows you to update and/or review the details of your user account.  
+                        #{lang['UpdatePersonalAccountInformationContent']}
                     </ui:define>
                 </ui:decorate>
 
@@ -36,12 +36,12 @@
                     <ui:param name="isPanelRendered" value="#{userAccountsViewerBean.systemAdmin}"/>
                     <ui:param name="showFunction" value="showInfoDiv(2)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
-                    <ui:param name="buttonName" value="Create a new user account"/>
+                    <ui:param name="buttonName" value="#{lang['CreateNewAccount']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToUserAccountManagementGeneralAccountCreationView"/>
                     <ui:param name="infoContainerID" value="info2"/>
                     <ui:define name="informationContent">
-                        This option allows you to create a new user account on the system which can be customized to your needs.
+                        #{lang['CreateNewAccountInformationContent']}
                     </ui:define>
                 </ui:decorate>
 
@@ -49,13 +49,12 @@
                     <ui:param name="isPanelRendered" value="#{userAccountsViewerBean.systemAdmin}"/>
                     <ui:param name="showFunction" value="showInfoDiv(3)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(3)"/>
-                    <ui:param name="buttonName" value="View all user accounts"/>
+                    <ui:param name="buttonName" value="#{lang['ViewAllAccounts']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToUserAccountManagementAccountsViewer"/>
                     <ui:param name="infoContainerID" value="info3"/>
                     <ui:define name="informationContent">
-                        This option allows you to view all the user accounts registered on the system.
-                        Further it provides you with user account editing and removal facilities for those accounts on the system that are active and dormant.
+                        #{lang['ViewAllAccountsInformationContent']}
                     </ui:define>
                 </ui:decorate>
                 
@@ -63,13 +62,12 @@
                     <ui:param name="isPanelRendered" value="#{userAccountsViewerBean.systemAdmin}"/>
                     <ui:param name="showFunction" value="showInfoDiv(4)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
-                    <ui:param name="buttonName" value="On-Demand user account approval service"/>
+                    <ui:param name="buttonName" value="#{lang['OnDemandAccountApproval']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToUserAccountManagementServicesOndemandUserAccountApprovalServiceView"/>
                     <ui:param name="infoContainerID" value="info4"/>
                     <ui:define name="informationContent">
-                        This option allows you to view all the on-demand user accounts that are currently pending approval on the system.
-                        Further it provides you with approval and decline facilities for such accounts.
+                        #{lang['OnDemandAccountApprovalInformationContent']}
                     </ui:define>
                 </ui:decorate> 
             </div>

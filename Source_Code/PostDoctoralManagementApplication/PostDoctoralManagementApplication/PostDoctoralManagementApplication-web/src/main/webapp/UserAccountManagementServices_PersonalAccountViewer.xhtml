@@ -14,8 +14,8 @@
 
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Viewing your user account - #{userAccountsPersonalAccountEditBean.person.completeName}</h1>
-                 <h2>Please update the fields below</h2>
+                <h1 class="header1">#{lang['ViewingAccount']}#{userAccountsPersonalAccountEditBean.person.completeName}</h1>
+                <h2>#{lang['PleaseUpdaTheFieldsBelow']}</h2>
             </div>
 
             <div>
@@ -43,7 +43,7 @@
                             </ui:decorate>    
                         </p:panel>
                                                 
-                        <p:panel id="upEmployeeInfoPanel" header="Insitatute employement information" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                        <p:panel id="upEmployeeInfoPanel" header="#{lang['InstitutionEmploymentInfo']}" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
                             <p:panel header="#{lang['UPEmploymentInformation']}">
                                 <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
                                     <ui:param name="employeeInformation" value="#{userAccountsPersonalAccountEditBean.employeeInformation}"/>
@@ -61,20 +61,20 @@
                                     <ui:param name="renderAttribute" value="#{userAccountsPersonalAccountEditBean.person.upEmployee}"/>
                                     <ui:param name="prefix" value="e"/>
                                     <ui:define name="header">
-                                        <h:outputText styleClass="header2" value="UP office address"/>
+                                        <h:outputText styleClass="header2" value="#{lang['UPOfficeAddress']}"/>
                                     </ui:define>
                                 </ui:decorate>
                             </p:panel>
                         </p:panel>
                         <p:growl sticky="true" showDetail="true" showSummary="true" globalOnly="true"/>
-                        <p:commandButton styleClass="button" value="Save changes" id="saveChanges" action="#{userAccountsPersonalAccountEditBean.performPersonalUserAccountEditRequest()}" process="@form" update="@form" >
+                        <p:commandButton styleClass="button" value="#{lang['SaveChanges']}" id="saveChanges" action="#{userAccountsPersonalAccountEditBean.performPersonalUserAccountEditRequest()}" process="@form" update="@form" >
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                            <p:confirm header="Edit confirmation" message="Are you sure you wish to save the changes to the user account details?" icon="ui-icon-alert"/>
+                            <p:confirm header="#{lang['EditConfirmationHeader']}" message="#{lang['EditAccountConfirmationMessage']}" icon="ui-icon-alert"/>
                         </p:commandButton>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                         </p:confirmDialog>
                     </center>
                 </h:form>

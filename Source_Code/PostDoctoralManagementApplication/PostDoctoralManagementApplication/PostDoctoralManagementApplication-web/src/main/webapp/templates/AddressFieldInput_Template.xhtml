@@ -10,35 +10,35 @@
             <f:facet name="header"> 
                 <ui:insert name="header"/>                
             </f:facet>
-            <p:outputLabel value="Country:" for="#{prefix}country"/>                                
+            <p:outputLabel value="#{lang['Country']}" for="#{prefix}country"/>                                
             <p:inputText id="#{prefix}country" value="#{address.country}"/>
             <p:message for="#{prefix}country" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Province:" for="#{prefix}province"/>                                
+            <p:outputLabel value="#{lang['Province']}" for="#{prefix}province"/>                                
             <p:inputText id="#{prefix}province" value="#{address.province}"/>
             <p:message for="#{prefix}province" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Town / City:" for="#{prefix}townCity"/>                                
+            <p:outputLabel value="#{lang['TownOrCity']}" for="#{prefix}townCity"/>                                
             <p:inputText id="#{prefix}townCity" value="#{address.townCity}"/>
             <p:message for="#{prefix}townCity" styleClass="fieldErrorMessage"/>
             
-            <p:outputLabel value="Suburb:" for="#{prefix}suburb"/>                                
+            <p:outputLabel value="#{lang['Suburb']}" for="#{prefix}suburb"/>                                
             <p:inputText id="#{prefix}suburb" value="#{address.suburb}"/>
             <p:message for="#{prefix}suburb" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Street name:" for="#{prefix}street"/>                                
+            <p:outputLabel value="#{lang['StreetName']}" for="#{prefix}street"/>                                
             <p:inputText id="#{prefix}street" value="#{address.street}"/>
             <p:message for="#{prefix}street" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Street number:" for="#{prefix}streetNumber"/>                                
+            <p:outputLabel value="#{lang['StreetNumber']}" for="#{prefix}streetNumber"/>                                
             <p:inputText id="#{prefix}streetNumber" value="#{address.streeNumber}"/>
             <p:message for="#{prefix}streetNumber" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Room number:" for="#{prefix}roomNumber"/>                                
+            <p:outputLabel value="#{lang['RoomNumber']}" for="#{prefix}roomNumber"/>                                
             <p:inputText id="#{prefix}roomNumber" value="#{address.roomNumber}"/>
             <p:message for="#{prefix}roomNumber" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Zip / Postal Code:" for="#{prefix}zippostalCode"/>                                
+            <p:outputLabel value="#{lang['ZipOrPostalCode']}" for="#{prefix}zippostalCode"/>                                
             <p:inputText id="#{prefix}zippostalCode" value="#{address.zippostalCode}"/>
             <p:message for="#{prefix}zippostalCode" styleClass="fieldErrorMessage"/>
         </h:panelGrid>

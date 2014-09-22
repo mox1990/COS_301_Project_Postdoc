@@ -30,14 +30,14 @@
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">Prospective fellow user account creation</h1>
-                 <h2>Please complete the fields below</h2>
+                <h1 class="header1">#{lang['ProspectiveFellowAccountCreation']}</h1>
+                 <h2>#{lang['CreationPrompt']}</h2>
             </div>
 
             <div>
                 <h:form id="createForm">
                     <center>
-                        <p:panel header="Person information">
+                        <p:panel header="#{lang['PersonInformation']}">
                             <ui:decorate template="templates/PersonFieldInput_Template.xhtml">
                                 <ui:param name="person" value="#{prospectiveUserAccountCreationBean.person}"/>
                                 <ui:param name="renderAttribute" value="#{true}"/>
@@ -49,7 +49,7 @@
                             </ui:decorate>
                         </p:panel>
                         
-                        <p:panel header="Residential address">
+                        <p:panel header="#{lang['ResidentialAddress']}">
                             <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
                                 <ui:param name="address" value="#{prospectiveUserAccountCreationBean.address}"/>
                                 <ui:param name="renderAttribute" value="#{true}"/>
@@ -59,8 +59,8 @@
                             </ui:decorate>
                         </p:panel>
 
-                        <p:panel id="upEmployeeInfoPanel" header="Insitatute employement information" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
-                            <p:panel header="University of Pretoria employment information" rendered="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                        <p:panel id="upEmployeeInfoPanel" header="#{lang['InstitutionEmploymentInfo']}" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                            <p:panel header="#{lang['UPEmploymentInformation']}" rendered="#{prospectiveUserAccountCreationBean.person.upEmployee}">
                                 <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
                                     <ui:param name="employeeInformation" value="#{prospectiveUserAccountCreationBean.employeeInformation}"/>
                                     <ui:param name="locationBean" value="#{prospectiveUserAccountCreationBean.locationFinderDependBean}"/>
@@ -71,7 +71,7 @@
                                 </ui:decorate>
                             </p:panel>
                             
-                            <p:panel header="UP office address" rendered="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                            <p:panel header="#{lang['UPOfficeAddress']}" rendered="#{prospectiveUserAccountCreationBean.person.upEmployee}">
                                 <ui:decorate template="templates/AddressFieldInput_Template.xhtml">
                                     <ui:param name="address" value="#{prospectiveUserAccountCreationBean.upAddress}"/>
                                     <ui:param name="renderAttribute" value="#{prospectiveUserAccountCreationBean.person.upEmployee}"/>
@@ -82,7 +82,7 @@
                             </p:panel>
                         </p:panel>
                         <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                        <p:commandButton styleClass="button" value="Create user account" id="createUser"  action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" update="createForm" process="@form">
+                        <p:commandButton styleClass="button" value="#{lang['CreateUserAccount']}" id="createUser"  action="#{prospectiveUserAccountCreationBean.performProspectiveFellowUserAccountCreation()}" update="createForm" process="@form">
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                         </p:commandButton>
                     </center>
