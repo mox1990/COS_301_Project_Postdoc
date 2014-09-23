@@ -159,11 +159,11 @@
                                     </p:panel>
                                                                         
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" value="Export to PDF" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
+                                    <p:commandButton ajax="false" value="Export to PDF" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                         <p:fileDownload value="#{reportGeneratorBean.exportReportToPDF()}" />
                                     </p:commandButton>
-                                    <p:commandButton update=":wizardTab" value="Export to MS Excel" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
+                                    <p:commandButton ajax="false" value="Export to MS Excel" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                         <p:fileDownload value="#{reportGeneratorBean.exportReportToMSExcel()}" />
                                     </p:commandButton>

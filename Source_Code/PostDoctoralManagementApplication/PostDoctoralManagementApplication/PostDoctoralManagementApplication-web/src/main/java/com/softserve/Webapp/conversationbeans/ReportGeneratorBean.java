@@ -68,7 +68,6 @@ public class ReportGeneratorBean implements Serializable {
     private DynamicReportExportRequest dynamicReportExportRequest;
     
     private String selectedQueryType;
-    private List<List<String>> selectedFieldMap;
     private List<List<Object>> selectedData;
     private List<String> selectedColumns;
     
@@ -97,7 +96,7 @@ public class ReportGeneratorBean implements Serializable {
             dynamicReport = null;
             dynamicReportCreationRequest = null;
             dynamicReportExportRequest = null;
-            selectedFieldMap = new ArrayList<List<String>>();
+
             selectedQueryType = com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_USERS;
             selectedEntityData = new TreeNode[0];
             selectedEntityColumns = new TreeNode[0];
@@ -169,6 +168,10 @@ public class ReportGeneratorBean implements Serializable {
 
     public void setSelectedEntityData(TreeNode[] selectedEntityData) {
         this.selectedEntityData = selectedEntityData;
+    }
+
+    public void setWizardTabIndex(int wizardTabIndex) {
+        this.wizardTabIndex = wizardTabIndex;
     }
     
         

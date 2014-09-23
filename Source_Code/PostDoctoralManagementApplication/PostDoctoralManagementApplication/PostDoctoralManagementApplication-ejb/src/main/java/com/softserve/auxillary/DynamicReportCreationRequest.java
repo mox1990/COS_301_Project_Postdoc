@@ -7,6 +7,7 @@
 package com.softserve.auxillary;
 
 import com.softserve.jasper.StringListDataSource;
+import java.io.Serializable;
 import java.util.List;
 import net.sf.jasperreports.engine.JRDataSource;
 
@@ -15,7 +16,7 @@ import net.sf.jasperreports.engine.JRDataSource;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class DynamicReportCreationRequest {
+public class DynamicReportCreationRequest  implements Serializable{
     private String title;
     private String subtitle;
     private boolean useFullPageWidth;
