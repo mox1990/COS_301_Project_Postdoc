@@ -82,7 +82,7 @@ public class ReportServicesTest {
         
         try
         {
-            instance.dynamicReport(session, columnHeaders, rows, "Sample Report Title");
+           // instance.dynamicReport(session, columnHeaders, rows, "Sample Report Title");
         }
         catch (Exception ex)
         {

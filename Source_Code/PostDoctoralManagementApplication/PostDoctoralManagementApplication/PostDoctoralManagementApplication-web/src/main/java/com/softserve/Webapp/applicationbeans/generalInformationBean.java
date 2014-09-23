@@ -36,6 +36,7 @@ public class generalInformationBean {
     private List<SelectItem> nrfRatingsItems;
     private List<SelectItem> referneceStatusItems;
     
+    private List<SelectItem> queryTypeItems;
     /**
      * Creates a new instance of generalInformationBean
      */
@@ -133,7 +134,9 @@ public class generalInformationBean {
         referneceStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_REFERENCE_UNDERREVIEW,com.softserve.constants.PersistenceConstants.CV_REFERENCE_UNDERREVIEW));
         referneceStatusItems.add(new SelectItem(com.softserve.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED,com.softserve.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED));
         
-        
+        queryTypeItems = new ArrayList<SelectItem>();
+        queryTypeItems.add(new SelectItem(com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_USERS,com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_USERS));
+        queryTypeItems.add(new SelectItem(com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_APPLICATION,com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_APPLICATION));
     }
 
     public List<String> getTitleSelectItems() {
@@ -185,6 +188,12 @@ public class generalInformationBean {
     public List<SelectItem> getReferneceStatusItems() {
         return referneceStatusItems;
     }
+
+    public List<SelectItem> getQueryTypeItems() {
+        return queryTypeItems;
+    }
+    
+    
         
     public String getVersion()
     {

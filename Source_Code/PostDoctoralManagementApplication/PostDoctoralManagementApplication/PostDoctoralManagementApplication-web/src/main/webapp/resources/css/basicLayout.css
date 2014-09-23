@@ -12,18 +12,30 @@ that is not approved by the stated authors is prohibited.
 body
 {
     font-family: Arial,sans-serif;
-    background-color: darkgrey;
+    background-image: -webkit-gradient(
+	linear,
+	left top,
+	right bottom,
+	color-stop(0.05, #FFFFFF),
+	color-stop(1, #949494)
+    );
+    background-image: -o-linear-gradient(right bottom, #FFFFFF 5%, #949494 100%);
+    background-image: -moz-linear-gradient(right bottom, #FFFFFF 5%, #949494 100%);
+    background-image: -webkit-linear-gradient(right bottom, #FFFFFF 5%, #949494 100%);
+    background-image: -ms-linear-gradient(right bottom, #FFFFFF 5%, #949494 100%);
+    background-image: linear-gradient(to right bottom, #FFFFFF 5%, #949494 100%);
     margin: 0;
 }
 
 .background
 {
-    background-color: darkgray;
+    //background-color: darkgray;
+    background-color: transparent;
 }
 
 .container
 {
-    background-color: darkgrey;
+    background-color: transparent;
     z-index: 1;
     
     width: 1000px;

@@ -6,12 +6,15 @@
 
 package com.softserve.ClassConverterUtils;
 
+import com.softserve.auxillary.SelectedColumn;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 
 /**
@@ -21,7 +24,7 @@ import javax.persistence.Column;
  */
 public class EntityToListConverter {
     
-    public List<String> convertEntityToListString(Object entity, Map propertymap)
+    public List<String> convertEntityToListString(Object entity, List<SelectedColumn> propertymap)
     {
         List<String> output = new ArrayList<String>();
         
@@ -31,16 +34,28 @@ public class EntityToListConverter {
         {
             Annotation entityAnnotation = member.getAnnotation(Column.class);
             
-            if(entityAnnotation != null && ((Boolean)propertymap.get(((Column) entityAnnotation).name()).equals(true)))
+            if(entityAnnotation != null && propertymap.contains(new SelectedColumn(null,((Column) entityAnnotation).name(), entity.getClass().getName())) )
             {
-                output.add(member.toString());
+                try 
+                {
+                    member.setAccessible(true);
+                    output.add(String.valueOf(member.get(entity)));
+                } 
+                catch (IllegalArgumentException ex) 
+                {
+                    Logger.getLogger(EntityToListConverter.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+                catch (IllegalAccessException ex) 
+                {
+                    Logger.getLogger(EntityToListConverter.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         
         return output;
     }
     
-    public List<List<String>> convertEntityListToListString(List<Object> entities, Map propertymap)
+    public List<List<String>> convertEntityListToListString(List<Object> entities, List<SelectedColumn> propertymap)
     {
         List<List<String>> lists = new ArrayList<List<String>>();
         
@@ -52,7 +67,7 @@ public class EntityToListConverter {
         return lists;
     }
     
-    public List<List<String>> convertConcatenatedEntitiesListToListString(List<List<Object>> entities, List<Map> propertymaps)
+    public List<List<String>> convertConcatenatedEntitiesListToListString(List<List<Object>> entities, List<SelectedColumn> propertymaps)
     {
         List<List<String>> lists = new ArrayList<List<String>>();
         
@@ -60,7 +75,7 @@ public class EntityToListConverter {
         {
             for(Object entity : entitiesToConcatenate)
             {
-                lists.add(convertEntityToListString(entity, propertymaps.get(entitiesToConcatenate.indexOf(entity))));
+                lists.add(convertEntityToListString(entity, propertymaps));
             }
         }
         
