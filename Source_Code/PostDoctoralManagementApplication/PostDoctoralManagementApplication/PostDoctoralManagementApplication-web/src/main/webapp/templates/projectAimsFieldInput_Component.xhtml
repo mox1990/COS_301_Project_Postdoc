@@ -10,22 +10,22 @@
             <p:outputPanel id="projectAims">
                 <p:outputPanel id="projectAimsTable">
                     <ui:decorate template="projectAimsDataTableInput_Component.xhtml">
-                        <ui:param name="header" value="Project aims already added"/>
+                        <ui:param name="header" value="#{lang['ProjectAimsAlreadyAdded']}"/>
                         <ui:param name="aims" value="#{aims}"/>
                         <ui:param name="selectedAimList" value="#{selectedAimList}"/>
                     </ui:decorate>
                 </p:outputPanel>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Aim" for="taim"/>                                
+                        <p:outputLabel value="#{lang['Aim']}" for="taim"/>                                
                         <p:inputTextarea id="taim" value="#{currentAim}" required="true"/>
                         <p:message for="taim" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanActionAdd]}" value="Add project aim" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanActionAdd]}" value="#{lang['AddProjectAim']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
-                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanActionRemove]}" process="@this projectAimsTable" value="Remove selected project aim" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="projectAims" action="#{bean[beanActionRemove]}" process="@this projectAimsTable" value="#{lang['RemoveSelectedProjectAim']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                 </div>

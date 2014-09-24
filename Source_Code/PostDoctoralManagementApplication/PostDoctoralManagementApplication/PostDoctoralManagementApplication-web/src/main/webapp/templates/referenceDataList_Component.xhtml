@@ -10,7 +10,7 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            Type: #{reference.type}, Name: #{reference.publicationName}, Published date: #{reference.publicationDate} Publisher: #{reference.publisher}, ISBN: #{reference.publicationISBN}, Page location: #{reference.publicationPageLocation}                
+            #{lang['Type']}: #{reference.type}, #{lang['Name']} #{reference.publicationName}, #{lang['PublishedDate']}: #{reference.publicationDate} #{lang['Publisher']}: #{reference.publisher}, #{lang['ISBN']}: #{reference.publicationISBN}, #{lang['PageLocation']}: #{reference.publicationPageLocation}                
         </p:dataList>
     </ui:component>
 </html>

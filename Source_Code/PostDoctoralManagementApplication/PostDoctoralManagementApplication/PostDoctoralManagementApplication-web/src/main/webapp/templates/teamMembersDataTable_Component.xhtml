@@ -10,16 +10,16 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['NameText']}">
                 <h:outputText value="#{member.title} #{member.fullName} #{member.surname}"/>
             </p:column>
-            <p:column headerText="Degree type">
+            <p:column headerText="#{lang['DegreeType']}">
                 <h:outputText value="#{member.degreeType}"/>
             </p:column>
-            <p:column headerText="Institution">
+            <p:column headerText="#{lang['InstitutionText']}">
                 <h:outputText value="#{member.institution}"/>
             </p:column>    
-            <p:column headerText="Position">
+            <p:column headerText="#{lang['Positition']}">
                 <h:outputText value="#{member.position}"/>
             </p:column> 
         </p:dataTable>

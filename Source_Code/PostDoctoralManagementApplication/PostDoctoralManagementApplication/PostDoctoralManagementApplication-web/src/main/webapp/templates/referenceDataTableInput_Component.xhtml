@@ -11,27 +11,27 @@
                 #{header}
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-            <p:column headerText="Type">
+            <p:column headerText="#{lang['Type']}">
                 <h:outputText value="#{reference.type}"/>
             </p:column>
-            <p:column headerText="Status">
+            <p:column headerText="#{lang['StatusText']}">
                 <h:outputText value="#{reference.status}"/>
             </p:column>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['NameText']}">
                 <h:outputText value="#{reference.publicationName}"/>
             </p:column>            
-            <p:column headerText="Publisher">
+            <p:column headerText="#{lang['Publisher']}">
                 <h:outputText value="#{reference.publisher}"/>
             </p:column>
-            <p:column headerText="Published date">
+            <p:column headerText="#{lang['PublishedDate']}">
                 <h:outputText value="#{reference.publicationDate}">
                     <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="ISBN">
+            <p:column headerText="#{lang['ISBN']}">
                 <h:outputText value="#{reference.publicationISBN}"/>
             </p:column> 
-            <p:column headerText="Page location">
+            <p:column headerText="#{lang['PageLocation']}">
                 <h:outputText value="#{reference.publicationPageLocation}"/>
             </p:column>
         </p:dataTable>

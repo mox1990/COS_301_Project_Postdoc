@@ -10,46 +10,46 @@
             <p:outputPanel id="teamMembers">
                 <p:outputPanel id="teammembersTable">
                     <ui:decorate template="teamMembersDataTableInput_Component.xhtml">
-                        <ui:param name="header" value="Team members already added"/>
+                        <ui:param name="header" value="#{lang['TeamMembersAlreadyAdded']}"/>
                         <ui:param name="members" value="#{members}"/>
                         <ui:param name="selectedMemberList" value="#{selectedMemberList}"/>
                     </ui:decorate>
                 </p:outputPanel>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Title" for="ttitle"/>                                
+                        <p:outputLabel value="#{lang['TitleText']}" for="ttitle"/>                                
                         <p:selectOneMenu id="ttitle" value="#{currentMember.title}" required="true">
                             <f:selectItems value="#{generalInformationBean.titleSelectItems}"/>
                         </p:selectOneMenu>                        
                         <p:message for="ttitle" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Full name" for="tfullName"/>                                
+                        <p:outputLabel value="#{lang['FullNameText']}" for="tfullName"/>                                
                         <p:inputText id="tfullName" value="#{currentMember.fullName}" required="true"/>
                         <p:message for="tfullName" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Surname:" for="tsurname" />                                
+                        <p:outputLabel value="#{lang['Surname']}" for="tsurname" />                                
                         <p:inputText id="tsurname" value="#{currentMember.surname}" required="true"/>
                         <p:message for="tsurname" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Degree type:" for="tdegreeType"/>                                
+                        <p:outputLabel value="#{lang['DegreeType']}" for="tdegreeType"/>                                
                         <p:selectOneMenu id="tdegreeType" value="#{currentMember.degreeType}" required="true">
                             <f:selectItems value="#{generalInformationBean.degreeTypeItems}"/>
                         </p:selectOneMenu>  
                         <p:message for="tdegreeType" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Institution:" for="tinstitution"/>                                
+                        <p:outputLabel value="#{lang['Institution']}" for="tinstitution"/>                                
                         <p:inputText id="tinstitution" value="#{currentMember.institution}" required="true"/>
                         <p:message for="tinstitution" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Position:" for="tposition"/>                                
+                        <p:outputLabel value="#{lang['PositionInput']}" for="tposition"/>                                
                         <p:inputText id="tposition" value="#{currentMember.position}" required="true"/>
                         <p:message for="tposition" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanActionAdd]}" value="Add team member" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanActionAdd]}" value="#{lang['AddTeamMember']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
-                    <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanActionRemove]}" process="@this teammembersTable" value="Add team member" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="teamMembers" action="#{bean[beanActionRemove]}" process="@this teammembersTable" value="#{lang['RemoveTeamMember']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                 </div>

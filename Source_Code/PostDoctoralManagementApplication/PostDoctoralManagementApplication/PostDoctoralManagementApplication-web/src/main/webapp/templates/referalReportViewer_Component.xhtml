@@ -7,23 +7,23 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>            
             <h:panelGrid columns="2" cellpadding="10px">
-                <h:outputText styleClass="text-label" value="Report creation date:"/>
+                <h:outputText styleClass="text-label" value="#{lang['ReportCreationDate']}"/>
                 <h:outputText value="#{report.timestamp}">
                     <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                 </h:outputText> 
-                <h:outputText styleClass="text-label" value="Referee name:"/>
+                <h:outputText styleClass="text-label" value="#{lang['RefereeName']}:"/>
                 <h:outputText value="#{report.referee.completeName}"/> 
-                <h:outputText styleClass="text-label" value="Referee email:"/>
+                <h:outputText styleClass="text-label" value="#{lang['RefereeEmail']}:"/>
                 <h:outputText value="#{report.referee.email}"/>
-                <h:outputText styleClass="text-label" value="Referee and candidate association:"/>
+                <h:outputText styleClass="text-label" value="#{lang['RefereeCandidateAssociation']}:"/>
                 <h:outputText value="#{report.contentXMLEntity.refereeAndCandidateAssociation}"/>
-                <h:outputText styleClass="text-label" value="Candidate project title under referee:"/>
+                <h:outputText styleClass="text-label" value="#{lang['CandidateProjectTitleUnderReview']}:"/>
                 <h:outputText value="#{report.contentXMLEntity.projectTitle}"/>
-                <h:outputText styleClass="text-label" value="Candidate project summary under referee:"/>
+                <h:outputText styleClass="text-label" value="#{lang['CandidateProjectTitleUnderReview']}:"/>
                 <h:outputText value="#{report.contentXMLEntity.projectSummary}"/>
-                <h:outputText styleClass="text-label" value="Candidate evaluation by referee:"/>
+                <h:outputText styleClass="text-label" value="#{lang['CandidateEvaluationByReferee']}:"/>
                 <h:outputText value="#{report.contentXMLEntity.evaluationOfCandidateSelf}"/>
-                <h:outputText styleClass="text-label" value="Candidate evaluation towards proposed project by referee:"/>
+                <h:outputText styleClass="text-label" value="#{lang['CandidateEvaluationTowardsProposedProjectByReferee']}:"/>
                 <h:outputText value="#{report.contentXMLEntity.evaluationOfCandidateTowardsProposedProject}"/>
             </h:panelGrid>            
     </ui:component>

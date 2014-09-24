@@ -6,34 +6,34 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">
-            <h:outputText styleClass="text-label" value="Report creation date:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ReportCreationDate']}"/>
             <h:outputText value="#{recommendationReport.timestamp}">
                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
             </h:outputText>
-            <h:outputText styleClass="text-label" value="HOD name:"/>
+            <h:outputText styleClass="text-label" value="#{lang['HODName']}"/>
             <h:outputText value="#{recommendationReport.hod.completeName}"/>
             
-            <h:outputText styleClass="text-label" value="Is candidate suitable for project:"/>
+            <h:outputText styleClass="text-label" value="#{lang['CandidateSuitableForProject']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.doesCandidateFit}"/> 
-            <h:outputText styleClass="text-label" value="Does candidate meet age requirement:"/>
+            <h:outputText styleClass="text-label" value="#{lang['CandidateMetAgeRequirement']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.candidateMeetsAgeRequirment}"/> 
-            <h:outputText styleClass="text-label" value="Has the candidate obtained their PhD in the last five years:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ObtainedPhDInLastFiveYears']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.candidateMeetsPhDAgeRequirement}"/> 
             
-            <h:outputText styleClass="text-label" value="Candidate academic merit and suitability:"/>
+            <h:outputText styleClass="text-label" value="#{lang['AcademicMeritSuitable']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.academicMeritAndSuitablityOfCandidate}"/>             
-            <h:outputText styleClass="text-label" value="Candidate age motivation:"/>
+            <h:outputText styleClass="text-label" value="#{lang['AgeMotivationi']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.candidateAgeMotivation}"/> 
             
             
-            <h:outputText styleClass="text-label" value="Is Research leader a full time staff member:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ResearchLeaderFullTime']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.fulltimeAcademicStaffMember}"/> 
-            <h:outputText styleClass="text-label" value="Research leader academic merit and suitability:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ResearchLeaderAcademicMeritSuitable']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.academicMeritOfResearchLeader}"/> 
             
-            <h:outputText styleClass="text-label" value="Scientific merit of application:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ScientificMeritOfApplication']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.scientificMeritOfApplication}"/> 
-            <h:outputText styleClass="text-label" value="Infrastructure availablility for project:"/>
+            <h:outputText styleClass="text-label" value="#{lang['InfrastructureAvailibilty']}"/>
             <h:outputText value="#{recommendationReport.contentXMLEntity.infrastructureAvailability}"/> 
         </h:panelGrid>
     </ui:component>
