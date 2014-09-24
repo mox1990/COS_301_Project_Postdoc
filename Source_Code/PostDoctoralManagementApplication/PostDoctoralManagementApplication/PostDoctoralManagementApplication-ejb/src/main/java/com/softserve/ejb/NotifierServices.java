@@ -113,49 +113,70 @@ public class NotifierServices implements NotifierServicesLocal {
             {
                 Issue issue = new Issue("Referral reports", "You have pending referral reports", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED));
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER))
             {
                 Issue issue = new Issue("Referral reports", "You have pending applications for finalisation", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED));
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD))
             {
                 Issue issue = new Issue("Recommendations", "You have pending recommendations", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED));
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER))
             {
                 Issue issue = new Issue("Endorsements", "You have pending endorsements", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED));
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER))
             {
                 Issue issue = new Issue("Application eligibility checks", "You have pending eligiblity checks", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED));
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER))
             {
                 Issue issue = new Issue("Funding reports", "You have pending funding reports", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE));
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER) || person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER))
             {
                 Issue issue = new Issue("Active post doctoral committe meeting", "You are currently attending post doctoral committe meetings", 0);
                 issue.setCount(getMeetingManagementServiceEJB().getAllActiveMeetingsForWhichUserIsToAttend(new Session(null, person, true)).size());
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
@@ -165,15 +186,22 @@ public class NotifierServices implements NotifierServicesLocal {
                 issues.add(issue);
                 issue = new Issue("Possible renewals", "You possible renewals waiting for you", 0);
                 issue.setCount(getApplicationRenewalServiceEJB().getRenewableApplicationsForFellow(new Session(null, person, true),person).size());
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
             
             if(person.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
             {
                 Issue issue = new Issue("Account approval", "You have pending funding reports", 0);
                 issue.setCount(getUserAccountManagementServiceEJB().loadAllPendingOnDemandAccounts(new Session(null, person, true)).size());
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
             }
+                      
             
             return issues;
         }

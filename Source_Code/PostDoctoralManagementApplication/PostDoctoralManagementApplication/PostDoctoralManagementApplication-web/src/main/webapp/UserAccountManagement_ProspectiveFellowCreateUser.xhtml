@@ -15,16 +15,10 @@
         
         <ui:define name="pageBreadBrumb">
             <div class="containerNavBar"> 
-                <h:form>
-                    <div class="breadCrumbs">
-                        <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
-                            <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>                                      
-                            <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
-                                <span class="breadCrumb-Splitter">></span>
-                            </c:if>
-                        </c:forEach>
-                    </div>
-                </h:form>
+                <ui:decorate template="templates/hoverBreadCrumb_Component.xhtml">
+                    <ui:param name="hoverID" value="navMenu"/>
+                    <ui:param name="firstAvtive" value="#{true}"/>
+                </ui:decorate>
             </div>
         </ui:define>
 

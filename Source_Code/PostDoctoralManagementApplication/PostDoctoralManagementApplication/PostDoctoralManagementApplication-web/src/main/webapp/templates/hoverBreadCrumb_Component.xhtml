@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:component>
+        <p:outputPanel id="#{hoverID}" styleClass="nav-entry">
+            <center>
+                <h1 class="notice-bar-header-no-effect" style="padding: 10px;">Click to view bread crumbs</h1>
+            </center>
+        </p:outputPanel>
+        
+        <p:overlayPanel id="breadcrumbPanel" for="#{hoverID}" showEffect="fade" hideEffect="fade" showCloseIcon="true" showEvent="click" hideEvent="none" at="left bottom">
+            <h:form id="breadcrumbFrom">
+                <div class="breadCrumbs">
+                    <p:growl sticky="true" showSummary="true" showDetail="true"/>
+                    <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
+                        <c:if test="#{(counter.count == 1)}">
+                            <p:commandButton value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}" update="breadcrumbFrom" icon="ui-icon-carat-1-e" iconPos="right" disabled="#{not firstAvtive}"/>
+                        </c:if>
+                        <c:if test="#{(counter.count > 1)}">
+                            <p:commandButton value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}" update="breadcrumbFrom" icon="ui-icon-carat-1-e" iconPos="right"/>
+                        </c:if>                    
+                    </c:forEach>                
+                </div>
+            </h:form>
+        </p:overlayPanel>
+    </ui:component>
+</html>

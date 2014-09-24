@@ -6,11 +6,19 @@
 
 package com.softserve.Webapp.requestbeans;
 
+import com.softserve.HTTPScrapers.GoogleScholarQuery;
+import com.softserve.HTTPScrapers.GoogleScholarScraper;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -34,6 +42,22 @@ public class IndexBean {
      */
     public IndexBean() {
     }
+    
+    @PostConstruct
+    public void init() 
+    {
+       /* GoogleScholarScraper googleScholarScrubber = new GoogleScholarScraper();
+        
+        try {
+            googleScholarScrubber.getResultsFromQuery(new GoogleScholarQuery("liquid", "john", "journal", 2010, 2012));
+        } catch (IOException ex) {
+            Logger.getLogger(IndexBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(IndexBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(IndexBean.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+    }   
     
     public void setupIndexPage()
     {

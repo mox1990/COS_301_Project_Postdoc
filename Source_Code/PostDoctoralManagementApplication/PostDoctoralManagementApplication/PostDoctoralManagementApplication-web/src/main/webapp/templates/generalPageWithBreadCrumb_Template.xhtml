@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:insert name="pageEvents"/>
     <h:head>
-<<<<<<< HEAD
+
         <title>#{lang['UPPostDoctoralApplicationManagementSystem']} - #{pageTitle}</title>
         <h:outputStylesheet name="css/basicLayout.css"/>
         <h:outputScript library="javascript" name="generalFunctions.js" target="body"/>
@@ -85,8 +85,11 @@
                     <ui:insert name="pageHeader"/>
                     
                 </div>
-                <div class="containerNavBar">                   
-                    <ui:decorate template="breadCrumb_Component.xhtml"/>
+                <div class="containerNavBar">
+                    <ui:decorate template="hoverBreadCrumb_Component.xhtml">
+                    <ui:param name="hoverID" value="navMenu"/>
+                    <ui:param name="firstAvtive" value="#{false}"/>
+                </ui:decorate>
                 </div>
                 <div class="containerBody">
                     <ui:insert name="pageBody"/>

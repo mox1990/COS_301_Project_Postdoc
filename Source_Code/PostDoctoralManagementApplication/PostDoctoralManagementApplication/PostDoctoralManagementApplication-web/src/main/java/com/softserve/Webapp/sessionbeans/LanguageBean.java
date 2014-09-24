@@ -48,6 +48,11 @@ public class LanguageBean implements Serializable {
         this.localeCode = localCode;
     }
     
+    public Locale getLocale()
+    {
+        return ((Locale)lang.get(localeCode));
+    }
+    
     /**
      * Creates a new instance of LanguageBean
      */
