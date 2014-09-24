@@ -10,18 +10,18 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="Capacity">
+            <p:column headerText="#{lang['Capacity']}">
                 <h:outputText value="#{experience.capacity}"/>
             </p:column>
-            <p:column headerText="Organisation">
+            <p:column headerText="#{lang['Organisation']}">
                 <h:outputText value="#{experience.organisation}"/>
             </p:column>
-            <p:column headerText="Start date">
+            <p:column headerText="#{lang['StartDateText']}">
                 <h:outputText value="#{experience.startDate}">
                     <f:convertDateTime pattern="yyyy/MM/dd"/>
                 </h:outputText>
             </p:column>    
-            <p:column headerText="End date">
+            <p:column headerText="#{lang['EndDateText']}">
                 <h:outputText value="#{experience.endDate}">
                     <f:convertDateTime pattern="yyyy/MM/dd"/>
                 </h:outputText>

@@ -11,8 +11,8 @@
         </div>
         <div>
             <h:panelGrid columns="2">
-                <p:outputLabel value="Make system administrator" styleClass="text-label"/>
-                <p:selectBooleanButton onLabel="Yes" offLabel="No" value="#{booleanValue}" styleClass="button">
+                <p:outputLabel value="#{lang['MakeSystemAdministrator']}" styleClass="text-label"/>
+                <p:selectBooleanButton onLabel="#{lang['YesButton']}" offLabel="#{lang['NoButton']}" value="#{booleanValue}" styleClass="button">
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                     <p:ajax update="securityRolesPick"/>
                 </p:selectBooleanButton>

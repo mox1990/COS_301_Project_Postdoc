@@ -11,20 +11,20 @@
                 <div>
                     <p:outputPanel id="#{prefix}researchoutputTable">
                         <ui:decorate template="referenceDataTableInput_Component.xhtml">
-                            <ui:param name="header" value="Research output already added"/>
+                            <ui:param name="header" value="#{lang['ResearchOutputAlreadyAdded']}"/>
                             <ui:param name="references" value="#{references}"/>
                             <ui:param name="selectedReferenceList" value="#{selectedReferenceList}" />
                         </ui:decorate>
                     </p:outputPanel>
                     
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Reference type" for="#{prefix}reftype"/>                                
+                        <p:outputLabel value="#{lang['ReferenceType']}" for="#{prefix}reftype"/>                                
                         <p:selectOneMenu id="#{prefix}reftype" value="#{currentReference.type}" required="true">
                             <f:selectItems value="#{generalInformationBean.referenceTypeItems}"/>
                         </p:selectOneMenu>                        
                         <p:message for="#{prefix}reftype" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Reference status" for="#{prefix}refstatus"/>                                
+                        <p:outputLabel value="#{lang['ReferenceStatus']}" for="#{prefix}refstatus"/>                                
                         <p:selectOneButton id="#{prefix}refstatus" value="#{currentReference.status}" required="true">
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                             <f:selectItems value="#{generalInformationBean.referneceStatusItems}"/>
@@ -32,34 +32,34 @@
                         </p:selectOneButton>                        
                         <p:message for="#{prefix}refstatus" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Publication Name:" for="#{prefix}refpublicationName"/>                                
+                        <p:outputLabel value="#{lang['PublicationName']}:" for="#{prefix}refpublicationName"/>                                
                         <p:inputText id="#{prefix}refpublicationName" value="#{currentReference.publicationName}" required="true"/>
                         <p:message for="#{prefix}refpublicationName" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Publisher:" for="#{prefix}refpublisher"/>                                
+                        <p:outputLabel value="#{lang['Publisher']}:" for="#{prefix}refpublisher"/>                                
                         <p:inputText id="#{prefix}refpublisher" value="#{currentReference.publisher}" disabled="#{!researchOutputReferenceControllerRequestBean.doesReferenceHavePubliser(currentReference)}" required="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePubliser(currentReference)}"/>
                         <p:message for="#{prefix}refpublisher" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Publication Date:" for="#{prefix}refpublicationDate"/>                                
+                        <p:outputLabel value="#{lang['PublicationDate']}:" for="#{prefix}refpublicationDate"/>                                
                         <p:calendar id="#{prefix}refpublicationDate" mask="true" value="#{currentReference.publicationDate}" pattern="yyyy-MM-dd" navigator="true" disabled="#{!researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}" required="#{researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}">
                             <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                         </p:calendar>
                         <p:message for="#{prefix}refpublicationDate" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Publication ISBN:" for="#{prefix}refpublicationISBN"/>                                
+                        <p:outputLabel value="#{lang['PublicationISBN']}:" for="#{prefix}refpublicationISBN"/>                                
                         <p:inputText id="#{prefix}refpublicationISBN" value="#{currentReference.publicationISBN}" disabled="#{!researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
                         <p:message for="#{prefix}refpublicationISBN"/>
 
-                        <p:outputLabel value="Page Location:" for="#{prefix}refpublicationPageLocation" />                                
+                        <p:outputLabel value="#{lang['PageLocation']}:" for="#{prefix}refpublicationPageLocation" />                                
                         <p:inputText id="#{prefix}refpublicationPageLocation" value="#{currentReference.publicationPageLocation}" disabled="#{!researchOutputReferenceControllerRequestBean.doesReferenceHavePublicationDate(currentReference)}"/>
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton value="Add reference" actionListener="#{bean[beanActionAdd]}" update="#{prefix}researchoutput" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['AddReference']}" actionListener="#{bean[beanActionAdd]}" update="#{prefix}researchoutput" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                     
-                    <p:commandButton value="Remove selected reference" actionListener="#{bean[beanActionRemove]}" update="#{prefix}researchoutput" styleClass="button button-fill" process="@this #{prefix}researchoutputTable">
+                    <p:commandButton value="#{lang['RemoveSelectedReference']}" actionListener="#{bean[beanActionRemove]}" update="#{prefix}researchoutput" styleClass="button button-fill" process="@this #{prefix}researchoutputTable">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                 </div>

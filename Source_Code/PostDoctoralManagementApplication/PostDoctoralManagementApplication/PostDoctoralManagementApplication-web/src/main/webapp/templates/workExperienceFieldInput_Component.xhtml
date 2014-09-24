@@ -11,38 +11,38 @@
                 <div>
 
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Capacity:" for="ecapacity"/>                                
+                        <p:outputLabel value="#{lang['Capacity']}:" for="ecapacity"/>                                
                         <p:inputText id="ecapacity" value="#{currentExperience.capacity}" required="true"/>
                         <p:message for="ecapacity" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Organisation:" for="eorganisation"/>                                
+                        <p:outputLabel value="#{lang['Organisation']}:" for="eorganisation"/>                                
                         <p:inputText id="eorganisation" value="#{currentExperience.organisation}" required="true"/>
                         <p:message for="eorganisation" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Start date:" for="estartDate"/>                                
+                        <p:outputLabel value="#{lang['StartDate']}" for="estartDate"/>                                
                         <p:calendar id="estartDate" mask="true" value="#{currentExperience.startDate}" required="true" pattern="yyyy/MM/dd" navigator="true">
                             <f:convertDateTime pattern="yyyy/MM/dd"/>
                         </p:calendar>
                         <p:message for="estartDate" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="End date:" for="eendDate"/>                                
+                        <p:outputLabel value="#{lang['EndDate']}" for="eendDate"/>                                
                         <p:calendar id="eendDate" mask="true" value="#{currentExperience.endDate}" required="true" pattern="yyyy/MM/dd" navigator="true">
                             <f:convertDateTime pattern="yyyy/MM/dd"/>
                         </p:calendar>
                         <p:message for="eendDate" styleClass="eendDate"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionAdd]}" value="Add work experience" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionAdd]}" value="#{lang['AddWorkExperience']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                     <p:outputPanel id="experiencesTable">
                         <ui:decorate template="workExpericenceDataTableInput_Component.xhtml">
-                            <ui:param name="header" value="Work experience already added"/>
+                            <ui:param name="header" value="#{lang['WorkExperienceAlreadyAdded']}"/>
                             <ui:param name="experienceList" value="#{experienceList}"/>
                             <ui:param name="selectedExperienceList" value="#{selectedExperienceList}"/>
                         </ui:decorate>
                     </p:outputPanel>
-                    <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionRemove]}" value="Remove selected work experience" styleClass="button button-fill" process="@this experiencesTable">
+                    <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionRemove]}" value="#{lang['RemoveSelectedWorkExperience']}" styleClass="button button-fill" process="@this experiencesTable">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
 

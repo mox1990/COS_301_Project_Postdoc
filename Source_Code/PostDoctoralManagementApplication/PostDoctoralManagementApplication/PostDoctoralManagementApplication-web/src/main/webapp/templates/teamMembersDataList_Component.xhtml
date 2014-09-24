@@ -10,7 +10,7 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            Name: #{member.title} #{member.fullName} #{member.surname}, Degree type: #{member.degreeType}, Institution: #{member.institution}, Position: #{member.position}                
+            #{lang['Name']} #{member.title} #{member.fullName} #{member.surname}, #{lang['DegreeType']}: #{member.degreeType}, #{lang['Institution']} #{member.institution}, #{lang['Positition']}: #{member.position}                
         </p:dataList>
     </ui:component>
 </html>
