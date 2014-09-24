@@ -43,7 +43,7 @@
                     </ui:decorate>
                     <h:form id="activeAnnouncements">
                         <ui:decorate template="templates/annoucementLister_Component.xhtml">
-                            <ui:param name="annoucements" value="#{announcementSelectionBean.pendingAnnouncementBean.filteredList}"/>
+                            <ui:param name="annoucements" value="#{announcementSelectionBean.activeAnnouncementBean.filteredList}"/>
                             <ui:define name="commandButtons">
                                 <p:commandButton value="Edit announcement" styleClass="button button-fill" action="#{announcementSelectionBean.editAnnouncement(annouce)}"/> 
                             </ui:define>

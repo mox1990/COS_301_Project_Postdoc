@@ -8,7 +8,8 @@
     <ui:insert name="pageEvents"/>
     <h:head>
         <title>#{lang['UPPostDoctoralApplicationManagementSystem']} - #{pageTitle}</title>
-        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
+        <h:outputStylesheet name="css/basicLayout.css" />
+        <h:outputScript library="javascript" name="generalFunctions.js" target="body"/>
         <ui:insert name="CSSStyleSheets"/>
         <ui:insert name="JSScripts"/>
     </h:head>
@@ -17,6 +18,13 @@
             <div class="sideNavBar"></div>
             <div class="container">
                 <div class="containerHeader">
+                    <h:panelGrid columns="2" cellpadding="5px" style="margin-top: 10px;">
+                    <p:graphicImage name="images/up_logo.PNG" width="450px"/>
+                    <div>
+                        <h1>DRIS</h1>
+                        <h2>Department of Research &amp; Innovation Support</h2>
+                    </div>
+                    </h:panelGrid>
                     <ui:insert name="pageHeader"/>
                 </div>
                 <ui:insert name="pageBreadBrumb"/>
@@ -24,7 +32,10 @@
                     <ui:insert name="pageBody"/>
                 </div>
                 <div class="containerFooter">
-                    #{generalInformationBean.JSFVersion}
+                    <h:panelGrid columns="2" cellpadding="5px">
+                        <h:outputText value="System version: #{generalInformationBean.version}"/>
+                        <h:outputText value="#{generalInformationBean.JSFVersion}"/>
+                    </h:panelGrid>
                     <ui:insert name="pageFooter"/>
                 </div>
             </div>            

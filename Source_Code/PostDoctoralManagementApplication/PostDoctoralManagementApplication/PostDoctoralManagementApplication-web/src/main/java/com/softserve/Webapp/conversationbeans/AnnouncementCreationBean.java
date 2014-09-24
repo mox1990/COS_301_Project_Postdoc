@@ -22,6 +22,7 @@ import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -60,6 +61,8 @@ public class AnnouncementCreationBean implements Serializable {
         conversationManagerBean.startConversation(conversation);
         
         announcementCreationDependBean.init(null);
+        
+        sessionManagerBean.addObjectToSessionStorage("FILEUPLOAD", null);
     }
 
     public AnnouncementCreationDependBean getAnnouncementCreationDependBean() {
@@ -70,19 +73,13 @@ public class AnnouncementCreationBean implements Serializable {
         this.announcementCreationDependBean = announcementCreationDependBean;
     }
     
-    public void uploadEvent(FileUploadEvent event)
-    {
-        if(event.getFile() != null)
-        {
-            announcementCreationDependBean.setFileUpload(event.getFile());
-            MessageUtil.CreateGlobalFacesMessage("Uploaded", announcementCreationDependBean.getFileUpload().toString(),FacesMessage.SEVERITY_INFO);
-        }
-    }
+    
     
     public String preformCreationAnnouncmentRequest()
     {
         try
         {
+            announcementCreationDependBean.setFileUpload(sessionManagerBean.getObjectFromSessionStorage("FILEUPLOAD", UploadedFile.class));
             announcementManagementServiceLocal.createAnnouncement(sessionManagerBean.getSession(), announcementCreationDependBean.getCombinedAnnouncement());
             return navigationManagerBean.goToAnnouncementServiceHomeView();
         }

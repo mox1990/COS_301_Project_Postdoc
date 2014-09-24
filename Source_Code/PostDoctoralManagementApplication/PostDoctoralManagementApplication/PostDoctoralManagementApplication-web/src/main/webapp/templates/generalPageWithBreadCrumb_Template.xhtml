@@ -8,21 +8,36 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:insert name="pageEvents"/>
     <h:head>
+<<<<<<< HEAD
         <title>#{lang['UPPostDoctoralApplicationManagementSystem']} - #{pageTitle}</title>
-        <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
+        <h:outputStylesheet name="css/basicLayout.css"/>
+        <h:outputScript library="javascript" name="generalFunctions.js" target="body"/>
         <ui:insert name="CSSStyleSheets"/>
         <ui:insert name="JSScripts"/>
     </h:head>
     <h:body>
         
         <div class="background">
-                <div class="notice-controller">
-                    <h:form>
-                        <p:commandButton type="button" styleClass="button-fill button" value="#{lang['ToggleNotificationBar']}" onclick="PF('notifications').toggle()" icon="ui-icon-arrow-1-s"/>
-                    </h:form>
-                </div>
-                
-                <p:notificationBar position="top" widgetVar="notifications" >
+
+            <div id="notice-bar" class="notice-bar">
+                <center>
+                    <h1 class="notice-bar-header">Hover to view navigation bar</h1>
+                </center>
+                <center>
+                    <h1 class="notice-bar-header-hover">#{notificationBarRequestBean.userGreeting}</h1>
+                </center>
+                <h:form>
+                    <p:growl sticky="true" showSummary="true" showDetail="true"/>
+                    <h:panelGrid columns="4" cellspacing="5px" cellpadding="5px">
+                        <p:commandButton styleClass="button-fill button" value="Logout" action="#{logoutRequestBean.performLogoutRequest()}" icon="ui-icon-arrow-1-s" rendered="#{notificationBarRequestBean.userLoggedIn}"/>
+                        <p:commandButton type="button" styleClass="button-fill button" value="Outstanding issues" onclick="PF('outDialog').show()" icon="ui-icon-arrow-1-s" rendered="#{notificationBarRequestBean.userLoggedIn}"/>
+                        <p:commandButton type="button" styleClass="button-fill button" value="Announcements" onclick="PF('announceDialog').show()" icon="ui-icon-arrow-1-s" rendered="#{notificationBarRequestBean.userLoggedIn}"/>                        
+                    </h:panelGrid>
+                </h:form>
+            </div>
+
+            <p:dialog header="Outstanding issues" modal="true" widgetVar="outDialog">
+
                     <h:form>
                         <p:dataTable value="#{notificationBarRequestBean.outstandingIssues}" var="issue">
                             <f:facet name="header">
@@ -36,31 +51,39 @@
                             </p:column>
                         </p:dataTable>
 
-                        <p:carousel autoPlayInterval="15" circular="true" itemStyle="height:200px;width:100%!important;"  headerText="Announcements" value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" vertical="false" numVisible="1">
-                            <p:panel header="#{announcement.headline}">                         
-
-                                <c:if test="#{not notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
-                                    <h:panelGrid cellpadding="10px" columns="2">
-                                        <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.loadImageForAnnoucement(announcement)}" width="150" height="250"/>
-                                        <h:outputText value="#{announcement.message}" styleClass="text-label"/>
-                                    </h:panelGrid>
-                                </c:if>
-
-                                <c:if test="#{notificationBarRequestBean.announcementViewerDependBean.isImageEmpty(announcement)}" >
-                                    <h:panelGrid cellpadding="10px" columns="1">                                        
-                                        <h:outputText value="#{announcement.message}" styleClass="text-label"/>
-                                    </h:panelGrid>
-                                </c:if>
-                            </p:panel>
-                        </p:carousel>
                     </h:form>
-                </p:notificationBar>
+                </p:dialog>
+
+                <p:dialog header="Announcements" modal="true" widgetVar="announceDialog">
+                    <h:form>
+                        <p:tabView value="#{notificationBarRequestBean.announcementViewerDependBean.activeAnnouncements}" var="announcement" orientation="top">
+                            <p:tab title="#{announcement.headline}" > 
+                                <h:panelGrid cellpadding="10px" columns="2">                                        
+                                    <p:graphicImage value="#{notificationBarRequestBean.announcementViewerDependBean.imageForAnnoucement}" width="150" height="250">
+                                        <f:param name="announceID" value="#{announcement.announcementID}"/>
+                                    </p:graphicImage>
+
+                                    <h:outputText value="#{announcement.message}" styleClass="text-label"/>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+                    </h:form>
+                </p:dialog>
+
             
             
             <div class="sideNavBar"></div>
             <div class="container">
                 <div class="containerHeader">
+                    <h:panelGrid columns="2" cellpadding="5px" style="margin-top: 10px;">
+                    <p:graphicImage name="images/up_logo.PNG" width="450px"/>
+                    <div>
+                        <h1>DRIS</h1>
+                        <h2>Department of Research &amp; Innovation Support</h2>
+                    </div>
+                    </h:panelGrid>
                     <ui:insert name="pageHeader"/>
+                    
                 </div>
                 <div class="containerNavBar">                   
                     <ui:decorate template="breadCrumb_Component.xhtml"/>
@@ -69,7 +92,10 @@
                     <ui:insert name="pageBody"/>
                 </div>
                 <div class="containerFooter">
-                    #{generalInformationBean.JSFVersion}
+                    <h:panelGrid columns="2" cellpadding="5px">
+                        <h:outputText value="System version: #{generalInformationBean.version}"/>
+                        <h:outputText value="#{generalInformationBean.JSFVersion}"/>
+                    </h:panelGrid>
                     <ui:insert name="pageFooter"/>
                 </div>
             </div>            

@@ -169,7 +169,7 @@ public class SessionManagerBean implements Serializable {
     
     public <T> T getObjectFromSessionStorage(int index, Class<T> objectClass)
     {
-        System.out.println("================Session storage: " + sessionStorage.toString());
+        System.out.println("=============Session storage: Current contents " + sessionStorage.toString());
         try
         {
             T temp = null;
@@ -178,25 +178,26 @@ public class SessionManagerBean implements Serializable {
             {
                 if(sessionStorage.get(index).getObject() == null)
                 {
-                    System.out.println("==========Object in storage is null");
+                    System.out.println("=============Session storage: Object at index " + index + " with key " + sessionStorage.get(index).getKey() + " is null");
                 }
                 
                 temp = objectClass.cast(sessionStorage.get(index).getObject());
-            }
-            
-            if(temp == null)
-            {
-                System.out.println("==========Casted is null");
+                
+                if(temp == null)
+                {
+                    System.out.println("=============Session storage: Object at index " + index + " with key " + sessionStorage.get(index).getKey() + " casted to null");
+                }
             }
             else
             {
-                System.out.println("==========Casted is not null");
+                System.out.println("=============Session storage: Index " + index + " is out of bounds");
             }
+
             return temp;
         }
         catch(ClassCastException ex)
         {
-            System.out.println("==========Cast exception");
+            System.out.println("=============Session storage: Cast exception");
             ExceptionUtil.logException(SessionManagerBean.class, ex);
             return null;
         }
@@ -218,30 +219,40 @@ public class SessionManagerBean implements Serializable {
     {
         if(object == null)
         {
-            System.out.println("==========Object in is null");
+            System.out.println("=============Session storage: Object with key " + key + " to insert is null");
         }
         
         if(doesKeyExistInSessionStorage(key))
         {
             updateObjectInSessionStorageAt(key, object);
             
-            return sessionStorage.indexOf(new StorageItem(key, null));
-            
+            return sessionStorage.indexOf(new StorageItem(key, null));            
         }
         else
         {
-            sessionStorage.add(new StorageItem(key, object));            
-        
-            if(sessionStorage.get(sessionStorage.size() - 1) == null)
+            boolean success = sessionStorage.add(new StorageItem(key, object));            
+            
+            if(success)
             {
-                System.out.println("==========Added Object in storage is null");
+                if(sessionStorage.get(sessionStorage.size() - 1) == null)
+                {
+                    System.out.println("=============Session storage: Object with key " + key + " was added but is null");
+                }
+                else
+                {        
+                    System.out.println("=============Session storage: Object with key " + key + " was added " + sessionStorage.get(sessionStorage.size() - 1).toString());
+                }  
+                
+                return sessionStorage.size() - 1;
             }
             else
-            {        
-                System.out.println("================Added to storage " + object.toString());
+            {
+                System.out.println("=============Session storage: Object with key " + key + " could not be added");
+                
+                return -1;
             }
             
-            return sessionStorage.size() - 1;
+            
         }
         
         
@@ -273,7 +284,7 @@ public class SessionManagerBean implements Serializable {
             storageItem.setObject(object);
             
             sessionStorage.set(index, storageItem);
-            System.out.println("=============Object updated with index " + index);
+            System.out.println("=============Session storage: Object updated at index " + index + " with key " + storageItem.getKey());
         }
     }
     

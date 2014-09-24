@@ -10,6 +10,7 @@ import com.softserve.DBEntities.Announcement;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.AnnouncementManagementServiceLocal;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +42,33 @@ public class AnnouncementViewerDependBean implements Serializable {
     }
     
     public boolean isImageEmpty(Announcement announcement)
-    {
-        return announcement == null || announcement.getImage() == null || isEmpty(announcement.getImage());
+    {        
+        return announcement == null || announcement.getImage() == null || announcement.getImage().length == 0;
     }
     
-    public StreamedContent loadImageForAnnoucement(Announcement announcement)
+    public StreamedContent getImageForAnnoucement()
     {
+        
+        
         if(FacesContext.getCurrentInstance().getCurrentPhaseId() == PhaseId.RENDER_RESPONSE)
         {
             return new DefaultStreamedContent();
         }
         else
         {
-            return new DefaultStreamedContent(new ByteArrayInputStream(announcement.getImage()));
+            Long id = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("announceID"));
+            List<Announcement> announcements = getActiveAnnouncements();
+            int index = announcements.indexOf(new Announcement(id));
+
+            Announcement announcement = announcements.get(index);
+            if(isImageEmpty(announcement))
+            {
+                return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
+            }
+            else
+            {
+                return new DefaultStreamedContent(new ByteArrayInputStream(announcement.getImage()));
+            }
         }
     }
     

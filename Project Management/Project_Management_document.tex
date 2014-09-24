@@ -96,16 +96,110 @@ This document provides the documenting of how the project will be managed.
 \vspace{0.2in}
 The Project Management provides the details of how the project will be managed by Software. It will contain the time schedule and the list of tasks that still need to be completed.
 
+\section{References}
+IEEE Std 1058-1998, IEEE Standard for Software Project Management Plans.
+
 \vspace{0.2in}
 
 \newpage
-\section{Project Timeline}
+\section{Project Organization}
+
+\subsection{External Interfaces}
+The external interfaces for this project will be the Stakeholders: Ms Cathy Sandis, Prof S. Gruner and the members of the COS 301 staff. The University of Pretoria are the acquiring organization for the software to be developed.
+
+\subsection{Internal Interfaces}
+\begin{itemize}
+\item Mathys Ellis
+\item Tokologo "Carlo" Machaba
+\item Kgothatso Phatedi Alfred Ngako
+\end{itemize}
+
+\section{Managerial Process}
+\subsection{Project Start Up Plan}
+\subsubsection{Division of use cases}
+This section provides the use cases each of the team members selected to do for the recess work plan. The selection process was as follows Kgothatso Phatedi Alfred Ngako and Tokologo “Carlo” Machaba selected which use cases they wished to do. Lastly Mathys Ellis selected the remaining use cases. It should be noted that the division of the use cases also relate with the expected work hours of each member.
+\begin{itemize}
+	\item Mathys Ellis
+	\begin{enumerate}
+		\item Post-doctoral fellow-ship management system use cases
+		\item Application services use cases
+		\item User account management services use cases
+		\item Grant holder application finalisation service use cases
+		\item HOD Approval service use cases
+		\item Dean endorsement service use cases
+		\item DRIS approval service use cases
+	\end{enumerate}
+	\item Tokologo “Carlo” Machaba
+	\begin{enumerate}
+		\item User gateway use cases
+		\item Application progress viewer service use cases
+		\item New fellowship application service use cases
+		\item Application renewal service use cases
+		\item Referees' report service use cases
+	\end{enumerate}
+	\item Kgothatso Phatedi Alfred Ngako
+	\begin{enumerate}
+		\item Report services use cases
+		\item Notification services use cases
+		\item Audit-Trail services use cases
+		\item Archival services use cases
+		\item Imports and exports services use cases
+		\item Meeting management service use cases
+	\end{enumerate}
+\end{itemize}
+
+\subsubsection{Tasks to be completed for each use case}
+This section lists and describes the tasks that should be completed for each of the use cases specified above.
+\begin{itemize}
+	\item Create interface diagram within the Model.eap file. In order to provide the expected APIs for other members, Document this in the Functional requirements document. This must be complete before the 12/06/2014.
+	\item Document initial unit and integration tests in the functional testing document. This must be complete before the 30/06/2014.
+	\item Complete the implementation of the back-end
+	\item If the use case provides a front-end it must be implemented. Document the user work flow and UI design also.
+	\item Develop JUnit tests alongside actual implementations 
+	\item Document any extra use case diagrams if new sub services are developed.
+	\item Document any process specification of an implemented functionality. 
+	\item Document any additional unit and integration tests while implementing
+\end{itemize}
+
+\subsubsection{Additional tasks}
+This section lists and describes the additional tasks that should be completed by each member. These revolve around the awe factors that the SoftServe group wishes to implement. The tasks were divided according to the background and skill level of each member in terms of AI and 3D graphics. 
+\begin{itemize}
+	\item Mathys Ellis
+	\begin{enumerate}
+		\item Research webGL and 3D user interfaces
+		\item Help with design of interactive UI
+		\item Research data mining and neural network techniques
+		\item Identify data sources that can be used to gather data.
+		\item Provide support in both the AI and 3D related topics.
+		\item Editing of documentation
+	\end{enumerate}
+	\item Tokologo “Carlo” Machaba
+	\begin{enumerate}
+		\item Research WebGL and 3D user interfaces
+		\item Design UI, standard and interactive
+		\item Research and develop innovative user interaction mechanisms
+		\item Initial documentation of 3D UI awe factor
+	\end{enumerate}
+	\item Kgothatso Phatedi Alfred Ngako
+	\begin{enumerate}
+		\item Research data mining and neural network techniques with regards to evaluation, prediction, background check.
+		\item Design viable data mining techniques.
+		\item Identify valuable indicators in data.
+		\item Identify data sources that can be used to gather data.
+		\item Initial documentation of AI awe factor
+	\end{enumerate}
+\end{itemize}
+
+\subsection{Work Plan}
+\subsubsection{Project Timeline}
 \begin{center}
 \begin{longtable}{|p{3cm}|p{3cm}|p{9cm}|}
 \hline
 \multicolumn{3}{|l|}{\bf Timeline} \\
 \hline
  Task & Date & Description  \\
+\hline
+First Demo & 23/05/2014 & Demo 1 \\
 \hline
 User Acceptance Tests & 23/05/2014 - 10/06/2014 & Create and finalise User Acceptance Tests \\
 \hline
@@ -176,920 +270,100 @@ Project Day Preparation & 10/10/2014 - 20/10/2014 & Maintenance and preparation 
 Project Day & 20/10/2014 & Project Day and system is presented. \\
 \hline
 
-
 %\end{tabbing}
 \end{longtable}
 \end{center}
 
-\section{July recess work plan}
-This section describes the SoftServe's group work plan for the July recess.
+\subsection{Control Plan}
+\subsubsection{Requirements Control Plan}
+Requirements will be added to the documentation and if necessary each document will be revised with each stakeholder updated with the new version.
 
-\subsection{Expected work hours}
-This section documents the expected work hours each member of the SoftServe's group specified they will contribute to the project. There are a total of 5 weeks in the period of 20/06/2014 to 22/07/2014. It should be noted that weekend days are not considered as work days by this plan.
+\subsubsection{Schedule Control Plan}
+SoftServe will measure the progress during the development by comparing the end products with the new version of the documentation.
+
+\subsubsection{Quality Control Plan}
+The software will be developed under the following specifications:
 \begin{itemize}
-	\item Mathys Ellis
-	\begin{itemize}
-		\item 4 hours per weekday
-		\item 4 x 5 = 20 hours per week
-		\item 20 x 5 = 100 hours over period
-	\end{itemize}
-	\item Tokologo “Carlo” Machaba
-	\begin{itemize}
-		\item 4 hours per weekday
-		\item 4 x 5 = 20 hours per week
-		\item 20 x 5 = 100 hours over period
-	\end{itemize}
-	\item Kgothatso Phatedi Alfred Ngako
-	\begin{itemize}
-		\item 6 hours per weekday
-		\item 6 x 5 = 30 hours per week
-		\item 30 x 5 = 150 hours over period
-	\end{itemize}
+\item V-Model Development model which is document driven and allows for the final product to be of high quality.
+\item All documentation will follow IEEE Standards, to ensure we follow and International Standard.
+\item SoftServe will conduct a number of tests.
 \end{itemize}
 
-\subsection{Division of use cases}
-This section provides the use cases each of the team members selected to do for the recess work plan. The selection process was as follows Kgothatso Phatedi Alfred Ngako and Tokologo “Carlo” Machaba selected which use cases they wished to do. Lastly Mathys Ellis selected the remaining use cases. It should be noted that the division of the use cases also relate with the expected work hours of each member.
+\subsubsection{Reporting}
+The following reporting will be used for communication:
 \begin{itemize}
-	\item Mathys Ellis
-	\begin{enumerate}
-		\item Post-doctoral fellow-ship management system use cases
-		\item Application services use cases
-		\item User account management services use cases
-		\item Grant holder application finalisation service use cases
-		\item HOD Approval service use cases
-		\item Dean endorsement service use cases
-		\item DRIS approval service use cases
-	\end{enumerate}
-	\item Tokologo “Carlo” Machaba
-	\begin{enumerate}
-		\item User gateway use cases
-		\item Application progress viewer service use cases
-		\item New fellowship application service use cases
-		\item Application renewal service use cases
-		\item Referees' report service use cases
-	\end{enumerate}
-	\item Kgothatso Phatedi Alfred Ngako
-	\begin{enumerate}
-		\item Report services use cases
-		\item Notification services use cases
-		\item Audit-Trail services use cases
-		\item Archival services use cases
-		\item Imports and exports services use cases
-		\item Meeting management service use cases
-	\end{enumerate}
+\item Formal Meetings - Used to discuss the requirements of the software, review of completed tasks and input from the client
+\item GitHub - Used for source code collaboration and issue-tracking.
 \end{itemize}
 
-\subsection{Tasks to be completed for each use case}
-This section lists and describes the tasks that should be completed for each of the use cases specified above.
+\subsection{Risk Management Plan}
+Risk Factors will be managed as follows:
 \begin{itemize}
-	\item Create interface diagram within the Model.eap file. In order to provide the expected APIs for other members, Document this in the Functional requirements document. This must be complete before the 12/06/2014.
-	\item Document initial unit and integration tests in the functional testing document. This must be complete before the 30/06/2014.
-	\item Complete the implementation of the back-end
-	\item If the use case provides a front-end it must be implemented. Document the user work flow and UI design also.
-	\item Develop JUnit tests alongside actual implementations 
-	\item Document any extra use case diagrams if new sub services are developed.
-	\item Document any process specification of an implemented functionality. 
-	\item Document any additional unit and integration tests while implementing
+\item Loss of a group member due to unforeseen circumstances. This will be managed by redistributing the tasks among the group members
+\item Schedule being followed will allow for sufficient time for minor changes and clean up at the end of the project.
+\item Creating different branches on GitHub during development to ensure that there is no disruptions once the prototype is ready.
 \end{itemize}
-
-\subsection{Additional tasks}
-This section lists and describes the additional tasks that should be completed by each member. These revolve around the awe factors that the SoftServe group wishes to implement. The tasks were divided according to the background and skill level of each member in terms of AI and 3D graphics. 
-\begin{itemize}
-	\item Mathys Ellis
-	\begin{enumerate}
-		\item Research webGL and 3D user interfaces
-		\item Help with design of interactive UI
-		\item Research data mining and neural network techniques
-		\item Identify data sources that can be used to gather data.
-		\item Provide support in both the AI and 3D related topics.
-		\item Editing of documentation
-	\end{enumerate}
-	\item Tokologo “Carlo” Machaba
-	\begin{enumerate}
-		\item Research webGL and 3D user interfaces
-		\item Design UI, standard and interactive
-		\item Research and develop innovative user interaction mechanisms
-		\item Initial documentation of 3D UI awe factor
-	\end{enumerate}
-	\item Kgothatso Phatedi Alfred Ngako
-	\begin{enumerate}
-		\item Research data mining and neural network techniques with regards to evaluation, prediction, background check.
-		\item Design viable data mining techniques.
-		\item Identify valuable indicators in data.
-		\item Identify data sources that can be used to gather data.
-		\item Initial documentation of AI awe factor
-	\end{enumerate}
-\end{itemize}
-
-\subsection{Evaluation}
-In order to control the work flow and monitor each group members performance over the July Recess 2 evaluation reports will created. These reports will document the tasks completed by each member and those not completed yet. As well as any issues with regards to technical or implementation. The first report will occur at the end of week 2 and the second at the end of week 5.  
-
 \newpage
-\section{Scrum Reports}
-\subsection{Reports for period 20 June - 4 July}
-\subsubsection{Mathys Ellis}
-	\begin{itemize}
-		\item June 16:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Do research into netbeans, JPA, entities and Maven Java EE file structure
-				\item Create maven environment and file structure for project project
-				\item Create SQL script for database
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item Task c - Partially completed script due to studying for exams
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Learning Maven
-				\item Found various approaches to creating JPA entities and how to use them - requires more research
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 17:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Do research into JPA, entities, Maven , JTA, MySQL tables
-				\item Update domain objects to refine and complete them
-				\item Refine SQL script to complete state and look for inconsistencies
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Found that XML structures will be required to store complex data in database due to our memory Limits
-				\item Had to do research into XML apis for java and associated plugins for maven
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 22:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Do further research into JAXB and Maven and also unit testing frameworks.
-				\item Update domain objects for any past and current changes changes
-				\item Review and refine SQL script to insure correctness as far as possible
-				\item Create JPA entities for persistence layer
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-				\item Task d
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Ensuring JPA entities are correct
-				\item Research showed various mock and unit testing frameworks. Require further investigation and time to get use to it 
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 23:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Do further research into JAXB and Maven and also unit testing frameworks and mockito.
-				\item Update domain objects for any past and current changes changes
-				\item Review and refine SQL script to insure correctness as far as possible
-				\item Check if JPA entities are correct for purpose of project and very usable
-				\item Create the 7 XML schemas for JAXB auto generation
-				\item Setup JAXB plug-in for maven and auto generation of XML controller classes 
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-				\item Task d
-				\item Task e
-				\item Task f
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item There where some limitations in the database that needed to be addressed to insure the entities will be very usable and simple.
-				\item The JAXB maven plugin took some time to configure and setup so that it work in the way the project requires.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 24:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Do research into DAOs, Mockito, unit testing
-				\item Create User account management services and create a example working experiment with database				
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item Task b - Was only partially completed due to some misunderstandings of JPA and unit testing them and unit test frameworks.
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Deciding on whether to use DAOs patterns or not. Research yield unclear results. Require further research and experimentation.
-				\item Setting up the unit test framework and mockito proved a little more difficult then expected since new to it.				
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 25:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item None
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Could not do anything due to a 24 hour power outage caused by cable replacement by eskom.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 26:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Create a constant classs to house any constants
-				\item Create DAOs
-				\item Work on User account management services				
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None.
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item None
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item June 27:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Add security roles to SQL script
-				\item Complete the User account management services
-				\item Check newly added code from Alfred for integrability build-ability compatibility
-				\item Start on a small integration test that will help provide an example and framework for group on how front-end business logic and the persistence layer will interact				
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c				
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None.
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Needed to re factor some code in Alfred's code to start integration and make it build able.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	\begin{itemize}
-		\item June 28:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Fix a strange error in maven build script
-				\item Create a small integration test for user account management services that will help provide an example and framework for the whole group on how front-end business logic and the persistence layer will interact				
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a								
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item Task b - The code is completed but the integration test is not performing what is expected
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Need to research further into JPA, JTA, CMT and BMT since the integration test is not working.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	\begin{itemize}
-	\item June 29:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Do more research into JPA, JTA, CMT and BMT
-			\item Find faults and fix integration test. 				
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a
-			\item Task b								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item None
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item None
-		\end{itemize}			
-	\end{enumerate}
-	\item June 30:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Do more research into Unit testing DAOs and JPA
-			\item Create a unit test for user account management. This will serve as an example.
-			\item Create unit tests for JPA entities.				
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a
-			\item Task b								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item Task c - Only created the initial skeletons of the unit tests
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Came to the conclusion from research that unit tests for services that do not return results need to be tested for behaviour using mockito.
-			\item Had to update some parts of the user account management service to support behavioural testing.
-		\end{itemize}			
-	\end{enumerate}
-	\item July 1:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Create Grant holder finalisation service
-			\item Create HOD approval service
-			\item Add to entities unit tests			
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a
-			\item Task b
-			\item Task c								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item None
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Authenticate user code is missing cannot use it yet. Log action and notification code not fully complete thus cannot insert.
-		\end{itemize}			
-	\end{enumerate}
-	\item July 2:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Create DRIS approval service
-			\item Create Dean endorsement service
-			\item Add to entities unit tests			
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a
-			\item Task b
-			\item Task c								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item None
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Authenticate user code is missing cannot use it yet. Log action and notification code not fully complete thus cannot integrate.
-		\end{itemize}			
-	\end{enumerate}
-	\item July 3:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Add to entities unit tests			
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item None
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item None
-		\end{itemize}			
-	\end{enumerate}
-\end{itemize}
 
-\subsubsection{Kgothatso Phatedi Alfred Ngako}
-\begin{itemize}
-	\item 23 June - 27 June: Worked on Notification services, Audit Trail services as they were highly prioritized. Started work on the meeting management services.
-	\item 30 June - 3 July: Researched about PDF and Excel api for Java. Choose to work with iText and Apache POI respectively. Added API to dependencies. Added more business logic to Meeting Management services. Started on Report (mainly PDF and Excel. Reports) services and Import services.Created a more generic method to handle the many entities that require being exported.	
-\end{itemize}
-\subsubsection{Tokologo “Carlo” Machaba}
-\begin{itemize}
-	\item 20 - 29 June
-	\begin{enumerate}
-	\item Tasks set out to do:
-	\begin{itemize}
-		\item Completed backend and tests for Application Renwals, Referees Report.
-	\end{itemize}
-	\item Tasks completed:
-	\begin{itemize}
-		\item Unit Tests
-		\item Backend for use cases
-	\end{itemize}
-	\item Tasks not completed:
-	\begin{itemize}
-		\item Backend for the rest of the use cases
-	\end{itemize}	
-	\item Challenges / obstacles faced:
-	\begin{itemize}
-		\item Github faults and pulling issues.
-		\item Learning JUnit 
-		\item Using XML schema
-		\item Access to Internet
-	\end{itemize}
-	\end{enumerate}
-	\item 30 June - 6 July On holiday in Drakensburg.	 
-\end{itemize}
-
-
-
-\subsection{Reports for period 5 July - 20 July}
-\subsubsection{Mathys Ellis}
-	\begin{itemize}
-		\item July 5:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Integrate Audit trial services and notification services with own code
-				\item Review Carlos progress
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task b
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item Task A - Partially completed due finding inconsistencies in code with regards to spec. 
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Amending code.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 6:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Complete integration of  Audit trial services and notification services
-				\item Review and correct any code of the Meeting management service
-				\item Add account status field to support carlo usergateway
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Found inconsistencies in meeting management service
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 7:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Create application progress viewer
-				\item Research and create template unit tests by creating unit tests for create user account creation function
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item When implementing unit test rather do it after we have completed integration of modules.
-				\item Need to create stage status class and add a date field to the application table
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 8:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Review user gateway code.
-				\item Create some sort of front-end login to test user gateway code.
-				\item Create CV management service 
-				\item Research java-ee session management
-				\item Assist Carlo on getting his back-end complete - New fellowship service
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-				\item Task d
-				\item Task e
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Found some inconsistencies to spec refactored code. 
-				\item Found a spec issue with regards to the generation of on-demand user accounts. Moved it user account creation.
-				\item Found errors in code with regards to the using EJBs in EJBs and the em factory.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 9:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Create progress report management service
-				\item Fix injection issue by creating a constructor that takes in emf in each class
-				\item Integrate Authentication services
-				\item Review all my code and trim
-				\item Assist Carlo on getting his back-end complete - Referee report service			
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b
-				\item Task c
-				\item Task d
-				\item Task e
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Had to add a new application status.
-				\item Added to constants security role objects.
-				\item EJB are now un-deployable for some reason.		
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 10:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item None
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Was away due to family reasons
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 11:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item None
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Was away due to family reasons
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 12:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item None
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Was away due to family reasons
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 13:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item None
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item None
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Was away due to family reasons
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	
-	\begin{itemize}
-		\item July 14:
-		\begin{enumerate}
-			\item Tasks set out to do:
-			\begin{enumerate}
-				\item Fix a strange error un-deployable error in ejbs
-				\item Research into JSF
-				\item Start developing web pages and backing beans				
-			\end{enumerate}
-			\item Tasks completed:
-			\begin{itemize}
-				\item Task a
-				\item Task b								
-			\end{itemize}
-			\item Tasks not completed:
-			\begin{itemize}
-				\item Task c - Started but encounter problems in understanding managed beans operations
-			\end{itemize}
-			\item Challenges/obstacles faced:
-			\begin{itemize}
-				\item Need to research further into JSF and backing beans.
-				\item Need a simple AJAX support JSF component library choose primefaces.
-			\end{itemize}			
-		\end{enumerate}
-	\end{itemize}
-	\begin{itemize}
-	\item July 15:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Do more research into JSF and backing beans
-			\item Create HOD services web pages. 				
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item Task b - Completed partially due to XML schema inconsistencies and backing bean design issues 
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Had to fix XML schemas to ensure proper classes
-			\item Had to create a XML unmarshaller class to convert strings to XML objects
-			\item Add functions to various entities that contain xml strings.
-			\item Refactor loadpendingapplications functions in EJBs to support record range
-		\end{itemize}			
-	\end{enumerate}
-	\item July 16:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Do more research into JSF
-			\item Create prospective fellow account creation web page
-			\item Create welcome page
-			\item Fix backing beans				
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a
-			\item Task b
-			\item Task c								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item Task d - Fixed partially still need to clear up small issue of class responsibility
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Had to fix automatic account generation error.
-			\item Had to create a authentication bypass when system level.
-		\end{itemize}			
-	\end{enumerate}
-	\item July 17:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Create a good structure for backing beans
-			\item Create a bread crumb facilities
-			\item Research into UI templating of JSF pages
-			\item Create templates and refactor current design			
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item Task a
-			\item Task b
-			\item Task c
-			\item Task d								
-		\end{itemize}
-		\item Tasks not completed:
-		\begin{itemize}
-			\item None
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Had to change already created backing beans
-			\item Had to create a conversation manager bean with generic methods
-			\item Had to refactor various web pages to support new navigation.
-			\item Breadcrumb doesn't work well with back button and caching in web browser
-		\end{itemize}			
-	\end{enumerate}
-	\item July 18:
-	\begin{enumerate}
-		\item Tasks set out to do:
-		\begin{enumerate}
-			\item Fix back button problem
-			\item Start on user account management web page			
-		\end{enumerate}
-		\item Tasks completed:
-		\begin{itemize}
-			\item None								
-		\end{itemize}
-			\item Tasks not completed:
-		\begin{itemize}
-			\item Task a - Partially solve. Tried various solutions but problem still persists
-			\item Task b - Partially completed on completed home page
-		\end{itemize}
-		\item Challenges/obstacles faced:
-		\begin{itemize}
-			\item Had some internet conection problems and other personal matters to attend to. Hence could not submit Scrum reports.
-			\item Need to find a way to turn of browser caching
-		\end{itemize}			
-	\end{enumerate}
-\end{itemize}
-
-\subsubsection{Kgothatso Phatedi Alfred Ngako}
-\begin{itemize}	
-	\item 6 July - 11 July: Added more work to the import functionality. Started and adopted the export functions to have less generic implementations. Researched on mysql back up functionality. Discovered and implemented ways to run mysqldump command in Java.
-	\item 14  July - 18 July: Updated archival services to include automatic scheduling of backup functionality. Started with the tests of each use case. Planned to formally write a day to day detailed scrum report.
-\end{itemize}
-\subsubsection{Tokologo “Carlo” Machaba}
-\begin{itemize}
-	\item 7 - 14 July
-	\begin{enumerate}
-	\item Tasks set out to do:
-	\begin{itemize}
-		\item Complete the backend functionality on my use cases
-	\end{itemize}
-	\item Tasks completed:
-	\begin{itemize}
-		\item Backend for User gateway, and application renewal service.
-	\end{itemize}
-	\item Tasks not completed:
-	\begin{itemize}
-		\item The other use cases, Mathys Ellis stepped in and provided assistance.
-	\end{itemize}	
-	\item Challenges / obstacles faced:
-	\begin{itemize}
-		\item Understanding the technologies used, with regards to persistence objects and entity objects and where they are applicable to be used.
-		\item Access to Internet
-	\end{itemize}
-	\end{enumerate}
-	\item 15 - 20 July
-	\begin{enumerate}
-	\item Tasks set out to do:
-	\begin{itemize}
-		\item Complete web pages(front end) for all my use cases
-		\item Do research and try to implement management and session objects to provide link to the backend
-	\end{itemize}
-	\item Tasks completed:
-	\begin{itemize}
-		\item Front end of Application Renewal, New Application Progress Viewer, Application Renewal.
-	\end{itemize}
-	\item Tasks not completed:
-	\begin{itemize}
-		\item Front end for new fellowship application.
-		\item Implementation of management and session beans
-	\end{itemize}	
-	\item Challenges / obstacles faced:
-	\begin{itemize}
-		\item Access to Internet
-	\end{itemize}
-	\end{enumerate}	 
-\end{itemize}
-
-It should be noted from the above and code commits that the back end is not near the expected level of completion and therefore it would be recommend that the whole group needs to focus the on the sections not completed nor integrated so that it can get done before the end of the weekend so that the project deadlines can be met.
-\section{Project backlog}
+\section{Project Deliverables}
 
 \begin{itemize}
 \item \textbf{User Acceptance tests}
-\item \textbf{User Interface Designs}
-\item \textbf{Database designs}
-\item \textbf{Implementation of the system}
-\item \textbf{Offline testing}
-\item \textbf{Live testing}
-\item \textbf{User manuals}
-\item \textbf{Final documentation}
-\item \textbf{Find a server to run to the system on}
+\item \textbf{Architectural Specification}
+\item \textbf{Software Requirements Specification}
+\item \textbf{Integration Test Plan}
+\item \textbf{Usability Test Plan}
+\item \textbf{Unit Test Plan}
+\item \textbf{Final Document}
 
 
 \end{itemize}
 
+\section{Technical Process Model}
+
+\subsection{Process Model}
+The development of the system will follow the V-Model process. The first phase consists of submission of the Requirements Specifications, which will be approved or revised by the client. If revision of the document is necessary, the required changes will be made to the document and revised version will be sent out.
+
+The steps mentioned above will be implemented for all the following phases, namely the Architectural Document, User Acceptance Test Document, Non-functional Testing Document(Usability Tests and User Acceptance Tests), Functional Testing Document(Unit Tests and Integration Tests).  
+
+\subsection{Methods, Tools and Techniques}
+The V-Model will be implemented as the Development Process of this software as it implements testing from the beginning of the software development life-cycle.
+
+Static Testing techniques such as inspections and walk-throughs will be implemented through the development of prototypes. This will allow for validation and verification of each subset of the software.
+
+Testing will be implemented at each development stage, allowing SoftServe to deliver a final product that is reliable, maintainable and error free. SoftServe strives to create a product that fulfils the client's requirements and goes above their expectations.
+
+\subsection{Product Acceptance Plan}
+A number of tests will be drawn up throughout the development process whereby different stakeholders will be testing the product for malfunctions:
+
+\begin{itemize}
+\item \textbf{User Acceptance tests will be performed by the client }
+\item \textbf{Usability tests will be performed by various stakeholders}
+\item \textbf{Unit tests will be performed by programmers}
+\item \textbf{Integration Tests will be performed by programmers}
+\item \textbf{Final Product Tests will be performed by all stakeholders}
+\end{itemize}
+
+\section{Supporting Process Plan}
+
+\subsection{Configuration Management Plan}
+All project deliverables are considered to be configuration items. The configuration items as well as it's documents would be named after the document title and will be followed by the version number. 
+
+\subsection{Verification and Validation}
+Each test plan and meeting will allow the client to provide feedback regarding their satisfaction with the requirements implemented in terms of valid implementation as well as verification of the implementation.
+ 
+\subsection{Documentation Plan}
+All documents will follow IEEE standards. Each document will ve discussed and reviewed before it is submission for assessment by the lecturers and client.
+ 
+\subsection{Quality Assurance Plan}
+SoftServe will ensure that each member produces work of a standard expected by the rest of the group, COS 301 lecturers and the client.
+
+\subsection{Reviews and Audit Plan}
+Peer reviews will be conducted in order to ensure that each members contribution is suitable.
+
+\subsection{Problem Resolution Plan}
+
+\subsection{Process Improvement Plan}
+Following the Agile development model and V-Model development process will allow SoftServe to periodically assess the project using the test plans. This will help us determine areas for improvement and reduce any disruptions during development phases later in the V-Model process.
 
 \end{document}

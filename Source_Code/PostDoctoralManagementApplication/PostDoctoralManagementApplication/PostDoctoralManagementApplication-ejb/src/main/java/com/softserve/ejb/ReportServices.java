@@ -6,6 +6,16 @@
 
 package com.softserve.ejb;
 
+import ar.com.fdvs.dj.core.DynamicJasperHelper;
+import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.core.layout.LayoutManager;
+import ar.com.fdvs.dj.core.layout.ListLayoutManager;
+import ar.com.fdvs.dj.domain.AutoText;
+import ar.com.fdvs.dj.domain.DynamicReport;
+import ar.com.fdvs.dj.domain.Style;
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
+import ar.com.fdvs.dj.domain.constants.Border;
+import com.softserve.ClassConverterUtils.EntityToListConverter;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
@@ -14,18 +24,25 @@ import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.auxillary.DynamicReportCreationRequest;
+import com.softserve.auxillary.DynamicReportExportRequest;
+import com.softserve.auxillary.SelectedColumn;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.jasper.DynamicColumnDataSource;
 import com.softserve.jasper.DynamicReportBuilder;
 import com.softserve.system.Session;
+import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +51,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +67,10 @@ import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -57,9 +79,19 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.HtmlExporter;
+import net.sf.jasperreports.engine.export.JRHtmlExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.Exporter;
+import net.sf.jasperreports.export.ExporterInput;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.poi.common.usermodel.LineStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -77,36 +109,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ReportServices implements ReportServicesLocal 
 {    
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
-    
-    @EJB 
-    private UserGatewayLocal userGateway;
-    
-    private final String fs = System.getProperty("file.separator");
-    private final String filepath = "Reports" + fs;
-    private final JasperDesign dynamicPersonReport;
-    
-    public ReportServices() throws Exception
-    {
-        //personReport = null;
-        //applicationReport = null;
-//        InputStream personInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.PERSON.getBytes("UTF-8"));
-//        InputStream allPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_PERSONS.getBytes("UTF-8"));
-//        InputStream applicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.APPLICATION.getBytes("UTF-8"));
-//        InputStream allApplicationInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.ALL_APPLICATIONS.getBytes("UTF-8"));
-        InputStream dynamicPersonInputStream = new ByteArrayInputStream(com.softserve.constants.JasperReportTemplateStrings.DYNAMIC_PERSON.getBytes("UTF-8"));
-        
-//        personReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Person.jrxml");
-//        allPersonReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllPersons.jrxml");
-//        applicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "Application.jrxml"); // TODO: Work an application report
-//        allApplicationReport = JasperCompileManager.compileReport(System.getProperty("user.home") + fs + "AllApplications.jrxml");
-//        
-//        personReport = JasperCompileManager.compileReport(personInputStream);
-//        allPersonReport = JasperCompileManager.compileReport(allPersonInputStream);
-//        applicationReport = JasperCompileManager.compileReport(applicationInputStream); // TODO: Work an application report
-//        allApplicationReport = JasperCompileManager.compileReport(allApplicationInputStream);
-        dynamicPersonReport = JRXmlLoader.load(dynamicPersonInputStream);
-    }
+    private EntityManagerFactory emf;   
+
     
     /**
      *
@@ -117,6 +121,190 @@ public class ReportServices implements ReportServicesLocal
         return new DAOFactory(em);
     }
     
+    protected EntityToListConverter getEntityToListConverterUTIL()
+    {
+        return new EntityToListConverter();
+    }
+    
+
+    public ReportServices() {
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
+    @Override
+    public List<Person> loadAllPersonEntities(Session session) throws Exception
+    {
+        EntityManager em = emf.createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createPersonDAO().findPersonEntities();
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
+    @Override
+    public List<Application> loadAllApplicationEntities(Session session) throws Exception 
+    {
+        EntityManager em = emf.createEntityManager();
+        
+        try
+        {
+            return getDAOFactory(em).createApplicationDAO().findApplicationEntities();
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<String> getFieldNamesForEntity(Object entity) throws Exception 
+    {
+        EntityToListConverter entityToListConverter = getEntityToListConverterUTIL();
+        
+        return entityToListConverter.getEntityFieldNames(entity);
+    }
+        
+    @Override
+    public List<String> getConcatenatedFieldNamesForEntities(List<Object> entities) throws Exception
+    {
+        EntityToListConverter entityToListConverter = getEntityToListConverterUTIL();
+        
+        return entityToListConverter.getConcatenatedEntityFieldNames(entities);
+    }
+    
+    @Override
+    public List<List<String>> convertEntitiesToRowData(List<List<Object>> entities, List<SelectedColumn> propertyMaps) throws Exception
+    {
+        EntityToListConverter entityToListConverter = getEntityToListConverterUTIL();
+        
+        return entityToListConverter.convertConcatenatedEntitiesListToListString(entities, propertyMaps);
+    }
+       
+    
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
+    @Override
+    public DynamicReport createDynamicReport(Session session, DynamicReportCreationRequest dynamicReportCreationRequest) throws Exception 
+    {
+        
+        
+        FastReportBuilder builder = new FastReportBuilder();
+        
+        DynamicReport dynamicReport = null;
+
+        for(SelectedColumn selectedColumn : dynamicReportCreationRequest.getSelectedColumns())
+        {
+            Style style = new Style();
+            style.setBorder(new Border(1.0f, Border.BORDER_STYLE_SOLID, Color.black));
+            Style hStyle = new Style();
+            hStyle.setBorder(new Border(1.0f, Border.BORDER_STYLE_SOLID, Color.black));
+            hStyle.setBackgroundColor(Color.gray);
+            
+            builder.addColumn(selectedColumn.getAlias(),selectedColumn.getActualname(), String.class.getName(), 30, style, hStyle);
+        }        
+        
+        builder.setTitle(dynamicReportCreationRequest.getTitle());
+        builder.setSubtitle(dynamicReportCreationRequest.getTitle());
+        builder.setUseFullPageWidth(dynamicReportCreationRequest.isUseFullPageWidth());
+        builder.setIgnorePagination(true);
+        builder.setPrintColumnNames(true);
+        
+        builder.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y,AutoText.POSITION_FOOTER,AutoText.ALIGNMENT_CENTER);
+        builder.addAutoText("Created by Softserve PostDoc", AutoText.POSITION_FOOTER, AutoText.ALIGNMENT_LEFT);
+        builder.addAutoText("Generated on " + (new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(new Date()), AutoText.POSITION_HEADER, AutoText.ALIGNMENT_LEFT);
+        dynamicReport = builder.build();
+        
+        return dynamicReport;
+        
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
+    @Override
+    public String renderReportAsHTML(Session session, DynamicReport report, DynamicReportExportRequest dynamicReportExportRequest) throws Exception
+    {
+        HtmlExporter exporter = new HtmlExporter();
+        
+        JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), dynamicReportExportRequest.getDataSourceForRowData());
+        ByteArrayOutputStream byteArrayOutputStream  = new ByteArrayOutputStream();
+
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleHtmlExporterOutput(byteArrayOutputStream));
+        exporter.exportReport();
+
+        return byteArrayOutputStream.toString();
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
+    @Override
+    public byte[] renderReportAsPDF(Session session, DynamicReport report, DynamicReportExportRequest dynamicReportExportRequest) throws Exception
+    {        
+        JRPdfExporter exporter = new JRPdfExporter();
+        
+        JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), dynamicReportExportRequest.getDataSourceForRowData());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+        
+        exporter.exportReport();
+        
+        return byteArrayOutputStream.toByteArray();
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @AuditableMethod
+    @Override
+    public byte[] renderReportAsMSEXCELSpreadsheet(Session session, DynamicReport report, DynamicReportExportRequest dynamicReportExportRequest) throws Exception
+    {
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        
+        JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(report, new ListLayoutManager(), dynamicReportExportRequest.getDataSourceForRowData());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+        
+        exporter.exportReport();
+        
+        return byteArrayOutputStream.toByteArray();
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public List<Person> getAllPersons(Session session)
@@ -141,6 +329,8 @@ public class ReportServices implements ReportServicesLocal
 
         try
         {
+            
+                    
             return getDAOFactory(em).createPersonDAO().findUserBySecurityRoleWithAccountStatus(new SecurityRole(role), com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
         }
         finally
@@ -243,5 +433,5 @@ public class ReportServices implements ReportServicesLocal
             Cell cell = row.createCell(cIndex++);
             cell.setCellValue(item);
         }
-    }
+    }*/
 }
