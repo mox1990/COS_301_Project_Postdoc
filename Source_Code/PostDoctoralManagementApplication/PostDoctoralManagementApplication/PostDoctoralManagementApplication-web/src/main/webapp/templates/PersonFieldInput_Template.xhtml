@@ -10,49 +10,49 @@
             <f:facet name="header"> 
                 <ui:insert name="header"/>                
             </f:facet>
-            <p:outputLabel value="Title:" for="title"/>                                    
+            <p:outputLabel value="#{lang['Title']}" for="title"/>                                    
             <p:selectOneMenu id="title" value="#{person.title}">
                 <f:selectItems value="#{generalInformationBean.titleSelectItems}" var="t" itemLabel="#{t}" itemValue="#{t}"/>
             </p:selectOneMenu>
             <p:message for="title" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Full name:" for="fname"/>                                
+            <p:outputLabel value="#{lang['FullName']}" for="fname"/>                                
             <p:inputText id="fname" value="#{person.fullName}"/>
             <p:message for="fname" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Surname:" for="sname"/>                                
+            <p:outputLabel value="#{lang['Surname']}" for="sname"/>                                
             <p:inputText id="sname" value="#{person.surname}"/>
             <p:message for="sname" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Email:" for="email"/>                                
+            <p:outputLabel value="#{lang['Email']}" for="email"/>                                
             <p:inputText id="email" value="#{person.email}" disabled="#{!emailEditable}"/>
             <p:message for="email" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Password:" for="password"/>                                
+            <p:outputLabel value="#{lang['Password']}" for="password"/>                                
             <p:password id="password" value="#{person.password}" feedback="true"/>
             <p:message for="password" styleClass="fieldErrorMessage"/>
             
-            <p:outputLabel value="Re-Type Password:" for="repassword"/>                                
+            <p:outputLabel value="#{lang['ReTypePassword']}" for="repassword"/>                                
             <p:password id="repassword" value="#{retypePasswordValue}"/>
             <p:message for="repassword" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Telephone number:" for="telephoneNumber"/>                                
+            <p:outputLabel value="#{lang['TelephoneNumber']}" for="telephoneNumber"/>                                
             <p:inputText id="telephoneNumber" value="#{person.telephoneNumber}"/>
             <p:message for="telephoneNumber" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Work phone number:" for="workNumber"/>                                
+            <p:outputLabel value="#{lang['WorkPhoneNumber']}" for="workNumber"/>                                
             <p:inputText id="workNumber" value="#{person.workNumber}"/>
             <p:message for="workNumber" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Fax number:" for="faxNumber"/>                               
+            <p:outputLabel value="#{lang['FaxNumber']}" for="faxNumber"/>                               
             <p:inputText id="faxNumber" value="#{person.faxNumber}"/>
             <p:message for="faxNumber" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Cellphone number:" for="cellphoneNumber"/>                                
+            <p:outputLabel value="#{lang['CellphoneNumber']}" for="cellphoneNumber"/>                                
             <p:inputText id="cellphoneNumber" value="#{person.cellphoneNumber}"/>
             <p:message for="cellphoneNumber" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Are you an UP empolyee:" for="upEmployee"/>                                
+            <p:outputLabel value="#{lang['AreYouAnUPEmployee']}" for="upEmployee"/>                                
             <p:selectBooleanCheckbox id="upEmployee" value="#{person.upEmployee}" disabled="#{!employeeEnabled}">
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                 <p:ajax update="upEmployeeInfoPanel"/>

@@ -6,11 +6,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">
-            <h:outputText styleClass="text-label" value="Report creation date:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ReportCreationDate']}"/>
             <h:outputText value="#{eligiblityReport.eligiblityCheckDate}">
                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
             </h:outputText>
-            <h:outputText styleClass="text-label" value="DRIS member name:"/>
+            <h:outputText styleClass="text-label" value="#{lang['DRISMemberName']}"/>
             <h:outputText value="#{eligiblityReport.eligiblityChecker.completeName}"/>        
         </h:panelGrid>
     </ui:component>

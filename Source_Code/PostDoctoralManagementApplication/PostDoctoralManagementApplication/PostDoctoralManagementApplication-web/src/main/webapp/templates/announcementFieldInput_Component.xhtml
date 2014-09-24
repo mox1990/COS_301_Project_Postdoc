@@ -7,21 +7,21 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="3" cellspacing="5px" cellpadding="5px">
-            <p:outputLabel value="Headline:" for="headline"/>                                
+            <p:outputLabel value="#{lang['Headline']}" for="headline"/>                                
             <p:inputText id="headline" value="#{annoucement.headline}" required="true"/>
             <p:message for="headline" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Message:" for="message"/>                                
+            <p:outputLabel value="#{lang['Message']}" for="message"/>                                
             <p:inputTextarea id="message" value="#{annoucement.message}" required="true"/>
             <p:message for="message" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Start date:" for="startDate"/>                                
+            <p:outputLabel value="#{lang['StartDate']}" for="startDate"/>                                
             <p:calendar id="startDate" mask="true" value="#{annoucement.startDate}" pattern="yyyy/MM/dd" navigator="true" required="true">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
             </p:calendar>
             <p:message for="startDate" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="End date:" for="endDate"/>                                
+            <p:outputLabel value="#{lang['EndDate']}" for="endDate"/>                                
             <p:calendar id="endDate" mask="true" value="#{annoucement.endDate}" pattern="yyyy/MM/dd" navigator="true" required="true">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
             </p:calendar>

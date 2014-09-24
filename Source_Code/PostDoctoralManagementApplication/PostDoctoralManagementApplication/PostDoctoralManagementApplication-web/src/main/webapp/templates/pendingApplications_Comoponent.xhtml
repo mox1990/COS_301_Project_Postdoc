@@ -10,26 +10,26 @@
         <div>
             <c:if test="#{pendingApplications.size() == 0}">
                 <div>
-                    <h:outputText styleClass="text-label" value="No pending applications found"/>
+                    <h:outputText styleClass="text-label" value="#{lang['NoPendingApplicationsFound']}"/>
                 </div>
             </c:if>
             <c:if test="#{pendingApplications.size() > 0}">                
                 <p:accordionPanel dynamic="true" cache="true" value="#{pendingApplications}" var="app" styleClass="box-round" activeIndex="">
-                    <p:tab title="Application - #{app.applicationID} - #{app.projectTitle}" >
+                    <p:tab title="#{lang['Application']} - #{app.applicationID} - #{app.projectTitle}" >
                         <h:panelGrid columns="2">
-                            <h:outputText styleClass="text-label" value="Application type:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ApplicationType']}"/>
                             <h:outputText value="#{app.type}"/>
-                            <h:outputText styleClass="text-label" value="Application Status:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ApplicationStatus']}"/>
                             <h:outputText value="#{app.status}"/>
-                            <h:outputText styleClass="text-label" value="Application creation date"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ApplicationCreationDate']}"/>
                             <h:outputText value="#{app.timestamp}">
                                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                             </h:outputText>
-                            <h:outputText styleClass="text-label" value="Fellow name:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['FellowName']}"/>
                             <h:outputText value="#{app.fellow.completeName}"/>
-                            <h:outputText styleClass="text-label" value="Grant holder name:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['GrantHolderName']}"/>
                             <h:outputText value="#{app.grantHolder.completeName}"/>
-                            <h:outputText styleClass="text-label" value="Project title:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ProjectTitle']}"/>
                             <h:outputText value="#{app.projectTitle}"/>
                         </h:panelGrid>
 

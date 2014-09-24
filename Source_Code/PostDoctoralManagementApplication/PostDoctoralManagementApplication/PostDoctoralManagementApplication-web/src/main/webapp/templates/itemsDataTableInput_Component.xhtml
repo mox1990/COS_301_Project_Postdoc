@@ -11,21 +11,21 @@
                 #{header}
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-            <p:column headerText="Type">
+            <p:column headerText="#{lang['Type']}">
                 <h:outputText value="#{item.type}"/>
             </p:column>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['NameText']}">
                 <h:outputText value="#{item.name}"/>
             </p:column>
-            <p:column headerText="Date">
+            <p:column headerText="#{lang['DateText']}">
                 <h:outputText value="#{item.date}">
                     <f:converter converterId="com.softserve.Webapp.DateTimeToXMLGregorianCalendarConverter" />
                 </h:outputText>
             </p:column>
-            <p:column headerText="Location">
+            <p:column headerText="#{lang['LocationText']}">
                 <h:outputText value="#{item.location}"/>
             </p:column>    
-            <p:column headerText="Description">
+            <p:column headerText="#{lang['DescriptionText']}">
                 <h:outputText value="#{item.desciption}"/>
             </p:column>   
         </p:dataTable>

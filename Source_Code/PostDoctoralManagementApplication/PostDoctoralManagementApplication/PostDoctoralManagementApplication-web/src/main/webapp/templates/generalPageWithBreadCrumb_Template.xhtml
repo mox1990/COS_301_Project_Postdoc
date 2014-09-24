@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:insert name="pageEvents"/>
     <h:head>
-        <title>UP Post doctoral application management system - #{pageTitle}</title>
+        <title>#{lang['UPPostDoctoralApplicationManagementSystem']} - #{pageTitle}</title>
         <link rel="stylesheet" type="text/css" href="CSS/basicLayout.css"/>
         <ui:insert name="CSSStyleSheets"/>
         <ui:insert name="JSScripts"/>
@@ -18,7 +18,7 @@
         <div class="background">
                 <div class="notice-controller">
                     <h:form>
-                        <p:commandButton type="button" styleClass="button-fill button" value="Toggle notification bar" onclick="PF('notifications').toggle()" icon="ui-icon-arrow-1-s"/>
+                        <p:commandButton type="button" styleClass="button-fill button" value="#{lang['ToggleNotificationBar']}" onclick="PF('notifications').toggle()" icon="ui-icon-arrow-1-s"/>
                     </h:form>
                 </div>
                 
@@ -26,12 +26,12 @@
                     <h:form>
                         <p:dataTable value="#{notificationBarRequestBean.outstandingIssues}" var="issue">
                             <f:facet name="header">
-                                Outstanding issues to attend to
+                                #{lang['OutstandingIssuesToAttendTo']}
                             </f:facet>
-                            <p:column headerText="Issue description">
+                            <p:column headerText="#{lang['IssueDescription']}">
                                 <h:outputText value="#{issue.message}"/>
                             </p:column>
-                            <p:column headerText="Number outstanding">
+                            <p:column headerText="#{lang['NumberOutstanding']}">
                                 <h:outputText value="#{issue.count}"/>
                             </p:column>
                         </p:dataTable>

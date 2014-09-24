@@ -8,42 +8,42 @@
     <ui:component>
         <div>
             <h:panelGrid columns="2" cellpadding="10px">
-                    <h:outputText styleClass="text-label" value="ID number:"/>
+                <h:outputText styleClass="text-label" value="#{lang['IDNumber']}"/>
                     <h:outputText value="#{cv.idNumber}"/>
-                    <h:outputText styleClass="text-label" value="Date of birth:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['DateOfBirth']}"/>
                     <h:outputText value="#{cv.dateOfBirth}">
                         <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                     </h:outputText>
-                    <h:outputText styleClass="text-label" value="Citizenship:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['Citizenship']}"/>
                     <h:outputText value="#{cv.citizenship}"/>
-                    <h:outputText styleClass="text-label" value="Race:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['Race']}"/>
                     <h:outputText value="#{cv.race}"/>
-                    <h:outputText styleClass="text-label" value="Gender:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['Gender']}"/>
                     <h:outputText value="#{cv.gender}"/>
-                    <h:outputText styleClass="text-label" value="NRF Rating:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['NRFRating']}"/>
                     <h:outputText value="#{cv.nrfRating}"/>
-                    <h:outputText styleClass="text-label" value="Additional information:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['AdditionalInformation']}"/>
                     <h:outputText value="#{cv.additionalInformationXMLEntity.information}"/>                    
             </h:panelGrid>
             
             
             <ui:decorate template="academicQualificationDataTable_Component.xhtml">
-                <ui:param name="header" value="Academic qualifications"/>
+                <ui:param name="header" value="#{lang['AcademicQualifications']}"/>
                 <ui:param name="academicQualificationList" value="#{cv.academicQualificationList}"/>
             </ui:decorate>
                                     
             <ui:decorate template="workExpericenceDataTable_Component.xhtml">
-                <ui:param name="header" value="Work experience"/>
+                <ui:param name="header" value="#{lang['WorkExperiance']}"/>
                 <ui:param name="experienceList" value="#{cv.experienceList}"/>
             </ui:decorate>
              
             <ui:decorate template="referenceDataTable_Component.xhtml">
-                <ui:param name="header" value="Research output"/>
+                <ui:param name="header" value="#{lang['ResearchOutput']}"/>
                 <ui:param name="references" value="#{cv.researchOutputXMLEntity.references}"/>
             </ui:decorate>
                           
             <ui:decorate template="itemsDataTable_Component.xhtml">
-                <ui:param name="header" value="Other contributions"/>
+                <ui:param name="header" value="#{lang['OtherContributions']}"/>
                 <ui:param name="items" value="#{cv.otherContributionsXMLEntity.items}"/>
             </ui:decorate>
             

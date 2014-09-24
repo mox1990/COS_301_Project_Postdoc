@@ -7,12 +7,12 @@
     <div>
         <h:form>
             <h:panelGrid cellpadding="5px" columns="3">
-                <p:outputLabel value="Filter by:" for="#{prefix}FilterSearch"/>
+                <p:outputLabel value="#{lang['FilterBy']}" for="#{prefix}FilterSearch"/>
                 <p:inputText value="#{bean.term}" />
                 <p:commandButton id="#{prefix}FilterSearch" process="@form" update="#{updatableItems}" actionListener="#{bean.filterListBy()}" icon="ui-icon-search" styleClass="button-unsized">
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/> 
                 </p:commandButton>
-                <p:tooltip for="#{prefix}FilterSearch" value="Search for" />
+                <p:tooltip for="#{prefix}FilterSearch" value="#{lang['SearchFor']}" />
             </h:panelGrid>
         </h:form>
     </div>

@@ -8,22 +8,22 @@
     <ui:component>
         <p:dataTable id="applicationList" var="app" value="#{applicationsSelectionList}" selection="#{selectedApplications}" rowKey="#{app.applicationID}" style="margin-bottom:0">
             <f:facet name="header">
-                Application selection list
+                #{lang['ApplicationSelectionList']}
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-            <p:column headerText="Application ID">
+            <p:column headerText="#{lang['ApplicationID']}">
                 <h:outputText value="#{app.applicationID}"/>
             </p:column>
-            <p:column headerText="Application type">
+            <p:column headerText="#{lang['ApplicationType']}">
                 <h:outputText value="#{app.type}"/>
             </p:column>
-            <p:column headerText="Project title">
+            <p:column headerText="#{lang['ProjectTitle']}">
                 <h:outputText value="#{app.projectTitle}"/>
             </p:column>
-            <p:column headerText="Fellow name">
+            <p:column headerText="#{lang['FellowName']}">
                 <h:outputText value="#{app.fellow.completeName} (#{app.fellow.systemID})"/>
             </p:column>
-            <p:column headerText="Grant holder name">
+            <p:column headerText="#{lang['GrantHolderName']}">
                 <h:outputText value="#{app.grantHolder.completeName} (#{app.grantHolder.systemID})"/>
             </p:column>
         </p:dataTable>

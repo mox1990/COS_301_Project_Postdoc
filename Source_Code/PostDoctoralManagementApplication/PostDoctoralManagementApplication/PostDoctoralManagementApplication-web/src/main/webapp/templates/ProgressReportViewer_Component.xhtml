@@ -6,26 +6,26 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">
-            <h:outputText styleClass="text-label" value="Created on:"/>
+            <h:outputText styleClass="text-label" value="#{lang['CreatedOn']}"/>
             <h:outputText value="#{progressReport.timestamp}">
                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
             </h:outputText>
-            <h:outputText styleClass="text-label" value="Self evaluation by fellow:"/>
+            <h:outputText styleClass="text-label" value="#{lang['SelfEvaluationByFellow']}"/>
             <h:outputText value="#{progressReport.contentXMLEntity.selfEvaluation}"/>
         </h:panelGrid>
         
         <ui:decorate template="referenceDataTable_Component.xhtml">
-            <ui:param name="header" value="Research output generated"/>
+            <ui:param name="header" value="#{lang['ResearchOutputGenerated']}"/>
             <ui:param name="members" value="#{progressReport.contentXMLEntity.researchOutput.references}" />
         </ui:decorate>
         
         <ui:decorate template="projectAimsDataTable_Component.xhtml">
-            <ui:param name="header" value="Project aims which were attained"/>
+            <ui:param name="header" value="#{lang['ProjectAimsWhichWereAttained']}"/>
             <ui:param name="aims" value="#{progressReport.contentXMLEntity.projectAimsAttainment.aimAttainment}" />
         </ui:decorate>
 
         <ui:decorate template="expectedOutcomesDataTable_Component.xhtml">
-            <ui:param name="header" value="Outcomes which were attained"/>
+            <ui:param name="header" value="#{lang['OutcomesWhichWereAttained']}"/>
             <ui:param name="expectedOutcomes" value="#{progressReport.contentXMLEntity.projectOutcomesAttainment.outcomeAttainment}" />
         </ui:decorate>
     </ui:component>

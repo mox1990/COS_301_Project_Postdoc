@@ -8,86 +8,86 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <div>
-            <p:panel header="Application #{selectedApplication.applicationID} - #{selectedApplication.projectTitle}">
+            <p:panel header="#{lang['Application']} #{selectedApplication.applicationID} - #{selectedApplication.projectTitle}">
                 <h:panelGrid columns="2" cellpadding="10px">
-                    <h:outputText styleClass="text-label" value="Application type:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ApplicationType']}"/>
                     <h:outputText value="#{selectedApplication.type}"/>
-                    <h:outputText styleClass="text-label" value="Application funding type:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ApplicationFundingType']}"/>
                     <h:outputText value="#{selectedApplication.fundingType}"/>
-                    <h:outputText styleClass="text-label" value="Application Status:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ApplicationStatus']}"/>
                     <h:outputText value="#{selectedApplication.status}"/>
-                    <h:outputText styleClass="text-label" value="Application creation date"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ApplicationCreationDate']}"/>
                     <h:outputText value="#{selectedApplication.timestamp}">
                         <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                     </h:outputText>
-                    <h:outputText styleClass="text-label" value="Fellow name:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['FellowName']}"/>
                     <h:outputText value="#{selectedApplication.fellow.completeName}"/>
-                    <h:outputText styleClass="text-label" value="Grant holder name:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['GrantHolderName']}"/>
                     <h:outputText value="#{selectedApplication.grantHolder.completeName}"/>
-                    <h:outputText styleClass="text-label" value="Finalisation date of application" rendered="#{selectedApplication.finalisationDate != null}"/>
+                    <h:outputText styleClass="text-label" value="#{lang['FinalisationDateOfApplication']}" rendered="#{selectedApplication.finalisationDate != null}"/>
                     <h:outputText value="#{selectedApplication.finalisationDate}">
                         <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                     </h:outputText>
-                    <h:outputText styleClass="text-label" value="Application commencement date:" rendered="#{selectedApplication.startDate != null}"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ApplicationCommencementDate']}" rendered="#{selectedApplication.startDate != null}"/>
                     <h:outputText value="#{selectedApplication.startDate}">
                         <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                     </h:outputText>
-                    <h:outputText styleClass="text-label" value="Application expiry date:" rendered="#{selectedApplication.endDate != null}"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ApplicationExpiryDate']}" rendered="#{selectedApplication.endDate != null}"/>
                     <h:outputText value="#{selectedApplication.endDate}">
                         <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                     </h:outputText>
                     
                 </h:panelGrid>
                 <p:tabView>
-                    <p:tab title="Project information" rendered="#{(selectedApplication.informationXMLEntity != null)}">
+                    <p:tab title="#{lang['ProjectInformation']}" rendered="#{(selectedApplication.informationXMLEntity != null)}">
                         <h:panelGrid columns="2" cellpadding="10px">
-                            <h:outputText styleClass="text-label" value="Project title:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ProjectTitle']}"/>
                             <h:outputText value="#{selectedApplication.projectTitle}"/>
                             
-                            <h:outputText styleClass="text-label" value="Research Methodology:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ResearchMethodology']}"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.researchMethodology}"/>
-                            <h:outputText styleClass="text-label" value="Research work plan:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ResearchWorkPlan']}"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.researchWorkPlan}"/>
-                            <h:outputText styleClass="text-label" value="Infrastructure and funding support motivation:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['InfrastructureAndFundingSupportMotivation']}"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.projectInfrastructureFunding}"/>
-                            <h:outputText styleClass="text-label" value="Self evaluation:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['SelfEvaluation']}"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.selfEvaluation}"/>
-                            <h:outputText styleClass="text-label" value="Project motivation:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['ProjectMotivation']}"/>
                             <h:outputText value="#{selectedApplication.informationXMLEntity.projectMotivation}"/> 
                         </h:panelGrid>
                          <ui:decorate template="teamMembersDataTable_Component.xhtml">
-                            <ui:param name="header" value="Team members list"/>
+                             <ui:param name="header" value="#{lang['TeamMembersList']}"/>
                             <ui:param name="members" value="#{selectedApplication.informationXMLEntity.teamMembers.member}" />
                         </ui:decorate>
 
 
                         <ui:decorate template="projectAimsDataTable_Component.xhtml">
-                            <ui:param name="header" value="Project aims list"/>
+                            <ui:param name="header" value="#{lang['ProjectAimsList']}"/>
                             <ui:param name="aims" value="#{selectedApplication.informationXMLEntity.projectAims.aim}" />
                         </ui:decorate>
 
 
                         <ui:decorate template="expectedOutcomesDataTable_Component.xhtml">
-                            <ui:param name="header" value="Expected project outcomes list"/>
+                            <ui:param name="header" value="#{lang['ExpectedProjectOutcomesList']}"/>
                             <ui:param name="expectedOutcomes" value="#{selectedApplication.informationXMLEntity.expectedOutcomes.outcome}" />
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Fellow cv" rendered="#{selectedApplication.fellow.cv != null}">
+                    <p:tab title="#{lang['FellowCv']}" rendered="#{selectedApplication.fellow.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
                             <ui:param name="cv" value="#{selectedApplication.fellow.cv}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Grant holder cv" rendered="#{selectedApplication.grantHolder.cv != null}">
+                    <p:tab title="#{lang['GrantHolderCv']}" rendered="#{selectedApplication.grantHolder.cv != null}">
                         <ui:decorate template="cvViewer_Component.xhtml">
                             <ui:param name="cv" value="#{selectedApplication.grantHolder.cv}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Refaral reports" rendered="#{selectedApplication.refereeReportList.size() > 0}">
+                    <p:tab title="#{lang['ReferralReports']}" rendered="#{selectedApplication.refereeReportList.size() > 0}">
                         <p:accordionPanel value="#{selectedApplication.refereeReportList}" var="report">
-                            <p:tab title="Referal report from - #{report.referee.completeName}">
+                            <p:tab title="#{lang['ReferralReportFrom']} - #{report.referee.completeName}">
                                 <ui:decorate template="referalReportViewer_Component.xhtml">
                                     <ui:param name="report" value="#{report}"/>
                                 </ui:decorate>
@@ -95,9 +95,9 @@
                         </p:accordionPanel>
                     </p:tab>
                     
-                    <p:tab title="Ammend requests" rendered="#{selectedApplication.ammendRequestList.size() > 0}">
+                    <p:tab title="#{lang['AmmendRequests']}" rendered="#{selectedApplication.ammendRequestList.size() > 0}">
                         <p:accordionPanel value="#{selectedApplication.ammendRequestList}" var="report">
-                            <p:tab title="Referal report from - #{report.creator.completeName}">
+                            <p:tab title="Ammend requests from - #{report.creator.completeName}">
                                 <ui:decorate template="ammendRequestViewer_Component.xhtml">
                                     <ui:param name="ammendRequest" value="#{report}"/>
                                 </ui:decorate>
@@ -105,51 +105,51 @@
                         </p:accordionPanel>
                     </p:tab>
                     
-                    <p:tab title="HOD Recommendation report" rendered="#{(selectedApplication.recommendationReport != null and applicationViewerRequestBean.HODOrDeanOrDRISMember)}">
+                    <p:tab title="#{lang['HODRecommendationReport']}" rendered="#{(selectedApplication.recommendationReport != null and applicationViewerRequestBean.HODOrDeanOrDRISMember)}">
                         <ui:decorate template="recommendationReportViewer_Component.xhtml">
                             <ui:param name="recommendationReport" value="#{selectedApplication.recommendationReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Dean Endorsement" rendered="#{(selectedApplication.endorsement != null and applicationViewerRequestBean.deanOrDRISMember)}">
+                    <p:tab title="#{lang['DeanEndorsement']}" rendered="#{(selectedApplication.endorsement != null and applicationViewerRequestBean.deanOrDRISMember)}">
                         <ui:decorate template="endorsementViewer_Component.xhtml">
                             <ui:param name="endorsement" value="#{selectedApplication.endorsement}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Eligiblity report" rendered="#{selectedApplication.eligiblityReport != null and applicationViewerRequestBean.DRISMember}">
+                    <p:tab title="#{lang['EligibilityReport']}" rendered="#{selectedApplication.eligiblityReport != null and applicationViewerRequestBean.DRISMember}">
                         <ui:decorate template="eligibityReportViewer_Component.xhtml">
                             <ui:param name="eligiblityReport" value="#{selectedApplication.eligiblityReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Committee meeting comments" rendered="#{selectedApplication.committeeMeetingList.size() > 0 and applicationViewerRequestBean.DRISMember}">
+                    <p:tab title="#{lang['CommitteeMeetingComments']}" rendered="#{selectedApplication.committeeMeetingList.size() > 0 and applicationViewerRequestBean.DRISMember}">
                         <p:accordionPanel value="#{selectedApplication.committeeMeetingList}" var="meeting">
-                            <p:tab title="Meeting - #{meeting.meetingID}" rendered="#{meeting.endDate != null}">
+                            <p:tab title="#{lang['Meeting']} - #{meeting.meetingID}" rendered="#{meeting.endDate != null}">
                                 <ui:decorate template="MeetingViewer_Component.xhtml">
                                     <ui:param name="meeting" value="#{meeting}"/>
                                 </ui:decorate>
                                 <ui:decorate template="MeetingCommentsTable_Component.xhtml">
-                                    <ui:param name="header" value="Meeting minutes/comments"/>
+                                    <ui:param name="header" value="#{lang['MeetingMinutes']}"/>
                                     <ui:param name="comments" value="#{meeting.minuteCommentList}"/>
                                 </ui:decorate>
                             </p:tab>
                         </p:accordionPanel>
                     </p:tab>
                     
-                    <p:tab title="Decline report" rendered="#{selectedApplication.declineReport != null}">
+                    <p:tab title="#{lang['DeclineReport']}" rendered="#{selectedApplication.declineReport != null}">
                         <ui:decorate template="declineReportViewer_Component.xhtml">
                             <ui:param name="declineReport" value="#{selectedApplication.declineReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="DRIS Funding report" rendered="#{selectedApplication.fundingReport != null}">
+                    <p:tab title="#{lang['DRISFundingReport']}" rendered="#{selectedApplication.fundingReport != null}">
                         <ui:decorate template="fundingReportViewer_Component.xhtml">
                             <ui:param name="fundingReport" value="#{selectedApplication.fundingReport}"/>
                         </ui:decorate>
                     </p:tab>
                     
-                    <p:tab title="Progress reports" rendered="#{selectedApplication.progressReportList.size() > 0}">
+                    <p:tab title="#{lang['ProgressReports']}" rendered="#{selectedApplication.progressReportList.size() > 0}">
                         <p:accordionPanel value="#{selectedApplication.progressReportList}" var="report">
                             <p:tab title="Progress report - #{report.reportID}">
                                 <ui:decorate template="ProgressReportViewer_Component.xhtml">

@@ -9,22 +9,22 @@
         <div>
             <c:if test="#{userAccounts.size() == 0}">
                 <div>
-                    <h:outputText styleClass="text-label" value="No user accounts"/>
+                    <h:outputText styleClass="text-label" value="#{lang['NoUserAccounts']}"/>
                 </div>
             </c:if>
             <c:if test="#{userAccounts.size() > 0}">  
                 <p:accordionPanel dynamic="true" cache="true" value="#{userAccounts}" var="account" styleClass="box-round" activeIndex="">
-                    <p:tab title="User account - #{account.systemID} - #{account.completeName}" >
+                    <p:tab title="#{lang['UserAccount']} - #{account.systemID} - #{account.completeName}" >
                         <h:panelGrid columns="2">
-                            <h:outputText styleClass="text-label" value="Full name:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['FullName']}"/>
                             <h:outputText value="#{account.fullName}"/>
-                            <h:outputText styleClass="text-label" value="Surname name:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['Surname']}"/>
                             <h:outputText value="#{account.surname}"/>
-                            <h:outputText styleClass="text-label" value="Email address:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['Email']}"/>
                             <h:outputText value="#{account.email}"/>
-                            <h:outputText styleClass="text-label" value="Account Status:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['AccountStatus']}"/>
                             <h:outputText value="#{account.accountStatus}"/>
-                            <h:outputText styleClass="text-label" value="Is UP employee:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['IsUpEmployee']}"/>
                             <h:outputText value="#{account.upEmployee}"/>
                         </h:panelGrid>
                         <ui:insert name="commandButtons"/>                            

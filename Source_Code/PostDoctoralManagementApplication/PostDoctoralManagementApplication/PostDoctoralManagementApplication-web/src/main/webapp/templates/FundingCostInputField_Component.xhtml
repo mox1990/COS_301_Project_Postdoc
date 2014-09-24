@@ -10,36 +10,36 @@
             <p:outputPanel id="fundingmenu">
                 <p:outputPanel id="fundingCostss">
                     <ui:decorate template="FundingCostDataTableInput_Component.xhtml">
-                        <ui:param name="header" value="Funding costs already added"/>
+                        <ui:param name="header" value="#{lang['FundingCostAlreadyAdded']}"/>
                         <ui:param name="fundingCosts" value="#{bean.fundingReport.fundingCostList}"/>
                         <ui:param name="selectedFundingCosts" value="#{selectedFundingCosts}"/>
                     </ui:decorate>
                 </p:outputPanel>
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="Funding Type:" for="type"/>                                
+                        <p:outputLabel value="#{lang['FundingType']}" for="type"/>                                
                             <p:selectOneButton id="type" value="#{bean.currentFundingCost.type}">
                                 <f:selectItems value="#{generalInformationBean.fundingCostTypeItems}" var="t" itemLabel="#{t}" itemValue="#{t}"/>
                             </p:selectOneButton>
                             <p:message for="type" styleClass="fieldErrorMessage"/>
 
-                            <p:outputLabel value="Ammount (ZAR):" for="ammount"/>                                
+                            <p:outputLabel value="#{lang['Amount']}" for="ammount"/>                                
                             <p:inputText id="ammount" value="#{bean.currentFundingCost.amount}" required="true">
                                 <f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
                                 <f:validateDoubleRange minimum="0.00" />
                             </p:inputText>
                             <p:message for="ammount" styleClass="fieldErrorMessage"/>
 
-                            <p:outputLabel value="Funding provider:" for="provider"/>                                
+                            <p:outputLabel value="#{lang['FundingProvider']}" for="provider"/>                                
                             <p:inputText id="provider" value="#{bean.currentFundingCost.provider}" required="true"/>
                             <p:message for="provider" styleClass="fieldErrorMessage"/> 
                     </h:panelGrid>
                     
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton ajax="true" update="@form" process="@form" actionListener="#{bean[beanActionAdd]}" value="Add funding costs" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="@form" process="@form" actionListener="#{bean[beanActionAdd]}" value="#{lang['AddFundingCosts']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
-                    <p:commandButton ajax="true" update="fundingCostss" process="fundingCostss @this" actionListener="#{bean[beanActionRemove]}" value="Remove selected funding costs" styleClass="button button-fill">
+                    <p:commandButton ajax="true" update="fundingCostss" process="fundingCostss @this" actionListener="#{bean[beanActionRemove]}" value="#{lang['RemoveSelectedFundingCost']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
 

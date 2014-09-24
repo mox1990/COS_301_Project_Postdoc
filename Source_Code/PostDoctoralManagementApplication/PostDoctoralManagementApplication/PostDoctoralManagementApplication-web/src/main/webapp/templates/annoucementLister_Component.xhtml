@@ -10,30 +10,30 @@
         <div>
             <c:if test="#{annoucements.size() == 0}">
                 <div>
-                    <h:outputText styleClass="text-label" value="No announcements found"/>
+                    <h:outputText styleClass="text-label" value="#{lang['NoAnnouncementsFound']}"/>
                 </div>
             </c:if>
             <c:if test="#{annoucements.size() > 0}">                
                 <p:accordionPanel dynamic="true" cache="true" value="#{annoucements}" var="annouce" styleClass="box-round">
-                    <p:tab title="Announcement - #{annouce.announcementID} - #{annouce.headline}" >
+                    <p:tab title="#{lang['Announcement']} - #{annouce.announcementID} - #{annouce.headline}" >
                         <h:panelGrid columns="2">
                             <h:outputText styleClass="text-label" value="Headline:"/>
                             <h:outputText value="#{annouce.headline}"/>
                             <h:outputText styleClass="text-label" value="Message:"/>
                             <h:outputText value="#{annouce.message}"/>
-                            <h:outputText styleClass="text-label" value="Creation date:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['CreatedOn']}"/>
                             <h:outputText value="#{annouce.timestamp}">
                                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                             </h:outputText>
-                            <h:outputText styleClass="text-label" value="Start date:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['StartDate']}"/>
                             <h:outputText value="#{annouce.startDate}">
                                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                             </h:outputText>
-                            <h:outputText styleClass="text-label" value="End date:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['EndDate']}"/>
                             <h:outputText value="#{annouce.endDate}">
                                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
                             </h:outputText>
-                            <h:outputText styleClass="text-label" value="Image:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['Image']}"/>
                             <p:graphicImage value="#{announcementViewerDependBean.loadImageForAnnoucement(annouce)}" width="150" height="250"/>
                         </h:panelGrid>
 

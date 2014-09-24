@@ -11,10 +11,10 @@
                 #{header}
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['NameText']}">
                 <h:outputText value="#{person.completeName}"/>
             </p:column>
-            <p:column headerText="Email">
+            <p:column headerText="#{lang['EmailText']}">
                 <h:outputText value="#{person.email}"/>
             </p:column>            
         </p:dataTable>

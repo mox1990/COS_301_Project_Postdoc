@@ -6,18 +6,18 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">    
-            <h:outputText styleClass="text-label" value="Creation date:"/>
+            <h:outputText styleClass="text-label" value="#{lang['CreationDate']}"/>
             <h:outputText value="#{fundingReport.timestamp}">
                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
             </h:outputText>
-            <h:outputText styleClass="text-label" value="DRIS member name:"/>
+            <h:outputText styleClass="text-label" value="#{lang['DRISMemberName']}"/>
             <h:outputText value="#{fundingReport.dris.completeName}"/>
             
             
         </h:panelGrid>
         <ui:decorate template="FundingCostDataTable_Component.xhtml">
                 <ui:param name="fundingCosts" value="#{fundingReport.fundingCostList}"/>
-                <ui:param name="header" value="Funding costs"/>
+                <ui:param name="header" value="#{lang['FundingCosts']}"/>
             </ui:decorate>
     </ui:component>
 </html>

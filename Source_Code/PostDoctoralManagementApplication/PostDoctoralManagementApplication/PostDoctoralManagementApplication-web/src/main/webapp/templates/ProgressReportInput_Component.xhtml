@@ -7,20 +7,20 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
             <h:form>
-                <p:panel header="Progress report information" id="infoProg">
+                <p:panel header="#{lang['ProgressReportInformation']}" id="infoProg">
                     <h:panelGrid columns="2" cellpadding="10px">            
-                        <p:outputLabel value="Self evaluation by fellow:" for="selfE"/>                                
+                        <p:outputLabel value="#{lang['SelfEvaluationByFellow']}" for="selfE"/>                                
                         <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
                         <p:message for="selfE" styleClass="fieldErrorMessage"/>            
                     </h:panelGrid>
                     <p:growl id="growler" sticky="true" globalOnly="true" showDetail="true"/>
-                    <p:commandButton value="Add infromation to progress report" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" process="infoProg" update="infoProg">
+                    <p:commandButton value="#{lang['AddInfromationToProgressReport']}" styleClass="button button-fill" actionListener="#{bean.addInfromation()}" process="infoProg" update="infoProg">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>  
                 </p:panel>
             </h:form>
         
-            <p:panel header="Research output generated" toggleable="true" collapsed="true">
+        <p:panel header="#{lang['ResearchOutputGenerated']}" toggleable="true" collapsed="true">
                 <ui:decorate template="researchOutputFieldInput_Component.xhtml">
                     <ui:param name="references" value="#{bean.progressReportContent.researchOutput.references}"/>
                     <ui:param name="currentReference" value="#{bean.currentReference}"/>
@@ -32,7 +32,7 @@
                 </ui:decorate>
             </p:panel>
 
-            <p:panel header="Project aims which were attained" toggleable="true" collapsed="true">
+        <p:panel header="#{lang['ProjectAimsWhichWereAttained']}" toggleable="true" collapsed="true">
                 <ui:decorate template="projectAimsFieldInput_Component.xhtml">
                     <ui:param name="aims" value="#{bean.progressReportContent.projectAimsAttainment.aimAttainment}"/>
                     <ui:param name="currentAim" value="#{bean.currentAttainedAim}"/>
@@ -43,7 +43,7 @@
                 </ui:decorate>
             </p:panel>
 
-            <p:panel header="Outcomes which were attained" toggleable="true" collapsed="true">
+        <p:panel header="#{lang['OutcomesWhichWereAttained']}" toggleable="true" collapsed="true">
                 <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
                     <ui:param name="expectedOutcomes" value="#{bean.progressReportContent.projectOutcomesAttainment.outcomeAttainment}"/>
                     <ui:param name="selectedOutcomeList" value="#{bean.selectedOutcomeList}"/>

@@ -8,7 +8,7 @@
     <ui:component>
         <h:panelGrid columns="2" cellpadding="5px">
             <p:outputLabel for="selectionSpecification" value="HOD selection mode:" styleClass="label-text"/>
-            <p:selectBooleanButton id="selectionSpecification" value="#{bean.manualSpecification}" onLabel="Specify person manually" offLabel="Choose from list of possible persons">
+            <p:selectBooleanButton id="selectionSpecification" value="#{bean.manualSpecification}" onLabel="#{lang['SpecifyPersonManually']}" offLabel="#{lang['ChooseFromListOfPossiblePersons']}">
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                 <p:ajax process="@this" update="peopleSelection"/>
             </p:selectBooleanButton>

@@ -6,15 +6,15 @@
       xmlns:p="http://primefaces.org/ui">
     <ui:component>        
         <h:panelGrid columns="3" cellpadding="5">
-            <p:outputLabel value="Meeting name:" for="name"/>                                
+            <p:outputLabel value="#{lang['MeetingName']}:" for="name"/>                                
             <p:inputText id="name" value="#{committeeMeeting.name}"/>
             <p:message for="name" styleClass="fieldErrorMessage"/>
             
-            <p:outputLabel value="Venue:" for="venue"/>                                
+            <p:outputLabel value="#{lang['Venue']}" for="venue"/>                                
             <p:inputText id="venue" value="#{committeeMeeting.venue}"/>
             <p:message for="venue" styleClass="fieldErrorMessage"/>           
             
-            <p:outputLabel value="Starting date and time:" for="startDate"/>                                
+            <p:outputLabel value="#{lang['StartDateAndTime']}" for="startDate"/>                                
             <p:calendar id="startDate" mask="true" value="#{committeeMeeting.startDate}" navigator="true" pattern="yyyy/MM/dd HH:mm:ss" timeOnly="false"/>
             <p:message for="startDate" styleClass="fieldErrorMessage"/>                                                                        
         </h:panelGrid>

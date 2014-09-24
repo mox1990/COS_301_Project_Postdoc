@@ -11,21 +11,21 @@
                 #{header}
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['NameText']}">
                 <h:outputText value="#{qualification.name}"/>
             </p:column>
-            <p:column headerText="Field of study">
+            <p:column headerText="#{lang['FieldOfStudy']}">
                 <h:outputText value="#{qualification.fieldOfStudy}"/>
             </p:column>
-            <p:column headerText="Year obtained">
+            <p:column headerText="#{lang['YearObtained']}">
                 <h:outputText value="#{qualification.yearObtained}">
                     <f:convertDateTime pattern="yyyy"/>
                 </h:outputText>
             </p:column>
-            <p:column headerText="Institution">
+            <p:column headerText="#{lang['InstitutionText']}">
                 <h:outputText value="#{qualification.institution}"/>
             </p:column>
-            <p:column headerText="Number of distinctions">
+            <p:column headerText="#{lang['NumberOfDistinctionsText']}">
                 <h:outputText value="#{qualification.distinctions}"/>
             </p:column>              
         </p:dataTable>

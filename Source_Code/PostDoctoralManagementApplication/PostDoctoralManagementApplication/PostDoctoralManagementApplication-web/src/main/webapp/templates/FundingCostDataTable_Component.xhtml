@@ -10,13 +10,13 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="Amount (ZAR)">
+            <p:column headerText="#{lang['Amount']}">
                 <h:outputText value="#{fundingCost.amount}"/>
             </p:column>
-            <p:column headerText="Type">
+            <p:column headerText="#{lang['Type']}">
                 <h:outputText value="#{fundingCost.type}"/>
             </p:column>
-            <p:column headerText="Provider">
+            <p:column headerText="#{lang['Provider']}">
                 <h:outputText value="#{fundingCost.provider}"/>
             </p:column>
         </p:dataTable>

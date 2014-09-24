@@ -6,13 +6,13 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">
-            <h:outputText styleClass="text-label" value="Report creation date:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ReportCreationDate']}"/>
             <h:outputText value="#{ammendRequest.timestamp}">
                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
             </h:outputText> 
-            <h:outputText styleClass="text-label" value="Authority name:"/>
+            <h:outputText styleClass="text-label" value="#{lang['AuthorityName']}"/>
             <h:outputText value="#{ammendRequest.creator.completeName}"/>    
-            <h:outputText styleClass="text-label" value="Reason:"/>
+            <h:outputText styleClass="text-label" value="#{lang['Reason']}"/>
             <h:outputText value="#{ammendRequest.request}"/>  
         </h:panelGrid>
     </ui:component>

@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="3" cellpadding="5"> 
-            <p:outputLabel value="Institution:" for="institution"/>                                
+            <p:outputLabel value="#{lang['Institution']}" for="institution"/>                                
             <p:selectOneMenu id="institution" value="#{locationBean.selectedInstitution}" >
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                 <p:ajax listener="#{locationBean.populateFaculties(locationBean.selectedInstitution)}" update="faculty department" process="@this"/>
@@ -16,19 +16,19 @@
             </p:selectOneMenu>
             <p:message for="institution" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Faculty:" for="faculty"/>                                
+            <p:outputLabel value="#{lang['Faculty']}" for="faculty"/>                                
             <p:selectOneMenu id="faculty" value="#{locationBean.selectedFaculty}" disabled="#{locationBean.faculties.size() == 0}">
                 <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                 <p:ajax listener="#{locationBean.populateDepartments(locationBean.selectedFaculty)}" update="department" process="@this"/>
-                <f:selectItem itemLabel="Select a faculty"/>
+                <f:selectItem itemLabel="#{lang['SelectAFaculty']}"/>
                 <f:selectItems value="#{locationBean.faculties}" var="fac" itemLabel="#{fac.name}" itemValue="#{fac}"/>
                 <f:converter converterId="com.softserve.Webapp.SelectFacultyConverter"/>                
             </p:selectOneMenu>
             <p:message for="faculty" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Department:" for="department"/>                                
+            <p:outputLabel value="#{lang['Department']}" for="department"/>                                
             <p:selectOneMenu id="department" value="#{departmentField}" disabled="#{locationBean.departments.size() == 0}">
-                <f:selectItem itemLabel="Select a department" />
+                <f:selectItem itemLabel="#{lang['SelectADepartment']}" />
                 <f:selectItems value="#{locationBean.departments}" var="dep" itemLabel="#{dep.name}" itemValue="#{dep}"/>
                 <f:converter converterId="com.softserve.Webapp.SelectDepartmentConverter"/>
             </p:selectOneMenu>

@@ -8,54 +8,54 @@
     <ui:component>
                  
         <h:form id="CVInfoForm">
-            <p:panel id="cvInfo" header="CV information" toggleable="true">   
+            <p:panel id="cvInfo" header="#{lang['CVInformation']}" toggleable="true">   
                 <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
-                    <p:outputLabel value="ID number:" for="idNumber"/>                                
+                    <p:outputLabel value="#{lang['IDNumber']}" for="idNumber"/>                                
                     <p:inputText id="idNumber" value="#{bean.cv.idNumber}" required="true"/>
                     <p:message for="idNumber" styleClass="fieldErrorMessage"/>
 
-                    <p:outputLabel value="Date of birth:" for="dateOfBirth"/>                                
+                    <p:outputLabel value="#{lang['DateOfBirth']}" for="dateOfBirth"/>                                
                     <p:calendar id="dateOfBirth" mask="true" value="#{bean.cv.dateOfBirth}" pattern="yyyy/MM/dd" navigator="true" required="true">
                         <f:convertDateTime pattern="yyyy/MM/dd"/>
                     </p:calendar>
                     <p:message for="dateOfBirth" styleClass="fieldErrorMessage"/>
 
-                    <p:outputLabel value="Citizenship:" for="citizenship"/>                                
+                    <p:outputLabel value="#{lang['Citizenship']}" for="citizenship"/>                                
                     <p:selectOneButton id="citizenship" value="#{bean.cv.citizenship}" required="true" >
                         <f:selectItems value="#{generalInformationBean.citizenshipTypeItems}"/>                           
                     </p:selectOneButton>
                     <p:message for="citizenship" styleClass="fieldErrorMessage"/>
 
-                    <p:outputLabel value="Race:" for="race"/>                                
+                    <p:outputLabel value="#{lang['Race']}" for="race"/>                                
                     <p:selectOneButton id="race" value="#{bean.cv.race}" required="true" >
                         <f:selectItems value="#{generalInformationBean.raceItems}" />                           
                     </p:selectOneButton>
                     <p:message for="race" styleClass="fieldErrorMessage"/>
 
-                    <p:outputLabel value="Gender:" for="gender"/>                                
+                    <p:outputLabel value="#{lang['Gender']}" for="gender"/>                                
                     <p:selectOneButton id="gender" value="#{bean.cv.gender}" required="true">
                         <f:selectItems value="#{generalInformationBean.genderItems}"/>
                     </p:selectOneButton> 
                     <p:message for="gender" styleClass="gender"/>
                     
-                    <p:outputLabel value="NRF Rating:" for="nrfRating"/>                                
+                    <p:outputLabel value="#{lang['NRFRating']}" for="nrfRating"/>                                
                     <p:selectOneButton id="nrfRating" value="#{bean.cv.nrfRating}" required="true">
                         <f:selectItems value="#{generalInformationBean.nrfRatingsItems}"/>
                     </p:selectOneButton> 
                     <p:message for="nrfRating" styleClass="fieldErrorMessage"/>
 
-                    <p:outputLabel value="Additional information:" for="additionalInformationXMLEntity"/>                               
+                    <p:outputLabel value="#{lang['AdditionalInformation']}" for="additionalInformationXMLEntity"/>                               
                     <p:inputTextarea id="additionalInformationXMLEntity" value="#{bean.additionalInformationXMLEntity.information}" required="true"/>
                     <p:message for="additionalInformationXMLEntity" styleClass="fieldErrorMessage"/>
                 </h:panelGrid> 
                 <p:growl id="message" globalOnly="true" showDetail="true" showSummary="true"/>
-                <p:commandButton value="Add infomration to CV" update="cvInfo" styleClass="button button-fill" actionListener="#{bean.addInfromationToCV()}">
+                <p:commandButton value="#{lang['AddInformationToCV']}" update="cvInfo" styleClass="button button-fill" actionListener="#{bean.addInfromationToCV()}">
                     <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                 </p:commandButton>
             </p:panel>
         </h:form>
         
-        <p:panel header="Academic qualifications" toggleable="true" collapsed="true">   
+        <p:panel header="#{lang['AcademicQualifications']}" toggleable="true" collapsed="true">   
             <ui:decorate template="academicQualificationFieldInput_Component.xhtml">
                 <ui:param name="academicQualificationList" value="#{bean.academicQualificationList}"/>
                 <ui:param name="selectedAcademicQualificationList" value="#{bean.selectedAcademicQualificationList}"/>
@@ -66,7 +66,7 @@
             </ui:decorate>
         </p:panel>
         
-        <p:panel header="Work experiance" toggleable="true" collapsed="true"> 
+        <p:panel header="#{lang['WorkExperiance']}" toggleable="true" collapsed="true"> 
             <ui:decorate template="workExperienceFieldInput_Component.xhtml">
                 <ui:param name="experienceList" value="#{bean.experienceList}"/>
                 <ui:param name="selectedExperienceList" value="#{bean.selectedExperienceList}"/>
@@ -77,7 +77,7 @@
             </ui:decorate>
         </p:panel>
         
-        <p:panel header="Research output" toggleable="true" collapsed="true"> 
+        <p:panel header="#{lang['ResearchOutput']}" toggleable="true" collapsed="true"> 
             <ui:decorate template="researchOutputFieldInput_Component.xhtml">
                 <ui:param name="references" value="#{bean.researchOutputXMLEntity.references}"/>
                 <ui:param name="selectedReferenceList" value="#{bean.selectedReferenceList}" />
@@ -89,7 +89,7 @@
             </ui:decorate>
         </p:panel>
         
-        <p:panel header="Other contributions" toggleable="true" collapsed="true"> 
+        <p:panel header="#{lang['OtherContributions']}" toggleable="true" collapsed="true"> 
             <ui:decorate template="otherContributionsFieldInput_Component.xhtml">
                 <ui:param name="items" value="#{bean.otherContributionsXMLEntity.items}"/>
                 <ui:param name="selectedItemList" value="#{bean.selectedItemList}" />

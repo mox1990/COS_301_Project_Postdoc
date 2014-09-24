@@ -10,19 +10,19 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="Application ID">
+            <p:column headerText="#{lang['ApplicationID']}">
                 <h:outputText value="#{app.applicationID}"/>
             </p:column>
-            <p:column headerText="Application type">
+            <p:column headerText="#{lang['ApplicationType']}">
                 <h:outputText value="#{app.type}"/>
             </p:column>
-            <p:column headerText="Project title">
+            <p:column headerText="#{lang['ProjectTitle']}">
                 <h:outputText value="#{app.projectTitle}"/>
             </p:column>
-            <p:column headerText="Fellow name">
+            <p:column headerText="#{lang['FellowName']}">
                 <h:outputText value="#{app.fellow.completeName} (#{app.fellow.systemID})"/>
             </p:column>
-            <p:column headerText="Grant holder name">
+            <p:column headerText="#{lang['GrantHolderName']}">
                 <h:outputText value="#{app.grantHolder.completeName} (#{app.grantHolder.systemID})"/>
             </p:column>
         </p:dataTable>

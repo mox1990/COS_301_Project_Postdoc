@@ -14,16 +14,16 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="From" filterBy="#{notification.sender.completeName}" filterMatchMode="contains">
+            <p:column headerText="#{lang['From']}" filterBy="#{notification.sender.completeName}" filterMatchMode="contains">
                 <h:outputText value="#{notification.sender.completeName} (#{notification.sender.systemID})" rendered="#{notification.sender != null}"/>
             </p:column>
-            <p:column headerText="Subject" filterBy="#{notification.subject}" filterMatchMode="contains">
+            <p:column headerText="#{lang['Subject']}" filterBy="#{notification.subject}" filterMatchMode="contains">
                 <h:outputText value="#{notification.subject}" />
             </p:column>
-            <p:column headerText="Message" filterBy="#{notification.message}" filterMatchMode="contains">
+            <p:column headerText="#{lang['Message']}" filterBy="#{notification.message}" filterMatchMode="contains">
                 <h:outputText value="#{notification.message}"/>
             </p:column>
-            <p:column headerText="Sent time" filterBy="#{notification.timestamp}" filterMatchMode="exact">
+            <p:column headerText="#{lang['SentTime']}" filterBy="#{notification.timestamp}" filterMatchMode="exact">
                 <h:outputText value="#{notification.timestamp}"/>
             </p:column>
         </p:dataTable>

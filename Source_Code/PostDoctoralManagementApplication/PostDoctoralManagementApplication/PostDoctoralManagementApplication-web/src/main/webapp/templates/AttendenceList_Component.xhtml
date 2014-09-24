@@ -10,13 +10,13 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="System ID">
+            <p:column headerText="#{lang['SystemID']}">
                 <h:outputText value="#{person.systemID}"/>
             </p:column>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['Name']}">
                 <h:outputText value="#{person.completeName}"/>
             </p:column>
-            <p:column headerText="Position">
+            <p:column headerText="#{lang['Position']}">
                 <h:outputText value="#{person.employeeInformation.position}"/>
             </p:column>  
         </p:dataTable>

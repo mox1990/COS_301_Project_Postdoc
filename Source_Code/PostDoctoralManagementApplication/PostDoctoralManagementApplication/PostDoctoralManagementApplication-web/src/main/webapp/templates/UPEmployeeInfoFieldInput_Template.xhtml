@@ -10,21 +10,21 @@
             <f:facet name="header"> 
                 <ui:insert name="header"/>
             </f:facet>
-            <p:outputLabel value="Empoyee ID:" for="systemID"/>                                
+            <p:outputLabel value="#{lang['EmployeeID']}" for="systemID"/>                                
             <p:inputText id="systemID" value="#{employeeInformation.employeeID}" disabled="#{!employeeIDEditable}"/>
             <p:message for="systemID" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Date of employeement" for="dateOfAppointment:"/>                                
+            <p:outputLabel value="#{lang['DateOfEmployment']}" for="dateOfAppointment:"/>                                
             <p:calendar id="dateOfAppointment" value="#{employeeInformation.dateOfAppointment}" navigator="true" pattern="yyyy/MM/dd" mask="true" required="true">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
             </p:calendar>
             <p:message for="dateOfAppointment" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Appointment status:" for="appointmentStatus"/>                                
+            <p:outputLabel value="#{lang['AppointmentStatus']}" for="appointmentStatus"/>                                
             <p:inputText id="appointmentStatus" value="#{employeeInformation.appointmentStatus}"/>
             <p:message for="appointmentStatus" styleClass="fieldErrorMessage"/>
 
-            <p:outputLabel value="Position:" for="position"/>                                
+            <p:outputLabel value="#{lang['PositionInput']}" for="position"/>                                
             <p:inputText id="position" value="#{employeeInformation.position}"/>
             <p:message for="position" styleClass="fieldErrorMessage"/>
             

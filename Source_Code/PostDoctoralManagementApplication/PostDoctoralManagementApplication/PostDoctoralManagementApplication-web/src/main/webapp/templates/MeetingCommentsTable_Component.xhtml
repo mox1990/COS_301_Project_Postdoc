@@ -10,15 +10,15 @@
             <f:facet name="header">
                 #{header}
             </f:facet>
-            <p:column headerText="Comment" >
+            <p:column headerText="#{lang['Comment']}" >
                 <h:outputText value="#{comment.comment}"/>
             </p:column>
-            <p:column headerText="Timestamp">
+            <p:column headerText="#{lang['Timestamp']}">
                 <h:outputText value="#{comment.timestamp}">
                     <f:convertDateTime pattern="yyyy/MM/dd HH:mm:ss"/>
                 </h:outputText>
             </p:column>
-            <p:column headerText="Commenter" >
+            <p:column headerText="#{lang['Commenter']}" >
                 <h:outputText value="#{comment.attendee.completeName} (#{comment.attendee.systemID})"/>
             </p:column>
         </p:dataTable>

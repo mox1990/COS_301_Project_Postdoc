@@ -6,16 +6,16 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <h:panelGrid columns="2" cellpadding="10px">
-            <h:outputText styleClass="text-label" value="Endorsement creation date:"/>
+            <h:outputText styleClass="text-label" value="#{lang['EndorsementCreatingDate']}"/>
             <h:outputText value="#{endorsement.timestamp}">
                 <f:convertDateTime pattern="EEEE dd MMMM yyyy"/>
             </h:outputText>
-            <h:outputText styleClass="text-label" value="Dean name:"/>
+            <h:outputText styleClass="text-label" value="#{lang['DeanName']}"/>
             <h:outputText value="#{endorsement.dean.completeName}"/>
             
-            <h:outputText styleClass="text-label" value="Application rank relative to other applications:"/>
+            <h:outputText styleClass="text-label" value="#{lang['ApplicationRankRelativeToOtherApplications']}"/>
             <h:outputText value="#{endorsement.rank}"/> 
-            <h:outputText styleClass="text-label" value="Motivation:"/>
+            <h:outputText styleClass="text-label" value="#{lang['Motivation']}"/>
             <h:outputText value="#{endorsement.motivation}"/> 
         </h:panelGrid>
     </ui:component>

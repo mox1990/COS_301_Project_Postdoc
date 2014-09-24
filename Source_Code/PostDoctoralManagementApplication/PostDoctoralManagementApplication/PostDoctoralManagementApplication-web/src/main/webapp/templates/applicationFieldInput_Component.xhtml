@@ -9,14 +9,14 @@
     <ui:component>
         <div>
             <h:form>
-                <p:panel id="applicationInfo" header="Application information" toggleable="true"> 
+                <p:panel id="applicationInfo" header="#{lang['ApplicationInformation']}" toggleable="true"> 
                     <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}">
 
-                        <p:outputLabel value="Project title:" for="projectTitle"/>                                
+                        <p:outputLabel value="#{lang['ProjectTitle']}" for="projectTitle"/>                                
                         <p:inputText id="projectTitle" value="#{bean.application.projectTitle}" required="true"/>
                         <p:message for="projectTitle" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Application funding type:" for="fundingType"/>                                
+                        <p:outputLabel value="#{lang['ApplicationFundingType']}" for="fundingType"/>                                
                         <p:selectOneButton id="fundingType" value="#{bean.application.fundingType}" required="true" >
                             <f:selectItems value="#{generalInformationBean.fundingTypeItems}" var="t" itemLabel="#{t}" itemValue="#{t}" />
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />                            
@@ -24,34 +24,34 @@
                         <p:message for="fundingType" styleClass="fieldErrorMessage"/>                        
                         
 
-                        <p:outputLabel value="Research Methodology:" for="researchMethodology"/>                                
+                        <p:outputLabel value="#{lang['ResearchMethodology']}" for="researchMethodology"/>                                
                         <p:inputTextarea id="researchMethodology" value="#{bean.informationXMLEntity.researchMethodology}" required="true"/>
                         <p:message for="researchMethodology" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Research work plan:" for="researchWorkPlan"/>                                
+                        <p:outputLabel value="#{lang['ResearchWorkPlan']}" for="researchWorkPlan"/>                                
                         <p:inputTextarea id="researchWorkPlan" value="#{bean.informationXMLEntity.researchWorkPlan}" required="true"/>
                         <p:message for="researchWorkPlan" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Infrastructure and funding support motivation:" for="projectInfrastructureFunding"/>                                
+                        <p:outputLabel value="#{lang['InfrastructureAndFundingSupportMotivation']}" for="projectInfrastructureFunding"/>                                
                         <p:inputTextarea id="projectInfrastructureFunding" value="#{bean.informationXMLEntity.projectInfrastructureFunding}" required="true"/>
                         <p:message for="projectInfrastructureFunding" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Self evaluation:" for="selfEvaluation"/>                                
+                        <p:outputLabel value="#{lang['SelfEvaluation']}" for="selfEvaluation"/>                                
                         <p:inputTextarea id="selfEvaluation" value="#{bean.informationXMLEntity.selfEvaluation}" required="true"/>
                         <p:message for="selfEvaluation" styleClass="fieldErrorMessage"/>
 
-                        <p:outputLabel value="Project motivation:" for="projectMotivation"/>                                
+                        <p:outputLabel value="#{lang['ProjectMotivation']}" for="projectMotivation"/>                                
                         <p:inputTextarea id="projectMotivation" value="#{bean.informationXMLEntity.projectMotivation}" required="true"/>
                         <p:message for="projectMotivation" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                      <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>  
-                    <p:commandButton value="Add infomration to application" update="applicationInfo" styleClass="button button-fill"  actionListener="#{bean.addInfromationToApplication()}">
+                     <p:commandButton value="#{lang['AddInformationToApplication']}" update="applicationInfo" styleClass="button button-fill"  actionListener="#{bean.addInfromationToApplication()}">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
                 </p:panel>
             </h:form>
             
-            <p:panel header="Team members" toggleable="true" collapsed="true">
+            <p:panel header="#{lang['TeamMembers']}" toggleable="true" collapsed="true">
                 <ui:decorate template="teamMembersFieldInput_Component.xhtml">
                     <ui:param name="members" value="#{bean.informationXMLEntity.teamMembers.member}"/>
                     <ui:param name="currentMember" value="#{bean.currentMember}"/>
@@ -62,7 +62,7 @@
                 </ui:decorate>
             </p:panel>
             
-            <p:panel header="Project aims" toggleable="true" collapsed="true">
+            <p:panel header="#{lang['ProjectAims']}" toggleable="true" collapsed="true">
                 <ui:decorate template="projectAimsFieldInput_Component.xhtml">
                     <ui:param name="aims" value="#{bean.informationXMLEntity.projectAims.aim}"/>
                     <ui:param name="currentAim" value="#{bean.currentAim}"/>
@@ -73,7 +73,7 @@
                 </ui:decorate>
             </p:panel>
             
-            <p:panel header="Expected outcomes" toggleable="true" collapsed="true">
+            <p:panel header="#{lang['ExpectedOutcomes']}" toggleable="true" collapsed="true">
                 <ui:decorate template="expectedOutcomeFieldInput_Component.xhtml">
                     <ui:param name="expectedOutcomes" value="#{bean.informationXMLEntity.expectedOutcomes.outcome}"/>
                     <ui:param name="currentExpectedOutcome" value="#{bean.currentExpectedOutcome}"/>

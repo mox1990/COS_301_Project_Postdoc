@@ -8,16 +8,16 @@
     <ui:component>
         <p:dataTable value="#{attendenceSelectionList}" var="person" selection="#{selectedAttendees}" rowKey="#{person.systemID}">
             <f:facet name="header">
-                Attendee selection list
+                #{lang['AttendeeSelectionList']}
             </f:facet>
             <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
-            <p:column headerText="System ID">
+            <p:column headerText="#{lang['SystemID']}">
                 <h:outputText value="#{person.systemID}"/>
             </p:column>
-            <p:column headerText="Name">
+            <p:column headerText="#{lang['Name']}">
                 <h:outputText value="#{person.completeName}"/>
             </p:column>
-            <p:column headerText="Position">
+            <p:column headerText="#{lang['Positition']}">
                 <h:outputText value="#{person.employeeInformation.position}"/>
             </p:column>  
         </p:dataTable>

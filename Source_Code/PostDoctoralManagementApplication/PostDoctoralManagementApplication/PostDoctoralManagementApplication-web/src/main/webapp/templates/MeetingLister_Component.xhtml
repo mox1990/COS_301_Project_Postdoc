@@ -10,12 +10,12 @@
         <div>
             <c:if test="#{meetingsList.size() == 0}">
                 <div>
-                    <h:outputText styleClass="text-label" value="No meetings found"/>
+                    <h:outputText styleClass="text-label" value="#{lang['NoMeetingsFound']}"/>
                 </div>
             </c:if>
             <c:if test="#{meetingsList.size() > 0}">                
                 <p:accordionPanel dynamic="true" cache="true" value="#{meetingsList}" var="meeting" styleClass="box-round">
-                    <p:tab title="Meeting - #{meeting.meetingID}" >
+                    <p:tab title="#{lang['Meeting']} - #{meeting.meetingID}" >
                         <ui:decorate template="MeetingViewer_Component.xhtml">
                             <ui:param name="meeting" value="#{meeting}"/>
                         </ui:decorate>                        

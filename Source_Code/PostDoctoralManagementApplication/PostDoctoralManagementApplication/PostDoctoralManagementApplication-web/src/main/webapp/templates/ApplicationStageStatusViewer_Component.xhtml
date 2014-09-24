@@ -6,14 +6,14 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <p:carousel headerText="Application status changes" value="#{applicationStageStatusViewerRequestBean.applicationStageStatuses}" var="applicationStage" circular="true" numVisible="2">
-            <p:tab title="Application status change to #{applicationStage.status}" >
+        <p:carousel headerText="#{lang['ApplicationStatusChange']}" value="#{applicationStageStatusViewerRequestBean.applicationStageStatuses}" var="applicationStage" circular="true" numVisible="2">
+            <p:tab title="#{lang['ApplicationStatusChangeTo']} #{applicationStage.status}" >
                 <h:panelGrid columns="2" cellpadding="10px">
-                    <h:outputText styleClass="text-label" value="Status:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['Status']}"/>
                     <h:outputText value="#{applicationStage.status}"/>
-                    <h:outputText styleClass="text-label" value="Changed by:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ChangedBy']}"/>
                     <h:outputText value="#{applicationStage.authority.completeName} (#{applicationStage.authority.systemID})" />
-                    <h:outputText styleClass="text-label" value="Changed at:"/>
+                    <h:outputText styleClass="text-label" value="#{lang['ChangedAt']}"/>
                     <h:outputText value="#{applicationStage.timestamp}">
                         <f:convertDateTime pattern="EEEE dd MMMM yyyy HH:mm:ss"/>
                     </h:outputText>
