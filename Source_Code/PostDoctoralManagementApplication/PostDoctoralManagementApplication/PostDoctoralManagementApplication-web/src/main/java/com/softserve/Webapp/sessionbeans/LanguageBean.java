@@ -7,9 +7,12 @@
 package com.softserve.Webapp.sessionbeans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -26,6 +29,7 @@ public class LanguageBean implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String localeCode;
+    private Locale langauge;
     private static Map<String, Object> lang;
     static
     {
@@ -50,15 +54,32 @@ public class LanguageBean implements Serializable {
     
     public Locale getLocale()
     {
+        System.out.println("Locale set at: " + (Locale)lang.get(localeCode));
         return ((Locale)lang.get(localeCode));
     }
+
+    public Locale getLangauge() {
+        return langauge;
+    }
+
+    public void setLangauge(Locale langauge) {
+        this.langauge = langauge;
+    }
+    
     
     /**
      * Creates a new instance of LanguageBean
      */
     public LanguageBean() {
+        System.out.println("Setting as " + getLocale());
     }
     
+    @PostConstruct
+    public void init()
+    {
+        System.out.println("Is this the problem?");
+        langauge = new Locale(Locale.ENGLISH.getLanguage());
+    }
     
     
     public void langLocaleCodeChanged(ValueChangeEvent e)
@@ -68,6 +89,7 @@ public class LanguageBean implements Serializable {
         {
             if(entry.getValue().toString().equals(newLocaleValue))
             {
+                langauge = (Locale) entry.getValue();
                 FacesContext.getCurrentInstance().getViewRoot().setLocale((Locale) entry.getValue());
             }
         }

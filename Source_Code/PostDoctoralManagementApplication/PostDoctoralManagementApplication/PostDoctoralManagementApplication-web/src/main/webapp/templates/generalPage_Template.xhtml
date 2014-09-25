@@ -6,6 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:insert name="pageEvents"/>
+    <f:view locale="#{languageBean.langauge}"/>
     <h:head>
         <title>#{lang['UPPostDoctoralApplicationManagementSystem']} - #{pageTitle}</title>
         <h:outputStylesheet name="css/basicLayout.css" />

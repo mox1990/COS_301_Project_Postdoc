@@ -7,6 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:insert name="pageEvents"/>
+    <f:view locale="#{languageBean.langauge}"/>
     <h:head>
 
         <title>#{lang['UPPostDoctoralApplicationManagementSystem']} - #{pageTitle}</title>
@@ -81,6 +82,7 @@
                         <h1>DRIS</h1>
                         <h2>Department of Research &amp; Innovation Support</h2>
                     </div>
+                    
                     </h:panelGrid>
                     <ui:insert name="pageHeader"/>
                     
@@ -99,6 +101,14 @@
                         <h:outputText value="System version: #{generalInformationBean.version}"/>
                         <h:outputText value="#{generalInformationBean.JSFVersion}"/>
                     </h:panelGrid>
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            Language : 
+                            <p:selectOneMenu value="#{languageBean.localeCode}" onchange="submit()" valueChangeListener="#{languageBean.langLocaleCodeChanged}">
+                                <f:selectItems value="#{languageBean.langaugesInMap}" /> 
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:form>
                     <ui:insert name="pageFooter"/>
                 </div>
             </div>            
