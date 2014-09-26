@@ -55,6 +55,39 @@
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
+                    <p:commandButton id="schoolarSearch" value="Search Google scholar for your works" onclick="" type="button" styleClass="button button-fill">
+                        <p:ajax event="click" listener="#{bean.googleScholarDependBean.getSearchResultsForAuthors()}" oncomplete="PF('scholardialog').show()">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                        </p:ajax>
+                    </p:commandButton>
+
+                        
+                    <p:dialog id="dialog" modal="true" dynamic="true" header="Google scholar search" widgetVar="scholardialog" closable="true">
+                        <p:dataTable value="#{bean.googleScholarDependBean.searchResults}" var="result" rowKey="#{result.title}" selectionMode="single" selection="#{bean.googleScholarDependBean.selectedResult}">
+                            <p:ajax event="rowSelect" listener="#{bean.useSelectedResultAsCurrentReference()}" process="@this" update="@form" >
+                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            </p:ajax>
+                            <f:facet name="header">
+                                Google scholar search results
+                            </f:facet>
+                            
+                            <p:column headerText="Title">
+                                <h:outputText value="#{result.title}"/>
+                            </p:column>
+                            <p:column headerText="Authors">
+                                <h:outputText value="#{result.authors}"/>
+                            </p:column>
+                            <p:column headerText="Date published">
+                                <h:outputText value="#{result.datePublished}"/>
+                            </p:column>
+                            <p:column headerText="Published in">
+                                <h:outputText value="#{result.publishedIn}"/>
+                            </p:column>
+                        </p:dataTable>
+                        
+                    </p:dialog>
+                    
+                    
                     <p:commandButton value="#{lang['AddReference']}" actionListener="#{bean[beanActionAdd]}" update="#{prefix}researchoutput" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>

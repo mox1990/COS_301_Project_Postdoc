@@ -6,18 +6,10 @@
 
 package com.softserve.HTTPScrapers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.HttpConnection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xml.sax.SAXException;
@@ -37,44 +29,76 @@ public class GoogleScholarScraper {
     }
     
     
-    public List<GoogleScholarResult> getResultsFromQuery(GoogleScholarQuery googleScholarQuery) throws IOException, ParserConfigurationException, SAXException
+    public List<GoogleScholarResult> getResultsFromQuery(GoogleScholarQuery googleScholarQuery) throws Exception
     {
         
         System.setProperty("http.agent", "");
- 
-        Document document = Jsoup.connect(googleScholarQuery.generateQueryURL()).userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/31.0").get();
         
-        ArrayList<GoogleScholarResult> searchResults = new ArrayList<GoogleScholarResult>();        
+        System.out.println("Google scholar: About to connect using " + googleScholarQuery.generateQueryURL());
+        Document document = Jsoup.connect(googleScholarQuery.generateQueryURL()).userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0").cookie("GOOGLE_ABUSE_EXEMPTION", "ID=7d4f53bdd7b788a6:TM=1411726594:C=c:IP=197.76.186.148-:S=APGng0uE695Q69xpETxxDEsPjVGPpKNoFg").get();
+        System.out.println("Google scholar: Page retrived and DOM constructed for " + googleScholarQuery.generateQueryURL());
+        
+        ArrayList<GoogleScholarResult> searchResults = new ArrayList<GoogleScholarResult>();  
+        
+        System.out.println("Google scholar: Parsing results");
         for(Element element : document.getElementsByAttributeValue("class", "gs_r"))
         {
             GoogleScholarResult googleScholarResult = new GoogleScholarResult();
             
-            googleScholarResult.setTitle(element.getElementsByClass("gs_rt").get(0).getElementsByTag("a").text());
-            googleScholarResult.setLink(element.getElementsByClass("gs_rt").get(0).getElementsByTag("a").attr("href"));
+            if(element.getElementsByClass("gs_rt").size() > 0)
+            {
+                googleScholarResult.setTitle(element.getElementsByClass("gs_rt").get(0).getElementsByTag("a").text().trim());
+                googleScholarResult.setLink(element.getElementsByClass("gs_rt").get(0).getElementsByTag("a").attr("href").trim());
+            }
 
             if(element.getElementsByClass("gs_a").size() > 0)
             {
-                String gs_ra = element.getElementsByClass("gs_a").get(0).text();
-                if(gs_ra.contains(" -"))
+                String gs_a = element.getElementsByClass("gs_a").get(0).text();
+                //Authors
+                if(gs_a.contains(" -"))
                 {
-                    googleScholarResult.setAuthors(gs_ra.substring(0, gs_ra.indexOf(" -")));
+                    googleScholarResult.setAuthors(gs_a.substring(0, gs_a.indexOf(" -")).trim());
                 }
                 
-                if(gs_ra.contains(" - ") && gs_ra.contains(","))
-                {
-                    googleScholarResult.setPublishedIn(gs_ra.substring(gs_ra.indexOf(" - ") + 3, gs_ra.indexOf(",", gs_ra.indexOf(" - ") + 3)));
-                }
                 
-                if(gs_ra.contains(" - ") && gs_ra.contains(","))
+                int endIndex = gs_a.lastIndexOf(" - ");
+                int startIndex = gs_a.lastIndexOf(" - ",endIndex - 1) + 3;
+                int subIndex = -1;
+                
+                
+                //Publised in && year
+                if(startIndex > -1 &&  endIndex > -1 && startIndex <= endIndex)
                 {
-                    googleScholarResult.setDatePublished(gs_ra.substring(gs_ra.indexOf(",", gs_ra.indexOf(" - ") + 3) + 2, gs_ra.lastIndexOf(" - ")));
+                    String publicationString = gs_a.substring(startIndex, endIndex).trim();
+                    
+                    subIndex = publicationString.lastIndexOf(",");
+                    System.out.println(publicationString);
+                    if(subIndex > -1)
+                    {
+                        System.out.println("Scanning for both: " + publicationString);
+                        googleScholarResult.setPublishedIn(publicationString.substring(0, subIndex).trim());
+                        googleScholarResult.setDatePublished(publicationString.substring(subIndex + 1).trim());
+                    }
+                    else
+                    {                        
+                        System.out.println("Scanning for one: " + publicationString);
+                        if(Character.isDigit(publicationString.charAt(0)) && publicationString.length() < 5)
+                        {
+                            googleScholarResult.setDatePublished(publicationString);
+                        }
+                        else
+                        {
+                            googleScholarResult.setPublishedIn(publicationString);
+                        }
+                    }
                 }
             }
             
             searchResults.add(googleScholarResult);
         }
         
-        System.out.println(searchResults.toString());
+        System.out.println("Google scholar: Results parsed");
+        System.out.println("Google scholar: Results " + searchResults.toString());
         
         return searchResults;        
     }

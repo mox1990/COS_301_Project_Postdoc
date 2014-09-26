@@ -183,7 +183,11 @@ public class NotifierServices implements NotifierServicesLocal {
             {
                 Issue issue = new Issue("Progress reports", "You have pending progress reports", 0);
                 issue.setCount(getProgressReportManagementServiceEJB().allApplicationsWithPendingReportsForUser(new Session(null, person, true)).size());
-                issues.add(issue);
+                if(issue.getCount() > 0)
+                {
+                    issues.add(issue);
+                }
+                
                 issue = new Issue("Possible renewals", "You possible renewals waiting for you", 0);
                 issue.setCount(getApplicationRenewalServiceEJB().getRenewableApplicationsForFellow(new Session(null, person, true),person).size());
                 if(issue.getCount() > 0)

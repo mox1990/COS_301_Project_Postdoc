@@ -18,11 +18,15 @@ import com.softserve.Webapp.util.MessageUtil;
 import com.sun.xml.xsom.impl.scd.Iterators;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.faces.application.FacesMessage;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.JAXBException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -33,6 +37,9 @@ import javax.xml.bind.JAXBException;
 @Dependent
 public class CVCreationDependBean implements Serializable{
 
+    @Inject
+    private GoogleScholarDependBean googleScholarDependBean;
+    
     private Cv cv;
     
     private List<AcademicQualification> academicQualificationList;
@@ -422,5 +429,22 @@ public class CVCreationDependBean implements Serializable{
         
         return cv;
     }
+    
+    public void useSelectedResultAsCurrentReference()
+    {  
+        currentReference = googleScholarDependBean.getSelectedResultAsReference();
+
+        MessageUtil.CreateGlobalFacesMessage("Using google scholar reference!", "You have selected a google scholar reference, please correct or update the data as need before adding it!", FacesMessage.SEVERITY_INFO);        
+    }
+
+    public GoogleScholarDependBean getGoogleScholarDependBean() {
+        return googleScholarDependBean;
+    }
+
+    public void setGoogleScholarDependBean(GoogleScholarDependBean googleScholarDependBean) {
+        this.googleScholarDependBean = googleScholarDependBean;
+    }
+    
+    
     
 }

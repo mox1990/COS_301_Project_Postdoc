@@ -22,6 +22,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.UserAlreadyExistsException;
 import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
+import com.softserve.Webapp.depenedentbeans.GoogleScholarDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -64,6 +65,7 @@ public class NewApplicationCreationBean implements Serializable {
     private CVCreationDependBean cVCreationDependBean;
     @Inject
     private ApplicationCreationDependBean ApplicationCreationDependBean;
+    
     
     @Inject
     private Conversation conversation;
@@ -127,7 +129,6 @@ public class NewApplicationCreationBean implements Serializable {
     public void setCVCreationDependBean(CVCreationDependBean cVCreationDependBean) {
         this.cVCreationDependBean = cVCreationDependBean;
     }
-    
         
     public void completeCV()
     {
