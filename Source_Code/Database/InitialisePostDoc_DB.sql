@@ -409,9 +409,11 @@ CREATE TABLE experience (
 CREATE TABLE announcement (
 	_announcementID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_timestamp DATETIME NOT NULL,
+	_headline VARCHAR(100),
 	_message TEXT NOT NULL,
 	_startDate DATETIME,
 	_endDate DATETIME,
+	_image BLOB,
 
 	PRIMARY KEY (_announcementID)
 	
