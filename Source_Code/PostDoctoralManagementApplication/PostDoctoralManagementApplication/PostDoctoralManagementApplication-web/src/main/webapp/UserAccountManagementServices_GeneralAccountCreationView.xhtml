@@ -54,7 +54,7 @@
                         </p:panel>
                         
                         
-                        <p:panel id="upEmployeeInfoPanel" header="Insitatute employement information" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
+                        <p:panel id="upEmployeeInfoPanel" header="#{lang['InstituteEmploymentInformation']}" visible="#{prospectiveUserAccountCreationBean.person.upEmployee}">
                             <p:panel header="#{lang['UPEmploymentInformation']}">
                                 <ui:decorate template="templates/UPEmployeeInfoFieldInput_Template.xhtml">
                                     <ui:param name="employeeInformation" value="#{generalUserAccountCreationBean.employeeInformation}"/>

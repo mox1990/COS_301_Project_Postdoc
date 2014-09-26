@@ -37,6 +37,14 @@
                         <h:outputText value="System version: #{generalInformationBean.version}"/>
                         <h:outputText value="#{generalInformationBean.JSFVersion}"/>
                     </h:panelGrid>
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            Language : 
+                            <p:selectOneMenu value="#{languageBean.localeCode}" onchange="submit()" valueChangeListener="#{languageBean.langLocaleCodeChanged}">
+                                <f:selectItems value="#{languageBean.langaugesInMap}" /> 
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </h:form>
                     <ui:insert name="pageFooter"/>
                 </div>
             </div>            
