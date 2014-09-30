@@ -52,7 +52,7 @@ CREATE TABLE department (
 
 CREATE TABLE person (
 	_systemID CHAR(9) NOT NULL,
-	_password VARCHAR(50) NOT NULL,
+	_password VARCHAR(130) NOT NULL,
 	_title CHAR(10) NOT NULL,
 	_fullName VARCHAR(250) NOT NULL,
 	_surname VARCHAR(250) NOT NULL,
@@ -420,7 +420,7 @@ CREATE TABLE announcement (
 ) ENGINE=InnoDB;
 
 
-INSERT INTO postdoc_db.security_role (_name, _roleMask) VALUES("Prospective fellow",0), 
+INSERT INTO PostDoc_DB.security_role (_name, _roleMask) VALUES("Prospective fellow",0), 
 															("Referee",1),
 															("Research fellow",2),
 															("Grant holder",3),
@@ -430,26 +430,26 @@ INSERT INTO postdoc_db.security_role (_name, _roleMask) VALUES("Prospective fell
 															("Post doctoral Committee member",7), 
 															("System administrator",8);
 
-INSERT INTO postdoc_db.institution (_name) VALUES ('University of Pretoria'),
+INSERT INTO PostDoc_DB.institution (_name) VALUES ('University of Pretoria'),
 												('University of Cape Town');
 
-INSERT INTO postdoc_db.faculty (_institution,_name) VALUES (1,'EBIT'),
+INSERT INTO PostDoc_DB.faculty (_institution,_name) VALUES (1,'EBIT'),
 												(1,'Humanities'),
 												(2,'Health sciences');
 
-INSERT INTO postdoc_db.department (_faculty,_name) VALUES (1,'Computer Science'),
+INSERT INTO PostDoc_DB.department (_faculty,_name) VALUES (1,'Computer Science'),
 												(1,'Informatics'),
 												(1,'Computer and Electronic Engineers'),
 												(2,'Philosophy'),
 												(3,'Dean');
 
-INSERT INTO postdoc_db.address (_country) VALUES("TestMainia");
-INSERT INTO postdoc_db.address (_country) VALUES("TestUniversity");
+INSERT INTO PostDoc_DB.address (_country) VALUES("TestMainia");
+INSERT INTO PostDoc_DB.address (_country) VALUES("TestUniversity");
 
-INSERT INTO postdoc_db.person (_systemID,_fullName,_password,_title,_surname,_email,_addressLine1,_UpEmployee,_accountStatus) VALUES ('u12019837','Test','test','Mr','Tester','test@gmail.com',1,true, 'active');
-INSERT INTO postdoc_db.employee_information (_employeeID, _physicalAddress, _position, _dateOfAppointment, _appointmentStatus, _department) VALUES('u12019837',2,'HOD','2001/01/20','full time',1);
+INSERT INTO PostDoc_DB.person (_systemID,_fullName,_password,_title,_surname,_email,_addressLine1,_UpEmployee,_accountStatus) VALUES ('u12019837','Test','ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff','Mr','Tester','test@gmail.com',1,true, 'active');
+INSERT INTO PostDoc_DB.employee_information (_employeeID, _physicalAddress, _position, _dateOfAppointment, _appointmentStatus, _department) VALUES('u12019837',2,'HOD','2001/01/20','full time',1);
 
-INSERT INTO postdoc_db.person_security_role (_personID, _roleID) VALUES ('u12019837',1),
+INSERT INTO PostDoc_DB.person_security_role (_personID, _roleID) VALUES ('u12019837',1),
 																		('u12019837',2),
 																		('u12019837',3),
 																		('u12019837',4),
@@ -462,129 +462,129 @@ INSERT INTO postdoc_db.person_security_role (_personID, _roleID) VALUES ('u12019
 
 USE PostDoc_Archive_DB;
 
-CREATE TABLE address  LIKE postdoc_db.address;
+CREATE TABLE address  LIKE PostDoc_DB.address;
 
-CREATE TABLE institution  LIKE postdoc_db.institution;
+CREATE TABLE institution  LIKE PostDoc_DB.institution;
 
-CREATE TABLE faculty  LIKE postdoc_db.faculty;
+CREATE TABLE faculty  LIKE PostDoc_DB.faculty;
 
-CREATE TABLE department  LIKE postdoc_db.department;
+CREATE TABLE department  LIKE PostDoc_DB.department;
 
-CREATE TABLE person  LIKE postdoc_db.person;
+CREATE TABLE person  LIKE PostDoc_DB.person;
 
-CREATE TABLE employee_information  LIKE postdoc_db.employee_information;
+CREATE TABLE employee_information  LIKE PostDoc_DB.employee_information;
 
-CREATE TABLE research_fellow_information  LIKE postdoc_db.research_fellow_information;
+CREATE TABLE research_fellow_information  LIKE PostDoc_DB.research_fellow_information;
 
-CREATE TABLE security_role  LIKE postdoc_db.security_role;
+CREATE TABLE security_role  LIKE PostDoc_DB.security_role;
 
-CREATE TABLE person_security_role  LIKE postdoc_db.person_security_role;
+CREATE TABLE person_security_role  LIKE PostDoc_DB.person_security_role;
 
-CREATE TABLE notification  LIKE postdoc_db.notification;
+CREATE TABLE notification  LIKE PostDoc_DB.notification;
 
-CREATE TABLE application  LIKE postdoc_db.application;
+CREATE TABLE application  LIKE PostDoc_DB.application;
 
-CREATE TABLE eligiblity_report  LIKE postdoc_db.eligiblity_report;
+CREATE TABLE eligiblity_report  LIKE PostDoc_DB.eligiblity_report;
 
-CREATE TABLE decline_report  LIKE postdoc_db.decline_report;
+CREATE TABLE decline_report  LIKE PostDoc_DB.decline_report;
 
-CREATE TABLE ammend_request  LIKE postdoc_db.ammend_request;
+CREATE TABLE ammend_request  LIKE PostDoc_DB.ammend_request;
 
-CREATE TABLE recommendation_report  LIKE postdoc_db.recommendation_report;
+CREATE TABLE recommendation_report  LIKE PostDoc_DB.recommendation_report;
 
-CREATE TABLE endorsement  LIKE postdoc_db.endorsement;
+CREATE TABLE endorsement  LIKE PostDoc_DB.endorsement;
 
-CREATE TABLE funding_report  LIKE postdoc_db.funding_report;
+CREATE TABLE funding_report  LIKE PostDoc_DB.funding_report;
 
-CREATE TABLE funding_cost  LIKE postdoc_db.funding_cost;
+CREATE TABLE funding_cost  LIKE PostDoc_DB.funding_cost;
 
-CREATE TABLE referee_application  LIKE postdoc_db.referee_application;
+CREATE TABLE referee_application  LIKE PostDoc_DB.referee_application;
 
-CREATE TABLE referee_report  LIKE postdoc_db.referee_report;
+CREATE TABLE referee_report  LIKE PostDoc_DB.referee_report;
 
-CREATE TABLE progress_report  LIKE postdoc_db.progress_report;
+CREATE TABLE progress_report  LIKE PostDoc_DB.progress_report;
 
-CREATE TABLE forward_and_rewind_report  LIKE postdoc_db.forward_and_rewind_report;
+CREATE TABLE forward_and_rewind_report  LIKE PostDoc_DB.forward_and_rewind_report;
 
-CREATE TABLE committee_meeting  LIKE postdoc_db.committee_meeting;
+CREATE TABLE committee_meeting  LIKE PostDoc_DB.committee_meeting;
 
-CREATE TABLE minute_comment  LIKE postdoc_db.minute_comment;
+CREATE TABLE minute_comment  LIKE PostDoc_DB.minute_comment;
 
-CREATE TABLE attendence_list  LIKE postdoc_db.attendence_list;
+CREATE TABLE attendence_list  LIKE PostDoc_DB.attendence_list;
 
-CREATE TABLE committee_meetings_applications  LIKE postdoc_db.committee_meetings_applications;
+CREATE TABLE committee_meetings_applications  LIKE PostDoc_DB.committee_meetings_applications;
 
-CREATE TABLE audit_log  LIKE postdoc_db.audit_log;
+CREATE TABLE audit_log  LIKE PostDoc_DB.audit_log;
 
-CREATE TABLE cv  LIKE postdoc_db.cv;
+CREATE TABLE cv  LIKE PostDoc_DB.cv;
 
-CREATE TABLE academic_qualification  LIKE postdoc_db.academic_qualification;
+CREATE TABLE academic_qualification  LIKE PostDoc_DB.academic_qualification;
 
-CREATE TABLE experience LIKE postdoc_db.experience;
+CREATE TABLE experience LIKE PostDoc_DB.experience;
 
-CREATE TABLE announcement LIKE postdoc_db.announcement;
+CREATE TABLE announcement LIKE PostDoc_DB.announcement;
 
 USE PostDoc_BackUp_DB;
 
-CREATE TABLE address  LIKE postdoc_db.address;
+CREATE TABLE address  LIKE PostDoc_DB.address;
 
-CREATE TABLE institution  LIKE postdoc_db.institution;
+CREATE TABLE institution  LIKE PostDoc_DB.institution;
 
-CREATE TABLE faculty  LIKE postdoc_db.faculty;
+CREATE TABLE faculty  LIKE PostDoc_DB.faculty;
 
-CREATE TABLE department  LIKE postdoc_db.department;
+CREATE TABLE department  LIKE PostDoc_DB.department;
 
-CREATE TABLE person  LIKE postdoc_db.person;
+CREATE TABLE person  LIKE PostDoc_DB.person;
 
-CREATE TABLE employee_information  LIKE postdoc_db.employee_information;
+CREATE TABLE employee_information  LIKE PostDoc_DB.employee_information;
 
-CREATE TABLE research_fellow_information  LIKE postdoc_db.research_fellow_information;
+CREATE TABLE research_fellow_information  LIKE PostDoc_DB.research_fellow_information;
 
-CREATE TABLE security_role  LIKE postdoc_db.security_role;
+CREATE TABLE security_role  LIKE PostDoc_DB.security_role;
 
-CREATE TABLE person_security_role  LIKE postdoc_db.person_security_role;
+CREATE TABLE person_security_role  LIKE PostDoc_DB.person_security_role;
 
-CREATE TABLE notification  LIKE postdoc_db.notification;
+CREATE TABLE notification  LIKE PostDoc_DB.notification;
 
-CREATE TABLE application  LIKE postdoc_db.application;
+CREATE TABLE application  LIKE PostDoc_DB.application;
 
-CREATE TABLE eligiblity_report  LIKE postdoc_db.eligiblity_report;
+CREATE TABLE eligiblity_report  LIKE PostDoc_DB.eligiblity_report;
 
-CREATE TABLE decline_report  LIKE postdoc_db.decline_report;
+CREATE TABLE decline_report  LIKE PostDoc_DB.decline_report;
 
-CREATE TABLE ammend_request  LIKE postdoc_db.ammend_request;
+CREATE TABLE ammend_request  LIKE PostDoc_DB.ammend_request;
 
-CREATE TABLE recommendation_report  LIKE postdoc_db.recommendation_report;
+CREATE TABLE recommendation_report  LIKE PostDoc_DB.recommendation_report;
 
-CREATE TABLE endorsement  LIKE postdoc_db.endorsement;
+CREATE TABLE endorsement  LIKE PostDoc_DB.endorsement;
 
-CREATE TABLE funding_report  LIKE postdoc_db.funding_report;
+CREATE TABLE funding_report  LIKE PostDoc_DB.funding_report;
 
-CREATE TABLE funding_cost  LIKE postdoc_db.funding_cost;
+CREATE TABLE funding_cost  LIKE PostDoc_DB.funding_cost;
 
-CREATE TABLE referee_application  LIKE postdoc_db.referee_application;
+CREATE TABLE referee_application  LIKE PostDoc_DB.referee_application;
 
-CREATE TABLE referee_report  LIKE postdoc_db.referee_report;
+CREATE TABLE referee_report  LIKE PostDoc_DB.referee_report;
 
-CREATE TABLE progress_report  LIKE postdoc_db.progress_report;
+CREATE TABLE progress_report  LIKE PostDoc_DB.progress_report;
 
-CREATE TABLE forward_and_rewind_report  LIKE postdoc_db.forward_and_rewind_report;
+CREATE TABLE forward_and_rewind_report  LIKE PostDoc_DB.forward_and_rewind_report;
 
-CREATE TABLE committee_meeting  LIKE postdoc_db.committee_meeting;
+CREATE TABLE committee_meeting  LIKE PostDoc_DB.committee_meeting;
 
-CREATE TABLE minute_comment  LIKE postdoc_db.minute_comment;
+CREATE TABLE minute_comment  LIKE PostDoc_DB.minute_comment;
 
-CREATE TABLE attendence_list  LIKE postdoc_db.attendence_list;
+CREATE TABLE attendence_list  LIKE PostDoc_DB.attendence_list;
 
-CREATE TABLE committee_meetings_applications  LIKE postdoc_db.committee_meetings_applications;
+CREATE TABLE committee_meetings_applications  LIKE PostDoc_DB.committee_meetings_applications;
 
-CREATE TABLE audit_log  LIKE postdoc_db.audit_log;
+CREATE TABLE audit_log  LIKE PostDoc_DB.audit_log;
 
-CREATE TABLE cv  LIKE postdoc_db.cv;
+CREATE TABLE cv  LIKE PostDoc_DB.cv;
 
-CREATE TABLE academic_qualification  LIKE postdoc_db.academic_qualification;
+CREATE TABLE academic_qualification  LIKE PostDoc_DB.academic_qualification;
 
-CREATE TABLE experience LIKE postdoc_db.experience;
+CREATE TABLE experience LIKE PostDoc_DB.experience;
 
-CREATE TABLE announcement LIKE postdoc_db.announcement;
+CREATE TABLE announcement LIKE PostDoc_DB.announcement;
 
