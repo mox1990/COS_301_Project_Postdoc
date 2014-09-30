@@ -11,6 +11,7 @@ import com.softserve.HTTPScrapers.GoogleScholarScraper;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -81,7 +82,7 @@ public class IndexBean {
         this.password = password;
     }
     
-    public String performLoginRequest()
+    public String performLoginRequest() throws NoSuchAlgorithmException 
     {
         return sessionManagerBean.login(usernameOrEmail,password);
     }

@@ -11,6 +11,7 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.system.Session;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import test.softserve.MockEJBClasses.UserGatewayMockUnit;
@@ -134,7 +135,7 @@ public class UserGatewayUnitTests {
      *
      * @param httpSession
      */
-    public void testGetSessionFromHttpSession()
+    public void testGetSessionFromHttpSession() throws NoSuchAlgorithmException
     {
         UserGatewayMockUnit instance = new UserGatewayMockUnit();
         HttpSession mockHttpSession = mock(HttpSession.class);

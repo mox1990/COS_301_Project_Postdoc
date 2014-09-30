@@ -8,6 +8,8 @@ package com.softserve.system;
 
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
+import com.softserve.auxillary.Hashing;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 
@@ -22,10 +24,10 @@ public class Session {
     private Person user = null;
     private boolean systemLevel = false;
 
-    public Session(HttpSession Session, Person User) 
+    public Session(HttpSession session, Person user) throws NoSuchAlgorithmException 
     {
-        user = User;
-        session = Session;
+        this.user = user;
+        this.session = session;
         systemLevel = false;
     }
     

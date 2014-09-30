@@ -10,10 +10,12 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.Webapp.util.StorageItem;
+import com.softserve.auxillary.Hashing;
 import com.softserve.ejb.*;
 import com.softserve.system.Session;
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +57,7 @@ public class SessionManagerBean implements Serializable {
         sessionStorage = new ArrayList<StorageItem>();
     }
     
-    public String login(String username, String password)
+    public String login(String username, String password) throws NoSuchAlgorithmException
     {
         HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
@@ -65,7 +67,7 @@ public class SessionManagerBean implements Serializable {
         }
         
         httpSession.setAttribute("username",username);
-        httpSession.setAttribute("password",password);
+        httpSession.setAttribute("password",Hashing.hashInput(password));
         httpSession.setAttribute("status", Boolean.FALSE);
         
         try
@@ -151,7 +153,7 @@ public class SessionManagerBean implements Serializable {
     public Session getSystemLevelSessionForCurrentSession() throws Exception
     {        
         Session session = getSession();
-        
+        System.out.println("The problem might be here...");
         return new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE);
     }
     

@@ -6,7 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.auxillary.Hashing;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -186,8 +188,8 @@ public class Person implements Serializable {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password) throws NoSuchAlgorithmException {
+        this.password = Hashing.hashInput(password);
     }
 
     public String getTitle() {

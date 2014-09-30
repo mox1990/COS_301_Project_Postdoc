@@ -6,6 +6,7 @@
 
 package com.softserve.DBEntities;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
@@ -39,19 +40,19 @@ public class PersonTest {
     }
 
     @Test
-    public void testSetAndGetPassword() 
+    public void testSetAndGetPassword() throws NoSuchAlgorithmException 
     {
         Person instance = new Person();
         instance.setPassword("Very very very good");
-        assertEquals("Very very very good",instance.getPassword());
+        assertEquals("126fb99348e3fc2667d83665b8e1a20757c92a8e60ed777b6c04e78554354cd739653c624fb31bfb412678ae92d42f68546304039fc9faa09bc65a816fbbe08b",instance.getPassword());
     }
 
     @Test
-    public void testSetAndGetTitle() 
+    public void testSetAndGetTitle() throws NoSuchAlgorithmException 
     {
         Person instance = new Person();
         instance.setPassword("Mr");
-        assertEquals("Mr",instance.getPassword());
+        assertEquals("1beabd9ca817058823d96028e7165c5e1874da567a98df0be72b84708d5107dd8292bf2890de392ae11b63f837aaea68f84344923adce62ac9340d4671902a46",instance.getPassword());
     }
 
     @Test

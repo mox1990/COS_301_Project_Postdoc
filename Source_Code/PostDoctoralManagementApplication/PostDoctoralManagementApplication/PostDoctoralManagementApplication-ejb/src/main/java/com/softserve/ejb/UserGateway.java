@@ -21,6 +21,7 @@ import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -114,7 +115,7 @@ public class UserGateway implements UserGatewayLocal
     
     
     @Override
-    public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException
+    public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException, NoSuchAlgorithmException
     {
         EntityManager em = emf.createEntityManager();
 
