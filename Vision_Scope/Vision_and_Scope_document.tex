@@ -27,12 +27,12 @@
 \linespread{1.1} % Line spacing
 
 \newcommand{\Title}{Vision and scope document} % Assignment title
-\newcommand{\Class}{Cos\ 301} % Course/class
+\newcommand{\Class}{COS\ 301 Final year project:} % Course/class
 \newcommand{\pd}{Post-Doctoral}
 \newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
-\newcommand{\version}{1.0}
-\newcommand{\iteration}{4}
-\newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
+\newcommand{\version}{2.0}
+\newcommand{\iteration}{5}
+\newcommand{\client}{Ms. Cathy Sandis (UP DRIS)}
 \newcommand{\project}{Post-Doctoral Application Management System}
 \newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 
@@ -47,6 +47,7 @@
 \centering
 \includegraphics{../Images_Docs/logo.png}
 \end{figure}
+\LARGE \bf \Class \\[0.25em]
 \LARGE \bf \project \\[1em]
 \LARGE \bf \Title \\[0.25em]
 \large \bf \today\\
@@ -94,6 +95,8 @@ Mathys Ellis (12019837) \\[8em]
 16/05/2014 & v 0.95 & Updated use case diagrams and stakeholders. & Mathys Ellis \\
 \hline
 21/05/2014 & v 1.0 & Added import and export services and application process. Finalised document for first iteration. & Mathys Ellis \\
+\hline
+01/10/2014 & v 2.0 & Added, refined and reordered document to meet new demands. & Mathys Ellis \\
 \hline
 
 \end{tabular}
@@ -216,46 +219,50 @@ These are stakeholders that do have a PeopleSoft account and are a group of staf
 \newpage
 \section{Project Scope:}
 \vspace{0.2in}
+
+\subsection{System scope}
 	
-The scope of the project is to design an Post-Doctoral application management system in the form of a software package where prospective fellows can apply for fellowships and current Post-Doctoral research fellows can renew their fellowships at the University of Pretoria. The system will further allow the management of the application process till the end of the process. The end is defined as follows: When the DIRS have either terminated or closed the application, or if the fellowship has been completed or when the application has been denied approval. The system will replace the current paper based approach currently in place. Further the system will incorporate auxiliary services to support and improve the administration and work-flow of the process. Such services are: Report generation, Google scholar integration, announcements, internationalisation, account management, audit trail, notification inbox, automatic notifier for pending tasks, data import and Backup services. The system will be designed so to allow for future integration with the current student and personnel management system, PeopleSoft, employed by the University of Pretoria and any other possible system by providing the necessary mechanism. Though the scope of this project will be to construct the proposed system independently of any other system and allow it to run as a stand-alone system.
+The scope of the project is to design a Post-Doctoral application management system in the form of a software package where prospective fellows can apply for fellowships and current Post-Doctoral research fellows can renew their fellowships at the University of Pretoria. The system will manage the application work-flow from the start until the end of the process. Where the end is defined as follows: When the DIRS have either terminated or closed the application, or if the fellowship has been completed or when the application has been denied approval. Further the system will also incorporate non-application services to support and enhance both the administration of the system and application work-flow. As well provide means to extract and use information from the data stored by the system. The system will also be designed so to allow for future integration with the current student and personnel management system, PeopleSoft, employed by the UP. As well as any other possible system by providing the necessary APIs and mechanisms to do so. Finally the proposed system will be a stand-alone system.
 \vspace{0.2in}
 
+\subsubsection{Use cases:}
+This section shows the use cases for the entire system. For a more  detailed view of each use cases please refer to the Functional requirements and application design document for the project 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Post-doctral fellowship management system.jpg}}
-\caption{Use case diagram of Post-doctoral fellowship management system}
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Post-doctral fellowship management system1.jpg}}
+\caption{Use case diagram of Post-doctoral application management system}
 \end{figure}
 
 \newpage
-\subsection{Application work-flow process}
-This section discusses and gives an abstract overview of the post-doctoral prospective and renewal application processes. Each of the processes are broken up in stages. Each of the stages need to be passed for the application to proceed. It should be noted that the client has pointed out that sometimes a stage or several stages have not been completed by the application though at the discretion of the DRIS the application may be pushed forward to the required stage. The stages are numbered in accordance to the order in which they occur. It should be noted that both processes only differ at the second stage and slightly at other stages.
+\subsection{Application services scope}
+This section discusses and gives an abstract overview of the post-doctoral prospective and renewal application processes. Each of the processes are broken up in stages. Each of the stage needs to be passed for the application to proceed to the next. It should be noted that the client has pointed out that sometimes a stage or several stages have not been completed by the application though at the discretion of the DRIS the application may be pushed forward to the required stage. The stages are numbered in accordance to the order in which they occur. It should be noted that both processes only differ at the second stage and slightly at other stages and that the renewal process is a extension of the prospective application process.
 
 \begin{itemize}
 	\item New application
 		\begin{enumerate}
 			\item A prospective fellow opens a application for a post-doctoral fellowship.
-			\item If the application is a UP Postdoc application it requires that at least 2 referees are specified by the prospective fellow, each have to complete a referral report.
-			\item The identified grant holder has to communicate with the prospective fellow in order to verify and finalise the application once all the referral reports are acquired if there are. If the grant holder is not satisfied then they can ask for amendment. The grant holder may deny the application if they feel so.
+			\item If the application is a UP Postdoc application it requires that at least 2 referees are specified by the prospective fellow, each have to complete a referral report. The grant holder is also notified once all the referral reports are completed. 
+			\item The identified grant holder has to communicate with the prospective fellow in order to verify and finalise the application once all the referral reports are acquired if there are. If the grant holder is not satisfied then they can ask for amendment. The grant holder may deny the application if they feel so. The prospective fellow is also notified of this. 
 			\item The finalised application is then given to HOD of the specified department for approval. On approval the application is supplemented with a recommendation report. The HOD can ask for amendment if he/she feels the need or even deny the application.
-			\item The application is then given to the appropriate member of the dean's office who then needs to approve it. On approval the application needs to be endorsed by a motivational letter and rank order based on score out of 10. The dean's office may deny the application.
-			\item The endorsed application is given to the appropriate member of the DRIS for eligibility checking. If found eligible the application is moved to the next stage. Else it is denied.
-			\item The DRIS member has to arrange and convene a post-doctoral meeting after the application deadline of the eligible applications. This documentation is the collection of all the related application data that has been added to the application at each stage.
+			\item The application is then given to the appropriate member of the dean's office who then needs to approve it. On approval the application needs to be endorsed by a motivational letter and rank order based on score out of 10. The dean's office may deny the application. The prospective fellow and grant holder is also notified of this. 
+			\item The endorsed application is given to the appropriate member of the DRIS for eligibility checking. If found eligible the application is moved to the next stage. Else it is denied. The prospective fellow and grant holder is also notified of this. 
+			\item The DRIS member has to arrange and convene a post-doctoral meeting after the application deadline of the eligible applications. This documentation is the collection of all the related application data that has been added to the application at each stage. The prospective fellow and grant holder is also notified of this. 
 			\item The post-doctoral meeting is then convened where the members of the post-doctoral committee evaluate and deliver their insights into the potential applications. This is documented in the form of minute meetings. 
 			\item The appropriate member(s) of the DRIS then need to make the final funding decision of all the applications based on the minute meetings and record this data. They can approve it or decline the application. If approved they need to add the final application information as well as the funding information.
-			\item The data is then summarised accordingly and sent to the finance department as well as the CSC. The grant holder is also notified of this.   
+			\item The data is then summarised accordingly and sent to the finance department as well as the CSC. The prospective fellow and grant holder is also notified of this.   
 		\end{enumerate}
 	\item Renewal application
 		\begin{enumerate}
 			\item A research fellow opens a renewal application for a post-doctoral fellowship.
 			\item The research fellow then needs to complete a final progress report if they have not yet done so.
-			\item The identified grant holder has to communicate with the prospective fellow in order to verify and finalise the renewal application once the renewal is submitted by the fellow. If the grant holder is not satisfied then they can ask for amendment. The grant holder may deny the application if they feel so.
-			\item The finalised application is then given to HOD of the specified department for approval. On approval the application is supplemented with a recommendation report. The HOD can ask for amendment if he/she feels the need or even deny the application.
-			\item The application is then given to the appropriate member of the dean's office who then needs to approve it. On approval the application needs to be endorsed by a motivational letter and rank order based on score out of 10. The dean's office may deny the application.
-			\item The endorsed application is given to the appropriate member of the DRIS for eligibility checking. If found eligible the application is stored. Else it is denied.
+			\item The identified grant holder has to communicate with the prospective fellow in order to verify and finalise the renewal application once the renewal is submitted by the fellow. If the grant holder is not satisfied then they can ask for amendment. The grant holder may deny the application if they feel so. The research fellow is notified of this.  
+			\item The finalised application is then given to HOD of the specified department for approval. On approval the application is supplemented with a recommendation report. The HOD can ask for amendment if he/she feels the need or even deny the application. The research fellow and grant holder is also notified of this.  
+			\item The application is then given to the appropriate member of the dean's office who then needs to approve it. On approval the application needs to be endorsed by a motivational letter and rank order based on score out of 10. The dean's office may deny the application. The research fellow and grant holder is also notified of this.  
+			\item The endorsed application is given to the appropriate member of the DRIS for eligibility checking. If found eligible the application is stored. Else it is denied. The research fellow and grant holder is also notified of this.  
 			\item The DRIS member has to arrange and convene a post-doctoral meeting after the application deadline and prepare the pre-documentation of the eligible applications. This documentation is the collection of all the related application data that has been added to each of the initial applications.
 			\item The post-doctoral meeting is then convened where the members of the post-doctoral committee evaluate and deliver their insights into the potential applications. This is documented in the form of minute meetings. 
 			\item The appropriate member(s) of the DRIS then need to make the final funding decision of all the applications based on the minute meetings and record this data. They can approve it or decline the application. If approved they need to add the final application information as well as the funding information.
-			\item The data is then summarised accordingly and sent to the finance department as well as the CSC. The grant holder is also notified of this.    
+			\item The data is then summarised accordingly and sent to the finance department as well as the CSC. The research fellow and grant holder is also notified of this.    
 		\end{enumerate}
 
 	
@@ -269,72 +276,55 @@ This section discusses and gives an abstract overview of the post-doctoral prosp
 
 \newpage
 \subsubsection{Use cases:}
-
-
+This section shows the use cases for the entire application process. For a more  detailed view of each use cases please refer to the Functional requirements and application design document for the project 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Application services.jpg}}
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Application services1.jpg}}
 \caption{Use case diagram of Application service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Report services.jpg}}
-\caption{Use case diagram of Report service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Notification services.jpg}}
-\caption{Use case diagram of Notification services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/User account management services.jpg}}
-\caption{Use case diagram of User account management services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/User gateway.jpg}}
-\caption{Use case diagram of User gateway}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Audit-Trail services.jpg}}
-\caption{Use case diagram of Audit-Trail services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Archival services.jpg}}
-\caption{Use case diagram of Archival services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Imports and exports services.jpg}}
-\caption{Use case diagram of Imports and exports services}
 \end{figure}
 
 \newpage
 \vspace{0.2in}
-\subsection{Auxiliary/Support services}
+\subsection{Non-application services scope}
+This section highlights all the services that aren't part of the application processes but serve other purposes. These services as the name implies can also be used by the system to preform tasks not related to the application processes that help with administration, maintenance of the system and information extraction from system data. Such services include:
+\begin{itemize}
+	\item Audit-trail services which track critical user actions.
+	\item Archival services that manges the backup and archival of data in the data store of system.
+	\item User account management services which allows the administration of user accounts.
+	\item Notifier services which track outstanding tasks for users.
+	\item Location management services which handles the administration of the University's internal academic structure.
+	\item Announcement services which help provide a means for system administrators to rely information with users.
+	\item Report services which allows for extraction of application and user data in a human readable fashion. 
+\end{itemize}
+ 
+ Some of these services can be used by the application processes to provide additional support to the application work-flow or even enhance it and can also be employed by other services in the system. such services in the scope include:
+ \begin{itemize}
+ 	\item Google scholar services which will provide a means to query google scholar for references and retrieve such search results in a usable manner.
+ 	\item Notification service which provides a means to send emails and create track-able notifications.
+ 	\item CV management services which provides the infrastructure for managing user CVs.
+\end{itemize} 
 
 \newpage
 \subsubsection{Use cases:}
+This section shows the use cases for the all the non-application services. For a more detailed view of each use case please refer to the Functional requirements and application design document for the project 
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Non-Application Services1.jpg}}
+\caption{Use case diagram of Non-Application services}
+\end{figure}
 
 \vspace{0.2in}
 \subsection{Limitations}
 \vspace{0.2in}
-At the time of writing the project is only limited with regards to the integration with the UP network and the UP's current student and personnel management system. This is due to the IT department of UP only being willing to offer these services or knowledge once the project has been successfully completed. But the system will be developed in such a way to consider the known integration requirements, which at this stage is still very limited.
+At the time of writing the project is only limited with regards to the integration with the UP network and the UP's current student and personnel management system. This is due to the IT department of UP only being willing to offer these services or knowledge once the project has been successfully completed. But the system will be developed in such a way to consider the known integration requirements, which at this stage is still very limited. But the fact that the system will provide an API for possible system integration should be able to overcome any problems. 
 
 \subsubsection{Exclusions}
 \vspace{0.2in}
 Everything not included in this document in terms of scope is considered not in the scope of the project. Though due to the Agile methodology that is employed by the project the scope may be extended or reduced in later iterations if approved by the client.
+
+It should be noted that the client has reduced the scope as to delay the development of the Archival services and has instructed that if there is time it can be implemented.
 \vspace{0.2in}
 
 \newpage
@@ -354,6 +344,7 @@ Everything not included in this document in terms of scope is considered not in 
 \item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
 \item \textbf{Use case} - A visual depiction of a service or group of services.
 \item \textbf{UP} - University of Pretoria
+\item \textbf{Data store} - A storage area for digital data.
  
 
 
