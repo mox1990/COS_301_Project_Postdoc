@@ -13,6 +13,7 @@
 \usepackage{color}
 \usepackage{grffile}
 \usepackage{float}
+\usepackage{titlesec}
 
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 
@@ -28,13 +29,15 @@
 
 \linespread{1.1} % Line spacing
 
+
+
 \newcommand{\Title}{Functional requirements and application design document} % Assignment title
-\newcommand{\Class}{Cos\ 301} % Course/class
+\newcommand{\Class}{COS\ 301 Final year project} % Course/class
 \newcommand{\pd}{Post-Doctoral}
 \newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
-\newcommand{\version}{1.0}
-\newcommand{\iteration}{4}
-\newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
+\newcommand{\version}{3.0}
+\newcommand{\iteration}{5}
+\newcommand{\client}{Ms. Cathy Sandis (UP DRIS)}
 \newcommand{\project}{Post-Doctoral Application Management System}
 \newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 
@@ -49,6 +52,7 @@
 \centering
 \includegraphics{../Images_Docs/logo.png}
 \end{figure}
+\LARGE \bf \Class \\[0.25em]
 \LARGE \bf \project \\[1em]
 \LARGE \bf \Title \\[0.25em]
 \large \bf \today\\
@@ -135,7 +139,7 @@ Mathys Ellis (12019837) \\[8em]
 
 \subsection{Document purpose:}
 \vspace{0.2in}
-This functional requirements and application design document serves the purpose of providing a detailed breakdown of the SoftServe's Post-Doctoral application management system's expected functionality and how it will be realised in terms of application design. Further it defines the services contracts required by each of the stakeholders with the proposed software system. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project functional requirements and realisation thereof.
+This functional requirements and application design document serves the purpose of providing a detailed breakdown of the SoftServe's Post-Doctoral application management system's expected functionality and how it will be realised in terms of application design. Further it defines the services contracts required by each of the stakeholders from the proposed software system. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project functional requirements and realisation thereof.
 
 \vspace{0.2in}
 
@@ -193,16 +197,9 @@ The required functionality, domain objects, process specification and use cases 
 \vspace{0.2in}
 The following sections will discuss the required functionality of all the major services handled by the system. Namely:
 \begin{itemize}
-\item User gateway
-\item Application service
-\item Report services
-\item Notification services
-\item User account management services
-\item Audit-Trail services
-\item Archival services
-\item Imports and exports services
-\item Location management service
-\item CV management service
+	\item User gateway
+	\item Application services
+	\item Non-Application services
 \end{itemize}
 
 \subsubsection{User gateway}
@@ -217,31 +214,33 @@ The following sections will discuss the required functionality of all the major 
 	\end{itemize}
 
 \subsubsection{Application services}
-	The application services encompasses the the entirety of the of the application process undergone by prospective fellows namely new and renewal applications.\\
-	The main user of these services will be the prospective fellows who wishes to track their application progress or renew or apply for a Post-Doctoral fellowship. Other stakeholders will only make use of certain sub-services which are provided under the Application services. It should be noted that most of the different stakeholders' usage of the system will be focused in this set of services only. \\As specified in the vision and scope document under section 7.1 the application process of each application is broken up into stages. These stages run concurrently until they reach the stage where the post-doctoral committee meeting is to take place. In this particular stage the applications are batch reviewed. After which all reviewed eligible applications are once again processed individually. In order to manage the work flow of the application pipeline a event will trigger after each stage is complete and the application(s) will be automatically forwarded to the next. Only the system administrator will have the power to forward or rewind any application through the stages. It should be noted that if the system administrator moves an application back then all the data of the stages that have been complete will be removed.
+	The application services encompasses the entirety of the of the Post-Doctoral application processes undergone by prospective and research fellows namely new and renewal applications.\\\\
+	The main users of these services will be the prospective and research fellows who wishes to apply for a new Post-Doctoral fellowship or renew their current fellowship or track the progress of any of their applications within the application work-flow. The majority of stakeholders will only make use of particular set of services which are provided under the Application services. Therefore most of the different stakeholders' usage of the system will be focused in this set of services only as these services capture the work-flow of the application processes. \\\\As specified in the vision and scope document under section 7.2 the application process of each application is broken up into stages. These stages run concurrently until they reach the stage where the post-doctoral committee meeting is to take place. In this particular stage the applications are batch reviewed. After which all reviewed eligible applications are once again processed individually. In order to manage the work flow of applications a notification event will trigger after each stage is complete and the applications will be automatically forwarded to the next by means of changing the application status. Only the DRIS will have the power to forward or rewind any application through the stages. It should be noted that if the DRIS moves an application back then all the data of the stages that have been complete will be removed.\\\\These services will capture the work-flow diagram in the Vision and Scope document, section 7.2 - Figure 2 as follows:
 	
 	
 	\begin{itemize}
-		\item\textbf{Application status levels:} Each stage the application goes through requires a different type of approval or check. Thus the status level of each stage in order of first to last, is highlighted below. Note * indicates this stage is only for new applications: 
+		\item\textbf{Application status levels:} Each stage the application goes through requires a different type of task to be preformed or group of tasks to be preformed by the appropriate user. Thus a status level is assigned to each stage in order to manage this work-flow. The status levels are list below in order of first to last. Note * indicates that the stage is different for new and renewal applications: 
 		\begin{enumerate}
-			\item \textbf{Open application} - This application is a newly created application.
-			\item \textbf{Submitted application} - This application is submitted by the fellow and awaits referral.
-			\item \textbf{*Refereed application} - This application has a completed list of referral reports from the specified referees.
+			\item \textbf{*Open application} - This application is a newly created prospective or renewal application.
+			\item \textbf{*Submitted application} - This application is submitted by the fellow and awaits referral if referral is required else it is automatically moved to Referred status.
+			\item \textbf{*Referred application} - This application has a completed list of referral reports from the specified referees or if the application is a renewal that that has been submitted. Note no referees are required for UP PhD Postdoc or Externally funded applications. 
 			\item \textbf{Finalised application} - This application has been finalised by the respective grant holder.
 			\item \textbf{Recommended application} - This application has been recommended by the respective HOD.
 			\item \textbf{Endorsed application} - This application has been endorsed by the respective Dean's office.
 			\item \textbf{Eligible application} - This application has been checked for eligibility by the DRIS and has been found to be eligible.
-			\item \textbf{Funded application} - This application has been approved for funding and is complete.
+			\item \textbf{Funded application} - This application has been approved for funding and is active.
 			\item \textbf{Completed application} - This application has passed its expiry date and has been completed.			
 		\end{enumerate}
 		Special application status levels are as follow:
 		\begin{enumerate}
 			\item \textbf{Declined application} - This is any application that has been declined by some authority in the process change.
-			\item \textbf{Terminated application} - This application has been completed or ended by the DRIS before its expiry date.		
+			\item \textbf{Terminated application} - This application has been completed or ended by the DRIS before its expiry date.	
+			\item \textbf{Closed application} - This application has been closed by the DRIS before due to the fellow not taking up the application.	
 		\end{enumerate}
-		\item\textbf{ New fellowship application service:}		
+		\item\textbf{ New application service:}	
+		This service deals with the creation and opening of prospective applications for prospective fellows.	
 		\begin{enumerate}			
-			\item A prospective fellow should be able to open a new application.
+			\item A prospective fellow should be able to open only one new application at a time.
 			\item A prospective fellow should be able to add their CV in the required format.
 			\item A specified grant holder should be able to add their CV in the required format. If they are a NRF A or B rated researcher they are not required to enter their CV.
 			\item A owner of a CV should be able to add various qualifications and work experience to their CV. 
@@ -252,161 +251,193 @@ The following sections will discuss the required functionality of all the major 
 			\item A application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process. 		
 		\end{enumerate}			
 		\item\textbf{ Application renewal service:}
+		This service deals with the renewal currently active applications for research fellows.
 		\begin{enumerate}					
-			\item A research fellow should be able to open a new renewal application. 
+			\item A research fellow should be able to open a new renewal application for a particularly current active application. 
 			\item A research fellow should be able to add their progress report on all the work they have been working on.	
 			\item A owner of a CV should be able to add various qualifications and work experience to their CV. 
 			\item A owner of a CV should be able to update their CV if it has been created. 
 			\item Once the application has been finalised the CV will be locked until the application is complete or denied.
 			\item A renewal application should be made available for stakeholders such as the DRIS, HOD and Dean to deny or approve it at the correct stage in the process.							 					
 		\end{enumerate}
-		\item \textbf{Application Referees' report service:}
+		\item \textbf{Referees' report service:}
+		This service provides the functionality required by the referees of an application to create referral reports.
 		\begin{enumerate}		
-			\item A referee should be able to login and create a referral report for the prospective fellow that has identified him/her.				 					
+			\item A referee should be able to login and create a referral report for the prospective fellow that has identified him/her as referee of there application.				 					
 		\end{enumerate}
 		\item \textbf{Grant holder application finalisation service:}
+		This service provides the functionality required by the grant holders of an application to review and update the application as they see fit.
 		\begin{enumerate}		
 			\item A research fellow's grant holder should be able to finalise the renewal application of that research fellow.
-			\item A prospective fellow's grant holder should be able to finalise the prospective fellows application who he wishes to  supervises.				 					
+			\item A prospective fellow's grant holder should be able to finalise the prospective fellows application who he wishes to  supervises.
+			\item A grant holder should be able to decline any application.
+			\item A grant holder should be able to request amendment for any application and be able to state the reason why.  				 					
 		\end{enumerate}
 		\item \textbf{HOD approval service:}
+		This service provides the functionality required by the HODs to review and create recommendation reports for the applications sent to them.
 		\begin{enumerate}		
 			\item A HOD of a department should be able to login and approve, decline or ask for amendment of any pending applications.
 			\item A HOD of a department must be able to create a recommendation report for applications they approve.				 					
 		\end{enumerate}
 		\item \textbf{Dean endorsement service:}
+		This service provides the functionality required by the Deans to review and endorse the applications sent to them.
 		\begin{enumerate}		
 			\item A member of the dean's office should be able to login and endorse the applications, that they approve of, with a motivation and be able to rank them.
 			\item A member of the dean's office should be able to login and deny applications that they disprove of.				 					
 		\end{enumerate}
 		\item \textbf{DRIS approval service:}
+		This service provides the functionality required by the DRIS to check the eligibility, approve funding and maintain active applications sent to them.
 		\begin{enumerate}		
-			\item A DRIS member who administers the process must be able to log in and review pending applications that need to be checked for eligibility and approve or deny them.
-			\item A DRIS member who administers the process must be able to create post doctoral committee meetings. And also be able to prepare the pre-documentation thereof.
-			\item A DRIS member who administers the process must be able to finally approve or deny the funding of any last stage applications and also be able to provide motivation and details thereof.				 					
+			\item A DRIS member must be able to review pending applications that need to be to automatically check applications for eligibility and manually approve or deny them thereof.
+			\item A DRIS member must be able to finally approve and create funding reports for them or deny the funding of any eligible applications and also be able to provide motivation and details thereof.
+			\item A DRIS member must be able update the funding reports of currently active applications.
+			\item A DRIS member must be able to update the progress report of an application.
+			\item A DRIS member must be able to terminate or close a currently active application.				 					
 		\end{enumerate}
-		\item\textbf{Application progress viewer service:}
+		\item\textbf{Meeting management Service:}
+		This service provides the functionality required by the DRIS to create and manage Post-Doctoral committee meetings and committee members the ability to comment on meetings.
 		\begin{enumerate}
-			\item A prospective fellow's application or a research fellow's renewal application status should be made available for their review if they have an application in the system.
-			\item The grant holder of an application should be able to view the status of the application.			
+			\item A DRIS member must be able to schedule a meeting for a particular date and add endorsed applications and committee members who need to attend. 
+			\item A DRIS member must be able to edit any meeting that is still to be held.
+			\item A DRIS member must be able to start, close or review meetings.
+			\item Committee members attending a meeting must be able to comment on the meeting.  
+			\item The convener of meeting must also be able to comment on a meeting.
+			\item Attendees of a meeting must be able to see the content of all applications attached to the meeting.		
+		\end{enumerate}	
+		\item\textbf{Application progress viewer service:}
+		This service provides the functionality required by the prospective fellows, research fellows, grant holders and DRIS to check the progress of any application in pipeline and data concerning the application.
+		\begin{enumerate}
+			\item A prospective fellow's prospective or a research fellow's renewal application status changes should be made available for their review if they have an application in the system.
+			\item The grant holder of an application should be able to view the status changes of the application.
+			\item The DRIS must be able to view the status changes for any of the applications in the system.
+			\item Owners of an application should be able to review the attachments of any of the applications.			
 		\end{enumerate}
 		\item\textbf{Progress report management service:}
+		This service provides the functionality required by the research fellows to check the application for any outstanding progress reports so that they can create them and provide edit functionality of such reports for the DRIS.
 		\begin{enumerate}
 			\item A research fellow should be able see which applications of theirs have outstanding reports. 
 			\item A research fellow should be able to create any outstanding progress report for a particular application. 
 			\item The number of progress reports for a particular application is equivalent to the number of years that application is active for.			
 		\end{enumerate}
 		\item\textbf{Forward and Rewind Service:}
+		This service provides the functionality required by the DRIS to forward and rewind applications through stages in the application work-flow.
 		\begin{enumerate}
-			\item A DRIS member must be able to forward any application through the various stages in the application pipeline. 
-			\item A DRIS member must be able to rewind any application through the various stages in the application pipeline.  
+			\item A DRIS member must be able to forward any application through the various stages in the application pipeline (Submitted to endorsed). 
+			\item A DRIS member must be able to rewind any application through the various stages in the application pipeline (Open to endorsed).  
 			\item Must allow the DRIS member to create forward and rewind report.		
 		\end{enumerate}		
 	\end{itemize}
-
-\subsubsection{Report services}
-	The report services provides the reporting generation service for the DRIS in order to extract valuable information and allow them to provide electronic and hard copy data for review or archiving. The DRIS is the only stakeholder that will make use of this service. Note reports are temporal objects and do not get saved by the system.
+\newpage
+\subsubsection{Non-Application services}
 	\begin{itemize}
-		\item The DRIS member must be able to access a report generation tool which effectively allows them to:
+		\item\textbf{Report services:}
+		The report services provides the reporting generation service for the DRIS in order to extract valuable information and allow them to provide electronic and hard copy data for review or archiving. The DRIS is the only stakeholder that will make use of this service. Note reports are temporal objects and do not get saved by the system.
+		\begin{itemize}
+			\item The DRIS member must be able to access a report generation tool which effectively allows them to:
+			\begin{enumerate}
+				\item Open new report.
+				\item Select report data from the database.
+				\item Generate report.
+				\item View report.
+			\end{enumerate}
+			\item The DRIS member viewing the report must be allowed to be exported the report to either a pdf or a spreadsheet format.	
+		\end{itemize}
+
+		\item\textbf{User account management services:}
+		The user account management services provide each user who has an account on the system with the facilities to manage their account and also a facility for the system administrator to manage the accounts on the system.
 		\begin{enumerate}
-			\item Open new report.
-			\item Select report data from the database.
-			\item Generate report.
-			\item View report.
+			\item A prospective fellow will be create a new account if they don't have one.
+			\item Any identified user that is not already on the system should be allowed to create a new account.
+			\item If integrated with peoplesoft the system should be able to pull all the account information of personnel but until such time the system administrator will have to be allowed create the accounts of all DRIS members, Dean's office members, HODs and post-doctoral committee members.	
+			\item A user should be able to modify their account details.
+			\item A administrator should be able to modify any user account details.
+			\item A administrator should be able to remove any user account.
+			\item Allow the creation and activation of On-demand users which are users which don't have an account but need an account with other privileges than a prospective fellow account.
 		\end{enumerate}
-		\item The DRIS member viewing the report must be allowed to be exported the report to either a pdf or a spreadsheet format.	
-	\end{itemize}
-
-\subsubsection{User account management services}
-	The user account management services provide each user who has an account on the system with the facilities to manage their account and also a facility for the system administrator to manage the accounts on the system.
-	\begin{itemize}
-		\item A prospective fellow will be create a new account if they don't have one.
-		\item Any identified user that is not already on the system should be allowed to create a new account.
-		\item If integrated with peoplesoft the system should be able to pull all the account information of personnel but until such time the system administrator will have to be allowed create the accounts of all DRIS members, Dean's office members, HODs and post-doctoral committee members.	
-		\item A user should be able to modify their account details.
-		\item A administrator should be able to modify any user account details.
-		\item A administrator should be able to remove any user account.
-		\item Allow the creation and activation of On-demand users which are users which don't have an account but need an account with other privileges than a prospective fellow account.
-	\end{itemize}
 	
-\subsubsection{Notification services}
-	The system will need to generate automated notifications that are sent internally and to the corresponding email of the recipient. To prevent spamming the system will only allow users with the correct security roles to make use of the service. It is important that this service runs asynchronously after it has been engaged since the service makes use of external systems that may be un-responsive. In case where the external systems fail this services needs to handle it. 
-	\begin{itemize}
-		\item The system must be able to create a new notification.
-		\item Stakeholders with the correct security roles must be able to create a new notification.
-		\item A notification must allow for the specification of recipient.
-		\item A notification must allow for the specification of a message.
-		\item The service must allow the notification to be sent to both the user account and recipient's email address.
-		\item The service must allow a batch of notifications to be sent.
-		\item The service must be able to send emails not associated with any internal notification.
-		\item The service must be able to see if there are any notifications that have an unsent email counterpart and attempt to resend it.
-	\end{itemize}
+		\item\textbf{Notification services:}
+		The system will need to generate automated notifications that are sent internally and to the corresponding email of the recipient. To prevent spamming the system will only allow users with the correct security roles to make use of the service. It is important that this service runs asynchronously after it has been engaged since the service makes use of external systems that may be un-responsive. In case where the external systems fail this services needs to handle it. 
+		\begin{enumerate}
+			\item The system must be able to create a new notification.
+			\item Stakeholders with the correct security roles must be able to create a new notification.
+			\item A notification must allow for the specification of recipient.
+			\item A notification must allow for the specification of a message.
+			\item The service must allow the notification to be sent to both the user account and recipient's email address.
+			\item The service must allow a batch of notifications to be sent.
+			\item The service must be able to send emails not associated with any internal notification.
+			\item The service must be able to see if there are any notifications that have an unsent email counterpart and attempt to resend it.
+		\end{enumerate}
 
-\subsubsection{Audit-Trail services}
-	The Audit-Trail services provide a means for the system administrator or DRIS members to view all the actions that were performed by a user of the system. It is important to note that the audit entries is read-only and can only be inserted by the system itself. The monitored actions are hard wired into the system so to prevent any tampering.
-	\begin{itemize}
-		\item An authorised user must be able to generate a report via the reporting services for the audit log.
-		\item The system should be able to insert audit log entries when the monitored actions occur.
-	\end{itemize}
-\subsubsection{Archival services}
-	The archival services of the system will be able to back up the current state of the database to a specified location. Further it should be able to remove old records from the working database that are no longer in use and store then in a location so that they can be retrieved on a on-demand basis.
-	\begin{itemize}		
-		\item The system administrator needs to be able to perform a automatic archival of old data.
-		\item The system administrator needs to be able to perform a backup of the current database.
-		\item The system should be able to notify the system administrator of any possible archival data.
-		\item The system administrator needs to be able to restore any backed up or archived data p.
-	\end{itemize}
-\subsubsection{Imports and exports services}
-	The imports and exports services of the system will allow the system administrator to export and import certain data. A sub-set of these services will also be made available to users of the appropriate security role.
-	\begin{itemize}		
-		\item The system administrator will be able to export and import user accounts and their associated information and link to the on-demand user account creation service.
-		\item The system administrator will also be able to import information of the departments and faculties for location purposes of users.
-		\item The system administrator and authorised users will be able to import and export all the data associated with applications.
-	\end{itemize}
-\subsubsection{Location management services}
-	The system will need to manage the current locations that exist with in the institutions that are registered with the system. A location is the concatenation of a department, faculty and institution. It may also be that the department is fictional and used as a simple place holder for cross departmental applications. Also if integration with peoplesoft is to occur it will allow this service to synchronise with it. This will be a system service and not be exposed directly to users
-	\begin{itemize}		
-		\item The service must allow the creation a location via the imports.
-		\item The service needs to be able to retrieve all institutions.
-		\item The service needs to be able to retrieve all faculties in the institution.
-		\item The service needs to be able to retrieve all departments under a faculty of a particular institution.
-	\end{itemize}
-\subsubsection{CV management services}
-	Each grant holder, prospective fellow and research fellow will have a CV. Thus this service will provide the management there of. This will be a system service which will be used indirectly the users of the system. 
-	\begin{itemize}		
-		\item The service must be able to create and update a CV for a particular user.
-	\end{itemize}
+		\item\textbf{Audit-Trail services:}
+		The Audit-Trail services provide a means for the system administrator or DRIS members to view all the actions that were performed by a user of the system. It is important to note that the audit entries is read-only and can only be inserted by the system itself. The monitored actions are hard wired into the system so to prevent any tampering.
+		\begin{enumerate}
+			\item An authorised user must be able to generate a report via the reporting services for the audit log.
+			\item The system should be able to insert audit log entries when the monitored actions occur.
+		\end{enumerate}
+		
+		\item\textbf{Archival services:}
+		The archival services of the system will be able to back up the current state of the database to a specified location. Further it should be able to remove old records from the working database that are no longer in use and store then in a location so that they can be retrieved on a on-demand basis.
+		\begin{enumerate}		
+			\item The system administrator needs to be able to perform a automatic archival of old data.
+			\item The system administrator needs to be able to perform a backup of the current database.
+			\item The system should be able to notify the system administrator of any possible archival data.
+			\item The system administrator needs to be able to restore any backed up or archived data.
+		\end{enumerate}
+		
+		\item\textbf{Application import services}
+		The application import services will be used to import existing applications into the system via a GUI wizard. It will not make use of batch import, nor will it import from files.
+		\begin{enumerate}		
+			\item The DRIS member will be able to import applications: to the extend where they include their core application information, fellow, grant holder and funding report as the other information is not required to manage a already approved application.
+			\item Once the data is finalised it cannot be changed by this service.
+		\end{enumerate}
+		
+		\item\textbf{Location management services:}
+		The system will need to manage the current locations that exist with in the institutions that are registered with the system. A location is the a department, faculty or institution. Departments may be fictional and used as a simple place holder for cross departmental applications. Also if integration with peoplesoft or another system is to occur it will allow this service to synchronise with it. This will be a system service and not be exposed directly to users except in the case of the system administrator wishing to edit or create new locations. Though in order to preserve data integrity locations cannot be removed.
+		\begin{enumerate}		
+			\item The service must allow the creation and update of locations.
+			\item The service needs to be able to retrieve all institutions.
+			\item The service needs to be able to retrieve all faculties in the institution.
+			\item The service needs to be able to retrieve all departments under a faculty of a particular institution.
+		\end{enumerate}
+		
+		\item\textbf{CV management services:}
+		Each grant holder, prospective fellow and research fellow will have a CV. Thus this service will provide the management there of. This will be a system service which will be used indirectly the users of the system. 
+		\begin{enumerate}		
+			\item The service must be able to create and update a CV for a particular user.
+			\item Prospective fellows can only update/create their CVs at the start of a new application.
+			\item Research fellows can only update/create their CVs at the start of a renewal or new application.
+			\item Grant holders can only update/create their CVs at the start of a finalisation stage of an application.   
+		\end{enumerate}
+		
+		\item\textbf{Notifier services:}
+		This system service is used to provide tracking of outstanding tasks for users and to notify them.
+		\begin{enumerate}		
+			\item The service must be able to determine any outstanding issues for a particular user.
+			\item The service must be able to send out daily reminders of outstanding issues to users.   
+		\end{enumerate}		
+		
+		\item\textbf{Announcement services:}
+		This service will give system administrators and DRIS members the ability to publish global announcements on the systems that can be viewed by users.
+		\begin{enumerate}		
+			\item System administrators and DRIS members must be able to create and manage announcements.
+			\item Announcements must be duration based.
+			\item The service must be able to automatically remove expired announcements from the system. 
+		\end{enumerate}
+		
+		\item\textbf{Google scholar services:}
+		This service is used to interface with Google scholar through HTML scrapping. It will be used to retrieve search results from custom queries 
+		\begin{enumerate}		
+			\item The service must be able to communicate with Google scholar and preform searches that is in accordance to fair usage policy.
+			\item Must be able to return the results of searches to the system in a system interpretable manner.  
+		\end{enumerate}
+	\end{itemize}		
 \vspace{0.2in}
 
 \subsection{Use case diagrams}
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Post-doctral fellowship management system1.jpg}}
-\caption{Use case diagram of Post-doctoral fellowship management system}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Application services1.jpg}}
-\caption{Use case diagram of Application service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Use case diagrams/Report services1.jpg}}
-\caption{Use case diagram of Report service}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Use case diagrams/Notification services1.jpg}}
-\caption{Use case diagram of Notification services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/User account management services1.jpg}}
-\caption{Use case diagram of User account management services}
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Post-doctral fellowship management system1.jpg}}
+\caption{Use case diagram of Post-doctoral application management system}
 \end{figure}
 
 \begin{figure}[H]
@@ -417,20 +448,8 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Audit-Trail services1.jpg}}
-\caption{Use case diagram of Audit-Trail services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/Archival services1.jpg}}
-\caption{Use case diagram of Archival services}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Imports and exports services1.jpg}}
-\caption{Use case diagram of Imports and exports services}
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Application services1.jpg}}
+\caption{Use case diagram of Application services}
 \end{figure}
 
 \begin{figure}[H]
@@ -441,13 +460,13 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/New fellowship application service1.jpg}}
-\caption{Use case diagram of New fellowship application service}
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/New application service1.jpg}}
+\caption{Use case diagram of New application services}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Application renewal service1.jpg}}
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Application renewal service1.jpg}}
 \caption{Use case diagram of Application renewal service}
 \end{figure}
 
@@ -459,15 +478,9 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/Grant holder application finalisation service1.jpg}}
+\framebox{\includegraphics[scale=0.85]{../Images_Docs/Diagrams/Use case diagrams/Grant holder application finalisation service1.jpg}}
 \caption{Use case diagram of Grant holder application finalisation service}
 \end{figure}
-
-%\begin{figure}[H]
-%\centering	
-%\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/CV Management service1.jpg}}
-%\caption{Use case diagram of CV management service}
-%\end{figure}
 
 \begin{figure}[H]
 \centering	
@@ -501,78 +514,133 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Location Management Service1.jpg}}
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Forward and Rewind Service1.jpg}}
+\caption{Use case diagram of Forward and Rewind Service}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Non-Application Services1.jpg}}
+\caption{Use case diagram of Non-Application services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Google Scholar services1.jpg}}
+\caption{Use case diagram of Google Scholar services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Location Management Service1.jpg}}
 \caption{Use case diagram of Location Management Service}
 \end{figure}
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Forward and Rewind Service1.jpg}}
-\caption{Use case diagram of Forward and Rewind Service}
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Audit-Trail services1.jpg}}
+\caption{Use case diagram of Audit-Trail services}
 \end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Notification services1.jpg}}
+\caption{Use case diagram of Notification services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/User account management services1.jpg}}
+\caption{Use case diagram of User account management services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Report services1.jpg}}
+\caption{Use case diagram of Report service}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/Archival services1.jpg}}
+\caption{Use case diagram of Archival services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Application import services1.jpg}}
+\caption{Use case diagram of Application import services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Announcement Services1.jpg}}
+\caption{Use case diagram of Announcement Services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/Notifier services1.jpg}}
+\caption{Use case diagram of Notifier services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/CV Management service1.jpg}}
+\caption{Use case diagram of CV management service}
+\end{figure}
+
+
 
 \newpage
 \subsection{Use case prioritization}
 \vspace{0.2in}
 This section states the ranking in terms of priority of the service use case per use case diagram figure. The priorities are: Critical, Important and Nice to have.\\ 
+
+\subsubsection{User gateway}
 \begin{itemize}
-	\item User gateway: Critical
-	\begin{itemize}
-		\item Login user: Critical
-		\item User account retrieval: Important
-		\item Create prospective fellow user account: Critical
-		\item Generate on-demand user account: Critical
-		\item Activate on-demand user account: Critical
-		\item Authenticate user: Critical
-	\end{itemize}
-	\item Application services: Critical
-	\begin{itemize}
-		\item New fellowship application service: Critical
-		\item Application renewal service: Critical
-		\item Referees' report service: Critical
-		\item Grant holder application finalisation service: Critical
-		\item HOD Approval service: Critical
-		\item Dean endorsement service: Critical
-		\item DRIS approval service: Critical
-		\item Progress report management service: Critical		
-		\item Meeting management service: Important
-		\item Application progress viewer service: Important		
-	\end{itemize}
+	\item Login user: Critical	
+	\item Create prospective fellow user account: Critical
+	\item Generate on-demand user account: Critical
+	\item Activate on-demand user account: Critical
+	\item Authenticate user: Critical
+	\item User account retrieval: Important
+\end{itemize}
+\subsubsection{Application services}
+\begin{itemize}
+	\item New application service: Critical
+	\item Application renewal service: Critical
+	\item Referees' report service: Critical
+	\item Grant holder application finalisation service: Critical
+	\item HOD Approval service: Critical
+	\item Dean endorsement service: Critical
+	\item DRIS approval service: Critical
+	\item Progress report management service: Critical		
+	\item Meeting management service: Important
+	\item Application progress viewer service: Important
+	\item Fast-forward and rewind service: Important		
+\end{itemize}
+
+\subsubsection{Non-Application services}
+\begin{itemize}
 	\item Notification services: Critical
 	\item User account management services: Critical
-	\begin{itemize}
-		\item Create new account: Critical
-		\item Modify account: Critical
-		\item Remove account: Important
-		\item View all accounts: Important
-	\end{itemize}
 	\item Audit-Trail services: Critical
-	\begin{itemize}
-		\item Log action: Critical
-		\item Query audit table: Important
-	\end{itemize}
 	\item CV management service: Critical
 	\item Location management service: Critical
 	\item Report services: Important
-	\item Imports and exports services: Important
-	\begin{itemize}
-		\item Import user account data: Important
-		\item Import application data: Nice to have
-		\item Import location data: Important
-		\item Export application data: Important
-	\end{itemize}	
+	\item Notifier services: Important
 	\item Archival services: Nice to have
-	\begin{itemize}
-		\item Retrieve archived information: Nice to have
-		\item Archive old information: Nice to have
-		\item Backup database: Important
-	\end{itemize}
+	\item Application import services: Nice to have
+	\item Google scholar services: Nice to have
+	\item Announcement services: Nice to have								
 \end{itemize}
 
 
-\vspace{0.2in}
 
-\subsection{Use case/Services contracts} %Mathys
+\vspace{0.2in}
+\newpage
+\subsection{Services contracts for use cases} %Mathys
 \vspace{0.2in}
 
 This section states the preconditions and postconditions of the each use case per use case diagram figure. \\
@@ -580,113 +648,64 @@ This section states the preconditions and postconditions of the each use case pe
 \subsubsection{Preconditions}
 These are conditions that must be met by the system or user before they are allowed to use the use case.\\
 \begin{itemize}
-	\item\textbf{ Application service}
-		\begin{itemize}
-			\item New fellowship application service: Can only be accessed if new applications are open, if the user has no open applications, and the applicant is under the age of 40.
-			\item Application renewal service: Can only be accessed if renewals are open and if the user is a research fellow that is still in possession of a fellowship.
-			\item Referees' report service:  Can only be accessed if user is a referee.
-			\item Grant holder application finalisation service:  Can only be accessed if user is a grant holder to the specified application.
-			\item HOD Approval service:  Can only be accessed if user is a HOD for the department, the application is linked to.
-			\item Dean endorsement service:  Can only be accessed if user is a member of the dean's office for the faculty the department is linked to.
-			\item DRIS Approval service:  Can only be accessed if user is a member of the DRIS.
-			\item Meeting management service:  Can only be accessed if user is a member of the DRIS or post-doctoral committee member.
-			\item Application progress viewer service: Can only be accessed if user logged as a prospective fellow, research fellow or grant holder. Also the user needs to have at least one application on the system.	
-		\end{itemize}
-	
-	\item \textbf{Report service}
-		\begin{itemize}
-			\item Create report: If a user with the associated credentials has been authenticated as a member of the DRIS or with the correct security role.
-			\item Open new report: If no report is currently open.
-			\item Select report data: If report is open and data is available for report.
-			\item Generate report: If data has been selected.
-			\item View report: If a report has been generated.
-			\item Export report: If user wants to export report and the user is busy viewing the report.
-			\item To csv: If user wants to export report to a cvs file.
-			\item To pdf: If user wants to export report to a pdf.	
-		\end{itemize}
-	
-	\item \textbf{Notification services}
-		\begin{itemize}
-			\item Create notification: If requesting user is the system or an authorised user.
-			\item Specify recipient user account: If a notification is in its setup stage.				
-			\item Specify message: If a notification is in its setup stage.
-			\item Send user account notification: If notification is ready to be sent.
-			\item Send email: If notification is ready to be sent.	
-		\end{itemize}
-	
-	\item \textbf{User account management services}
-		\begin{itemize}
-			\item Create new account: If requesting user has the appropriate security role or the system administrator.
-			\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
-			\item Remove account: If requesting user has the appropriate security role.	
-			\item View all accounts: If requesting user is a system administrator.					
-		\end{itemize}
-	
 	\item \textbf{User gateway}
 		\begin{itemize}
-			\item Login user: If requesting user is a user of the system.
-			\item User account retrieval: If requesting user has forgotten their user credentials.				
-			\item Activate on-demand user account: If a user has been identified by an applicant and has a security token.
-			\item Authenticate user: if user is logged in.						
-		\end{itemize}
-	
-	\item \textbf{Audit-Trail services}
-		\begin{itemize}
-			\item Log action: If requesting user is the system.
-			\item Query audit table: If the user has the correct security role.										
-		\end{itemize}
-	\item \textbf{Archival services}
-		\begin{itemize}
-			\item Retrieve archived information: If requesting user is a system administrator or the system.
-			\item Archive old information: If requesting user is a system administrator or the system.	
-			\item Backup database: If requesting user is a system administrator.					
-		\end{itemize}
-	\item \textbf{Imports and exports services}
-		\begin{itemize}
-			\item Import application data: If requesting user is a system administrator or a DRIS member.
-			\item Export application data: If requesting user is a system administrator or a DRIS member.	
-			\item Import location data: If requesting user is a system administrator.
-			\item Import faculty information: If no such faculty is in the database already.
-			\item Import departments information: If no such department is in the database and the faculty it relates to is in the database.
-			\item Import user account data: If requesting user is a system administrator.
-			\item Populate user account data: If the user account exists in th e database and the data is valid.
-			\item Import referral reports: If the application is a new application.
-			\item Import progress report: If the application is a renewal application.
-			\item Import HOD recommendations: If the application has a valid HOD recommendation.
-			\item Import dean endorsements: If the application has a valid Dean's endorsement.
-			\item Import DRIS approval data: If the application has valid DRIS approval data.
-			\item Import funding data: If the application has a valid funding data and has been funded.				
-		\end{itemize}		
-	\item \textbf{Application progress viewer service}
-		\begin{itemize}
-			\item View application progress: Can only be used if there are any applications made by the user or there are pending applications for their approval or recommendation.
+			\item Login user: Requesting user is a user of the system and not logged in.
+			\item User account retrieval: Requesting user has forgotten their user credentials.				
+			\item Authenticate user: User is logged in.	
+			\item Authenticate as owner: User is logged in and an object has been selected for ownership test.
+			\item Logout: The user is logged in.
+			\item Retrieve session: The user is logged in.						
 		\end{itemize}
 		
-	\item \textbf{New fellowship application service}
+	\item\textbf{Application services}
 		\begin{itemize}
-			\item Generate on-demand user account: If the prospective fellow has identified a referee or grant holder not on the system.
-			\item Submit information: If all the application information is complete.
+			\item New application services: The user is a prospective fellow.
+			\item Application renewal service: Renewals are open and the user is a research fellow that is still in possession of active fellowship.
+			\item Referees' report service: If user is a referee.
+			\item Grant holder application finalisation service:  The user is a grant holder.
+			\item HOD Approval service: The user is a HOD.
+			\item Dean endorsement service: The user is a member of the dean's office.
+			\item DRIS Approval service:  The user is a member of the DRIS.
+			\item Meeting management service:  The user is a member of the DRIS or post-doctoral committee.
+			\item Application progress viewer service: The user is a prospective fellow or research fellow or grant holder or DRIS member.
+			\item Forward and rewind service: The user is a member of the DRIS.
+			\item Progress report management service: The user is a research fellow or a member of the DRIS.	
+		\end{itemize}
+		
+	\item \textbf{Application progress viewer service}
+		\begin{itemize}
+			\item View application progress: A application is selected.
+			\item View application stage attachments: A application is selected.
+		\end{itemize}
+		
+	\item \textbf{New application services}
+		\begin{itemize}
+			\item Generate on-demand user account: The prospective fellow has identified a referee or grant holder not on the system.
+			\item Submit information: The fellow's cv, application information, grant holder and referee information is complete.
+			\item Open new application: An application is currently open for the fellow or all applications owned by the fellow are completed/closed/terminated.			
 		\end{itemize}
 	
 	\item \textbf{Application renewal service}
 		\begin{itemize}
-			\item Open new renewal application: If research fellow has a fellowship that is renewable.
-			\item Submit report: If the progress report has been completed.				
-			\item Submit renewal application: If all the required information for the renewal has been entered.									
+			\item Load all applications available for renewal: There are applications of the research fellow that are available for renewal.
+			\item Open renewal application: The research fellow has a fellowship that is renewable or has a currently open renewal application.
+			\item Complete progress report: The final progress report has not been completed.				
+			\item Submit renewal application: If all the required information for the renewal has been completed.									
 		\end{itemize}
 	
 	\item \textbf{Referees' report service}
 		\begin{itemize}
-			\item Load pending applications: If there are any pending applications for the referee and if the user was authenticated as the referee.
-			\item Create report: If if a application is selected from the list of pending applications.				
+			\item Load pending applications: There are applications that need a referral report form the referee.
+			\item Create referral report: The application selected needs a referral report from the referee.				
 			\item Submit referral report: If the referral report has been completed.									
 		\end{itemize}
 		
 	\item \textbf{Grant holder application finalisation service}
 		\begin{itemize}
-			\item Load pending applications: If there are any pending applications for the grant holder and if the user was authenticated as the grant holder.
-			\item Create Grant holder CV: If grant holder does not have a CV.
-			\item Complete application form: If grant holder has selected any application that is still pending.
+			\item Load pending applications: There are applications that need to be finalised by the grant holder.
+			\item Create or Update Grant holder CV: The grant holder does not have a CV or has a CV.
+			\item Finalise application: If grant holder has selected any application that is still pending.
 			\item Submit application: If all the required information has been entered									
 		\end{itemize}
 			
@@ -720,6 +739,16 @@ These are conditions that must be met by the system or user before they are allo
 			\item Approve funding: If the application's funding was denied.									
 		\end{itemize}
 	
+	\item \textbf{Progress report management service}
+		\begin{itemize}
+			\item List options: If user is a authenticated DRIS member.
+			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
+			\item Add endorsed applications: If any new applications that are eligible are available.
+			\item Add endorsed renewals: If any renewal applications that are eligible are available.
+			\item List active meetings: If user is a authenticated post doctoral committee member.
+			\item Record minutes of meeting: If the selected meeting has been listed.							
+		\end{itemize}
+
 	\item \textbf{Meeting management service}
 		\begin{itemize}
 			\item List options: If user is a authenticated DRIS member.
@@ -729,7 +758,118 @@ These are conditions that must be met by the system or user before they are allo
 			\item List active meetings: If user is a authenticated post doctoral committee member.
 			\item Record minutes of meeting: If the selected meeting has been listed.							
 		\end{itemize}
-	\end{itemize}
+
+	\item \textbf{Forward and rewind service}
+		\begin{itemize}
+			\item List options: If user is a authenticated DRIS member.
+			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
+			\item Add endorsed applications: If any new applications that are eligible are available.
+			\item Add endorsed renewals: If any renewal applications that are eligible are available.
+			\item List active meetings: If user is a authenticated post doctoral committee member.
+			\item Record minutes of meeting: If the selected meeting has been listed.							
+		\end{itemize}
+
+	\item \textbf{Non-Application services}
+		\begin{itemize}
+			\item List options: If user is a authenticated DRIS member.
+			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
+			\item Add endorsed applications: If any new applications that are eligible are available.
+			\item Add endorsed renewals: If any renewal applications that are eligible are available.
+			\item List active meetings: If user is a authenticated post doctoral committee member.
+			\item Record minutes of meeting: If the selected meeting has been listed.							
+		\end{itemize}
+		
+	\item \textbf{Google scholar services}
+		\begin{itemize}
+			\item List options: If user is a authenticated DRIS member.
+			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
+			\item Add endorsed applications: If any new applications that are eligible are available.
+			\item Add endorsed renewals: If any renewal applications that are eligible are available.
+			\item List active meetings: If user is a authenticated post doctoral committee member.
+			\item Record minutes of meeting: If the selected meeting has been listed.							
+		\end{itemize}
+		
+	\item \textbf{Location management services}
+		\begin{itemize}
+			\item List options: If user is a authenticated DRIS member.
+			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
+			\item Add endorsed applications: If any new applications that are eligible are available.
+			\item Add endorsed renewals: If any renewal applications that are eligible are available.
+			\item List active meetings: If user is a authenticated post doctoral committee member.
+			\item Record minutes of meeting: If the selected meeting has been listed.							
+		\end{itemize}
+	
+	\item \textbf{Audit-Trail services}
+		\begin{itemize}
+			\item Log action: If requesting user is the system.
+			\item Query audit table: If the user has the correct security role.										
+		\end{itemize}
+	
+	\item \textbf{Notification services}
+		\begin{itemize}
+			\item Create notification: If requesting user is the system or an authorised user.
+			\item Specify recipient user account: If a notification is in its setup stage.				
+			\item Specify message: If a notification is in its setup stage.
+			\item Send user account notification: If notification is ready to be sent.
+			\item Send email: If notification is ready to be sent.	
+		\end{itemize}
+	
+	\item \textbf{User account management services}
+		\begin{itemize}
+			\item Create new account: If requesting user has the appropriate security role or the system administrator.
+			\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
+			\item Remove account: If requesting user has the appropriate security role.	
+			\item View all accounts: If requesting user is a system administrator.					
+		\end{itemize}
+	
+	\item \textbf{Report service}
+		\begin{itemize}
+			\item Create report: If a user with the associated credentials has been authenticated as a member of the DRIS or with the correct security role.
+			\item Open new report: If no report is currently open.
+			\item Select report data: If report is open and data is available for report.
+			\item Generate report: If data has been selected.
+			\item View report: If a report has been generated.
+			\item Export report: If user wants to export report and the user is busy viewing the report.
+			\item To csv: If user wants to export report to a cvs file.
+			\item To pdf: If user wants to export report to a pdf.	
+		\end{itemize}
+	
+	
+	\item \textbf{Archival services}
+		\begin{itemize}
+			\item Retrieve archived information: If requesting user is a system administrator or the system.
+			\item Archive old information: If requesting user is a system administrator or the system.	
+			\item Backup database: If requesting user is a system administrator.					
+		\end{itemize}
+		
+	\item \textbf{Application import services}
+		\begin{itemize}
+			\item Retrieve archived information: If requesting user is a system administrator or the system.
+			\item Archive old information: If requesting user is a system administrator or the system.	
+			\item Backup database: If requesting user is a system administrator.					
+		\end{itemize}
+		
+	\item \textbf{Announcement services}
+		\begin{itemize}
+			\item Retrieve archived information: If requesting user is a system administrator or the system.
+			\item Archive old information: If requesting user is a system administrator or the system.	
+			\item Backup database: If requesting user is a system administrator.					
+		\end{itemize}
+		
+	\item \textbf{Notifier services}
+		\begin{itemize}
+			\item Retrieve archived information: If requesting user is a system administrator or the system.
+			\item Archive old information: If requesting user is a system administrator or the system.	
+			\item Backup database: If requesting user is a system administrator.					
+		\end{itemize}
+		
+	\item \textbf{CV management services}
+		\begin{itemize}
+			\item Retrieve archived information: If requesting user is a system administrator or the system.
+			\item Archive old information: If requesting user is a system administrator or the system.	
+			\item Backup database: If requesting user is a system administrator.					
+		\end{itemize}	
+\end{itemize}	
 
 \subsubsection{Postconditions}
 These are conditions that must be met by the system and the data after the use case has been used.\\
@@ -955,7 +1095,109 @@ These are conditions that must be met by the system and the data after the use c
 \end{itemize}
 
 \subsubsection{Request and result data structures}
-The system will be following a object oriented approach due it being the paradigm of the Java programming language. Therefore the input and output structure will mainly be in the form of objects. Also the objects that will be produced and used inside the system will adhere to the domain objects specification found below.
+The system will be following a object oriented approach due it being the paradigm of the Java programming language. Therefore the input and output structure will mainly be in the form of objects. Also the objects that will be produced and used inside the system will adhere to the domain objects specification found below. Provided below is the data flow diagrams for request and result data flow:
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ApplicationProgress.png}}
+\caption{Data Flow for Application progress viewer.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ApplicationRenewal.png}}
+\caption{Data Flow for Application Renewal.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ArchivalService.png}}
+\caption{Data Flow for Archival Service.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/AuditTrail.png}}
+\caption{Data Flow for Audit Trail.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/CVManagement.png}}
+\caption{Data Flow CV Management.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/DeansEndorsement.png}}
+\caption{Data Flow for Dean's Endorsement.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/DRISApproval.png}}
+\caption{Data Flow for DRIS Approval.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/GrantHolderFinalisation.png}}
+\caption{Data Flow for Grant Holder Finalisation.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/HODRecommendation.png}}
+\caption{Data Flow for HOD Recommendation.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/MeetingManagement.png}}
+\caption{Data Flow for Meeting Management.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/NewApplication.png}}
+\caption{Data Flow for New Application .}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/NotificationService.png}}
+\caption{Data Flow for Notification Service.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ProgressReport.png}}
+\caption{Data Flow for Progress Reports.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/RefereeReport.png}}
+\caption{Data Flow for Referee Report.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/Reporting.png}}
+\caption{Data Flow for Reporting Service.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/UserAccount.png}}
+\caption{Data Flow for User Account Management.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/UserGateway.png}}
+\caption{Data Flow for User Gateway.}
+\end{figure}
 
 \vspace{0.2in}
 \newpage
@@ -1470,116 +1712,7 @@ The system will be following a object oriented approach due it being the paradig
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{figure}
-\newpage
-\subsection{Data Flow Diagrams}
 
-
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ApplicationProgress.png}}
-\caption{Data Flow for Application progress viewer.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ApplicationRenewal.png}}
-\caption{Data Flow for Application Renewal.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ArchivalService.png}}
-\caption{Data Flow for Archival Service.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/AuditTrail.png}}
-\caption{Data Flow for Audit Trail.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/CVManagement.png}}
-\caption{Data Flow CV Management.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/DeansEndorsement.png}}
-\caption{Data Flow for Dean's Endorsement.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/DRISApproval.png}}
-\caption{Data Flow for DRIS Approval.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/GrantHolderFinalisation.png}}
-\caption{Data Flow for Grant Holder Finalisation.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/HODRecommendation.png}}
-\caption{Data Flow for HOD Recommendation.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/MeetingManagement.png}}
-\caption{Data Flow for Meeting Management.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/NewApplication.png}}
-\caption{Data Flow for New Application .}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/NotificationService.png}}
-\caption{Data Flow for Notification Service.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/ProgressReport.png}}
-\caption{Data Flow for Progress Reports.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/RefereeReport.png}}
-\caption{Data Flow for Referee Report.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/Reporting.png}}
-\caption{Data Flow for Reporting Service.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/UserAccount.png}}
-\caption{Data Flow for User Account Management.}
-\end{figure}
-
-\begin{figure}[H]
-\centering	
-\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Data Flow/UserGateway.png}}
-\caption{Data Flow for User Gateway.}
-\end{figure}
-
-
-
-\vspace{0.2in}
 \newpage
 \subsection{Domain Objects}
 \subsubsection{Overview}
