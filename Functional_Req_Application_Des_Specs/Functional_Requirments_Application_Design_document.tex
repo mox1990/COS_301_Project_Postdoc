@@ -322,8 +322,8 @@ The following sections will discuss the required functionality of all the major 
 		\item\textbf{Forward and Rewind Service:}
 		This service provides the functionality required by the DRIS to forward and rewind applications through stages in the application work-flow.
 		\begin{enumerate}
-			\item A DRIS member must be able to forward any application through the various stages in the application pipeline (Submitted to endorsed). 
-			\item A DRIS member must be able to rewind any application through the various stages in the application pipeline (Open to endorsed).  
+			\item A DRIS member must be able to forward any application through the various stages in the application pipeline (Submitted to recommend). 
+			\item A DRIS member must be able to rewind any application through the various stages in the application pipeline (Submitted to declined).  
 			\item Must allow the DRIS member to create forward and rewind report.		
 		\end{enumerate}		
 	\end{itemize}
@@ -484,8 +484,8 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/HOD Approval service1.jpg}}
-\caption{Use case diagram of HOD Approval service}
+\framebox{\includegraphics[scale=0.75]{../Images_Docs/Diagrams/Use case diagrams/HOD Recommendation service1.jpg}}
+\caption{Use case diagram of HOD Recommendation service}
 \end{figure}
 
 \begin{figure}[H]
@@ -550,7 +550,7 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/User account management services1.jpg}}
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/User account management services1.jpg}}
 \caption{Use case diagram of User account management services}
 \end{figure}
 
@@ -696,402 +696,441 @@ These are conditions that must be met by the system or user before they are allo
 	
 	\item \textbf{Referees' report service}
 		\begin{itemize}
-			\item Load pending applications: There are applications that need a referral report form the referee.
+			\item Load pending applications: There are submitted applications that need a referral report form the referee.
 			\item Create referral report: The application selected needs a referral report from the referee.				
 			\item Submit referral report: If the referral report has been completed.									
 		\end{itemize}
 		
 	\item \textbf{Grant holder application finalisation service}
 		\begin{itemize}
-			\item Load pending applications: There are applications that need to be finalised by the grant holder.
+			\item Load pending applications: There are referred applications that need to be finalised by the grant holder.
 			\item Create or Update Grant holder CV: The grant holder does not have a CV or has a CV.
-			\item Finalise application: If grant holder has selected any application that is still pending.
-			\item Submit application: If all the required information has been entered									
+			\item Review application: There are pending applications.
+			\item Finalise application: The grant holder has selected an application that is pending. 
+			\item Request fellow amendment: The grant holder has selected an application that is pending.
+			\item Decline application: The grant holder has selected an application that is pending.
+			\item Generate on-demand user account: The grant holder has identified a HOD not on the system.								
 		\end{itemize}
 			
-	\item \textbf{HOD Approval service}
+	\item \textbf{HOD Recommendation service}
 		\begin{itemize}
-			\item Load pending applications: If there are any finalised application available for approval and the grant holder of the application falls under department the HOD is in charge of and if user has been authenticated as the HOD.
-			\item Application approval: If HOD has selected a application from the application list. 
-			\item Create recommendation report: If the application has been approved.				
-			\item Submit approved application's information: If the recommendation report has been completed.									
+			\item Load pending applications: There are finalised applications that need to be recommended by the HOD.
+			\item Review application: There are pending applications.
+			\item Recommend: The HOD has selected an application that is pending. 
+			\item Decline: The HOD has selected an application that is pending. 
+			\item Request for amendment: The HOD has selected an application that is pending. 
+			\item Create recommendation report: The selected application has been marked for recommendation.				
+			\item Recommend application: If the recommendation report has been completed.
+			\item Generate on-demand user account: The grant holder has identified a Dean's office member not on the system.										
 		\end{itemize}
 		
 	\item \textbf{Dean endorsement service}
 		\begin{itemize}
-			\item Load pending applications: If there are any approved application available for endorsement and the grant holder of the application falls under faculty of which the Dean's office is in charge of and the user has been authenticated as a member of the dean's office.
-			\item Endorse application: If a application is selected from the pending list. 
-			\item Rank application: If the application has been endorsed.	
+			\item Load pending applications: There are recommend applications that need to be endorsed by the Dean's office.
+			\item Review application: There are pending applications.
+			\item Endorse: The Dean's office member has selected an application that is pending.  
+			\item Decline: The Dean's office member has selected an application that is pending.	
 			\item Create comment: If the application has been ranked.			
-			\item Submit endorsed application: If the required endorsement information has been completed.									
+			\item Endorse application: If the required endorsement information has been completed.									
 		\end{itemize}
 	
 	\item \textbf{DRIS approval service}
 		\begin{itemize}
-			\item Load pending applications: If the user is authenticated as a member of the DRIS and if there are any endorsed application available for eligibility checking or applications available for finalising their funding decisions.
-			\item Check eligibility: If there are any endorsed application available for its eligibility check.
-			\item Deny: If the prospective fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
-			\item Accept: If the prospective fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years.
-			\item Meeting management service: If a meeting is to be created or updated. 
-			\item Finalise funding decision: If the meeting regarding the application has been concluded.
-			\item Create funding information: The application has been approved for funding.	
-			\item Deny: If the application's funding was denied.			
-			\item Approve funding: If the application's funding was denied.									
+			\item Load pending endorsed applications: There are endorsed applications that need to be checked for eligibility by the DRIS.
+			\item Load pending eligible applications: There are eligible applications that need to be approved for funding by the DRIS.
+			\item Check eligibility automatically: There are endorsed application available for  eligibility check.
+			\item Decline: The fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
+			\item Accept: The fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years.
+			\item Override eligibility result manually: Application is a special case.
+			\item Confirm eligibility result: A eligibility result for the selected application is determined. 
+			\item Finalise funding decision: There are eligible applications available for  funding approval.			
+			\item Approve funding: The Dean's office member has selected an application that has a pending funding decision.	
+			\item Decline: The Dean's office member has selected an application that has a pending funding decision.
+			\item Fund application: All funding information is complete.											
 		\end{itemize}
 	
 	\item \textbf{Progress report management service}
 		\begin{itemize}
-			\item List options: If user is a authenticated DRIS member.
-			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item List active meetings: If user is a authenticated post doctoral committee member.
-			\item Record minutes of meeting: If the selected meeting has been listed.							
+			\item Create progress report: The research fellow has an outstanding progress report.
+			\item Update progress report: A valid progress report has been selected.
+			\item Retrieve the number of progress reports for a application: A valid application has been selected.
+			\item Load all applications with outstanding progress reports: There are applications with outstanding progress reports.
+			\item Final progress report completion status: A valid application has been selected.						
 		\end{itemize}
 
 	\item \textbf{Meeting management service}
-		\begin{itemize}
-			\item List options: If user is a authenticated DRIS member.
-			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item List active meetings: If user is a authenticated post doctoral committee member.
-			\item Record minutes of meeting: If the selected meeting has been listed.							
+		\begin{itemize}			
+			\item Create meeting: The user is a DRIS member.
+			\item Add eligible new applications: There are eligible new applications available.
+			\item Add eligible renewal applications: There are eligible renewal applications available.
+			\item Add attendees: There are post doctoral committee members available.
+			\item List meetings still to be held: There are meetings still to be held available.
+			\item Update meeting: The meeting is not active nor concluded and the user is a DRIS member.
+			\item Cancel meeting: The meeting is not active nor concluded and the user is a DRIS member.
+			\item Start meeting: The meeting is not active nor concluded and the user is a DRIS member.
+			\item List active meetings: There are active meetings available.
+			\item Comment on meeting: The selected meeting is active and the user is a attendee.
+			\item Conclude meeting: The selected meeting is active and the user is a DRIS member.	
+			\item List concluded meetings: There are meetings that have been concluded available.						
 		\end{itemize}
 
 	\item \textbf{Forward and rewind service}
 		\begin{itemize}
-			\item List options: If user is a authenticated DRIS member.
-			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item List active meetings: If user is a authenticated post doctoral committee member.
-			\item Record minutes of meeting: If the selected meeting has been listed.							
+			\item Forward application to stage: The selected application has a status between Open and recommended.
+			\item Rewind application to stage: The selected application has a status between Submitted and Declined.						
 		\end{itemize}
 
 	\item \textbf{Non-Application services}
 		\begin{itemize}
-			\item List options: If user is a authenticated DRIS member.
-			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item List active meetings: If user is a authenticated post doctoral committee member.
-			\item Record minutes of meeting: If the selected meeting has been listed.							
+			\item Notification services: The user is the system or authorised user.
+			\item User account management services: The user is the system or system administrator or owner of an account.
+			\item Archival services: The user is a system administrator.
+			\item CV Management service: The user has a CV or needs to create a CV.
+			\item Location management service: The user is the system administrator or the system.
+			\item Google scholar services: The user is the system.
+			\item Report services: The user is a DRIS member or system administrator.
+			\item Announcement services: The user is a DRIS member or system administrator.
+			\item Audit-Trail service: The user is a system administrator or the system.
+			\item Notifier service: The user is the system.						
 		\end{itemize}
 		
 	\item \textbf{Google scholar services}
 		\begin{itemize}
-			\item List options: If user is a authenticated DRIS member.
-			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item List active meetings: If user is a authenticated post doctoral committee member.
-			\item Record minutes of meeting: If the selected meeting has been listed.							
+			\item Query Google scholar: Google scholar is available and the query is valid.							
 		\end{itemize}
 		
 	\item \textbf{Location management services}
 		\begin{itemize}
-			\item List options: If user is a authenticated DRIS member.
-			\item Create meeting: If any eligible applications are available and the user selects the service from the options list.
-			\item Add endorsed applications: If any new applications that are eligible are available.
-			\item Add endorsed renewals: If any renewal applications that are eligible are available.
-			\item List active meetings: If user is a authenticated post doctoral committee member.
-			\item Record minutes of meeting: If the selected meeting has been listed.							
+			\item Create Faculty: The institution exists.
+			\item Create Department: The faculty under which it falls exist.
+			\item Update Institution: A valid institution is selected.
+			\item Update Faculty: A valid faculty is selected. 	
+			\item Update Department: A valid department is selected. 
+			\item Retrieve all Institutions: There are institutions available.
+			\item Retrieve all faculties in an institution: There are faculties available under the institution.
+			\item Retrieve all departments in a particular faculty of a particular institution: There are departments available under the faculty.	 						
 		\end{itemize}
 	
 	\item \textbf{Audit-Trail services}
 		\begin{itemize}
-			\item Log action: If requesting user is the system.
-			\item Query audit table: If the user has the correct security role.										
+			\item Log action: If requesting user is the system and a User has preformed a critical task.
+			\item Query audit table: If the user is system administrator.										
 		\end{itemize}
 	
 	\item \textbf{Notification services}
 		\begin{itemize}
-			\item Create notification: If requesting user is the system or an authorised user.
-			\item Specify recipient user account: If a notification is in its setup stage.				
-			\item Specify message: If a notification is in its setup stage.
+			\item Send all queued notifications' emails: There are unsent emails available and 1 minute has passed since the last check.
+			\item Create notification: The message has a recipient and message.				
 			\item Send user account notification: If notification is ready to be sent.
-			\item Send email: If notification is ready to be sent.	
+			\item Send email: If notification is ready to be sent or a standalone email is to be sent.
+			\item Send batch notifications: There is more then one notification request waiting.
+			\item Load all notifications received by user: There are notifications that the user has received available.
+			\item Load all notifications sent by user: There are notifications that the user has sent available.	
 		\end{itemize}
 	
 	\item \textbf{User account management services}
 		\begin{itemize}
-			\item Create new account: If requesting user has the appropriate security role or the system administrator.
-			\item Modify account: If requesting user has the appropriate security role or is the owner of the account.				
-			\item Remove account: If requesting user has the appropriate security role.	
-			\item View all accounts: If requesting user is a system administrator.					
+			\item Create new account: The user is a system administrator or is a prospective fellow.
+			\item Modify account: The user is a system administrator or is the owner of the account.				
+			\item Remove account: The user is a system administrator.	
+			\item View all accounts: The user is a system administrator.
+			\item Generate on-demand user account: The system requires a new account to be created for a person not the system.
+			\item Approve on-demand user account: The user is a system administrator and there are pending on-demand user accounts available.
+			\item Activate on-demand user account: The user is the owner of the account and the account is a dormant user account.				
 		\end{itemize}
 	
 	\item \textbf{Report service}
 		\begin{itemize}
-			\item Create report: If a user with the associated credentials has been authenticated as a member of the DRIS or with the correct security role.
-			\item Open new report: If no report is currently open.
-			\item Select report data: If report is open and data is available for report.
-			\item Generate report: If data has been selected.
-			\item View report: If a report has been generated.
-			\item Export report: If user wants to export report and the user is busy viewing the report.
-			\item To csv: If user wants to export report to a cvs file.
-			\item To pdf: If user wants to export report to a pdf.	
+			\item Create report: The user is a system administrator or a DRIS member.
+			\item Open new report: No report is currently open.
+			\item Select report data: A report is open and there is data available for report.
+			\item Generate report: Data has been selected for the report.
+			\item View report: The report has been generated.
+			\item Export report: The user wants to export report and the user is busy viewing the report.
+			\item To Spreadsheet: The user wants to export report to a MS Excel spreadsheet file.
+			\item To pdf: The user wants to export report to a PDF.	
 		\end{itemize}
 	
 	
 	\item \textbf{Archival services}
 		\begin{itemize}
-			\item Retrieve archived information: If requesting user is a system administrator or the system.
-			\item Archive old information: If requesting user is a system administrator or the system.	
-			\item Backup database: If requesting user is a system administrator.					
+			\item Retrieve archived information: The user is a system administrator or the system and there is any archived information available.
+			\item Archive old information: The user is a system administrator or the system.	
+			\item Backup database: The user is a system administrator or the system.	
+			\item Restore backup: The user is a system administrator or the system and there are backups available.			
 		\end{itemize}
 		
 	\item \textbf{Application import services}
 		\begin{itemize}
-			\item Retrieve archived information: If requesting user is a system administrator or the system.
-			\item Archive old information: If requesting user is a system administrator or the system.	
-			\item Backup database: If requesting user is a system administrator.					
+			\item Import application: The user wants to create a already funded and still active application that already exists but not on the system.
+			\item Generate on-demand user account: If the fellow or grant holder of the application does not exist. 					
 		\end{itemize}
 		
 	\item \textbf{Announcement services}
 		\begin{itemize}
-			\item Retrieve archived information: If requesting user is a system administrator or the system.
-			\item Archive old information: If requesting user is a system administrator or the system.	
-			\item Backup database: If requesting user is a system administrator.					
+			\item Create announcement: The user wants to create a new announcement.
+			\item Update announcement: The user wants to update the selected pending/active announcement.
+			\item Remove all expired announcements: There are expired announcements on the system and a 1 Day has passed since the last check.
+			\item Load all active announcements: There are active announcements available.
+			\item Load all pending announcements: There are pending announcements available. 				
 		\end{itemize}
 		
 	\item \textbf{Notifier services}
 		\begin{itemize}
-			\item Retrieve archived information: If requesting user is a system administrator or the system.
-			\item Archive old information: If requesting user is a system administrator or the system.	
-			\item Backup database: If requesting user is a system administrator.					
+			\item Send daily reminders: There are issues outstanding for any user and a day has passed since the last check.
+			\item Load all pending issues for user: A valid user is selected and the user is the system and there are outstanding issues for the user.	
+			\item Load all pending issues for session: The user is the owner of the session and there are outstanding issues for the user.				
 		\end{itemize}
 		
 	\item \textbf{CV management services}
 		\begin{itemize}
-			\item Retrieve archived information: If requesting user is a system administrator or the system.
-			\item Archive old information: If requesting user is a system administrator or the system.	
-			\item Backup database: If requesting user is a system administrator.					
+			\item Create CV: The system requires to create a CV for some user.
+			\item Update CV: The system requires to update a CV for an existing CV of a particular user who is the owner of the CV.					
 		\end{itemize}	
 \end{itemize}	
 
 \subsubsection{Postconditions}
 These are conditions that must be met by the system and the data after the use case has been used.\\
 \begin{itemize}
-		
-	\item \textbf{Report service}
-		\begin{itemize}
-			\item Authenticate user: The user has been authenticated as a DRIS member.
-			\item Open new report: A new report is active.
-			\item Select report data: The data for the active report is selected.
-			\item Generate report: The report is available for viewing.
-			\item View report: The report is available for export and must be visible.
-			\item To pdf: The report has been exported to a PDF file.
-			\item To spreadsheet: The report has been exported to a spreadsheet file.	
-		\end{itemize}
-	
-	\item \textbf{Notification services}
-		\begin{itemize}
-			\item Authenticate user: The user has been authenticated as the system or a user with the appropriate security role.
-			\item Send notification: A notification has been stored and sent.
-			\item Create notification: A notification has been stored internally.
-			\item Specify recipient user account: The notification has a a recipient.				
-			\item Specify message: The notification has a message.
-			\item Send user account notification: The message is sent to the user.
-			\item Send email: The message is sent to the email specified email address.
-			\item Send batch notifications: A batch of notifications have been stored and sent.
-			\item Load all notifications received by user: All the notifications that were received by the user are available.
-			\item Load all notifications sent by user: All the notifications that were sent by the user are available.
-		\end{itemize}
-	
-	\item \textbf{User account management services}
-		\begin{itemize}
-			\item Create new account: A new user account is added to the system.
-			\item Modify account: The specified user account is updated.				
-			\item Remove account: The specified user account is disabled and pending removal from the system.
-			\item View all accounts: All user accounts have been loaded and are available for viewing.
-			\item Generate on-demand user account: A dormant user account has been created on the system with a random password.
-			\item Generate random password for account: A random password has been created and associated with account.
-			\item Notify owner: A notification has been sent the owner of the account.
-			\item Approve on-demand user account: The pending user account has become dormant.
-			\item Activate on-demand user account: The dormant user account has become active.						
-		\end{itemize}
-	
 	\item \textbf{User gateway}
 		\begin{itemize}
-			\item Login user: User is verified and logged in.
-			\item User account retrieval: An recovery email is sent to the user account that has been queried for recovery.				
-			\item Logout: A user's session has been invalidated and the user is no longer accessing any services of the system.
-			\item Retrieve session: The user's session data is available.
-			\item Authenticate user as owner: The current user has been authenticated as the owner of the object.
-			\item Authenticate user: The user is confirmed to be logged in and has the security role expected by the system.						
+			\item Login user: Requesting user is a user of the system and not logged in.
+			\item User account retrieval: Requesting user has forgotten their user credentials.				
+			\item Authenticate user: User is logged in.	
+			\item Authenticate as owner: User is logged in and an object has been selected for ownership test.
+			\item Logout: The user is logged in.
+			\item Retrieve session: The user is logged in.						
 		\end{itemize}
 		
-	\item \textbf{Audit-Trail services}
+	\item\textbf{Application services}
 		\begin{itemize}
-			\item Log action: A user action was recorded in the audit table and cannot be changed by user nor by the system.
-			\item Query audit table: An valid response to the query was returned.									
+			\item New application services: The user is a prospective fellow.
+			\item Application renewal service: Renewals are open and the user is a research fellow that is still in possession of active fellowship.
+			\item Referees' report service: If user is a referee.
+			\item Grant holder application finalisation service:  The user is a grant holder.
+			\item HOD Approval service: The user is a HOD.
+			\item Dean endorsement service: The user is a member of the dean's office.
+			\item DRIS Approval service:  The user is a member of the DRIS.
+			\item Meeting management service:  The user is a member of the DRIS or post-doctoral committee.
+			\item Application progress viewer service: The user is a prospective fellow or research fellow or grant holder or DRIS member.
+			\item Forward and rewind service: The user is a member of the DRIS.
+			\item Progress report management service: The user is a research fellow or a member of the DRIS.	
 		\end{itemize}
-	\item \textbf{Archival services}
-		\begin{itemize}
-			\item Retrieve archived information: The current working database has been repopulated with the selected archive database data.
-			\item Archive old information: Any old information in the current working database has moved to the archived database.
-			\item Scan current database for old entities: All old entities in the current working database have be identified.
-			\item Move old entities to archive database: All old entities are no longer in the current working database but in the archive database.
-			\item Backup database: The database has been backed up the specified location.	
-			\item Restore backup: The current working database has been repopulated with the backed up data.								
-		\end{itemize}
-	\item \textbf{Imports and exports services}
-		\begin{itemize}
-			\item Import application data: All the specified application data is now in the database.
-			\item Export application data: All the specified application data has been exported.	
-			\item Import location data: All the specified location data is now available in the database. 
-			\item Import faculty information: The specified faculty is now in the database.
-			\item Import departments information: The specified department is now in the database.
-			\item Import user account data: The user account has been created on the system and the user is notified of this.
-			\item Populate user account data: The data of the user has been imported into the new user account.
-			\item Import referral reports: The associated application's referral reports are in the database.
-			\item Import progress report: The associated application's progress report is in the database.
-			\item Import HOD recommendations: The associated application's HOD recommendation is in the database.
-			\item Import dean endorsements: The associated application's dean endorsement is in the database.
-			\item Import DRIS approval data: The associated application's DRIS approval data is in the database.
-			\item Import funding data: The associated application's funding data is in the database.				
-		\end{itemize}
+		
 	\item \textbf{Application progress viewer service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a grant holder or research fellow or a prospective fellow.
-			\item View application progress: The application progress of the specified user application is visible.									
-		\end{itemize}				
+			\item View application progress: A application is selected.
+			\item View application stage attachments: A application is selected.
+		\end{itemize}
 		
-	\item \textbf{New fellowship application service}
+	\item \textbf{New application services}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a prospective fellow.
-			\item Open new application: A new application has been created and has a status level of open. The prospective fellow is a associated with the application.
-			\item Retrieve currently open application for fellow: The current open application of the prospective fellow has been loaded.
-			\item Create prospective fellow cv: The prospective fellow's CV has been created and associated with the prospective fellow.
-			\item Specify and link grant holder: The grant holder's user account is associated with the application. Grant holder has been notified.
-			\item Specify and link referees: The referees' user account is associated with the application. Referees have been notified.
-			\item Submit application: The applications status is now submitted.				
+			\item Generate on-demand user account: The prospective fellow has identified a referee or grant holder not on the system.
+			\item Submit information: The fellow's cv, application information, grant holder and referee information is complete.
+			\item Open new application: An application is currently open for the fellow or all applications owned by the fellow are completed/closed/terminated.			
 		\end{itemize}
 	
 	\item \textbf{Application renewal service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a research fellow.
-			\item Open new renewal application: A new renewal application is open and stored in the system.
-			\item Complete final progress report: The final progress report associated with	the renewal has been completed and stored in the system.
-			\item Update research fellow CV: The research fellow's CV has been updated.
-			\item Complete application renewal information: The application's information is complete and stored. The application associated with the research fellow.		
-			\item Submit application renewal: The application status has been set to referred. Grant holder is notified.
-			\item Load all applications available for renewal: All the applications of the research fellow which are available for renewal (3 months from expiration) have been loaded.											
+			\item Load all applications available for renewal: There are applications of the research fellow that are available for renewal.
+			\item Open renewal application: The research fellow has a fellowship that is renewable or has a currently open renewal application.
+			\item Complete progress report: The final progress report has not been completed.				
+			\item Submit renewal application: If all the required information for the renewal has been completed.									
 		\end{itemize}
 	
 	\item \textbf{Referees' report service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a referee.
-			\item Load pending applications: Any applications that need a referral report from the specified referee must be listed.
-			\item Create report for prospective fellow: The report is complete and ready to be submitted.				
-			\item Submit referral report: The referral report has been finalised and associated with the application. If it is the last referral report then the application's status is changed to refereed and the Grant Holder of the application is notified.									
+			\item Load pending applications: There are submitted applications that need a referral report form the referee.
+			\item Create referral report: The application selected needs a referral report from the referee.				
+			\item Submit referral report: If the referral report has been completed.									
 		\end{itemize}
+		
 	\item \textbf{Grant holder application finalisation service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a grant holder.
-			\item Load pending applications: Any applications that need to be finalised from the specified grant holder have been loaded.			
-			\item Create or update grant holder cv: The grant holder's CV is stored and associated with the grant holder or is updated.
-			\item Review application: The application details have been loaded.
-			\item Request fellow amendment: The application's is has reverted to submitted.
-			\item Finalise application: The application is now a finalised application. The HOD of the relative department is notified. 
-			\item Manual HOD specification: The HOD has been manually specified and notified. If the HOD does not exist in the system a user account has been created for them.
-			\item Automatic HOD specification: The HOD has been automatically selected based on location data and has been notified.									
+			\item Load pending applications: There are referred applications that need to be finalised by the grant holder.
+			\item Create or Update Grant holder CV: The grant holder does not have a CV or has a CV.
+			\item Review application: There are pending applications.
+			\item Finalise application: The grant holder has selected an application that is pending. 
+			\item Request fellow amendment: The grant holder has selected an application that is pending.
+			\item Decline application: The grant holder has selected an application that is pending.
+			\item Generate on-demand user account: The grant holder has identified a HOD not on the system.								
 		\end{itemize}
-	\item \textbf{CV management service}
-			\begin{itemize}
-				\item Authenticate User: The user has been authenticated as the System.
-				\item Create CV: A CV has been stored on the system and associated with the user.
-				\item Update CV: The specified CV has been updated.			
-				\item Does CV exist: The status of the CV existence in the system is available.									
-			\end{itemize}		
-	\item \textbf{HOD Approval service}
+			
+	\item \textbf{HOD Recommendation service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a HOD.
-			\item Load pending applications: Any applications that need to be approved by the specified HOD must have been loaded.
-			\item Decline: The specified application's status is changed to declined and a decline report is associated with the application.
-			\item Amend: Application's status is changed to refereed. Amend request has been associated with the application.
-			\item State reason: The reason for the action is associated with decline report or amend request. 
-			\item Notify grant holder: A denied, amend or recommended notification has been sent to the Grant holder of the application appropriately.  
-			\item Approve: The application has a recommendation report associated with it and its status has changed to recommended.
-			\item Review application: The application details have been loaded.
-			\item Create recommendation report: The recommendation report is associated with the application and the Approval is ready to be finalised.				
-			\item Recommend application: The application status is changed to recommend. A notification is sent to the grant holder.
-			\item Manual Dean's office member specification: The Dean's office member has been manually specified and notified. If the Dean's office member does not exist in the system a user account has been created for them.
-			\item Automatic Dean's office member specification: The Dean's office member has been automatically selected based on location data and has been notified.									
+			\item Load pending applications: There are finalised applications that need to be recommended by the HOD.
+			\item Review application: There are pending applications.
+			\item Recommend: The HOD has selected an application that is pending. 
+			\item Decline: The HOD has selected an application that is pending. 
+			\item Request for amendment: The HOD has selected an application that is pending. 
+			\item Create recommendation report: The selected application has been marked for recommendation.				
+			\item Recommend application: If the recommendation report has been completed.
+			\item Generate on-demand user account: The grant holder has identified a Dean's office member not on the system.										
 		\end{itemize}
 		
 	\item \textbf{Dean endorsement service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a member of a dean's office.
-			\item Load pending applications: Any applications that need to be approved by the specified dean's office have been loaded.
-			\item Review application: The application details have been loaded.
-			\item Decline: The specified application's status is changed to declined and a decline report is associated with the application.			
-			\item State reason: The reason for the action is associated with decline report or amend request. 
-			\item Notify grant holder: A denied or endorsed notification has been sent to the Grant holder of the application appropriately.
-			\item Endorse: The specified application has been endorsed and has a endorsement report associated with it. The DRIS members are notified.
-			\item Rank application: The application has a rank associated with it.	
-			\item Create comment: The application has a endorsement comment associated with it.			
-			\item Endorse application: The application endorsement is finalised and the application status is now endorsed and the DRIS are notified as well as the grant holder.									
+			\item Load pending applications: There are recommend applications that need to be endorsed by the Dean's office.
+			\item Review application: There are pending applications.
+			\item Endorse: The Dean's office member has selected an application that is pending.  
+			\item Decline: The Dean's office member has selected an application that is pending.	
+			\item Create comment: If the application has been ranked.			
+			\item Endorse application: If the required endorsement information has been completed.									
 		\end{itemize}
 	
 	\item \textbf{DRIS approval service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a member of the DRIS.
-			\item Load pending endorsed applications: Any applications that need to be checked for eligibility by the DRIS have been loaded.
-			\item Load pending eligible applications: Any applications that need to have their final funding decision made by the DRIS have been loaded.			 
-			\item Decline: The application eligibility has been automatically declined and is ready to be confirmed. 
-			\item Notify grant holder: A decline or eligible or approved funding notification is sent to the Grant holder of the application.
-			\item Accept: The application eligibility has been automatically accepted and is ready to be confirmed.			
-			\item Decline: The specified application's status is changed to declined and a decline report is associated with the application.			
-			\item State reason: The reason for the action is associated with decline report or amend request.			
-			\item Check eligibility automatically: The application has been checked for eligibility and been confirmed by the DRIS member.
-			\item Confirm eligibility result: The application's status has been changed accordingly. 
-			\item Override eligibility result manually: The automated eligibility check's result has been inverted accordingly.
-			\item Approve funding: The application status is now changed to a funded.
-			\item Create funding information: The application has its funding information associated with it.
-			\item Notify grant holder: A notification is sent to the Grant holder of the application that it is successful.
-			\item Specify and email CSC department member: A customizable email has been sent to the specified CSC department member.
-			\item Specify and email Finance department member: A customizable email has been sent to the specified Finance department member.									
+			\item Load pending endorsed applications: There are endorsed applications that need to be checked for eligibility by the DRIS.
+			\item Load pending eligible applications: There are eligible applications that need to be approved for funding by the DRIS.
+			\item Check eligibility automatically: There are endorsed application available for  eligibility check.
+			\item Decline: The fellow is older than 40 and has not obtained their PhD in the last 5 years or if the prospective fellow does not have a PhD.
+			\item Accept: The fellow is younger than 40 or is 40 and they have a PhD or if they have obtained a PhD in the last 5 years.
+			\item Override eligibility result manually: Application is a special case.
+			\item Confirm eligibility result: A eligibility result for the selected application is determined. 
+			\item Finalise funding decision: There are eligible applications available for  funding approval.			
+			\item Approve funding: The Dean's office member has selected an application that has a pending funding decision.	
+			\item Decline: The Dean's office member has selected an application that has a pending funding decision.
+			\item Fund application: All funding information is complete.											
 		\end{itemize}
 	
 	\item \textbf{Progress report management service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a research fellow.
-			\item Create progress report: The progress report has stored in the system and is associated with the application.
-			\item Update progress report: The specified progress report has been updated.
-			\item Retrieve the number of progress reports for a application: The number of progress reports for a application is available.
-			\item Load all applications with outstanding progress reports: All applications with outstanding progress reports have been loaded.
-			\item Final progress completion status: The completion status of the final progress report for an application is available.							
+			\item Create progress report: The research fellow has an outstanding progress report.
+			\item Update progress report: A valid progress report has been selected.
+			\item Retrieve the number of progress reports for a application: A valid application has been selected.
+			\item Load all applications with outstanding progress reports: There are applications with outstanding progress reports.
+			\item Final progress report completion status: A valid application has been selected.						
 		\end{itemize}
-	
+
 	\item \textbf{Meeting management service}
+		\begin{itemize}			
+			\item Create meeting: The user is a DRIS member.
+			\item Add eligible new applications: There are eligible new applications available.
+			\item Add eligible renewal applications: There are eligible renewal applications available.
+			\item Add attendees: There are post doctoral committee members available.
+			\item List meetings still to be held: There are meetings still to be held available.
+			\item Update meeting: The meeting is not active nor concluded and the user is a DRIS member.
+			\item Cancel meeting: The meeting is not active nor concluded and the user is a DRIS member.
+			\item Start meeting: The meeting is not active nor concluded and the user is a DRIS member.
+			\item List active meetings: There are active meetings available.
+			\item Comment on meeting: The selected meeting is active and the user is a attendee.
+			\item Conclude meeting: The selected meeting is active and the user is a DRIS member.	
+			\item List concluded meetings: There are meetings that have been concluded available.						
+		\end{itemize}
+
+	\item \textbf{Forward and rewind service}
 		\begin{itemize}
-			\item Authenticate user: The current user was authenticated as a member of the DRIS or the Post doctoral committee.
-			\item List meetings still to be held: All meetings still to be held at the time have been loaded.
-			\item List active meetings: All active meetings at the time have been loaded.
-			\item List concluded meetings: All concluded meetings at the time have been loaded.
-			\item Create meeting: A new meeting is open for modification.
-			\item Add endorsed applications: An endorsed new application has been added to the agenda of the meeting.
-			\item Add endorsed renewals: An renewal application has been added to the agenda of the meeting.
-			\item Add attendee: A attendee have been added to the meeting.
-			\item Notify attendees: A notification is sent to all the meeting attendees.			
-			\item Comment of meeting: The comment has been associated with meeting.
-			\item Start meeting now: The specified meeting has started.
-			\item Conclude meeting: The specified meeting has been concluded.
-			\item Cancel meeting: The meeting has been cancelled and removed form the system. The attendees have been notified.
-			\item Update meeting: The meeting has been updated. The attendees have been notified.
-			\item View meeting: The meeting is loaded and being viewed.							
+			\item Forward application to stage: The selected application has a status between Open and recommended.
+			\item Rewind application to stage: The selected application has a status between Submitted and Declined.						
+		\end{itemize}
+
+	\item \textbf{Non-Application services}
+		\begin{itemize}
+			\item Notification services: The user is the system or authorised user.
+			\item User account management services: The user is the system or system administrator or owner of an account.
+			\item Archival services: The user is a system administrator.
+			\item CV Management service: The user has a CV or needs to create a CV.
+			\item Location management service: The user is the system administrator or the system.
+			\item Google scholar services: The user is the system.
+			\item Report services: The user is a DRIS member or system administrator.
+			\item Announcement services: The user is a DRIS member or system administrator.
+			\item Audit-Trail service: The user is a system administrator or the system.
+			\item Notifier service: The user is the system.						
 		\end{itemize}
 		
-	\item \textbf{Forward and Rewind Service}
-			\begin{itemize}
-				\item Authenticate user: The current user was authenticated as a DRIS office member.
-				\item Forward application to stage: The application has been moved to appropriate status.
-				\item Rewind application to stage: The application has been moved back to the appropriate stage. All higher stage data has been removed from application.							
-			\end{itemize}		
-
+	\item \textbf{Google scholar services}
+		\begin{itemize}
+			\item Query Google scholar: Google scholar is available and the query is valid.							
+		\end{itemize}
+		
+	\item \textbf{Location management services}
+		\begin{itemize}
+			\item Create Faculty: The institution exists.
+			\item Create Department: The faculty under which it falls exist.
+			\item Update Institution: A valid institution is selected.
+			\item Update Faculty: A valid faculty is selected. 	
+			\item Update Department: A valid department is selected. 
+			\item Retrieve all Institutions: There are institutions available.
+			\item Retrieve all faculties in an institution: There are faculties available under the institution.
+			\item Retrieve all departments in a particular faculty of a particular institution: There are departments available under the faculty.	 						
+		\end{itemize}
+	
+	\item \textbf{Audit-Trail services}
+		\begin{itemize}
+			\item Log action: If requesting user is the system and a User has preformed a critical task.
+			\item Query audit table: If the user is system administrator.										
+		\end{itemize}
+	
+	\item \textbf{Notification services}
+		\begin{itemize}
+			\item Send all queued notifications' emails: There are unsent emails available and 1 minute has passed since the last check.
+			\item Create notification: The message has a recipient and message.				
+			\item Send user account notification: If notification is ready to be sent.
+			\item Send email: If notification is ready to be sent or a standalone email is to be sent.
+			\item Send batch notifications: There is more then one notification request waiting.
+			\item Load all notifications received by user: There are notifications that the user has received available.
+			\item Load all notifications sent by user: There are notifications that the user has sent available.	
+		\end{itemize}
+	
+	\item \textbf{User account management services}
+		\begin{itemize}
+			\item Create new account: The user is a system administrator or is a prospective fellow.
+			\item Modify account: The user is a system administrator or is the owner of the account.				
+			\item Remove account: The user is a system administrator.	
+			\item View all accounts: The user is a system administrator.
+			\item Generate on-demand user account: The system requires a new account to be created for a person not the system.
+			\item Approve on-demand user account: The user is a system administrator and there are pending on-demand user accounts available.
+			\item Activate on-demand user account: The user is the owner of the account and the account is a dormant user account.				
+		\end{itemize}
+	
+	\item \textbf{Report service}
+		\begin{itemize}
+			\item Create report: The user is a system administrator or a DRIS member.
+			\item Open new report: No report is currently open.
+			\item Select report data: A report is open and there is data available for report.
+			\item Generate report: Data has been selected for the report.
+			\item View report: The report has been generated.
+			\item Export report: The user wants to export report and the user is busy viewing the report.
+			\item To Spreadsheet: The user wants to export report to a MS Excel spreadsheet file.
+			\item To pdf: The user wants to export report to a PDF.	
+		\end{itemize}
+	
+	
+	\item \textbf{Archival services}
+		\begin{itemize}
+			\item Retrieve archived information: The user is a system administrator or the system and there is any archived information available.
+			\item Archive old information: The user is a system administrator or the system.	
+			\item Backup database: The user is a system administrator or the system.	
+			\item Restore backup: The user is a system administrator or the system and there are backups available.			
+		\end{itemize}
+		
+	\item \textbf{Application import services}
+		\begin{itemize}
+			\item Import application: The user wants to create a already funded and still active application that already exists but not on the system.
+			\item Generate on-demand user account: If the fellow or grant holder of the application does not exist. 					
+		\end{itemize}
+		
+	\item \textbf{Announcement services}
+		\begin{itemize}
+			\item Create announcement: The user wants to create a new announcement.
+			\item Update announcement: The user wants to update the selected pending/active announcement.
+			\item Remove all expired announcements: There are expired announcements on the system and a 1 Day has passed since the last check.
+			\item Load all active announcements: There are active announcements available.
+			\item Load all pending announcements: There are pending announcements available. 				
+		\end{itemize}
+		
+	\item \textbf{Notifier services}
+		\begin{itemize}
+			\item Send daily reminders: There are issues outstanding for any user and a day has passed since the last check.
+			\item Load all pending issues for user: A valid user is selected and the user is the system and there are outstanding issues for the user.	
+			\item Load all pending issues for session: The user is the owner of the session and there are outstanding issues for the user.				
+		\end{itemize}
+		
+	\item \textbf{CV management services}
+		\begin{itemize}
+			\item Create CV: The system requires to create a CV for some user.
+			\item Update CV: The system requires to update a CV for an existing CV of a particular user who is the owner of the CV.					
+		\end{itemize}	
 \end{itemize}
 
 \subsubsection{Request and result data structures}
