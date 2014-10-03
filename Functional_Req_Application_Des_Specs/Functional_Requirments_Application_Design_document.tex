@@ -1793,20 +1793,40 @@ This object represents a the details of a currently active session on the system
 \vspace{0.2in}
 \newpage
 \section{Application Design}
+This section deals with actual design of the application itself and how the requirement will be implemented.
 \subsection{Overview}
+As seen from the various functional requirements above the application covers vast number of services and domain objects. Thus in order to break down and structure the application so that it doesn't become an complicate and unmaintainable system the application will make use of the Java EE reference framework that automatically implies a layered architectural pattern and provides many out of the box services. This is as discussed in the Software architectural document.
 
 \newpage
 \subsection{Web interface font-end layer}
 \subsubsection{Summary}
+
 \subsubsection{Web page template/Style}
 
 \newpage
 \subsection{JSF Backing bean layer}
 \subsubsection{Summary}
+The JSF Backing bean layer will provide managed beans in order to process, validate and structure the input from the front-end web interface to the EJB layer and vice versa. The managed beans will also be used to provide the support for the front-end by using a variety of CDI scopes in order to retain important information and discard once off information:
+\begin{itemize}
+	\item Application scope
+	\item Session scope
+	\item Conversation scope
+	\item Request scope
+	\item Dependent scope
+\end{itemize}
+Further the Context and Dependency Injection (CDI) Technology will be used provide communication between managed beans themselves and the EJBs.
 
 \newpage
 \subsection{EJB Layer}
 \subsubsection{Summary}
+The EJB layer will provide the back bone for the business logic and capture all the core non UI-related logic as seen by the class diagrams of the various interfaces below. Majority of the functions provided by the EJB layer will be expecting domain objects as stipulated above and only in some rare instances will expect primitives or non-domain objects. All the EJBs are stateless and all provide a local interface. Also in order to preform user authentication and auditing custom interceptors designed for these purposes where designed as well as accompanying custom method annotations to specify parameters for audit able and secured methods by the EJBs. Also in order to conform to the layered architecture no communication with Persistence layer is allowed with out using the EJB layer. Also since the system will make use of RestFul API inorder to integrate with other software this Layer needs to be completely secure. 
+
+\subsubsection{Annotations}
+This sections provides a overview of all the custom annotations used by the system.
+\begin{itemize}
+	\item \textbf{AuditableMethod} - Used to indicate the method needs to be audited and what audit message should be used.
+	\item \textbf{SecuredMethod} - Used to indicate the needs authentication, the allowed security roles, if to test for ownership and what is the object to test ownership of.
+\end{itemize} 
 
 \newpage
 \subsubsection{Class diagrams of interfaces}
@@ -1822,31 +1842,31 @@ This section handles the
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationRenewalService.jpg}}
-\caption{Interface Diagram for the Application Renewal service.}
+\caption{Class diagram of interface for the Application Renewal service.}
 \end{subfigure}
 
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ArchivalService.jpg}}
-\caption{Interface Diagram for the Archival service.}
+\caption{Class diagram of interface for the Archival service.}
 \end{subfigure}
 ~
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/CVManagementService.jpg}}
-\caption{Interface Diagram for the CV Management service.}
+\caption{Class diagram of interface for the CV Management service.}
 \end{subfigure}
 
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DeansEndorsementService.jpg}}
-\caption{Interface Diagram for the Deans Endorsement service.}
+\caption{Class diagram of interface for the Deans Endorsement service.}
 \end{subfigure}
 ~
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DRISApprovalService.jpg}}
-\caption{Interface Diagram for the DRIS Approval service.}
+\caption{Class diagram of interface for the DRIS Approval service.}
 \end{subfigure}
 \end{figure}
 
@@ -1854,37 +1874,37 @@ This section handles the
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/GrantHolderFinalisationService.jpg}}
-\caption{Interface Diagram for the Grant Holder Finalisation service.}
+\caption{Class diagram of interface for the Grant Holder Finalisation service.}
 \end{subfigure}
 ~
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/HODRecommendationServices.jpg}}
-\caption{Interface Diagram for the HOD Recommendation service.}
+\caption{Class diagram of interface for the HOD Recommendation service.}
 \end{subfigure}
 
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/MeetingMananagementInterface.png}}
-\caption{Interface Diagram for the Meeting Management service.}
+\caption{Class diagram of interface for the Meeting Management service.}
 \end{subfigure}
 ~
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/NewApplicationServiceInterface.png}}
-\caption{Interface Diagram for the New Application service.}
+\caption{Class diagram of interface for the New Application service.}
 \end{subfigure}
 
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/NotificationsInterface.png}}
-\caption{Interface Diagram for the Notification service.}
+\caption{Class diagram of interface for the Notification service.}
 \end{subfigure}
 ~
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ProgressReportManagementServiceInterface.png}}
-\caption{Interface Diagram for the Progress Report Management service.}
+\caption{Class diagram of interface for the Progress Report Management service.}
 \end{subfigure}
 \end{figure}
 
@@ -1892,19 +1912,19 @@ This section handles the
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/RefereeReportInterface.png}}
-\caption{Interface Diagram for the Referee Report service.}
+\caption{Class diagram of interface for the Referee Report service.}
 \end{subfigure}
 ~
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/UserAccountManagementServicesInterface.png}}
-\caption{Interface Diagram for the User Account Management service.}
+\caption{Class diagram of interface for the User Account Management service.}
 \end{subfigure}
 
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/UserGatewayInterface.png}}
-\caption{Interface Diagram for the User Gateway service.}
+\caption{Class diagram of interface for the User Gateway service.}
 \end{subfigure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
