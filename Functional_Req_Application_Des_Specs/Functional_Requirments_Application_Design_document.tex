@@ -128,6 +128,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 03/10/2014 & v 3.0 & Added and updated use case diagrams and descriptions. Added and updated preconditions and postconditions also update data flow diagrams and domain objects. Added application design section and restructured the whole document. & Mathys Ellis \\
 \hline
+03/10/2014 & v 3.01 & Added and updated activity and interface diagrams & Alfred Ngako \\
+\hline
 
 %\end{tabbing}
 \end{longtable}
@@ -591,7 +593,7 @@ The following sections will discuss the required functionality of all the major 
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/CV Management service1.jpg}}
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Use case diagrams/CV Management Service1.jpg}}
 \caption{Use case diagram of CV management service}
 \end{figure}
 
@@ -1508,6 +1510,42 @@ This object represents a result returned by one a \textbf{GoogleScholarQuery} to
 
 \begin{figure}[H]
 \centering	
+\framebox{\includegraphics[scale=0.65]{../Images_Docs/Diagrams/Activity Diagrams/AnnouncementManagement/createAnnouncement.png}}
+\caption{Activity diagram of the create anouncement use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.65]{../Images_Docs/Diagrams/Activity Diagrams/AnnouncementManagement/loadAllActiveAnnouncements.png}}
+\caption{Activity diagram of the load all anouncements use case.}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.65]{../Images_Docs/Diagrams/Activity Diagrams/AnnouncementManagement/loadAllPendingAnnouncements.png}}
+\caption{Activity diagram of the load all pending anouncements use case.}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.65]{../Images_Docs/Diagrams/Activity Diagrams/AnnouncementManagement/removeAnnouncement.png}}
+\caption{Activity diagram of the remove anouncement use case.}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.65]{../Images_Docs/Diagrams/Activity Diagrams/AnnouncementManagement/updateAnnouncement.png}}
+\caption{Activity diagram of the update anouncement use case.}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[H]
+\centering	
 \framebox{\includegraphics[scale=0.25]{../Images_Docs/Diagrams/Activity Diagrams/ApplicationProgressViewer/Get All Applications.jpg}}
 \caption{Activity diagram of the Get All Applications use case.}
 \end{figure}
@@ -1596,6 +1634,37 @@ This object represents a result returned by one a \textbf{GoogleScholarQuery} to
 
 \begin{figure}[H]
 \centering	
+\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/Activity Diagrams/ForwardAndRewindServices/forwardApplication.png}}
+\caption{Activity diagram of the foward application use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/Activity Diagrams/ForwardAndRewindServices/loadMovableApplications.png}}
+\caption{Activity diagram of the load movable applications use case.}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/Activity Diagrams/ForwardAndRewindServices/rewindApplication.png}}
+\caption{Activity diagram of the rewind application use case.}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.55]{../Images_Docs/Diagrams/Activity Diagrams/GoogleScholarService/searchGoogleScholarUsing.png}}
+\caption{Activity diagram of the search Google Scholar use case.}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[H]
+\centering	
 \framebox{\includegraphics[scale=0.25]{../Images_Docs/Diagrams/Activity Diagrams/GrantHolderFinalisation/Create Grantholder CV.jpg}}
 \caption{Activity diagram of the Create Grantholder CV use case.}
 \end{figure}
@@ -1625,6 +1694,83 @@ This object represents a result returned by one a \textbf{GoogleScholarQuery} to
 \framebox{\includegraphics[scale=0.25]{../Images_Docs/Diagrams/Activity Diagrams/HOD recommendations/Deny Application.jpg}}
 \caption{Activity diagram of the Deny Application use case.}
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/createDepartment.png}}
+\caption{Activity diagram of the create department use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/createFaculty.png}}
+\caption{Activity diagram of the create faculty use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/createInstitution.png}}
+\caption{Activity diagram of the create institution use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/getAllDepartmentForFaculty.png}}
+\caption{Activity diagram of the get all department for faculty use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/getAllFacultiesInInstitution.png}}
+\caption{Activity diagram of the get all faculties institution use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/getAllInstitutions.png}}
+\caption{Activity diagram of the get all institutions use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/getDepartment.png}}
+\caption{Activity diagram of the get department use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/getFaculty.png}}
+\caption{Activity diagram of the get faculty use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/getInstitution.png}}
+\caption{Activity diagram of the get institution use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/updateDepartment.png}}
+\caption{Activity diagram of the update department use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/updateFaculty.png}}
+\caption{Activity diagram of the update faculty use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.95]{../Images_Docs/Diagrams/Activity Diagrams/LocationManagement/updateInstitution.png}}
+\caption{Activity diagram of the update institution use case.}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{figure}[H]
 \centering	
@@ -1731,6 +1877,28 @@ This object represents a result returned by one a \textbf{GoogleScholarQuery} to
 \caption{Activity diagram of the Send batch Notifications use case.}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Activity Diagrams/Notifier/loadAllPendingIssuesForSession.png}}
+\caption{Activity diagram of the load all pending issues for session use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Activity Diagrams/Notifier/loadAllPendingIssuesForUser.png}}
+\caption{Activity diagram of the load all pending issues for user use case.}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.9]{../Images_Docs/Diagrams/Activity Diagrams/Notifier/sendDailyReminders.png}}
+\caption{Activity diagram of the send daily reminders use case.}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[H]
 \centering	
@@ -1795,7 +1963,7 @@ This object represents a result returned by one a \textbf{GoogleScholarQuery} to
 
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Activity Diagrams/UserAccountManagement/GetUserbySystemID.png}}
+\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Activity Diagrams/UserAccountManagement/GetUserBySystemID.png}}
 \caption{Activity diagram of the Get User by System ID use case.}
 \end{figure}
 
@@ -1889,23 +2057,35 @@ This sections provides a overview of all the custom annotations used by the syst
 \newpage
 \subsubsection{Class diagrams of interfaces}
 This section handles the 
-\begin{figure}[H]
+\begin{figure}[p]
 
+\begin{subfigure}[p]{0.47\textwidth}
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/AnnouncementManagementInterface.jpg}}
+\caption{Class diagram of interface for the Announcement Management service.}
+\end{subfigure}
+~
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationProgressViewerService.jpg}}
 \caption{Class diagram of interface for the Application Progress Viewer service.}
 \end{subfigure}
-~
+
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ApplicationRenewalService.jpg}}
 \caption{Class diagram of interface for the Application Renewal service.}
 \end{subfigure}
-
+~
 \begin{subfigure}[p]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ArchivalService.jpg}}
+\caption{Class diagram of interface for the Archival service.}
+\end{subfigure}
+
+\begin{subfigure}[p]{0.47\textwidth}
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/AuditTrailInterface.jpg}}
 \caption{Class diagram of interface for the Archival service.}
 \end{subfigure}
 ~
@@ -1926,6 +2106,18 @@ This section handles the
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/DRISApprovalService.jpg}}
 \caption{Class diagram of interface for the DRIS Approval service.}
 \end{subfigure}
+
+\begin{subfigure}[p]{0.47\textwidth}
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/ForwardAndRewindInterface.jpg}}
+\caption{Class diagram of interface for the Forward and Rewind service.}
+\end{subfigure}
+~
+\begin{subfigure}[p]{0.47\textwidth}
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/GoogleScholarInterface.jpg}}
+\caption{Class diagram of interface for the Google Scholar service.}
+\end{subfigure}
 \end{figure}
 
 \begin{figure}[H]
@@ -1941,22 +2133,35 @@ This section handles the
 \caption{Class diagram of interface for the HOD Recommendation service.}
 \end{subfigure}
 
+\begin{subfigure}[p]{0.47\textwidth}
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/LocationManagementInterface.png}}
+\caption{Class diagram of interface for the Location Management service.}
+\end{subfigure}
+~
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/MeetingMananagementInterface.png}}
 \caption{Class diagram of interface for the Meeting Management service.}
 \end{subfigure}
-~
+
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/Interface Diagram/NewApplicationServiceInterface.png}}
 \caption{Class diagram of interface for the New Application service.}
 \end{subfigure}
-
+~
 \begin{subfigure}[H]{0.47\textwidth}
 \centering	
 \framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/NotificationsInterface.png}}
 \caption{Class diagram of interface for the Notification service.}
+\end{subfigure}
+
+
+\begin{subfigure}[H]{0.47\textwidth}
+\centering	
+\framebox{\includegraphics[width=\textwidth]{../Images_Docs/Diagrams/Interface Diagram/NotifierInterface.png}}
+\caption{Class diagram of interface for the Notifier service.}
 \end{subfigure}
 ~
 \begin{subfigure}[H]{0.47\textwidth}
