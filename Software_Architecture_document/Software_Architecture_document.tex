@@ -73,6 +73,8 @@ Mathys Ellis (12019837) \\[8em]
  Date & Version & Description &  Person \\
 \hline
 03/10/2014 & v 0.0 & Combined architectural specification and architectural requirements specification & Mathys Ellis \\
+\hline
+03/10/2014 & v 1.0 & Complete restructuring and most of the editing and additions  & Mathys Ellis \\
 
 %\end{tabbing}
 \end{tabular}
@@ -90,7 +92,7 @@ Mathys Ellis (12019837) \\[8em]
 
 \subsection{Document purpose:}
 \vspace{0.2in}
-The Software architecture document provides the architectural requirements that the project will need to follow as well as a set of quality requirements that must be met by the system. The quality requirements have been quantified in order to provide the SoftServe group and the client with a means to test the system for non-functional compliance. This allows the SoftServe group to set up tests in the non-functional testing document that can be used at the end of the development cycle to verify that the system complies with the architecture and quality requirements specified by this document. Further the document provides the architecture specification which covers architectural descriptions of various architectural factors that the project will need to follow when developing the system.  Architecture in this document's context refer to the technological basis and software development styles of the project. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of what technologies the project should incorporate as-well as the software development infrastructure that the system will be based on and also the quality the system should be of once the project is complete.
+The Software architecture document provides the architectural requirements that the project will need to follow as well as a set of quality requirements that must be met by the system. The quality requirements have been quantified in order to provide the SoftServe group and the client with a means to test the system for non-functional compliance. This allows the SoftServe group to set up tests in the non-functional testing document that can be used at the end of the development cycle to verify that the system complies with the architectural and quality requirements specified by this document. Further the document provides the architecture specification which covers architectural descriptions of various architectural factors that the project will need to follow when developing the system.  Architecture in this document's context refer to the technological basis and software development and organisational styles and strategies of the project. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of what technologies the project should incorporate as-well as the software development infrastructure that the system will be based on and also the quality the system should be of once the project is complete.
 \vspace{0.2in}
 
 \subsection{Documentation methodology}
@@ -98,7 +100,7 @@ The Software architecture document provides the architectural requirements that 
 \begin{flushleft}
 The documentation and software development methodology used by the project adhere to the guidelines set out by the scum agile methodology. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
 
-This document was created using the requirement elicitation techniques and requirement definitions as specified by Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
+This document was created using various insights gained throughout the COS 301 course and the requirement elicitation techniques and definitions as specified by Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
 The quality requirements and aspects of the architectural requirements, were elicited from the following sources:
 \begin{itemize}
 	\item Numerous interviews with the client.
@@ -121,7 +123,6 @@ The quality requirements and aspects of the architectural requirements, were eli
 \vspace{0.1in}
 \begin{itemize}
 \item Documentation formulation tool: LaTeX
-
 \end{itemize}
 
 \vspace{0.2in}
@@ -145,27 +146,28 @@ The quality requirements and aspects of the architectural requirements, were eli
 \subsection{Architectural Scope}
 This section discusses the scope that the software architecture of the system needs to cover:
 \begin{itemize}
-\item A persistence infrastructure using a DBMS to facilitate the storage of the various domain objects (e.g CVs, DRIS information, and Applications). So to allow the system to store and centralise the various data that the system will be handling.
+\item A persistence infrastructure using a DBMS to facilitate the storage of the various domain objects (e.g CVs, DRIS information, and Applications). So to allow the system to store and centralise the various data that the system will be handling as outlined in the functional requirements and application document.
 \item A multi-user session infrastructure to assist in realizing the security requirements of authenticating users and their actions.
-\item A pipeline infrastructure for processing applications. 
-\item A RESTful web service infrastructure, so to allow lightweight data communication between the users and the server and support for mobile platforms.
+\item A work-flow infrastructure for processing applications that can be modified and extended. 
+\item A RESTful web service infrastructure, to provide a means for the system to be integrated in other systems and also to allow lightweight data communication between the users and the server and support for mobile platforms. 
 \item A report generation infrastructure in order to support the data retrieval requirements of the client.
 \item An email infrastructure for the system to use in order to provide notification support.
 \item A action logging infrastructure to track user activity on the system, in order to provide audit-ability.
+\item A gateway infrastructure to provide access control to services provided by the system.
 
 \end{itemize}
 
+\newpage
 \subsection{Access channel requirements}
 \vspace{0.2in}
 The only two access channel requirements specified by the client are as follows:
 \begin{itemize}
 
-
 \item \textbf{All stakeholders:}
-Users of the system will access the system through a HTTP and HTTPS web browser client that is locally installed on a user's computer system or mobile platform. Support for mark up language HTML 4.0.1 and 5 will be enabled through this. This will improve availability and usability of the system due it making it more compatible with older internet enabled systems. The web interface will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts. 
+Users of the system will access it through the HTTP and HTTPS protocols either via a web browser client or some software, which makes use of the Restful API the system provides. Both will be locally installed on a user's desktop or mobile platform. Web browsers are expected to be HTML 5 compliment. This access channel will provide excellent availability and usability of the system due to the RESTFul nature of most internet enabled systems and the ease of using web browsers. The access channel will allow different stakeholders access to different sections of the system based on the roles assigned to their accounts. 
 
 \item\textbf{System Administrator:}
-The system administrator will require the same as the above but will need to be able to conduct any administration duties through some form of web portal using the HTTP and HTTPS protocols. Above this the system administrator will need to have access to the MySQL database employed by the system. This is mainly for maintenance reasons but also as an alternative if certain unexpected system failures or system generated errors occur. This will be accessible through the use of software which uses the appropriate technologies.
+The system administrator will require the same as the above but will in addition need to be able to conduct any external administration duties on the system which can not be done via the the above access channel. Such as updates, server maintenance, etc. Thus such operations will be done via the server by some terminal emulation protocol, such as Telnet or SSH, or by physical access. 
 
 \end{itemize}
 \vspace{0.2in}
@@ -176,24 +178,34 @@ The system administrator will require the same as the above but will need to be 
 \input{../Quality_Requirements/QR.tex}
 
 \vspace{0.1in}
+
 \newpage
 \subsection{Integration requirements}
 \vspace{0.2in}
-The client's primary integration requirement is with regards to the import and export of data that can be used by the PeopleSoft management system of UP as well as other parties. The client's secondary integration requirement is with regards to the complete integration of the system with UP's PeopleSoft management system. With the regards the vision and scope document it should be noted that the knowledge the SoftServe group has of the Peoplesoft system is very limited due to UP's IT department's prerequisite for the project. Above that their are a few other integration requirements that SoftServe in conjunction with the client have purposed. The system has to integrate with the following systems as follows:
+The client's primary integration requirement is to completely integrate with UP's PeopleSoft management system. With the regards the vision and scope document it should be noted that the knowledge the SoftServe group has of the Peoplesoft system is very limited due to UP's IT department's prerequisite for the project. The system has to integrate with the PeopleSoft as follows:
+
 \begin{itemize}
-	\item Must be able to create exportable data packages containing the information of prospective and current research fellows that can easily be loaded into the PeopleSoft system or used by other parties. The technology interchange format purposed is CSV. This is to meet the primary requirement of the client. In terms of quality requirements:
+	\item Must be able to create exportable data packages containing the information of prospective and current research fellows that can easily be loaded into the PeopleSoft system or used by other parties. In terms of quality requirements:
 	\begin{enumerate}
 		\item \textbf{Performance:} The system should be able to handle the export and importing of application information at a reasonable rate of about at least 10 full application data packages in a second. The system should be able to import and generate on-demand user accounts at a rate of 50 per second. For exporting it should be able to do so at 60 accounts per second.
 		\item \textbf{Scalability:} The system should be able to export or import as much data as specified by the user as long as it does not exceed the size of the database or the size of users secondary storage. 
 		\item \textbf{Audibility:} Any export and import should be recorded by the system.
 	\end{enumerate}  
-	\item Must be able to query PeopleSoft system to retrieve the account information of internal individual or group Stakeholders to create a uniform login experience. As specified by the vision and scope document this will not be possible at the time of writing. Therefore no API can be given. But the system will most likely make use of the above in point to achieve this requirement. 
-	\item Must assign Prospective fellows with a id number in such a way that is integrable with UP Emplid. SoftServe suggests: "f" + 8 digit code.
-	\item Stakeholders that have a Peoplesoft account must use their UP emplid id as a user name. The password may vary.
-	\item Must be able to provide access to the NRF researcher ratings list but not utilize it as the client has stipulated human error is possible in maintaining of those ratings.
+	\item Must be able to query PeopleSoft system to retrieve the account information of internal individual or group Stakeholders to create a uniform login experience. As specified by the vision and scope document this will not be possible at the time of writing since no API can be given to the SoftServe group. 
+	\item To standardise information the following is to be done:
+	\begin{enumerate}  
+		\item Must assign Prospective fellows with a id number in such a way that is integrable with UP Emplid. SoftServe suggests: "f" + 8 digit code.
+		\item Stakeholders that have a Peoplesoft account must use their UP emplid id as a user name. The password may vary.
+		\item Must be able to provide access to the NRF researcher ratings list but not utilize it as the client has stipulated human error is possible in maintaining of those ratings.
+	\end{enumerate}
 \end{itemize}
 
-The above integration requirements except for the second requirement does need to make use of any protocols or another system's API.
+SoftServe has also decided to add two further integration requirements in an attempt to improve future integration with other systems and to improve the application process. The two requirements are as follows:
+
+\begin{itemize}
+	\item \textbf{RESTful API/Web services} - The system will need to be able to provide a set of RESTful web services that is able to make use of all the back-end services provided by the system. This will allow future systems to easily integrate with other systems who wish to make use of the system. The interchange formats for the data should be limited to XML and JSON as these are the most universal and at the time of writing the de facto data formats. This will also help solve any future integration with the PeopleSoft system.
+	\item \textbf{Google Scholar} - The system will need to be able to integrate with the Google Scholar services. The service needs to allow the system to be able to create full fledged queries for google scholar and be able to retrieve their results. This will be used to allow applicants to quickly populate their CV references by having the system quick search google scholar. There is unfortunately at the time of writing no such API. Therefore the SoftServe group will need to create our own API. This proposed by employing a HTML scrapping technique. 
+\end{itemize} 
 
 \vspace{0.2in}
 
@@ -208,7 +220,7 @@ The following architecture constraints have been selected by SoftServe group as 
 \item Development platform: Java-EE 7 
 \item System architecture: Java-EE
 \item Architectural frameworks: JSF, PAM, Java Persistence API, JAX-RS
-\item Architectural pattern: MVC, Layered (Multi-tiered)
+\item Architectural pattern: Layered (Multi-tiered)
 \item Development technologies: EJB, JSP, Expression Language, JDBC, JTA, Java EE Connector Architecture, JAF, JavaMail, JNDI, JAAS, Concurrency Utilities for Java EE, JAXB, PrimeFaces
 \item IDE: Netbeans 8.0
 \item Build environment: Apache Maven 3
@@ -224,70 +236,59 @@ The following architecture constraints have been selected by SoftServe group as 
 
 % Mention of how Java EE actually doesn't require use of GoF design patterns >> http://www.theserverside.com/tip/With-Java-EE-7-your-Design-Patterns-are-dead-And-your-EAR-is-ugly-too <<
 
-The system will employ the Model-View-Controller, MVC, architectural pattern combined with a multi-tier/layered architectural pattern to form what is known as the Java Enterprise Edition system architecture. This will allow the client(s) to be decoupled from the server. Further this allows the view, the controller and the model each to have its own set of layers. Both of these patterns provide various benefits and are widely used. Some benefits include modularity, encapsulation, re-usability of components, decoupling and system maintainability [Ali Babar, M.] [Oracle, 2014][Kayal, D., 2008]\\
+The system will employ a multi-tier/layered architectural pattern to form what is known as the Java Enterprise Edition system architecture. This will allow the client(s) to be decoupled from the server. This pattern is widely used and provides various benefits. Some benefits include modularity, encapsulation, re-usability of components, decoupling, system maintainability, pluggable-ness of layers and complexity reduction [Ali Babar, M.] [Oracle, 2014][Kayal, D., 2008]\\
 \\
-The Java EE system architecture is designed to support highly scalable, distributed, transactional, and portable applications that use the speed, security, and reliability of a Java EE server to provide powerful enterprise applications. [Oracle, 2014] For this reason SoftServe believes this system architecture is well suited for the development of the Post-Doctoral application management system as it will satisfy the requirements in terms of quality and functional as stipulated by the client. The following diagram provides the system architectural that will be employed by the system:\\
+The Java EE system architecture is designed to support highly scalable, distributed, transactional and portable applications that use the speed, security, and reliability of a Java EE server to provide powerful enterprise applications. [Oracle, 2014] For this reason SoftServe believes this system architecture is well suited for the development of the Post-Doctoral application management system as it will satisfy the requirements in terms of quality and functional as stipulated by the client. The following diagram provides the system architecture that will be employed by the system:\\
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Architecture/Java EE system architecture.jpg}
-\caption{Java EE system architecture}
+\includegraphics[scale=0.6]{../Images_Docs/Diagrams/Architecture/Java EE system architecture.jpg}
+\caption{Java EE system architecture with respect to the Post-Doctoral application management system}
 \end{figure}
 
-\subsection{View}
-The View component of the system architecture is used to represent and encapsulate the front-end of the system. It contains the client tier of the Java EE system architecture. Thus this allows the system to decouple the front-end and the back-end components. Allowing various clients to access the back-end without having to duplicate certain back-end tiers for each client. [Kayal, D., 2008]
-\subsubsection{Client Tier}
-This tier runs on the client system and encapsulates the various components that a client system may use to access the Java EE server-side tiers. These components include dynamic web pages, Java applications and Java applets. In order to make the Post-doctoral application management system accessible to any stakeholder over the internet and provide a uniform user experience the system will only make use of the dynamic web pages component provided by the Java EE client tier. [Oracle, 2014]  
-\subsection{Controller}
-The controller component of the system architecture is used to provide the business logic and manage and manipulate the view's request in order to provide communication between the Model component and the View. This component therefore hosts the web tier and the business tier of the Java EE application. This component is located on the Java EE server which is a multi-threaded application server. [Kayal, D., 2008] [Oracle, 2014] 
-\subsubsection{Web Tier}
-This Tier runs on the Java EE server and hosts the Web container. It provides the management and web page generation support for the web pages that the system has to provide to the view through the user of servlets, Java ServerPages and Java ServerFaces Facelets. Facilitates the communication between the business tier and client tier for web browser clients and applets. Client applications do not have to make use of the Web Tier and can directly skip to the business tier. But as stipulated above the other types of client components will not be considered for the project. [Oracle, 2014]
-\subsubsection{Business Tier}
-This Tier also runs on the Java EE server and hosts the Enterprise Java Bean container. It provides the business logic section for the Java EE application in the form of Enterprise Java Beans which are simply classes that represent various persistence entities of the data base, system messages, sessions, etc. This tier communicates with EIS tier in order to get access the database and various other lower level infrastructures that the Java EE application requires. [Oracle, 2014]
-% More bullshit goes here.
-\subsection{Model}
-The Model component of the system architecture contains the various persistence storage infrastructure and lower level system management features such as transaction processing. It hosts the Enterprise Information System tier of the Java EE application. [Kayal, D., 2008]
-\subsubsection{Enterprise Information Tier} 
-The EIS tier provides mainly the support for database systems that is used by the Java-EE application. This tier can run on the Java-EE server as a virtual server or on a physically different database server. Due to the project budget and technical constraints the former will used by the system. [Oracle, 2014] 
+\subsection{Client Tier}
+This tier runs on the client system and encapsulates the various components that a client system may use to access the Java EE server-side tiers. These components include dynamic web pages, Java applications and Java applets. In order to make the Post-doctoral application management system accessible to any stakeholder over the internet and provide a uniform user experience the system will make use of the JSF frame work to provide web pages via a web browsers and RESTful web-services to provide access to the system via other client side applications. [Oracle, 2014]  
+
+\subsection{Web Tier}
+This Tier runs on the Java EE server and hosts the Web container and RESTful web services. It provides the management and web page generation support for the web pages that the system has to provide to the client Tier through the use of of the Java ServerFaces Facelets and backing beans. It also facilitates the communication between the business tier and client tier and thus handles the data validation and transformation required by such communication.[Oracle, 2014] 
+\subsection{Business Tier}
+This Tier also runs on the Java EE server and hosts the Enterprise Java Bean container. It provides the business logic section for the Java EE application in the form of Enterprise Java Beans which are simply classes of POJOs that represent various persistence entities of the persistence layer, system messages, sessions, services. It also hosts any auxiliary services that the application wishes to implement in order to help the EJBs. This tier communicates with EIS tier in order provide access to the database and various other lower level infrastructures that the Java EE application requires. [Oracle, 2014]
+
+\subsection{Enterprise Information Tier} 
+The EIS tier provides mainly the support for database systems that are used by the Java-EE application. This tier can run on the Java-EE server as a virtual server or on a physically different database server. Due to the project budget and technical constraints the former will used by the system. [Oracle, 2014] 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Tactics and Strategies} % skipped till further notice.
 This section describes the architectural techniques which will be used in order for the system to satisfy the quality requirements. 
 
-% This section needs a lot of paraphrasing...
 \subsection{Concurrency}
-The Java Platform has always offered support for concurrent programming, which is the basis for implementing many of the services offered by Java EE containers. This is realized through the two main concepts of having a multiple threads execute under a single process, in the case of Java EE mulitple beans execute under the JVM. The number of threads that can execute under the JVM can go well beyond thousands depending on factors such as the machine the JVM is running on and how it has been configured.\\
+The Java Platform offers support for concurrent programming, which is the basis for implementing many of the services offered by Java EE containers via concurrency utilities. This is realized through the use of thread pooling, threads, queuing and scheduling strategies.(Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).\\
 
-Even though the concurrent threads will mean better performance and a scalable implementation for the system they may lead to issues that effect the reliability and integrity of the system such as:
-\begin{itemize}
-\item Deadlocks,
-\item Thread Starvation,
-\item Concurrent  accessing of shared resources, and
-\item Situations where the program generates incorrect data.
-\end{itemize}
+\subsection{Exception handling}
+To improve the robustness and reliability of the system the system employees various usages of try catch control structures and exception classes. This helps prevent system failure and improves availability. Also user friendly messages will be displayed to users using a messing framework to notify users about system failure or exceptions.
 
-To deal with these issues Java EE provides concurrent utilities that access concurrent resources via JNDI lookup or resource injection. The components in the utilities ensure that the issues mentioned above are nullified. The primary components of interest in the concurrent utilities for our system are:
-\begin{itemize}
-\item managed executor service, 
-\item managed scheduled executor service, 
-\item managed thread factory, and 
-\item context service.
-\end{itemize}
-\subsubsection{Concurrency Utilities for Java EE}
-\subsubsection{Managed Executor Service}
-A managed executor service is used by applications to execute submitted tasks asynchronously. Tasks are executed on threads that are
-started and managed by the container. The context of the container is propagated to the thread executing the task.
+\subsection{Logging}
+To improve security, audibility, reliability and maintainability the system logs exceptions and various other information such as queries and system status on a server log for later review. Thus it can be used to pinpoint bugs or attacks.
 
-For example, by using an ManagedExecutorService.submit() call, a task, such as the GenerateReportTask, could be submitted to execute at a later time and then, by using the Future object callback, retrieve the result when it becomes available ().
+\subsection{Testing framework}
+In order to satisfy reliability a testing framework will be used by the system in which unit and integration tests are designed and automatically ran at build time. To complement this a mock frame work will also be used to mock out dependencies for unit tests.
 
-\subsubsection{Managed Scheduled Executor Service}
-A managed scheduled executor service is used by applications to execute submitted tasks asynchronously at specific times. Tasks are executed on threads that are started and managed by the container. The context of the container is propagated to the thread executing the task. The API
-provides the scheduling functionality that allows users to set a specific date/time for the Task execution programmatically in the application.
+\subsection{Checkpoints and roll-backs}
+To prevent the data integrity from being compromised when storing various items to the database in single operation the system will make use of two-phase commits and a entity manager that will only commit in a single transaction once all the data has been created/removed/modified in the temporary entity graph. Thus if an error occur all changes are rolled back to the previous checkpoint.
 
-\subsubsection{Managed Thread Factory}
-A managed thread factory is used by applications to create managed threads. The threads are started and managed by the container. The context of the container is propagated to the thread executing the task. This object can also be used to provide custom factories for specific use cases (with custom Threads) and, for example, set specific/proprietary properties to these objects (Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).
+\subsection{Maintaining backups}
+To improve reliability of the system the system will allow for full backups of the entire working database to be created.
 
-\subsection{Design Patterns}
+\subsection{Interceptors}
+To improve security and audibility interceptors will be employed by the system to detect the execution of methods that are demarcated by appropriate annotations. These interceptors will process the inputs to see if the user can use the service or if it needs to be logged by system in the working database. 
+
+\subsection{Minimize access channels}
+Another step taken to improve the security of the system was to minimize the access channels to only that of the web browser interface and RESTful API. Thus allowing the focus of security implementations on those provides.
+
+
+\subsection{Design Patterns used}
+To help improve maintainability and design of the system various design patterns will be employed.
+
 \subsubsection{Builder Pattern}
 The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. The process of creating objects speeds up as well. This construction of objects in small steps decreasing coupling and makes the code more testable. The design helps improve the flexibility as well as the maintainability of the code.  
 
@@ -306,8 +307,8 @@ The Database Access Object is used by all the application calls to provide speci
 The use of DAO will help reduce the existance of object-relational impedance mismatch present in the system. It will also contribute to the flexibilty of the system. In the case where the systems underlying persistance mechanism has to change only the DAO will have to be updated and all the places in the system where the DAO was used will then remain constant.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Use of Reference Architecture and Framework}
-The core design philosophy of the Java-EE platform is to provide a Java-EE application developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of the project.
+\section{Use of Reference Architecture and frameworks}
+The core design philosophy of the Java-EE platform is to provide a Java-EE application developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system's technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of the project.
 
 \subsection{JavaServer Faces (JSF)}
 JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.\\
@@ -321,6 +322,7 @@ Java EE is based on Java which is an object-oriented language. Whereas most mode
 \item The query language
 \item ORM
 \end{itemize}
+
 \subsection{Java API for RESTful Web Services (JAX-RS)}
 The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. This will allow the system to easily be accesses by mobile and computer platforms alike and also be accessible over most companies firewalls as it will make use of the HTTPS protocol. Further this will allow for future expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
 \subsection{JUnit}
