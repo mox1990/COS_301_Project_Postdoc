@@ -13,6 +13,7 @@
 \usepackage{color}
 \usepackage{grffile}
 \usepackage{float}
+\usepackage{longtable}
 \usepackage{titlesec}
 
 \usepackage[a4paper, total={6in, 8in}]{geometry}
@@ -73,7 +74,7 @@ Mathys Ellis (12019837) \\[8em]
 %{\LARGE \bf Change log}\\[2em]
 
 \begin{center}
-\begin{tabular}{|l|p{1.4cm}|p{8cm}|p{2.8cm}|}
+\begin{longtable}{|l|p{1.4cm}|p{8cm}|p{2.8cm}|}
 \hline
 \multicolumn{4}{|c|}{\bf Change log} \\
 \hline
@@ -123,9 +124,13 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 13/08/2014 & v 2.4 & Added and updated use case diagrams and descriptions. Added and updated post conditions and also domain objects. & Mathys Ellis \\
 \hline
+02/10/2014 & v 2.5 & Added and updated use case diagrams and descriptions. Added and updated preconditions conditions. & Mathys Ellis \\
+\hline
+03/10/2014 & v 3.0 & Added and updated use case diagrams and descriptions. Added and updated preconditions and postconditions also update data flow diagrams and domain objects. Added application design section and restructured the whole document. & Mathys Ellis \\
+\hline
 
 %\end{tabbing}
-\end{tabular}
+\end{longtable}
 \end{center}
 \newpage
 \tableofcontents
@@ -1160,126 +1165,167 @@ The system will be following a object oriented approach due it being the paradig
 \newpage
 \subsection{Domain Objects}
 \subsubsection{Overview}
+This section discusses the domain objects that are required by the system in technological neutral manner. Within the system there are two types of domain objects classes: Persistent and non-persistent domain objects.
 
+\newpage
+\subsubsection{Persistent domain objects}
+These domain objects represent those domain objects that are stored in some form of persistent data store.
 \begin{figure}[H]
 \centering	
-\framebox{\includegraphics[scale=0.45]{../Images_Docs/Diagrams/DomainObjects/DomainObjects1.png}}
-\caption{Overview of the data structures and relationships for the core domain objects of the
-system.}
+\framebox{\includegraphics[scale=0.45]{../Images_Docs/Diagrams/DomainObjects/Persistent domain objects1.png}}
+\caption{Overview of the data structures and relationships for the persistent domain objects of the
+system}
 \end{figure}
 
 \newpage
-\subsubsection{Person}
+\begin{itemize}
+\item \textbf{Person}
 This object represents the stakeholders that will make use of the system. All stakeholders will have accounts which they will use to log on to the system, using a unique user id and a predefined or user specified password. The unique user id can either be a Peoplesoft Emplid number or a email address. The person has an associated \textbf{Location} and \textbf{SecurityRole}(s)
 
-\subsubsection{Department}
+\item \textbf{Department}
 This object represents the department under which a \textbf{Person} falls in the \textbf{Faculty}. This is used to if they are a \textbf{employee} or \textbf{Research fellow} at the University of Pretoria. This object will no longer be needed if the system is integrated with peoplesoft as it would cause redundancy.
 
-\subsubsection{Faculty}
+\item \textbf{Faculty}
 This object represents the faculty that may exist under an institution. It is used to map the location of a \textbf{Person}. 
 
-\subsubsection{Institution}
+\item \textbf{Institution}
 This object represents the institutions that may exist in the system. It is used to map the location of a \textbf{Person}. This allows for generic support if the software solution had to be expanded to other universities.
 
-\subsubsection{EmployeeInformation}
+\item \textbf{EmployeeInformation}
 This object represents the information regarding the employment of a \textbf{Person} at the University. It also contains the \textbf{Department} under which the \textbf{Person} falls. Also it contains the physical \textbf{Address} of the employee's office. This is made generic for software expansion support.  
 
-\subsubsection{ResearchFellowInformation}
+\item \textbf{ResearchFellowInformation}
 This object represents the CSC's or institution equivalents assigned emplid and the institution's assigned email address for an appointed \textbf{ResearchFellow}. This allows for possible future integration and better user support. Also it stores the \textbf{Department} in the institution to which the fellow was assigned to by the \textbf{DRIS}.
 
-\subsubsection{Address}
+\item \textbf{Address}
 This object represents a physical address. Thus it is used to expand and provide location details for a particular physical object or person.  
 
-\subsubsection{SecurityRole}
+\item \textbf{SecurityRole}
 This object represents a particular security role of a \textbf{Person}. A \textbf{Person} may have many different security roles. The security role can be used as a subtype discriminator for relational database architectures.
 
-\subsubsection{DRIS}
+\item \textbf{DRIS}
 This object represents members of Department of Research and Innovation Support who administers the process.
 
-\subsubsection{FundingReport}
+\item \textbf{FundingReport}
 This object represents an \textbf{Application}'s funding costs as decide per the \textbf{DRIS}. It comprises of multiple \textbf{FundingCost}s that provides the various funding inputs from various parties for the particular fund-able costs namely fellowship, travel, running, equipment, operating
 and conference.
  
-\subsubsection{FundingCost}
+\item \textbf{FundingCost}
 This object represents a particular funding input cost for a \textbf{Application} from a particular funder. 
 
-\subsubsection{DeclineReport}
+\item \textbf{DeclineReport}
 This object represents the report associated with an \textbf{Application} that has been declined by some authority. It contains the creation timestamp, \textbf{Person} responsible and the reason. Only one such report can exist per \textbf{Application}.
 
-\subsubsection{AmmendRequest}
+\item \textbf{AmmendRequest}
 This object represents a Amend request for a \textbf{Application} that is sent by some \textbf{HOD}. It contains the creation timestamp, \textbf{HOD} responsible and the reason. This is used to allow fellow to understand what is wrong with their \textbf{Application} so that they can correct it. There can be multiple such requests associated with an \textbf{Application}.
 
-\subsubsection{EligibilityReport}
+\item \textbf{EligibilityReport}
 This object represents a report associated with an \textbf{Application} that has been checked for eligibility. It contains the check timestamp and \textbf{DRIS} member responsible. It is primary used for auditing. Only one such report can exist per \textbf{Application}.
 
-\subsubsection{ForwardAndRewindReport}
+\item \textbf{ForwardAndRewindReport}
 This object represents a report associated with an \textbf{Application} that has been either forwarded or re-winded through a particular set of application stages. This is used to track such actions and the reasons for them. There can be multiple such reports associated with an \textbf{Application}. 
  
-\subsubsection{ProspectiveFellow}
+\item \textbf{ProspectiveFellow}
 This inherited object represents a prospective fellow who is a holder of a PhD obtained in the last five years (or nearing completion of a PhD) or is 40 years or younger and has a PhD. The prospective fellow can open a \textbf{NewApplication}.
 
-\subsubsection{ResearchFellow}
+\item \textbf{ResearchFellow}
 This inherited object represents a research fellow who is a currently a researcher at the University of Pretoria. This object was initially a \textbf{ProspectiveFellow}. The research fellow can apply for a \textbf{RenewalApplication} if their application falls in their renewal time frame.
 
-\subsubsection{GrantHolder}
+\item \textbf{GrantHolder}
 This inherited object represents a grant holder who can be a rated researcher by the NRF or not. The system should not require the CV's of A and B rated researchers to be added to the system. The reason for this is that the CV's of such researchers can be easily obtained from the NRF and tend to be very long. A grant holder is the supervisor for a or many \textbf{ProspectiveFellow}(s) or \textbf{ResearchFellow}(s) and owns the \textbf{Application} of the \textbf{ProspectiveFellow}(s) or \textbf{ResearchFellow}(s).
 
-\subsubsection{HOD}
+\item \textbf{HOD}
 This inherited object represents a HOD of a particular department. The HOD creates the recommendation reports for \textbf{Application}(s) they consider to meet their requirements.\\
 
-\subsubsection{HODRecommandationReport}
+\item \textbf{HODRecommandationReport}
 This inherited object represents a recommendation report highlighting the reasons to why the \textbf{Application} of a \textbf{ProspectiveFellow} or \textbf{ResearchFellow} is needed by the department.
 
-\subsubsection{Deans Office}
+\item \textbf{Deans Office}
 The Dean's office object represents the relevant faculty's Dean and Deputy Dean. The Dean's Office creates the \textbf{Endorsement} for any the \textbf{Application} that is approved by them.
 
-\subsubsection{Endorsement}
+\item \textbf{Endorsement}
 This object represents the endorsement of an \textbf{Application} of a \textbf{ProspectiveFellow} or \textbf{ResearchFellow} and contains the rank in comparison to other pending \textbf{Application}(s) with a \textbf{Endorsement}.
 
-\subsubsection{Referee}
+\item \textbf{Referee}
 This inherited object represents the referees of any \textbf{ProspectiveFellow} and is responsible for creating \textbf{RefereeReport} regarding the \textbf{ProspectiveFellow}.
 
-\subsubsection{RefereeReport}
+\item \textbf{RefereeReport}
 This object represents the referral report from an identified referee of a \textbf{ProspectiveFellow}.
 
-\subsubsection{PostDocCommittee}
+\item \textbf{PostDocCommittee}
 This inherited object represents the individual members of the post-doctoral committee who approves all available \textbf{Applications} during committee meetings and records the \textbf{Minutes} of the meeting.
 
-\subsubsection{CommitteeMeeting}
+\item \textbf{CommitteeMeeting}
 This object represents a meeting of the \textbf{PostDocCommittee} convened by the \textbf{DRIS} that will be review the \textbf{Applications} and will evaluate each. This object contains the attendance list, date and time convened and the \textbf{MinuteComment}s of the meeting.
 
-\subsubsection{MinuteComment}
+\item \textbf{MinuteComment}
 This object represents a comment made by a \textbf{PostDocCommittee} member during a \textbf{CommitteeMeeting}.
 
-\subsubsection{Application}
+\item \textbf{Application}
 This object represents an applications and will contain the information of \textbf{ProspectiveFellow} or \textbf{ResearchFellow} and \textbf{GrantHolder} who owns it. The object holds the status of the application and any project information. As well as the \textbf{HODRecommandationReport} of a \textbf{HOD} and \textbf{Endorsement} from a \textbf{DeansOffice}. It further holds the \textbf{EligibilityReport} and \textbf{FundingReport} from the \textbf{DRIS}. If the application is declined the \textbf{DeclineReport} is associated with the application. The application object can also hold multiple \textbf{AmmendRequest}s if any such requests are created. All the \textbf{ProgressReport}s created by the \textbf{ResearchFellow} are also contained in the application. Lastly if the application forwarded or re-winded then the associated \textbf{Forward rewind report}s are also contained by the application 
 
-\subsubsection{NewApplication}
+\item \textbf{NewApplication}
 This inherited object represents new application for a \textbf{ProspectiveFellow} who is currently not a fellow in the system. Also it holds any \textbf{RefereeReport}(s) that has been created for the application.
 
-\subsubsection{RenewalApplication}
+\item \textbf{RenewalApplication}
 This inherited object represents renewal application for a \textbf{ProspectiveFellow} who is a fellow in the system. Also it holds the \textbf{ProgressReport} that has been created for the application.
 
-\subsubsection{ProgressReport}
+\item \textbf{ProgressReport}
 This object represents the periodical report on the research that the \textbf{ResearchFellow} has done for the particular period in the duration of their fellowship. These reports are completed on an annual bases.
 
-\subsubsection{CV}
+\item \textbf{CV}
 This object represents a CV and contains all the information such as personal details, \textbf{AcademicQualification}(s), \textbf{Experience} regarding a \textbf{GrantHolder} or \textbf{ProspectiveFellow} in the system.
 
-\subsubsection{AcademicQualification}
+\item \textbf{AcademicQualification}
 This object represents a academic qualification and the information regarding it such as the qualification name, field, where it was obtained and when it was obtained.
 
-\subsubsection{Experience}
+\item \textbf{Experience}
 This object represents a work experience and the information regarding it such as the capacity of the work, where this work was done and when it was done.
 
-\subsubsection{Notification}
+\item \textbf{Notification}
 This object represents a email or internal message sent by a user to a user via the system. The system itself may also seen as a user with regards to the sender of such notification. It consists of the actual message, subject, timestamp and email status. 
 
-\subsubsection{AuditLog}
+\item \textbf{AuditLog}
 This object represents a audit log that stores all the actions of all users within the system. Each entry records the action, who committed the action as well as at what time the action was committed.
 
-\subsubsection{Session}
-This object represents a the details of a currently active session on the system. It contains the user (\textbf{Person}) and the link to the system's session management system's record. This object will be used through out the system for auditing and authentication. 
+
+\end{itemize}
+
+\newpage
+\subsubsection{Non-Persistent domain objects}
+These domain objects represent those domain objects that are not stored in some form of persistent data store and exist with in the runtime of the software solution.
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.65]{../Images_Docs/Diagrams/DomainObjects/Non-Persistent domain objects1.png}}
+\caption{Overview of the data structures and relationships for the non-persistent domain objects of the
+system}
+\end{figure}
+
+\newpage
+\begin{itemize}
+\item \textbf{ApplicationStageStatus}
+This object represents a stage change that has occurred for a particular \textbf{Application} which was caused by a \textbf{Person} in the system.
+
+\item \textbf{Issue}
+This object represents an outstanding issue for a particular \textbf{Person} in the system. It consist of a message and the number of such instances.
+
+\item \textbf{Session}
+This object represents a the details of a currently active session on the system. It contains the user (\textbf{Person}) and the link to the system's session management system's record. This object will be used through out the system for auditing and authentication.
+
+\item \textbf{DynamicReportCreationRequest}
+This object represents a report creation request that a \textbf{DRIS} member is making to the system. It contains all the configuration information needed to generate a report.
+
+\item \textbf{DynamicReportExportRequest}
+This object represents a report export request that a \textbf{DRIS} member is making to the system. It contains all the configuration and data information needed to generate the report to a particular format.
+
+\item \textbf{GoogleScholarQuery}
+This object represents a query that is made to the Google Scholar website by the system.
+
+\item \textbf{GoogleScholarResult}
+This object represents a result returned by one a \textbf{GoogleScholarQuery} to the Google scholar service.
+
+\end{itemize} 
 
 \newpage
 \subsection{Data flow diagrams}
@@ -1800,8 +1846,20 @@ As seen from the various functional requirements above the application covers va
 \newpage
 \subsection{Web interface font-end layer}
 \subsubsection{Summary}
-
+The front-end is a single web interface that makes use of the JSF facelet technology and Primefaces component kit in order to provide the a interactive, attractive and cohesive user interface. This layer communicates with the JSF backing bean layer through means of Java Expression language and Servelt technology as document in the Software Architecture document. Some concept and template samples for the webpage design is provided below:
+\newpage
 \subsubsection{Web page template/Style}
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.4]{../Images_Docs/Diagrams/WebsiteDesignSamples/WebsiteConceptSample1.png}}
+\caption{Website Concept Sample 1}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.4]{../Images_Docs/Diagrams/WebsiteDesignSamples/WebsiteConceptSample2.png}}
+\caption{Website Concept Sample 2}
+\end{figure}
 
 \newpage
 \subsection{JSF Backing bean layer}
@@ -1941,7 +1999,8 @@ The persistence layer is made up of three Relation MySQL databases each of which
 \end{itemize}
 
 Ideally these databases should be store on separate database services to improve redundancy and fault tolerance. Though in the current situation this is not possible due to financial constraints.\\
-In order to convert the relation entities to object representation for the EJB layer, the Eclipse Top-link JPA object relational mapper is used. As stipulated in the Software architecture document this the database can be replaced with ObjectDB if financial support is provided.
+In order to convert the relation entities to object representation for the EJB layer, the Eclipse Top-link JPA object relational mapper is used. Further to efficiently use storage space and increase maintainability of the large text data in the database certain text sections are in XML format. This string of text is converted to and from Objects using JAXB technology.  
+As stipulated in the Software architecture document this the RDBMS can be replaced with ObjectDB if financial support is provided this would increase the performance, maintainability and cohesiveness of the data structures in the persistence layer.
 \newpage
 \subsubsection{ERD diagram of database}
 \begin{figure}[H]
