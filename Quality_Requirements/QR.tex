@@ -1,4 +1,4 @@
-These are the quality requirements as specified by the client and are also in the order of precedence. Where the first takes the highest precedence.
+This section discuses the quality requirements as specified by the client and are also in the order of precedence. Where the first takes the highest precedence.
 
 \subsubsection{Usability requirements}
 
@@ -7,7 +7,7 @@ These are the quality requirements as specified by the client and are also in th
 
 \textbf{Requirement}
 
-This is first and foremost quality requirement stipulated by the client. The primary language of the system will be South African English. Any other language support is not considered part of the requirements but the system will be designed to allow for such development in the future.\\
+This is first and foremost quality requirement stipulated by the client. The primary language of the system will be South African English. Any other language support is not considered part of the requirement but the system will be designed to allow for such development in the future via internationalisation.\\
 
 \vspace{0.1in}
 
@@ -17,7 +17,7 @@ The system's UI will only consider 2 types of user categories with regard to usa
 
 \item\textbf{Trained user:}
 
-This type of user will need to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. These user will be regarded as system administrators or specialised users of the system. The stakeholders who fall under this category is the DRIS staff members overseeing the application process and any technical or maintenance support users.
+This type of user will need to have training in understanding how the system functions and how to use it. Their computer skills will be assumed to be in the range of basic to intermediate. Thus the user interface can allow for certain complexities but these complexities must be kept at a minimal. These users will be regarded as system administrators or specialised users of the system. The stakeholders who fall under this category is the DRIS staff members overseeing the application process and any technical or maintenance support users.
 
 \item\textbf{Normal user:}
 
@@ -25,17 +25,13 @@ This type of user will have no training with regard to the system. Their compute
 
 \end{itemize}
 
-In order to quantify the above the SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. A further quantification of this requirement can be seen as finding the least number of clicks a user has to perform in order to perform any operation. Thus to meet this requirement local tasks should take a maximum of five clicks and distant tasks should take up to a maximum of 8 clicks. Where local refers to tasks that are related to the current section being accessed by a user within the system. These clicks should not include the clicks need to enter various lengthy form data. Distant task being those task outside the current section a user finds themselves within a system.
-%\vspace{0.1in}
-%
-%\textbf{Improvement} %Benefits to the systems
-%
-%All the normal users interacting with the UI should be able to use it intuitively. 
+The above is quantified as follows: The SoftServe group will need to provide the system with a uniform user experience that is as simplistic and as visually oriented as possible without negating the below requirements severely. In addition to this any form of help text or instruction should be written in as natural, uncomplicated and unambiguous manner as possible. A further quantification of this requirement can be seen as finding the least number of clicks a user has to perform in order to perform any operation. Thus to meet this requirement local tasks should take a maximum of five clicks and distant tasks should take up to a maximum of 8 clicks. Where local refers to tasks that are related to the current section being accessed by a user within the system. These clicks should not include the clicks need to enter various lengthy form data. Distant task being those task outside the current section a user finds themselves within a system.
+ 
 \vspace{0.1in}
 
 \textbf{Trade Offs}
 
-Since the system will be interacting with an imense amount of users whom will only be using it for short periods of time and at a very low frequency, security assurance will be compromised by having the restrictions on the clicks per task and catering for the needs of the normal user. This means that certain security routines, mainting a record of all beings that act on the system, cannot be implemented within the system. %As a conseqeunce, the robustness of the system is being diluted. 
+A prominent trade off of this requirement is the security of the system as the more usable the system becomes the less authentication factors can be used. Also the more simplified the UI becomes the more abstraction is require thus supporting back becomes more complicated thus reducing maintainability and increasing possible chances for errors and security vulnerabilities. Also usability requires efficient performance thus reducing the ability audit everything.
 \end{flushleft}
 
 \subsubsection{Security requirements}
@@ -45,15 +41,15 @@ Since the system will be interacting with an imense amount of users whom will on
 
 \textbf{Requirement}
 
-The system will need to be fully secured since it deals with confidential information such as personal information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and auditable application and renewal process flow the system may not be vulnerable to data tampering or any tampering whatsoever.\\
+The system will need to be fully secured since it deals with confidential information such as personal information, application statuses, financial data and meeting information. Also since the systems main goal is to provide stable and audit-able environment for prospective and renewal application processes the system may not be vulnerable to data tampering or any tampering whatsoever.\\
 \vspace{0.1in}
 
 The system will have to provide different security roles to the registered users on the system. Any number of roles should be assignable to any user by a system administrator to allow for flexibility.\\
 There will also need to be predefined roles so to allow a stakeholder from list of stakeholders in the vision and scope document, to only have the ability and access to perform the actions as defined by the vision and scope document.\\
 The system administrator should be able to access all the sections in the system and should be able to modify them except where only the system itself has that right.\\
 Another security requirement is that the audit trail must not be allowed to be modified by any human user and only allow the system to be able to insert data into the audit log. Further the audit table should only be query-able by a user with the correct security role.\\
-To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. When a user attempts to make an unauthorized action, the execution of that action will be halted and a message will be shown to the user, through the UI, that they are unauthoried to make that action.\\
-Any form of account retrieval token or on-demand user account creation tokens must expire within a specified time period. For account retrieval token this should be 1 hour. For on-demand user account creation this should be about 2 days. Once this time has expired the time will be unusable in the system. Failed user actions will not be logged in the audit trail.
+To further quantify this requirement the system must provide some means of a centralised user authentication that acts as a gateway for all users of the system. Also every time some action is made by the user the user needs to be re-authenticated to insure that the user does have the correct privileges and if any user account changes where made it takes immediate affect. When a user attempts to make an unauthorized action, the execution of that action will be halted and a message will be shown to the user, through the UI, that they are unauthorised to make that action.\\
+Failed user actions will not be logged in the audit trail. SQL injection must be prevented. Also the services should be mutually suspecting of each other and assume the philosophy of least privilege.
 \vspace{0.1in}
 
 %\textbf{Improvement} %Benefits to the systems
@@ -63,7 +59,7 @@ Any form of account retrieval token or on-demand user account creation tokens mu
 
 \textbf{Trade Offs}
 
-This requirement will influence the usability requirement negativitly as  the more secure a system becomes the less user friendly it is, this is so because there will be need for more user forms and interactions. Since userbility is of higher proirty then security the impact of this requirement must be minimized as much as possible. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated while mainting the sort after usability requirement. Further this requirement will also negatively impact performance as it will result on more code command execution per action that needs to be secured.
+This requirement will influence the usability requirement negativity as the more secure a system becomes the less user friendly it is, this is so because there will be need for more user forms and interactions. Since Usability is of higher precedence then security the impact of this requirement must be minimized as much as possible. Therefore the SoftServe group will try to balance the two requirements in such a way that neither of the two is negated while maintaining the sort after usability and security requirement. Further this requirement will also negatively impact performance as it will result on more code execution per action that needs to be secured.
 \end{flushleft}
 
 \vspace{0.1in}
@@ -79,15 +75,11 @@ This is seen as the third most important requirement according to the client. Th
 
 To quantify this requirement, the system will need to have an active audit log that can capture all the actions, that meet the list of critical actions, of each user that uses the system. With regards to usability, the feature needs to run in the background and not be noticeable by any user while they are using the system except if it is deliberately queried.
 \vspace{0.1in}
-%
-%\textbf{Improvement} %Benefits to the systems
-%
-%The 
-%\vspace{0.1in}
+
 
 \textbf{Trade Offs}
 
-This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. To combat this overhead the audit logging action should be made as light weight as possible. Also adequate storage will be needed since such entries can easily grow exponentially which can lead to availability and other performance issues.  
+This requirement will have a negative impact on performance as it will be adding more overhead the executions of audit-able actions. But since not all the actions are audit-able it should not have a to significant impact. To combat this overhead the audit logging action should be made as light weight as possible. Also adequate storage will be needed since such entries can easily grow exponentially which can lead to a degradation of availability and other performance issues.  
 
 \vspace{0.1in}
 
@@ -108,7 +100,7 @@ The system needs to be scalable with regards to the following factors:
 \begin{itemize}
 
 \item\textbf{Performance:} This aspect of the system regards the speed and responsiveness of the system.
-The system needs to handle large report queries in less than 10 seconds. It should be able to handle any application approval service processing in less than 3 seconds. It should be able to send emails instantly from the system side. Note this may be difficult to measure due internet bandwidth and receiving mail server constraints. Login, logout and user authentication should be handled in less then a second by the system this does not  considering the transfer of data to and from the server which is depended on the network connection speed.\\
+The system needs to handle large report queries in less than 10 seconds. It should be able to handle any application approval service processing in less than 3 seconds. It should be able to send emails instantly from the system side. Note this may be difficult to measure due internet bandwidth and receiving mail server constraints. Login, logout and user authentication should be handled in less then a second by the system this does not considering the transfer of data to and from the server which is depended on the network connection speed.\\
 
 \item\textbf{Storage:} This aspect of the system regards the growth and shrinking of the data that is stored by the system.
 The system will need to be able to handle a database that is in the range of 1 GB to 15 GB that has the potential to grow even larger. The reason for this stems from the fact that the system will need to store a large amount of active data over a period of about 3 to 8 years before it can be archived.
@@ -132,8 +124,7 @@ The system will need to support at least 100+/- concurrent users efficiently and
 
 \textbf{Trade Offs}
 
-
-This requirement will require that the code undergo optimization and as well as certain functionality which can reduce the maintain-ability of the code itself also it can lead to reduction in terms of system robustness.
+This requirement will require that the code undergo optimization and as well as certain functionality which can reduce the maintain-ability of the code itself. It can also lead to reduction of system robustness.
 
 \end{flushleft}
 \vspace{0.1in}
@@ -151,8 +142,7 @@ In order to quantify this it should be seen as follows: If the hosting service's
 
 \textbf{Trade Offs}
 
-% This trade off is questionable...
-This requirement directly impacts on the scalabilty of the system. Even though it is meant to cater for a relatively small number of applications (50 to 500 per year) when compared to what the techonolgy allows to compute, the system should still be able to withstand a sudden influx in request and not be rendered unavailible when such happens.
+Due to the independences of the requirement it does not directly impact other requirements, but the availability as described above will expose the system to the outside world. Thus increasing the risk of attacks. Also if the system is not scalable then a sudden influx of information exchange due to its availability will cause the system to degrade or even fail.  
 
 \vspace{0.1in}
 %Say something about the trade off of avaibility
@@ -165,7 +155,7 @@ This requirement directly impacts on the scalabilty of the system. Even though i
 
 \textbf{Requirement}
 
-This requirement was identified by the SoftServe group as being very important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in terms of its data validation routines, data storage routines, security routines, and system integrity checks. 
+This requirement was identified by the SoftServe group as important since the system will be receiving and handling large amounts of sensitive data. Thus the integrity of the data must be insured. To do this the system needs to be robust in terms of its data validation routines, data storage routines, security routines, and system integrity checks. 
 
 These four aspects of robustness are quantified as follow:
 \begin{itemize}
@@ -178,9 +168,10 @@ These four aspects of robustness are quantified as follow:
 
 \textbf{Trade Offs}
 
-This requirement might have an effect on the scalability requirement of the system. As specified above, request should be handled in a timily manner and this requirement will take up amounts from the reponse time.
+This requirement might have an effect on the scalability requirement of the system. As specified above, request should be handled in a timely manner and this requirement will increase the responses time of commands. It will also complicate the code hence reducing maintainability and performance of the system.
 \vspace{0.1in}
 \end{flushleft}
+\newpage
 \subsubsection{Testability:}
 
 \begin{flushleft}
@@ -224,6 +215,7 @@ User acceptance testing will test the whole system in regard to:
 
 \end{flushleft}
 
+\newpage
 \subsubsection{Flexibility:}
 
 \begin{flushleft}
@@ -235,7 +227,7 @@ The system should be designed in such a way that adding new features can be done
 \vspace{0.1in}
 
 \textbf{Trade Offs}
-This requirement will lead to an increase in complexity as implementing some of the design patterns will still require satisfying the large set of requirments.
+This requirement will lead to an increase in complexity as implementing some of the design patterns will still require satisfying the large set of requirements.
 
 \vspace{0.1in}
 
@@ -264,10 +256,13 @@ The system's components should be designed in such away that they can be reused 
 
 \textbf{Requirement}
 
-The system should be maintainable in regards to 2 aspects: 
+The system should be maintainable in regards to 3 aspects: 
 \begin{itemize}
+\item \textbf{Work-flow and persistence maintainability}: This aspect deals with structure of the application work-flow with regards to it adapting to change. Also it deals with the underlying persistence layer and how adaptable and flexible it is. The work-flow should allow for customizable pre and post conditions for application stages that can be changed with out recompiling or redeploying the application. The system will not employ a work-flow engine as it expects that the application processes will have to be manually reprogrammed and redeployed in the form of patches since the client has stipulated that the application process changes seldom and if it does it does not change greatly. As with regards persistence storage the data store needs to support excellent schema evolution and provide support for complex real world items and relations.
 \item \textbf{System housekeeping}: This aspect revolves around the actually administration of the system once it is deployed. The system should prevent the system administrator from unnecessary worrying about automated tasks. But the system should allow the system administrator to be able to manage user data, perform backups manually, archival routines and system configuration manually. 
 \item \textbf{System development}: This aspect revolves around the developers of the software. The system must be developed in such a way that the source code is easy to maintain and highly readable such that debugging and patching difficulty can be reduced. Also this ensures that the code can easily be given to a third party if need be. The coding documentation standard that must be adhered is that stipulated by the JavaDoc standard. The coding style convention must be defined in such away that the code is easy to read and structured in a logical manner. The identifiers used must be named appropriately and must follow the camelCase standard except where the identifiers are constants in which case the entire name will be in capital letters. The style suggested is a variant of the Allman style:
+\newpage
+\textbf{Coding style sample:}\\
 \begin{lstlisting}
 public void run()
 {
@@ -292,6 +287,7 @@ public void run()
 	}
 }
 \end{lstlisting}
+
 \end{itemize}
 
 
