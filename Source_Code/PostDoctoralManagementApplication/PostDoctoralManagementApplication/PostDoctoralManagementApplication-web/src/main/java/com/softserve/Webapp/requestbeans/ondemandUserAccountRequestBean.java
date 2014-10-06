@@ -9,7 +9,7 @@ package com.softserve.Webapp.requestbeans;
 import com.softserve.DBEntities.Person;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.MessageUtil;
-import com.softserve.ejb.UserAccountManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;

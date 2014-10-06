@@ -12,7 +12,7 @@ import com.softserve.HTTPScrapers.GoogleScholarQuery;
 import com.softserve.HTTPScrapers.GoogleScholarResult;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.GoogleScholarServicesLocal;
+import com.softserve.ejb.nonapplicationservices.GoogleScholarServicesLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;

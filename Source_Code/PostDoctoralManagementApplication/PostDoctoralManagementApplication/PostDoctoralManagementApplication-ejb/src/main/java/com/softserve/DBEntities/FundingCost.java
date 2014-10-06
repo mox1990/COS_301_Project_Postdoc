@@ -48,7 +48,7 @@ public class FundingCost implements Serializable {
     @Size(max = 100)
     @Column(name = "_provider")
     private String provider;
-    @Size(max = 11)
+    @Size(max = 40)
     @Column(name = "_type")
     private String type;
     @JoinColumn(name = "_fundingReport", referencedColumnName = "_reportID")

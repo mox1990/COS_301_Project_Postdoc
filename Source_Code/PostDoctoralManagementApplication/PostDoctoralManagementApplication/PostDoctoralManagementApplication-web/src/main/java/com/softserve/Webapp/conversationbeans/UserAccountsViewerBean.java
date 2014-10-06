@@ -13,7 +13,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.UserAccountManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.lang.Exception;
 import java.util.ArrayList;

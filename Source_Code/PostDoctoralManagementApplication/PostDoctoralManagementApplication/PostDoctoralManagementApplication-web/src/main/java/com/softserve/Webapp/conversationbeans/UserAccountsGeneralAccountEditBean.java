@@ -18,8 +18,8 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.LocationManagementServiceLocal;
-import com.softserve.ejb.UserAccountManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.LocationManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +56,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     @EJB
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
+    private String password;
     private String reTypePassword;
     private Person person;
     private Address address;
@@ -176,6 +177,14 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
         return isSystemAdmin;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+        
     public String getReTypePassword() {
         return reTypePassword;
     }
@@ -196,9 +205,15 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
     {
         try 
         {
-            if(!reTypePassword.equals(person.getPassword()))
+            
+            if(!reTypePassword.equals(password))
             {
                 throw new Exception("Passwords do not match");
+            }
+            
+            if(!reTypePassword.equals(""))
+            {
+                person.setPassword(password);
             }
             
             if(isSystemAdmin)

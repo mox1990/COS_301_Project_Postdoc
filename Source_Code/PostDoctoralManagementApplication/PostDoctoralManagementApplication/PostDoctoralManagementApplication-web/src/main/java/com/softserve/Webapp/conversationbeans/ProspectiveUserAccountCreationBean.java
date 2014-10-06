@@ -18,7 +18,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.UserAccountManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
@@ -53,6 +53,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
     
     private String reTypePassword;
+    private String password;
     private Person person;
     private Address address;
     private EmployeeInformation employeeInformation;
@@ -129,15 +130,25 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
     public void setLocationFinderDependBean(LocationFinderDependBean locationFinderDependBean) {
         this.locationFinderDependBean = locationFinderDependBean;
     }
-    
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+            
     public String performProspectiveFellowUserAccountCreation()
     {        
         try 
         {
-            if(!reTypePassword.equals(person.getPassword()))
+            if(!reTypePassword.equals(password))
             {
                 throw new Exception("Passwords do not match");
             }
+            
+            person.setPassword(password);
             
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
             person.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
@@ -159,7 +170,7 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
                 userAccountManagementServiceLocal.createUserAccount(sessionManagerBean.getSystemLevelSession(), false, person);            
             }
             
-            String outcome = sessionManagerBean.login(person.getSystemID(), person.getPassword());
+            String outcome = sessionManagerBean.login(person.getSystemID(), password);
             conversationManagerBean.deregisterConversation(conversation);
             return outcome;
         }

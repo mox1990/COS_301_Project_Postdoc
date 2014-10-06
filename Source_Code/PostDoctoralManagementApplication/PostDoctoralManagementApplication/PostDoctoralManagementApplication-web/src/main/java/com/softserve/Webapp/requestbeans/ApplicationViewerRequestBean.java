@@ -13,7 +13,7 @@ import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
-import com.softserve.ejb.HODRecommendationServices;
+import com.softserve.ejb.applicationservices.HODRecommendationServices;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

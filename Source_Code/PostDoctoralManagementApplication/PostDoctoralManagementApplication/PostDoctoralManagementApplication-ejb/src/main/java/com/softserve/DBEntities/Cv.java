@@ -76,7 +76,7 @@ public class Cv implements Serializable {
     @Column(name = "_dateOfBirth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-    @Size(max = 6)
+    @Size(max = 40)
     @Column(name = "_gender")
     private String gender;
     @Size(max = 100)

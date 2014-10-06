@@ -8,8 +8,8 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.DAOFactory;
-import com.softserve.ejb.ApplicationProgressViewerService;
-import com.softserve.ejb.UserGateway;
+import com.softserve.ejb.applicationservices.ApplicationProgressViewerService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;

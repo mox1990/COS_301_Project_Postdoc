@@ -14,7 +14,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.ArchivalServiceLocal;
+import com.softserve.ejb.nonapplicationservices.ArchivalServiceLocal;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
 

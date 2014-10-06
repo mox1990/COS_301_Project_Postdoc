@@ -62,7 +62,7 @@ public class Person implements Serializable {
     private String systemID;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 130)
     @Column(name = "_password")
     private String password;
     @Basic(optional = false)
@@ -113,7 +113,7 @@ public class Person implements Serializable {
     @JoinTable(name = "referee_application", joinColumns = {
         @JoinColumn(name = "_refereeID", referencedColumnName = "_systemID")}, inverseJoinColumns = {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Application> applicationList;
     @ManyToMany(mappedBy = "personList")
     private List<CommitteeMeeting> committeeMeetingList;
@@ -145,12 +145,12 @@ public class Person implements Serializable {
     private List<FundingReport> fundingReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private Cv cv;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fellow", fetch = FetchType.EAGER)
     private List<Application> applicationList1;
-    @OneToMany(mappedBy = "grantHolder")
+    @OneToMany(mappedBy = "grantHolder", fetch = FetchType.EAGER)
     private List<Application> applicationList2;
     @JoinColumn(name = "_addressLine1", referencedColumnName = "_addressID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Address addressLine1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendee")
     private List<MinuteComment> minuteCommentList;

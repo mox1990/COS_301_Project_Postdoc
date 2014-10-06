@@ -8,7 +8,7 @@ package test.softserve.EJBUnitTests;
 
 import com.softserve.DBDAO.AuditLogJpaController;
 import com.softserve.DBEntities.AuditLog;
-import com.softserve.ejb.AuditTrailServiceLocal;
+import com.softserve.ejb.nonapplicationservices.AuditTrailServiceLocal;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;

@@ -57,6 +57,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Application.findByEndDate", query = "SELECT a FROM Application a WHERE a.endDate = :endDate"),
     @NamedQuery(name = "Application.findByProjectTitle", query = "SELECT a FROM Application a WHERE a.projectTitle = :projectTitle")})
 public class Application implements Serializable {
+    @Column(name = "_imported")
+    private Boolean imported;
+    @OneToMany(mappedBy = "parentApplication")
+    private List<Application> applicationList;
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -412,6 +416,23 @@ public class Application implements Serializable {
 
     public void setChildApplication(Application childApplication) {
         this.childApplication = childApplication;
+    }
+
+    public Boolean getImported() {
+        return imported;
+    }
+
+    public void setImported(Boolean imported) {
+        this.imported = imported;
+    }
+
+    @XmlTransient
+    public List<Application> getApplicationList() {
+        return applicationList;
+    }
+
+    public void setApplicationList(List<Application> applicationList) {
+        this.applicationList = applicationList;
     }
     
     

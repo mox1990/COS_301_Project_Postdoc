@@ -16,7 +16,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.GrantHolderFinalisationServiceLocal;
+import com.softserve.ejb.applicationservices.GrantHolderFinalisationServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;

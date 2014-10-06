@@ -7,7 +7,7 @@
 package com.softserve.constants;
 
 import com.softserve.DBEntities.SecurityRole;
-import com.softserve.ejb.UserAccountManagementService;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

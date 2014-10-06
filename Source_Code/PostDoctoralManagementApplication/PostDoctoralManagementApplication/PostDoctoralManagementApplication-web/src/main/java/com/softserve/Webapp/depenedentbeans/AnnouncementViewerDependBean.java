@@ -8,7 +8,7 @@ package com.softserve.Webapp.depenedentbeans;
 
 import com.softserve.DBEntities.Announcement;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.AnnouncementManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.AnnouncementManagementServiceLocal;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;

@@ -12,11 +12,11 @@ import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.CvJpaController;
 import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.ejb.AuditTrailService;
-import com.softserve.ejb.CVManagementService;
-import com.softserve.ejb.NewApplicationService;
-import com.softserve.ejb.NotificationService;
-import com.softserve.ejb.UserGateway;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.applicationservices.CVManagementService;
+import com.softserve.ejb.applicationservices.NewApplicationService;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import javax.persistence.EntityManager;
 

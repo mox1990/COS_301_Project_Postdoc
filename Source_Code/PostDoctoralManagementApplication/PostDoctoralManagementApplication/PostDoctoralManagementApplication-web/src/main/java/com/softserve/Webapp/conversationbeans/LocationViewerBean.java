@@ -14,7 +14,7 @@ import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.LocationManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.LocationManagementServiceLocal;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;

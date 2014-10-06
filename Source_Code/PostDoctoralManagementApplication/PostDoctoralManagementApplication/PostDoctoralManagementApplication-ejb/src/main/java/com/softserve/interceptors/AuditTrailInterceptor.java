@@ -9,7 +9,7 @@ package com.softserve.interceptors;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
-import com.softserve.ejb.AuditTrailServiceLocal;
+import com.softserve.ejb.nonapplicationservices.AuditTrailServiceLocal;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import javax.ejb.EJB;

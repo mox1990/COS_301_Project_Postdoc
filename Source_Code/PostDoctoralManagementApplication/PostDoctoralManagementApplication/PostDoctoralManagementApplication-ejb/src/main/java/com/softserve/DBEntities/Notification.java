@@ -55,7 +55,7 @@ public class Notification implements Serializable {
     @Size(max = 65535)
     @Column(name = "_message")
     private String message;
-    @Size(max = 8)
+    @Size(max = 40)
     @Column(name = "_emailStatus")
     private String emailStatus;
     @Column(name = "_emailRetryCount")

@@ -9,7 +9,7 @@ package test.softserve.EJBUnitTests;
 import com.softserve.DBDAO.NotificationJpaController;
 import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
-import com.softserve.ejb.NotificationServiceLocal;
+import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;

@@ -34,7 +34,7 @@ import com.softserve.DBDAO.RecommendationReportJpaController;
 import com.softserve.DBDAO.RefereeReportJpaController;
 import com.softserve.DBDAO.ResearchFellowInformationJpaController;
 import com.softserve.DBDAO.SecurityRoleJpaController;
-import com.softserve.ejb.ArchivalService;
+import com.softserve.ejb.nonapplicationservices.ArchivalService;
 import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.transactioncontrollers.TransactionController;
 import javax.persistence.EntityManager;

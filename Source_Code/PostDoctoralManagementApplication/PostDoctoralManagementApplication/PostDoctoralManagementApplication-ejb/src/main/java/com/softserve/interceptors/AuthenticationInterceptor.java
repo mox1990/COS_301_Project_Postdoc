@@ -14,7 +14,7 @@ import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.annotations.SecuredMethod;
-import com.softserve.ejb.UserGatewayLocal;
+import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import javax.ejb.EJB;

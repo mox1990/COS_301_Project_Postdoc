@@ -6,12 +6,12 @@
 
 package com.softserve.Webapp.sessionbeans;
 
+import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.Webapp.util.StorageItem;
 import com.softserve.auxillary.Hashing;
-import com.softserve.ejb.*;
 import com.softserve.system.Session;
 import java.io.IOException;
 import java.io.Serializable;
@@ -74,9 +74,12 @@ public class SessionManagerBean implements Serializable {
         {
             Session session = userGateway.getSessionFromHttpSession(httpSession);
         
-            System.out.println("Test " + httpSession.getAttribute("username"));
+            System.out.println("Login: " + httpSession.toString());
             
             userGateway.login(session);
+            
+            System.out.println("Login: Account status = " + session.getUser().getAccountStatus());
+            
             if(session.isUserAccountDorment())
             {
                 return navigationManagerBean.goToUserAccountManagementServicesOnDemandUserActivationView();
@@ -93,7 +96,6 @@ public class SessionManagerBean implements Serializable {
         }
         catch(Exception ex)
         {
-            System.out.println("Login exception");
             ExceptionUtil.logException(SessionManagerBean.class, ex);
             ExceptionUtil.handleException(null, ex);
             return "";
@@ -121,14 +123,7 @@ public class SessionManagerBean implements Serializable {
     {
         HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
-        if(httpSession == null)
-        {
-            httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(true));
-            httpSession.setAttribute("username","");
-            httpSession.setAttribute("password","");
-            httpSession.setAttribute("status", Boolean.FALSE);
-        }
-        else
+        if(httpSession != null)
         {
             if(httpSession.getAttribute("status") != null && httpSession.getAttribute("status").equals(Boolean.TRUE))
             {
@@ -153,7 +148,6 @@ public class SessionManagerBean implements Serializable {
     public Session getSystemLevelSessionForCurrentSession() throws Exception
     {        
         Session session = getSession();
-        System.out.println("The problem might be here...");
         return new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE);
     }
     

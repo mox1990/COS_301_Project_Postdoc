@@ -16,7 +16,7 @@ import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.auxillary.DynamicReportCreationRequest;
 import com.softserve.auxillary.DynamicReportExportRequest;
 import com.softserve.auxillary.SelectedColumn;
-import com.softserve.ejb.ReportServicesLocal;
+import com.softserve.ejb.nonapplicationservices.ReportServicesLocal;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;

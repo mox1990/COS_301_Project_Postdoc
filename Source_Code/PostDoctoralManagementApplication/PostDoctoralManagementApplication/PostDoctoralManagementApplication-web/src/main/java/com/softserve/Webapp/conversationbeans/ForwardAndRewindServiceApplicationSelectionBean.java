@@ -12,7 +12,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.ForwardAndRewindServicesLocal;
+import com.softserve.ejb.applicationservices.ForwardAndRewindServicesLocal;
 import com.softserve.system.ApplicationServicesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;

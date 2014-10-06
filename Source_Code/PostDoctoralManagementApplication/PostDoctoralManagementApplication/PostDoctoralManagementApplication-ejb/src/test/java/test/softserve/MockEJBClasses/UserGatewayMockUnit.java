@@ -9,8 +9,8 @@ package test.softserve.MockEJBClasses;
 import com.softserve.DBDAO.AddressJpaController;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.EmployeeInformationJpaController;
-import com.softserve.ejb.AuditTrailService;
-import com.softserve.ejb.UserGateway;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 

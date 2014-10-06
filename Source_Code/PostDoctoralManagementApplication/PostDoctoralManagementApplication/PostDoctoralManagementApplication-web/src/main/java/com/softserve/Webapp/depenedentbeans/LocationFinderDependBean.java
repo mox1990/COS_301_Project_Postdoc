@@ -9,7 +9,7 @@ package com.softserve.Webapp.depenedentbeans;
 import com.softserve.DBEntities.Department;
 import com.softserve.DBEntities.Faculty;
 import com.softserve.DBEntities.Institution;
-import com.softserve.ejb.LocationManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.LocationManagementServiceLocal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

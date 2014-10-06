@@ -7,10 +7,10 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.DBDAO.*;
-import com.softserve.ejb.AuditTrailService;
-import com.softserve.ejb.NotificationService;
-import com.softserve.ejb.UserAccountManagementService;
-import com.softserve.ejb.UserGateway;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.system.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 

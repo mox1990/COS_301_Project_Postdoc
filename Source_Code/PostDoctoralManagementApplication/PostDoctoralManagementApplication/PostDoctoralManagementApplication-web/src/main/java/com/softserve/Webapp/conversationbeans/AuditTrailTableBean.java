@@ -11,7 +11,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.AuditTrailServiceLocal;
+import com.softserve.ejb.nonapplicationservices.AuditTrailServiceLocal;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;

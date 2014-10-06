@@ -63,7 +63,7 @@ CREATE TABLE person (
 	_cellphoneNumber CHAR(20),	
 	_addressLine1 BIGINT UNSIGNED,
 	_upEmployee BOOLEAN NOT NULL,
-	_accountStatus ENUM('Active', 'Pending', 'Disabled', 'Dorment'),
+	_accountStatus VARCHAR(40),
 	
 	
 	PRIMARY KEY (_systemID),	
@@ -116,7 +116,7 @@ CREATE TABLE notification (
 	_notificationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	_subject VARCHAR(200),
 	_message TEXT,
-	_emailStatus ENUM('Sent', 'Queued', 'Failed', 'Disabled'),
+	_emailStatus VARCHAR(40),
 	_emailRetryCount INT,
 	_timestamp DATETIME NOT NULL,
 	_sender CHAR(9),
@@ -131,9 +131,10 @@ CREATE TABLE notification (
 
 CREATE TABLE application (
     _applicationID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    _type ENUM('New', 'Renewal'),
-    _status ENUM('Open', 'Submitted', 'Declined', 'Referred', 'Finalised', 'Recommended', 'Endorsed', 'Eligible', 'Funded', 'Completed', 'Terminated'),
-	_fundingType ENUM('UP PhD Postdoc', 'UP Postdoc', 'Externally funded'),
+    _imported BOOLEAN, 
+	_type VARCHAR(40),
+    _status VARCHAR(40),
+	_fundingType VARCHAR(40),
     _timestamp DATETIME NOT NULL,
 	_submissionDate DATETIME,
     _finalisationDate DATETIME,    
@@ -153,7 +154,7 @@ CREATE TABLE application (
 CREATE TABLE application_review_request (
 	_person CHAR(9) NOT NULL,
 	_application BIGINT UNSIGNED NOT NULL,
-	_type ENUM('HOD','DEAN'),
+	_type VARCHAR(40),
 
 	PRIMARY KEY (_person, _application, _type),
 	FOREIGN KEY (_person) REFERENCES person(_systemID),
@@ -228,7 +229,7 @@ CREATE TABLE funding_cost (
 	_fundingReport BIGINT UNSIGNED NOT NULL,
 	_amount FLOAT,
 	_provider VARCHAR(100),
-	_type ENUM('Fellowship','Running','Travel','Equipment','Operating','Conference'),
+	_type VARCHAR(40),
 
 	PRIMARY KEY (_costID),
 	FOREIGN KEY (_fundingReport) REFERENCES funding_report(_reportID)
@@ -242,12 +243,6 @@ CREATE TABLE referee_application (
 	FOREIGN KEY (_refereeID) REFERENCES person(_systemID),
 	FOREIGN KEY (_applicationID) REFERENCES application(_applicationID)
 ) ENGINE=InnoDB;
-#CREATE TABLE NEW_applicationS (
-#	_applicationID BIGINT UNSIGNED NOT NULL,
-#	
-#	PRIMARY KEY (_applicationID),
-#	FOREIGN KEY (_applicationID) REFERENCES applicationS(_applicationID)
-#);
 
 CREATE TABLE referee_report (
 	_reportID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -276,22 +271,15 @@ CREATE TABLE forward_and_rewind_report (
 	_application BIGINT UNSIGNED NOT NULL,
 	_dris CHAR(9) NOT NULL,
 	_timestamp DATETIME NOT NULL,
-	_type ENUM('Forward', 'Rewind') NOT NULL,
+	_type VARCHAR(40) NOT NULL,
 	_reason TEXT,
-	_fromStatus ENUM('Open', 'Submitted', 'Declined', 'Referred', 'Finalised', 'Recommended', 'Endorsed', 'Eligible', 'Funded', 'Completed', 'Terminated'),
-	_toStatus ENUM('Open', 'Submitted', 'Declined', 'Referred', 'Finalised', 'Recommended', 'Endorsed', 'Eligible', 'Funded', 'Completed', 'Terminated'),
+	_fromStatus VARCHAR(40),
+	_toStatus VARCHAR(40),
 
 	PRIMARY KEY (_reportID),
 	FOREIGN KEY (_application) REFERENCES application(_applicationID),
 	FOREIGN KEY (_dris) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
-
-#CREATE TABLE RENEWAL_applicationS (
-#	_applicationID BIGINT UNSIGNED NOT NULL,
-	
-#	PRIMARY KEY (_applicationID),
-#	FOREIGN KEY (_applicationID) REFERENCES applicationS(_applicationID)
-#);
 
 CREATE TABLE committee_meeting (
 	_meetingID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -316,24 +304,6 @@ CREATE TABLE minute_comment (
 	FOREIGN KEY (_meeting) REFERENCES committee_meeting(_meetingID),
 	FOREIGN KEY (_attendee) REFERENCES person(_systemID)
 ) ENGINE=InnoDB;
-
-#CREATE TABLE NEW_applicationS_COMMITT_MEETINGS (
-#	_meetingID BIGINT UNSIGNED NOT NULL,
-#	_newApplicationID BIGINT UNSIGNED NOT NULL,
-#	
-#	PRIMARY KEY (_meetingID, _newApplicationID),
-#	FOREIGN KEY (_meetingID) REFERENCES committee_meetingS(_meetingID),
-#	FOREIGN KEY (_newApplicationID) REFERENCES NEW_applicationS(_applicationID)
-#);
-
-#CREATE TABLE RENEWAL_applicationS_COMMITT_MEETINGS (
-#	_meetingID BIGINT UNSIGNED NOT NULL,
-#	_renewalApplicationID BIGINT UNSIGNED NOT NULL,
-	
-#	PRIMARY KEY (_meetingID, _renewalApplicationID),
-#	FOREIGN KEY (_meetingID) REFERENCES committee_meetingS(_meetingID),
-#	FOREIGN KEY (_renewalApplicationID) REFERENCES RENEWAL_applicationS(_applicationID)
-#);
 
 CREATE TABLE attendence_list (	
 	_meetingID BIGINT UNSIGNED NOT NULL,
@@ -368,7 +338,7 @@ CREATE TABLE cv (
 	_cvID CHAR(9) NOT NULL,
 	_idNumber CHAR(30) NOT NULL,
 	_dateOfBirth DATE NOT NULL,
-	_gender ENUM('Male','Female','Other'),
+	_gender VARCHAR(40),
 	_citizenship VARCHAR(100),
 	_nrfRating CHAR(4),
 	_race CHAR(20),
@@ -446,7 +416,7 @@ INSERT INTO PostDoc_DB.department (_faculty,_name) VALUES (1,'Computer Science')
 INSERT INTO PostDoc_DB.address (_country) VALUES("TestMainia");
 INSERT INTO PostDoc_DB.address (_country) VALUES("TestUniversity");
 
-INSERT INTO PostDoc_DB.person (_systemID,_fullName,_password,_title,_surname,_email,_addressLine1,_UpEmployee,_accountStatus) VALUES ('u12019837','Test','ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff','Mr','Tester','test@gmail.com',1,true, 'active');
+INSERT INTO PostDoc_DB.person (_systemID,_fullName,_password,_title,_surname,_email,_addressLine1,_UpEmployee,_accountStatus) VALUES ('u12019837','Test','ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff','Mr','Tester','test@gmail.com',1,true, 'Active');
 INSERT INTO PostDoc_DB.employee_information (_employeeID, _physicalAddress, _position, _dateOfAppointment, _appointmentStatus, _department) VALUES('u12019837',2,'HOD','2001/01/20','full time',1);
 
 INSERT INTO PostDoc_DB.person_security_role (_personID, _roleID) VALUES ('u12019837',1),

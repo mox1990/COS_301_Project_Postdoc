@@ -28,7 +28,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.Webapp.util.MessageUtil;
-import com.softserve.ejb.NewApplicationServiceLocal;
+import com.softserve.ejb.applicationservices.NewApplicationServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
 import java.util.ArrayList;

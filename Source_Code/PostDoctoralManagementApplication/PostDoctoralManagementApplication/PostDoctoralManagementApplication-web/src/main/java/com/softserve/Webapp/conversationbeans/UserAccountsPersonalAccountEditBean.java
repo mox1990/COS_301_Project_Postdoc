@@ -19,8 +19,8 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.LocationManagementServiceLocal;
-import com.softserve.ejb.UserAccountManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.LocationManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import javax.inject.Named;
 import javax.enterprise.context.ConversationScoped;
 import java.io.Serializable;
@@ -60,6 +60,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     
     private UIComponent errorContainer;
     
+    private String password;
     private String reTypePassword;
     private Person person;
     private Address address;
@@ -106,6 +107,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         {
             ExceptionUtil.logException(UserAccountsPersonalAccountEditBean.class, ex);
             ExceptionUtil.handleException(null, ex);
+            navigationManagerBean.goToPreviousBreadCrumb();
         }
     }
 
@@ -158,6 +160,14 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
         this.locationFinderDependBean = locationFinderDependBean;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+        
     public String getReTypePassword() {
         return reTypePassword;
     }
@@ -183,9 +193,14 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     {
         try 
         {
-            if(!reTypePassword.equals(person.getPassword()))
+            if(!reTypePassword.equals(password))
             {
                 throw new Exception("Passwords do not match");
+            }
+            
+            if(!reTypePassword.equals(""))
+            {
+                person.setPassword(password);
             }
             
             person.setAddressLine1(address);
@@ -201,7 +216,7 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
             {
                 userAccountManagementServiceLocal.updateUserAccount(sessionManagerBean.getSystemLevelSessionForCurrentSession(), person);
             }
-            
+            sessionManagerBean.getSession().setHttpSessionPassword(person.getPassword());
             conversationManagerBean.deregisterConversation(conversation);
             return navigationManagerBean.goToPreviousBreadCrumb();
         } 
@@ -217,10 +232,12 @@ public class UserAccountsPersonalAccountEditBean implements Serializable {
     {
         try 
         {
-            if(!reTypePassword.equals(person.getPassword()))
+            if(!reTypePassword.equals(password))
             {
                 throw new Exception("Passwords do not match");
             }
+            
+            person.setPassword(password);
             
             person.setAddressLine1(address);
             if(person.getUpEmployee())

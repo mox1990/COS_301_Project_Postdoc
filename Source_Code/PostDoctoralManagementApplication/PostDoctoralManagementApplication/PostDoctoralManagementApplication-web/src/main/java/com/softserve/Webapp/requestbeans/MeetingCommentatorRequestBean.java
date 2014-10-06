@@ -12,7 +12,7 @@ import com.softserve.Webapp.conversationbeans.MeetingSelectionBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.MeetingManagementServiceLocal;
+import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;

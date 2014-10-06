@@ -13,7 +13,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.ejb.MeetingManagementServiceLocal;
+import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
 import com.softserve.system.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
