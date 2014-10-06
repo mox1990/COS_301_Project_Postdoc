@@ -16,6 +16,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -101,7 +102,7 @@ public class Application implements Serializable {
     @Size(max = 65535)
     @Column(name = "_information")
     private String information;
-    @ManyToMany(mappedBy = "applicationList")
+    @ManyToMany(mappedBy = "applicationList", fetch = FetchType.EAGER)
     private List<Person> personList;
     @ManyToMany(mappedBy = "applicationList")
     private List<CommitteeMeeting> committeeMeetingList;

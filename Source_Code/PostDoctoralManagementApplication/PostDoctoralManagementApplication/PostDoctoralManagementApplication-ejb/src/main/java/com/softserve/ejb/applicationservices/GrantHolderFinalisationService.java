@@ -246,8 +246,15 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.StartTransaction());
             applicationServices.declineAppliction(session, application, reason);
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+            List<Notification> notifications = new ArrayList<Notification>();
+        
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application finalisation declined", "Please note that the finalisation of the application '" + application.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -257,7 +264,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         finally
         {
             transactionController.CloseEntityManagerForTransaction();
-        }              
+        } 
+        
+        
     }
     
     /**
@@ -284,21 +293,20 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
             AmmendRequestJpaController ammendRequestJpaController = dAOFactory.createAmmendRequestDAO();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
 
             //Ammend application
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);        
             applicationJpaController.edit(application);
 
             AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
-
             ammendRequestJpaController.create(ammendRequest);
-
-            //Send notification to grant holder and applicatantD        
-            Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
+  
+            List<Notification> notifications = new ArrayList<Notification>();        
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application ammendment request", "Please note that the grant holder has requested ammendment for the application '" + application.getProjectTitle() + "' for which you are the fellow of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+                    
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -308,7 +316,9 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         finally
         {
             transactionController.CloseEntityManagerForTransaction();
-        }        
+        } 
+        
+        
         
     }
     
@@ -327,15 +337,16 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     public void finaliseApplication(Session session, Application application) throws Exception
     {
         
+        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
         {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
             
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
-            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
 
             application = applicationJpaController.findApplication(application.getApplicationID());
 
@@ -346,14 +357,18 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
 
             //Send notification to HOD       
             List<Person> HODs = dAOFactory.createApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
-            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            
             for(Person p : HODs)
             {
-                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application finalised", "The following application has been finalised by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application finalised", "The application " + application.getProjectTitle() + " has been finalised by " + session.getUser().getCompleteName() + ". Please review the application for recommendation."));
             }
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true); 
+            
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application finalised", "Please note that the application '" + application.getProjectTitle() + "' has been finalised for which you are the fellow of. "));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application finalised", "Please note that the application '" + application.getProjectTitle() + "' has been finalised for which you are the grant holder of."));              
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true); 
         }
         catch(Exception ex)
         {
@@ -364,6 +379,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
         
                
     }
@@ -423,7 +439,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
 
                 hod.setSecurityRoleList(new ArrayList<SecurityRole>());
                 hod.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-                getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a postdoc fellowship as an HOD", true, hod);
+                getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a post doctoral fellowship for recommendation consideration.", true, hod);
             }
             else
             {

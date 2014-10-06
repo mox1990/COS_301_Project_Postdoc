@@ -9,6 +9,7 @@ package com.softserve.ejb.nonapplicationservices;
 import ar.com.fdvs.dj.domain.DynamicReport;
 import com.itextpdf.text.DocumentException;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
 import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.auxillary.DynamicReportCreationRequest;
@@ -30,7 +31,7 @@ import net.sf.jasperreports.engine.JRException;
 @Local
 public interface ReportServicesLocal {
     
-
+    public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception;
     public List<Person> loadAllPersonEntities(Session session) throws Exception;
     public List<Application> loadAllApplicationEntities(Session session) throws Exception;
     

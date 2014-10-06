@@ -23,6 +23,7 @@ import com.softserve.DBEntities.ApplicationReviewRequest;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.ForwardAndRewindReport;
 import com.softserve.DBEntities.FundingCost;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.annotations.AuditableMethod;
@@ -291,39 +292,41 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
             ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD, toStatus, application.getStatus());
 
-            if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
+            switch (toStatus) 
             {
-                forwardApplicationToSubmittedStatus(transactionController,application);
-                if(application.getPersonList().isEmpty())
-                {
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED:
+                    forwardApplicationToSubmittedStatus(transactionController,application);
+                    if(application.getPersonList().isEmpty())
+                    {
+                        forwardApplicationToReferredStatus(transactionController,application);
+                    }   break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED:
                     forwardApplicationToReferredStatus(transactionController,application);
-                }
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
-            {
-                forwardApplicationToReferredStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
-            {
-                forwardApplicationToFinalisedStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
-            {
-                forwardApplicationToRecommendedStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
-            {
-                forwardApplicationToEndorsedStatus(transactionController,application);
-            }
-            else
-            {
-                throw new Exception("The status " + toStatus + " specified to forward to does not exist");
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED:
+                    forwardApplicationToFinalisedStatus(transactionController,application);
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED:
+                    forwardApplicationToRecommendedStatus(transactionController,application);
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED:
+                    forwardApplicationToEndorsedStatus(transactionController,application);
+                    break;
+                default:
+                    throw new Exception("The status " + toStatus + " specified to forward to does not exist");
             }
 
             dAOFactory.createApplicationDAO().edit(application);
             dAOFactory.createForwardAndRewindReportDAO().create(forwardAndRewindReport);
+            
+            List<Notification> notifications = new ArrayList<Notification>();
+        
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application forwarded", "Please note that the application '" + application.getProjectTitle() + "' has been forwarded to " + toStatus + " for which you are the fellow of. The reason for this is as follows: " + reason));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application forwarded", "Please note that the application '" + application.getProjectTitle() + "' has been forwarded to " + toStatus + " for which you are the grant holder of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -334,7 +337,6 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         {
             transactionController.CloseEntityManagerForTransaction();
         }
-
         
     }
     
@@ -351,43 +353,44 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
             ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_REWIND, toStatus, application.getStatus());
         
-            if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+            switch (toStatus) 
             {
-                rewindApplicationToOpenStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
-            {
-                rewindApplicationToSubmittedStatus(transactionController,application);
-                if(application.getPersonList().isEmpty())
-                {
-                    forwardApplicationToReferredStatus(transactionController,application);
-                }
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
-            {
-                rewindApplicationToReferredStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
-            {
-                rewindApplicationToFinalisedStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
-            {
-                rewindApplicationToRecommendedStatus(transactionController,application);
-            }
-            else if(toStatus.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
-            {
-                rewindApplicationToEndorsedStatus(transactionController,application);
-            }
-            else
-            {
-                throw new Exception("The status specified to forward to does not exist");
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN:
+                    rewindApplicationToOpenStatus(transactionController,application);
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED:
+                    rewindApplicationToSubmittedStatus(transactionController,application);
+                    if(application.getPersonList().isEmpty())
+                    {
+                        forwardApplicationToReferredStatus(transactionController,application);
+                    }   break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED:
+                    rewindApplicationToReferredStatus(transactionController,application);
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED:
+                    rewindApplicationToFinalisedStatus(transactionController,application);
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED:
+                    rewindApplicationToRecommendedStatus(transactionController,application);
+                    break;
+                case com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED:
+                    rewindApplicationToEndorsedStatus(transactionController,application);
+                    break;
+                default:
+                    throw new Exception("The status specified to forward to does not exist");
             }
 
             dAOFactory.createApplicationDAO().edit(application);
             dAOFactory.createForwardAndRewindReportDAO().create(forwardAndRewindReport);
+        
+            List<Notification> notifications = new ArrayList<Notification>();
+
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application rewinded", "Please note that the application '" + application.getProjectTitle() + "' has been rewinded to " + toStatus + " for which you are the fellow of. The reason for this is as follows: " + reason));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application rewinded", "Please note that the application '" + application.getProjectTitle() + "' has been rewinded to " + toStatus + " for which you are the grant holder of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -398,6 +401,8 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})

@@ -138,8 +138,17 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.StartTransaction());
             applicationServices.declineAppliction(session, application, reason);
+            
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+            List<Notification> notifications = new ArrayList<Notification>();
+
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application endorsement declined", "Please note that the endorsement of the application '" + application.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application endorsement declined", "Please note that the endorsement of the application '" + application.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -150,6 +159,8 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
+        
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
@@ -157,6 +168,8 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     @Override
     public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws AuthenticationException, RollbackFailureException, NonexistentEntityException, Exception
     {        
+        
+        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
@@ -164,8 +177,9 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
             EndorsementJpaController endorsementJpaController = dAOFactory.createEndorsementDAO();
-            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();        
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            
 
             endorsementReport.setEndorsementID(application.getApplicationID());
             endorsementReport.setDean(session.getUser());
@@ -189,14 +203,18 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
             //Send notification to DRIS member(s)
             List<Person> DRISMembers = applicationJpaController.findAllDRISMembersWhoCanApproveApplication(application);
-            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            
             for(Person p : DRISMembers)
             {
-                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application endorsed", "The following application has been endorsed by " + session.getUser().getCompleteName() + ". Please review for eligbility."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application endorsed", "The application " + application.getProjectTitle() + " has been endorsed by " + session.getUser().getCompleteName() + ". Please review application for eligbility."));
             }
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true); 
+            
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application endorsed", "Please note that the application '" + application.getProjectTitle() + "' has been endorsed for which you are the fellow of. "));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application endorsed", "Please note that the application '" + application.getProjectTitle() + "' has been endorsed for which you are the grant holder of."));        
 
-            transactionController.CommitTransaction();
+            transactionController.CommitTransaction();            
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true); 
         }
         catch(Exception ex)
         {
@@ -207,6 +225,8 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
+          
         
     }
 }

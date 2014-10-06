@@ -21,6 +21,7 @@ import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
@@ -133,6 +134,15 @@ public class ReportServices implements ReportServicesLocal
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
+    public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @AuditableMethod
+    @Override
     public List<Person> loadAllPersonEntities(Session session) throws Exception
     {
         EntityManager em = emf.createEntityManager();
@@ -147,7 +157,7 @@ public class ReportServices implements ReportServicesLocal
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadAllApplicationEntities(Session session) throws Exception 
@@ -190,7 +200,7 @@ public class ReportServices implements ReportServicesLocal
        
     
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public DynamicReport createDynamicReport(Session session, DynamicReportCreationRequest dynamicReportCreationRequest) throws Exception 
@@ -227,7 +237,7 @@ public class ReportServices implements ReportServicesLocal
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public String renderReportAsHTML(Session session, DynamicReport report, DynamicReportExportRequest dynamicReportExportRequest) throws Exception
@@ -244,7 +254,7 @@ public class ReportServices implements ReportServicesLocal
         return byteArrayOutputStream.toString();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public byte[] renderReportAsPDF(Session session, DynamicReport report, DynamicReportExportRequest dynamicReportExportRequest) throws Exception
@@ -262,7 +272,7 @@ public class ReportServices implements ReportServicesLocal
         return byteArrayOutputStream.toByteArray();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public byte[] renderReportAsMSEXCELSpreadsheet(Session session, DynamicReport report, DynamicReportExportRequest dynamicReportExportRequest) throws Exception

@@ -183,8 +183,17 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.StartTransaction());
             applicationServices.declineAppliction(session, application, reason);
+            
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+            List<Notification> notifications = new ArrayList<Notification>();
+
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application recommendation declined", "Please note that the recommendation for the application '" + application.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application recommendation declined", "Please note that the recommendation for the application '" + application.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -194,7 +203,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         finally
         {
             transactionController.CloseEntityManagerForTransaction();
-        }              
+        }
+        
+        
     }
     
     /**
@@ -220,7 +231,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
             AmmendRequestJpaController ammendRequestJpaController = dAOFactory.createAmmendRequestDAO();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
 
             //Ammend application
             application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
@@ -228,15 +238,14 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
 
             AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
             ammendRequestJpaController.create(ammendRequest);
+        
+            List<Notification> notifications = new ArrayList<Notification>();
 
-            //Send notification to grant holder and applicatantD        
-            Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
-
-            notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application ammendment request", "Please note that the HOD has requested ammendment for the application '" + application.getProjectTitle() + "' for which you are the grant holder of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -247,6 +256,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
+        
         
         
     }
@@ -266,7 +277,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception
     {
-       
+        
+        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
@@ -275,8 +287,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
             RecommendationReportJpaController recommendationReportJpaController = dAOFactory.createRecommendationReportDAO();
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+            
 
             recommendationReport.setReportID(application.getApplicationID());
             recommendationReport.setHod(session.getUser());
@@ -302,14 +315,18 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
 
             //Send notification to Deans office
             List<Person> DeansOfficeMembers = applicationJpaController.findAllDeansOfficeMembersWhoCanEndorseApplication(application);
-            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            
             for(Person p : DeansOfficeMembers)
             {
-                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application recommended", "The following application has been recommended by " + session.getUser().getCompleteName() + ". Please review for endorsement."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Application recommended", "The application " + application.getProjectTitle() + " has been recommend by " + session.getUser().getCompleteName() + ". Please review application for endorsement."));
             }
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+            
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application recommended", "Please note that the application '" + application.getProjectTitle() + "' has been recommended for which you are the fellow of. "));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application recommended", "Please note that the application '" + application.getProjectTitle() + "' has been recommended for which you are the grant holder of."));        
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true); 
         }
         catch(Exception ex)
         {
@@ -321,6 +338,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             transactionController.CloseEntityManagerForTransaction();
         }
         
+                
         
     }
     
@@ -374,10 +392,9 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             }
             if(personJpaController.findUserBySystemIDOrEmail(dean.getSystemID()) == null)
             {
-
                 dean.setSecurityRoleList(new ArrayList<SecurityRole>());
                 dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-                getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a postdoc fellowship as an Dean", true, dean);
+                getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a post doctoral fellowship for endorsement consideration", true, dean);
             }
             else
             {
@@ -394,7 +411,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
                 }
                 else
                 {
-                    throw new Exception("You cannot, nor the fellow, nor the referees of your application can be requested to review application");
+                    throw new Exception("You cannot, nor the fellow, nor the grant holder, nor the referees of your application can be requested to review the application for endorsement");
                 }
             }
         }

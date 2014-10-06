@@ -279,6 +279,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     public void setApplicationEligibleStatus(Session session, Application application, boolean isElgible) throws Exception
     {        
         
+        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
@@ -286,6 +287,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
             EligiblityReportJpaController eligiblityReportJpaController = dAOFactory.createEligiblityReportDAO();
+            List<Notification> notifications = new ArrayList<Notification>();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
 
             if(application.getEligiblityReport() == null)
@@ -295,16 +297,20 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
                     application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
                     applicationJpaController.edit(application);
                     
-                    Notification notification = getDBEntitiesFactory().createNotificationEntity(session.getUser(), application.getFellow(), "Application is eligible", "Your application has been checked for eligiblity and found that that is eligible");
-                    getNotificationServiceEJB().sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
+                    notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application is eligible", "Please note that the application '" + application.getProjectTitle() + "' has been found to be eligible for funding consideration for which you are the fellow of. "));
+                    notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application is eligible", "Please note that the application '" + application.getProjectTitle() + "' has been found to be eligible for funding consideration for which you are the grant holder of."));                              
                 }
                 else
                 {
                     //Send notification to grant holder and applicatantD
-                    String reason = "Prospective fellow does not meet the eligiblity requirement";
+                    String reason = "The fellow does not meet the eligiblity requirement as required by the DRIS.";
 
                     ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.getEntityManager());
-                    applicationServices.declineAppliction(session, application, reason);
+                    applicationServices.declineAppliction(session, application, reason); 
+                    
+                    notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application not eligible", "Please note that the application '" + application.getProjectTitle() + "' has been found to be not eligible for which you are the fellow of. The reason for this is as follows: " + reason));
+                    notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application not eligible", "Please note that the application '" + application.getProjectTitle() + "' has been found to be not eligible for which you are the grant holder of. The reason for this is as follows: " + reason));
+
                 }
 
                 EligiblityReport eligiblityReport = dBEntitiesFactory.createEligiblityReportEntity(application, session.getUser(), getGregorianCalendar().getTime());
@@ -316,6 +322,8 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             }
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true); 
         }
         catch(Exception ex)
         {
@@ -351,8 +359,15 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(transactionController.getEntityManager());
             applicationServices.declineAppliction(session, application, reason);
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+            List<Notification> notifications = new ArrayList<Notification>();
+
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application funding declined", "Please note that the funding for the application '" + application.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application funding declined", "Please note that the funding for the application '" + application.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason));
 
             transactionController.CommitTransaction();
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -362,7 +377,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         finally
         {
             transactionController.CloseEntityManagerForTransaction();
-        }  
+        }
+        
+        
     }
     
     /**
@@ -381,9 +398,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @AuditableMethod
     @Override
     public void approveFunding(Session session, Application application, ResearchFellowInformation researchFellowInformation, FundingReport fundingReport, String applicantMessage, Notification cscMesssage, Notification finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
-    {        
-        
-        
+    {   
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
@@ -448,18 +463,17 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             
             //Send notification to CSC, Finance, grant holder and applicatant
             ArrayList<Notification> notifications = new ArrayList<Notification>();        
-            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
-            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));       
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application funding approved", "The application '" + application.getProjectTitle() + "' has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application funding approved", "The application '" + application.getProjectTitle() + "' has been approved for funding by " + session.getUser().getCompleteName() + ". " + applicantMessage));     
 
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
-
-            //CSC and finance person
+            transactionController.CommitTransaction();
+            
             cscMesssage.setSubject("Application funding approved");
             finaceMessage.setSubject(cscMesssage.getSubject());
             notificationService.sendOnlyEmail(new Session(session.getHttpSession(),session.getUser(),true),cscMesssage);
-            notificationService.sendOnlyEmail(new Session(session.getHttpSession(),session.getUser(),true),finaceMessage);  
-
-            transactionController.CommitTransaction();
+            notificationService.sendOnlyEmail(new Session(session.getHttpSession(),session.getUser(),true),finaceMessage);
+            
+            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {

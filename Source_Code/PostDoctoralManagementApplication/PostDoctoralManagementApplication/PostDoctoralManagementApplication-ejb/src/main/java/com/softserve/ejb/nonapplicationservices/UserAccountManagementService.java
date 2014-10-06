@@ -578,7 +578,8 @@ public class UserAccountManagementService implements UserAccountManagementServic
         //Set account to dorment
         user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
         //Set new random password
-        user.setPassword(getGeneratorUTIL().generateRandomHexString());
+        String password = getGeneratorUTIL().generateRandomHexString();
+        user.setPassword(password);
 
         //Create a user account using a system level system authentication
         createUserAccount(new Session(session.getHttpSession(), session.getUser(), true), useManualSystemIDSpecification, user);
@@ -586,7 +587,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         //Notify the new user
-        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that a account be created for you for the following reasons: " + reason + ". Please visit inorder to activate your account. Log in with your email address and the following password " + user.getPassword());
+        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that an account be created for you for the following reasons: " + reason + ". Please visit the UP Postdoc site inorder to activate your account. Log in with your email address and the following password " + password);
         notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
         
     }

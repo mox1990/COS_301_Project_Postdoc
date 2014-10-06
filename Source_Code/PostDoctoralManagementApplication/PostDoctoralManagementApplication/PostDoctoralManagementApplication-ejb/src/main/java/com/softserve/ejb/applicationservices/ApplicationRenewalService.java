@@ -6,12 +6,12 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
@@ -19,6 +19,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.ApplicationServicesUtil;
@@ -241,8 +242,15 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         try
         {
             getApplicationServicesUtil(transactionController.StartTransaction()).submitApplication(application);
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+            List<Notification> notifications = new ArrayList<Notification>();
+
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Renewal application submitted", "Please note that the renewal application '" + application.getProjectTitle() + "' has been submitted for which you are the fellow of."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Renewal application submitted", "Please note that the renewal application '" + application.getProjectTitle() + "' has been submitted for which you are the grant holder of."));
             
             transactionController.CommitTransaction();
+            getNotificationServiceEJB().sendBatchNotifications(session, notifications, true);
         }
         catch(Exception ex)
         {
@@ -253,5 +261,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
+        
     }
 }

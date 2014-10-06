@@ -14,6 +14,7 @@ import com.softserve.DBEntities.Address;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.*;
@@ -273,7 +274,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
                 securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
                 referee.setSecurityRoleList(securityRoles);
 
-                accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral application", false, referee);
+                accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral fellowship application.", false, referee);
             }
             else if(referee.getSystemID() != null)
             {
@@ -340,8 +341,22 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         try
         {            
             getApplicationServicesUTIL(transactionController.getEntityManager()).submitApplication(application); 
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
+        
+            List<Notification> notifications = new ArrayList<Notification>();
 
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "New application submitted", "Please note that the new application '" + application.getProjectTitle() + "' has been submitted for which you are the fellow of."));
+            
+            if(application.getPersonList().size() == application.getRefereeReportList().size())
+            {
+                notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "New application referred", "Please note that the new application '" + application.getProjectTitle() + "' has been referred and is awaiting for finalisation from you the grant holder."));
+            }
+            else
+            {
+                notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "New application submitted", "Please note that the new application '" + application.getProjectTitle() + "' has been submitted for which you are the grant holder of."));
+            }
             transactionController.CommitTransaction();
+            getNotificationServiceEJB().sendBatchNotifications(session, notifications, true);
         }
         catch(Exception ex)
         {

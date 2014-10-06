@@ -9,9 +9,11 @@ package com.softserve.ejb.applicationservices;
 import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBDAO.ProgressReportJpaController;
 import com.softserve.DBEntities.Application;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.annotations.AuditableMethod;
 import com.softserve.annotations.SecuredMethod;
+import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.interceptors.AuditTrailInterceptor;
 import com.softserve.interceptors.AuthenticationInterceptor;
 import com.softserve.system.DBEntitiesFactory;
@@ -20,6 +22,7 @@ import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -40,6 +43,14 @@ public class ProgressReportManagementService implements ProgressReportManagement
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
         
     public ProgressReportManagementService() {
     }
@@ -79,6 +90,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         try
         {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
             
             ProgressReportJpaController progressReportJpaController = dAOFactory.createProgressReportDAO();
         
@@ -86,7 +98,14 @@ public class ProgressReportManagementService implements ProgressReportManagement
             progressReport.setTimestamp(getGregorianCalendarUTIL().getTime());
             progressReportJpaController.create(progressReport);
 
+            List<Notification> notifications = new ArrayList<Notification>();
+        
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Progress report created", "Please note a progress report for the application '" + application.getProjectTitle() + "' has been created for which you are the fellow of."));
+            notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Progress report created", "Please note a progress report for the application '" + application.getProjectTitle() + "' has been created for which you are the grant holder of."));
+
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -142,21 +161,24 @@ public class ProgressReportManagementService implements ProgressReportManagement
 
             for(Application application : applications)
             {        
-                GregorianCalendar startCal = getGregorianCalendarUTIL();
-                startCal.setTime(application.getStartDate());            
-
-                GregorianCalendar endCal = getGregorianCalendarUTIL();
-                endCal.setTime(application.getEndDate());
-
-                //System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
-
-                if(startCal.before(curCal) && endCal.after(curCal))
+                if(application.getEndDate() != null && application.getStartDate() != null)
                 {
-                    //System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
-                    if(getNumberOfProgressReportsRequiredByApplication(session,application) > application.getProgressReportList().size())
+                    GregorianCalendar startCal = getGregorianCalendarUTIL();
+                    startCal.setTime(application.getStartDate());            
+
+                    GregorianCalendar endCal = getGregorianCalendarUTIL();
+                    endCal.setTime(application.getEndDate());
+
+                    //System.out.println("start date " + startCal.toString() + " end date" + endCal.toString() + " cur date" + curCal.toString() + " " + startCal.before(curCal) + " " + endCal.after(curCal));
+
+                    if(startCal.before(curCal) && endCal.after(curCal))
                     {
-                        //System.out.println("Added" + application.toString());
-                        output.add(application);
+                        //System.out.println("True " + getNumberOfProgressReportsRequiredByApplication(session,application) + " " + application.getProgressReportList().size() );
+                        if(getNumberOfProgressReportsRequiredByApplication(session,application) > application.getProgressReportList().size())
+                        {
+                            //System.out.println("Added" + application.toString());
+                            output.add(application);
+                        }
                     }
                 }
             }

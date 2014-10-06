@@ -121,32 +121,30 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
         
+        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
         {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
             
             CommitteeMeetingJpaController committeeMeetingJpaController = dAOFactory.createCommitteeMeetingDAO();
-            DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
-
-            ArrayList<Notification> notifications = new ArrayList<Notification>();
 
             //Create notifications for each attendee
             for(Person p : committeeMeeting.getPersonList())
             {
-                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend a meeting arranged by " + session.getUser().getCompleteName() + "."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting creation notification", "Please note that you have been requested to attend the meeting '" + committeeMeeting.getName() + "' arranged by " + session.getUser().getCompleteName() + " at '" + committeeMeeting.getVenue() + "' starting at " + committeeMeeting.getStartDate().toString() + "."));
             }
             committeeMeeting.setOrganiser(session.getUser());
             //Create the meeting
             committeeMeeting.setEndDate(null);
             committeeMeetingJpaController.create(committeeMeeting);
-
-            //Send notification batch to attendees
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
-
+            
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -158,6 +156,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
             transactionController.CloseEntityManagerForTransaction();
         }
         
+        //Send notification batch to attendees
         
     }
     
@@ -176,6 +175,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
         
+        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try
@@ -184,7 +184,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
             
             CommitteeMeetingJpaController committeeMeetingJpaController = dAOFactory.createCommitteeMeetingDAO();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
 
             CommitteeMeeting cm = committeeMeetingJpaController.findCommitteeMeeting(committeeMeeting.getMeetingID());
 
@@ -195,16 +195,14 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
 
             committeeMeetingJpaController.edit(committeeMeeting);
 
-            ArrayList<Notification> notifications = new ArrayList<Notification>();
-
             for(Person p : committeeMeeting.getPersonList())
             {
-                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been updated."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting update notification", "Please note that you have been requested to attend the meeting '" + committeeMeeting.getName() + "' arranged by " + session.getUser().getCompleteName() + " at '" + committeeMeeting.getVenue() + "' starting at " + committeeMeeting.getStartDate().toString() + " which orginally was the meeting '" + cm.getName() + "' arranged by " + cm.getOrganiser().getCompleteName() + " at '" + cm.getVenue() + "' starting at " + cm.getStartDate().toString() + "."));
             }
 
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
-
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {
@@ -215,6 +213,8 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         {
             transactionController.CloseEntityManagerForTransaction();
         }
+        
+        
         
         
     }
@@ -233,7 +233,6 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
             
             CommitteeMeetingJpaController committeeMeetingJpaController = dAOFactory.createCommitteeMeetingDAO();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
 
             if(committeeMeeting.getStartDate().before(getGregorianCalendar().getTime()) || committeeMeeting.getMinuteCommentList().size() > 0)
             {
@@ -244,14 +243,14 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
 
             for(Person p : committeeMeeting.getPersonList())
             {
-                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting arranged by " + session.getUser().getCompleteName() + " has been canceled."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(session.getUser(), p, "Postdoc Commitee meeting cancelation notification", "Please note that the following meeting '" + committeeMeeting.getName() + "' arranged by " + session.getUser().getCompleteName() + " has been canceled."));
             }
 
-            committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());        
-
-            notificationService.sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
+            committeeMeetingJpaController.destroy(committeeMeeting.getMeetingID());  
 
             transactionController.CommitTransaction();
+            
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications, true);
         }
         catch(Exception ex)
         {

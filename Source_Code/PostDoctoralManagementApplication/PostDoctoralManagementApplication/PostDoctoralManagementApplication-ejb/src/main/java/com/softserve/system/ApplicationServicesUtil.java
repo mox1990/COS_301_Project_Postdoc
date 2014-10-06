@@ -311,13 +311,6 @@ public class ApplicationServicesUtil {
 
             DeclineReport declineReport = dBEntitiesFactory.createDeclineReportEntity(application,session.getUser(), reason, getGregorianCalendar().getTime());
             declineReportJpaController.create(declineReport);
-
-            //Send notification to grant holder and applicatantD
-            //Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getFellow(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            //notificationService.sendNotification(notification, true);
-
-            //notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application declined", "The following application has been declined by " + session.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            //notificationService.sendNotification(notification, true);
         }
         else
         {

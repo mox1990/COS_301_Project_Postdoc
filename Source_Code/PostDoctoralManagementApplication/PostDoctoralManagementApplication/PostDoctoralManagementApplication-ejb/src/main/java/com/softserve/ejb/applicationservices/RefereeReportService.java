@@ -13,6 +13,7 @@ import com.softserve.DBDAO.RefereeReportJpaController;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.AuditLog;
+import com.softserve.DBEntities.Notification;
 import com.softserve.DBEntities.RefereeReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
@@ -162,7 +163,6 @@ public class RefereeReportService implements RefereeReportServiceLocal {
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
             RefereeReportJpaController refereeReportJpaController = dAOFactory.createRefereeReportDAO();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            NotificationServiceLocal notificationService = getNotificationServiceEJB();
 
             refereeReport.setTimestamp(getGregorianCalendar().getTime());
             refereeReport.setApplicationID(application);
@@ -170,8 +170,10 @@ public class RefereeReportService implements RefereeReportServiceLocal {
 
 
             application = applicationJpaController.findApplication(application.getApplicationID());
-            System.out.println("====Number of referees: " + application.getPersonList().size());
-            System.out.println("====Number of reports: " + application.getRefereeReportList().size());
+
+            List<Notification> notifications = new ArrayList<Notification>();
+           
+            
             if(application.getPersonList().size() == application.getRefereeReportList().size())
             {
                 application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
@@ -186,12 +188,12 @@ public class RefereeReportService implements RefereeReportServiceLocal {
                     refereeReportJpaController.destroy(refereeReport.getReportID());
                     throw ex;
                 }
-
-                //Send notification to Grant holder
-                notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),dBEntitiesFactory.createNotificationEntity(session.getUser(), application.getGrantHolder(), "Application refereed", "The following application has been refereed. Please review for finalisation."),true);
+                notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application referred", "The application '" + application.getProjectTitle() + "' has been referred for which you are the fellow of."));
+                notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getGrantHolder(), "Application referred", "The application '" + application.getProjectTitle() + "' has been referred. Please review for finalisation."));
             }
-
+            
             transactionController.CommitTransaction();
+            getNotificationServiceEJB().sendBatchNotifications(new Session(session.getHttpSession(),session.getUser(),true),notifications,true);
         }
         catch(Exception ex)
         {
