@@ -3,30 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.ApplicationJpaController;
+import com.softserve.DBDAO.DAOFactory;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.RefereeReport;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.auxillary.ApplicationStageStatus;
 import com.softserve.ejb.applicationservices.ApplicationProgressViewerServiceLocal;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.Session;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.ApplicationProgressViewerServiceMockUnit;
 
 /**
@@ -35,9 +34,12 @@ import test.softserve.MockEJBClasses.ApplicationProgressViewerServiceMockUnit;
  */
 public class ApplicationProgressViewerUnitTest {
     private ApplicationProgressViewerServiceMockUnit instance;
-    
-    private ApplicationJpaController mockApplicationJpaController;
+    private ApplicationServicesUtil mockApplicationServicesUtil;
     private UserGateway mockUserGateway;
+    private DAOFactory mockDAOFactory;
+    private EntityManager mockEntityManager;
+    
+    private Application mockApplication;
     
     public ApplicationProgressViewerUnitTest() {
     }
@@ -51,17 +53,28 @@ public class ApplicationProgressViewerUnitTest {
     }
     
     @Before
-    public void setUp() 
-    {
+    public void setUp() {
         instance = new ApplicationProgressViewerServiceMockUnit();
         
-        //Setup dependices mocks
-        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockApplicationServicesUtil = mock(ApplicationServicesUtil.class);
         mockUserGateway = mock(UserGateway.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockEntityManager = mock(EntityManager.class);
         
-        //Load dependices mocks' into instance
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setuEJB(mockUserGateway);
+        mockApplication = mock(Application.class);
+        
+        Person fellow = new Person("u12236731");
+        Person tmp = new Person("uxxxxxxxx");
+        
+        when(mockApplication.getFellow()).thenReturn(fellow);
+        when(mockApplication.getGrantHolder()).thenReturn(tmp);
+        when(mockApplication.getTimestamp()).thenReturn(new Date());
+        when(mockApplication.getSubmissionDate()).thenReturn(new Date());
+        //TODO: Populate the list...
+        when(mockApplication.getRefereeReportList()).thenReturn(new ArrayList<RefereeReport>());
+        when(mockApplication.getPersonList()).thenReturn(new ArrayList<Person>());
+        
+        //TODO: Configure all the nullable data...
     }
     
     @After
@@ -69,45 +82,19 @@ public class ApplicationProgressViewerUnitTest {
     }
 
     /**
+     * Test of getAllApplications method, of class ApplicationProgressViewerService.
+     */
+    @Test
+    public void testGetAllApplications() throws Exception {
+        
+    }
+
+    /**
      * Test of getApplicationProgress method, of class ApplicationProgressViewerService.
      */
     @Test
-    public void testGetApplicationProgressWithUserAsOwnerAndApplicationOpen() throws Exception {
-        //Setup parameter mocks
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
+    public void testGetApplicationProgress() throws Exception {
         
-        Application mockApplication = mock(Application.class);
-        when(mockApplication.getFellow()).thenReturn(new Person("u12019837"));
-        
-        List<RefereeReport> rrList = new ArrayList<>();
-        RefereeReport rr = mock(RefereeReport.class);
-        when(rr.getReferee()).thenReturn(new Person("u12019837"));
-        
-        //rrList.add(rr);
-        when(mockApplication.getRefereeReportList()).thenReturn(rrList);
-        when(mockApplication.getRecommendationReport()).thenReturn(null);
-        when(mockApplication.getEndorsement()).thenReturn(null);
-        when(mockApplication.getStatus()).thenReturn(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
-        
-        //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
-        try
-        {
-            //Execute function
-            instance.getApplicationProgress(mockSession, mockApplication);
-            
-            //Verify correct function behaviour
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow());
-            //verify(mockApplicationStageStatusList).add(mockApplicationStageStatus);
-            //verifyNoMoreInteractions(mockApplicationStageStatusList);
-            // TODO: ADD more of the logic...
-            
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
-        }
     }
     
 }

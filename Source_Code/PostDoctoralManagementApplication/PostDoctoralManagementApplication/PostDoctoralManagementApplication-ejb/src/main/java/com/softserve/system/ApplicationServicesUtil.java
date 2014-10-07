@@ -389,7 +389,7 @@ public class ApplicationServicesUtil {
         }
         else if(status.equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED))
         {
-            return 9;
+            return 10;
         }
         
         return 20;

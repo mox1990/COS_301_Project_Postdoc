@@ -111,12 +111,17 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         
         try
         {

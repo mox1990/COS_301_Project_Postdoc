@@ -56,10 +56,15 @@ public class AnnouncementManagementService implements AnnouncementManagementServ
         return new TransactionController(emf);
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     @Override
     public List<Announcement> loadAllActiveAnnouncements() throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         try
         {
             return getDAOFactory(em).createAnnouncementDAO().findAllActiveAnnouncements();
@@ -73,7 +78,7 @@ public class AnnouncementManagementService implements AnnouncementManagementServ
     @Override
     public List<Announcement> loadAllPendingAnnouncements() throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         try
         {
             return getDAOFactory(em).createAnnouncementDAO().findPendingAnnouncements();
@@ -164,7 +169,7 @@ public class AnnouncementManagementService implements AnnouncementManagementServ
     private void removeAllExpiredAnnouncements() throws Exception
     {
         
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         
         try
         {

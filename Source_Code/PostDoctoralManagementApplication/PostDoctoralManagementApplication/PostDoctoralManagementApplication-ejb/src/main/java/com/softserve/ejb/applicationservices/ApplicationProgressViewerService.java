@@ -80,12 +80,17 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
         return new ApplicationServicesUtil(em);
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public List<Application> getAllApplications(Session session) throws Exception 
     {   
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         DAOFactory dAOFactory = getDAOFactory(em);
         try
         {
@@ -104,8 +109,6 @@ public class ApplicationProgressViewerService implements ApplicationProgressView
     @Override
     public List<ApplicationStageStatus> getApplicationProgress(Session session, Application application) throws AuthenticationException, Exception
     { 
-        
-        
         List<ApplicationStageStatus> stageStatuses = getApplicationStageStatus();
         
         //Opening information

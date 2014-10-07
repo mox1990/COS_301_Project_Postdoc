@@ -11,6 +11,7 @@ import com.softserve.DBDAO.DAOFactory;
 import com.softserve.ejb.applicationservices.ApplicationProgressViewerService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.system.ApplicationServicesUtil;
+import com.softserve.system.DBEntitiesFactory;
 import com.softserve.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,33 +22,44 @@ import javax.persistence.EntityManager;
  * @author kgothatso
  */
 public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgressViewerService {
-    private ApplicationJpaController aDAO;
+    private ApplicationServicesUtil aEJB;
     private UserGateway uEJB;
-
-    public void setaDAO(ApplicationJpaController aDAO) {
-        this.aDAO = aDAO;
+    private DAOFactory dAOFactory;
+    private EntityManager em;
+    
+    public void setaEJB(ApplicationServicesUtil aEJB) {
+        this.aEJB = aEJB;
     }
 
     public void setuEJB(UserGateway uEJB) {
         this.uEJB = uEJB;
     }
     
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
+    }
     
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(em);
+        return dAOFactory;
     }    
     
     @Override
     protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
     {
-        return new ApplicationServicesUtil(em);
+        return aEJB;
     }
     
     @Override
     protected UserGateway getUserGatewayServiceEJB()
     {
         return uEJB;
+    }
+    
+    @Override
+    protected EntityManager createEntityManager()
+    {
+        return em;
     }
 }
