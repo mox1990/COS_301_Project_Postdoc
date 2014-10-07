@@ -157,7 +157,15 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountCreationForProspectiveFellowView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagement_ProspectiveFellowCreateUser", "Prospective Fellow account creation view");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagement_ProspectiveFellowCreateUser", "Prospective Fellow account creation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToUserAccountRetrievalView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountRetrieval", "User account retrieval");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -174,7 +182,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToApplicationServicesHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ApplicationServices_Home", "Application services home");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationServices_Home", "Application services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -182,7 +190,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToReportServicesHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ReportServices_Home", "Report services home");
+        BreadCrumb breadCrumb = new BreadCrumb("ReportServices_Home", "Report services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -190,7 +198,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDataImportAndExportServicesHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DataImportAndExportServices_Home", "Data import and export services home");
+        BreadCrumb breadCrumb = new BreadCrumb("DataImportAndExportServices_Home", "Data import and export services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -198,7 +206,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountManagementServicesHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_Home", "User account management services home");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_Home", "User account management services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -206,7 +214,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToArchivalServicesHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ArchivalServices_Home", "Archival services home");
+        BreadCrumb breadCrumb = new BreadCrumb("ArchivalServices_Home", "Archival services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -214,7 +222,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToAduitTrailServicesHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("AuditTrailServices_Home", "Audit trail services home");
+        BreadCrumb breadCrumb = new BreadCrumb("AuditTrailServices_Home", "Audit-trail services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -222,7 +230,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToHODApplicationViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("HODRecommendationService_ApplicationViewer", "Application viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("HODRecommendationService_ApplicationViewer", "Application reviewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -238,7 +246,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToHODAmmendView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("HODRecommendationService_ApplicationAmmend", "Request application ammendment");
+        BreadCrumb breadCrumb = new BreadCrumb("HODRecommendationService_ApplicationAmmend", "Application ammendment");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -254,7 +262,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToHODApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("HODRecommendationService_ApplicationSelection", "Application selection view");
+        BreadCrumb breadCrumb = new BreadCrumb("HODRecommendationService_ApplicationSelection", "Pending applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -262,7 +270,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountManagementAccountsViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountsViewer", "Accounts list");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountsViewer", "All user accounts");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -270,7 +278,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountManagementlAccountViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountViewer", "Account viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_AccountViewer", "User account viewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -278,7 +286,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountManagementPersonalAccountViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_PersonalAccountViewer", "Personal account viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_PersonalAccountViewer", "Personal user account");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -295,7 +303,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDeanApplicationViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_ApplicationViewer", "Application viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_ApplicationViewer", "Application reviewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -319,7 +327,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDeanApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("DeanEndorsementService_ApplicationSelection", "Pending applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -335,7 +343,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToApplicationProgressViewerApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ApplicationProgressViewerService_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationProgressViewerService_ApplicationSelection", "Reviewable applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -343,7 +351,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToApplicationProgressViewerApplicationProgressView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ApplicationProgressViewerService_ApplicationProgress", "Application progress viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationProgressViewerService_ApplicationProgress", "Application progress reviewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -351,7 +359,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToRefereeReportServiceApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("RefereeReportService_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("RefereeReportService_ApplicationSelection", "Pending applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -367,7 +375,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDRISApprovalServiceApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationSelection", "Pending applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -375,7 +383,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDRISApprovalServiceApplicationViewer()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationViewer", "Application viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationViewer", "Application reviewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -391,7 +399,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDRISApprovalServiceDeclineFundingSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_DeclineFunding", "Decline Funding");
+        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_DeclineFunding", "Decline funding");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -399,7 +407,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToDRISApprovalServiceApplicationFundingReportMangementView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationFundingReportMangement", "Funding report managment");
+        BreadCrumb breadCrumb = new BreadCrumb("DRISApprovalService_ApplicationFundingReportMangement", "Funding report management");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -409,7 +417,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToUserAccountManagementServicesOnDemandUserActivationView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_OnDemandUserActivation", "On demand user activation");
+        BreadCrumb breadCrumb = new BreadCrumb("UserAccountManagementServices_OnDemandUserActivation", "On-demand user account activation");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -417,7 +425,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToGrantHolderFinalisationServiceApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationSelection", "Pending applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -425,7 +433,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToGrantHolderFinalisationServiceApplicationAmmendView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationAmmend", "Application ammendement");
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationAmmend", "Application ammendement request");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -433,7 +441,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToGrantHolderFinalisationServiceApplicationDeclineView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationDecline", "Application decline");
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_ApplicationDecline", "Decline application");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -441,7 +449,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToGrantHolderFinalisationServiceFinalisationWizardView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_FinalisationWizard", "Finalisation wizard");
+        BreadCrumb breadCrumb = new BreadCrumb("GrantHolderFinalisationService_FinalisationWizard", "Application finalisation wizard");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -449,7 +457,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToMeetingManagementServiceHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_Home", "Meeting management home");
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_Home", "Meeting management services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -457,7 +465,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToMeetingManagementServiceMeetingCreationView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingCreation", "Meeting creation menu");
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingCreation", "Meeting schedular");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -473,7 +481,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToMeetingManagementServiceMeetingSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingSelection", "Meeting selection");
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementServices_MeetingSelection", "Available meetings");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -481,7 +489,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToMeetingManagementServiceMeetingViewerView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementService_MeetingViewer", "Meeting viewer");
+        BreadCrumb breadCrumb = new BreadCrumb("MeetingManagementService_MeetingViewer", "Meeting reviewer");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -497,7 +505,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToProgressReportManagementServiceApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ProgressReportManagement_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("ProgressReportManagement_ApplicationSelection", "Selectable applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -505,7 +513,15 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToProgressReportManagementServiceReportCreationView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ProgressReportManagement_ReportCreation", "Report creation");
+        BreadCrumb breadCrumb = new BreadCrumb("ProgressReportManagement_ReportCreation", "Progress report creation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToProgressReportManagementServiceReportUpdateView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("ProgressReportManagement_ReportUpdate", "Progress report editor");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -513,7 +529,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToApplicationRenewalServiceApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ApplicationRenewalService_ApplicationSelection", "Application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationRenewalService_ApplicationSelection", "Renewable applications");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -521,7 +537,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToApplicationRenewalServiceWizardView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ApplicationRenewalService_Wizard", "Application renwal wizard");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationRenewalService_Wizard", "Renwal application wizard");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -529,7 +545,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToNotificationServiceNotificationManagementView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("NotificationService_NotificationManagement", "Notification manager");
+        BreadCrumb breadCrumb = new BreadCrumb("NotificationService_NotificationManagement", "Notification inbox");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -545,7 +561,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToForwardAndRewindServicesApplicationSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("ForwardAndRewindServices_ApplicationSelection", "Forward and rewind application selection");
+        BreadCrumb breadCrumb = new BreadCrumb("ForwardAndRewindServices_ApplicationSelection", "Forward and rewind services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -561,7 +577,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToAnnouncementServiceAnnouncementSelectionView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementSelection", "Announcement selection");
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementSelection", "Available announcements");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -569,7 +585,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToAnnouncementServiceAnnouncementEditView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementEdit", "Announcement edit");
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_AnnouncementEdit", "Announcement editor");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -577,7 +593,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToAnnouncementServiceHomeView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_Home", "Announcement home");
+        BreadCrumb breadCrumb = new BreadCrumb("AnnoucementManagementService_Home", "Announcement services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -585,7 +601,7 @@ public class NavigationManagerBean implements Serializable {
     
     public String goToLocationMangementServiceView()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("LocationMangementService", "Location management");
+        BreadCrumb breadCrumb = new BreadCrumb("LocationMangementService", "Location management services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);

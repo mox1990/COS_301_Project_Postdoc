@@ -62,9 +62,20 @@
                         <ui:decorate template="templates/pendingApplications_Comoponent.xhtml">
                             <ui:param name="pendingApplications" value="#{drisApplicationSelectionBean.applicationFilterDependBeanFunded.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="#{lang['ViewApplication']}" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/> 
+                                <p:commandButton value="#{lang['ViewApplication']}" styleClass="button-fill button" action="#{drisApplicationSelectionBean.viewApplication(app)}"/>
+                                <p:commandButton value="#{lang['TerminateApplication']}" styleClass="button-fill button" action="#{drisApplicationSelectionBean.terminateApplication(app)}">
+                                    <p:confirm header="#{lang['TerminateConfrimationHeader']}" message="#{lang['TerminateConfrimationMsg']}" />
+                                </p:commandButton>
+                                <p:commandButton value="#{lang['AbandonApplication']}" styleClass="button-fill button" action="#{drisApplicationSelectionBean.abandonApplication(app)}">
+                                    <p:confirm header="#{lang['AbandonConfrimationHeader']}" message="#{lang['AbandonConfrimationMsg']}" />
+                                </p:commandButton>
                             </ui:define>
                         </ui:decorate>
+                        
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
                     </h:form>
                 </p:panel>
             </p:outputPanel>

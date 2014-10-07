@@ -67,6 +67,7 @@ public class PersistenceConstants {
     public final static String APPLICATION_STATUS_FUNDED = "Funded";
     public final static String APPLICATION_STATUS_COMPLETED = "Completed";
     public final static String APPLICATION_STATUS_TERMINATED = "Terminated";
+    public final static String APPLICATION_STATUS_ABANDONED = "Abandoned";
     
     //Application type constants
     public final static String APPLICATION_TYPE_NEW = "New";

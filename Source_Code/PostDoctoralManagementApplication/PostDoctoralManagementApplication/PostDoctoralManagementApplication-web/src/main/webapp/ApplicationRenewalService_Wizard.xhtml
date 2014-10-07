@@ -32,7 +32,7 @@
                                     </ui:decorate>
                                 <h:form id="progressReportInfo">    
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeFinalProgressReport()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this @(#progressReportInfo)">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeFinalProgressReport()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this @(#progressReportInfo)" icon="ui-icon-circle-arrow-e">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                 </h:form>
@@ -49,9 +49,10 @@
                                 </ui:decorate>                        
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.updateCV()}"  value="Next" styleClass="button button-fill" process="@this @(#CVInfoForm)">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.updateCV()}"  value="Next" styleClass="button button-fill" process="@this @(#CVInfoForm)" icon="ui-icon-circle-arrow-e">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
+                                    
                                 </h:form>
                             </center>                      
                         </p:outputPanel>
@@ -66,9 +67,19 @@
                                 </ui:decorate>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeApplicationRenewal()}" value="Next" styleClass="button button-fill">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationRenewalBean.completeApplicationRenewal()}" value="Next" styleClass="button button-fill" icon="ui-icon-circle-arrow-e">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
+                                    
+                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                    
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>
@@ -80,9 +91,14 @@
                                 <h2 class="header2">#{lang['SubmitApplicationHeader']}</h2>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.submitApplicationRenewal()}" value="#{lang['ConfirmRenewalSubmission']}" styleClass="button button-fill">
+                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.submitApplicationRenewal()}" value="#{lang['ConfirmRenewalSubmission']}" styleClass="button button-fill" icon="ui-icon-circle-arrow-e">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                         <p:confirm header="#{lang['ApplicationRenewalSubmissionConfirmation']}" message="#{lang['RenewalConfirmationMessage']}" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                    
+                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back?" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

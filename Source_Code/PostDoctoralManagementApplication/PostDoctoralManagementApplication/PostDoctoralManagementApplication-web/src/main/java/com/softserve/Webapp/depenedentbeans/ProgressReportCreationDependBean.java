@@ -43,17 +43,31 @@ public class ProgressReportCreationDependBean implements Serializable {
     public ProgressReportCreationDependBean() {
     }
     
-    public void init()
+    public void init(ProgressReport progressReport)
     {
-        this.progressReport = new ProgressReport();
-        progressReportContent = new ProgressReportContent();
-        progressReportContent.setProjectAimsAttainment(new ProgressReportContent.ProjectAimsAttainment());
-        progressReportContent.setProjectOutcomesAttainment(new ProgressReportContent.ProjectOutcomesAttainment());
-        progressReportContent.setResearchOutput(new ProgressReportContent.ResearchOutput());
-        progressReportContent.setSelfEvaluation("");
         
-        progressReportContent.getProjectAimsAttainment().getAimAttainment();
-        progressReportContent.getProjectOutcomesAttainment().getOutcomeAttainment();
+        if(progressReport == null)
+        {
+            this.progressReport = new ProgressReport();
+            progressReportContent = null;
+        }
+        else
+        {
+            this.progressReport = progressReport;
+            progressReportContent = progressReport.getContentXMLEntity();
+        }
+        
+        if(progressReportContent == null)
+        {
+            progressReportContent = new ProgressReportContent();
+            progressReportContent.setProjectAimsAttainment(new ProgressReportContent.ProjectAimsAttainment());
+            progressReportContent.setProjectOutcomesAttainment(new ProgressReportContent.ProjectOutcomesAttainment());
+            progressReportContent.setResearchOutput(new ProgressReportContent.ResearchOutput());
+            progressReportContent.setSelfEvaluation("");
+
+            progressReportContent.getProjectAimsAttainment().getAimAttainment();
+            progressReportContent.getProjectOutcomesAttainment().getOutcomeAttainment();
+        }
         
         currentReference = new Reference();
         currentAttainedAim = "";

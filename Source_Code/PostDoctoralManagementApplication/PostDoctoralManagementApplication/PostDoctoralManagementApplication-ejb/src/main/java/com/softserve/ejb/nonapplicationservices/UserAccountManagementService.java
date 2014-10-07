@@ -531,24 +531,43 @@ public class UserAccountManagementService implements UserAccountManagementServic
             {
                 if(account.getEmail().equals(user.getEmail()))
                 {
-                    String pass = getGeneratorUTIL().generateRandomHexString();
-                    account.setPassword(pass);
-                    Notification notification = getDBEntitiesFactory().createNotificationEntity(null, user, "Account password reset", "You have requested a password reset on your account. The password has been changed to " + pass +". If you did not do so please contact the DRIS immditately as your account may have been hijacked");
-                    getNotificationServiceEJB().sendOnlyEmail(new Session(null, null, Boolean.TRUE), notification);
+                    TransactionController transactionController = getTransactionController();
+                    transactionController.StartTransaction();
+                    try
+                    {
+                        String pass = getGeneratorUTIL().generateRandomHexString();
+                        account.setPassword(pass);
+                    
+                        transactionController.getDAOFactoryForTransaction().createPersonDAO().edit(account);
+                    
+                        Notification notification = getDBEntitiesFactory().createNotificationEntity(null, account, "Account password reset", "You have requested a password reset on your account. The password has been changed to " + pass +". If you did not do so please contact the DRIS immditately as your account may have been hijacked");
+                        getNotificationServiceEJB().sendOnlyEmail(new Session(null, null, Boolean.TRUE), notification);
+                    
+                        transactionController.CommitTransaction();
+                    }
+                    catch(Exception ex)
+                    {
+                        transactionController.RollbackTransaction();
+                        throw ex;
+                    }
+                    finally
+                    {
+                        transactionController.CloseEntityManagerForTransaction();
+                    }
                 }
                 else
                 {
-                    throw new Exception("User account reset failed: The email supplied was incorrect");
+                    throw new Exception("User account reset failed: The user account or email supplied was incorrect");
                 }
             }
             else
             {
-                throw new Exception("User account reset failed: The user account does not exist");
+                throw new Exception("User account reset failed: The user account or email supplied was incorrect");
             }            
         }
         else
         {
-            throw new Exception("User account reset failed: The user account does not exist");
+            throw new Exception("User account reset failed: The user account or email supplied was incorrect");
         }
     }
     
@@ -587,7 +606,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         NotificationServiceLocal notificationService = getNotificationServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         //Notify the new user
-        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that an account be created for you for the following reasons: " + reason + ". Please visit the UP Postdoc site inorder to activate your account. Log in with your email address and the following password " + password);
+        Notification notification = dBEntitiesFactory.createNotificationEntity(session.getUser(), user, "Automatic account creation", "The user " + session.getUser().getCompleteName() + " has requested that an account be created for you for the following reasons: " + reason + ". Please visit the UP Postdoc site inorder to activate your account. Log in with your email address and the following password " + password + " to activate your account.");
         notificationService.sendNotification(new Session(session.getHttpSession(),session.getUser(),true),notification, true);
         
     }

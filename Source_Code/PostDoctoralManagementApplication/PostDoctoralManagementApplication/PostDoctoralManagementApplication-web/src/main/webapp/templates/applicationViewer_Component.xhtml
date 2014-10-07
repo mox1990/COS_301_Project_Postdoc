@@ -155,6 +155,9 @@
                                 <ui:decorate template="ProgressReportViewer_Component.xhtml">
                                     <ui:param name="progressReport" value="#{report}"/>
                                 </ui:decorate>
+                                <h:form>
+                                    <p:commandButton value="#{lang['EditProgressReport']}" action="#{applicationViewerRequestBean.editProgressReport(report)}" rendered="#{applicationViewerRequestBean.DRISMember}"/>
+                                </h:form>
                             </p:tab>
                         </p:accordionPanel>
                     </p:tab>

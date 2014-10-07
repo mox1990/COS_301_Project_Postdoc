@@ -53,6 +53,7 @@ public class ApplicationRenewalBean implements Serializable {
     private Application oldApplication;
     
     private int wizardActiveTab;
+    private final int MAX_TAB_INDEX = 3;
     
     /**
      * Creates a new instance of ApplicationRenewalBean
@@ -76,7 +77,7 @@ public class ApplicationRenewalBean implements Serializable {
 
             applicationCreationDependBean.init(new Application());
             cVCreationDependBean.init(oldApplication.getFellow().getCv());
-            progressReportCreationDependBean.init();       
+            progressReportCreationDependBean.init(null);       
             
             if(applicationRenewalServiceLocal.doesApplicationHaveFinalProgressReport(sessionManagerBean.getSession(),oldApplication))
             {
@@ -125,6 +126,14 @@ public class ApplicationRenewalBean implements Serializable {
 
     public void setProgressReportCreationDependBean(ProgressReportCreationDependBean progressReportCreationDependBean) {
         this.progressReportCreationDependBean = progressReportCreationDependBean;
+    }
+    
+    public void goBack()
+    {
+        if(wizardActiveTab > 1 && wizardActiveTab <=  MAX_TAB_INDEX)
+        {
+            wizardActiveTab--;
+        }
     }
     
     public void completeFinalProgressReport()

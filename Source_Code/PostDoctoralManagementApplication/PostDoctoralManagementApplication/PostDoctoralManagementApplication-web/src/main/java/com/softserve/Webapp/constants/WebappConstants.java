@@ -14,5 +14,6 @@ package com.softserve.Webapp.constants;
 public class WebappConstants {
     public static final String QUERY_ALL_USERS = "All users";
     public static final String QUERY_ALL_APPLICATION = "All applications";
-    
+    public static final String QUERY_ALL_AUDIT_LOG_ENTRIES = "All audit log entries";
+    public static final String QUERY_CUSTOM = "Custom query";
 }

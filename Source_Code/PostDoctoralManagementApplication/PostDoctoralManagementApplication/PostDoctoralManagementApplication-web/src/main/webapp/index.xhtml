@@ -38,12 +38,8 @@
                         <br/>
                         <p:growl sticky="true" showSummary="true" showDetail="true" globalOnly="false"/>
                         <p:commandButton id="loginButton" styleClass="button" value="#{lang['Login']}" action="#{indexBean.performLoginRequest()}" process="@form" update="@form"/>
-                        <br/>
-                    </h:form>  
-                    <!-- This is the only place in can get it to be visible. 
-                    Wanted to put it in the header though. 
-                    Might even end in the breadcrumb....-->
-                    
+                        <p:commandButton id="resetButton" styleClass="button" value="#{lang['forgotPassword']}" action="#{navigationManagerBean.goToUserAccountRetrievalView()}" process="@form" update="@form"/>
+                    </h:form>                      
                 </div>
             </div>
         </ui:define>

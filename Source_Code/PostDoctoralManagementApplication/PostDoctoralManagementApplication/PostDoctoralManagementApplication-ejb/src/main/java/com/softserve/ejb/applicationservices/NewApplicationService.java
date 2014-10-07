@@ -182,6 +182,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             throw new Exception("Grant holder is not valid");
         }
         
+        
+        
         EntityManager em = emf.createEntityManager();
 
         try
@@ -242,13 +244,77 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         finally
         {
             transactionController.CloseEntityManagerForTransaction();
-        }
-        
-               
+        }               
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
-    @AuditableMethod(message = "Linked referee to new application")
+    @AuditableMethod
+    public void linkRefereesToApplication(Session session, Application application, List<Person> referees) throws Exception
+    {
+        if(referees == null)
+        {
+            throw new Exception("Referees are not valid");
+        }  
+        
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
+            ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
+            
+            Application a = applicationJpaController.findApplication(application.getApplicationID());
+
+            a.setPersonList(new ArrayList<Person>());
+            
+            for(Person referee : referees)
+            {
+                UserAccountManagementServiceLocal accountManagementServices = getUserAccountManagementServiceEJB();
+
+                //Check if referee already exists
+                if(!(referee.getSystemID() != null && accountManagementServices.getUserBySystemID(referee.getSystemID()) != null && accountManagementServices.getUserBySystemID(referee.getSystemID()).equals(referee)))
+                {
+                    referee.setAddressLine1(new Address());
+
+                    List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+                    securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                    referee.setSecurityRoleList(securityRoles);
+
+                    accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral fellowship application.", false, referee);
+                }
+                else if(referee.getSystemID() != null)
+                {
+                    if(!referee.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
+                    {
+                        referee.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                        accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), referee);
+                    }            
+                }
+                
+                if(!a.getPersonList().contains(referee))
+                {
+                    a.getPersonList().add(referee);
+                }
+            }
+            
+            applicationJpaController.edit(a);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+    }
+    
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @AuditableMethod
     @Override
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
     {

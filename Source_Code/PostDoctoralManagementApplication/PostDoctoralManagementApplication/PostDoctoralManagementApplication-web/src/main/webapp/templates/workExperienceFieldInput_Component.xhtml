@@ -9,7 +9,13 @@
         <h:form>
             <p:outputPanel id="experiences">
                 <div>
-
+                    <p:outputPanel id="experiencesTable">
+                        <ui:decorate template="workExpericenceDataTableInput_Component.xhtml">
+                            <ui:param name="header" value="#{lang['WorkExperienceAlreadyAdded']}"/>
+                            <ui:param name="experienceList" value="#{experienceList}"/>
+                            <ui:param name="selectedExperienceList" value="#{selectedExperienceList}"/>
+                        </ui:decorate>
+                    </p:outputPanel>
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="#{lang['Capacity']}:" for="ecapacity"/>                                
                         <p:inputText id="ecapacity" value="#{currentExperience.capacity}" required="true"/>
@@ -31,17 +37,11 @@
                         </p:calendar>
                         <p:message for="eendDate" styleClass="eendDate"/>
                     </h:panelGrid>
+                    
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionAdd]}" value="#{lang['AddWorkExperience']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
-                    <p:outputPanel id="experiencesTable">
-                        <ui:decorate template="workExpericenceDataTableInput_Component.xhtml">
-                            <ui:param name="header" value="#{lang['WorkExperienceAlreadyAdded']}"/>
-                            <ui:param name="experienceList" value="#{experienceList}"/>
-                            <ui:param name="selectedExperienceList" value="#{selectedExperienceList}"/>
-                        </ui:decorate>
-                    </p:outputPanel>
                     <p:commandButton ajax="true" update="experiences" actionListener="#{bean[beanActionRemove]}" value="#{lang['RemoveSelectedWorkExperience']}" styleClass="button button-fill" process="@this experiencesTable">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>

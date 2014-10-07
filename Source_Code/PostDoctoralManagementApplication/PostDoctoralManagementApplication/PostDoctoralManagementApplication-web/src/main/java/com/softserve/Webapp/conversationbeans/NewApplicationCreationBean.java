@@ -74,7 +74,7 @@ public class NewApplicationCreationBean implements Serializable {
     private NewApplicationServiceLocal newApplicationServiceLocal;
     
     private int wizardActiveTab;
-    
+    private final int MAX_TAB_INDEX = 4;
        
     
     /**
@@ -128,6 +128,14 @@ public class NewApplicationCreationBean implements Serializable {
 
     public void setCVCreationDependBean(CVCreationDependBean cVCreationDependBean) {
         this.cVCreationDependBean = cVCreationDependBean;
+    }
+    
+    public void goBack()
+    {
+        if(wizardActiveTab > 0 && wizardActiveTab <=  MAX_TAB_INDEX)
+        {
+            wizardActiveTab--;
+        }
     }
         
     public void completeCV()
@@ -223,8 +231,7 @@ public class NewApplicationCreationBean implements Serializable {
     public void completeGrantHolderSpecification()
     {
         try 
-        {            
-            newApplicationServiceLocal.linkGrantHolderToApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication(), ApplicationCreationDependBean.getGrantHolder());
+        {  
             
             if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
             {
@@ -235,7 +242,6 @@ public class NewApplicationCreationBean implements Serializable {
                 wizardActiveTab = 4;
             }
             
-            sessionManagerBean.clearSessionStorage();
         } 
         catch (Exception ex) 
         {
@@ -254,11 +260,7 @@ public class NewApplicationCreationBean implements Serializable {
             {
                 throw new Exception("You need at least 2 to referees for this application");
             }
-            for(Person referee: ApplicationCreationDependBean.getReferees())
-            {
-                System.out.println("ref :" + referee.toString());
-                newApplicationServiceLocal.linkRefereeToApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication(), referee);                
-            }   
+            
             wizardActiveTab = 4;
         } 
         catch (Exception ex) 
@@ -273,6 +275,13 @@ public class NewApplicationCreationBean implements Serializable {
     {
         try 
         {
+            newApplicationServiceLocal.linkGrantHolderToApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication(), ApplicationCreationDependBean.getGrantHolder());
+            
+            if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
+            {            
+                newApplicationServiceLocal.linkRefereesToApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication(), ApplicationCreationDependBean.getReferees());                      
+            }
+            
             newApplicationServiceLocal.submitApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication());
             return navigationManagerBean.goToApplicationServicesHomeView();
         } 

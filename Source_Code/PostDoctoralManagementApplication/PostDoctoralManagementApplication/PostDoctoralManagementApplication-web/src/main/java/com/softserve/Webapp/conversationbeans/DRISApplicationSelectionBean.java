@@ -100,4 +100,30 @@ public class DRISApplicationSelectionBean implements Serializable {
         conversationManagerBean.deregisterConversation(conversation);
         return navigationManagerBean.goToDRISApprovalServiceApplicationViewer();
     }
+    
+    public void terminateApplication(Application application)
+    {
+        try
+        {
+            dRISApprovalServiceLocal.terminateApplication(sessionManagerBean.getSession(), application);
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(DRISApplicationSelectionBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+    }
+    
+    public void abandonApplication(Application application)
+    {
+        try
+        {
+            dRISApprovalServiceLocal.abandonApplication(sessionManagerBean.getSession(), application);
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(DRISApplicationSelectionBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+        }
+    }
 }

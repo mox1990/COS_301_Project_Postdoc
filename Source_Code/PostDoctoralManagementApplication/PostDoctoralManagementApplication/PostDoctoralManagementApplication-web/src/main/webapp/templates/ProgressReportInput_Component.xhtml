@@ -8,7 +8,7 @@
     <ui:component>
             <h:form>
                 <p:panel header="#{lang['ProgressReportInformation']}" id="infoProg">
-                    <h:panelGrid columns="2" cellpadding="10px">            
+                    <h:panelGrid columns="3" cellpadding="10px">            
                         <p:outputLabel value="#{lang['SelfEvaluationByFellow']}" for="selfE"/>                                
                         <p:inputTextarea id="selfE" value="#{bean.progressReportContent.selfEvaluation}"/>
                         <p:message for="selfE" styleClass="fieldErrorMessage"/>            

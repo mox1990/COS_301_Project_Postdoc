@@ -114,7 +114,6 @@ public class SessionManagerBean implements Serializable {
         catch (Exception ex) 
         {
             ExceptionUtil.logException(SessionManagerBean.class, ex);
-            ExceptionUtil.handleException(null, ex);
             return navigationManagerBean.goToPortalView();
         }
     }
@@ -137,11 +136,13 @@ public class SessionManagerBean implements Serializable {
     {
         HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
         
-        return userGateway.getSessionFromHttpSession(httpSession);
+        Session session = userGateway.getSessionFromHttpSession(httpSession);
+
+        return session;
     }
     
     public Session getSystemLevelSession()
-    {
+    {        
         return new Session(null, null, Boolean.TRUE);
     }
     

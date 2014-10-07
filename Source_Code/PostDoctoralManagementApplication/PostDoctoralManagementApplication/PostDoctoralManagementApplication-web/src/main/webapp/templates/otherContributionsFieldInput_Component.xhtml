@@ -9,6 +9,14 @@
         <h:form>
             <p:outputPanel id="#{prefix}items">
                 <div>
+                    <p:outputPanel id="#{prefix}itemsTable" >
+                        <ui:decorate template="itemsDataTableInput_Component.xhtml">
+                            <ui:param name="header" value="#{lang['OtherContributionsAlreadyAdded']}"/>
+                            <ui:param name="items" value="#{items}"/>
+                            <ui:param name="selectedItemList" value="#{selectedItemList}" />
+                        </ui:decorate>
+                    </p:outputPanel>
+                    
                     <h:panelGrid columns="3" cellpadding="5">
                         <p:outputLabel value="#{lang['ContributionType']}" for="#{prefix}itemtype"/>                                
                         <p:selectOneMenu id="#{prefix}itemtype" value="#{currentItem.type}" required="true">
@@ -34,17 +42,12 @@
                         <p:inputText id="#{prefix}itemdesciption" value="#{currentItem.desciption}" required="true"/>
                         <p:message for="#{prefix}itemdesciption"/>
                     </h:panelGrid>
+                    
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     <p:commandButton ajax="true" update="#{prefix}items" actionListener="#{bean[beanActionAdd]}" value="#{lang['AddContributionItem']}" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>
-                    <p:outputPanel id="#{prefix}itemsTable" >
-                        <ui:decorate template="itemsDataTableInput_Component.xhtml">
-                            <ui:param name="header" value="#{lang['OtherContributionsAlreadyAdded']}"/>
-                            <ui:param name="items" value="#{items}"/>
-                            <ui:param name="selectedItemList" value="#{selectedItemList}" />
-                        </ui:decorate>
-                    </p:outputPanel>
+                    
                     <p:commandButton ajax="true" update="#{prefix}items" value="#{lang['RemoveSelectedContributions']}" actionListener="#{bean[beanActionRemove]}" styleClass="button button-fill" process="@this #{prefix}itemsTable">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                     </p:commandButton>

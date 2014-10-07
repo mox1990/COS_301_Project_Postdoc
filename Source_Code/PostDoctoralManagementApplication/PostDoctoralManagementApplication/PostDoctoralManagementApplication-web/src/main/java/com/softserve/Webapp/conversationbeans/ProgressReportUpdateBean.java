@@ -6,25 +6,19 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import auto.softserve.XMLEntities.CV.ProgressReportContent;
-import auto.softserve.XMLEntities.CV.Reference;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.ProgressReport;
 import com.softserve.Webapp.depenedentbeans.ProgressReportCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.ejb.applicationservices.ProgressReportManagementServiceLocal;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -33,9 +27,9 @@ import javax.inject.Named;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Named(value = "progressReportCreationBean")
+@Named(value = "progressReportUpdateBean")
 @ConversationScoped
-public class ProgressReportCreationBean implements Serializable{
+public class ProgressReportUpdateBean implements Serializable {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
@@ -51,12 +45,10 @@ public class ProgressReportCreationBean implements Serializable{
     @EJB
     private ProgressReportManagementServiceLocal progressReportManagementServiceLocal;
     
-    
-    
     /**
-     * Creates a new instance of ProgressReportCreationRequestBean
+     * Creates a new instance of ProgressReportUpdateBean
      */
-    public ProgressReportCreationBean() {
+    public ProgressReportUpdateBean() {
     }
     
     @PostConstruct
@@ -66,23 +58,23 @@ public class ProgressReportCreationBean implements Serializable{
         conversationManagerBean.startConversation(conversation);
         try
         {
-            if(getSelectedApplication() == null)
+            if(getSelectedProgressReport()== null)
             {
-                throw new Exception("No application selected");
+                throw new Exception("No Progress Report selected");
             }
-            progressReportCreationDependBean.init(null);
+            progressReportCreationDependBean.init(getSelectedProgressReport());
         }
         catch(Exception ex)
         {
             ExceptionUtil.logException(ProgressReportCreationBean.class, ex);
             ExceptionUtil.handleException(null, ex);
-            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToProgressReportManagementServiceApplicationSelectionView());
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPreviousBreadCrumb());
         }
     }
     
-    public Application getSelectedApplication()
+    public ProgressReport getSelectedProgressReport()
     {
-        return sessionManagerBean.getObjectFromSessionStorage("APPLICATION", Application.class);
+        return sessionManagerBean.getObjectFromSessionStorage("PROGRESSREPORT", ProgressReport.class);
     }
 
     public ProgressReportCreationDependBean getProgressReportCreationDependBean() {
@@ -93,12 +85,12 @@ public class ProgressReportCreationBean implements Serializable{
         this.progressReportCreationDependBean = progressReportCreationDependBean;
     }
     
-    public String preformProgressReportCreationRequest()
+    public String preformProgressReportUpdateRequest()
     {
         try
         {   
-            progressReportManagementServiceLocal.createProgressReport(sessionManagerBean.getSession(), getSelectedApplication(), progressReportCreationDependBean.getCombinedProgressReport());
-            return navigationManagerBean.goToProgressReportManagementServiceApplicationSelectionView();
+            progressReportManagementServiceLocal.updateProgressReport(sessionManagerBean.getSession(), progressReportCreationDependBean.getCombinedProgressReport());
+            return navigationManagerBean.goToPreviousBreadCrumb();
         }
         catch(Exception ex)
         {
@@ -107,4 +99,5 @@ public class ProgressReportCreationBean implements Serializable{
             return "";
         }
     }
+    
 }

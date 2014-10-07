@@ -137,6 +137,7 @@ public class generalInformationBean {
         queryTypeItems = new ArrayList<SelectItem>();
         queryTypeItems.add(new SelectItem(com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_USERS,com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_USERS));
         queryTypeItems.add(new SelectItem(com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_APPLICATION,com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_APPLICATION));
+        queryTypeItems.add(new SelectItem(com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_AUDIT_LOG_ENTRIES,com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_AUDIT_LOG_ENTRIES));
     }
 
     public List<String> getTitleSelectItems() {

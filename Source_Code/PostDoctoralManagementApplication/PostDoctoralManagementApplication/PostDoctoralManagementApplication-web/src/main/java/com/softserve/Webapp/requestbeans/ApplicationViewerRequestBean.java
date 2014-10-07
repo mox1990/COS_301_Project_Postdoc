@@ -9,6 +9,7 @@ package com.softserve.Webapp.requestbeans;
 import auto.softserve.XMLEntities.CV.*;
 import com.softserve.DBEntities.Application;
 import com.softserve.DBEntities.Cv;
+import com.softserve.DBEntities.ProgressReport;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
@@ -89,6 +90,13 @@ public class ApplicationViewerRequestBean {
         {
             return false;
         }
+    }
+    
+    public String editProgressReport(ProgressReport progressReport)
+    {
+        sessionManagerBean.addObjectToSessionStorage("PROGRESSREPORT", progressReport);
+                
+        return navigationManagerBean.goToProgressReportManagementServiceReportUpdateView();
     }
     
 }

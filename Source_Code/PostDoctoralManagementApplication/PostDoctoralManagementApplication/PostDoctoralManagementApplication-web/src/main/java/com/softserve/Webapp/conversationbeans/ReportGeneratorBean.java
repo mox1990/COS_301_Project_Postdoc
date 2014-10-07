@@ -201,6 +201,10 @@ public class ReportGeneratorBean implements Serializable {
                     data = Arrays.asList(reportServicesLocal.loadAllPersonEntities(sessionManagerBean.getSession()).toArray());
                     break;
                     
+                case com.softserve.Webapp.constants.WebappConstants.QUERY_ALL_AUDIT_LOG_ENTRIES:
+                    data = Arrays.asList(reportServicesLocal.loadAllAuditLogEntries(sessionManagerBean.getSession()).toArray());
+                    break;
+                    
                 default:
                     break;
             }

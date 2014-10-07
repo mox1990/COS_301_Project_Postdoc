@@ -9,45 +9,45 @@
         <h:form>
             <p:outputPanel id="qualifications">
                 <div>
-                        <p:outputPanel id="qualificationsTable">
-                            <ui:decorate template="academicQualificationDataTableInput_Component.xhtml">
-                                <ui:param name="header" value="#{lang['AcademicQualificationsAlreadyAdded']}"/>
-                                <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
-                                <ui:param name="selectedAcademicQualificationList" value="#{selectedAcademicQualificationList}"/>
-                            </ui:decorate>
-                        </p:outputPanel>
+                    <p:outputPanel id="qualificationsTable">
+                        <ui:decorate template="academicQualificationDataTableInput_Component.xhtml">
+                            <ui:param name="header" value="#{lang['AcademicQualificationsAlreadyAdded']}"/>
+                            <ui:param name="academicQualificationList" value="#{academicQualificationList}"/>
+                            <ui:param name="selectedAcademicQualificationList" value="#{selectedAcademicQualificationList}"/>
+                        </ui:decorate>
+                    </p:outputPanel>
                         
                     <p:commandButton ajax="true" update="qualifications" actionListener="#{bean[beanActionRemove]}" value="#{lang['RemoveSelectedQualifications']}" styleClass="button button-fill" process="@this qualificationsTable">
-                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                        </p:commandButton>
-                    
-                        <h:panelGrid columns="3" cellpadding="5">
-                            <p:outputLabel value="#{lang['Name']}" for="qname"/>                                
-                            <p:inputText id="qname" value="#{currentQualification.name}" required="true"/>
-                            <p:message for="qname" styleClass="fieldErrorMessage"/>
-                            
-                            <p:outputLabel value="#{lang['FieldOfStudy']}" for="qfieldofstudy"/>                                
-                            <p:inputText id="qfieldofstudy" value="#{currentQualification.fieldOfStudy}" required="true"/>
-                            <p:message for="qfieldofstudy" styleClass="fieldErrorMessage"/>
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
 
-                            <p:outputLabel value="#{lang['YearObtained']}" for="qyearObtained"/>                                
-                            <p:calendar id="qyearObtained" mask="true" value="#{currentQualification.yearObtained}" required="true" navigator="true" pattern="yyyy/MM/dd">
-                                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                            </p:calendar>
-                            <p:message for="qyearObtained" styleClass="fieldErrorMessage"/>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="#{lang['Name']}" for="qname"/>                                
+                        <p:inputText id="qname" value="#{currentQualification.name}" required="true"/>
+                        <p:message for="qname" styleClass="fieldErrorMessage"/>
 
-                            <p:outputLabel value="#{lang['Institution']}" for="qinstitution"/>                                
-                            <p:inputText id="qinstitution" value="#{currentQualification.institution}" required="true"/>
-                            <p:message for="qinstitution" styleClass="fieldErrorMessage"/>
+                        <p:outputLabel value="#{lang['FieldOfStudy']}" for="qfieldofstudy"/>                                
+                        <p:inputText id="qfieldofstudy" value="#{currentQualification.fieldOfStudy}" required="true"/>
+                        <p:message for="qfieldofstudy" styleClass="fieldErrorMessage"/>
 
-                            <p:outputLabel value="#{lang['NumberOfDistinctions']}" for="qdistinctions"/>                                
-                            <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}" required="true"/>
-                            <p:message for="qdistinctions" styleClass="fieldErrorMessage"/>
-                        </h:panelGrid>
-                        <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                        <p:commandButton ajax="true" update="qualifications" actionListener="#{bean[beanActionAdd]}" value="#{lang['AddQualification']}" styleClass="button button-fill">
-                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                        </p:commandButton>
+                        <p:outputLabel value="#{lang['YearObtained']}" for="qyearObtained"/>                                
+                        <p:calendar id="qyearObtained" mask="true" value="#{currentQualification.yearObtained}" required="true" navigator="true" pattern="yyyy/MM/dd">
+                            <f:convertDateTime pattern="yyyy/MM/dd"/>
+                        </p:calendar>
+                        <p:message for="qyearObtained" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="#{lang['Institution']}" for="qinstitution"/>                                
+                        <p:inputText id="qinstitution" value="#{currentQualification.institution}" required="true"/>
+                        <p:message for="qinstitution" styleClass="fieldErrorMessage"/>
+
+                        <p:outputLabel value="#{lang['NumberOfDistinctions']}" for="qdistinctions"/>                                
+                        <p:spinner min="0" id="qdistinctions" value="#{currentQualification.distinctions}" required="true"/>
+                        <p:message for="qdistinctions" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
+                    <p:commandButton ajax="true" update="qualifications" actionListener="#{bean[beanActionAdd]}" value="#{lang['AddQualification']}" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                    </p:commandButton>
                         
                         
                 </div>

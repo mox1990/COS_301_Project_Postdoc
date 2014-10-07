@@ -34,4 +34,6 @@ public interface DRISApprovalServiceLocal {
     public void approveFunding(Session session, Application application, ResearchFellowInformation researchFellowInformation, FundingReport fundingReport, String applicantMessage, Notification cscMesssage, Notification finaceMessage) throws Exception;
     public void setApplicationEligibleStatus(Session session, Application application, boolean isElgible) throws Exception;
     public void updateFundingInformation(Session session, Application application) throws Exception;
+    public void terminateApplication(Session session, Application application) throws Exception;
+    public void abandonApplication(Session session, Application application) throws Exception;
 }

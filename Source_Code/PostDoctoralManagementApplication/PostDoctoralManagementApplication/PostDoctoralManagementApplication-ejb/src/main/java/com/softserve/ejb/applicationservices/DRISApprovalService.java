@@ -595,5 +595,66 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
 
     }
     
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @AuditableMethod
+    @Override
+    public void terminateApplication(Session session, Application application) throws Exception 
+    {
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            ApplicationJpaController applicationJpaController = transactionController.getDAOFactoryForTransaction().createApplicationDAO();
+            
+            Application a = applicationJpaController.findApplication(application.getApplicationID());
+            
+            a.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED);
+            
+            applicationJpaController.edit(a);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @AuditableMethod
+    @Override
+    public void abandonApplication(Session session, Application application) throws Exception {
+        TransactionController transactionController = getTransactionController();
+        transactionController.StartTransaction();        
+        try
+        {
+            ApplicationJpaController applicationJpaController = transactionController.getDAOFactoryForTransaction().createApplicationDAO();
+            
+            Application a = applicationJpaController.findApplication(application.getApplicationID());
+            
+            a.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ABANDONED);
+            
+            applicationJpaController.edit(a);
+
+            transactionController.CommitTransaction();
+        }
+        catch(Exception ex)
+        {
+            transactionController.RollbackTransaction();
+            throw ex;
+        }
+        finally
+        {
+            transactionController.CloseEntityManagerForTransaction();
+        }
+    }
+    
+    
+    
     
 }

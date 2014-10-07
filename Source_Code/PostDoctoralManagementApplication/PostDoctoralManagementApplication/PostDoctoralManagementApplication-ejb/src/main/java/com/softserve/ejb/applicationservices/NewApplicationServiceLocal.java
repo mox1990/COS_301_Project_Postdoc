@@ -13,6 +13,7 @@ import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Exceptions.CVAlreadExistsException;
 import com.softserve.Exceptions.UserAlreadyExistsException;
 import com.softserve.system.Session;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -27,6 +28,7 @@ public interface NewApplicationServiceLocal
     public void createProspectiveFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception;
     public void createNewApplication(Session session, Application application) throws AuthenticationException, Exception;
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception;
+    public void linkRefereesToApplication(Session session, Application application, List<Person> referees) throws Exception;
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception;
     public void submitApplication(Session session, Application application) throws Exception;
     public boolean canFellowOpenANewApplication(Person fellow);

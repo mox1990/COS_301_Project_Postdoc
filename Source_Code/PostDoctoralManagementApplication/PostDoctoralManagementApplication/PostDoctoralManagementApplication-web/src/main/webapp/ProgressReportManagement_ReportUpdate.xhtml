@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Progress report editor"/>
+        
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">#{lang['ProgressReportUpdate']}</h1>
+                <h2>#{lang['CompleteProgressReportPrompt']}</h2>
+            </div>
+                
+                <p:growl sticky="true" showSummary="true" globalOnly="false"/>
+                <ui:decorate template="templates/ProgressReportInput_Component.xhtml">
+                    <ui:param name="bean" value="#{progressReportUpdateBean.progressReportCreationDependBean}"/>
+                </ui:decorate>
+                <h:form>
+                    <p:growl sticky="true" showDetail="true" globalOnly="true"/>
+                    <p:commandButton value="#{lang['UpdateProgressReport']}" action="#{progressReportUpdateBean.preformProgressReportUpdateRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                        <p:confirm header="#{lang['UpdateProgressReportConfirmation']}" message="#{lang['UpdateProgressReportConfirmationMessage']}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

@@ -36,6 +36,16 @@
                         </p:panel>
                     </p:outputPanel>
                     
+                    <p:panel header="#{lang['Applications']}" toggleable="true">
+                        <p:tabView value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.applicationList}" dynamic="true" activeIndex="0" cache="true" var="application" >
+                            <p:tab title="#{lang['Application']} #{selectedApplication.applicationID} - #{selectedApplication.projectTitle}">
+                                <ui:decorate template="templates/applicationViewer_Component.xhtml">
+                                    <ui:param name="selectedApplication" value="#{application}"/>
+                                </ui:decorate>
+                            </p:tab>
+                        </p:tabView>
+                    </p:panel>
+                    
                     <p:commandButton value="#{lang['ConcludeMeeting']}" styleClass="button button-fill" action="#{meetingCommentatorRequestBean.closeMeeting()}" rendered="#{meetingCommentatorRequestBean.isOrganiserOfMeeting()}" update="@form">                        
                         <p:confirm header="#{lang['Confirmation']}" message="#{lang['ConcludeMeetingConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
