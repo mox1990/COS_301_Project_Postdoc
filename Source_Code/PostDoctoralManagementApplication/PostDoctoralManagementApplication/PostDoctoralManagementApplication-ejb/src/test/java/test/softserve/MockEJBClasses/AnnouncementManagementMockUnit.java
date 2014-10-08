@@ -5,10 +5,10 @@
  */
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.DAOFactory;
+import com.softserve.auxillary.factories.DAOFactory;
 import com.softserve.ejb.nonapplicationservices.AnnouncementManagementService;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import javax.persistence.EntityManager;
 
 /**

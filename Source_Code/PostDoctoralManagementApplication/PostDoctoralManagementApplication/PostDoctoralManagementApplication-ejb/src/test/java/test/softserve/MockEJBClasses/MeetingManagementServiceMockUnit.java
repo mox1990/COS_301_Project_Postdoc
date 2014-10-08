@@ -6,14 +6,14 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.CommitteeMeetingJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.MinuteCommentJpaController;
+import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.MeetingManagementService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
 import javax.persistence.EntityManager;
 
 /**

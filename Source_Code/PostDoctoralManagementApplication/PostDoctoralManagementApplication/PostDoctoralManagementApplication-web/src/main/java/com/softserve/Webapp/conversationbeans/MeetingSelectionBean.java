@@ -6,15 +6,15 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.Webapp.depenedentbeans.MeetingFilterDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -173,7 +173,7 @@ public class MeetingSelectionBean implements Serializable {
     public boolean isUserDRIS()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         try 
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);

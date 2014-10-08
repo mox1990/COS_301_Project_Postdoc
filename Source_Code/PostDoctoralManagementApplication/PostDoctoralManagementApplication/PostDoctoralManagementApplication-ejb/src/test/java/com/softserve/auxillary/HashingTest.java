@@ -5,6 +5,7 @@
  */
 package com.softserve.auxillary;
 
+import com.softserve.auxillary.util.HashUtil;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,14 +39,14 @@ public class HashingTest {
     }
 
     /**
-     * Test of hashString method, of class Hashing.
+     * Test of hashString method, of class HashUtil.
      */
     @Test
     public void testHashString() throws Exception {
         System.out.println("hashString");
         String input = "test";
         String expResult = "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff";
-        String result = Hashing.hashInput(input);
+        String result = HashUtil.hashInput(input);
         System.out.println("Result: " + result);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.

@@ -6,10 +6,10 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.Institution;
-import com.softserve.Webapp.TreeNodeWrapper;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Institution;
+
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;

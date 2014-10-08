@@ -7,10 +7,10 @@
 package com.softserve.Webapp.requestbeans;
 
 import auto.softserve.XMLEntities.CV.*;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Cv;
+import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Cv;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
@@ -50,17 +50,17 @@ public class DRISApplicationViewerRequestBean {
     
     public boolean isApplicationEndorsed()
     {
-        return getSelectedApplication().getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        return getSelectedApplication().getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
     }
     
     public boolean isApplicationEligible()
     {
-        return getSelectedApplication().getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+        return getSelectedApplication().getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
     }
     
     public boolean isApplicationFunded()
     {
-        return getSelectedApplication().getStatus().equals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
+        return getSelectedApplication().getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
     }
     
     public String getAutomaticEligiblityApprovalResult()

@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Announcement;
+import com.softserve.persistence.DBEntities.Announcement;
 import com.softserve.Webapp.depenedentbeans.AnnouncementFilterDependBean;
 import com.softserve.Webapp.depenedentbeans.AnnouncementViewerDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;

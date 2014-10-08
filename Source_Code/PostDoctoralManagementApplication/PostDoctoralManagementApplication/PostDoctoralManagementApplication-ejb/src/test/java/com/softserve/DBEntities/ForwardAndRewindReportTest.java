@@ -6,6 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ForwardAndRewindReport;
+import com.softserve.persistence.DBEntities.Application;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
@@ -50,8 +53,8 @@ public class ForwardAndRewindReportTest {
     public void testSetAndGetType() 
     {
         ForwardAndRewindReport instance = new ForwardAndRewindReport();
-        instance.setType(com.softserve.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD);
-        assertEquals(com.softserve.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD,instance.getType());
+        instance.setType(com.softserve.auxillary.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD);
+        assertEquals(com.softserve.auxillary.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD,instance.getType());
     }
 
     @Test

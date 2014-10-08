@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Notification;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;

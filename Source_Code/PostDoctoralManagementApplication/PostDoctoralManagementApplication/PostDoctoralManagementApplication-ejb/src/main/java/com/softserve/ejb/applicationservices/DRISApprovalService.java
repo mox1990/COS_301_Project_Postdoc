@@ -7,34 +7,34 @@
 package com.softserve.ejb.applicationservices;
 
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.EligiblityReportJpaController;
-import com.softserve.DBDAO.FundingCostJpaController;
-import com.softserve.DBDAO.FundingReportJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.ResearchFellowInformationJpaController;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.EligiblityReport;
-import com.softserve.DBEntities.FundingCost;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ResearchFellowInformation;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
+import com.softserve.persistence.DBDAO.FundingCostJpaController;
+import com.softserve.persistence.DBDAO.FundingReportJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.ResearchFellowInformationJpaController;
+import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.EligiblityReport;
+import com.softserve.persistence.DBEntities.FundingCost;
+import com.softserve.persistence.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ResearchFellowInformation;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -58,7 +58,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DRISApprovalService implements DRISApprovalServiceLocal {
     
-    @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName=com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -158,7 +158,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @throws java.lang.Exception
      */
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadPendingEndorsedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
@@ -168,7 +168,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         try
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
-            return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,StartIndex,maxNumberOfRecords);
+            return applicationServices.loadPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED,StartIndex,maxNumberOfRecords);
         }
         finally
         {
@@ -178,7 +178,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public int countTotalPendingEndorsedApplications(Session session) throws Exception 
@@ -188,7 +188,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         try
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
-            return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+            return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         }
         finally
         {
@@ -203,7 +203,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @return A list of all the applications that user can Approved/declined
      * @throws com.softserve.Exceptions.AuthenticationException
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadPendingEligibleApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
@@ -214,7 +214,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         try
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
-            return applicationServices.loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, StartIndex, maxNumberOfRecords);
+            return applicationServices.loadPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, StartIndex, maxNumberOfRecords);
         }
         finally
         {
@@ -222,7 +222,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public int countTotalPendingEligibleApplications(Session session) throws AuthenticationException, Exception 
@@ -232,7 +232,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         try
         {
             ApplicationServicesUtil applicationServices = getApplicationServicesUTIL(em);        
-            return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+            return applicationServices.getTotalNumberOfPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
         }
         finally
         {
@@ -250,7 +250,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public boolean checkApplicationForEligiblity(Session session, Application application) throws Exception
@@ -273,7 +273,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void setApplicationEligibleStatus(Session session, Application application, boolean isElgible) throws Exception
@@ -294,7 +294,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             {
                 if(isElgible)
                 {
-                    application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+                    application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
                     applicationJpaController.edit(application);
                     
                     notifications.add(dBEntitiesFactory.createNotificationEntity(null, application.getFellow(), "Application is eligible", "Please note that the application '" + application.getProjectTitle() + "' has been found to be eligible for funding consideration for which you are the fellow of. "));
@@ -348,7 +348,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void denyFunding(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
@@ -394,7 +394,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void approveFunding(Session session, Application application, ResearchFellowInformation researchFellowInformation, FundingReport fundingReport, String applicantMessage, Notification cscMesssage, Notification finaceMessage) throws AuthenticationException, RollbackFailureException, Exception
@@ -421,7 +421,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             oldApplication.setStartDate(application.getStartDate());
             oldApplication.setEndDate(application.getEndDate());
             oldApplication.setFundingReport(null);
-            oldApplication.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
+            oldApplication.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
             applicationJpaController.edit(oldApplication);
 
             List<FundingCost> fundingCosts = fundingReport.getFundingCostList();
@@ -443,9 +443,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
 
 
             Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
-            if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
+            if(!fellow.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
             {
-                fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
+                fellow.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
             }
 
 
@@ -486,7 +486,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadFundedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception 
@@ -495,7 +495,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
 
         try
         {
-            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, StartIndex, maxNumberOfRecords);
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, StartIndex, maxNumberOfRecords);
         }
         finally
         {
@@ -504,7 +504,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void updateFundingInformation(Session session, Application application) throws Exception 
@@ -555,9 +555,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
 
 
             Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
-            if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
+            if(!fellow.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
             {
-                fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
+                fellow.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);            
             }
 
             researchFellowInformation.setPerson(fellow);
@@ -595,7 +595,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
 
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void terminateApplication(Session session, Application application) throws Exception 
@@ -608,7 +608,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             
             Application a = applicationJpaController.findApplication(application.getApplicationID());
             
-            a.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED);
+            a.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED);
             
             applicationJpaController.edit(a);
 
@@ -625,7 +625,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void abandonApplication(Session session, Application application) throws Exception {
@@ -637,7 +637,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             
             Application a = applicationJpaController.findApplication(application.getApplicationID());
             
-            a.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ABANDONED);
+            a.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ABANDONED);
             
             applicationJpaController.edit(a);
 

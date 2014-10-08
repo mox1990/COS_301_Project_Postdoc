@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Application;
 import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;

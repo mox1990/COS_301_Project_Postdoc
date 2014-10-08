@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import javax.inject.Named;

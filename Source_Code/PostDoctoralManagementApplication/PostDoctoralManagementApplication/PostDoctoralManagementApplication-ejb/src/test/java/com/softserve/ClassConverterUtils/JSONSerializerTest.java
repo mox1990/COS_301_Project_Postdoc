@@ -6,8 +6,10 @@
 
 package com.softserve.ClassConverterUtils;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Person;
+import com.softserve.experimental.converters.ConvertProperty;
+import com.softserve.experimental.converters.JSONSerializer;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Person;
 import java.util.ArrayList;
 import java.util.Date;
 import org.junit.After;

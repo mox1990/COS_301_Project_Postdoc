@@ -6,13 +6,13 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Person;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.Exceptions.CVAlreadExistsException;
-import com.softserve.Exceptions.UserAlreadyExistsException;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.Exceptions.CVAlreadExistsException;
+import com.softserve.auxillary.Exceptions.UserAlreadyExistsException;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

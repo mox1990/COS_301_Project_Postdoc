@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.FundingCost;
+import com.softserve.persistence.DBEntities.FundingReport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,8 +59,8 @@ public class FundingCostTest {
     public void testSetAndGetType() 
     {
         FundingCost instance = new FundingCost(Long.MIN_VALUE);
-        instance.setType(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE);
-        assertEquals(com.softserve.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE,instance.getType());
+        instance.setType(com.softserve.auxillary.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE);
+        assertEquals(com.softserve.auxillary.constants.PersistenceConstants.FUNDINGCOST_TYPE_CONFERENCE,instance.getType());
     }
 
     @Test

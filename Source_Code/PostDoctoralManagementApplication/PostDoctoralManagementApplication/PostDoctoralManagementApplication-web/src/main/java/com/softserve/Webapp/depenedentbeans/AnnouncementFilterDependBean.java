@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.depenedentbeans;
 
-import com.softserve.DBEntities.Announcement;
+import com.softserve.persistence.DBEntities.Announcement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

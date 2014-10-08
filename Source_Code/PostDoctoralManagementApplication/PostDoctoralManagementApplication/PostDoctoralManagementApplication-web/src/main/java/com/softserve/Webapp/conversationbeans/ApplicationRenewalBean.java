@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Application;
 import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.ProgressReportCreationDependBean;

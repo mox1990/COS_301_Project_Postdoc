@@ -5,16 +5,16 @@
  */
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.AnnouncementJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBEntities.Announcement;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.RefereeReport;
+import com.softserve.persistence.DBDAO.AnnouncementJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBEntities.Announcement;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.RefereeReport;
 import com.softserve.ejb.nonapplicationservices.AnnouncementManagementServiceLocal;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;

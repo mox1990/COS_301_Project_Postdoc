@@ -6,6 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Address;
 import java.util.ArrayList;
 import org.junit.After;
 import static org.junit.Assert.*;

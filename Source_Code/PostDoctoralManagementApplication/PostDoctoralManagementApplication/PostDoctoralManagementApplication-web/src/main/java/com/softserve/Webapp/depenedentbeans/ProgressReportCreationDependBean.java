@@ -8,7 +8,7 @@ package com.softserve.Webapp.depenedentbeans;
 
 import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import auto.softserve.XMLEntities.CV.Reference;
-import com.softserve.DBEntities.ProgressReport;
+import com.softserve.persistence.DBEntities.ProgressReport;
 import com.softserve.Webapp.util.MessageUtil;
 import java.io.Serializable;
 import java.util.ArrayList;

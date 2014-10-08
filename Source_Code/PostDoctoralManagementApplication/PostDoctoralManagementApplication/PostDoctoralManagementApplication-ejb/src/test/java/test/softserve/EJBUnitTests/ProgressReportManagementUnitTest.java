@@ -6,21 +6,21 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.ProgressReportJpaController;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ProgressReport;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.ProgressReportJpaController;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ProgressReport;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.applicationservices.ProgressReportManagementService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -79,7 +79,7 @@ public class ProgressReportManagementUnitTest
       
         Session mockSession = mock(Session.class);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         instance.setaDAO(mockApplicationDAO);
         instance.setnEJB(mockNotificationService);
@@ -126,7 +126,7 @@ public class ProgressReportManagementUnitTest
         
         Session mockSession = mock(Session.class);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         instance.setaDAO(mockApplication);
         instance.setnEJB(mockNotificationService);

@@ -6,13 +6,13 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.MinuteComment;
-import com.softserve.DBEntities.Person;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.MinuteComment;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

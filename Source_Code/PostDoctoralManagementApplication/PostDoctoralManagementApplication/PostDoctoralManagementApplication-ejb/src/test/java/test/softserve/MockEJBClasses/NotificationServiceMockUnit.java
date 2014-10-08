@@ -6,9 +6,9 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.AuditLogJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.NotificationJpaController;
+import com.softserve.persistence.DBDAO.AuditLogJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.NotificationJpaController;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import javax.persistence.EntityManager;
 

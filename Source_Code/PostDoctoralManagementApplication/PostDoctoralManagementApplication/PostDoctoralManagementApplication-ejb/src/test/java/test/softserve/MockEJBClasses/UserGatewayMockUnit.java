@@ -6,12 +6,12 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.AddressJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.EmployeeInformationJpaController;
+import com.softserve.persistence.DBDAO.AddressJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.EmployeeInformationJpaController;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 
 /**

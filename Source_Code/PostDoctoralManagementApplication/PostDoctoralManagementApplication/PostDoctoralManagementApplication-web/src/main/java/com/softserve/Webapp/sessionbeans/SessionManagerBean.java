@@ -7,12 +7,12 @@
 package com.softserve.Webapp.sessionbeans;
 
 import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.Webapp.util.StorageItem;
-import com.softserve.auxillary.Hashing;
-import com.softserve.system.Session;
+import com.softserve.Webapp.auxiliary.StorageItem;
+import com.softserve.auxillary.util.HashUtil;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
@@ -67,7 +67,7 @@ public class SessionManagerBean implements Serializable {
         }
         
         httpSession.setAttribute("username",username);
-        httpSession.setAttribute("password",Hashing.hashInput(password));
+        httpSession.setAttribute("password", HashUtil.hashInput(password));
         httpSession.setAttribute("status", Boolean.FALSE);
         
         try

@@ -7,13 +7,13 @@
 package com.softserve.Webapp.requestbeans;
 
 import auto.softserve.XMLEntities.referee.ReferalReport;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.RefereeReport;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.RefereeReportServiceLocal;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;

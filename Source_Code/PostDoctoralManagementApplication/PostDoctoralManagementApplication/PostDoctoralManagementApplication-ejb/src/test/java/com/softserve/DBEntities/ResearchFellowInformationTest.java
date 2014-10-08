@@ -6,6 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ResearchFellowInformation;
+import com.softserve.persistence.DBEntities.Department;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

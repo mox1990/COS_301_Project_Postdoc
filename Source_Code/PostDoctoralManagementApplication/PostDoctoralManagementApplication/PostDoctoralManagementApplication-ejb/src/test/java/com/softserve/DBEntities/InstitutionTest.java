@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Institution;
+import com.softserve.persistence.DBEntities.Faculty;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;

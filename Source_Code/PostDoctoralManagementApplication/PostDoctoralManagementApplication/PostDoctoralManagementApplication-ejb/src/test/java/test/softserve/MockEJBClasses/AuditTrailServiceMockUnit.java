@@ -6,10 +6,10 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.AuditLogJpaController;
-import com.softserve.DBDAO.DAOFactory;
+import com.softserve.persistence.DBDAO.AuditLogJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import javax.persistence.EntityManager;
 
 /**

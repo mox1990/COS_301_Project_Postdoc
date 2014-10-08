@@ -6,11 +6,11 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.SecurityRoleJpaController;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBDAO.SecurityRoleJpaController;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;

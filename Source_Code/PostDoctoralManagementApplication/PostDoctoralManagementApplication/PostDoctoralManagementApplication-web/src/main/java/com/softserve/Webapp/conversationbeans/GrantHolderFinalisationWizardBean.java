@@ -6,9 +6,9 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.Person;
 import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.ApplicationReviewRequestCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
@@ -17,7 +17,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.GrantHolderFinalisationServiceLocal;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;

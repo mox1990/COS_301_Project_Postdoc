@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.sessionbeans;
 
-import com.softserve.Webapp.util.BreadCrumb;
+import com.softserve.Webapp.auxiliary.BreadCrumb;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

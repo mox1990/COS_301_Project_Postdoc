@@ -7,10 +7,10 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Local;
@@ -23,11 +23,11 @@ import javax.mail.MessagingException;
  */
 @Local
 public interface NotificationServiceLocal {
-    public void sendBatchNotifications(com.softserve.system.Session session, List<Notification> notifications, boolean sendEmail) throws Exception;
-    public void sendNotification(com.softserve.system.Session session, Notification notification, boolean sendEmail) throws Exception;
-    public void sendOnlyEmail(com.softserve.system.Session session, Notification notification);
+    public void sendBatchNotifications(com.softserve.auxillary.requestresponseclasses.Session session, List<Notification> notifications, boolean sendEmail) throws Exception;
+    public void sendNotification(com.softserve.auxillary.requestresponseclasses.Session session, Notification notification, boolean sendEmail) throws Exception;
+    public void sendOnlyEmail(com.softserve.auxillary.requestresponseclasses.Session session, Notification notification);
     public List<Notification> getAllNotificationsForPerson(Session session, Person person) throws AuthenticationException, Exception;
-    public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception;
+    public List<Notification> getAllNotificationsFromPerson(com.softserve.auxillary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception;
     
 
 }

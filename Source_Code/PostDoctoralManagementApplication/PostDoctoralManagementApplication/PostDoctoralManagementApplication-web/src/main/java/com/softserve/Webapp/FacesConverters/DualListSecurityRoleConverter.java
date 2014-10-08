@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.FacesConverters;
 
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -36,7 +36,7 @@ public class DualListSecurityRoleConverter implements Converter {
         
             SecurityRole role = new SecurityRole();
             role.setRoleID(Long.parseLong(value));
-            role.setName(com.softserve.constants.PersistenceConstants.getSecurityRoleName(role.getRoleID()));
+            role.setName(com.softserve.auxillary.constants.PersistenceConstants.getSecurityRoleName(role.getRoleID()));
             //role.setRoleID(Long.parseLong(value.substring(0, value.indexOf(" "))));
             //role.setName(value.substring(value.indexOf(" ") + 1));
             System.out.println("Converting string " + value + " to " + role.getName() + " " + role.toString());

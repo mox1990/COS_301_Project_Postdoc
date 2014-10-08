@@ -6,20 +6,20 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.EligiblityReportJpaController;
-import com.softserve.DBDAO.FundingCostJpaController;
-import com.softserve.DBDAO.FundingReportJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.Application;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
+import com.softserve.persistence.DBDAO.FundingCostJpaController;
+import com.softserve.persistence.DBDAO.FundingReportJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.Application;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.DRISApprovalService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;

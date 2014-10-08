@@ -6,15 +6,15 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.AcademicQualificationJpaController;
-import com.softserve.DBDAO.CvJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.ExperienceJpaController;
+import com.softserve.persistence.DBDAO.AcademicQualificationJpaController;
+import com.softserve.persistence.DBDAO.CvJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.ExperienceJpaController;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.CVManagementService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import javax.persistence.EntityManager;
 
 /**

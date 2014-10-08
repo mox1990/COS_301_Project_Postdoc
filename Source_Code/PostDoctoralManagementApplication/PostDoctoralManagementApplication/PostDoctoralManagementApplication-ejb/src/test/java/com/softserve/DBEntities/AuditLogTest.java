@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.AuditLog;
 import java.util.Date;
 import javax.validation.constraints.AssertTrue;
 import org.junit.After;

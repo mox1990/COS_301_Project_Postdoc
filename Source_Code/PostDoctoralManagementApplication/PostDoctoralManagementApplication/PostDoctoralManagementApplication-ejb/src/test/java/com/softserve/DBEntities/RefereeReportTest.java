@@ -6,6 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Application;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
