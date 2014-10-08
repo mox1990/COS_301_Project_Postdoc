@@ -8,35 +8,35 @@ package com.softserve.ejb.applicationservices;
 
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
-import com.softserve.DBDAO.AmmendRequestJpaController;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.DeclineReportJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.AmmendRequest;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.ApplicationReviewRequest;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.DeclineReport;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.DeclineReportJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
+import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.AmmendRequest;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.ApplicationReviewRequest;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.DeclineReport;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.RecommendationReport;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -60,7 +60,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class HODRecommendationServices implements HODRecommendationServicesLocal {
 
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -126,7 +126,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws com.softserve.Exceptions.AuthenticationException
      * @throws java.lang.Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
@@ -135,7 +135,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
 
         try
         {
-            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, StartIndex, maxNumberOfRecords);
         }
         finally
         {
@@ -145,7 +145,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
@@ -154,7 +154,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
 
         try
         {
-            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
         }
         finally
         {
@@ -172,7 +172,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public void declineAppliction(Session session, Application application, String reason) throws Exception
@@ -218,7 +218,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
@@ -233,7 +233,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
 
             //Ammend application
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
+            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);        
             applicationJpaController.edit(application);
 
             AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
@@ -272,7 +272,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public void recommendApplication(Session session, Application application, RecommendationReport recommendationReport) throws Exception
@@ -300,7 +300,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             application = applicationJpaController.findApplication(application.getApplicationID());
 
             application.setRecommendationReport(recommendationReport);
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
 
             try
             {
@@ -342,7 +342,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public List<Person> getDeansOfApplication(Session session, Application application) throws Exception
@@ -360,7 +360,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_HOD})
     @AuditableMethod
     @Override
     public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
@@ -372,7 +372,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             DAOFactory dAOFactory = getDAOFactory(em);
             ApplicationReviewRequestJpaController applicationReviewRequestJpaController = dAOFactory.createApplicationReviewRequestDAO();
             PersonJpaController personJpaController = dAOFactory.createPersonDAO();
-            List<ApplicationReviewRequest> applicationReviewRequests = applicationReviewRequestJpaController.findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            List<ApplicationReviewRequest> applicationReviewRequests = applicationReviewRequestJpaController.findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
 
             if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
             {
@@ -393,7 +393,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             if(personJpaController.findUserBySystemIDOrEmail(dean.getSystemID()) == null)
             {
                 dean.setSecurityRoleList(new ArrayList<SecurityRole>());
-                dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+                dean.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
                 getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a post doctoral fellowship for endorsement consideration", true, dean);
             }
             else
@@ -401,11 +401,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
 
                 dean = personJpaController.findPerson(dean.getSystemID());
 
-                if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
+                if(!session.getUser().equals(dean) && !application.getFellow().equals(dean) && (!application.getGrantHolder().equals(dean) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER)) && !application.getPersonList().contains(dean))
                 {
-                    if(!dean.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER))
+                    if(!dean.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER))
                     {
-                        dean.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+                        dean.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
                         getUserAccountManagementServiceEJB().updateUserAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), dean);
                     }
                 }
@@ -427,7 +427,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, dean, com.softserve.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, dean, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
 
             dAOFactory.createApplicationReviewRequestDAO().create(applicationReviewRequest);
 

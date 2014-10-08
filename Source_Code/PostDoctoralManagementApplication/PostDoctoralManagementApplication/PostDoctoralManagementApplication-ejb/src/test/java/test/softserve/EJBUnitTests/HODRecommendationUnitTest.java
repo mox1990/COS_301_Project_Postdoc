@@ -6,26 +6,26 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.AmmendRequestJpaController;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.FundingReportJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
-import com.softserve.DBEntities.AmmendRequest;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.FundingReportJpaController;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
+import com.softserve.persistence.DBEntities.AmmendRequest;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.RecommendationReport;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.HODRecommendationServices;
 import com.softserve.ejb.applicationservices.HODRecommendationServicesLocal;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -110,7 +110,7 @@ public class HODRecommendationUnitTest {
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         int start = 0;
         int max = 5; 
         
@@ -119,7 +119,7 @@ public class HODRecommendationUnitTest {
             instance.loadPendingApplications(mockSession, start, max);
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, start, max);
+            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, start, max);
         }
         catch (Exception ex)
         {
@@ -137,14 +137,14 @@ public class HODRecommendationUnitTest {
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         
         try
         {
             instance.countTotalPendingApplications(mockSession);
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
         }
         catch (Exception ex)
         {
@@ -178,7 +178,7 @@ public class HODRecommendationUnitTest {
         when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
 
         try
         {
@@ -221,7 +221,7 @@ public class HODRecommendationUnitTest {
         when(mockDBEntitiesFactory.createAmmendRequestEntity(mockApplication, mockSession.getUser(),reason, mockCal.getTime())).thenReturn(new AmmendRequest(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
 
         try
         {
@@ -274,7 +274,7 @@ public class HODRecommendationUnitTest {
         when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
 
         try
         {

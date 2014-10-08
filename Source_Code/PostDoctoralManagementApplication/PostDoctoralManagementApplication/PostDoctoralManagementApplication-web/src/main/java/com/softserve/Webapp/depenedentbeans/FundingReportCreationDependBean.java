@@ -6,8 +6,8 @@
 
 package com.softserve.Webapp.depenedentbeans;
 
-import com.softserve.DBEntities.FundingCost;
-import com.softserve.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.FundingCost;
+import com.softserve.persistence.DBEntities.FundingReport;
 import com.softserve.Webapp.util.MessageUtil;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -6,6 +6,9 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Endorsement;
 import java.util.ArrayList;
 import java.util.Date;
 import org.junit.After;

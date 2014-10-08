@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Person;
 import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
 import com.softserve.Webapp.depenedentbeans.PersonFilterDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;

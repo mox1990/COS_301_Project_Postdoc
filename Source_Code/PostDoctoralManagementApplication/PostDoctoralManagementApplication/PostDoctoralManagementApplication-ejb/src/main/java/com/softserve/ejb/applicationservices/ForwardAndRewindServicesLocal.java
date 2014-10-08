@@ -6,8 +6,8 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

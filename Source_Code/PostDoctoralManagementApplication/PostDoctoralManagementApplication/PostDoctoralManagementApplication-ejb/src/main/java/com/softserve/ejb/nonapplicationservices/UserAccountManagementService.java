@@ -6,28 +6,34 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBDAO.*;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.PreexistingEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ResearchFellowInformation;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.Exceptions.AutomaticSystemIDGenerationException;
-import com.softserve.Exceptions.UserAlreadyExistsException;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Generator;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.AuditLogJpaController;
+import com.softserve.persistence.DBDAO.AddressJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.ResearchFellowInformationJpaController;
+import com.softserve.persistence.DBDAO.NotificationJpaController;
+import com.softserve.persistence.DBDAO.EmployeeInformationJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.persistence.DBDAO.exceptions.PreexistingEntityException;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ResearchFellowInformation;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.Exceptions.AutomaticSystemIDGenerationException;
+import com.softserve.auxillary.Exceptions.UserAlreadyExistsException;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.util.GeneratorUtil;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -64,7 +70,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * is used to give the DAOs the ability to use application managed 
      * entity managers in JTA context so that manual transaction demarcation.
      */
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -150,9 +156,9 @@ public class UserAccountManagementService implements UserAccountManagementServic
      *
      * @return
      */
-    protected Generator getGeneratorUTIL()
+    protected GeneratorUtil getGeneratorUTIL()
     {
-        return new Generator();
+        return new GeneratorUtil();
     }
     
     /**
@@ -222,7 +228,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws com.softserve.DBDAO.exceptions.RollbackFailureException Is thrown if an address, person or employeeinfo failed to rollback due to some error 
      * @throws Exception Is thrown if an unknown error has occurred
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void createUserAccount(Session session, boolean useManualSystemIDSpecification, Person user) throws Exception
     {     
@@ -259,15 +265,15 @@ public class UserAccountManagementService implements UserAccountManagementServic
             if(!useManualSystemIDSpecification)
             {
 
-                if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
+                if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR))
                 {
                     user.setSystemID(generateSystemID('a'));
                 }
-                else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
+                else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW))
                 {
                     user.setSystemID(generateSystemID('f'));
                 }
-                else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
+                else if(personJpaController.doesPersonHaveSecurityRole(user, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_REFEREE))
                 {
                     user.setSystemID(generateSystemID('r'));
                 }
@@ -365,7 +371,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws com.softserve.DBDAO.exceptions.RollbackFailureException Is thrown if an address, person or employeeinfo failed to rollback due to some error 
      * @throws Exception Is thrown if an unknown error has occurred
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void updateUserAccount(Session session, Person user) throws Exception
@@ -481,7 +487,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @throws RollbackFailureException
      * @throws Exception Is thrown if an unknown error has occurred
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public void removeUserAccount(Session session, String systemID) throws Exception
@@ -503,7 +509,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
             //Find person object
             Person user = personJpaController.findPerson(systemID);
 
-            user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+            user.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
             personJpaController.edit(user);
 
             transactionController.CommitTransaction();
@@ -583,7 +589,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param userUPInfo
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public void generateOnDemandAccount(Session session, String reason, boolean useManualSystemIDSpecification, Person user) throws Exception
@@ -595,7 +601,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         }
 
         //Set account to dorment
-        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
+        user.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
         //Set new random password
         String password = getGeneratorUTIL().generateRandomHexString();
         user.setPassword(password);
@@ -622,7 +628,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     public void activateOnDemandAccount(Session session, Person user) throws Exception
     {        
                 
-        user.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        user.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
         updateUserAccount(session, user);  
         
         AuditLog auditLog = getDBEntitiesFactory().createAduitLogEntitiy("Activated user account", user); //This is a isolated instance when a user activates a new account
@@ -634,7 +640,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      * @param session The current HttpSession that is used for user authentication
      * @return A list of Person objects representing the user accounts
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception
@@ -689,7 +695,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     }
     
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public void approveOnDemandAccount(Session session, Person account) throws Exception 
@@ -703,7 +709,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
             PersonJpaController personJpaController = dAOFactory.createPersonDAO();
             account = personJpaController.findPerson(account.getSystemID());
         
-            account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+            account.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
 
             personJpaController.edit(account);
 
@@ -722,7 +728,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public void declineOnDemandAccount(Session session, Person account) throws Exception 
@@ -737,7 +743,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
             NotificationJpaController notificationJpaController = dAOFactory.createNotificationDAO();
             AuditLogJpaController auditLogJpaController = dAOFactory.createAuditLogDAO();
 
-            account.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+            account.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
 
             for(Notification notification: account.getNotificationList())
             {
@@ -802,7 +808,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception 
@@ -811,7 +817,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
 
         try
         {
-            return getDAOFactory(em).createPersonDAO().findAllUsersWhichHaveAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
+            return getDAOFactory(em).createPersonDAO().findAllUsersWhichHaveAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_PENDING);
         }
         finally
         {

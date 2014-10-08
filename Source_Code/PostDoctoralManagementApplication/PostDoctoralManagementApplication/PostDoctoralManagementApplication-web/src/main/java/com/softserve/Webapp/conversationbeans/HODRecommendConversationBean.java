@@ -7,8 +7,8 @@
 package com.softserve.Webapp.conversationbeans;
 
 import auto.softserve.XMLEntities.HOD.RecommendationReportContent;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.RecommendationReport;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.RecommendationReport;
 import com.softserve.Webapp.depenedentbeans.ApplicationReviewRequestCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;

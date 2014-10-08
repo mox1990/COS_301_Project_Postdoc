@@ -6,6 +6,10 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.Department;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;

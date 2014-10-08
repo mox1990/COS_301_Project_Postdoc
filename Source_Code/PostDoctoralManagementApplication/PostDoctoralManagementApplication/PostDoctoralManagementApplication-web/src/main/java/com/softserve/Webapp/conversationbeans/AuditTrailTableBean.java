@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;

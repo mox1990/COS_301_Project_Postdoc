@@ -8,9 +8,9 @@ package com.softserve.Webapp.conversationbeans;
 
 import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import auto.softserve.XMLEntities.CV.Reference;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ProgressReport;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ProgressReport;
 import com.softserve.Webapp.depenedentbeans.ProgressReportCreationDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;

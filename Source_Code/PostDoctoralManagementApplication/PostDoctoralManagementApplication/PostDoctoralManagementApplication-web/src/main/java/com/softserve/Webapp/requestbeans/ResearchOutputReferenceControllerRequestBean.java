@@ -28,7 +28,7 @@ public class ResearchOutputReferenceControllerRequestBean {
     {
         if(reference != null && reference.getStatus() != null && !reference.getStatus().equals(""))
         {            
-            return !reference.getStatus().equals(com.softserve.constants.PersistenceConstants.CV_REFERENCE_INPROGRESS);
+            return !reference.getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.CV_REFERENCE_INPROGRESS);
         }
         else
         {
@@ -40,7 +40,7 @@ public class ResearchOutputReferenceControllerRequestBean {
     {
         if(reference != null && reference.getStatus() != null && !reference.getStatus().equals(""))
         {            
-            return reference.getStatus().equals(com.softserve.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED);
+            return reference.getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.CV_REFERENCE_PUBLISHED);
         }
         else
         {

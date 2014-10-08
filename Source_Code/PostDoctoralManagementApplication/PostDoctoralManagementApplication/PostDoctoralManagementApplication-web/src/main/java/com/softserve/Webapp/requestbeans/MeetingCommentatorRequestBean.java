@@ -6,8 +6,8 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.MinuteComment;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.MinuteComment;
 import com.softserve.Webapp.conversationbeans.MeetingSelectionBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;

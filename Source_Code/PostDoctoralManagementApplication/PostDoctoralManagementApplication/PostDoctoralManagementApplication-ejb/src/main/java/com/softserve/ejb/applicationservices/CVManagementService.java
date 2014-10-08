@@ -6,22 +6,23 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.DBDAO.AcademicQualificationJpaController;
-import com.softserve.DBDAO.CvJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.ExperienceJpaController;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Experience;
-import com.softserve.Exceptions.*;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.Exceptions.CVAlreadExistsException;
+import com.softserve.persistence.DBDAO.AcademicQualificationJpaController;
+import com.softserve.persistence.DBDAO.CvJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.ExperienceJpaController;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.Experience;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -42,7 +43,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class CVManagementService implements CVManagementServiceLocal {
 
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     public CVManagementService() {

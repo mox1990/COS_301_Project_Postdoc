@@ -6,17 +6,17 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.NotificationJpaController;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.NotificationJpaController;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,7 +55,7 @@ import javax.validation.constraints.Future;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class NotificationService implements NotificationServiceLocal { // TODO: Decide on the local, ermote and what not <- should be local
     
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
     public NotificationService() {
@@ -102,7 +102,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                                                   @Override
                                                   protected PasswordAuthentication getPasswordAuthentication() 
                                                   {
-                                                          return new PasswordAuthentication(com.softserve.constants.SystemConstants.MAIL_USERNAME, com.softserve.constants.SystemConstants.MAIL_PASSWORD);
+                                                          return new PasswordAuthentication(com.softserve.auxillary.constants.SystemConstants.MAIL_USERNAME, com.softserve.auxillary.constants.SystemConstants.MAIL_PASSWORD);
                                                   }
                                                 };
         return authenticator;        
@@ -126,7 +126,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
 
     @Override
     @Asynchronous
-    public void sendBatchNotifications(com.softserve.system.Session session, List<Notification> notifications, boolean sendEmail) throws Exception
+    public void sendBatchNotifications(com.softserve.auxillary.requestresponseclasses.Session session, List<Notification> notifications, boolean sendEmail) throws Exception
     {
         for(Notification n : notifications)
         {
@@ -137,7 +137,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @SecuredMethod(AllowedSecurityRoles = {})
     @Override
     @Asynchronous
-    public void sendNotification(com.softserve.system.Session session, Notification notification, boolean sendEmail)
+    public void sendNotification(com.softserve.auxillary.requestresponseclasses.Session session, Notification notification, boolean sendEmail)
     {   
         try 
         {
@@ -162,17 +162,17 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                     try
                     {
                         sendEmail(notification);
-                        notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_SENT);
+                        notification.setEmailStatus(com.softserve.auxillary.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_SENT);
                     }
                     catch(MessagingException ex)
                     {
-                        notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_QUEUED);
+                        notification.setEmailStatus(com.softserve.auxillary.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_QUEUED);
                         
                     }
                 }
                 else
                 {
-                    notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_DISABLED);
+                    notification.setEmailStatus(com.softserve.auxillary.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_DISABLED);
                 }
 
                 notification.setEmailRetryCount(0);
@@ -201,7 +201,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @SecuredMethod(AllowedSecurityRoles = {})
     @Override
     @Asynchronous
-    public void sendOnlyEmail(com.softserve.system.Session session, Notification notification)
+    public void sendOnlyEmail(com.softserve.auxillary.requestresponseclasses.Session session, Notification notification)
     {        
         try
         {
@@ -228,10 +228,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         String footerText = "\n\n" + "This message is an email sent from the UP Post Doctoral Management System. Please do not reply to this email.";
         
         Address[] addresses = new Address[1];
-        addresses[0] = getInternetAddressJMAIL(com.softserve.constants.SystemConstants.MAIL_USERNAME);
+        addresses[0] = getInternetAddressJMAIL(com.softserve.auxillary.constants.SystemConstants.MAIL_USERNAME);
 
         Message message = getMimeMessageJMAIL(session);
-        message.setFrom(getInternetAddressJMAIL(com.softserve.constants.SystemConstants.MAIL_USERNAME));
+        message.setFrom(getInternetAddressJMAIL(com.softserve.auxillary.constants.SystemConstants.MAIL_USERNAME));
         message.setSubject(subjectText + notification.getSubject());
         message.setRecipients(Message.RecipientType.TO, addresses);
         message.setText(headerText + notification.getMessage() + footerText);
@@ -239,10 +239,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
 
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR},ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
-    public List<Notification> getAllNotificationsForPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception
+    public List<Notification> getAllNotificationsForPerson(com.softserve.auxillary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception
     {
         EntityManager em = emf.createEntityManager();
 
@@ -256,10 +256,10 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         }        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR},ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR},ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
-    public List<Notification> getAllNotificationsFromPerson(com.softserve.system.Session session, Person person) throws AuthenticationException, Exception
+    public List<Notification> getAllNotificationsFromPerson(com.softserve.auxillary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception
     {
 
         EntityManager em = emf.createEntityManager();
@@ -295,9 +295,9 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
                     {
                         notification.setEmailRetryCount(notification.getEmailRetryCount() + 1);
                         
-                        if(notification.getEmailRetryCount() > com.softserve.constants.PersistenceConstants.EMAIL_RETRY_THRESHOLD)
+                        if(notification.getEmailRetryCount() > com.softserve.auxillary.constants.PersistenceConstants.EMAIL_RETRY_THRESHOLD)
                         {
-                            notification.setEmailStatus(com.softserve.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_FAILED);
+                            notification.setEmailStatus(com.softserve.auxillary.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_FAILED);
                         }
                         
                         TransactionController transactionController = new TransactionController(emf);

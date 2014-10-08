@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.depenedentbeans;
 
-import com.softserve.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Person;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.Dependent;

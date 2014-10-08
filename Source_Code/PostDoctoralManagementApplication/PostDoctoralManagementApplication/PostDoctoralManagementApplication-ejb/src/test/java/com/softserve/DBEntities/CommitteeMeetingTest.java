@@ -6,6 +6,10 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.MinuteComment;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.Application;
 import java.util.ArrayList;
 import java.util.Date;
 import org.junit.After;

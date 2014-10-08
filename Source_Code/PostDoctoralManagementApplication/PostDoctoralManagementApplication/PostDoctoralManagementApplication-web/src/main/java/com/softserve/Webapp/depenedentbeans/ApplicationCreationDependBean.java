@@ -8,9 +8,9 @@ package com.softserve.Webapp.depenedentbeans;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
 import auto.softserve.XMLEntities.application.Member;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Experience;
-import com.softserve.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Experience;
+import com.softserve.persistence.DBEntities.Person;
 import com.softserve.Webapp.util.MessageUtil;
 import java.io.Serializable;
 import java.util.ArrayList;

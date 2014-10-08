@@ -6,8 +6,8 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBEntities.Announcement;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBEntities.Announcement;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

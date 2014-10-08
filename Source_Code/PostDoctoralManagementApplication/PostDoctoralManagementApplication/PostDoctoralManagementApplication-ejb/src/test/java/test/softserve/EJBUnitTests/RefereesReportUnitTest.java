@@ -8,27 +8,27 @@ package test.softserve.EJBUnitTests;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
 import auto.softserve.XMLEntities.referee.ReferalReport;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.CvJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
-import com.softserve.DBDAO.RefereeReportJpaController;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.EligiblityReport;
-import com.softserve.DBEntities.Experience;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.RefereeReport;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.CvJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
+import com.softserve.persistence.DBDAO.RefereeReportJpaController;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.EligiblityReport;
+import com.softserve.persistence.DBEntities.Experience;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import org.junit.*;
 import static org.junit.Assert.fail;
@@ -70,7 +70,7 @@ public class RefereesReportUnitTest {
         Session mockSession = mock(Session.class);
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         int start = 0;
         int max = 5; 
         
@@ -78,7 +78,7 @@ public class RefereesReportUnitTest {
         {
             instance.loadPendingApplications(mockSession, start, max);
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, start, max);
+            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, start, max);
         }
         catch(Exception ex)
         {
@@ -106,13 +106,13 @@ public class RefereesReportUnitTest {
         instance.setuEJB(mockUserGateway); 
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         
         try
         {
             instance.countTotalPendingApplications(mockSession);
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }
         catch(Exception ex)
         {
@@ -139,7 +139,7 @@ public class RefereesReportUnitTest {
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Application made Referred" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         try
         {
             instance.submitReferralReport(mockSession, mockApplication, mockRefereeReport);

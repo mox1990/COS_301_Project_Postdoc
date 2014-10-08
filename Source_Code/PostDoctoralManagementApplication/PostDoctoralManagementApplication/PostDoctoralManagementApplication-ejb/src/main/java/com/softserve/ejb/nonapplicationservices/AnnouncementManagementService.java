@@ -6,15 +6,16 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBDAO.AnnouncementJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBEntities.Announcement;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.*;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.persistence.DBDAO.AnnouncementJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBEntities.Announcement;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Asynchronous;
@@ -38,7 +39,7 @@ import javax.persistence.PersistenceUnit;
 @Stateless
 public class AnnouncementManagementService implements AnnouncementManagementServiceLocal {
 
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     protected DAOFactory getDAOFactory(EntityManager em)
@@ -89,7 +90,7 @@ public class AnnouncementManagementService implements AnnouncementManagementServ
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR} )
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR} )
     @AuditableMethod 
     @Override
     public void createAnnouncement(Session session, Announcement announcement) throws Exception 
@@ -114,7 +115,7 @@ public class AnnouncementManagementService implements AnnouncementManagementServ
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR} )
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR} )
     @AuditableMethod 
     @Override
     public void updateAnnouncement(Session session, Announcement announcement) throws Exception 
@@ -139,7 +140,7 @@ public class AnnouncementManagementService implements AnnouncementManagementServ
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR} )
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR} )
     @AuditableMethod 
     @Override
     public void removeAnnouncement(Session session, Announcement announcement) throws Exception 

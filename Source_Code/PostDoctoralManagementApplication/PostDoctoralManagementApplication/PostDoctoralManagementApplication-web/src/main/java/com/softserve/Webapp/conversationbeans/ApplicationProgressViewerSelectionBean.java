@@ -6,15 +6,15 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.ApplicationProgressViewerServiceLocal;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
@@ -106,8 +106,8 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         try 
         {
             ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-            securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
             
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
@@ -123,7 +123,7 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
     {
         try 
         {
-            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         } 
         catch (Exception ex) 
         {
@@ -138,8 +138,8 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         try 
         {
             ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-            securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 

@@ -8,22 +8,22 @@ package test.softserve.EJBUnitTests;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
 import auto.softserve.XMLEntities.referee.ReferalReport;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.CvJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Experience;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.CvJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.Experience;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import org.junit.*;
 import org.junit.AfterClass;
@@ -72,7 +72,7 @@ public class NewApplicationUnitTest {
         AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
    
         try
         {
@@ -114,7 +114,7 @@ public class NewApplicationUnitTest {
         instance.setuEJB(mockUserGateway);
         instance.setaTEJB(mockAuditTrailService);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         
         
         try
@@ -126,7 +126,7 @@ public class NewApplicationUnitTest {
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
         }
         catch (Exception ex)
         {
@@ -158,7 +158,7 @@ public class NewApplicationUnitTest {
         instance.setuEJB(mockUserGateway);
         instance.setaTEJB(mockAuditTrailService);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         
         
        try
@@ -193,7 +193,7 @@ public class NewApplicationUnitTest {
         Person mockPerson = mock(Person.class);
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         try
         {
@@ -229,7 +229,7 @@ public class NewApplicationUnitTest {
         Person mockPerson = null;
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         try
         {
@@ -263,7 +263,7 @@ public class NewApplicationUnitTest {
         instance.setdBEntitities(mockDBEntitiesFactory);
         instance.setuEJB(mockUserGateway);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
         try
         {
             instance.linkRefereeToApplication(mockSession, mockApplication, mockPerson);
@@ -298,7 +298,7 @@ public class NewApplicationUnitTest {
         instance.setdBEntitities(mockDBEntitiesFactory);
         instance.setuEJB(mockUserGateway);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
        
         try
         {
@@ -394,7 +394,7 @@ public class NewApplicationUnitTest {
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         Session mockSession = mock(Session.class);
         Application mockApplication = mock(Application.class);
-        when(mockApplication.getStatus()).thenReturn(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        when(mockApplication.getStatus()).thenReturn(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         ArrayList<Application> mockAppList = mock(ArrayList.class);
         when(mockAppList.get(0)).thenReturn(mockApplication);
         
@@ -432,7 +432,7 @@ public class NewApplicationUnitTest {
         AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
         Session mockSession = mock(Session.class);
         Application mockApplication = mock(Application.class);
-        when(mockApplication.getStatus()).thenReturn(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        when(mockApplication.getStatus()).thenReturn(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         ArrayList<Application> mockAppList = mock(ArrayList.class);
         when(mockAppList.get(0)).thenReturn(mockApplication);
         
@@ -448,7 +448,7 @@ public class NewApplicationUnitTest {
         instance.setuEJB(mockUserGateway);
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         
         
         try

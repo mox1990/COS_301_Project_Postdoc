@@ -6,6 +6,14 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.RecommendationReport;
+import com.softserve.persistence.DBEntities.ProgressReport;
+import com.softserve.persistence.DBEntities.Endorsement;
 import java.util.ArrayList;
 import java.util.Date;
 import org.junit.After;
@@ -51,8 +59,8 @@ public class ApplicationTest {
     public void testSetAndGetAndGetStatus() 
     {
         Application instance = new Application();
-        instance.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED);
-        assertEquals(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED, instance.getStatus());
+        instance.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED);
+        assertEquals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED, instance.getStatus());
     }
 
     @Test

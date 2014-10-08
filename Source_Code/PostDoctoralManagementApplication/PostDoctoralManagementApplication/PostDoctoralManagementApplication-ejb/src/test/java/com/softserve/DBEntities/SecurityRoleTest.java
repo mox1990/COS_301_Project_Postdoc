@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.Person;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;

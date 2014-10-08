@@ -6,11 +6,11 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ResearchFellowInformation;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ResearchFellowInformation;
 import com.softserve.Webapp.depenedentbeans.FundingReportCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;

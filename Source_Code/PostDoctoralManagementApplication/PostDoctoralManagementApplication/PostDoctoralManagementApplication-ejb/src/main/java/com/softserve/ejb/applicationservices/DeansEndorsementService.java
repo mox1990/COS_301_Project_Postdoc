@@ -7,26 +7,26 @@
 package com.softserve.ejb.applicationservices;
 
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.EndorsementJpaController;
-import com.softserve.DBDAO.exceptions.NonexistentEntityException;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.EndorsementJpaController;
+import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Endorsement;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -49,7 +49,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -93,7 +93,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new GregorianCalendar();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
@@ -102,7 +102,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
         try
         {      
-            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, StartIndex, maxNumberOfRecords);
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, StartIndex, maxNumberOfRecords);
         }
         finally
         {
@@ -110,7 +110,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod
     @Override
     public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
@@ -119,7 +119,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
         try
         {
-            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
         }
         finally
         {
@@ -127,7 +127,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod(message = "Dean declined")
     @Override
     public void declineApplication(Session session, Application application, String reason) throws AuthenticationException, NonexistentEntityException, RollbackFailureException, Exception
@@ -163,7 +163,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod(message = "Dean endorsed application")
     @Override
     public void endorseApplication(Session session, Application application, Endorsement endorsementReport) throws AuthenticationException, RollbackFailureException, NonexistentEntityException, Exception
@@ -188,7 +188,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
             endorsementJpaController.create(endorsementReport);
 
             application.setEndorsement(endorsementReport);        
-            application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
 
             try
             {

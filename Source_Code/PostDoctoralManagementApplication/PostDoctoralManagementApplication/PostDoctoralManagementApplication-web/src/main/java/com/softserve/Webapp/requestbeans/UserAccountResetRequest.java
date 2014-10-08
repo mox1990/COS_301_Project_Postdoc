@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Person;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;

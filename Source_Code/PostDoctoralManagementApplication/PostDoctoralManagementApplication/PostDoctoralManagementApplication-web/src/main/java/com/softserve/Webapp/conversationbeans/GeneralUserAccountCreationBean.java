@@ -6,13 +6,13 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.Institution;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Institution;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
@@ -94,8 +94,8 @@ public class GeneralUserAccountCreationBean implements Serializable{
 
             locationFinderDependBean.init(null);
 
-            sourceRoles = com.softserve.constants.PersistenceConstants.getAllSecurityRoles();
-            sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            sourceRoles = com.softserve.auxillary.constants.PersistenceConstants.getAllSecurityRoles();
+            sourceRoles.remove(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
 
             targetRoles = new ArrayList<SecurityRole>();
             securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles);
@@ -199,7 +199,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 securityRoles.getTarget().addAll(securityRoles.getSource());
                 
                 
-                securityRoles.getTarget().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+                securityRoles.getTarget().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
 
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
@@ -207,7 +207,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
             
             System.out.println(person.getSecurityRoleList().toString());
             
-            person.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+            person.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
             person.setAddressLine1(address);
             
             

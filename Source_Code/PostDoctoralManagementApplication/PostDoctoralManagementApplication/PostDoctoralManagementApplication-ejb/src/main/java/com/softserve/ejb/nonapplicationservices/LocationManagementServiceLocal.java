@@ -6,11 +6,11 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.Institution;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Institution;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

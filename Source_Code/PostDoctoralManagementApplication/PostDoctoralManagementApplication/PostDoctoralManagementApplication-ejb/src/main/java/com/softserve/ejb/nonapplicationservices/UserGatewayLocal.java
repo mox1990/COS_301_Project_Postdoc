@@ -6,16 +6,16 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBDAO.SecurityRoleJpaController;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ProgressReport;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.Exceptions.AuthenticationException;
-import com.softserve.system.Session;
+import com.softserve.persistence.DBDAO.SecurityRoleJpaController;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ProgressReport;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 import javax.servlet.http.HttpSession;

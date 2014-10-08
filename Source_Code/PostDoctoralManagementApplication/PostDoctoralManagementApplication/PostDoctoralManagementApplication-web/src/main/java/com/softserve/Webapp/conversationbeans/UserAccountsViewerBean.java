@@ -6,8 +6,8 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.Webapp.depenedentbeans.PersonFilterDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
@@ -112,17 +112,17 @@ public class UserAccountsViewerBean implements Serializable {
     
     public boolean isUserAccountDisabled(Person account)
     {
-        return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+        return account.getAccountStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
     }
     
     public boolean isUserAccountDorment(Person account)
     {
-        return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        return account.getAccountStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
     }
     
     public boolean isUserAccountActive(Person account)
     {
-        return account.getAccountStatus().equals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        return account.getAccountStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
     public boolean isOwnerOfAccount(Person account)
@@ -142,7 +142,7 @@ public class UserAccountsViewerBean implements Serializable {
     public boolean isSystemAdmin()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try 
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);

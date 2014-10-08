@@ -6,9 +6,9 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.AuditLogJpaController;
-import com.softserve.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.AuditLogJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.ejb.nonapplicationservices.ReportServices;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;

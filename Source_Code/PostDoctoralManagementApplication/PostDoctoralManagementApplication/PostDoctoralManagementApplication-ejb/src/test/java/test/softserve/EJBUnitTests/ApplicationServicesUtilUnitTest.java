@@ -6,26 +6,26 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.DeclineReportJpaController;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.DeclineReport;
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.EligiblityReport;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.DeclineReportJpaController;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.DeclineReport;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.EligiblityReport;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -108,7 +108,7 @@ public class ApplicationServicesUtilUnitTest {
      */
     @Test
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndReferre() {
-        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
+        String applicationStatusGroup = com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
         
         try
         {
@@ -126,7 +126,7 @@ public class ApplicationServicesUtilUnitTest {
     
     @Test
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndGrantholder() {
-        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED;
+        String applicationStatusGroup = com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED;
         
         try
         {
@@ -144,7 +144,7 @@ public class ApplicationServicesUtilUnitTest {
     
     @Test
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndDepartment() {
-        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
+        String applicationStatusGroup = com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
         
         Department mockDepartment = mock(Department.class);
         when(mockDepartment.getName()).thenReturn("TEST");
@@ -171,7 +171,7 @@ public class ApplicationServicesUtilUnitTest {
     
     @Test
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndFaculty() {
-        String applicationStatusGroup = com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
+        String applicationStatusGroup = com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
         
         Department mockDepartment = mock(Department.class);
         
@@ -269,7 +269,7 @@ public class ApplicationServicesUtilUnitTest {
         when(mockApplication.getFellow()).thenReturn(new Person("u12236731"));
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
-        when(mockApplication.getStatus()).thenReturn(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
+        when(mockApplication.getStatus()).thenReturn(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED);
         
         String reason = "Prospective fellow does not meet the requirement";
         

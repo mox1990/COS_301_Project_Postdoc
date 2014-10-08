@@ -6,14 +6,14 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.Person;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Person;
 import com.softserve.ejb.nonapplicationservices.ReportServices;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;

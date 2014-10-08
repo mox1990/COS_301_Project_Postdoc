@@ -6,6 +6,10 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.DeclineReport;
+import com.softserve.persistence.DBEntities.AmmendRequest;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;

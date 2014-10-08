@@ -6,6 +6,20 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.MinuteComment;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.RecommendationReport;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.Endorsement;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import org.junit.After;
@@ -186,8 +200,8 @@ public class PersonTest {
     public void testSetAndGetAccountStatus() 
     {
         Person instance = new Person();
-        instance.setAccountStatus(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
-        assertEquals(com.softserve.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE, instance.getAccountStatus());
+        instance.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        assertEquals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE, instance.getAccountStatus());
     }
 
     @Test

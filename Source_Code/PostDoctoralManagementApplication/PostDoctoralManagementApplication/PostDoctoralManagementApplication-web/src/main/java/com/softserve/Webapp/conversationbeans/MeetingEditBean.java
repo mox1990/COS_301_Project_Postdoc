@@ -6,17 +6,17 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.Person;
-import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.auxillary.Exceptions.AuthenticationException;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.DRISApprovalServiceLocal;
 import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

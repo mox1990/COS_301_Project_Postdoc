@@ -6,69 +6,69 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBDAO.AcademicQualificationJpaController;
-import com.softserve.DBDAO.AddressJpaController;
-import com.softserve.DBDAO.AmmendRequestJpaController;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.ApplicationReviewRequestJpaController;
-import com.softserve.DBDAO.AuditLogJpaController;
-import com.softserve.DBDAO.CommitteeMeetingJpaController;
-import com.softserve.DBDAO.CvJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.DeclineReportJpaController;
-import com.softserve.DBDAO.DepartmentJpaController;
-import com.softserve.DBDAO.EligiblityReportJpaController;
-import com.softserve.DBDAO.EmployeeInformationJpaController;
-import com.softserve.DBDAO.EndorsementJpaController;
-import com.softserve.DBDAO.ExperienceJpaController;
-import com.softserve.DBDAO.FacultyJpaController;
-import com.softserve.DBDAO.ForwardAndRewindReportJpaController;
-import com.softserve.DBDAO.FundingCostJpaController;
-import com.softserve.DBDAO.FundingReportJpaController;
-import com.softserve.DBDAO.InstitutionJpaController;
-import com.softserve.DBDAO.MinuteCommentJpaController;
-import com.softserve.DBDAO.NotificationJpaController;
-import com.softserve.DBDAO.PersonJpaController;
-import com.softserve.DBDAO.ProgressReportJpaController;
-import com.softserve.DBDAO.RecommendationReportJpaController;
-import com.softserve.DBDAO.RefereeReportJpaController;
-import com.softserve.DBDAO.ResearchFellowInformationJpaController;
-import com.softserve.DBDAO.SecurityRoleJpaController;
-import com.softserve.DBDAO.exceptions.RollbackFailureException;
-import com.softserve.DBEntities.AcademicQualification;
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.AmmendRequest;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.ApplicationReviewRequest;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.DeclineReport;
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.EligiblityReport;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Endorsement;
-import com.softserve.DBEntities.Experience;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.ForwardAndRewindReport;
-import com.softserve.DBEntities.FundingCost;
-import com.softserve.DBEntities.FundingReport;
-import com.softserve.DBEntities.Institution;
-import com.softserve.DBEntities.MinuteComment;
-import com.softserve.DBEntities.Notification;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ProgressReport;
-import com.softserve.DBEntities.RecommendationReport;
-import com.softserve.DBEntities.RefereeReport;
-import com.softserve.DBEntities.ResearchFellowInformation;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.constants.PersistenceConstants;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.AcademicQualificationJpaController;
+import com.softserve.persistence.DBDAO.AddressJpaController;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.persistence.DBDAO.AuditLogJpaController;
+import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.persistence.DBDAO.CvJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.DeclineReportJpaController;
+import com.softserve.persistence.DBDAO.DepartmentJpaController;
+import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
+import com.softserve.persistence.DBDAO.EmployeeInformationJpaController;
+import com.softserve.persistence.DBDAO.EndorsementJpaController;
+import com.softserve.persistence.DBDAO.ExperienceJpaController;
+import com.softserve.persistence.DBDAO.FacultyJpaController;
+import com.softserve.persistence.DBDAO.ForwardAndRewindReportJpaController;
+import com.softserve.persistence.DBDAO.FundingCostJpaController;
+import com.softserve.persistence.DBDAO.FundingReportJpaController;
+import com.softserve.persistence.DBDAO.InstitutionJpaController;
+import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
+import com.softserve.persistence.DBDAO.NotificationJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.ProgressReportJpaController;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
+import com.softserve.persistence.DBDAO.RefereeReportJpaController;
+import com.softserve.persistence.DBDAO.ResearchFellowInformationJpaController;
+import com.softserve.persistence.DBDAO.SecurityRoleJpaController;
+import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
+import com.softserve.persistence.DBEntities.AcademicQualification;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.AmmendRequest;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.ApplicationReviewRequest;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.Cv;
+import com.softserve.persistence.DBEntities.DeclineReport;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.EligiblityReport;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Endorsement;
+import com.softserve.persistence.DBEntities.Experience;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.ForwardAndRewindReport;
+import com.softserve.persistence.DBEntities.FundingCost;
+import com.softserve.persistence.DBEntities.FundingReport;
+import com.softserve.persistence.DBEntities.Institution;
+import com.softserve.persistence.DBEntities.MinuteComment;
+import com.softserve.persistence.DBEntities.Notification;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.ProgressReport;
+import com.softserve.persistence.DBEntities.RecommendationReport;
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.ResearchFellowInformation;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.constants.PersistenceConstants;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -100,11 +100,11 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ArchivalService implements ArchivalServiceLocal {
     
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emfArchive;
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emfWorking;
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emfBackup;
 
     public ArchivalService() 
@@ -138,7 +138,7 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
     @Override
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     public void backupDatabase(Session session) throws Exception
     {
         System.out.println("Running Backup...");
@@ -1158,21 +1158,21 @@ public class ArchivalService implements ArchivalServiceLocal {
     }    
     
     //@Schedule(dayOfWeek="Sat", hour="2", info = "Daily backup of the database.")
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void archiveOldInformation(Session session)
     {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void retrieveArchievedInformation(Session session)
     {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void restoreBackupToWorkingDatabase(Session session) throws Exception
     {

@@ -6,19 +6,19 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.CommitteeMeetingJpaController;
-import com.softserve.DBDAO.MinuteCommentJpaController;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.DBEntities.CommitteeMeeting;
-import com.softserve.DBEntities.MinuteComment;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
+import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.persistence.DBEntities.CommitteeMeeting;
+import com.softserve.persistence.DBEntities.MinuteComment;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
-import com.softserve.system.Session;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -279,8 +279,8 @@ public class MeetingManagementUnitTest {
         when(mockSession.getUser()).thenReturn(new Person("u12019837"));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
         
         try
         {

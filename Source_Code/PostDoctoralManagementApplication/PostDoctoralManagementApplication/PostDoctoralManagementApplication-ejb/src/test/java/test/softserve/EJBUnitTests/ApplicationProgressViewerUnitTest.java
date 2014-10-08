@@ -5,15 +5,15 @@
  */
 package test.softserve.EJBUnitTests;
 
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.RefereeReport;
-import com.softserve.auxillary.ApplicationStageStatus;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.auxillary.requestresponseclasses.ApplicationStageStatus;
 import com.softserve.ejb.applicationservices.ApplicationProgressViewerServiceLocal;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.system.Session;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -6,7 +6,7 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.IOException;
 import javax.ejb.Local;
 

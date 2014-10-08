@@ -6,16 +6,16 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.DBDAO.AmmendRequestJpaController;
-import com.softserve.system.ApplicationServicesUtil;
-import com.softserve.DBDAO.ApplicationJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBDAO.RecommendationReportJpaController;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.HODRecommendationServices;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.system.DBEntitiesFactory;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 

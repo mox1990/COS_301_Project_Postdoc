@@ -6,14 +6,14 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.DBEntities.Announcement;
+import com.softserve.persistence.DBEntities.Announcement;
 import com.softserve.Webapp.depenedentbeans.AnnouncementViewerDependBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
-import com.softserve.auxillary.Issue;
+import com.softserve.auxillary.requestresponseclasses.Issue;
 import com.softserve.ejb.nonapplicationservices.AnnouncementManagementServiceLocal;
 import com.softserve.ejb.nonapplicationservices.NotifierServicesLocal;
-import com.softserve.system.Session;
+import com.softserve.auxillary.requestresponseclasses.Session;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;

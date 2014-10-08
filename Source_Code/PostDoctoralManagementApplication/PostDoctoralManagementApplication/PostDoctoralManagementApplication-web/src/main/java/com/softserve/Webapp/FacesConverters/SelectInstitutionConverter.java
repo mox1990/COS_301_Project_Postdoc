@@ -6,7 +6,7 @@
 
 package com.softserve.Webapp.FacesConverters;
 
-import com.softserve.DBEntities.Institution;
+import com.softserve.persistence.DBEntities.Institution;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

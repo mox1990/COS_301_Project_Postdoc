@@ -6,6 +6,8 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.Experience;
+import com.softserve.persistence.DBEntities.Cv;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;

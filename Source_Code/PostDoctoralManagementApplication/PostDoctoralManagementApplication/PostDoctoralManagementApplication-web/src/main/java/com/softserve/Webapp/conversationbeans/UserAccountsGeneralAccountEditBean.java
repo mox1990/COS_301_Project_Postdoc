@@ -6,13 +6,13 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.Institution;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Institution;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
@@ -107,15 +107,15 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
             }
             employeeInformation.setEmployeeID(person.getSystemID());
 
-            sourceRoles = com.softserve.constants.PersistenceConstants.getAllSecurityRoles();        
-            sourceRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            sourceRoles = com.softserve.auxillary.constants.PersistenceConstants.getAllSecurityRoles();        
+            sourceRoles.remove(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
 
             targetRoles = person.getSecurityRoleList();
             sourceRoles.removeAll(targetRoles);
 
             securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles); 
 
-            if(targetRoles.remove(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
+            if(targetRoles.remove(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR))
             {
                 isSystemAdmin = true;            
             }
@@ -219,7 +219,7 @@ public class UserAccountsGeneralAccountEditBean implements Serializable {
             if(isSystemAdmin)
             {
                 securityRoles.getTarget().addAll(securityRoles.getSource()); 
-                securityRoles.getTarget().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+                securityRoles.getTarget().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
 
             person.setSecurityRoleList(new ArrayList<SecurityRole>());

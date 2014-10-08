@@ -6,6 +6,10 @@
 
 package com.softserve.DBEntities;
 
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.ResearchFellowInformation;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Department;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;

@@ -6,15 +6,15 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.DBDAO.AuditLogJpaController;
-import com.softserve.DBDAO.DAOFactory;
-import com.softserve.DBEntities.AuditLog;
-import com.softserve.annotations.AuditableMethod;
-import com.softserve.annotations.SecuredMethod;
-import com.softserve.interceptors.AuditTrailInterceptor;
-import com.softserve.interceptors.AuthenticationInterceptor;
-import com.softserve.system.Session;
-import com.softserve.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.AuditLogJpaController;
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.persistence.DBEntities.AuditLog;
+import com.softserve.auxillary.annotations.AuditableMethod;
+import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +36,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class AuditTrailService implements AuditTrailServiceLocal {
 
-    @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
     public AuditTrailService() {
@@ -89,7 +89,7 @@ public class AuditTrailService implements AuditTrailServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @AuditableMethod
     @Override
     public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception
