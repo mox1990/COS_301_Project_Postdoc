@@ -6,12 +6,15 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import com.softserve.persistence.DBDAO.AuditLogJpaController;
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.ejb.nonapplicationservices.AuditTrailServiceLocal;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -20,10 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import test.softserve.MockEJBClasses.AuditTrailServiceMockUnit;
 
@@ -36,6 +36,9 @@ import test.softserve.MockEJBClasses.AuditTrailServiceMockUnit;
 public class AuditTrailUnitTest {
     private AuditTrailServiceMockUnit instance;
     
+    private DAOFactory mockDAOFactory;
+    private TransactionController mockTransactionController;
+    private EntityManager mockEm;
     private AuditLogJpaController mockAuditLogJpaController;
     
     public AuditTrailUnitTest() {
@@ -50,12 +53,20 @@ public class AuditTrailUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new AuditTrailServiceMockUnit();
         
+        mockDAOFactory = mock(DAOFactory.class);
+        mockTransactionController = mock(TransactionController.class);
+        mockEm = mock(EntityManager.class);
         mockAuditLogJpaController = mock(AuditLogJpaController.class);
         
-        instance.setADAO(mockAuditLogJpaController);
+        instance.setEm(mockEm);
+        instance.setTransactionController(mockTransactionController);
+        instance.setdAOFactory(mockDAOFactory);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
+        when(mockDAOFactory.createAuditLogDAO()).thenReturn(mockAuditLogJpaController);
     }
     
     @After
@@ -91,6 +102,24 @@ public class AuditTrailUnitTest {
         {
             //instance.logAction(mockAuditLog);
             //verify(mockAuditLog).setAction("Shortened action");
+            
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            //fail("An exception occured");
+        }
+    }
+    
+    /**
+     * Test of loadAllLogActions method, of class AuditTrailService.
+     */
+    @Test
+    public void loadAllLogActions() throws Exception {        
+        AuditLog mockAuditLog = mock(AuditLog.class);
+        when(mockAuditLog.getAction()).thenReturn("Defualt action");
+        try
+        {
             
         }
         catch (Exception ex)

@@ -6,6 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxillary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.AcademicQualificationJpaController;
 import com.softserve.persistence.DBDAO.CvJpaController;
 import com.softserve.persistence.DBDAO.ExperienceJpaController;
@@ -16,6 +17,7 @@ import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxillary.factories.DBEntitiesFactory;
 import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -37,11 +39,10 @@ public class CVManagementUnitTest {
     private CVManagementServiceMockUnit instance;
         
     private CvJpaController mockCvJpaController;
-    private UserGateway mockUserGateway;
-    private AuditTrailService mockAuditTrailService;
     private AcademicQualificationJpaController mockAcademicQualificationJpaController;
     private ExperienceJpaController mockExperienceJpaController;
-    private DBEntitiesFactory mockDBEntitiesFactory;
+    private DAOFactory mockDAOFactory;
+    private TransactionController mockTransactionController;
     
     public CVManagementUnitTest() {
     }
@@ -55,23 +56,21 @@ public class CVManagementUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new CVManagementServiceMockUnit();
         
-        mockCvJpaController =  mock(CvJpaController.class);
-        mockUserGateway =  mock(UserGateway.class);
-        mockAuditTrailService =  mock(AuditTrailService.class);
         mockAcademicQualificationJpaController = mock(AcademicQualificationJpaController.class);
         mockExperienceJpaController = mock(ExperienceJpaController.class);
-        mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
+        mockCvJpaController =  mock(CvJpaController.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockTransactionController = mock(TransactionController.class);
         
+        instance.setdAOFactory(mockDAOFactory);
         
-        instance.setcVDAO(mockCvJpaController);
-        instance.setuEJB(mockUserGateway);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setaQDAO(mockAcademicQualificationJpaController);
-        instance.seteDAO(mockExperienceJpaController);
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
+        when(mockDAOFactory.createAcademicQualificationDAO()).thenReturn(mockAcademicQualificationJpaController);
+        when(mockDAOFactory.createExperienceDAO()).thenReturn(mockExperienceJpaController);
+        when(mockDAOFactory.createCvDAO()).thenReturn(mockCvJpaController);
     }
     
     @After
@@ -83,8 +82,7 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testCreateCV() throws Exception {
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-                
+        
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
         Session mockSession = mock(Session.class);
@@ -95,11 +93,9 @@ public class CVManagementUnitTest {
         {
             instance.createCV(mockSession, mockCV);
             
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
+            
             verify(mockCvJpaController).create(mockCV);          
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created user cv", new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+            // TODO: Add more stuff
         }
         catch (Exception ex)
         {
@@ -110,8 +106,6 @@ public class CVManagementUnitTest {
     
     @Test
     public void testCreateCVButHasCV() throws Exception {
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-                
         Person mockPerson = mock(Person.class);
         
         Cv mockCV = mock(Cv.class);  
@@ -126,13 +120,12 @@ public class CVManagementUnitTest {
         {
             instance.createCV(mockSession, mockCV);
             
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            
         }
         catch (Exception ex)
         {
-            if(!ex.getMessage().equals("The user already has a cv"))
-                ;//fail("An exception occured");
+            if(!ex.getMessage().equals("The user already has a cv"));
+            //fail("An exception occured");
         }
     }
 
@@ -141,8 +134,6 @@ public class CVManagementUnitTest {
      */
     @Test
     public void testUpdateCV() throws Exception {
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        
         Cv mockCV = mock(Cv.class);  
         when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
         Session mockSession = mock(Session.class);
@@ -152,11 +143,8 @@ public class CVManagementUnitTest {
         {
             instance.updateCV(mockSession, mockCV);
             
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
             verify(mockCvJpaController).edit(mockCV);          
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Updated user cv", new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+            
         }
         catch (Exception ex)
         {

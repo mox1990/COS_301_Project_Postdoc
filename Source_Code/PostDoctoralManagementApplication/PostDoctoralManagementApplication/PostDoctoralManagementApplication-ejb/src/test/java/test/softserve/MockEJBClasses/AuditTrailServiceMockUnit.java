@@ -8,6 +8,7 @@ package test.softserve.MockEJBClasses;
 
 import com.softserve.persistence.DBDAO.AuditLogJpaController;
 import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxillary.factories.DBEntitiesFactory;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import javax.persistence.EntityManager;
@@ -18,19 +19,37 @@ import javax.persistence.EntityManager;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class AuditTrailServiceMockUnit extends AuditTrailService {
-    
-    private AuditLogJpaController aDAO = null;
-    
-    public void setADAO(AuditLogJpaController aDAO)
-    {
-        this.aDAO = aDAO;
+    DAOFactory dAOFactory;
+    TransactionController transactionController;
+    EntityManager em;
+
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
     }
     
-    @Override    
+    public void setTransactionController(TransactionController transactionController) {
+        this.transactionController = transactionController;
+    }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+    
+    @Override
     protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(em);
-    }   
+        return dAOFactory;
+    }
     
+    @Override
+    protected TransactionController getTransactionController()
+    {
+        return transactionController;
+    }
     
+    @Override
+    protected EntityManager createEntityManager()
+    {
+        return em;
+    }
 }

@@ -100,6 +100,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
     
     protected void rewindApplicationToOpenStatus(TransactionController transactionController, Application application) throws Exception
     {
@@ -277,7 +281,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         }
     }
-        
+    
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod(message = "Application forwared")
     @Override
@@ -411,7 +415,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     public List<Application> loadMovableApplications(Session session) throws Exception
     {
         
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

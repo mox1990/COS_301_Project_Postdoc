@@ -15,6 +15,7 @@ import com.softserve.ejb.applicationservices.CVManagementService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxillary.factories.DBEntitiesFactory;
 import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import javax.persistence.EntityManager;
 
 /**
@@ -22,43 +23,27 @@ import javax.persistence.EntityManager;
  * @author kgothatso
  */
 public class CVManagementServiceMockUnit extends CVManagementService {
-    private CvJpaController cVDAO;
-    private UserGateway uEJB;
-    private AuditTrailService aTEJB;
-    private DBEntitiesFactory dBEntities;
-    private AcademicQualificationJpaController aQDAO;
-    private ExperienceJpaController eDAO;
+    private DAOFactory dAOFactory;
+    private TransactionController transactionController;
 
-    public void seteDAO(ExperienceJpaController eDAO) {
-        this.eDAO = eDAO;
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
     }
     
-    public void setaQDAO(AcademicQualificationJpaController aQDAO) {
-        this.aQDAO = aQDAO;
+    public void setTransactionController(TransactionController transactionController) {
+        this.transactionController = transactionController;
     }
-    
-    public void setcVDAO(CvJpaController cVDAO) {
-        this.cVDAO = cVDAO;
-    }
-
-    public void setuEJB(UserGateway uEJB) {
-        this.uEJB = uEJB;
-    }
-
-    public void setaTEJB(AuditTrailService aTEJB) {
-        this.aTEJB = aTEJB;
-    }
-
-    public void setdBEntities(DBEntitiesFactory dBEntities) {
-        this.dBEntities = dBEntities;
-    }
-    
-
     
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(em);
+        return dAOFactory;
     } 
+    
+    @Override
+    protected TransactionController getTransactionController()
+    {
+        return transactionController;
+    }
     
 }

@@ -20,6 +20,7 @@ import com.softserve.ejb.applicationservices.DRISApprovalService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -29,69 +30,37 @@ import javax.persistence.EntityManager;
  * @author kgothatso
  */
 public class DRISApprovalServiceMockUnit extends DRISApprovalService {
-    private ApplicationJpaController aDAO;
-    private FundingReportJpaController fRDAO;
     private DBEntitiesFactory dBEntities;
-    private UserGateway uEJB;
     private NotificationService nEJB;
-    private AuditTrailService aTEJB;
     private ApplicationServicesUtil aSEJB;
-    private EligiblityReportJpaController eDAO;
-    private GregorianCalendar gCal;
-    private PersonJpaController pDAO;
-    private FundingCostJpaController fCDAO;
+    private GregorianCalendar gCal;    
+    private DAOFactory dAOFactory;
+    private TransactionController transactionController;
+    private EntityManager em;
 
-    public void setfCDAO(FundingCostJpaController fCDAO) {
-        this.fCDAO = fCDAO;
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
     }
     
-    public void setpDAO(PersonJpaController pDAO) {
-        this.pDAO = pDAO;
+    public void setTransactionController(TransactionController transactionController) {
+        this.transactionController = transactionController;
     }
     
-
     public void setgCal(GregorianCalendar gCal) {
         this.gCal = gCal;
-    }
-    
-    public void seteDAO(EligiblityReportJpaController eDAO) {
-        this.eDAO = eDAO;
-    }
-    
-    public void setaDAO(ApplicationJpaController aDAO) {
-        this.aDAO = aDAO;
-    }
-
-    public void setfRDAO(FundingReportJpaController fRDAO) {
-        this.fRDAO = fRDAO;
     }
 
     public void setdBEntities(DBEntitiesFactory dBEntities) {
         this.dBEntities = dBEntities;
     }
 
-    public void setuEJB(UserGateway uEJB) {
-        this.uEJB = uEJB;
-    }
-
     public void setnEJB(NotificationService nEJB) {
         this.nEJB = nEJB;
-    }
-
-    public void setaTEJB(AuditTrailService aTEJB) {
-        this.aTEJB = aTEJB;
     }
 
     public void setaSEJB(ApplicationServicesUtil aSEJB) {
         this.aSEJB = aSEJB;
     }
-    
-    
-    @Override    
-    protected DAOFactory getDAOFactory(EntityManager em)
-    {
-        return new DAOFactory(em);
-    } 
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
@@ -106,9 +75,35 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
         return nEJB;
     }
     
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
+    {
+        return dAOFactory;
+    } 
     
-
+    @Override
+    protected TransactionController getTransactionController()
+    {
+        return transactionController;
+    }
     
+    @Override
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return gCal;
+    }
+    
+    @Override
+    protected EntityManager createEntityManager()
+    {
+        return em;
+    }
+    
+    @Override
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
+    {
+        return aSEJB;
+    }
     /** TODO: Implement work around...
     protected boolean hasPhD(Application application)
     {
