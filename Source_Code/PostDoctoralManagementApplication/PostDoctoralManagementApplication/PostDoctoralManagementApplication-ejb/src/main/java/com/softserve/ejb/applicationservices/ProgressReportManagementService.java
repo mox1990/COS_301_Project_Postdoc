@@ -6,19 +6,19 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.ProgressReportJpaController;
 import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.ProgressReport;
-import com.softserve.auxillary.annotations.AuditableMethod;
-import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxiliary.annotations.AuditableMethod;
+import com.softserve.auxiliary.annotations.SecuredMethod;
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -41,7 +41,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ProgressReportManagementService implements ProgressReportManagementServiceLocal {
 
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -80,7 +80,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
     }
      
      
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws Exception
@@ -120,7 +120,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void updateProgressReport(Session session, ProgressReport progressReport) throws Exception
@@ -145,7 +145,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
@@ -192,7 +192,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public boolean doesApplicationHaveFinalProgressReport(Session session, Application application) throws Exception
@@ -200,7 +200,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         return getNumberOfProgressReportsRequiredByApplication(session,application) == application.getProgressReportList().size();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public int getNumberOfProgressReportsRequiredByApplication(Session session, Application application) throws Exception

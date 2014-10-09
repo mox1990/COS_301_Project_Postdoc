@@ -10,8 +10,8 @@ import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.Endorsement;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

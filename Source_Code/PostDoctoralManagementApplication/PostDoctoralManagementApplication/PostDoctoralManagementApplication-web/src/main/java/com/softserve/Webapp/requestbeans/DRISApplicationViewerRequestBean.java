@@ -50,17 +50,17 @@ public class DRISApplicationViewerRequestBean {
     
     public boolean isApplicationEndorsed()
     {
-        return getSelectedApplication().getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+        return getSelectedApplication().getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
     }
     
     public boolean isApplicationEligible()
     {
-        return getSelectedApplication().getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+        return getSelectedApplication().getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
     }
     
     public boolean isApplicationFunded()
     {
-        return getSelectedApplication().getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
+        return getSelectedApplication().getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED);
     }
     
     public String getAutomaticEligiblityApprovalResult()

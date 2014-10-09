@@ -13,7 +13,7 @@ import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.ejb.nonapplicationservices.ReportServices;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;

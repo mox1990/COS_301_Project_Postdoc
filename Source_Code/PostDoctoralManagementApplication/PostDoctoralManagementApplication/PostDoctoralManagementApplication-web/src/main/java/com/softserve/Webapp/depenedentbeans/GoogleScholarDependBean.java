@@ -8,8 +8,8 @@ package com.softserve.Webapp.depenedentbeans;
 
 import auto.softserve.XMLEntities.CV.Reference;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarQuery;
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarResult;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarQuery;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarResult;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.nonapplicationservices.GoogleScholarServicesLocal;

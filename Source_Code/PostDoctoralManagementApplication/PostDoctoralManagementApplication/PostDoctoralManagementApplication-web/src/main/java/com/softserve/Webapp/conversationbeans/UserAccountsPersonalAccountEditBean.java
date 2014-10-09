@@ -6,14 +6,14 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import com.softserve.DBEntities.Address;
-import com.softserve.DBEntities.Department;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.SecurityRole;
-import com.softserve.DBEntities.EmployeeInformation;
-import com.softserve.DBEntities.Faculty;
-import com.softserve.DBEntities.Institution;
-import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.Department;
+import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.SecurityRole;
+import com.softserve.persistence.DBEntities.EmployeeInformation;
+import com.softserve.persistence.DBEntities.Faculty;
+import com.softserve.persistence.DBEntities.Institution;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
 import com.softserve.Webapp.depenedentbeans.LocationFinderDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;

@@ -6,8 +6,8 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarQuery;
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarResult;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarQuery;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarResult;
 import java.util.List;
 import javax.ejb.Local;
 

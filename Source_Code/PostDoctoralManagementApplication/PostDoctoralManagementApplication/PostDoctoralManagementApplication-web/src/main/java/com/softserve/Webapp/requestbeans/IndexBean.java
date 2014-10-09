@@ -6,8 +6,8 @@
 
 package com.softserve.Webapp.requestbeans;
 
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarQuery;
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarScraper;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarQuery;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarScraper;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import java.io.IOException;

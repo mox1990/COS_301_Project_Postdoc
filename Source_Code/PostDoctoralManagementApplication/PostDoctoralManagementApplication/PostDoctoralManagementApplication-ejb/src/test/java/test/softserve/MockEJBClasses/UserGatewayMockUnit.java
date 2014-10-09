@@ -11,7 +11,7 @@ import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBDAO.EmployeeInformationJpaController;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 
 /**

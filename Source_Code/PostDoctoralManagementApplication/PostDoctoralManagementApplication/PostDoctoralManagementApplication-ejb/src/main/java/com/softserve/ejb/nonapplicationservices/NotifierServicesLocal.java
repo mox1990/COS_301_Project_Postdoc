@@ -7,8 +7,8 @@
 package com.softserve.ejb.nonapplicationservices;
 
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.auxillary.requestresponseclasses.Issue;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Issue;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

@@ -8,7 +8,7 @@ package com.softserve.ejb.applicationservices;
 
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
@@ -19,14 +19,14 @@ import com.softserve.persistence.DBEntities.MinuteComment;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.annotations.AuditableMethod;
-import com.softserve.auxillary.annotations.SecuredMethod;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.annotations.AuditableMethod;
+import com.softserve.auxiliary.annotations.SecuredMethod;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +53,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     //All our ejb should be stateless due to the beter reusablity of the ejb
     //private CommitteeMeeting cMeeting = new CommitteeMeeting();
     
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -115,7 +115,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
@@ -169,7 +169,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void updateMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
@@ -219,7 +219,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void cancelMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
@@ -277,7 +277,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void startMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
@@ -321,7 +321,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void endMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
@@ -366,7 +366,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
     @AuditableMethod
     @Override
     public void addMinuteComment(Session session, MinuteComment minuteComment) throws Exception 
@@ -415,7 +415,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllMeetings(Session session) throws Exception 
@@ -441,7 +441,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      * @throws AuthenticationException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws Exception 
@@ -459,7 +459,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllActiveMeetingsForWhichUserIsToAttend(Session session) throws Exception 
@@ -494,7 +494,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws Exception 
@@ -513,7 +513,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<Person> getAllPostDocCommitteeMembers(Session session) throws Exception 
@@ -522,7 +522,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
 
         try
         {
-            List<Person> persons = getDAOFactory(em).createPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+            List<Person> persons = getDAOFactory(em).createPersonDAO().findUserBySecurityRoleWithAccountStatus(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER, com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
             persons.remove(session.getUser());
             return persons;
         }
@@ -533,7 +533,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws Exception 

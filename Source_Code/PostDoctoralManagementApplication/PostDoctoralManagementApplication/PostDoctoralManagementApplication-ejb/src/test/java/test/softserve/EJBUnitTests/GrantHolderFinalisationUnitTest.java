@@ -21,9 +21,9 @@ import com.softserve.ejb.applicationservices.CVManagementService;
 import com.softserve.ejb.applicationservices.GrantHolderFinalisationServiceLocal;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -111,7 +111,7 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testCreateGrantHolderCV() throws Exception {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Cv mockCV = mock(Cv.class);  
         Session mockSession = mock(Session.class);
@@ -133,7 +133,7 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testCreateGrantHolderCVNotValid() throws Exception {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
         
@@ -156,7 +156,7 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testLoadPendingApplications() throws Exception {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
         int startIndex = 0;
@@ -167,7 +167,7 @@ public class GrantHolderFinalisationUnitTest {
             instance.loadPendingApplications(mockSession, startIndex, max);
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, startIndex, max);
+            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, startIndex, max);
         }
         catch (Exception ex)
         {
@@ -182,7 +182,7 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testCountTotalPendingApplications() throws Exception {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -191,7 +191,7 @@ public class GrantHolderFinalisationUnitTest {
             instance.countTotalPendingApplications(mockSession);
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }
         catch (Exception ex)
         {
@@ -207,7 +207,7 @@ public class GrantHolderFinalisationUnitTest {
     public void testFinaliseApplication() throws Exception // TODO: Add alternatives to this...
     {
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -217,7 +217,7 @@ public class GrantHolderFinalisationUnitTest {
         
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         when(mockApplicationJpaController.findApplication(Long.MAX_VALUE)).thenReturn(mockApplication);
-        when(mockApplicationReviewRequestJpaController.findAllPeopleWhoHaveBeenRequestForApplicationAs(mockApplication, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD)).thenReturn(new ArrayList<Person>());
+        when(mockApplicationReviewRequestJpaController.findAllPeopleWhoHaveBeenRequestForApplicationAs(mockApplication, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD)).thenReturn(new ArrayList<Person>());
         try
         {
             instance.finaliseApplication(mockSession, mockApplication);
@@ -239,7 +239,7 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testFinaliseApplicationWithNotifications() throws Exception { // TODO: Populate notifications
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));

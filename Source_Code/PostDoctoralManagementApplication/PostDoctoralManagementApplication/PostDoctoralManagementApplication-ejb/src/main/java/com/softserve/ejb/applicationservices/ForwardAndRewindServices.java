@@ -10,7 +10,7 @@ import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
 import com.softserve.persistence.DBDAO.EndorsementJpaController;
 import com.softserve.persistence.DBDAO.ForwardAndRewindReportJpaController;
@@ -26,14 +26,14 @@ import com.softserve.persistence.DBEntities.FundingCost;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.RefereeReport;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.annotations.AuditableMethod;
-import com.softserve.auxillary.annotations.SecuredMethod;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.annotations.AuditableMethod;
+import com.softserve.auxiliary.annotations.SecuredMethod;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -56,7 +56,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
 
-    @PersistenceUnit(unitName=com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName=com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -103,10 +103,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected void rewindApplicationToOpenStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
+        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
             rewindApplicationToSubmittedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
             
             application.setSubmissionDate(null);
         }
@@ -114,10 +114,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected void rewindApplicationToSubmittedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
+        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             rewindApplicationToReferredStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
             
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
@@ -135,10 +135,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected void rewindApplicationToReferredStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
             rewindApplicationToFinalisedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
             
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
@@ -149,7 +149,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
                 ApplicationReviewRequestJpaController applicationReviewRequestJpaController = dAOFactory.createApplicationReviewRequestDAO();
                 for(ApplicationReviewRequest applicationReviewRequest : application.getApplicationReviewRequestList())
                 {
-                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD))
+                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD))
                     {
                         applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
                     }
@@ -160,10 +160,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected void rewindApplicationToFinalisedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
             rewindApplicationToRecommendedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
             
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
@@ -178,7 +178,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
                 ApplicationReviewRequestJpaController applicationReviewRequestJpaController = dAOFactory.createApplicationReviewRequestDAO();
                 for(ApplicationReviewRequest applicationReviewRequest : application.getApplicationReviewRequestList())
                 {
-                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN))
+                    if(applicationReviewRequest.getApplicationReviewRequestPK().getType().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN))
                     {
                         applicationReviewRequestJpaController.destroy(applicationReviewRequest.getApplicationReviewRequestPK());
                     }
@@ -189,10 +189,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected void rewindApplicationToRecommendedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
+        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
         {
             rewindApplicationToEndorsedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
             
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
@@ -206,11 +206,11 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     
     protected void rewindApplicationToEndorsedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
+        if(getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE))
         {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
             if(application.getFundingReport() != null)
             {
                 FundingCostJpaController fundingCostJpaController = dAOFactory.createFundingCostJpaController();
@@ -234,51 +234,51 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
     protected void forwardApplicationToSubmittedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
+        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED))
         {
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
             application.setSubmissionDate(getGregorianCalendar().getTime());
         }
     }
     
     protected void forwardApplicationToReferredStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
+        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED))
         {
             forwardApplicationToSubmittedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }
     }
     
     protected void forwardApplicationToFinalisedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
+        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED))
         {
             forwardApplicationToReferredStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
             application.setFinalisationDate(getGregorianCalendar().getTime());
         }
     }
     
     protected void forwardApplicationToRecommendedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
+        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED))
         {
             forwardApplicationToFinalisedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
         }
     }
     
     protected void forwardApplicationToEndorsedStatus(TransactionController transactionController, Application application) throws Exception
     {
-        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
+        if(!getApplicationServicesUTIL(transactionController.getEntityManager()).hasApplicationAchivedThisStatus(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED))
         {
             forwardApplicationToRecommendedStatus(transactionController,application);
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         }
     }
         
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod(message = "Application forwared")
     @Override
     public void forwardApplication(Session session, Application application, String toStatus, String reason) throws Exception 
@@ -290,26 +290,26 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.auxillary.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD, toStatus, application.getStatus());
+            ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.auxiliary.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_FORWARD, toStatus, application.getStatus());
 
             switch (toStatus) 
             {
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED:
                     forwardApplicationToSubmittedStatus(transactionController,application);
                     if(application.getPersonList().isEmpty())
                     {
                         forwardApplicationToReferredStatus(transactionController,application);
                     }   break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED:
                     forwardApplicationToReferredStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED:
                     forwardApplicationToFinalisedStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED:
                     forwardApplicationToRecommendedStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED:
                     forwardApplicationToEndorsedStatus(transactionController,application);
                     break;
                 default:
@@ -340,7 +340,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod(message = "Application rewinded")
     @Override
     public void rewindApplication(Session session, Application application, String toStatus, String reason) throws Exception 
@@ -351,29 +351,29 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.auxillary.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_REWIND, toStatus, application.getStatus());
+            ForwardAndRewindReport forwardAndRewindReport = dBEntitiesFactory.createForwardAndRewindReport(application, session.getUser(), getGregorianCalendar().getTime(), reason, com.softserve.auxiliary.constants.PersistenceConstants.FORWARDREWINREPORT_TYPE_REWIND, toStatus, application.getStatus());
         
             switch (toStatus) 
             {
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN:
                     rewindApplicationToOpenStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED:
                     rewindApplicationToSubmittedStatus(transactionController,application);
                     if(application.getPersonList().isEmpty())
                     {
                         forwardApplicationToReferredStatus(transactionController,application);
                     }   break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED:
                     rewindApplicationToReferredStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED:
                     rewindApplicationToFinalisedStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED:
                     rewindApplicationToRecommendedStatus(transactionController,application);
                     break;
-                case com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED:
+                case com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED:
                     rewindApplicationToEndorsedStatus(transactionController,application);
                     break;
                 default:
@@ -405,7 +405,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadMovableApplications(Session session) throws Exception
@@ -418,14 +418,14 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
             List<Application> applications = new ArrayList<Application>();
             ApplicationJpaController applicationJpaController = getDAOFactory(em).createApplicationDAO();
 
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, 0, Integer.MAX_VALUE));
-            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, 0, Integer.MAX_VALUE));
+            applications.addAll(applicationJpaController.findAllApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, 0, Integer.MAX_VALUE));
 
             return applications;
         }
