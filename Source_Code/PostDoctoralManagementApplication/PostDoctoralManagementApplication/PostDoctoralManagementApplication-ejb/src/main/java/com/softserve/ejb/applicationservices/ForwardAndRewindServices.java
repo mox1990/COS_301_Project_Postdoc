@@ -100,6 +100,10 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
     
     protected void rewindApplicationToOpenStatus(TransactionController transactionController, Application application) throws Exception
     {
@@ -411,7 +415,7 @@ public class ForwardAndRewindServices implements ForwardAndRewindServicesLocal {
     public List<Application> loadMovableApplications(Session session) throws Exception
     {
         
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

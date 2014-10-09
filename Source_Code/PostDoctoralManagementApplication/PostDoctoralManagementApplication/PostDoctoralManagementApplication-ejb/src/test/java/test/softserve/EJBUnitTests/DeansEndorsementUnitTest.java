@@ -6,7 +6,16 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.ejb.applicationservices.DeansEndorsementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
+
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.EndorsementJpaController;
 import com.softserve.persistence.DBDAO.FundingReportJpaController;
@@ -18,23 +27,19 @@ import com.softserve.persistence.DBEntities.FundingReport;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.ejb.nonapplicationservices.AuditTrailService;
-import com.softserve.ejb.applicationservices.DeansEndorsementServiceLocal;
-import com.softserve.ejb.nonapplicationservices.NotificationService;
-import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxiliary.factories.DBEntitiesFactory;
-import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -52,11 +57,13 @@ public class DeansEndorsementUnitTest {
     private ApplicationJpaController mockApplicationJpaController;
     private EndorsementJpaController mockEndorsementJpaController;
     private DBEntitiesFactory mockDBEntitiesFactory;
-    private UserGateway mockUserGateway;
     private NotificationService mockNotificationService;
-    private AuditTrailService mockAuditTrailService;
     private ApplicationServicesUtil mockApplicationServices;
-
+    private TransactionController mockTransactionController;
+    private DAOFactory mockDAOFactory;
+    private EntityManager mockEntityManager;
+    private GregorianCalendar mockGregorianCalendar;
+    
     public DeansEndorsementUnitTest() {
     }
     
@@ -69,24 +76,30 @@ public class DeansEndorsementUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new DeansEndorsementServiceMockUnit();
         
         mockApplicationJpaController = mock(ApplicationJpaController.class);
         mockEndorsementJpaController = mock(EndorsementJpaController.class);
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        mockUserGateway = mock(UserGateway.class);
         mockNotificationService = mock(NotificationService.class);
-        mockAuditTrailService = mock(AuditTrailService.class);
         mockApplicationServices = mock(ApplicationServicesUtil.class);
+        mockTransactionController = mock(TransactionController.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockGregorianCalendar = mock(GregorianCalendar.class);
         
-        instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntities(mockDBEntitiesFactory);
-        instance.seteDAO(mockEndorsementJpaController);
         instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
+        instance.setdAOFactory(mockDAOFactory);
+        //instance.setTransactionController(mockTransactionController);
+        instance.setEm(mockEntityManager);
+        instance.setgCal(mockGregorianCalendar);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createEndorsementDAO()).thenReturn(mockEndorsementJpaController);
     }
     
     @After
@@ -107,11 +120,6 @@ public class DeansEndorsementUnitTest {
         {
             instance.loadPendingApplications(mockSession, startIndex, maxNumber);
             
-            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-            
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, startIndex, maxNumber);
         }
         catch (Exception ex)
         {
@@ -131,11 +139,13 @@ public class DeansEndorsementUnitTest {
         {
             instance.countTotalPendingApplications(mockSession);
             
+
             //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
             //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            //verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, startIndex, maxNumber);
+
         }
         catch (Exception ex)
         {
@@ -174,8 +184,6 @@ public class DeansEndorsementUnitTest {
         try
         {
             instance.declineApplication(mockSession, mockApplication, reason);
-            // Declined Application...
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
             
         }
         catch (Exception ex)
@@ -218,15 +226,7 @@ public class DeansEndorsementUnitTest {
         try
         {
             instance.endorseApplication(mockSession, mockApplication, mockEndorsement);
-            // Declined Application...
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
             
-            verify(mockEndorsementJpaController).create(mockEndorsement);
-            verify(mockApplicationJpaController).edit(mockApplication);
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            //verify(mockNotificationService).sendBatchNotifications(new ArrayList<Notification>(), true);
         }
         catch (Exception ex)
         {
@@ -236,3 +236,10 @@ public class DeansEndorsementUnitTest {
     }
     
 }
+
+            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            
+            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            //verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+

@@ -149,6 +149,11 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         return false;
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     /**
      *This function loads all the applications that need to approved/declined by the 
      * specified HOD
@@ -163,7 +168,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public List<Application> loadPendingEndorsedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -183,7 +188,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public int countTotalPendingEndorsedApplications(Session session) throws Exception 
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -209,7 +214,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     public List<Application> loadPendingEligibleApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {        
         
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -227,7 +232,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public int countTotalPendingEligibleApplications(Session session) throws AuthenticationException, Exception 
     {       
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -491,7 +496,7 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     @Override
     public List<Application> loadFundedApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

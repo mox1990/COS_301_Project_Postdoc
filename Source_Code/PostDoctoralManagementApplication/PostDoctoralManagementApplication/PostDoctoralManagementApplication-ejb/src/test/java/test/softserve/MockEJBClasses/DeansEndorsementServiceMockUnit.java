@@ -22,46 +22,46 @@ import javax.persistence.EntityManager;
  * @author kgothatso
  */
 public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
-    private ApplicationJpaController aDAO;
-    private EndorsementJpaController eDAO;
     private DBEntitiesFactory dBEntities;
-    private UserGateway uEJB;
     private NotificationService nEJB;
-    private AuditTrailService aTEJB;
     private ApplicationServicesUtil aSEJB;
-
-    public void setaDAO(ApplicationJpaController aDAO) {
-        this.aDAO = aDAO;
-    }
-
-    public void seteDAO(EndorsementJpaController eDAO) {
-        this.eDAO = eDAO;
-    }
+    private TransactionController transactionController;
+    private DAOFactory dAOFactory;
+    private GregorianCalendar gCal;
+    private EntityManager em;
 
     public void setdBEntities(DBEntitiesFactory dBEntities) {
         this.dBEntities = dBEntities;
-    }
-
-    public void setuEJB(UserGateway uEJB) {
-        this.uEJB = uEJB;
     }
 
     public void setnEJB(NotificationService nEJB) {
         this.nEJB = nEJB;
     }
 
-    public void setaTEJB(AuditTrailService aTEJB) {
-        this.aTEJB = aTEJB;
-    }
-
     public void setaSEJB(ApplicationServicesUtil aSEJB) {
         this.aSEJB = aSEJB;
+    }
+
+    public void setTransactionController(TransactionController transactionController) {
+        this.transactionController = transactionController;
+    }
+
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
+    }
+
+    public void setgCal(GregorianCalendar gCal) {
+        this.gCal = gCal;
+    }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
     }
     
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(em);
+        return dAOFactory;
     } 
     
     @Override
@@ -75,4 +75,27 @@ public class DeansEndorsementServiceMockUnit extends DeansEndorsementService {
     {
         return nEJB;
     }    
+    
+    @Override
+    protected TransactionController getTransactionController()
+    {
+        return transactionController;
+    }
+    
+    @Override
+    protected GregorianCalendar getGregorianCalendar()
+    {
+        return gCal;
+    }
+    
+    @Override
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
+    {
+        return aSEJB;
+    }
+    
+    protected EntityManager createEntityManager()
+    {
+        return em;
+    }
 }

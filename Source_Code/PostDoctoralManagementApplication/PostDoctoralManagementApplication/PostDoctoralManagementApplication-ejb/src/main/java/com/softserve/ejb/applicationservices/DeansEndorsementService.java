@@ -93,12 +93,17 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         return new GregorianCalendar();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_DEANS_OFFICE_MEMBER})
     @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {      
@@ -115,7 +120,7 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     @Override
     public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

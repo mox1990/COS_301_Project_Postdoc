@@ -57,6 +57,11 @@ public class AuditTrailService implements AuditTrailServiceLocal {
         return new TransactionController(emf);
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     //Just changed it so that it recieves the auditLog object not creates which should be hanadled by the calling function
     @SecuredMethod(AllowedSecurityRoles = {})
     @Override

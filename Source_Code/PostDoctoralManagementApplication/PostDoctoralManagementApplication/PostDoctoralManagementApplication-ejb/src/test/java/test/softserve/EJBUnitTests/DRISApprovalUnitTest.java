@@ -6,6 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxillary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
 import com.softserve.persistence.DBDAO.FundingCostJpaController;
@@ -58,14 +59,14 @@ public class DRISApprovalUnitTest {
     ApplicationJpaController mockApplicationJpaController;
     FundingReportJpaController mockFundingReportJpaController;
     DBEntitiesFactory mockDBEntitiesFactory;
-    UserGateway mockUserGateway;
     NotificationService mockNotificationService;
-    AuditTrailService mockAuditTrailService;
     ApplicationServicesUtil mockApplicationServices;
     EligiblityReportJpaController mockEligiblityReportJpaController;
     GregorianCalendar mockCal;
     PersonJpaController mockPersonJpaController;
     FundingCostJpaController mockFundingCostJpaController; 
+    TransactionController mockTransactionController;
+    DAOFactory mockDAOFactory;
     
     public DRISApprovalUnitTest() {
     }
@@ -79,32 +80,35 @@ public class DRISApprovalUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new DRISApprovalServiceMockUnit();
         
         mockApplicationJpaController = mock(ApplicationJpaController.class);
         mockFundingReportJpaController = mock(FundingReportJpaController.class);
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        mockUserGateway = mock(UserGateway.class);
         mockNotificationService = mock(NotificationService.class);
-        mockAuditTrailService = mock(AuditTrailService.class);
         mockApplicationServices = mock(ApplicationServicesUtil.class);
         mockEligiblityReportJpaController = mock(EligiblityReportJpaController.class);
         mockCal = mock(GregorianCalendar.class);
         mockPersonJpaController = mock(PersonJpaController.class);
         mockFundingCostJpaController = mock(FundingCostJpaController.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockTransactionController = mock(TransactionController.class);
         
-        instance.setaDAO(mockApplicationJpaController);
         instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setfRDAO(mockFundingReportJpaController);
         instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
-        instance.seteDAO(mockEligiblityReportJpaController);
         instance.setgCal(mockCal);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setfCDAO(mockFundingCostJpaController);
+        instance.setTransactionController(mockTransactionController);
+        instance.setdAOFactory(mockDAOFactory);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createFundingCostJpaController()).thenReturn(mockFundingCostJpaController);
+        when(mockDAOFactory.createEligiblityReportDAO()).thenReturn(mockEligiblityReportJpaController);
+        when(mockDAOFactory.createPersonDAO()).thenReturn(mockPersonJpaController);
+        when(mockDAOFactory.createFundingReportDAO()).thenReturn(mockFundingReportJpaController);
+        //TODO: Go over the dependencies again this is a big class...
     }
     
     @After
@@ -123,10 +127,6 @@ public class DRISApprovalUnitTest {
         try
         {
             instance.loadPendingEndorsedApplications(mockSession, startIndex, maxNumber);
-            
-            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED, startIndex, maxNumber);
@@ -149,12 +149,7 @@ public class DRISApprovalUnitTest {
         {
             instance.countTotalPendingEndorsedApplications(mockSession);
             
-//            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-//            
-//            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
         }
         catch (Exception ex)
         {
@@ -175,12 +170,7 @@ public class DRISApprovalUnitTest {
         {
             instance.loadPendingEligibleApplications(mockSession, startIndex, maxNumber);
             
-//            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-//            
-//            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, startIndex, maxNumber);
+            verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE, startIndex, maxNumber);
         }
         catch (Exception ex)
         {
@@ -200,12 +190,7 @@ public class DRISApprovalUnitTest {
         {
             instance.countTotalPendingEligibleApplications(mockSession);
             
-//            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-//            
-//            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ELIGIBLE);
         }
         catch (Exception ex)
         {
@@ -302,13 +287,7 @@ public class DRISApprovalUnitTest {
         try
         {
             instance.checkApplicationForEligiblity(mockSession, mockApplication);
-            // Declined Application...
-            //verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles);
-            //verify(mockApplicationJpaController).edit(mockApplication);
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"));
-            //verify(mockDBEntitiesFactory).createEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime());
-            //verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            
         }
         catch (Exception ex)
         {
@@ -349,8 +328,7 @@ public class DRISApprovalUnitTest {
         try
         {
             instance.denyFunding(mockSession, mockApplication, reason);
-            // Declined Application...
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            
         }
         catch (Exception ex)
         {
