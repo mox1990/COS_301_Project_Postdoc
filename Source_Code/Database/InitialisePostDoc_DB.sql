@@ -389,6 +389,16 @@ CREATE TABLE announcement (
 	
 ) ENGINE=InnoDB;
 
+CREATE TABLE resourceentity (
+	il8n_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	i18n_key VARCHAR(250) NOT NULL,
+	i18n_value VARCHAR(250) NOT NULL,
+	i18n_locale VARCHAR(250) NOT NULL,
+	
+	PRIMARY KEY (il8n_id)
+) ENGINE=InnoDB;
+
+INSERT INTO PostDoc_DB.resourceentity (i18n_key, i18n_value, i18n_locale) VALUES ('welcome.title', 'You must know', 'en'), ('welcome.name', 'Master', 'en'), ('welcome.db', 'PostDoc', 'en'), ('welcome.language', 'English', 'en');
 
 INSERT INTO PostDoc_DB.security_role (_name, _roleMask) VALUES("Prospective fellow",0), 
 															("Referee",1),
