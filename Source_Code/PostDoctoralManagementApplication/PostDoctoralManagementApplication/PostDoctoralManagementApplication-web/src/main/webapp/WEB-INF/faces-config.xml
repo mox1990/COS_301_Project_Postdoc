@@ -15,6 +15,10 @@
         </resource-bundle>
            
         <resource-bundle>
+            <base-name>com.softserve.Webapp.auxiliary.resourcebundle.DatabaseResourceBundle</base-name>
+            <var>db</var>
+        </resource-bundle>
+        <resource-bundle>
             <base-name>/Bundle</base-name>
             <var>bundle</var>
         </resource-bundle>

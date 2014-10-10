@@ -6,6 +6,7 @@
 
 package com.softserve.auxillary.factories;
 
+import com.softserve.ejb.nonapplicationservices.ResourceBundleService;
 import com.softserve.persistence.DBDAO.AcademicQualificationJpaController;
 import com.softserve.persistence.DBDAO.AddressJpaController;
 import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
@@ -33,6 +34,7 @@ import com.softserve.persistence.DBDAO.ProgressReportJpaController;
 import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
 import com.softserve.persistence.DBDAO.RefereeReportJpaController;
 import com.softserve.persistence.DBDAO.ResearchFellowInformationJpaController;
+import com.softserve.persistence.DBDAO.ResourceEntityJpaController;
 import com.softserve.persistence.DBDAO.SecurityRoleJpaController;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -183,6 +185,11 @@ public class DAOFactory {
     public ResearchFellowInformationJpaController createResearchFellowInformationDAO()
     {
         return new ResearchFellowInformationJpaController(em);
+    }
+    
+    public ResourceEntityJpaController createResourceEntityDAO()
+    {
+        return new ResourceEntityJpaController(em);
     }
     
     public SecurityRoleJpaController createSecurityRoleDAO()
