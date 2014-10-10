@@ -6,8 +6,16 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.auxillary.factories.DAOFactory;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.ejb.applicationservices.DeansEndorsementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
+
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.EndorsementJpaController;
 import com.softserve.persistence.DBDAO.FundingReportJpaController;
@@ -19,13 +27,6 @@ import com.softserve.persistence.DBEntities.FundingReport;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.ejb.nonapplicationservices.AuditTrailService;
-import com.softserve.ejb.applicationservices.DeansEndorsementServiceLocal;
-import com.softserve.ejb.nonapplicationservices.NotificationService;
-import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,10 +36,10 @@ import javax.ejb.embeddable.EJBContainer;
 import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -92,7 +93,7 @@ public class DeansEndorsementUnitTest {
         instance.setdBEntities(mockDBEntitiesFactory);
         instance.setnEJB(mockNotificationService);
         instance.setdAOFactory(mockDAOFactory);
-        instance.setTransactionController(mockTransactionController);
+        //instance.setTransactionController(mockTransactionController);
         instance.setEm(mockEntityManager);
         instance.setgCal(mockGregorianCalendar);
         
@@ -138,6 +139,13 @@ public class DeansEndorsementUnitTest {
         {
             instance.countTotalPendingApplications(mockSession);
             
+
+            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            
+            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            //verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, startIndex, maxNumber);
+
         }
         catch (Exception ex)
         {
@@ -171,7 +179,7 @@ public class DeansEndorsementUnitTest {
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
 
         try
         {
@@ -210,7 +218,7 @@ public class DeansEndorsementUnitTest {
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
           
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         
         Endorsement mockEndorsement = mock(Endorsement.class);
         // when(mockEndorsement.get()).thenReturn(Long.MAX_VALUE);
@@ -228,3 +236,10 @@ public class DeansEndorsementUnitTest {
     }
     
 }
+
+            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
+            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            
+            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            //verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+

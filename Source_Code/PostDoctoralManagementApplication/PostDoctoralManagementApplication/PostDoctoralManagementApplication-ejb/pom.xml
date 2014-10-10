@@ -36,6 +36,8 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -111,7 +113,14 @@
             <groupId>ar.com.fdvs</groupId>
             <artifactId>DynamicJasper</artifactId>
             <version>5.0.0</version>
-          </dependency>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.softserve</groupId>
+            <artifactId>PostDoctoralManagementApplication-ejb</artifactId>
+            <version>0.0</version>
+        </dependency>
+        
     </dependencies>
 
     <build>  
@@ -123,6 +132,7 @@
                     <configuration>
                         <source>1.7</source>
                         <target>1.7</target>
+                        <!--<compilerArgument>-proc:none</compilerArgument>-->
                     </configuration>
                 </plugin>
                 <plugin>

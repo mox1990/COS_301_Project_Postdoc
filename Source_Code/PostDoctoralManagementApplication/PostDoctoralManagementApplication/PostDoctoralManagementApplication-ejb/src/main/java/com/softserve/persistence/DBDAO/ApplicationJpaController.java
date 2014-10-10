@@ -375,7 +375,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.type = :type", Application.class).setParameter("status", applicationStatus).setParameter("type", com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_TYPE_NEW).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.type = :type", Application.class).setParameter("status", applicationStatus).setParameter("type", com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_TYPE_NEW).setFirstResult(startRecord).setMaxResults(maxRecords);
         
         List<Application> applications = q.getResultList();
         return (applications != null)?applications:new ArrayList<Application>();
@@ -385,7 +385,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.type = :type", Application.class).setParameter("status", applicationStatus).setParameter("type", com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL).setFirstResult(startRecord).setMaxResults(maxRecords);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.type = :type", Application.class).setParameter("status", applicationStatus).setParameter("type", com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL).setFirstResult(startRecord).setMaxResults(maxRecords);
         
         List<Application> applications = q.getResultList();
         return (applications != null)?applications:new ArrayList<Application>();
@@ -435,7 +435,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department = :loc AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment()).setParameter("secRole", com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department = :loc AND :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment()).setParameter("secRole", com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         List<Person> people = q.getResultList();
         return (people != null)?people:new ArrayList<Person>();
@@ -445,7 +445,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department.faculty = :loc AND :secRole MEMBER OF p.securityRoleList ", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment().getFaculty()).setParameter("secRole", com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.upEmployee = true AND p.employeeInformation.department.faculty = :loc AND :secRole MEMBER OF p.securityRoleList ", Person.class).setParameter("loc", application.getGrantHolder().getEmployeeInformation().getDepartment().getFaculty()).setParameter("secRole", com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
         
         List<Person> people = q.getResultList();
         return (people != null)?people:new ArrayList<Person>();
@@ -455,7 +455,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("secRole", com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE :secRole MEMBER OF p.securityRoleList", Person.class).setParameter("secRole", com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         
         List<Person> people = q.getResultList();
         return (people != null)?people:new ArrayList<Person>();
@@ -525,7 +525,7 @@ public class ApplicationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE (a.fellow = :fellow) AND (a.type = :type) AND (a.endDate BETWEEN :rangeStart AND :rangeEnd)", Application.class).setParameter("rangeStart", rangeStart).setParameter("rangeEnd", rangeEnd).setParameter("fellow", fellow).setParameter("type", com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE (a.fellow = :fellow) AND (a.type = :type) AND (a.endDate BETWEEN :rangeStart AND :rangeEnd)", Application.class).setParameter("rangeStart", rangeStart).setParameter("rangeEnd", rangeEnd).setParameter("fellow", fellow).setParameter("type", com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
         
         List<Application> applications = q.getResultList();
         return (applications != null)?applications:new ArrayList<Application>();

@@ -13,7 +13,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.RefereeReportServiceLocal;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;

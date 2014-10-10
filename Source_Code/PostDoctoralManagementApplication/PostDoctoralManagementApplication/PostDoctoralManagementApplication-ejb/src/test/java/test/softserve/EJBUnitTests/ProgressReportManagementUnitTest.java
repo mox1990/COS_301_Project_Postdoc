@@ -18,9 +18,9 @@ import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.applicationservices.ProgressReportManagementService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -79,7 +79,7 @@ public class ProgressReportManagementUnitTest
       
         Session mockSession = mock(Session.class);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         instance.setaDAO(mockApplicationDAO);
         instance.setnEJB(mockNotificationService);
@@ -126,7 +126,7 @@ public class ProgressReportManagementUnitTest
         
         Session mockSession = mock(Session.class);
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         
         instance.setaDAO(mockApplication);
         instance.setnEJB(mockNotificationService);

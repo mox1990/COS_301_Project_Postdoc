@@ -9,8 +9,8 @@ package com.softserve.ejb.nonapplicationservices;
 import com.softserve.persistence.DBEntities.Department;
 import com.softserve.persistence.DBEntities.Faculty;
 import com.softserve.persistence.DBEntities.Institution;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

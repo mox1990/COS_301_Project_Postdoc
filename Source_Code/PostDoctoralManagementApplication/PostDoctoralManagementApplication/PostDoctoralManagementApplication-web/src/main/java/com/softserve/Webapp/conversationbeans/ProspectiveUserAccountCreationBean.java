@@ -151,9 +151,9 @@ public class ProspectiveUserAccountCreationBean implements Serializable{
             person.setPassword(password);
             
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
-            person.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+            person.getSecurityRoleList().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
             
-            person.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+            person.setAccountStatus(com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
             person.setAddressLine1(address);
             
             if(person.getUpEmployee())

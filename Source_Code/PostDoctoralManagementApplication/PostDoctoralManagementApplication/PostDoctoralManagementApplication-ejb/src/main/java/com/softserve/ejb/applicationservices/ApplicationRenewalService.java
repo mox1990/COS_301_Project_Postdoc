@@ -7,7 +7,7 @@
 package com.softserve.ejb.applicationservices;
 
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.persistence.DBEntities.Cv;
@@ -15,17 +15,17 @@ import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.ProgressReport;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.Exceptions.CVAlreadExistsException;
-import com.softserve.auxillary.annotations.AuditableMethod;
-import com.softserve.auxillary.annotations.SecuredMethod;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.Exceptions.CVAlreadExistsException;
+import com.softserve.auxiliary.annotations.AuditableMethod;
+import com.softserve.auxiliary.annotations.SecuredMethod;
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -48,7 +48,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
 
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -116,7 +116,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return emf.createEntityManager();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws Exception
@@ -129,7 +129,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
             
             ApplicationJpaController applicationJpaController = dAOFactory.createApplicationDAO();
 
-            List<Application> applications  = applicationJpaController.findAllRenewalApplicationsWithStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
+            List<Application> applications  = applicationJpaController.findAllRenewalApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
             
             if(applications.isEmpty())
             {
@@ -152,7 +152,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public boolean doesApplicationHaveFinalProgressReport(Session session,Application application) throws Exception
@@ -160,7 +160,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return getProgressReportManagementServiceEJB().doesApplicationHaveFinalProgressReport(session,application);
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public void updateResearchFellowCV(Session session, Cv cv) throws Exception
@@ -181,7 +181,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW})
     @AuditableMethod
     @Override
     public void createFinalProgressReportForApplication(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
@@ -198,7 +198,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception
@@ -213,10 +213,10 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
             {
 
                 application.setTimestamp(getGregorianCalendarUTIL().getTime());
-                application.setType(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
+                application.setType(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
                 application.setFellow(oldApplication.getFellow());
                 application.setGrantHolder(oldApplication.getGrantHolder());
-                application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+                application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
 
                 applicationJpaController.create(application);
             }
@@ -238,7 +238,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_RESEARCH_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void submitApplication(Session session, Application application) throws Exception

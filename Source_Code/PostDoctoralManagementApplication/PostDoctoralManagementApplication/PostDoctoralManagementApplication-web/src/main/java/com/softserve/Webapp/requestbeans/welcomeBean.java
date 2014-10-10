@@ -53,8 +53,8 @@ public class welcomeBean {
     public boolean isReportServicesDisplayable()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try 
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
@@ -69,7 +69,7 @@ public class welcomeBean {
     {
         try 
         {
-            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         } 
         catch (Exception ex) 
         {
@@ -80,8 +80,8 @@ public class welcomeBean {
     public boolean isAuditTrailServicesDisplayable()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try 
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
@@ -95,8 +95,8 @@ public class welcomeBean {
     public boolean isArchivalServicesDisplayable()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try 
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);

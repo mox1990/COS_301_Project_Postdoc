@@ -13,20 +13,19 @@ import com.softserve.persistence.DBEntities.Cv;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.Exceptions.*;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.Exceptions.CVAlreadExistsException;
-import com.softserve.auxillary.Exceptions.UserAlreadyExistsException;
-import com.softserve.auxillary.annotations.AuditableMethod;
-import com.softserve.auxillary.annotations.SecuredMethod;
-import com.softserve.auxillary.constants.PersistenceConstants.*;
-import com.softserve.auxillary.factories.DAOFactory;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.Exceptions.CVAlreadExistsException;
+import com.softserve.auxiliary.Exceptions.UserAlreadyExistsException;
+import com.softserve.auxiliary.annotations.AuditableMethod;
+import com.softserve.auxiliary.annotations.SecuredMethod;
+import com.softserve.auxiliary.constants.PersistenceConstants.*;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class NewApplicationService implements  NewApplicationServiceLocal{
 
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -108,7 +107,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         return new GregorianCalendar();
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Updated/Created CV")
     @Override
     public void createProspectiveFellowCV(Session session, Cv cv) throws AuthenticationException, CVAlreadExistsException, Exception
@@ -129,7 +128,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Created/Updated a new application")
     @Override
     public void createNewApplication(Session session, Application application) throws AuthenticationException, Exception
@@ -150,8 +149,8 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             //Set status and application type
             if(application.getApplicationID() == null || applicationJpaController.findApplication(application.getApplicationID()) == null)
             {
-                application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
-                application.setType(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
+                application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+                application.setType(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
                 application.setTimestamp(getGregorianCalendar().getTime());
                 applicationJpaController.create(application);
             }
@@ -174,7 +173,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
                        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Linked grant holder to new application")
     @Override
     public void linkGrantHolderToApplication(Session session, Application application, Person grantHolder) throws AuthenticationException, UserAlreadyExistsException, Exception
@@ -199,16 +198,16 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
                 grantHolder.setAddressLine1(new Address());
 
                 List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-                securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+                securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
                 grantHolder.setSecurityRoleList(securityRoles);
 
                 accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a grant holder for their post doctoral application", true, grantHolder);
             }
             else if(grantHolder.getSystemID() != null)
             {
-                if(!grantHolder.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER))
+                if(!grantHolder.getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER))
                 {
-                    grantHolder.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+                    grantHolder.getSecurityRoleList().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
                     accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), grantHolder);
                 }            
             }
@@ -249,7 +248,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }               
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     public void linkRefereesToApplication(Session session, Application application, List<Person> referees) throws Exception
     {
@@ -279,16 +278,16 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
                     referee.setAddressLine1(new Address());
 
                     List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-                    securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                    securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
                     referee.setSecurityRoleList(securityRoles);
 
                     accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral fellowship application.", false, referee);
                 }
                 else if(referee.getSystemID() != null)
                 {
-                    if(!referee.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
+                    if(!referee.getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
                     {
-                        referee.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                        referee.getSecurityRoleList().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
                         accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), referee);
                     }            
                 }
@@ -315,7 +314,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
     }
     
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
     @Override
     public void linkRefereeToApplication(Session session, Application application, Person referee) throws AuthenticationException, UserAlreadyExistsException, Exception
@@ -339,16 +338,16 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
                 referee.setAddressLine1(new Address());
 
                 List<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-                securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
                 referee.setSecurityRoleList(securityRoles);
 
                 accountManagementServices.generateOnDemandAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), session.getUser().getCompleteName() + " has requested you be a referee for their post doctoral fellowship application.", false, referee);
             }
             else if(referee.getSystemID() != null)
             {
-                if(!referee.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
+                if(!referee.getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE))
                 {
-                    referee.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
+                    referee.getSecurityRoleList().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
                     accountManagementServices.updateUserAccount(new Session(session.getHttpSession(),session.getUser(), true), referee);
                 }            
             }
@@ -398,7 +397,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Submitted a new application")
     @Override
     public void submitApplication(Session session, Application application) throws Exception
@@ -447,7 +446,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             List<Application> applications = getDAOFactory(em).createApplicationDAO().findAllApplicationsWhosFellowIs(fellow);
             for(Application application: applications)
             {
-                if(!(application.getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
+                if(!(application.getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED) || application.getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED) || application.getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED)))
                 {
                     return false;
                 }
@@ -463,7 +462,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         
     }   
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW})
     @AuditableMethod
     @Override
     public Application getOpenApplication(Session session) throws AuthenticationException, Exception
@@ -475,7 +474,7 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
             List<Application> applications = getDAOFactory(em).createApplicationDAO().findAllApplicationsWhosFellowIs(session.getUser());
             for(Application application: applications)
             {
-                if(application.getStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
+                if(application.getStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN))
                 {
                     return application;
                 }

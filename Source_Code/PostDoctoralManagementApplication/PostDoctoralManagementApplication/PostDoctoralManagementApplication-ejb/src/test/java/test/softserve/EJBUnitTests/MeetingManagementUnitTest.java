@@ -17,8 +17,8 @@ import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -279,8 +279,8 @@ public class MeetingManagementUnitTest {
         when(mockSession.getUser()).thenReturn(new Person("u12019837"));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
         
         try
         {

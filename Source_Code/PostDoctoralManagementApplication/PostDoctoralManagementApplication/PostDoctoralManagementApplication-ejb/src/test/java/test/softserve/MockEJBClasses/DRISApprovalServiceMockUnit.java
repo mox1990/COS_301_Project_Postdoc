@@ -6,9 +6,9 @@
 
 package test.softserve.MockEJBClasses;
 
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
 import com.softserve.persistence.DBDAO.FundingCostJpaController;
 import com.softserve.persistence.DBDAO.FundingReportJpaController;
@@ -19,8 +19,7 @@ import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.applicationservices.DRISApprovalService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;

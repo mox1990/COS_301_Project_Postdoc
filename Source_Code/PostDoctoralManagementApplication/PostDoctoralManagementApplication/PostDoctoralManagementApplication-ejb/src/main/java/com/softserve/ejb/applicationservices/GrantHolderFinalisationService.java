@@ -12,7 +12,7 @@ import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.persistence.DBDAO.CvJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.persistence.DBDAO.exceptions.RollbackFailureException;
@@ -26,16 +26,16 @@ import com.softserve.persistence.DBEntities.EmployeeInformation;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.Exceptions.CVAlreadExistsException;
-import com.softserve.auxillary.annotations.AuditableMethod;
-import com.softserve.auxillary.annotations.SecuredMethod;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.Exceptions.CVAlreadExistsException;
+import com.softserve.auxiliary.annotations.AuditableMethod;
+import com.softserve.auxiliary.annotations.SecuredMethod;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -58,7 +58,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class GrantHolderFinalisationService implements GrantHolderFinalisationServiceLocal {
     
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     @EJB
@@ -141,7 +141,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws CVAlreadExistsException If the grant holder already has a CV
      * @throws Exception If an unknown error occurs
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public void createGrantHolderCV(Session session, Cv cv) throws Exception
@@ -172,7 +172,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @return A list of all the applications that user can finalise
      * @throws com.softserve.Exceptions.AuthenticationException
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
@@ -181,7 +181,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
 
         try
         {
-            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, StartIndex, maxNumberOfRecords);
+            return getApplicationServicesUTIL(em).loadPendingApplications(session.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, StartIndex, maxNumberOfRecords);
         }
         finally
         {
@@ -191,7 +191,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
@@ -200,7 +200,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
 
         try
         {
-            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            return getApplicationServicesUTIL(em).getTotalNumberOfPendingApplications(session.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
         }
         finally
         {
@@ -209,7 +209,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public void saveChangesToApplication(Session session, Application application) throws Exception
@@ -235,7 +235,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         }
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public void declineAppliction(Session session, Application application, String reason) throws Exception
@@ -279,7 +279,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws RollbackFailureException
      * @throws Exception
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public void ammendAppliction(Session session, Application application, String reason) throws Exception
@@ -295,7 +295,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
 
             //Ammend application
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);        
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);        
             applicationJpaController.edit(application);
 
             AmmendRequest ammendRequest = dBEntitiesFactory.createAmmendRequestEntity(application, session.getUser(), reason, getGregorianCalendar().getTime());
@@ -331,7 +331,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      * @throws RollbackFailureException If an error occured while rolling back the entry in the database
      * @throws Exception If an unknown error occured
      */
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public void finaliseApplication(Session session, Application application) throws Exception
@@ -352,11 +352,11 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
 
             //Finalise application
             application.setFinalisationDate(getGregorianCalendar().getTime());
-            application.setStatus(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);        
+            application.setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);        
             applicationJpaController.edit(application);
 
             //Send notification to HOD       
-            List<Person> HODs = dAOFactory.createApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+            List<Person> HODs = dAOFactory.createApplicationReviewRequestDAO().findAllPeopleWhoHaveBeenRequestForApplicationAs(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
             
             for(Person p : HODs)
             {
@@ -384,7 +384,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
                
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public List<Person> getHODsOfApplication(Session session, Application application) throws Exception 
@@ -401,7 +401,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         }        
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_GRANT_HOLDER})
     @AuditableMethod
     @Override
     public void requestSpecificHODtoReview(Session session, Application application, Person hod) throws Exception 
@@ -415,7 +415,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             ApplicationReviewRequestJpaController applicationReviewRequestJpaController = dAOFactory.createApplicationReviewRequestDAO();
             PersonJpaController personJpaController = dAOFactory.createPersonDAO();
             
-            List<ApplicationReviewRequest> applicationReviewRequests = applicationReviewRequestJpaController.findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+            List<ApplicationReviewRequest> applicationReviewRequests = applicationReviewRequestJpaController.findAllRequestsThatHaveBeenRequestForApplicationAs(application, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
             
             if(applicationReviewRequests != null && applicationReviewRequests.size() > 0)
             {
@@ -438,19 +438,19 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             {
 
                 hod.setSecurityRoleList(new ArrayList<SecurityRole>());
-                hod.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+                hod.getSecurityRoleList().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
                 getUserAccountManagementServiceEJB().generateOnDemandAccount(session, "You have been requested to review a post doctoral fellowship for recommendation consideration.", true, hod);
             }
             else
             {
 
                 hod = personJpaController.findPerson(hod.getSystemID());
-                System.out.println(hod.toString() + " " + application.getFellow().toString() + " " + application.getGrantHolder().toString() + " " + application.getGrantHolder().getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD));
-                if(!application.getFellow().equals(hod) && (!application.getGrantHolder().equals(hod) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD)) && !application.getPersonList().contains(hod))
+                System.out.println(hod.toString() + " " + application.getFellow().toString() + " " + application.getGrantHolder().toString() + " " + application.getGrantHolder().getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD));
+                if(!application.getFellow().equals(hod) && (!application.getGrantHolder().equals(hod) || application.getGrantHolder().getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD)) && !application.getPersonList().contains(hod))
                 {
-                    if(!hod.getSecurityRoleList().contains(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD))
+                    if(!hod.getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD))
                     {
-                        hod.getSecurityRoleList().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+                        hod.getSecurityRoleList().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
                         getUserAccountManagementServiceEJB().updateUserAccount(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), hod);
                     }
                 }
@@ -472,7 +472,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
             
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, hod, com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
+            ApplicationReviewRequest applicationReviewRequest = dBEntitiesFactory.createApplicationReviewRequest(application, hod, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD);
 
             dAOFactory.createApplicationReviewRequestDAO().create(applicationReviewRequest);
 
