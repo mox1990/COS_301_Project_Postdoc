@@ -116,6 +116,37 @@
         </dependency>
         
         <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+            <version>4.4.1</version>            
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.4.3</version>
+        </dependency> 
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        
+        <dependency>
             <groupId>com.softserve</groupId>
             <artifactId>PostDoctoralManagementApplication-ejb</artifactId>
             <version>0.0</version>
@@ -226,7 +257,21 @@
                             <schemaFiles>Referee_refaralReportSchema.xsd</schemaFiles>
                             <clearOutputDir>FALSE</clearOutputDir>
                         </configuration>
-                    </execution>                    
+                    </execution>  
+                    
+                    <execution>
+                        <id>PrePostConditional entities</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <packageName>auto.softserve.XMLEntities.PrePostConditional</packageName>
+                            <outputDirectory>${basedir}/src/main/java/</outputDirectory>
+                            <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
+                            <schemaFiles>PrePostConditionalMethod_Schema.xsd</schemaFiles>
+                            <clearOutputDir>FALSE</clearOutputDir>
+                        </configuration>
+                    </execution>                   
                 </executions>
                 
             </plugin>  

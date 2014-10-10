@@ -9,6 +9,7 @@ package com.softserve.auxiliary.XMLUtils;
 import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import auto.softserve.XMLEntities.CV.*;
 import auto.softserve.XMLEntities.HOD.*;
+import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
 import auto.softserve.XMLEntities.application.*;
 import auto.softserve.XMLEntities.referee.*;
 import java.io.StringReader;
@@ -110,6 +111,18 @@ public class XMLUnmarshaller {
         JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.CV");
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return (AdditionalInformation) unmarshaller.unmarshal(new StreamSource(new StringReader(additionalInformation)));        
+    }
+    
+    public Prepostconditionalmethods unmarshalPrepostconditionalmethodsString(String prepostconditionalmethods) throws JAXBException
+    {
+        if(prepostconditionalmethods == null || prepostconditionalmethods.equals(""))
+        {
+            return new Prepostconditionalmethods();
+        }
+        
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.PrePostConditional");
+        Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
+        return (Prepostconditionalmethods) unmarshaller.unmarshal(new StreamSource(new StringReader(prepostconditionalmethods)));        
     }
     
 }

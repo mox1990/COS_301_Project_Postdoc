@@ -6,9 +6,14 @@
 
 package com.softserve.auxiliary.annotationprocessors;
 
+import auto.softserve.XMLEntities.PrePostConditional.Methodinfo;
+import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.softserve.auxiliary.annotations.PrePostConditionalMethod;
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.io.File;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.annotation.processing.Messager;
@@ -28,29 +33,94 @@ import javax.tools.Diagnostic;
 @SupportedAnnotationTypes("com.softserve.auxiliary.annotations.PrePostConditionalMethod")
 @SupportedSourceVersion(SourceVersion.RELEASE_7) 
 public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
-
+    
+    public final String TARGET_DIR = "..\\PostDoctoralManagementApplication-web\\src\\main\\resources\\META-INF\\prepostconfig.xml";
+    public final String SOURCE_DIR = "";
+    
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) 
     {
-       
-        Messager messager = processingEnv.getMessager();
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("Starting PrePostConditionalAnnotationProcessor...");
+        System.out.println("Working directory: " + System.getProperty("user.dir"));
         
-        for(Element element : roundEnv.getElementsAnnotatedWith(PrePostConditionalMethod.class))
+        if(!System.getProperty("user.dir").endsWith("ejb"))
         {
-            
-            System.out.println(element.getEnclosingElement().toString());
-            System.out.println(element.getEnclosedElements().toString());
-            System.out.println(element.getKind().toString());
-            System.out.println(element.getModifiers().toString());
-            System.out.println(element.getSimpleName().toString());
-            
-            ExecutableElement methodElement = (ExecutableElement) element;
-            System.out.println(methodElement.getParameters().get(0).getSimpleName().toString());
-            System.out.println(methodElement.getParameters().get(0).asType().toString());
-            
-            messager.printMessage(Diagnostic.Kind.NOTE, element.getSimpleName(),element);
+            return false;
         }
         
+        System.out.println("");
+        
+        Messager messager = processingEnv.getMessager();
+        
+        String config = "";
+        Prepostconditionalmethods prepostconditionalmethods = null;
+        
+        try
+        { 
+            XmlMapper xmlMapper = new XmlMapper();
+            xmlMapper.enable(ToXmlGenerator.Feature.WRITE_XML_DECLARATION);
+            //xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+            prepostconditionalmethods = xmlMapper.readValue(new File(TARGET_DIR), Prepostconditionalmethods.class);
+        }
+        catch(Exception ex)
+        {
+            System.out.println("PrePostConditionalAnnotationProcessor cannot find or access config file. Exception: " + ex.toString());
+            System.out.println("Will rewrite contents at end of pass...");
+        }
+        
+        if(prepostconditionalmethods == null)
+        {
+            prepostconditionalmethods = new Prepostconditionalmethods();
+        }
+        
+        System.out.println("");
+       
+        System.out.println("Elements found:");
+        System.out.println("=======================");
+        
+        List<Methodinfo> methodinfos = prepostconditionalmethods.getMethod();
+        
+        for(Element element : roundEnv.getElementsAnnotatedWith(PrePostConditionalMethod.class))
+        {            
+            System.out.println("    Element name: " + element.getSimpleName().toString());
+            System.out.println("    Class which method is in: " + element.getEnclosingElement().toString());
+            System.out.println("    Element kind: " + element.getKind().toString());
+            System.out.println("    Element modifiers: " + element.getModifiers().toString());
+            
+            Methodinfo methodinfo = new Methodinfo();
+            methodinfo.setClazz(element.getEnclosingElement().toString());
+            methodinfo.setName(element.getSimpleName().toString());
+            methodinfo.setPostcode("");
+            methodinfo.setPrecode("");
+            
+            methodinfos.add(methodinfo);
+            
+            System.out.println("    Added method");
+            
+            System.out.println("");
+        }
+        
+        System.out.println("=======================");
+        
+        try
+        {  
+            
+            XmlMapper xmlMapper = new XmlMapper();
+            xmlMapper.enable(ToXmlGenerator.Feature.WRITE_XML_DECLARATION);
+            //xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
+            System.out.println("XML Config produced: " + xmlMapper.writeValueAsString(prepostconditionalmethods));
+            xmlMapper.writeValue(new File(TARGET_DIR), prepostconditionalmethods);            
+            System.out.println("Target directory: " + TARGET_DIR);
+        }
+        catch(Exception ex)
+        {
+            System.out.println("PrePostConditionalAnnotationProcessor cannot write to config file. Exception: " + ex.toString());
+        }
+        
+        System.out.println("PrePostConditionalAnnotationProcessor stopped");
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("");
         
         return true;
     }

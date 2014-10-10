@@ -20,4 +20,7 @@ public class SystemConstants {
     //System constants
     public final static String VERSION = "0.7 Beta";
     public final static String DEVELOPER = "Softserve group";
+    
+    //File constants
+    public final static String PREPOSTCONDITIONAL_FILE_DIR = "";
 }

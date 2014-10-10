@@ -6,17 +6,18 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.persistence.DBDAO.AcademicQualificationJpaController;
 import com.softserve.persistence.DBDAO.CvJpaController;
 import com.softserve.persistence.DBDAO.ExperienceJpaController;
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.persistence.DBEntities.Cv;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.ejb.nonapplicationservices.AuditTrailService;
-import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxiliary.factories.DBEntitiesFactory;
-import com.softserve.auxiliary.requestresponseclasses.Session;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
 import org.junit.AfterClass;

@@ -5,10 +5,10 @@
  */
 package test.softserve.MockEJBClasses;
 
-import com.softserve.auxillary.factories.DAOFactory;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.ejb.applicationservices.ForwardAndRewindServices;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;

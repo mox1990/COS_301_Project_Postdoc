@@ -10,6 +10,7 @@ package com.softserve.auxiliary.XMLUtils;
 import auto.softserve.XMLEntities.CV.ProgressReportContent;
 import auto.softserve.XMLEntities.CV.*;
 import auto.softserve.XMLEntities.HOD.*;
+import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
 import auto.softserve.XMLEntities.application.*;
 import auto.softserve.XMLEntities.referee.*;
 import java.io.StringWriter;
@@ -98,6 +99,17 @@ public class XMLMarshaller {
         StringWriter stringWriter = new StringWriter();
         
         marshaller.marshal(additionalInformation,stringWriter);      
+        return stringWriter.toString();
+    }
+    
+    public String marshalPrepostconditionalmethodsObject(Prepostconditionalmethods prepostconditionalmethods) throws JAXBException
+    {
+        JAXBContext jaxbc = JAXBContext.newInstance("auto.softserve.XMLEntities.PrePostConditional");
+        Marshaller marshaller = jaxbc.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+        StringWriter stringWriter = new StringWriter();
+        
+        marshaller.marshal(prepostconditionalmethods,stringWriter);      
         return stringWriter.toString();
     }
 }

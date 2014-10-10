@@ -6,8 +6,8 @@
 
 package test.softserve.EJBUnitTests;
 
-import com.softserve.auxillary.factories.DAOFactory;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.persistence.DBDAO.AuditLogJpaController;
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.ejb.nonapplicationservices.AuditTrailServiceLocal;

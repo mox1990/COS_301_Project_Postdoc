@@ -5,9 +5,9 @@
  */
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.auxillary.factories.DAOFactory;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.persistence.DBEntities.ResourceEntity;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -24,7 +24,7 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 @Stateless
 public class ResourceBundleService implements ResourceBundleServiceLocal {
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
     
     protected DAOFactory getDAOFactory(EntityManager em)

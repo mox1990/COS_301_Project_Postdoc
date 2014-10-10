@@ -26,7 +26,7 @@ import javax.persistence.TypedQuery;
  * @author eiselem
  */
 public class DatabaseResourceBundle extends ResourceBundle {
-    private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME);
+    private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME);
     private EntityManager _entityManager = factory.createEntityManager();
     private Map<String, String> _values = new HashMap<String, String>();
     protected final static String BUNDLE_NAME = "com.softserve.Webapp.auxiliary.resourcebundle";

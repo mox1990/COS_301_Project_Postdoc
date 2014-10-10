@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+This file is copyrighted to the authors stated below.
+Any duplication or modifications or usage of the file's contents               
+that is not approved by the stated authors is prohibited.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+           <xs:complexType name="methodinfo">
+                <xs:sequence>
+                    <xs:element name="class" type="xs:string"/>
+                    <xs:element name="name" type="xs:string"/>
+                    <xs:element name="precode" type="xs:string"/>
+                    <xs:element name="postcode" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+    
+           <xs:element name="prepostconditionalmethods">
+               <xs:complexType>
+                   <xs:sequence>
+                       <xs:element name="method" maxOccurs="unbounded" minOccurs="0" type="methodinfo" />
+                           
+                   </xs:sequence>
+               </xs:complexType>
+           </xs:element>
+</xs:schema>
