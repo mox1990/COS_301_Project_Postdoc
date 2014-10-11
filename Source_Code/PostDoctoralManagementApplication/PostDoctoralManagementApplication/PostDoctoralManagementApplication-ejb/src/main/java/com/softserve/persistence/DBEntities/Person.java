@@ -6,7 +6,11 @@
 
 package com.softserve.persistence.DBEntities;
 
-import com.softserve.auxillary.util.HashUtil;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.softserve.auxiliary.util.HashUtil;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -35,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 @Entity
 @Table(name = "person")
 @XmlRootElement
@@ -115,32 +120,44 @@ public class Person implements Serializable {
         @JoinColumn(name = "_applicationID", referencedColumnName = "_applicationID")})
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Application> applicationList;
+    @JsonIgnore
     @ManyToMany(mappedBy = "personList")
     private List<CommitteeMeeting> committeeMeetingList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     private List<DeclineReport> declineReportList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dean")
     private List<Endorsement> endorsementList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person1")
     private List<ApplicationReviewRequest> applicationReviewRequestList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private ResearchFellowInformation researchFellowInformation;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "referee")
     private List<RefereeReport> refereeReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
     private EmployeeInformation employeeInformation;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
     private List<Notification> notificationList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reciever")
     private List<Notification> notificationList1;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
     private List<AmmendRequest> ammendRequestList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organiser")
     private List<CommitteeMeeting> committeeMeetingList1;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<AuditLog> auditLogList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hod")
     private List<RecommendationReport> recommendationReportList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
     private List<FundingReport> fundingReportList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "person")
@@ -152,10 +169,12 @@ public class Person implements Serializable {
     @JoinColumn(name = "_addressLine1", referencedColumnName = "_addressID")
     @ManyToOne(fetch = FetchType.EAGER)
     private Address addressLine1;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "attendee")
     private List<MinuteComment> minuteCommentList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eligiblityChecker")
     private List<EligiblityReport> eligiblityReportList;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dris")
     private List<ForwardAndRewindReport> forwardAndRewindReportList;
 

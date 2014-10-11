@@ -5,7 +5,7 @@
  */
 package test.softserve.EJBUnitTests;
 
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.Cv;
 import com.softserve.persistence.DBEntities.Person;
@@ -15,10 +15,10 @@ import com.softserve.ejb.applicationservices.ApplicationRenewalServiceLocal;
 import com.softserve.ejb.applicationservices.CVManagementServiceLocal;
 import com.softserve.ejb.applicationservices.ProgressReportManagementServiceLocal;
 import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;

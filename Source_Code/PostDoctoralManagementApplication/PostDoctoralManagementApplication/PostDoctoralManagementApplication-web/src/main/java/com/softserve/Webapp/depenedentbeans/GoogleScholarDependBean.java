@@ -8,8 +8,8 @@ package com.softserve.Webapp.depenedentbeans;
 
 import auto.softserve.XMLEntities.CV.Reference;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarQuery;
-import com.softserve.auxillary.HTTPScrapers.GoogleScholarResult;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarQuery;
+import com.softserve.auxiliary.HTTPScrapers.GoogleScholarResult;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.nonapplicationservices.GoogleScholarServicesLocal;
@@ -96,7 +96,7 @@ public class GoogleScholarDependBean implements Serializable {
         
         try 
         {
-            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(googleScholarQuery);
+            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(sessionManagerBean.getSession(),googleScholarQuery);
         } 
         catch (Exception ex) 
         {
@@ -120,7 +120,7 @@ public class GoogleScholarDependBean implements Serializable {
             GoogleScholarQuery googleScholarQuery = new GoogleScholarQuery("", "", "", "", author, "", 0, 0, true);
         
         
-            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(googleScholarQuery);
+            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(sessionManagerBean.getSession(),googleScholarQuery);
         } 
         catch (Exception ex) 
         {

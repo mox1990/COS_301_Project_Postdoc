@@ -389,6 +389,59 @@ CREATE TABLE announcement (
 	
 ) ENGINE=InnoDB;
 
+CREATE TABLE neural_network (
+	_neuralnetworkID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_timestamp DATETIME NOT NULL,
+	_defaultNetwork BOOLEAN,
+	_name VARCHAR(100),	
+	_type VARCHAR(100),
+	_learningRate DOUBLE,
+	_momentum DOUBLE,
+	_bias_threshold DOUBLE,
+	_smoothingParameterT DOUBLE,
+	_lowerCertaintyBound DOUBLE,
+	_upperCertaintyBound DOUBLE,
+
+	PRIMARY KEY (_neuralnetworkID)
+	
+) ENGINE=InnoDB;
+
+CREATE TABLE neuron (
+	_neuronID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_neuralnetwork BIGINT UNSIGNED NOT NULL,
+	_neuronOrderIndex BIGINT UNSIGNED,
+	_value DOUBLE,
+	_error DOUBLE,
+	_biasNeuron BOOLEAN,
+
+	PRIMARY KEY (_neuronID),
+	FOREIGN KEY (_neuralnetwork) REFERENCES neural_network(_neuralnetworkID)
+) ENGINE=InnoDB;
+
+CREATE TABLE synapse (
+	_synapseID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_neuralnetwork BIGINT UNSIGNED NOT NULL,
+	_srcNeuron BIGINT UNSIGNED NOT NULL,
+	_destNeuron BIGINT UNSIGNED NOT NULL,
+	_weight DOUBLE,
+	_previousWeightChange DOUBLE,
+
+	PRIMARY KEY (_synapseID),
+	FOREIGN KEY (_neuralnetwork) REFERENCES neural_network(_neuralnetworkID),
+	FOREIGN KEY (_srcNeuron) REFERENCES neuron(_neuronID),
+	FOREIGN KEY (_destNeuron) REFERENCES neuron(_neuronID)
+) ENGINE=InnoDB;
+
+CREATE TABLE resourceentity (
+	il8n_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	i18n_key VARCHAR(250) NOT NULL,
+	i18n_value VARCHAR(250) NOT NULL,
+	i18n_locale VARCHAR(250) NOT NULL,
+	
+	PRIMARY KEY (il8n_id)
+) ENGINE=InnoDB;
+
+INSERT INTO PostDoc_DB.resourceentity (i18n_key, i18n_value, i18n_locale) VALUES ('welcome.title', 'You must know', 'en'), ('welcome.name', 'Master', 'en'), ('welcome.db', 'PostDoc', 'en'), ('welcome.language', 'English', 'en');
 
 INSERT INTO PostDoc_DB.security_role (_name, _roleMask) VALUES("Prospective fellow",0), 
 															("Referee",1),
@@ -494,6 +547,12 @@ CREATE TABLE experience LIKE PostDoc_DB.experience;
 
 CREATE TABLE announcement LIKE PostDoc_DB.announcement;
 
+CREATE TABLE neuralnetwork LIKE PostDoc_DB.neural_network;
+
+CREATE TABLE synapse LIKE PostDoc_DB.synapse;
+
+CREATE TABLE neuron LIKE PostDoc_DB.neuron;
+
 USE PostDoc_BackUp_DB;
 
 CREATE TABLE address  LIKE PostDoc_DB.address;
@@ -557,4 +616,10 @@ CREATE TABLE academic_qualification  LIKE PostDoc_DB.academic_qualification;
 CREATE TABLE experience LIKE PostDoc_DB.experience;
 
 CREATE TABLE announcement LIKE PostDoc_DB.announcement;
+
+CREATE TABLE neuralnetwork LIKE PostDoc_DB.neural_network;
+
+CREATE TABLE synapse LIKE PostDoc_DB.synapse;
+
+CREATE TABLE neuron LIKE PostDoc_DB.neuron;
 

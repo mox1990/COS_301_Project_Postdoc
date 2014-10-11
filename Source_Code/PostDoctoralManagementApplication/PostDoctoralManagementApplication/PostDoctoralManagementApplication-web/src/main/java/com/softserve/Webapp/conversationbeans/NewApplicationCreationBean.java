@@ -18,8 +18,8 @@ import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.Cv;
 import com.softserve.persistence.DBEntities.Experience;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.Exceptions.UserAlreadyExistsException;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.Exceptions.UserAlreadyExistsException;
 import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.GoogleScholarDependBean;
@@ -29,7 +29,7 @@ import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.ejb.applicationservices.NewApplicationServiceLocal;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +208,7 @@ public class NewApplicationCreationBean implements Serializable {
             }
             else
             {            
-                if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
+                if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
                 {
                     wizardActiveTab = 3;
                 }
@@ -233,7 +233,7 @@ public class NewApplicationCreationBean implements Serializable {
         try 
         {  
             
-            if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
+            if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
             {
                 wizardActiveTab = 3;
             }
@@ -277,7 +277,7 @@ public class NewApplicationCreationBean implements Serializable {
         {
             newApplicationServiceLocal.linkGrantHolderToApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication(), ApplicationCreationDependBean.getGrantHolder());
             
-            if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
+            if(ApplicationCreationDependBean.getApplication().getFundingType().equals(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_FUNDINGTYPE_UPPOSTDOC))
             {            
                 newApplicationServiceLocal.linkRefereesToApplication(sessionManagerBean.getSession(), ApplicationCreationDependBean.getApplication(), ApplicationCreationDependBean.getReferees());                      
             }

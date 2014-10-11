@@ -53,7 +53,7 @@ public class ApplicationViewerRequestBean {
     {
         try 
         {
-            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
         } 
         catch (Exception ex) 
         {
@@ -66,8 +66,8 @@ public class ApplicationViewerRequestBean {
         try 
         {
             ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
         catch (Exception ex) 
@@ -81,9 +81,9 @@ public class ApplicationViewerRequestBean {
         try 
         {
             ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
         catch (Exception ex) 

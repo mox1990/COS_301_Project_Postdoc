@@ -36,6 +36,8 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -111,7 +113,45 @@
             <groupId>ar.com.fdvs</groupId>
             <artifactId>DynamicJasper</artifactId>
             <version>5.0.0</version>
-          </dependency>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+            <version>4.4.1</version>            
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.4.3</version>
+        </dependency> 
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.softserve</groupId>
+            <artifactId>PostDoctoralManagementApplication-ejb</artifactId>
+            <version>0.0</version>
+        </dependency>
+        
     </dependencies>
 
     <build>  
@@ -123,6 +163,7 @@
                     <configuration>
                         <source>1.7</source>
                         <target>1.7</target>
+                        <!--<compilerArgument>-proc:none</compilerArgument>-->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -216,7 +257,21 @@
                             <schemaFiles>Referee_refaralReportSchema.xsd</schemaFiles>
                             <clearOutputDir>FALSE</clearOutputDir>
                         </configuration>
-                    </execution>                    
+                    </execution>  
+                    
+                    <execution>
+                        <id>PrePostConditional entities</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <packageName>auto.softserve.XMLEntities.PrePostConditional</packageName>
+                            <outputDirectory>${basedir}/src/main/java/</outputDirectory>
+                            <schemaDirectory>${basedir}/src/main/resources/XML-SCHEMAS</schemaDirectory>
+                            <schemaFiles>PrePostConditionalMethod_Schema.xsd</schemaFiles>
+                            <clearOutputDir>FALSE</clearOutputDir>
+                        </configuration>
+                    </execution>                   
                 </executions>
                 
             </plugin>  

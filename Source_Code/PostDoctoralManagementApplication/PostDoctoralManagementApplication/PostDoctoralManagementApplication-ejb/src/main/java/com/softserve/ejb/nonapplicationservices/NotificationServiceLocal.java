@@ -9,8 +9,8 @@ package com.softserve.ejb.nonapplicationservices;
 
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Local;
@@ -23,11 +23,11 @@ import javax.mail.MessagingException;
  */
 @Local
 public interface NotificationServiceLocal {
-    public void sendBatchNotifications(com.softserve.auxillary.requestresponseclasses.Session session, List<Notification> notifications, boolean sendEmail) throws Exception;
-    public void sendNotification(com.softserve.auxillary.requestresponseclasses.Session session, Notification notification, boolean sendEmail) throws Exception;
-    public void sendOnlyEmail(com.softserve.auxillary.requestresponseclasses.Session session, Notification notification);
+    public void sendBatchNotifications(com.softserve.auxiliary.requestresponseclasses.Session session, List<Notification> notifications, boolean sendEmail) throws Exception;
+    public void sendNotification(com.softserve.auxiliary.requestresponseclasses.Session session, Notification notification, boolean sendEmail) throws Exception;
+    public void sendOnlyEmail(com.softserve.auxiliary.requestresponseclasses.Session session, Notification notification);
     public List<Notification> getAllNotificationsForPerson(Session session, Person person) throws AuthenticationException, Exception;
-    public List<Notification> getAllNotificationsFromPerson(com.softserve.auxillary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception;
+    public List<Notification> getAllNotificationsFromPerson(com.softserve.auxiliary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception;
     
 
 }

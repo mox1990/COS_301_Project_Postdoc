@@ -13,7 +13,7 @@ import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.ForwardAndRewindServicesLocal;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -77,12 +77,12 @@ public class ForwardAndRewindServiceRequestBean {
         
         if(applicationServicesUtil.getOrderIndexOfApplicationStatus(application.getStatus()) < 8)
         {
-            output.add(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
-            output.add(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
-            output.add(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
-            output.add(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
-            output.add(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
-            output.add(com.softserve.auxillary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
+            output.add(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+            output.add(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED);
+            output.add(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            output.add(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            output.add(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            output.add(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
 
             output.remove(application.getStatus());
         }

@@ -7,12 +7,12 @@
 package test.softserve.MockEJBClasses;
 
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.ejb.applicationservices.ApplicationProgressViewerService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;

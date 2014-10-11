@@ -94,8 +94,8 @@ public class GeneralUserAccountCreationBean implements Serializable{
 
             locationFinderDependBean.init(null);
 
-            sourceRoles = com.softserve.auxillary.constants.PersistenceConstants.getAllSecurityRoles();
-            sourceRoles.remove(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            sourceRoles = com.softserve.auxiliary.constants.PersistenceConstants.getAllSecurityRoles();
+            sourceRoles.remove(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
 
             targetRoles = new ArrayList<SecurityRole>();
             securityRoles = new DualListModel<SecurityRole>(sourceRoles, targetRoles);
@@ -199,7 +199,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
                 securityRoles.getTarget().addAll(securityRoles.getSource());
                 
                 
-                securityRoles.getTarget().add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+                securityRoles.getTarget().add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             }
 
             person.setSecurityRoleList(new ArrayList<SecurityRole>());
@@ -207,7 +207,7 @@ public class GeneralUserAccountCreationBean implements Serializable{
             
             System.out.println(person.getSecurityRoleList().toString());
             
-            person.setAccountStatus(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+            person.setAccountStatus(com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
             person.setAddressLine1(address);
             
             

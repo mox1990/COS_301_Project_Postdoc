@@ -6,7 +6,7 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.io.IOException;
 import javax.ejb.Local;
 
@@ -18,7 +18,11 @@ import javax.ejb.Local;
 @Local
 public interface ArchivalServiceLocal {
     public void backupDatabase(Session session) throws Exception;
+    public void restoreBackupToWorkingDatabase(Session session) throws Exception;
     public void archiveOldInformation(Session session) throws Exception;
     public void retrieveArchievedInformation(Session session) throws Exception;
-    public void restoreBackupToWorkingDatabase(Session session) throws Exception;
+    
+    
+    public byte[] createBackupScriptForWorkingDatabase(Session session) throws Exception;
+    public void restoreBackupOfWorkingDatabaseFromScript(Session session, byte[] file) throws Exception;
 }

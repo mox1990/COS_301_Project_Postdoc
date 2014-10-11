@@ -14,7 +14,7 @@ import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.persistence.DBDAO.AuditLogJpaController;
 import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.persistence.DBDAO.CvJpaController;
-import com.softserve.auxillary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.DeclineReportJpaController;
 import com.softserve.persistence.DBDAO.DepartmentJpaController;
 import com.softserve.persistence.DBDAO.EligiblityReportJpaController;
@@ -62,13 +62,13 @@ import com.softserve.persistence.DBEntities.RecommendationReport;
 import com.softserve.persistence.DBEntities.RefereeReport;
 import com.softserve.persistence.DBEntities.ResearchFellowInformation;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.annotations.SecuredMethod;
-import com.softserve.auxillary.constants.PersistenceConstants;
-import com.softserve.auxillary.interceptors.AuditTrailInterceptor;
-import com.softserve.auxillary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.annotations.SecuredMethod;
+import com.softserve.auxiliary.constants.PersistenceConstants;
+import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
+import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -100,11 +100,11 @@ import javax.persistence.PersistenceUnit;
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ArchivalService implements ArchivalServiceLocal {
     
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.ARCHIVE_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emfArchive;
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emfWorking;
-    @PersistenceUnit(unitName = com.softserve.auxillary.constants.PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME)
+    @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.BACKUP_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emfBackup;
 
     public ArchivalService() 
@@ -138,7 +138,7 @@ public class ArchivalService implements ArchivalServiceLocal {
     
     //@Schedule(dayOfWeek="*", hour="2", info = "Daily backup of the database.")
     @Override
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     public void backupDatabase(Session session) throws Exception
     {
         System.out.println("Running Backup...");
@@ -1158,21 +1158,21 @@ public class ArchivalService implements ArchivalServiceLocal {
     }    
     
     //@Schedule(dayOfWeek="Sat", hour="2", info = "Daily backup of the database.")
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void archiveOldInformation(Session session)
     {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void retrieveArchievedInformation(Session session)
     {
         
     }
     
-    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
     @Override
     public void restoreBackupToWorkingDatabase(Session session) throws Exception
     {
@@ -1254,5 +1254,15 @@ public class ArchivalService implements ArchivalServiceLocal {
     {
         System.out.println("Failed to restore: " + object.toString());
         // TODO: Log it in a more suitable manner...
+    }
+
+    @Override
+    public byte[] createBackupScriptForWorkingDatabase(Session session) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void restoreBackupOfWorkingDatabaseFromScript(Session session, byte[] file) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -18,8 +18,8 @@ import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -103,7 +103,7 @@ public class UserAccountManagmentUnitTest {
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE)); 
         boolean useManualSystemIDSpecification = false;
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
@@ -128,7 +128,7 @@ public class UserAccountManagmentUnitTest {
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         boolean useManualSystemIDSpecification = true;
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
@@ -152,7 +152,7 @@ public class UserAccountManagmentUnitTest {
         boolean useManualSystemIDSpecification = true;
         when(mockSession.getUser().getSystemID()).thenReturn(mockPerson.getSystemID());
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.createUserAccount(mockSession, useManualSystemIDSpecification, mockPerson);
@@ -169,7 +169,7 @@ public class UserAccountManagmentUnitTest {
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.updateUserAccount(mockSession, mockPerson);
@@ -192,7 +192,7 @@ public class UserAccountManagmentUnitTest {
         DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Removed user", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         String id = mockPerson.getSystemID();
         try
         {
@@ -210,7 +210,7 @@ public class UserAccountManagmentUnitTest {
     public void testRemoveUserFail(){
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         String id = mockPerson.getSystemID();
         mockPerson.setSecurityRoleList(roles);
         
@@ -228,7 +228,7 @@ public class UserAccountManagmentUnitTest {
     //@Test 
     public void testViewAllUserAccounts() throws Exception{
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockPerson);
             verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Viewed all accounts", new Person("u12236731"));
@@ -250,7 +250,7 @@ public class UserAccountManagmentUnitTest {
     public void testGenerateOnDemandAccountTrue(){
         String reason = "Required to be a referre";
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.generateOnDemandAccount(mockSession, reason, true, mockPerson);
@@ -271,7 +271,7 @@ public class UserAccountManagmentUnitTest {
     public void testGenerateOnDemandAccountFalse(){
         String reason = "Required to be a referre";
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.generateOnDemandAccount(mockSession, reason, false, mockPerson);
@@ -293,7 +293,7 @@ public class UserAccountManagmentUnitTest {
     public void testActivateOnDemandAccount()
     {
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.activateOnDemandAccount(mockSession, mockPerson);
@@ -315,7 +315,7 @@ public class UserAccountManagmentUnitTest {
     public void testGetAllSecurityRoles()
     {
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             //instance.getAllSecurityRoles();
@@ -338,7 +338,7 @@ public class UserAccountManagmentUnitTest {
     {
         String user = "u12078027";
          ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try
         {
             instance.getUserBySystemIDOrEmail(mockPerson.getEmail());

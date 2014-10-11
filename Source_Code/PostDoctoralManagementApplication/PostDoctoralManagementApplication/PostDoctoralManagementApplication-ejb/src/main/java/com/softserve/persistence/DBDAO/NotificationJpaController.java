@@ -150,7 +150,7 @@ public class NotificationJpaController implements Serializable {
     {
         EntityManager em = getEntityManager();
         
-        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.emailStatus = :status", Notification.class).setParameter("status", com.softserve.auxillary.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_QUEUED);
+        TypedQuery<Notification> q = em.createQuery("SELECT n FROM Notification n WHERE n.emailStatus = :status", Notification.class).setParameter("status", com.softserve.auxiliary.constants.PersistenceConstants.NOTIFICATION_EMAIL_STATUS_QUEUED);
         
         return q.getResultList();
     }

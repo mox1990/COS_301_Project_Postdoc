@@ -8,8 +8,8 @@ package com.softserve.ejb.applicationservices;
 
 import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.ProgressReport;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.util.List;
 import javax.ejb.Local;
 

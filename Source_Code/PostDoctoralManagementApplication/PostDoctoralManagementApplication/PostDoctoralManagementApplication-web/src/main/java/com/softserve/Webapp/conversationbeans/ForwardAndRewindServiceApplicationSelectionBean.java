@@ -13,7 +13,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.ForwardAndRewindServicesLocal;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

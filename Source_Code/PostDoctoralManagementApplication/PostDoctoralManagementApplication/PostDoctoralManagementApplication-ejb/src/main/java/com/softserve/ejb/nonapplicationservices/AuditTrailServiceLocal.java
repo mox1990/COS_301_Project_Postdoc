@@ -8,7 +8,7 @@ package com.softserve.ejb.nonapplicationservices;
 
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Local;

@@ -14,7 +14,7 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.ApplicationProgressViewerServiceLocal;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
@@ -106,8 +106,8 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         try 
         {
             ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
             
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 
@@ -123,7 +123,7 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
     {
         try 
         {
-            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
+            return sessionManagerBean.getSession().doesUserHaveSecurityRole(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
         } 
         catch (Exception ex) 
         {
@@ -138,8 +138,8 @@ public class ApplicationProgressViewerSelectionBean implements Serializable {
         try 
         {
             ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-            securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+            securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
             
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
         } 

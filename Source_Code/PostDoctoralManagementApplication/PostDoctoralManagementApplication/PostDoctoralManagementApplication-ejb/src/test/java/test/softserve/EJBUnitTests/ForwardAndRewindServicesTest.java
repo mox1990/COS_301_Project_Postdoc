@@ -5,11 +5,11 @@
  */
 package test.softserve.EJBUnitTests;
 
-import com.softserve.auxillary.factories.DAOFactory;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
-import com.softserve.auxillary.requestresponseclasses.Session;
-import com.softserve.auxillary.transactioncontrollers.TransactionController;
-import com.softserve.auxillary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.ejb.applicationservices.ForwardAndRewindServicesLocal;
 import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
 import com.softserve.persistence.DBDAO.RefereeReportJpaController;

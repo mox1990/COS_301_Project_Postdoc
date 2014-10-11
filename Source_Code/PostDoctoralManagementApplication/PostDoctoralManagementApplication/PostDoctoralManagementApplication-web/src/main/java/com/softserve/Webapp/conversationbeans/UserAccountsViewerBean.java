@@ -112,17 +112,17 @@ public class UserAccountsViewerBean implements Serializable {
     
     public boolean isUserAccountDisabled(Person account)
     {
-        return account.getAccountStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+        return account.getAccountStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
     }
     
     public boolean isUserAccountDorment(Person account)
     {
-        return account.getAccountStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
+        return account.getAccountStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_DORMENT);
     }
     
     public boolean isUserAccountActive(Person account)
     {
-        return account.getAccountStatus().equals(com.softserve.auxillary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
+        return account.getAccountStatus().equals(com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_ACTIVE);
     }
     
     public boolean isOwnerOfAccount(Person account)
@@ -142,7 +142,7 @@ public class UserAccountsViewerBean implements Serializable {
     public boolean isSystemAdmin()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.auxillary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
         try 
         {
             return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);

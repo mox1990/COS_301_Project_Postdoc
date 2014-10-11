@@ -13,7 +13,7 @@ import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserAccountManagementService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxillary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import java.util.GregorianCalendar;
 
 /**

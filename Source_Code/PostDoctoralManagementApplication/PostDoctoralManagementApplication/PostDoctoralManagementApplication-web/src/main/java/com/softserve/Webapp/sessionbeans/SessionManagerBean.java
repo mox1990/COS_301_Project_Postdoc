@@ -8,11 +8,11 @@ package com.softserve.Webapp.sessionbeans;
 
 import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;
 import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.auxillary.Exceptions.AuthenticationException;
+import com.softserve.auxiliary.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.Webapp.auxiliary.StorageItem;
-import com.softserve.auxillary.util.HashUtil;
-import com.softserve.auxillary.requestresponseclasses.Session;
+import com.softserve.auxiliary.util.HashUtil;
+import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
