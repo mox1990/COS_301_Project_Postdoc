@@ -96,7 +96,7 @@ public class GoogleScholarDependBean implements Serializable {
         
         try 
         {
-            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(googleScholarQuery);
+            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(sessionManagerBean.getSession(),googleScholarQuery);
         } 
         catch (Exception ex) 
         {
@@ -120,7 +120,7 @@ public class GoogleScholarDependBean implements Serializable {
             GoogleScholarQuery googleScholarQuery = new GoogleScholarQuery("", "", "", "", author, "", 0, 0, true);
         
         
-            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(googleScholarQuery);
+            searchResults = googleScholarServicesLocal.searchGoogleScholarUsing(sessionManagerBean.getSession(),googleScholarQuery);
         } 
         catch (Exception ex) 
         {

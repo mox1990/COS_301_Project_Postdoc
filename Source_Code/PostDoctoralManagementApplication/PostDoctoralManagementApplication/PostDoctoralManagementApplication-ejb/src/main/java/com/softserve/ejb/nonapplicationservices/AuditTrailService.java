@@ -48,9 +48,9 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     }
     
     protected DAOFactory getDAOFactory(EntityManager em)
-{
+    {
 	return new DAOFactory(em);
-}
+    }
 
     protected TransactionController getTransactionController()
     {

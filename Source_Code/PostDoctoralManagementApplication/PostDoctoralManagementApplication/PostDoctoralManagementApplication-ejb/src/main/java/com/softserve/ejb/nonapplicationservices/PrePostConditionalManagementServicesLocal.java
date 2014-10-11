@@ -6,10 +6,8 @@
 
 package com.softserve.ejb.nonapplicationservices;
 
-import com.softserve.auxiliary.HTTPScrapers.GoogleScholarQuery;
-import com.softserve.auxiliary.HTTPScrapers.GoogleScholarResult;
+import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
 import com.softserve.auxiliary.requestresponseclasses.Session;
-import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -18,7 +16,7 @@ import javax.ejb.Local;
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Local
-public interface GoogleScholarServicesLocal {
-    public List<GoogleScholarResult> searchGoogleScholarUsing(Session session, GoogleScholarQuery googleScholarQuery) throws Exception;
-    
+public interface PrePostConditionalManagementServicesLocal {
+    public Prepostconditionalmethods loadPrePostConditionalMethodsConfiguration(Session session) throws Exception;
+    public void updatePrePostConditionalMethodsConfiguration(Session session, Prepostconditionalmethods prepostconditionalmethods) throws Exception;
 }

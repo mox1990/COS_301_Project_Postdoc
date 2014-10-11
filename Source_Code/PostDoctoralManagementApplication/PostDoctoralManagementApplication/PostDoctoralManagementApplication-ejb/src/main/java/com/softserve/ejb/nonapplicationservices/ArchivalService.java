@@ -1255,4 +1255,14 @@ public class ArchivalService implements ArchivalServiceLocal {
         System.out.println("Failed to restore: " + object.toString());
         // TODO: Log it in a more suitable manner...
     }
+
+    @Override
+    public byte[] createBackupScriptForWorkingDatabase(Session session) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void restoreBackupOfWorkingDatabaseFromScript(Session session, byte[] file) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

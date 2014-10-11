@@ -28,6 +28,8 @@ import com.softserve.persistence.DBDAO.FundingCostJpaController;
 import com.softserve.persistence.DBDAO.FundingReportJpaController;
 import com.softserve.persistence.DBDAO.InstitutionJpaController;
 import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
+import com.softserve.persistence.DBDAO.NeuralNetworkJpaController;
+import com.softserve.persistence.DBDAO.NeuronJpaController;
 import com.softserve.persistence.DBDAO.NotificationJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBDAO.ProgressReportJpaController;
@@ -36,6 +38,7 @@ import com.softserve.persistence.DBDAO.RefereeReportJpaController;
 import com.softserve.persistence.DBDAO.ResearchFellowInformationJpaController;
 import com.softserve.persistence.DBDAO.ResourceEntityJpaController;
 import com.softserve.persistence.DBDAO.SecurityRoleJpaController;
+import com.softserve.persistence.DBDAO.SynapseJpaController;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -197,4 +200,18 @@ public class DAOFactory {
         return new SecurityRoleJpaController(em);
     }
     
+    public NeuralNetworkJpaController createNeuralNetworkDAO()
+    {
+        return new NeuralNetworkJpaController(em);
+    }
+    
+    public NeuronJpaController createNeuronDAO()
+    {
+        return new NeuronJpaController(em);
+    }
+    
+    public SynapseJpaController createSynapseDAO()
+    {
+        return new SynapseJpaController(em);
+    }
 }
