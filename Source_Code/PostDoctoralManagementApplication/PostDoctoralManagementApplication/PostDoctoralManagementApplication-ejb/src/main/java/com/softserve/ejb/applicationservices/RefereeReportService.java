@@ -98,6 +98,11 @@ public class RefereeReportService implements RefereeReportServiceLocal {
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     /**
      *This function loads all the applications that need to approved/declined by the 
      * specified HOD
@@ -111,7 +116,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws AuthenticationException, Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -128,7 +133,7 @@ public class RefereeReportService implements RefereeReportServiceLocal {
     @Override
     public int countTotalPendingApplications(Session session) throws AuthenticationException, Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

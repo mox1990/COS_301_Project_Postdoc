@@ -3,44 +3,55 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package test.softserve.EJBUnitTests;
 
-import com.softserve.persistence.DBDAO.ApplicationJpaController;
-import com.softserve.persistence.DBDAO.PersonJpaController;
-import com.softserve.persistence.DBDAO.ProgressReportJpaController;
-import com.softserve.persistence.DBEntities.Application;
-import com.softserve.persistence.DBEntities.AuditLog;
-import com.softserve.persistence.DBEntities.Person;
-import com.softserve.persistence.DBEntities.ProgressReport;
-import com.softserve.persistence.DBEntities.SecurityRole;
-import com.softserve.ejb.nonapplicationservices.AuditTrailService;
-import com.softserve.ejb.nonapplicationservices.NotificationService;
-import com.softserve.ejb.applicationservices.ProgressReportManagementService;
-import com.softserve.ejb.nonapplicationservices.UserGateway;
-import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
-import java.util.ArrayList;
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.ejb.applicationservices.ProgressReportManagementServiceLocal;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.ProgressReportJpaController;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.ProgressReport;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
 import test.softserve.MockEJBClasses.ProgressReportManagementMockUnit;
 
 /**
  *
- * @author User
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class ProgressReportManagementUnitTest
-{
+public class ProgressReportManagementUnitTest {
+    private ProgressReportManagementMockUnit instance;
+    
+    private ApplicationJpaController mockApplicationJpaController;
+    private RecommendationReportJpaController mockRecommendationReportJpaController;
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private NotificationService mockNotificationService;
+    private AmmendRequestJpaController mockAmmendRequestJpaController;
+    private GregorianCalendar mockCal;
+    private TransactionController mockTransactionController;
+    private DAOFactory mockDAOFactory;
+    private EntityManager mockEntityManager;
+    private ProgressReportJpaController mockProgressReportJpaController;
+    
     public ProgressReportManagementUnitTest() {
     }
     
@@ -53,110 +64,76 @@ public class ProgressReportManagementUnitTest
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        instance = new ProgressReportManagementMockUnit();
+        
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
+        mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockAmmendRequestJpaController = mock(AmmendRequestJpaController.class);
+        mockCal = mock(GregorianCalendar.class);
+        mockTransactionController = mock(TransactionController.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockProgressReportJpaController = mock(ProgressReportJpaController.class);
+                
+        instance.setdBEntities(mockDBEntitiesFactory);
+        instance.setnEJB(mockNotificationService);
+        instance.setgCal(mockCal);
+        instance.setTransactionController(mockTransactionController);
+        instance.setEntityManager(mockEntityManager);
+        instance.setdAOFactory(mockDAOFactory);
+        
+        when(mockDAOFactory.createProgressReportDAO()).thenReturn(mockProgressReportJpaController);
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createRecommendationReportDAO()).thenReturn(mockRecommendationReportJpaController);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
     
     @After
     public void tearDown() {
     }
-    
-    //@Test
-    public void testCreateProgressReport() throws Exception
-    {
-        ProgressReportManagementMockUnit instance = new ProgressReportManagementMockUnit();
-        
-        Application mockApplication = mock(Application.class);
-        ApplicationJpaController mockApplicationDAO = mock(ApplicationJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class); 
-        //ApplicationInformation mockApplicationInformation = mock(ApplicationInformation.class);
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        ProgressReport mockProgress = mock(ProgressReport.class);
-        ProgressReportJpaController mockProgressReportController = mock(ProgressReportJpaController.class);
-      
-        Session mockSession = mock(Session.class);
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
-        instance.setaDAO(mockApplicationDAO);
-        instance.setnEJB(mockNotificationService);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuEJB(mockUserGateway);
-        instance.setaSEJB(mockApplicationServices);
-        
-        try
-        {
-            instance.createProgressReport(mockSession, mockApplication, mockProgress);
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockProgressReportController).edit(mockProgress);
-            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
-        
-    }
-    
-    //@Test
-    public void testUpdateProgressReport() throws Exception
-    {
-        ProgressReportManagementMockUnit instance = new ProgressReportManagementMockUnit();
-        
-        UserGateway mockUserGateway = mock(UserGateway.class); 
-        PersonJpaController mockPersonJpaController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        ProgressReport mockProgress = mock(ProgressReport.class);
-        ProgressReportJpaController mockProgressReportController = mock(ProgressReportJpaController.class);
-        ApplicationJpaController mockApplication = mock(ApplicationJpaController.class);
-        
-        Session mockSession = mock(Session.class);
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
-        instance.setaDAO(mockApplication);
-        instance.setnEJB(mockNotificationService);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setnEJB(mockNotificationService);
-        instance.setpDAO(mockPersonJpaController);
-        instance.setuEJB(mockUserGateway);
-        instance.setaSEJB(mockApplicationServices);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        
-          
-        try
-        {
-            instance.updateProgressReport(mockSession, mockProgress);
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockProgressReportController).edit(mockProgress);
-            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Progress Report updated" + Long.MAX_VALUE, new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
+
+    /**
+     * Test of createProgressReport method, of class ProgressReportManagementService.
+     */
+    @Test
+    public void testCreateProgressReport() throws Exception {
         
     }
 
+    /**
+     * Test of updateProgressReport method, of class ProgressReportManagementService.
+     */
+    @Test
+    public void testUpdateProgressReport() throws Exception {
+        
+    }
 
+    /**
+     * Test of allApplicationsWithPendingReportsForUser method, of class ProgressReportManagementService.
+     */
+    @Test
+    public void testAllApplicationsWithPendingReportsForUser() throws Exception {
+        
+    }
+
+    /**
+     * Test of doesApplicationHaveFinalProgressReport method, of class ProgressReportManagementService.
+     */
+    @Test
+    public void testDoesApplicationHaveFinalProgressReport() throws Exception {
+        
+    }
+
+    /**
+     * Test of getNumberOfProgressReportsRequiredByApplication method, of class ProgressReportManagementService.
+     */
+    @Test
+    public void testGetNumberOfProgressReportsRequiredByApplication() throws Exception {
+        
+    }
+    
 }

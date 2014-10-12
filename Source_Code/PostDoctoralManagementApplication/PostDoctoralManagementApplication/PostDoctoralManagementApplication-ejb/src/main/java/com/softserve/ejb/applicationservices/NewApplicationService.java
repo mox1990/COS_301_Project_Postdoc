@@ -107,6 +107,11 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod(message = "Updated/Created CV")
     @Override
@@ -248,8 +253,16 @@ public class NewApplicationService implements  NewApplicationServiceLocal{
         }               
     }
     
+    /**
+     *
+     * @param session
+     * @param application
+     * @param referees
+     * @throws Exception
+     */
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_PROSPECTIVE_FELLOW}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
+    @Override
     public void linkRefereesToApplication(Session session, Application application, List<Person> referees) throws Exception
     {
         if(referees == null)

@@ -107,6 +107,11 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         return new GregorianCalendar();
     }
     
+    public EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     /**
      *
      * @param session
@@ -420,7 +425,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllMeetings(Session session) throws Exception 
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -446,7 +451,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllActiveMeetings(Session session) throws Exception 
     {   
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -464,7 +469,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllActiveMeetingsForWhichUserIsToAttend(Session session) throws Exception 
     {   
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -499,7 +504,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws Exception 
     {   
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -518,7 +523,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<Person> getAllPostDocCommitteeMembers(Session session) throws Exception 
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -538,7 +543,7 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public List<CommitteeMeeting> getAllStillToBeHeldMeetings(Session session) throws Exception 
     {       
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

@@ -77,17 +77,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     private NotificationServiceLocal notificationServiceLocal;
     @EJB
     private AuditTrailServiceLocal auditTrailServiceLocal;
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
     
-    /**
-     *
-     * @return
-     */
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
     
     /**
      *
@@ -106,8 +96,6 @@ public class UserAccountManagementService implements UserAccountManagementServic
     {
         return auditTrailServiceLocal;
     }
-    
-    
     
     /**
      *
@@ -161,6 +149,11 @@ public class UserAccountManagementService implements UserAccountManagementServic
         return new GeneratorUtil();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     /**
      *This function is used to automatically generate a new valid SystemID
      * @param prefix The prefix to be used for the 9 character systemID
@@ -168,7 +161,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
      */
     protected String generateSystemID(char prefix)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -645,7 +638,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public List<Person> viewAllUserAccounts(Session session) throws AuthenticationException, Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         try
         {
             return getDAOFactory(em).createPersonDAO().findPersonEntities();
@@ -664,7 +657,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public Person getUserBySystemIDOrEmail(String intput)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         try
         {
             return getDAOFactory(em).createPersonDAO().findUserBySystemIDOrEmail(intput);
@@ -683,7 +676,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public Person getUserBySystemID(String systemID)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         try
         {
             return getDAOFactory(em).createPersonDAO().findPerson(systemID);
@@ -813,7 +806,7 @@ public class UserAccountManagementService implements UserAccountManagementServic
     @Override
     public List<Person> loadAllPendingOnDemandAccounts(Session session) throws Exception 
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

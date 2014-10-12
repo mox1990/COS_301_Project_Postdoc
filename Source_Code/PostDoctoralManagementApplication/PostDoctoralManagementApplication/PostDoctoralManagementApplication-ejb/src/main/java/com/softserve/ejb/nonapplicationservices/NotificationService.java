@@ -123,7 +123,11 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
         Transport.send(message);
     }
     
-
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     @Override
     @Asynchronous
     public void sendBatchNotifications(com.softserve.auxiliary.requestresponseclasses.Session session, List<Notification> notifications, boolean sendEmail) throws Exception
@@ -146,9 +150,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
             try
             {
                 DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
-                
-                EntityManager em = emf.createEntityManager();
-            
+                            
                 NotificationJpaController notificationJpaController = dAOFactory.createNotificationDAO();
 
                 //Set as current time
@@ -244,7 +246,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @Override
     public List<Notification> getAllNotificationsForPerson(com.softserve.auxiliary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {        
@@ -262,7 +264,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     public List<Notification> getAllNotificationsFromPerson(com.softserve.auxiliary.requestresponseclasses.Session session, Person person) throws AuthenticationException, Exception
     {
 
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {        
@@ -278,7 +280,7 @@ public class NotificationService implements NotificationServiceLocal { // TODO: 
     @Asynchronous
     public void sendAllEmailsOfQueuedNotifications()
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         try
         {
             System.out.println("==================================SENDING QUEDED EMAILS");

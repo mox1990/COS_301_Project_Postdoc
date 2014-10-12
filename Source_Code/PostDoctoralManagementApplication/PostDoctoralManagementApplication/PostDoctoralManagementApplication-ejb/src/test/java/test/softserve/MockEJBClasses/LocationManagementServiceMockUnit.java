@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package test.softserve.MockEJBClasses;
 
-import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.auxiliary.factories.DAOFactory;
-import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
-import com.softserve.ejb.nonapplicationservices.AuditTrailService;
-import com.softserve.ejb.applicationservices.MeetingManagementService;
-import com.softserve.ejb.nonapplicationservices.NotificationService;
-import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.ejb.nonapplicationservices.AuditTrailService;
+import com.softserve.ejb.nonapplicationservices.LocationManagementService;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 
@@ -24,10 +21,8 @@ import javax.persistence.EntityManager;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class MeetingManagementServiceMockUnit extends MeetingManagementService {
+public class LocationManagementServiceMockUnit extends LocationManagementService {
     private DBEntitiesFactory dBEntities;
-    private NotificationService nEJB;
-    private GregorianCalendar gCal;
     private DAOFactory dAOFactory;
     private TransactionController transactionController;
     private EntityManager entityManager;
@@ -44,40 +39,19 @@ public class MeetingManagementServiceMockUnit extends MeetingManagementService {
         this.entityManager = entityManager;
     }
 
-    public void setgCal(GregorianCalendar gCal) {
-        this.gCal = gCal;
-    }
-
     public void setdBEntities(DBEntitiesFactory dBEntities) {
         this.dBEntities = dBEntities;
     }
-
-    public void setnEJB(NotificationService nEJB) {
-        this.nEJB = nEJB;
-    }
-    
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return dBEntities;
     }
     
-    @Override
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return nEJB;
-    }
-    
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)
     {
         return dAOFactory;
-    }
-     
-    @Override
-    protected GregorianCalendar getGregorianCalendar()
-    {
-        return gCal;
     }
     
     @Override

@@ -19,60 +19,53 @@ import com.softserve.ejb.applicationservices.GrantHolderFinalisationService;
 import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 
 /**
  *
- * @author kgothatso
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisationService {
-    private PersonJpaController pDAO;
-    private CvJpaController cVDAO;
-    private ApplicationJpaController aDAO;
     private DBEntitiesFactory dBEntitities;
-    private UserGateway uEJB;
     private NotificationService nEJB;
-    private AuditTrailService aTEJB;
     private CVManagementService cVEJB;
     private ApplicationServicesUtil aSEJB;
     private GregorianCalendar gCal;
-    private ApplicationReviewRequestJpaController aRDAO;
+    private DAOFactory dAOFactory;
+    private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
+    private TransactionController transactionController;
+    private EntityManager entityManager;
 
-    public void setaRDAO(ApplicationReviewRequestJpaController aRDAO) {
-        this.aRDAO = aRDAO;
+    public void setTransactionController(TransactionController transactionController) {
+        this.transactionController = transactionController;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
+    }
+
+    public void setUserAccountManagementServiceLocal(UserAccountManagementServiceLocal userAccountManagementServiceLocal) {
+        this.userAccountManagementServiceLocal = userAccountManagementServiceLocal;
     }
     
     public void setgCal(GregorianCalendar gCal) {
         this.gCal = gCal;
     }
 
-    public void setpDAO(PersonJpaController pDAO) {
-        this.pDAO = pDAO;
-    }
-
-    public void setcVDAO(CvJpaController cVDAO) {
-        this.cVDAO = cVDAO;
-    }
-
-    public void setaDAO(ApplicationJpaController aDAO) {
-        this.aDAO = aDAO;
-    }
-
     public void setdBEntitities(DBEntitiesFactory dBEntitities) {
         this.dBEntitities = dBEntitities;
     }
 
-    public void setuEJB(UserGateway uEJB) {
-        this.uEJB = uEJB;
-    }
-
     public void setnEJB(NotificationService nEJB) {
         this.nEJB = nEJB;
-    }
-
-    public void setaTEJB(AuditTrailService aTEJB) {
-        this.aTEJB = aTEJB;
     }
 
     public void setcVEJB(CVManagementService cVEJB) {
@@ -86,7 +79,7 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return new DAOFactory(em);
+        return dAOFactory;
     } 
     
     
@@ -108,13 +101,34 @@ public class GrantHolderFinalisationServiceMockUnit extends GrantHolderFinalisat
         return cVEJB;
     }
     
-    
-    
     @Override
     protected GregorianCalendar getGregorianCalendar()
     {
         return gCal;
     }
     
-   
+    @Override
+    protected UserAccountManagementServiceLocal getUserAccountManagementServiceEJB()
+    {
+        return userAccountManagementServiceLocal;
+    }
+    
+    @Override
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
+    {
+        return aSEJB;
+    }
+    
+    @Override
+    protected TransactionController getTransactionController()
+    {
+        return transactionController;
+    }
+    
+    @Override
+    protected EntityManager createEntityManager()
+    {
+        return entityManager;
+    }
 }
+

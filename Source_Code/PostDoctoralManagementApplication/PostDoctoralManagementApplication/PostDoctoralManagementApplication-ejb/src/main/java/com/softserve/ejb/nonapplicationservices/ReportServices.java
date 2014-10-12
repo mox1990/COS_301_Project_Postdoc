@@ -75,7 +75,11 @@ public class ReportServices implements ReportServicesLocal
         return new EntityToListConverter();
     }
     
-
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     public ReportServices() {
     }
     
@@ -93,7 +97,7 @@ public class ReportServices implements ReportServicesLocal
     @Override
     public List<Person> loadAllPersonEntities(Session session) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -110,8 +114,8 @@ public class ReportServices implements ReportServicesLocal
     @Override
     public List<Application> loadAllApplicationEntities(Session session) throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
-        
+        EntityManager em = createEntityManager();
+       
         try
         {
             return getDAOFactory(em).createApplicationDAO().findApplicationEntities();

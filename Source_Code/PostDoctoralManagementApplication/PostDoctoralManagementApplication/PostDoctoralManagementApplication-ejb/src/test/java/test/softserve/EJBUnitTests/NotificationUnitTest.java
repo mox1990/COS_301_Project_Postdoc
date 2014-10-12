@@ -3,34 +3,50 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxiliary.factories.DAOFactory;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
+import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.persistence.DBDAO.NotificationJpaController;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
-import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import javax.ejb.embeddable.EJBContainer;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.NotificationServiceMockUnit;
 
 /**
  *
- * @author kgothatso
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class NotificationUnitTest {
+    private NotificationServiceMockUnit instance;
+    
+    private DAOFactory mockDAOFactory;
+    private TransactionController mockTransactionController;
+    private UserGateway mockUserGateway;
+    private Properties mockProperties;
+    private javax.mail.Session mockSession;
+    private javax.mail.Authenticator mockAuthenticator;
+    private InternetAddress mockInternetAddress;
+    private MimeMessage mockMimeMessage;
+    private EntityManager mockEntityManager;
+    private NotificationJpaController mockNotificationJpaController;
     
     public NotificationUnitTest() {
     }
@@ -44,186 +60,84 @@ public class NotificationUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        instance = new NotificationServiceMockUnit();
+        
+        mockDAOFactory = mock(DAOFactory.class);
+        mockTransactionController = mock(TransactionController.class);
+        mockUserGateway = mock(UserGateway.class);
+        mockProperties = mock(Properties.class);
+        // TODO: Sort this out
+        //mockSession = mock(javax.mail.Session.class);
+        //mockAuthenticator = mock(javax.mail.Authenticator.class);
+        mockInternetAddress = mock(InternetAddress.class);
+        mockMimeMessage = mock(MimeMessage.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockNotificationJpaController = mock(NotificationJpaController.class);
+        
+        instance.setdAOFactory(mockDAOFactory);
+        instance.setTransactionController(mockTransactionController);
+        instance.setUserGateway(mockUserGateway);
+        instance.setProperties(mockProperties);
+        instance.setAuthenticator(mockAuthenticator);
+        instance.setInternetAddress(mockInternetAddress);
+        instance.setMimeMessage(mockMimeMessage);
+        instance.setEntityManager(mockEntityManager);
+        
+        when(mockDAOFactory.createNotificationDAO()).thenReturn(mockNotificationJpaController);
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
     
     @After
     public void tearDown() {
     }
-    
-    //@Test
-    public void testSendBatchNotifications() {
-        NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+
+    /**
+     * Test of sendBatchNotifications method, of class NotificationService.
+     */
+    @Test
+    public void testSendBatchNotifications() throws Exception {
         
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        when(mockNotification.getReciever()).thenReturn(new Person("u12236731"));
-        List<Notification> mockNotifications = Arrays.asList(mockNotification);
-        
-        try
-        {
-            //instance.sendBatchNotifications(mockNotifications, true);            
-            verify(mockNotificationJpaController, times(3)).create(mockNotification);
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
-    //@Test
-    public void testSendNotificationWithoutEmail() {
-        NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+
+    /**
+     * Test of sendNotification method, of class NotificationService.
+     */
+    @Test
+    public void testSendNotification() throws Exception {
         
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        
-        try
-        {
-            //instance.sendNotification(mockNotification, false);
-            verify(mockNotificationJpaController).create(mockNotification);
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
-    
-     //@Test
-    public void testSendNotificationWithEmail() {
-        NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+
+    /**
+     * Test of sendOnlyEmail method, of class NotificationService.
+     */
+    @Test
+    public void testSendOnlyEmail() throws Exception {
         
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        when(mockNotification.getReciever()).thenReturn(new Person("u12236731"));
-        try
-        {
-            //instance.sendNotification(mockNotification, true);
-            verify(mockNotificationJpaController).create(mockNotification);
-        }
-        catch (Exception ex)
-        {
-           //fail("An exception occured");
-        }
     }
-    
-    public void testFindAll()
-    {
-         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+
+    /**
+     * Test of getAllNotificationsForPerson method, of class NotificationService.
+     */
+    @Test
+    public void testGetAllNotificationsForPerson() throws Exception {
         
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        
-        try
-        {
-            //instance.findAll();
-            //verify(mockNotificationJpaController).create(mockNotification);
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
-    
-    
-    public void testFindByID()
-    {
-         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+
+    /**
+     * Test of getAllNotificationsFromPerson method, of class NotificationService.
+     */
+    @Test
+    public void testGetAllNotificationsFromPerson() throws Exception {
         
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        
-        
-        try 
-        {
-            //instance.
-        }
-        catch(Exception ex)
-        {
-            
-        }
     }
-    
-    
-    public void testFindBySubject()
-    {
-         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
+
+    /**
+     * Test of sendAllEmailsOfQueuedNotifications method, of class NotificationService.
+     */
+    @Test
+    public void testSendAllEmailsOfQueuedNotifications() throws Exception {
         
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        
-        
-        try
-        {
-            //instance.findBySubject(mockNotification.getSubject());
-         //   verify(mockNotificationJpaController).create(mockNotification);
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
-    
-    
-    public void testFindByTimestamp()
-    {
-         NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
-        
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        
-        Timestamp time = mock(Timestamp.class);
-        try
-        {
-            //instance.findByTimestamp(time);
-            //verify(mockNotificationJpaController).create(mockNotification);
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
-    }
-    
-   public void testFindByRange()
-   {
-        NotificationServiceMockUnit instance = new NotificationServiceMockUnit();
-        
-        NotificationJpaController mockNotificationJpaController = mock(NotificationJpaController.class);
-        
-        instance.setNDAO(mockNotificationJpaController);
-        
-        Notification mockNotification = mock(Notification.class);
-        Timestamp timeS = mock(Timestamp.class);
-        Timestamp timeE = mock(Timestamp.class);
-        try
-        {
-            //instance.findBetweenRange(timeS, timeE);
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        } 
-    }
-    
     
 }

@@ -45,14 +45,6 @@ public class LocationManagementService implements LocationManagementServiceLocal
 
     @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-    
-    @EJB
-    private UserGatewayLocal userGatewayLocal;
-    
-    protected UserGatewayLocal getUserGatewayServiceEJB()
-    {
-        return userGatewayLocal;
-    }
 
     public LocationManagementService() {
     }
@@ -74,6 +66,11 @@ public class LocationManagementService implements LocationManagementServiceLocal
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
+    }
+    
+    public EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
     }
     
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR})
@@ -239,7 +236,7 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public List<Institution> getAllInstitutions() throws AuthenticationException, Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -254,7 +251,7 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public List<Faculty> getAllFacultiesInInstitution(Institution institution) throws AuthenticationException, Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -269,7 +266,7 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public List<Department> getAllDepartmentForFaculty(Faculty faculty) throws AuthenticationException, Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -286,7 +283,7 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public Institution getInstitution(Long institution) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -303,7 +300,7 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public Faculty getFaculty(Long faculty) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -319,7 +316,7 @@ public class LocationManagementService implements LocationManagementServiceLocal
     @Override
     public Department getDepartment(Long department) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

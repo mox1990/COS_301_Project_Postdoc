@@ -74,11 +74,15 @@ public class ProgressReportManagementService implements ProgressReportManagement
         return new DBEntitiesFactory();
     }
     
-     protected GregorianCalendar getGregorianCalendarUTIL()
+    protected GregorianCalendar getGregorianCalendarUTIL()
     {
         return new GregorianCalendar();
     }
      
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
      
     @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_SYSTEM_ADMINISTRATOR}, ownerAuthentication = true, ownerParameterIndex = 1)
     @AuditableMethod
@@ -150,7 +154,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
     @Override
     public List<Application> allApplicationsWithPendingReportsForUser(Session session) throws Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         
         try
         {

@@ -10,10 +10,12 @@ import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
-import com.softserve.ejb.applicationservices.ForwardAndRewindServicesLocal;
-import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.ejb.applicationservices.RefereeReportServiceLocal;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.RefereeReportJpaController;
 import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.RefereeReport;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -25,27 +27,27 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import test.softserve.MockEJBClasses.ForwardAndRewindServicesMockUnit;
+import test.softserve.MockEJBClasses.RefereeReportMockUnit;
 
 /**
  *
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-public class ForwardAndRewindServicesTest {
-    private ForwardAndRewindServicesMockUnit instance;
+public class RefereeReportUnitTest {
+    private RefereeReportMockUnit instance;
     
+    private GregorianCalendar mockGregorianCalendar;
+    private NotificationService mockNotificationService;
     private DBEntitiesFactory mockDBEntitiesFactory;
+    private ApplicationServicesUtil mockApplicationServicesUtil;
     private DAOFactory mockDAOFactory;
     private TransactionController mockTransactionController;
-    private ApplicationServicesUtil mockApplicationServicesUtil;
-    private GregorianCalendar mockGregorianCalendar;
-    private EntityManager mockEm; 
-    
+    private EntityManager mockEntityManager;
     private RefereeReportJpaController mockRefereeReportJpaController;
-    private ApplicationReviewRequestJpaController mockApplicationReviewRequestJpaController;
+    private ApplicationJpaController mockApplicationJpaController;
     
-    public ForwardAndRewindServicesTest() {
+    public RefereeReportUnitTest() {
     }
     
     @BeforeClass
@@ -58,28 +60,30 @@ public class ForwardAndRewindServicesTest {
     
     @Before
     public void setUp() throws Exception {
-        instance = new ForwardAndRewindServicesMockUnit();
+        instance = new RefereeReportMockUnit();
         
+        mockGregorianCalendar = mock(GregorianCalendar.class);
+        mockNotificationService = mock(NotificationService.class);
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockApplicationServicesUtil = mock(ApplicationServicesUtil.class);
         mockDAOFactory = mock(DAOFactory.class);
         mockTransactionController = mock(TransactionController.class);
-        mockApplicationServicesUtil = mock(ApplicationServicesUtil.class);
-        mockGregorianCalendar = mock(GregorianCalendar.class);
-        mockEm = mock(EntityManager.class);
+        mockEntityManager = mock(EntityManager.class);
         mockRefereeReportJpaController = mock(RefereeReportJpaController.class);
-        mockApplicationReviewRequestJpaController = mock(ApplicationReviewRequestJpaController.class);
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
         
-        instance.setApplicationServicesUtil(mockApplicationServicesUtil);
-        instance.setEm(mockEm);
-        instance.setGregorianCalendar(mockGregorianCalendar);
-        instance.setTransactionController(mockTransactionController);
+        instance.setCal(mockGregorianCalendar);
+        instance.setnEJB(mockNotificationService);
+        instance.setdBEntitities(mockDBEntitiesFactory);
+        instance.setaSEJB(mockApplicationServicesUtil);
         instance.setdAOFactory(mockDAOFactory);
-        instance.setdBEntitiesFactory(mockDBEntitiesFactory);
+        instance.setTransactionController(mockTransactionController);
+        instance.setEntityManager(mockEntityManager);
+        
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createRefereeReportDAO()).thenReturn(mockRefereeReportJpaController);
         
         when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
-        when(mockDAOFactory.createRefereeReportDAO()).thenReturn(mockRefereeReportJpaController);
-        when(mockDAOFactory.createApplicationReviewRequestDAO()).thenReturn(mockApplicationReviewRequestJpaController);
-        //TODO: Set all the nullable pieces...
     }
     
     @After
@@ -87,26 +91,26 @@ public class ForwardAndRewindServicesTest {
     }
 
     /**
-     * Test of forwardApplication method, of class ForwardAndRewindServices.
+     * Test of loadPendingApplications method, of class RefereeReportService.
      */
     @Test
-    public void testForwardApplication() throws Exception {
+    public void testLoadPendingApplications() throws Exception {
         
     }
 
     /**
-     * Test of rewindApplication method, of class ForwardAndRewindServices.
+     * Test of countTotalPendingApplications method, of class RefereeReportService.
      */
     @Test
-    public void testRewindApplication() throws Exception {
+    public void testCountTotalPendingApplications() throws Exception {
         
     }
 
     /**
-     * Test of loadMovableApplications method, of class ForwardAndRewindServices.
+     * Test of submitReferralReport method, of class RefereeReportService.
      */
     @Test
-    public void testLoadMovableApplications() throws Exception {
+    public void testSubmitReferralReport() throws Exception {
         
     }
     

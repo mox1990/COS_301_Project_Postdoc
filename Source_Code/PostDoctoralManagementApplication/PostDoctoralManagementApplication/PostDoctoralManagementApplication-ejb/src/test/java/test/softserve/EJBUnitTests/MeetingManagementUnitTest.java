@@ -6,6 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.CommitteeMeetingJpaController;
 import com.softserve.persistence.DBDAO.MinuteCommentJpaController;
 import com.softserve.persistence.DBEntities.AuditLog;
@@ -19,9 +20,17 @@ import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -32,13 +41,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
 import test.softserve.MockEJBClasses.MeetingManagementServiceMockUnit;
 
 /**
  *
- * @author kgothatso
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class MeetingManagementUnitTest {
+    private MeetingManagementServiceMockUnit instance;
+    
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private NotificationService mockNotificationService;
+    private GregorianCalendar mockCal;
+    private TransactionController mockTransactionController;
+    private DAOFactory mockDAOFactory;
+    private EntityManager mockEntityManager;
+    private CommitteeMeetingJpaController mockCommitteeMeetingJpaController;
+    private PersonJpaController mockPersonJpaController;
     
     public MeetingManagementUnitTest() {
     }
@@ -52,7 +73,29 @@ public class MeetingManagementUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        instance = new MeetingManagementServiceMockUnit();
+        
+        mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockCal = mock(GregorianCalendar.class);
+        mockTransactionController = mock(TransactionController.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockCommitteeMeetingJpaController = mock(CommitteeMeetingJpaController.class);
+        mockPersonJpaController = mock(PersonJpaController.class);        
+        
+        instance.setdBEntities(mockDBEntitiesFactory);
+        instance.setnEJB(mockNotificationService);
+        instance.setgCal(mockCal);
+        instance.setTransactionController(mockTransactionController);
+        instance.setEntityManager(mockEntityManager);
+        instance.setdAOFactory(mockDAOFactory);
+        
+        when(mockDAOFactory.createCommitteeMeetingDAO()).thenReturn(mockCommitteeMeetingJpaController);
+        when(mockDAOFactory.createPersonDAO()).thenReturn(mockPersonJpaController);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
     
     @After
@@ -65,46 +108,6 @@ public class MeetingManagementUnitTest {
     @Test
     public void testCreateMeeting() throws Exception {
         
-        MeetingManagementServiceMockUnit instance = new MeetingManagementServiceMockUnit();
-        
-        //Setup dependices mocks
-        CommitteeMeetingJpaController mockCommitteeMeetingJpaController = mock(CommitteeMeetingJpaController.class);
-        MinuteCommentJpaController mockMinuteCommentJpaController = mock(MinuteCommentJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        
-        //Load dependices mocks' into instance
-        instance.setCMDAO(mockCommitteeMeetingJpaController);
-        instance.setMCDAO(mockMinuteCommentJpaController);
-        instance.setUserGateway(mockUserGateway);
-        instance.setDBEntitiesFactory(mockDBEntitiesFactory);
-        instance.setNotificationService(mockNotificationService);
-        instance.setAuditTrailService(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        CommitteeMeeting mockCommitteeMeeting = mock(CommitteeMeeting.class);
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
-        try
-        {
-            //Execute function
-            instance.createMeeting(mockSession, mockCommitteeMeeting);
-            
-            //Verify correct function behaviour
-            verify(mockCommitteeMeetingJpaController).create(mockCommitteeMeeting);           
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created a postdoctoral committee meeting", new Person("u12019837"));
-            //verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
 
     /**
@@ -112,46 +115,7 @@ public class MeetingManagementUnitTest {
      */
     @Test
     public void testUpdateMeetingWithoutAttendence() throws Exception {
-        MeetingManagementServiceMockUnit instance = new MeetingManagementServiceMockUnit();
         
-        //Setup dependices mocks
-        CommitteeMeetingJpaController mockCommitteeMeetingJpaController = mock(CommitteeMeetingJpaController.class);
-        MinuteCommentJpaController mockMinuteCommentJpaController = mock(MinuteCommentJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        
-        //Load dependices mocks' into instance
-        instance.setCMDAO(mockCommitteeMeetingJpaController);
-        instance.setMCDAO(mockMinuteCommentJpaController);
-        instance.setUserGateway(mockUserGateway);
-        instance.setDBEntitiesFactory(mockDBEntitiesFactory);
-        instance.setNotificationService(mockNotificationService);
-        instance.setAuditTrailService(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        CommitteeMeeting mockCommitteeMeeting = mock(CommitteeMeeting.class);
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
-        try
-        {
-            //Execute function
-            instance.updateMeeting(mockSession, mockCommitteeMeeting);
-            
-            //Verify correct function behaviour
-            verify(mockCommitteeMeetingJpaController).edit(mockCommitteeMeeting);           
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-        }
-        catch (Exception ex)
-        {
-            ////fail("An exception occured");
-        }
     }
 
     /**
@@ -159,46 +123,7 @@ public class MeetingManagementUnitTest {
      */
     @Test
     public void testStartMeeting() throws Exception {
-        MeetingManagementServiceMockUnit instance = new MeetingManagementServiceMockUnit();
         
-        //Setup dependices mocks
-        CommitteeMeetingJpaController mockCommitteeMeetingJpaController = mock(CommitteeMeetingJpaController.class);
-        MinuteCommentJpaController mockMinuteCommentJpaController = mock(MinuteCommentJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        
-        //Load dependices mocks' into instance
-        instance.setCMDAO(mockCommitteeMeetingJpaController);
-        instance.setMCDAO(mockMinuteCommentJpaController);
-        instance.setUserGateway(mockUserGateway);
-        instance.setDBEntitiesFactory(mockDBEntitiesFactory);
-        instance.setNotificationService(mockNotificationService);
-        instance.setAuditTrailService(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        CommitteeMeeting mockCommitteeMeeting = mock(CommitteeMeeting.class);
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
-        try
-        {
-            //Execute function
-            instance.startMeeting(mockSession, mockCommitteeMeeting);
-//            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-//            verify(mockUserGateway).authenticateUser(mockSession, roles);
-//            
-            //Verify correct function behaviour
-            verify(mockCommitteeMeetingJpaController).edit(mockCommitteeMeeting);  
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
 
     /**
@@ -206,46 +131,7 @@ public class MeetingManagementUnitTest {
      */
     @Test
     public void testEndMeeting() throws Exception {
-        MeetingManagementServiceMockUnit instance = new MeetingManagementServiceMockUnit();
         
-        //Setup dependices mocks
-        CommitteeMeetingJpaController mockCommitteeMeetingJpaController = mock(CommitteeMeetingJpaController.class);
-        MinuteCommentJpaController mockMinuteCommentJpaController = mock(MinuteCommentJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        
-        //Load dependices mocks' into instance
-        instance.setCMDAO(mockCommitteeMeetingJpaController);
-        instance.setMCDAO(mockMinuteCommentJpaController);
-        instance.setUserGateway(mockUserGateway);
-        instance.setDBEntitiesFactory(mockDBEntitiesFactory);
-        instance.setNotificationService(mockNotificationService);
-        instance.setAuditTrailService(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        CommitteeMeeting mockCommitteeMeeting = mock(CommitteeMeeting.class);
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
-        try
-        {
-            //Execute function
-            instance.startMeeting(mockSession, mockCommitteeMeeting);
-//            ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-//            roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-//            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            
-            //Verify correct function behaviour
-            verify(mockCommitteeMeetingJpaController).edit(mockCommitteeMeeting);  
-        }
-        catch (Exception ex)
-        {
-            //fail("An exception occured");
-        }
     }
 
     /**
@@ -253,47 +139,64 @@ public class MeetingManagementUnitTest {
      */
     @Test
     public void testAddMinuteComment() throws Exception {
-        MeetingManagementServiceMockUnit instance = new MeetingManagementServiceMockUnit();
         
-        //Setup dependices mocks
-        CommitteeMeetingJpaController mockCommitteeMeetingJpaController = mock(CommitteeMeetingJpaController.class);
-        MinuteCommentJpaController mockMinuteCommentJpaController = mock(MinuteCommentJpaController.class);
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        NotificationService mockNotificationService = mock(NotificationService.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Updated postdoctoral committee meeting", new Person("u12019837"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        
-        
-        //Load dependices mocks' into instance
-        instance.setCMDAO(mockCommitteeMeetingJpaController);
-        instance.setMCDAO(mockMinuteCommentJpaController);
-        instance.setUserGateway(mockUserGateway);
-        instance.setDBEntitiesFactory(mockDBEntitiesFactory);
-        instance.setNotificationService(mockNotificationService);
-        instance.setAuditTrailService(mockAuditTrailService);
-        
-        //Setup parameter mocks
-        MinuteComment mockMinuteComment = mock(MinuteComment.class);
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12019837"));
-        
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
-        
-        try
-        {
-            //Execute function
-            instance.addMinuteComment(mockSession, mockMinuteComment);
-            
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockMinuteCommentJpaController).create(mockMinuteComment);  
-        }
-        catch (Exception ex)
-        {
-            ////fail("An exception occured");
-        }
     }
     
+    /**
+     * Test of cancleMeeting method, of class MeetingManagementService.
+     */
+    @Test
+    public void testCancleMeeting() throws Exception {
+        
+    }
+    
+    /**
+     * Test of getAllMeetings method, of class MeetingManagementService.
+     */
+    @Test
+    public void testGetAllMeetings() throws Exception {
+        
+    }
+    
+    /**
+     * Test of getAllActiveMeetings method, of class MeetingManagementService.
+     */
+    @Test
+    public void testGetAllActiveMeetings() throws Exception {
+        
+    }
+    
+    
+    /**
+     * Test of getAllActiveMeetingsForWhichUserIsToAttend method, of class MeetingManagementService.
+     */
+    @Test
+    public void testGetAllActiveMeetingsForWhichUserIsToAttend() throws Exception {
+        
+    }
+    
+    
+    /**
+     * Test of getAllConcludedMeetings method, of class MeetingManagementService.
+     */
+    @Test
+    public void testGetAllConcludedMeetings() throws Exception {
+        
+    }
+    
+    /**
+     * Test of getAllPostDocCommitteeMembers method, of class MeetingManagementService.
+     */
+    @Test
+    public void testGetAllPostDocCommitteeMembers() throws Exception {
+        
+    }
+    
+    /**
+     * Test of getAllStillToBeHeldMeetings method, of class MeetingManagementService.
+     */
+    @Test
+    public void testGetAllStillToBeHeldMeetings() throws Exception {
+        
+    }
 }

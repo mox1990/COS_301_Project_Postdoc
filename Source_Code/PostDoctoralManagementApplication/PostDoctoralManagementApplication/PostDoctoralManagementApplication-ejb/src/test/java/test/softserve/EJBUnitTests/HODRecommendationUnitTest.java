@@ -6,6 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
@@ -26,11 +27,13 @@ import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
+import javax.persistence.EntityManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -46,20 +49,22 @@ import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
 
 /**
  *
- * @author kgothatso
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class HODRecommendationUnitTest {
-    private HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
+    private HODRecommendationServicesMockUnit instance;
         
     private ApplicationJpaController mockApplicationJpaController;
     private RecommendationReportJpaController mockRecommendationReportJpaController;
     private DBEntitiesFactory mockDBEntitiesFactory;
-    private UserGateway mockUserGateway;
     private NotificationService mockNotificationService;
-    private AuditTrailService mockAuditTrailService;
     private ApplicationServicesUtil mockApplicationServices;
     private AmmendRequestJpaController mockAmmendRequestJpaController;
     private GregorianCalendar mockCal;
+    private TransactionController mockTransactionController;
+    private DAOFactory mockDAOFactory;
+    private EntityManager mockEntityManager;
         
     public HODRecommendationUnitTest() {
     }
@@ -73,28 +78,33 @@ public class HODRecommendationUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new HODRecommendationServicesMockUnit();
         
         mockApplicationJpaController = mock(ApplicationJpaController.class);
         mockRecommendationReportJpaController = mock(RecommendationReportJpaController.class);
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        mockUserGateway = mock(UserGateway.class);
         mockNotificationService = mock(NotificationService.class);
-        mockAuditTrailService = mock(AuditTrailService.class);
         mockApplicationServices = mock(ApplicationServicesUtil.class);
         mockAmmendRequestJpaController = mock(AmmendRequestJpaController.class);
         mockCal = mock(GregorianCalendar.class);
-
-        instance.setaRDAO(mockAmmendRequestJpaController);
-        instance.setaDAO(mockApplicationJpaController);
+        mockTransactionController = mock(TransactionController.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockDAOFactory = mock(DAOFactory.class);
+                
         instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
         instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setrRDAO(mockRecommendationReportJpaController);
         instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
         instance.setgCal(mockCal);
+        instance.setTransactionController(mockTransactionController);
+        instance.setEntityManager(mockEntityManager);
+        instance.setdAOFactory(mockDAOFactory);
+        
+        when(mockDAOFactory.createAmmendRequestDAO()).thenReturn(mockAmmendRequestJpaController);
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createRecommendationReportDAO()).thenReturn(mockRecommendationReportJpaController);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
     
     @After
@@ -106,7 +116,7 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testLoadPendingApplications() throws Exception {                
-        Session mockSession = mock(Session.class);
+        /*Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -125,7 +135,7 @@ public class HODRecommendationUnitTest {
         {
             ex.printStackTrace();
             //fail("An exception occured");
-        }
+        }*/
     }
 
     /**
@@ -133,7 +143,7 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testCountTotalPendingApplications() throws Exception {
-        Session mockSession = mock(Session.class);
+        /*Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
@@ -150,15 +160,15 @@ public class HODRecommendationUnitTest {
         {
             ex.printStackTrace();
             //fail("An exception occured");
-        }
+        }*/
     }
 
     /**
      * Test of declineAppliction method, of class HODRecommendationServices.
      */
     @Test
-    public void testDenyAppliction() throws Exception {
-        Session mockSession = mock(Session.class);
+    public void testDeclineAppliction() throws Exception {
+        /*Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         Cv mockCv = mock(Cv.class);
@@ -190,7 +200,7 @@ public class HODRecommendationUnitTest {
         {
             ex.printStackTrace();
             //fail("An exception occured");
-        }
+        }*/
     }
 
     /**
@@ -198,7 +208,7 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testAmmendAppliction() throws Exception {
-        
+        /*
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -243,15 +253,15 @@ public class HODRecommendationUnitTest {
         {
             ex.printStackTrace();
             //fail("An exception occured");
-        }
+        }*/
     }
 
     /**
      * Test of recommendApplication method, of class HODRecommendationServices.
      */
     @Test
-    public void testApproveApplicationWithoutDeansToEndorse() throws Exception {
-        Session mockSession = mock(Session.class);
+    public void testRecommendApplicationWithoutDeansToEndorse() throws Exception {
+        /*Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         Cv mockCv = mock(Cv.class);
@@ -291,14 +301,11 @@ public class HODRecommendationUnitTest {
         {
             ex.printStackTrace();
            ////fail("An exception occured");
-        }
+        }*/
     }
     
-    /**
-     * Test of recommendApplication method, of class HODRecommendationServices.
-     */
     @Test
-    public void testApproveApplicationWithDeansToEndorse() throws Exception {        
+    public void testRequestApplicationWithDeansToEndorse() throws Exception {        
         /*HODRecommendationServicesMockUnit instance = new HODRecommendationServicesMockUnit();
         
         ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
@@ -357,4 +364,19 @@ public class HODRecommendationUnitTest {
         }*/
     }
     
+    /**
+     * Test of getDeansOfApplication method, of class HODRecommendationServices.
+     */
+    @Test
+    public void testGetDeansOfApplication() throws Exception {        
+        
+    }
+    
+    /**
+     * Test of requestSpecificDeanToReview method, of class HODRecommendationServices.
+     */
+    @Test
+    public void testRequestSpecificDeanToReview() throws Exception {        
+        
+    }
 }

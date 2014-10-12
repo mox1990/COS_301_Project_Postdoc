@@ -58,6 +58,11 @@ public class UserGateway implements UserGatewayLocal
     {
         return new DAOFactory(em);
     }
+    
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
 
     public UserGateway() {
     }

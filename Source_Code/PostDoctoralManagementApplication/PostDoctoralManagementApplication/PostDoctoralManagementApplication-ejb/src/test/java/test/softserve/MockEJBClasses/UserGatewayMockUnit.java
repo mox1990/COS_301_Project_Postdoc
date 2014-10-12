@@ -6,49 +6,55 @@
 
 package test.softserve.MockEJBClasses;
 
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.AddressJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBDAO.EmployeeInformationJpaController;
 import com.softserve.ejb.nonapplicationservices.AuditTrailService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 
 /**
  *
- * @author User
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class UserGatewayMockUnit extends UserGateway
 {
-    private PersonJpaController pDAO = null;
-    private AddressJpaController aDAO = null;
-    private EmployeeInformationJpaController uDAO = null;
-    private DBEntitiesFactory dbFactory = null;
-    private AuditTrailService atsEJB = null;
-    private GregorianCalendar cal = null;
+    private NotificationServiceLocal notificationServiceLocal;
+    private DAOFactory dAOFactory;
+    private EntityManager entityManager;
 
-    public void setpDAO(PersonJpaController pDAO) {
-        this.pDAO = pDAO;
+    public void setNotificationServiceLocal(NotificationServiceLocal notificationServiceLocal) {
+        this.notificationServiceLocal = notificationServiceLocal;
     }
 
-    public void setaDAO(AddressJpaController aDAO) {
-        this.aDAO = aDAO;
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
     }
 
-    public void setuDAO(EmployeeInformationJpaController uDAO) {
-        this.uDAO = uDAO;
-    }
-
-    public void setDbFactory(DBEntitiesFactory dbFactory) {
-        this.dbFactory = dbFactory;
-    }
-
-    public void setAtsEJB(AuditTrailService atsEJB) {
-        this.atsEJB = atsEJB;
-    }
-
-    public void setCal(GregorianCalendar cal) {
-        this.cal = cal;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
     
+    @Override
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }    
+    
+    @Override
+    protected DAOFactory getDAOFactory(EntityManager em)
+    {
+        return dAOFactory;
+    }
+    
+    @Override
+    protected EntityManager createEntityManager()
+    {
+        return entityManager;
+    }
 }

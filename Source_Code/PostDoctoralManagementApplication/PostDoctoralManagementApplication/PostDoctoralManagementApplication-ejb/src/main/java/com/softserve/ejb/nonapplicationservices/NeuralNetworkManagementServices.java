@@ -69,11 +69,16 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
     {
         return new GregorianCalendar();
     }
+    
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
 
     @Override
     public List<NeuralNetwork> loadAllNeuralNetworks(Session session) throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -88,7 +93,7 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
     @Override
     public NeuralNetwork getDefaultNeuralNetwork(Session session) throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

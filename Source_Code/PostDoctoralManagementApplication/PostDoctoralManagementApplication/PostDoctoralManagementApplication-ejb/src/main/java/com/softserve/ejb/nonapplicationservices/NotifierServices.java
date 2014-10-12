@@ -94,6 +94,11 @@ public class NotifierServices implements NotifierServicesLocal {
         return new ApplicationServicesUtil(em);
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     @Override
     public List<Issue> loadAllPendingIssuesForSession(Session session) throws Exception 
     {

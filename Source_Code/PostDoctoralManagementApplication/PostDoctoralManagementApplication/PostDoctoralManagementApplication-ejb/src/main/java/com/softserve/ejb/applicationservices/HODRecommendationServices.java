@@ -118,6 +118,11 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     /**
      *This function loads all the applications that need to approved/declined by the 
      * specified HOD
@@ -131,7 +136,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -150,7 +155,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
     { 
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -289,7 +294,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
             RecommendationReportJpaController recommendationReportJpaController = dAOFactory.createRecommendationReportDAO();
             ArrayList<Notification> notifications = new ArrayList<Notification>();
             DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-            
 
             recommendationReport.setReportID(application.getApplicationID());
             recommendationReport.setHod(session.getUser());
@@ -347,7 +351,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public List<Person> getDeansOfApplication(Session session, Application application) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -365,7 +369,7 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     @Override
     public void requestSpecificDeanToReview(Session session, Application application, Person dean) throws Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

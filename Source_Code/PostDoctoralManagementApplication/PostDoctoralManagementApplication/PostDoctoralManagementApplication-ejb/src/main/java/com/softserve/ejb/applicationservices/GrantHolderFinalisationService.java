@@ -132,6 +132,11 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         return new GregorianCalendar();
     }
     
+    protected EntityManager createEntityManager()
+    {
+        return emf.createEntityManager();
+    }
+    
     /**
      *This function is used to create a CV for a grant holder
      * @param session The session which is used to authenticate the user
@@ -177,7 +182,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public List<Application> loadPendingApplications(Session session, int StartIndex, int maxNumberOfRecords) throws Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -196,7 +201,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public int countTotalPendingApplications(Session session) throws Exception
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {
@@ -389,7 +394,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @Override
     public List<Person> getHODsOfApplication(Session session, Application application) throws Exception 
     {        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {        

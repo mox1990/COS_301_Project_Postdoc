@@ -8,6 +8,7 @@ package test.softserve.EJBUnitTests;
 
 import auto.softserve.XMLEntities.application.ApplicationInformation;
 import auto.softserve.XMLEntities.referee.ReferalReport;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.CvJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
@@ -24,7 +25,14 @@ import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.ejb.applicationservices.CVManagementService;
+import com.softserve.ejb.nonapplicationservices.NotificationService;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
+import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 import org.junit.*;
 import org.junit.AfterClass;
 import static org.junit.Assert.fail;
@@ -32,13 +40,27 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import test.softserve.MockEJBClasses.GrantHolderFinalisationServiceMockUnit;
 import test.softserve.MockEJBClasses.NewApplicationMockUnit;
 
 /**
  *
- * @author User
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class NewApplicationUnitTest {
+    private NewApplicationMockUnit instance;
+    
+    private CVManagementService mockCVManagementService;
+    private DBEntitiesFactory mockDBEntitiesFactory;
+    private NotificationService mockNotificationService;
+    private ApplicationServicesUtil mockApplicationServices;
+    private GregorianCalendar mockCal;
+    private DAOFactory mockDAOFactory;
+    private UserAccountManagementServiceLocal mockUserAccountManagementServiceLocal;
+    private TransactionController mockTransactionController;
+    private EntityManager mockEntityManager;
+    private ApplicationJpaController mockApplicationJpaController;
     
     @BeforeClass
     public static void setUpClass() {
@@ -49,7 +71,31 @@ public class NewApplicationUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        instance = new NewApplicationMockUnit();
+        
+        mockCVManagementService = mock(CVManagementService.class);
+        mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
+        mockNotificationService = mock(NotificationService.class);
+        mockApplicationServices = mock(ApplicationServicesUtil.class);
+        mockCal = mock(GregorianCalendar.class);
+        mockDAOFactory = mock(DAOFactory.class);
+        mockUserAccountManagementServiceLocal = mock(UserAccountManagementServiceLocal.class);
+        mockTransactionController = mock(TransactionController.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        
+        instance.setcVEJB(mockCVManagementService);
+        instance.setdBEntitities(mockDBEntitiesFactory);
+        instance.setnEJB(mockNotificationService);
+        instance.setUserAccountManagementServiceLocal(mockUserAccountManagementServiceLocal);
+        instance.setEntityManager(mockEntityManager);
+        instance.setGregorianCalendar(mockCal);
+        instance.setApplicationServicesUtil(mockApplicationServices);
+        
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
     
     @After
@@ -58,408 +104,61 @@ public class NewApplicationUnitTest {
     
     public void testCreateProspectiveFellowCV(Session session, Cv cv)
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
         
-        UserGateway mockUserGateway =  mock(UserGateway.class);
-        CvJpaController mockCvJpaController =  mock(CvJpaController.class);
-        instance.setcVDAO(mockCvJpaController);
-        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        Cv mockCV = mock(Cv.class);  
-        when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created user cv", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
-   
-        try
-        {
-             instance.createProspectiveFellowCV(mockSession, mockCV);
-             verify(mockCvJpaController).create(mockCV);
-             
-             //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockCV.getPerson());
-              verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created user cv", new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); 
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
     }
     
     public void testCreateNewApplication()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
         
-        Application mockApplication =  mock(Application.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        instance.setaDAO(mockApplicationController);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        instance.setaSEJB(mockApplicationServices);
-        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        Session mockSession = mock(Session.class);
-        Person mockPerson = mock(Person.class);
-        Cv mockCV = mock(Cv.class);
-        
-        UserGateway mockUserGateway =  mock(UserGateway.class);
-        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        when(mockPerson.getCv()).thenReturn(mockCV);
-        when(mockApplication.getFellow()).thenReturn(mockPerson);
-       
-        instance.setuEJB(mockUserGateway);
-        instance.setaTEJB(mockAuditTrailService);
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        
-        
-        try
-        {
-            instance.createNewApplication(mockSession, mockApplication);
-            verify(mockApplicationController).create(mockApplication);
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow());
-            verify(mockUserGateway, Mockito.times(2)).authenticateUser(mockSession, roles); 
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Created new application", new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_TYPE_NEW);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
     }
     
     public void testCreateNewApplicationNull()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
         
-        Application mockApplication =  null;
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        instance.setaDAO(mockApplicationController);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        instance.setaSEJB(mockApplicationServices);
-        DBEntitiesFactory mockDBEntitiesFactory =  mock(DBEntitiesFactory.class);
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Created new application", new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        Session mockSession = mock(Session.class);
-        Person mockPerson = mock(Person.class);
-        Cv mockCV = mock(Cv.class);
-        
-        UserGateway mockUserGateway =  mock(UserGateway.class);
-        AuditTrailService mockAuditTrailService =  mock(AuditTrailService.class);
-        when(mockPerson.getCv()).thenReturn(mockCV);
-        when(mockApplication.getFellow()).thenReturn(mockPerson);
-       
-        instance.setuEJB(mockUserGateway);
-        instance.setaTEJB(mockAuditTrailService);
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        
-        
-       try
-        {
-            instance.createNewApplication(mockSession, mockApplication);
-            //fail("Exception not thrown");
-        }
-        catch(Exception ex)
-        {
-            Assert.assertTrue(true);
-        }
     }
     
     public void testLinkGrantHolderToApplication()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-         ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
         
-        instance.setpDAO(mockPersonController);
-        instance.setaDAO(mockApplicationController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        Person mockPerson = mock(Person.class);
-        
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
-        try
-        {
-            instance.linkGrantHolderToApplication(mockSession, mockApplication, mockPerson);
-            verify(mockPersonController).findPerson(mockPerson.getFullName());
-            verify(mockApplication).getGrantHolder();
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
     }
     
     public void testLinkGrantHolderToApplicationNull()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-         ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
         
-        instance.setpDAO(mockPersonController);
-        instance.setaDAO(mockApplicationController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        Person mockPerson = null;
+    }
+    
+    public void testLinkRefereesToApplication() 
+    {
         
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
-        try
-        {
-            instance.linkGrantHolderToApplication(mockSession, mockApplication, mockPerson);
-            //fail("Exception not thrown");
-        }
-        catch(Exception ex)
-        {
-            Assert.assertTrue(true);
-        }
     }
     
     public void testLinkRefereeToApplication() 
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        Person mockPerson = mock(Person.class);
         
-        
-        instance.setaDAO(mockApplicationController);
-        instance.setpDAO(mockPersonController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-        try
-        {
-            instance.linkRefereeToApplication(mockSession, mockApplication, mockPerson);
-            verify(mockApplication).getRefereeReportList();
-            verify(mockPersonController).findPerson(mockPerson.getFullName());
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
     }
      
     public void testLinkRefereeToApplicationNull() 
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        Person mockPerson = null;
         
-        
-        instance.setaDAO(mockApplicationController);
-        instance.setpDAO(mockPersonController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_REFEREE);
-       
-        try
-        {
-            instance.linkRefereeToApplication(mockSession, mockApplication, mockPerson);
-            //fail("Exception not thrown");
-        }
-        catch(Exception ex)
-        {
-            Assert.assertTrue(true);
-        }
     }
     
     public void testSubmitApplication()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        Person mockPerson = mock(Person.class);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
         
-        instance.setaDAO(mockApplicationController);
-        instance.setpDAO(mockPersonController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        
-        try
-        {
-            instance.submitApplication(mockSession, mockApplication);
-            verify(mockApplicationJpaController).edit(mockApplication);
-            
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
-            
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPerson, "Application finalised", "The following application has been submitted by " + mockSession.getUser().getCompleteName() +  ". Please complete referee report.");
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockUserGateway).authenticateUserAsOwner(mockSession, mockApplication.getFellow()); 
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
     }
     
     public void testSubmitApplicationNull()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = null;
-        Person mockPerson = mock(Person.class);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
         
-        instance.setaDAO(mockApplicationController);
-        instance.setpDAO(mockPersonController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        
-        try
-        {
-            instance.linkRefereeToApplication(mockSession, mockApplication, mockPerson);
-            //fail("Exception not thrown");
-        }
-        catch(Exception ex)
-        {
-            Assert.assertTrue(true);
-        }
     }
     
     public void testCanFellowOpenApplication()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        when(mockApplication.getStatus()).thenReturn(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
-        ArrayList<Application> mockAppList = mock(ArrayList.class);
-        when(mockAppList.get(0)).thenReturn(mockApplication);
         
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getApplicationList()).thenReturn(mockAppList);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        
-        instance.setaDAO(mockApplicationController);
-        instance.setpDAO(mockPersonController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        
-        try
-        {
-            instance.canFellowOpenANewApplication(mockPerson);
-            verify(mockApplication).getStatus();
-            
-        }
-        catch(Exception ex)
-        {
-            Assert.assertTrue(true);
-        }
     }
     
     public void testGetOpenApplication()
     {
-        NewApplicationMockUnit instance = new NewApplicationMockUnit();
-        UserGateway mockUserGateway = mock(UserGateway.class);
-        ApplicationJpaController mockApplicationController = mock(ApplicationJpaController.class);
-        PersonJpaController mockPersonController = mock(PersonJpaController.class);
-        DBEntitiesFactory mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        ApplicationServicesUtil mockApplicationServices = mock(ApplicationServicesUtil.class);
-        AuditTrailService mockAuditTrailService = mock(AuditTrailService.class);
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        when(mockApplication.getStatus()).thenReturn(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_ENDORSED);
-        ArrayList<Application> mockAppList = mock(ArrayList.class);
-        when(mockAppList.get(0)).thenReturn(mockApplication);
         
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getApplicationList()).thenReturn(mockAppList);
-        ApplicationJpaController mockApplicationJpaController = mock(ApplicationJpaController.class);
-        
-        instance.setaDAO(mockApplicationController);
-        instance.setpDAO(mockPersonController);
-        instance.setaSEJB(mockApplicationServices);
-        instance.setaTEJB(mockAuditTrailService);
-        instance.setdBEntitities(mockDBEntitiesFactory);
-        instance.setuEJB(mockUserGateway);
-        
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
-        
-        
-        try
-        {
-            instance.getOpenApplication(mockSession);
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplication).getStatus();
-        }
-        catch(Exception ex)
-        {
-            
-        }
     }
 }

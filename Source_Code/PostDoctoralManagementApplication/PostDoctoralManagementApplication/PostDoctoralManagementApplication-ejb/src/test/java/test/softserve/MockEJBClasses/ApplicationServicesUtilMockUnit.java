@@ -20,7 +20,8 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author kgothatso
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class ApplicationServicesUtilMockUnit extends ApplicationServicesUtil {
     private ApplicationJpaController aDAO;

@@ -6,6 +6,7 @@
 
 package test.softserve.MockEJBClasses;
 
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
@@ -15,82 +16,81 @@ import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.applicationservices.ProgressReportManagementService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import java.util.GregorianCalendar;
+import javax.persistence.EntityManager;
 
 /**
  *
- * @author User
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 public class ProgressReportManagementMockUnit extends ProgressReportManagementService
 {
-    private UserGateway uEJB;
-    private PersonJpaController pDAO;
+    private DBEntitiesFactory dBEntities;
     private NotificationService nEJB;
-    private AuditTrailService aTEJB;
-    private DBEntitiesFactory dBEntitities;
-    private ApplicationServicesUtil aSEJB;
-    private ApplicationJpaController aDAO;
-       
-    public void setaDAO(ApplicationJpaController aDAO)
-    {
-        this.aDAO = aDAO;
-    }
-    
-    public void setaSEJB(ApplicationServicesUtil aSEJB) 
-    {
-        this.aSEJB = aSEJB;
-    }
-    
-    public void setpDAO(PersonJpaController pDAO)
-    {
-        this.pDAO = pDAO;
+    private GregorianCalendar gCal;
+    private DAOFactory dAOFactory;
+    private TransactionController transactionController;
+    private EntityManager entityManager;
+
+    public void setdAOFactory(DAOFactory dAOFactory) {
+        this.dAOFactory = dAOFactory;
     }
 
-    public void setdBEntitities(DBEntitiesFactory dBEntitities)
-    {
-        this.dBEntitities = dBEntitities;
+    public void setTransactionController(TransactionController transactionController) {
+        this.transactionController = transactionController;
     }
-    
-    public void setuEJB(UserGateway uEJB)
-    {
-        this.uEJB = uEJB;
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
-    
-     public void setnEJB(NotificationService nEJB)
-    {
+
+    public void setgCal(GregorianCalendar gCal) {
+        this.gCal = gCal;
+    }
+
+    public void setdBEntities(DBEntitiesFactory dBEntities) {
+        this.dBEntities = dBEntities;
+    }
+
+    public void setnEJB(NotificationService nEJB) {
         this.nEJB = nEJB;
-    }
-     
-     public void setaTEJB(AuditTrailService aTEJB)
-     {
-        this.aTEJB = aTEJB;
-     }
-   
-    protected ApplicationJpaController getApplicationDAO()
-    {
-        return aDAO;
-    }
-    
-    
-    protected PersonJpaController getPersonDAO()
-    {
-        return pDAO;
     }
     
     @Override
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
-        return dBEntitities;
+        return dBEntities;
     }
-
     
+    @Override
     protected NotificationService getNotificationServiceEJB()
     {
         return nEJB;
     }
     
-   
-    protected ApplicationServicesUtil getApplicationServicesUTIL()
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em)
     {
-        return aSEJB;
+        return dAOFactory;
+    }
+     
+    @Override
+    protected GregorianCalendar getGregorianCalendarUTIL()
+    {
+        return gCal;
+    }
+    
+    @Override
+    protected TransactionController getTransactionController()
+    {
+        return transactionController;
+    }
+    
+    @Override
+    public EntityManager createEntityManager()
+    {
+        return entityManager;
     }
 }
