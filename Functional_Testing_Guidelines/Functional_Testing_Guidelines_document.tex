@@ -145,6 +145,7 @@ The requirements, vision and scope were elicited from the following sources:
 \vspace{0.1in}
 \begin{itemize}
 \item Dr.Phol, K., 2010, \textit{Requirements Engineering: Fundamentals, Principles, and Techniques}, Springer, Heidelberg.
+\item Yvonne Rogers, Helen Sharp,  Jenny Preece,\textit{  Interaction Design: Beyond Human–Computer Interaction, 3rd ed.}, John Wiley, Sons Ltd., 2011 ISBN 0-470-66576-9
 \end{itemize}	
 
 \vspace{0.5in}
@@ -152,7 +153,7 @@ The requirements, vision and scope were elicited from the following sources:
 \newpage
 
 \section{Unit Testing}
-\subsubsection{ApplicationProgressViewer}
+\subsection{ApplicationProgressViewer}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -192,7 +193,7 @@ Description: & To test EJB's function to get the progress of an open application
 \end{tabular}
 \end{center}
 
-\subsubsection{Application Services Util}
+\subsection{Application Services Util}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -354,7 +355,7 @@ Description: & To test the EJB's function to behave when an application has alre
 \end{center}
 
 
-\subsubsection{Audit Trail}
+\subsection{Audit Trail}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -376,7 +377,7 @@ Description: & To test EJB's function to Log an action to the system. \\
 \end{tabular}
 \end{center}
 
-\subsubsection{CV Management}
+\subsection{CV Management}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -440,7 +441,7 @@ Description: & Test EJB's function to update an existing CV. \\
 \end{center}
 
 
-\subsubsection{DRIS Approval}
+\subsection{DRIS Approval}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -501,7 +502,7 @@ Description: & To test EJB's function to get the all pending applications that f
 \end{tabular}
 \end{center}
 
-\subsubsection{Deans Endorsement}
+\subsection{Deans Endorsement}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -562,7 +563,70 @@ Description: & To test EJB's function to decline a specific application. \\
 %\end{tabbing}
 \end{tabular}
 \end{center}
-\subsubsection{Grant Holder Finalisation}
+
+\subsection{Fast Forward And Rewind Service}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testForwardApplication  \\
+\hline
+Level: & Unit \\
+\hline
+TestCode: & v FFR \\
+\hline
+Module:& Fast Forward And Rewind Service \\
+\hline
+Function & FFR \\
+\hline
+Description: & Test EJB's function to Forward an application\\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testRewindApplication  \\
+\hline
+Level: & Unit \\
+\hline
+TestCode: & v FFR \\
+\hline
+Module:& Fast Forward And Rewind Service \\
+\hline
+Function & FFR \\
+\hline
+Description: & Test EJB's function to Rewind an application\\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testLoadMovableApplication  \\
+\hline
+Level: & Unit \\
+\hline
+TestCode: & v FFR \\
+\hline
+Module:& Fast Forward And Rewind Service \\
+\hline
+Function & FFR \\
+\hline
+Description: & Test EJB's function to show the applications which can be moved\\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsection{Grant Holder Finalisation}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -644,7 +708,7 @@ Description: & Test EJB's function to finalise an application and send notificat
 \end{tabular}
 \end{center}
 
-\subsubsection{HOD Recommendation}
+\subsection{HOD Recommendation}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -710,7 +774,7 @@ Description: & To test EJB's function to allow a HOD to ammend an application. \
 
 
 
-\subsubsection{Meeting Management}
+\subsection{Meeting Management}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -815,7 +879,7 @@ Description: & To test out the ability to update meetings without any attendance
 \end{tabular}
 \end{center}
 
-\subsubsection{New Application}
+\subsection{New Application}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -1026,7 +1090,7 @@ Description: & To test out see if the application has been submitted   \\
 \end{tabular}
 \end{center}
 
-\subsubsection{Notification}
+\subsection{Notification}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -1215,7 +1279,7 @@ Description: & To test out send notifications without emails. \\
 %\end{tabbing}
 \end{tabular}
 \end{center}
-\subsubsection{Progress Reports}
+\subsection{Progress Reports}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -1258,7 +1322,7 @@ Description: & To test out if a porgress report has been submitted \\
 \end{tabular}
 \end{center}
 
-\subsubsection{Referee Report}
+\subsection{Referee Report}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -1301,7 +1365,7 @@ Description: & To test out if a referee report has been submitted \\
 \end{tabular}
 \end{center}
 
-\subsubsection{User Account Management}
+\subsection{User Account Management}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -1492,7 +1556,7 @@ Description: & To test out if the address for the specified user exists \\
 \end{tabular}
 \end{center}
 
-\subsubsection{User Gateway}
+\subsection{User Gateway}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
 \hline
@@ -1602,6 +1666,67 @@ Description: & To test out if a user has been authenticated as the owner \\
 
 \newpage
 \section{Integretation Testing}
+
+\subsection{User Accounts and Notification Service}
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+ Name: & testNewUserAndNotification  \\
+\hline
+Level: & Integration \\
+\hline
+TestCode: & INUN \\
+\hline
+Module:& User Account Management and Notification Service \\
+\hline
+Function & INUN \\
+\hline
+Description: & This test ensures the integration between the User Account Management Service and Notification Service. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsection{Referral Reports and Notification Service}
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+ Name: & testReferralAndNotification  \\
+\hline
+Level: & Integration \\
+\hline
+TestCode: & IRAN \\
+\hline
+Module:& Referee Reports and Notification Service \\
+\hline
+Function & ICNA \\
+\hline
+Description: & This test ensures the integration between the Referee Report Service and Notification Service. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsection{Meeting Management and Notification Service}
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+ Name: & testMeetingAndNotification  \\
+\hline
+Level: & Integration \\
+\hline
+TestCode: & ICNA \\
+\hline
+Module:& Meeting Management and Notification Service \\
+\hline
+Function & ICNA \\
+\hline
+Description: & This test ensures the integration between the Meeting Management Service and Notification Service. \\
+\hline
+%\end{tabbing}
+\end{tabular}
+\end{center}
+
 \subsection{Creating A New Application}
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -1644,7 +1769,7 @@ Description: & To test out the ability of a renewal application to move through 
 \end{center}
 
 
-\subsection{Applying for Renewal}
+\subsection{Applying for Fellowship with Fast Forwarding and Rewind Service}
 
 \begin{center}
 \begin{tabular}{|l|p{12cm}|}
@@ -1685,6 +1810,87 @@ Description: & To test out the ability of tehe EJB's to use scrapping to retriev
 \end{tabular}
 \end{center}
 
+\newpage
+\section{Usability Tests}
+For the Usability Tests Softserve will be using the DECIDE Framework:
+\subsection{DECIDE Framework}
+\subsubsection{Determine the goals of evaluation}
+
+A Post-Doctoral fellow is a person who conducts research after they have completed their PhD, with the aim of deepening their knowledge in a specified. The University of Pretoria supports such research opportunities in order to the increase research output of the University. Post-Doctoral fellows who conduct their research at the University of Pretoria do so under the supervision of a staff member of the University and their research may be privately or internally funded. This is a growing field in Universities around South Africa. A lack in the software solutions for the application management of Post-Doctoral fellows has been identified by the SoftServe group.
+
+The purpose of the evaluation is to check areas of usability that are successfully comprehended by the user, and at the same time also discover those areas that are not consistent or intuitive for the user, all in efforts to better the system. The specific goal of the evaluation is to see if the users can intuitively navigate through the application to perform common tasks by understanding their role in the system. The evaluation will also consider the time it took to perform the tasks and will help discover better solutions for parts of the evaluation where the user struggled to use the application. The evaluation is important to the success of the system, as it is imperative that users be able to understand the options available to them and be able to efficiently navigate the system for their benefit. 
+
+\subsubsection{Explore the specific questions to be answered}
+
+Are users intuitively able to navigate through the application?
+Are users able to perform tasks faster after using the application again?
+Is the process of creating an application intuitive enough?
+How do the users feel about the forms filling process?
+General opinions on User Interface Elements?
+
+\subsubsection{Choose the evaluation paradigm and techniques to answer questions}
+
+The primary evaluation technique that was used for the evaluation was Usability Testing. The reason for choosing this technique is because the evaluations needed to take place in a controlled setting where the evaluators are able keep track of various behaviours of the users after performing predetermined tasks on the application.
+The data gathering techniques used was taking notes, video recording and monitoring key strokes. These techniques were used to produce both quantitative and qualitative data but primarily quantitative data that can easily be quantified and summarized into meaningful averages that can be further analysed at a later stage.
+
+\subsubsection{Identify the practical issues that must be addressed}
+\begin{enumerate}
+
+\item	Users will have to include current Post Doctoral students, DRIS members, the client and other computer literate members.
+\item Users will have to concurrently be able to complete their tasks on the application with other users in the laboratory.
+\item The users may be disturbed by external noise from nearby construction, students passing by etc., but should not affect the outcomes of the evaluation because the application was designed with simplicity and does not require a lot of focus.
+\item The user only has an hour to complete all their tasks otherwise their results will have to be nullified. 
+\item	Different users will have different tasks and as a result there could be distractions in the lab
+\item	The users may be disturbed by external noise from nearby construction, students passing by etc… This may affect the outcomes of the evaluation because although the application was designed with simplicity and it does require a lot of focus.
+\item Making the application accessible over the UP network.
+
+\end{enumerate}
+
+\subsubsection{Decide how to deal with the ethical issues}
+
+Ethical issues, which we may encounter, would be dealing with confidentiality of information we receive from the users. We will address this issue by presenting a consent form for the use to sign – that guards their rights and our special privilege to their information. Our duty after that is to make sure their personal information is not compromised or released. Another issue, which we may encounter, would be dealing with the actual testing. The participants will be told in advance that if any part of the testing is not comfortable, they may choose to quit the testing. 
+
+\subsubsection{Evaluate, analyse, interpret and present the data} 
+
+We will evaluate the data looking for patterns in the user’s behaviour for certain tasks and take all users into consideration that gave us consent and completed all the tasks in time. We will analyse the data by using both quantitative and qualitative frameworks and techniques to get meaningful data that can help us in improving the application’s user experience and expectations. We will interpret the data to a human understandable format that allows an easier understanding evaluation taking place. We will then present the data in order to help detect where to improve or tweak the application to improve a user’s experience of using the application. 
+
+\newpage
+\subsection{Questionnaire}
+The following is the questionnaire users will be filling out.
+Using a scale of 1 to 5, where 1 is Strongly Disagree and 5 is Strongly Agree
+
+\begin{center}
+\begin{tabular}{|l|p{2cm}|}
+\hline
+ Question: & Rating \\
+\hline
+	Overall, I am satisfied with how easy it is to use the system. &  \\ \hline
+	It was simple to use the system. & \\ \hline
+	I would effectively complete the tasks using this system. & \\ \hline
+	I was able to complete the tasks quickly using this system. & \\ \hline
+	I was able to efficiently complete the tasks using the system. & \\ \hline
+	I feel comfortable using the system. & \\ \hline
+	It was easy to learn to use the system. & \\ \hline
+	I believe I could become productive quickly using the system. & \\ \hline
+	The system gave error messages that clearly told me how to fix the problem. & \\ \hline
+	Whenever I made a mistake using the system, I could recover easily and quickly. & \\ \hline
+	It was easy to find the information I needed. & \\ \hline
+	The information provided for the system was easy to understand. & \\ \hline
+	The information was effective in helping me complete the tasks. & \\ \hline
+	The organization of information on the system screens was clear. & \\ \hline
+	The interface of the system pleasant. & \\ \hline
+ I liked using the interface of the system. & \\ \hline
+	The system has all the functions and capabilities I expect it to have. & \\ \hline
+	Overall, I am satisfied with the system. & \\ \hline
+
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item	Please list three things you liked most about this system software.
+
+\item	Please list three things you liked least about this system software.
+
+\end{itemize}
 
 \newpage
 \section{Glossary:}
