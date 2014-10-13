@@ -39,6 +39,10 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
     public void setdAOFactory(DAOFactory dAOFactory) {
         this.dAOFactory = dAOFactory;
     }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
     
     @Override    
     protected DAOFactory getDAOFactory(EntityManager em)

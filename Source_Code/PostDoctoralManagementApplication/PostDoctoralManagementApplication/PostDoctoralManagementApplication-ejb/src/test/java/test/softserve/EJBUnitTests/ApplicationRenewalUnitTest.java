@@ -19,6 +19,10 @@ import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBEntities.Notification;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -48,7 +52,11 @@ public class ApplicationRenewalUnitTest {
     private DBEntitiesFactory mockDBEntitiesFactory;
     private ApplicationServicesUtil mockApplicationServicesUtil;
     private GregorianCalendar mockGregorianCalendar;
-    private EntityManager em;
+    private EntityManager mockEntityManager;
+    private ApplicationJpaController mockApplicationJpaController;
+    
+    private Session mockSession;
+    private Application mockApplication;
     
     public ApplicationRenewalUnitTest() {
     }
@@ -62,7 +70,7 @@ public class ApplicationRenewalUnitTest {
     }
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         instance = new ApplicationRenewalServiceMockUnit();
         
         mockNotificationServiceLocal = mock(NotificationServiceLocal.class);
@@ -73,6 +81,10 @@ public class ApplicationRenewalUnitTest {
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         mockApplicationServicesUtil = mock(ApplicationServicesUtil.class);
         mockGregorianCalendar = mock(GregorianCalendar.class);
+        mockSession = mock(Session.class);
+        mockEntityManager = mock(EntityManager.class);
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        mockApplication = mock(Application.class);
         
         instance.setNotificationServiceLocal(mockNotificationServiceLocal);
         instance.setcVManagementServiceLocal(mockCVManagementServiceLocal);
@@ -82,6 +94,10 @@ public class ApplicationRenewalUnitTest {
         instance.setdBEntitiesFactory(mockDBEntitiesFactory);
         instance.setApplicationServicesUtil(mockApplicationServicesUtil);
         instance.setGregorianCalendar(mockGregorianCalendar);
+        instance.setEm(mockEntityManager);
+        
+        when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
     }
     
     @After
@@ -93,7 +109,37 @@ public class ApplicationRenewalUnitTest {
      */
     @Test
     public void testGetRenewableApplicationsForFellow() throws Exception {
+        Person p = new Person("u12236731");
         
+        try
+        {
+            instance.getRenewableApplicationsForFellow(mockSession, p);
+            
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findAllRenewalApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, 0, Integer.MAX_VALUE);
+            verify(mockApplicationJpaController).getAllNewApplicationsForFellowWithEndDateInBetween(p, mockGregorianCalendar.getGregorianChange(), mockGregorianCalendar.getGregorianChange());
+            verify(mockGregorianCalendar, times(2)).getTime();
+            verify(mockGregorianCalendar).add(GregorianCalendar.DAY_OF_YEAR, 365);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
 
     /**
@@ -102,6 +148,32 @@ public class ApplicationRenewalUnitTest {
     @Test
     public void testDoesApplicationHaveFinalProgressReport() throws Exception {
         
+        try
+        {
+            instance.doesApplicationHaveFinalProgressReport(mockSession, mockApplication);
+            
+            verify(mockProgressReportManagementServiceLocal).doesApplicationHaveFinalProgressReport(mockSession, mockApplication);
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplication);
+            
+            //verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
 
     /**
@@ -109,7 +181,65 @@ public class ApplicationRenewalUnitTest {
      */
     @Test
     public void testUpdateResearchFellowCV() throws Exception {
+        Cv cv = new Cv("mockCV");
         
+        when(mockCVManagementServiceLocal.hasCV(mockSession)).thenReturn(Boolean.TRUE);
+        try
+        {
+            instance.updateResearchFellowCV(mockSession, cv);
+            
+            verify(mockCVManagementServiceLocal).hasCV(mockSession);
+            verify(mockCVManagementServiceLocal).updateCV(mockSession, cv);
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
+    }
+    
+    public void testUpdateResearchFellowCVFail() throws Exception {
+        Cv cv = new Cv("mockCV");
+        
+        when(mockCVManagementServiceLocal.hasCV(mockSession)).thenReturn(Boolean.FALSE);
+        try
+        {
+            instance.updateResearchFellowCV(mockSession, cv);
+            
+            verify(mockCVManagementServiceLocal).hasCV(mockSession);
+            verify(mockCVManagementServiceLocal).updateCV(mockSession, cv);
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
 
     /**
@@ -117,15 +247,117 @@ public class ApplicationRenewalUnitTest {
      */
     @Test
     public void testCreateFinalProgressReportForApplication() throws Exception {
+        ProgressReport pr = new ProgressReport(Long.MIN_VALUE);
         
+        List<ProgressReport> l = mock(List.class);
+        when(l.size()).thenReturn(2);
+        when(mockApplication.getProgressReportList()).thenReturn(l);
+        when(mockProgressReportManagementServiceLocal.getNumberOfProgressReportsRequiredByApplication(mockSession, mockApplication)).thenReturn(3);
+        try
+        {
+            instance.createFinalProgressReportForApplication(mockSession, mockApplication, pr);
+            
+            verify(mockProgressReportManagementServiceLocal).getNumberOfProgressReportsRequiredByApplication(mockSession, mockApplication);
+            verify(mockProgressReportManagementServiceLocal).createProgressReport(mockSession, mockApplication, pr);
+            verify(mockApplication).getProgressReportList();
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
 
     /**
      * Test of createRenewalApplication method, of class ApplicationRenewalService.
      */
     @Test
-    public void testCreateRenewalApplication() throws Exception {
+    public void testCreateRenewalApplicationEdit() throws Exception {
+        ProgressReport pr = new ProgressReport(Long.MIN_VALUE);
+        Application oldApplication = mock(Application.class);
         
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        try
+        {
+            instance.createRenewalApplication(mockSession, oldApplication, mockApplication);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplication, atLeast(2)).getApplicationID(); // TODO: Why does it bug?
+            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockApplicationJpaController).edit(mockApplication);
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            // TODO: Write for verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
+    }
+    
+    @Test
+    public void testCreateRenewalApplicationCreate() throws Exception {
+        ProgressReport pr = new ProgressReport(Long.MIN_VALUE);
+        Application oldApplication = mock(Application.class);
+        
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        try
+        {
+            instance.createRenewalApplication(mockSession, oldApplication, mockApplication);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplication, atLeast(2)).getApplicationID(); // TODO: Why does it bug?
+            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockApplicationJpaController).edit(mockApplication);
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            // TODO: Write for verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
 
     /**
@@ -133,7 +365,49 @@ public class ApplicationRenewalUnitTest {
      */
     @Test
     public void testSubmitApplication() throws Exception {
+        when(mockApplication.getFellow()).thenReturn(new Person("u12236731"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("u12345678"));
+        when(mockApplication.getProjectTitle()).thenReturn("Mock Project");
         
+        List<Notification> n = new ArrayList<>();
+        n.add(new Notification(Long.MIN_VALUE)); n.add(new Notification(Long.MAX_VALUE));
+        
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("u12236731"), "Renewal application submitted", "Please note that the renewal application '" + "Mock Project" + "' has been submitted for which you are the fellow of.")).thenReturn(n.get(0));
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("u12345678"), "Renewal application submitted", "Please note that the renewal application '" + "Mock Project" + "' has been submitted for which you are the grant holder of.")).thenReturn(n.get(1));
+        
+        try
+        {
+            instance.submitApplication(mockSession, mockApplication);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            verify(mockApplicationServicesUtil).submitApplication(mockApplication);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, mockApplication.getFellow(), "Renewal application submitted", "Please note that the renewal application '" + mockApplication.getProjectTitle() + "' has been submitted for which you are the fellow of.");
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, mockApplication.getGrantHolder(), "Renewal application submitted", "Please note that the renewal application '" + mockApplication.getProjectTitle() + "' has been submitted for which you are the grant holder of.");
+            verify(mockNotificationServiceLocal).sendBatchNotifications(mockSession, n, true);
+            verify(mockApplication, atLeastOnce()).getFellow();
+            verify(mockApplication, atLeastOnce()).getGrantHolder();
+            verify(mockApplication, atLeast(2)).getProjectTitle();
+            
+            verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockCVManagementServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
     
 }

@@ -91,18 +91,21 @@ public class AnnouncementManagementUnitTest {
     public void testLoadAllActiveAnnouncementsReturnEmpty() throws Exception {
         Announcement mockAnnouncement = mock(Announcement.class);
         
-        //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
         try
         {
             //Execute function
             List<Announcement> announcements = instance.loadAllActiveAnnouncements();
             
+            verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).findAllActiveAnnouncements();
+            
+            verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            
             if(!announcements.isEmpty())
             {
-                fail("Announcements were not empty");
-            }
-            
+                fail("Announcements were empty");
+            }      
         }
         catch (Exception ex)
         {
@@ -113,22 +116,21 @@ public class AnnouncementManagementUnitTest {
     
     @Test
     public void testLoadAllActiveAnnouncements() throws Exception {
-        Announcement mockAnnouncement = mock(Announcement.class);
         List<Announcement> a = new ArrayList<>();
         a.add(new Announcement(Long.MIN_VALUE)); a.add(new Announcement(Long.MAX_VALUE));
         when(mockAnnouncementJpaController.findAllActiveAnnouncements()).thenReturn(a);
         //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
         try
         {
-            //Execute function
             List<Announcement> announcements = instance.loadAllActiveAnnouncements();
             
+            verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).findAllActiveAnnouncements();
-            if(announcements.size() != a.size())
-            {
-                fail("Announcements were not required amount");
-            }
             
+            verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            
+            assertArrayEquals(announcements.toArray(), a.toArray());
         }
         catch (Exception ex)
         {
@@ -152,12 +154,13 @@ public class AnnouncementManagementUnitTest {
             //Execute function
             List<Announcement> announcements = instance.loadAllPendingAnnouncements();
             
+            verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).findPendingAnnouncements();
-            if(announcements.size() != a.size())
-            {
-                fail("Announcements were not required amount");
-            }
             
+            verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            
+            assertArrayEquals(announcements.toArray(), a.toArray());
         }
         catch (Exception ex)
         {
@@ -173,14 +176,47 @@ public class AnnouncementManagementUnitTest {
     public void testCreateAnnouncement() throws Exception {
         Announcement mockAnnouncement = mock(Announcement.class);
         
-        //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
         try
         {
-            //Execute function
             instance.createAnnouncement(mockSession, mockAnnouncement);
             
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).create(mockAnnouncement);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
             verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
+    }
+    
+    // TODO: Implement proper logic for this...
+    @Test
+    public void testCreateAnnouncementFail() throws Exception {
+        Announcement mockAnnouncement = mock(Announcement.class);
+        
+        try
+        {
+            instance.createAnnouncement(mockSession, mockAnnouncement);
+            
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAnnouncementDAO();
+            verify(mockAnnouncementJpaController).create(mockAnnouncement);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
@@ -201,9 +237,17 @@ public class AnnouncementManagementUnitTest {
         {
             //Execute function
             instance.updateAnnouncement(mockSession, mockAnnouncement);
-            
+                        
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).edit(mockAnnouncement);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
             verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
@@ -212,6 +256,35 @@ public class AnnouncementManagementUnitTest {
         }
     }
 
+    // TODO: Make it fail...
+    @Test
+    public void testUpdateAnnouncementFail() throws Exception {
+        Announcement mockAnnouncement = mock(Announcement.class);
+        
+        //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
+        try
+        {
+            //Execute function
+            instance.updateAnnouncement(mockSession, mockAnnouncement);
+                        
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAnnouncementDAO();
+            verify(mockAnnouncementJpaController).edit(mockAnnouncement);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
+    }
+    
     /**
      * Test of removeAnnouncement method, of class AnnouncementManagementService.
      */
@@ -225,8 +298,16 @@ public class AnnouncementManagementUnitTest {
             //Execute function
             instance.removeAnnouncement(mockSession, mockAnnouncement);
             
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).destroy(mockAnnouncement.getAnnouncementID());
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
             verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
@@ -235,4 +316,32 @@ public class AnnouncementManagementUnitTest {
         }
     }
     
+    // TODO: Make it throw an exception...
+    @Test
+    public void testRemoveAnnouncementFail() throws Exception {
+        Announcement mockAnnouncement = new Announcement(Long.MAX_VALUE);
+        
+        //when(new ApplicationStageStatus(mockApplication.getTimestamp(), com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_OPEN, mockApplication.getFellow())).thenReturn(mockApplicationStageStatus);
+        try
+        {
+            //Execute function
+            instance.removeAnnouncement(mockSession, mockAnnouncement);
+            
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAnnouncementDAO();
+            verify(mockAnnouncementJpaController).destroy(mockAnnouncement.getAnnouncementID());
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockAnnouncementJpaController);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
+    }
 }
