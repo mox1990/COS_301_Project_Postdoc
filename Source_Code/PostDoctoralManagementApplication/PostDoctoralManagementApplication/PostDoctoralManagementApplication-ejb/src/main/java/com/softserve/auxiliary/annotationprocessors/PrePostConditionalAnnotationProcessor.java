@@ -8,13 +8,19 @@ package com.softserve.auxiliary.annotationprocessors;
 
 import auto.softserve.XMLEntities.PrePostConditional.Methodinfo;
 import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.softserve.auxiliary.annotations.PrePostConditionalMethod;
+import com.softserve.auxiliary.requestresponseclasses.MethodParameters;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.processing.*;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.RoundEnvironment;
@@ -23,6 +29,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.tools.Diagnostic;
 
 /**
@@ -34,7 +41,7 @@ import javax.tools.Diagnostic;
 @SupportedSourceVersion(SourceVersion.RELEASE_7) 
 public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
     
-    public final String TARGET_DIR = "..\\PostDoctoralManagementApplication-web\\src\\main\\resources\\META-INF\\prepostconfig.xml";
+    public String TARGET_DIR = ".\\src\\main\\resources\\META-INF\\prepostconfig.xml";
     public final String SOURCE_DIR = "";
     
     @Override
@@ -44,9 +51,13 @@ public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
         System.out.println("Starting PrePostConditionalAnnotationProcessor...");
         System.out.println("Working directory: " + System.getProperty("user.dir"));
         
-        if(!System.getProperty("user.dir").endsWith("ejb"))
+        if(System.getProperty("user.dir").endsWith("ejb"))
         {
-            return false;
+            TARGET_DIR = ".\\src\\main\\resources\\META-INF\\prepostconfig.xml";
+        }
+        else
+        {
+            TARGET_DIR = ".\\PostDoctoralManagementApplication-ejb\\src\\main\\resources\\META-INF\\prepostconfig.xml";
         }
         
         System.out.println("");
@@ -87,12 +98,31 @@ public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
             System.out.println("    Class which method is in: " + element.getEnclosingElement().toString());
             System.out.println("    Element kind: " + element.getKind().toString());
             System.out.println("    Element modifiers: " + element.getModifiers().toString());
+            ExecutableElement executableElement = (ExecutableElement) element;
+            
+            System.out.println("    Element parameters: " + executableElement.getParameters().toString());
             
             Methodinfo methodinfo = new Methodinfo();
             methodinfo.setClazz(element.getEnclosingElement().toString());
             methodinfo.setName(element.getSimpleName().toString());
-            methodinfo.setPostcode("");
-            methodinfo.setPrecode("");
+            MethodParameters methodParameters = new MethodParameters();
+            List<String> params = new ArrayList<String>();
+            for(VariableElement variableElement : executableElement.getParameters())
+            {
+                params.add(variableElement.asType().toString());
+            }
+            String [] ps = new String[1];            
+            methodParameters.setParameters(params.toArray(ps));
+            
+            ObjectMapper objectMapper = new ObjectMapper();
+            try 
+            {
+                methodinfo.setParameters(objectMapper.writeValueAsString(methodParameters));
+            } 
+            catch (JsonProcessingException ex) 
+            {
+                Logger.getLogger(PrePostConditionalAnnotationProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             methodinfos.add(methodinfo);
             

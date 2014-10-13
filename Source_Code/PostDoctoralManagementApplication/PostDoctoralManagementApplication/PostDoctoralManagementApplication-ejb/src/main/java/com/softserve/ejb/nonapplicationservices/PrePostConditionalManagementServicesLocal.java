@@ -8,6 +8,8 @@ package com.softserve.ejb.nonapplicationservices;
 
 import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.persistence.DBEntities.PrePostConditionMethod;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -17,6 +19,10 @@ import javax.ejb.Local;
  */
 @Local
 public interface PrePostConditionalManagementServicesLocal {
-    public Prepostconditionalmethods loadPrePostConditionalMethodsConfiguration(Session session) throws Exception;
-    public void updatePrePostConditionalMethodsConfiguration(Session session, Prepostconditionalmethods prepostconditionalmethods) throws Exception;
+    public List<PrePostConditionMethod> loadPrePostConditionalMethods(Session session) throws Exception;
+    public void updatePrePostConditionalMethod(Session session, PrePostConditionMethod prePostConditionMethod) throws Exception;
+    public PrePostConditionMethod findPrePostConditionMethodByClassAndName(Session session, String className, String methodName) throws Exception;
+    
+    public Boolean evaluatePreCondition(Session session, PrePostConditionMethod postConditionMethod) throws Exception;
+    public Boolean evaluatePostCondition(Session session, PrePostConditionMethod postConditionMethod) throws Exception;
 }

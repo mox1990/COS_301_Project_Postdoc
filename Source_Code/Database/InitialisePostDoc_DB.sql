@@ -432,6 +432,19 @@ CREATE TABLE synapse (
 	FOREIGN KEY (_destNeuron) REFERENCES neuron(_neuronID)
 ) ENGINE=InnoDB;
 
+CREATE TABLE pre_post_condition_method (
+	_prePostConditionMethodID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	_methodName VARCHAR(250),	
+	_methodClassName VARCHAR(250),
+	_methodParameters TEXT,
+	_scriptLangName VARCHAR(250),
+	_preConditionScript TEXT,
+	_postConditionScript TEXT,
+	
+	PRIMARY KEY (_prePostConditionMethodID)
+	
+) ENGINE=InnoDB;
+
 CREATE TABLE resourceentity (
 	il8n_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 	i18n_key VARCHAR(250) NOT NULL,
@@ -553,6 +566,8 @@ CREATE TABLE synapse LIKE PostDoc_DB.synapse;
 
 CREATE TABLE neuron LIKE PostDoc_DB.neuron;
 
+CREATE TABLE pre_post_condition_method LIKE PostDoc_DB.pre_post_condition_method;
+
 USE PostDoc_BackUp_DB;
 
 CREATE TABLE address  LIKE PostDoc_DB.address;
@@ -622,4 +637,6 @@ CREATE TABLE neuralnetwork LIKE PostDoc_DB.neural_network;
 CREATE TABLE synapse LIKE PostDoc_DB.synapse;
 
 CREATE TABLE neuron LIKE PostDoc_DB.neuron;
+
+CREATE TABLE pre_post_condition_method LIKE PostDoc_DB.pre_post_condition_method;
 

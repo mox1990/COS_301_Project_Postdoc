@@ -12,8 +12,7 @@ that is not approved by the stated authors is prohibited.
                 <xs:sequence>
                     <xs:element name="class" type="xs:string"/>
                     <xs:element name="name" type="xs:string"/>
-                    <xs:element name="precode" type="xs:string"/>
-                    <xs:element name="postcode" type="xs:string"/>
+                    <xs:element name="parameters" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
     

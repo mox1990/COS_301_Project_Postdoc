@@ -22,5 +22,8 @@ public class SystemConstants {
     public final static String DEVELOPER = "Softserve group";
     
     //File constants
-    public final static String PREPOSTCONDITIONAL_FILE_DIR = "";
+    public final static String PREPOSTCONDITIONALCONFIG_FILE_NAME = "prepostconfig.xml";
+    
+    //Script engine constants
+    public final static String SCRIPT_ENGINE_NAME_JAVASCRIPT = "javascript";
 }

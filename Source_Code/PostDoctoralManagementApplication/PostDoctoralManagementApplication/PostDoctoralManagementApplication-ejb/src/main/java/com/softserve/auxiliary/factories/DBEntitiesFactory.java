@@ -19,6 +19,7 @@ import com.softserve.persistence.DBEntities.NeuralNetwork;
 import com.softserve.persistence.DBEntities.Neuron;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
+import com.softserve.persistence.DBEntities.PrePostConditionMethod;
 import com.softserve.persistence.DBEntities.ProgressReport;
 import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.persistence.DBEntities.Synapse;
@@ -210,6 +211,20 @@ public class DBEntitiesFactory {
         neuron.setNeuronOrderIndex(orderIndex);
         
         return neuron;       
+    }
+    
+    public PrePostConditionMethod createPrePostConditionMethod(String className, String methodName, String parameters, String scriptLanguageName, String preCondtionScript, String postConditionScript)
+    {
+        PrePostConditionMethod prePostConditionMethod = new PrePostConditionMethod();
+        
+        prePostConditionMethod.setMethodClassName(className);
+        prePostConditionMethod.setMethodName(methodName);
+        prePostConditionMethod.setMethodParameters(parameters);
+        prePostConditionMethod.setScriptLangName(scriptLanguageName);
+        prePostConditionMethod.setPreConditionScript(preCondtionScript);
+        prePostConditionMethod.setPostConditionScript(postConditionScript);
+        
+        return prePostConditionMethod;       
     }
     //Rest of entities: Add as required
 }

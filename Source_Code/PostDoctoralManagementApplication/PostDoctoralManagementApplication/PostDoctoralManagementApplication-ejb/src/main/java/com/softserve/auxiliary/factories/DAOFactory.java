@@ -32,6 +32,7 @@ import com.softserve.persistence.DBDAO.NeuralNetworkJpaController;
 import com.softserve.persistence.DBDAO.NeuronJpaController;
 import com.softserve.persistence.DBDAO.NotificationJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
+import com.softserve.persistence.DBDAO.PrePostConditionMethodJpaController;
 import com.softserve.persistence.DBDAO.ProgressReportJpaController;
 import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
 import com.softserve.persistence.DBDAO.RefereeReportJpaController;
@@ -213,5 +214,10 @@ public class DAOFactory {
     public SynapseJpaController createSynapseDAO()
     {
         return new SynapseJpaController(em);
+    }
+    
+    public PrePostConditionMethodJpaController createPrePostConditionMethodDAO()
+    {
+        return new PrePostConditionMethodJpaController(em);
     }
 }
