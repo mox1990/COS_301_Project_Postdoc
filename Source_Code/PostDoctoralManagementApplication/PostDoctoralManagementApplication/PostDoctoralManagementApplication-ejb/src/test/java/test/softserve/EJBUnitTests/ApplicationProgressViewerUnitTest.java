@@ -14,6 +14,8 @@ import com.softserve.ejb.applicationservices.ApplicationProgressViewerServiceLoc
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,11 +37,14 @@ import test.softserve.MockEJBClasses.ApplicationProgressViewerServiceMockUnit;
  */
 public class ApplicationProgressViewerUnitTest {
     private ApplicationProgressViewerServiceMockUnit instance;
+    
     private ApplicationServicesUtil mockApplicationServicesUtil;
     private UserGateway mockUserGateway;
     private DAOFactory mockDAOFactory;
     private EntityManager mockEntityManager;
+    private ApplicationJpaController mockApplicationJpaController;
     
+    private Session mockSession;
     private Application mockApplication;
     
     public ApplicationProgressViewerUnitTest() {
@@ -61,8 +66,14 @@ public class ApplicationProgressViewerUnitTest {
         mockUserGateway = mock(UserGateway.class);
         mockDAOFactory = mock(DAOFactory.class);
         mockEntityManager = mock(EntityManager.class);
-        
         mockApplication = mock(Application.class);
+        mockSession = mock(Session.class);
+        mockApplicationJpaController = mock(ApplicationJpaController.class);
+        
+        instance.setaEJB(mockApplicationServicesUtil);
+        instance.setuEJB(mockUserGateway);
+        instance.setdAOFactory(mockDAOFactory);
+        instance.setEm(mockEntityManager);
         
         Person fellow = new Person("u12236731");
         Person tmp = new Person("uxxxxxxxx");
@@ -75,7 +86,7 @@ public class ApplicationProgressViewerUnitTest {
         when(mockApplication.getRefereeReportList()).thenReturn(new ArrayList<RefereeReport>());
         when(mockApplication.getPersonList()).thenReturn(new ArrayList<Person>());
         
-        //TODO: Configure all the nullable data...
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
     }
     
     @After
@@ -87,7 +98,27 @@ public class ApplicationProgressViewerUnitTest {
      */
     @Test
     public void testGetAllApplications() throws Exception {
+        List<Application> a = new ArrayList<>();
+        a.add(new Application(Long.MAX_VALUE)); a.add(new Application(Long.MIN_VALUE));
         
+        when(mockApplicationJpaController.findApplicationEntities()).thenReturn(a);
+        try
+        {
+            List<Application> applications = instance.getAllApplications(mockSession);
+            
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findApplicationEntities();
+            
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            
+            assertArrayEquals(applications.toArray(), a.toArray());
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
 
     /**
@@ -96,6 +127,18 @@ public class ApplicationProgressViewerUnitTest {
     @Test
     public void testGetApplicationProgress() throws Exception {
         
+        try
+        {
+            instance.getApplicationProgress(mockSession, mockApplication);
+            
+            //verifyNoMoreInteractions(mockDAOFactory);
+            //verifyNoMoreInteractions(mockApplication);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+        }
     }
     
 }

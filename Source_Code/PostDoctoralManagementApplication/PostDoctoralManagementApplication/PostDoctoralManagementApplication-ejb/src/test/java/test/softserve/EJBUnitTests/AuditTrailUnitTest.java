@@ -82,12 +82,25 @@ public class AuditTrailUnitTest {
         when(mockAuditLog.getAction()).thenReturn("Defualt action");
         try
         {
+            instance.logAction(null, mockAuditLog);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAuditLogDAO();
+            verify(mockAuditLogJpaController).create(mockAuditLog);
+            
+            // TODO: Verfiy work on mock application...
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
             
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
@@ -100,14 +113,25 @@ public class AuditTrailUnitTest {
         String s = new String(new char[550]);
         try
         {
-            //instance.logAction(mockAuditLog);
-            //verify(mockAuditLog).setAction("Shortened action");
+            instance.logAction(null, mockAuditLog);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAuditLogDAO();
+            verify(mockAuditLogJpaController).create(mockAuditLog);
+            
+            // TODO: Verfiy work on mock application...
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
             
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
@@ -120,7 +144,7 @@ public class AuditTrailUnitTest {
         when(mockAuditLog.getAction()).thenReturn("Defualt action");
         try
         {
-            
+            // TODO: Implement...
         }
         catch (Exception ex)
         {
