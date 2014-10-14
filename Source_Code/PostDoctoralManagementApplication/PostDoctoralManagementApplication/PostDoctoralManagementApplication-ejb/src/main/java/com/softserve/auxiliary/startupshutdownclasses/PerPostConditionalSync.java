@@ -74,23 +74,23 @@ public class PerPostConditionalSync {
     {
         try
         {
-            System.out.println("syncPerPostConditionsWithDB: Starting pre post condition synchronisation..." );
+            System.out.println("======== syncPerPostConditionsWithDB: Starting pre post condition synchronisation..." );
             File configFile = null;
             try
             {
-                System.out.println("syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
+                System.out.println("======== syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
                 File file = new File("..");
-
+                System.out.println("======== syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
                 configFile = searchForFileInDirectoryRecursively(file, com.softserve.auxiliary.constants.SystemConstants.PREPOSTCONDITIONALCONFIG_FILE_NAME);
             }
             catch(Exception ex)
             {
-
+                System.out.println("======== syncPerPostConditionsWithDB: exception occured during file search continuing " + ex.getMessage());
             }
 
             if(configFile != null)
             {
-                System.out.println("syncPerPostConditionsWithDB: Config file found " + configFile.toString());
+                System.out.println("======== syncPerPostConditionsWithDB: Config file found " + configFile.toString());
 
                 XMLUnmarshaller xMLUnmarshaller = getXMLUnmarshaller();
 
@@ -100,7 +100,7 @@ public class PerPostConditionalSync {
 
                 Prepostconditionalmethods prepostconditionalmethods = xMLUnmarshaller.unmarshalPrepostconditionalmethodsString(contents);
 
-                System.out.println("syncPerPostConditionsWithDB: Config file unmarshalled");
+                System.out.println("======== syncPerPostConditionsWithDB: Config file unmarshalled");
 
                 TransactionController transactionController = getTransactionController();
                 transactionController.StartTransaction();
@@ -109,7 +109,7 @@ public class PerPostConditionalSync {
                 {               
 
                     PrePostConditionMethodJpaController prePostConditionMethodJpaController = transactionController.getDAOFactoryForTransaction().createPrePostConditionMethodDAO();
-                    System.out.println("syncPerPostConditionsWithDB: Starting to synchronise file entries with database ");
+                    System.out.println("======== syncPerPostConditionsWithDB: Starting to synchronise file entries with database ");
 
                     List<PrePostConditionMethod> dbPrePostConditionMethods = prePostConditionMethodJpaController.findPrePostConditionMethodEntities();
 
@@ -140,8 +140,8 @@ public class PerPostConditionalSync {
                             }
                             catch(Exception ex)
                             {
-                                System.out.println("syncPerPostConditionsWithDB: Excpetion occured while pre post condition synchronisation for '" + methodinfo.getClazz() + "." + methodinfo.getName() + "' it has not been added. Message = " + ex.toString() );
-                                System.out.println("syncPerPostConditionsWithDB: Continuing with rest of methods...");
+                                System.out.println("======== syncPerPostConditionsWithDB: Excpetion occured while pre post condition synchronisation for '" + methodinfo.getClazz() + "." + methodinfo.getName() + "' it has not been added. Message = " + ex.toString() );
+                                System.out.println("======== syncPerPostConditionsWithDB: Continuing with rest of methods...");
                             }
 
                         }
@@ -175,23 +175,31 @@ public class PerPostConditionalSync {
     }
     
     private File searchForFileInDirectoryRecursively(File path, String name)
-    {
-        File found = null;
-        
-        for(File file : path.listFiles())
+    {        
+        System.out.println("Searching [ " + path.listFiles().length +" files ] in " + path + " for file " + name +  " ...");
+        for(int i = 0; i < path.listFiles().length; i++)
         {
+            File file = path.listFiles()[i];
+            System.out.println("Inspecting file - " + file.getName());
             if(file.getName().equals(name))
             {
                 return file;
             }
             
-            if(file.isDirectory() && file != path || !file.getName().equals("."))
+            if(file.isDirectory() && !file.isFile() && !file.equals(path) && !file.getName().equals("."))
             {
-                searchForFileInDirectoryRecursively(file, name);
+                System.out.println("Preparing to scan sub dir - " + file.getName());
+                File result = searchForFileInDirectoryRecursively(file, name);
+                
+                if(result != null)
+                {
+                    return result;
+                }
+                System.out.println("Completed scaning sub dir - " + file.getName());
             }
         }                 
         
-        return found;
+        return null;
     }
     
     

@@ -103,6 +103,15 @@ public class PrePostConditionMethod implements Serializable {
         return methodParameters;
     }
     
+    public void setMethodParametersEncode(List<String> parameters) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String[] s = new String[1];
+        MethodParameters mp = new MethodParameters(parameters.toArray(s));
+        
+        setMethodParameters(objectMapper.writeValueAsString(mp));
+        
+    }
+    
     public List<String> getMethodParametersDecode() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         MethodParameters mp = objectMapper.readValue(methodParameters, MethodParameters.class);

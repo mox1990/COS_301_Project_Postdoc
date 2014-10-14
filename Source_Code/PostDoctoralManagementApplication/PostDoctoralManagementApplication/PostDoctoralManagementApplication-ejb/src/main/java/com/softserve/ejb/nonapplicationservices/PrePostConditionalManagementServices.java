@@ -149,12 +149,19 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
     
     @SecuredMethod(AllowedSecurityRoles = {})
     @Override
-    public PrePostConditionMethod findPrePostConditionMethodByClassAndName(Session session, String className, String methodName) throws Exception 
+    public PrePostConditionMethod findPrePostConditionMethodByClassAndName(Session session, String className, String methodName, List<String> parameters) throws Exception 
     {
         EntityManager em = createEntityManager();
         try
         {            
-            return getDAOFactory(em).createPrePostConditionMethodDAO().findPrePostConditionByClassAndMethodName(methodName, className);
+            if(getClassMethodVerificationUtil().doesMethodExist(className, methodName, parameters))
+            {
+                return getDAOFactory(em).createPrePostConditionMethodDAO().findPrePostConditionByClassAndMethodName(methodName, className, parameters);
+            }
+            else
+            {
+                return null;
+            }
         }
         finally
         {
