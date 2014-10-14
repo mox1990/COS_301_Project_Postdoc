@@ -60,7 +60,7 @@
                         <ui:param name="hideFunction" value="hideInfoDiv(4)"/>
                         <ui:param name="buttonName" value="#{lang['WelcomeDataImportAndExportServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                        <ui:param name="buttonAction" value="goToDataImportAndExportServicesHomeView"/>
+                        <ui:param name="buttonAction" value="goToApplicationImportServicesWizard"/>
                         <ui:param name="infoContainerID" value="info4"/>
                         <ui:define name="informationContent">
                             #{lang['WelcomeDataImportAndExportServicesInformationContent']}
@@ -81,7 +81,7 @@
                     </ui:decorate>
                     
                     <ui:decorate template="templates/panelButton_Component.xhtml">
-                        <ui:param name="isPanelRendered" value="#{welcomeBean.archivalServicesDisplayable}"/>
+                        <ui:param name="isPanelRendered" value="#{false}"/>
                         <ui:param name="showFunction" value="showInfoDiv(6)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(6)"/>
                         <ui:param name="buttonName" value="#{lang['WelcomeArchivalServices']}"/>
@@ -107,28 +107,54 @@
                     </ui:decorate>
                     
                     <ui:decorate template="templates/panelButton_Component.xhtml">
-                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.announcementServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(8)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(8)"/>
-                        <ui:param name="buttonName" value="Announcement management service"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeAnnouncementManagementServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToAnnouncementServiceHomeView"/>
                         <ui:param name="infoContainerID" value="info8"/>
                         <ui:define name="informationContent">
-                            This option allows you to view and create new announcements that can be viewed by any logged in user. 
+                            #{lang['WelcomeAnnouncementManagementInformationContent']}
                         </ui:define>
                     </ui:decorate>
                     
                     <ui:decorate template="templates/panelButton_Component.xhtml">
-                        <ui:param name="isPanelRendered" value="#{true}"/>
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.locationServicesDisplayable}"/>
                         <ui:param name="showFunction" value="showInfoDiv(9)"/>
                         <ui:param name="hideFunction" value="hideInfoDiv(9)"/>
-                        <ui:param name="buttonName" value="Location management service"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeLocationManagementServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                         <ui:param name="buttonAction" value="goToLocationMangementServiceView"/>
                         <ui:param name="infoContainerID" value="info9"/>
                         <ui:define name="informationContent">
-                            This option allows you to view and create new institutions, faculties and departments that the system can recognise. 
+                            #{lang['WelcomeLocationManagementInformationContent']}
+                        </ui:define>
+                    </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.prePostConditionalServicesDisplayable}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(10)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(10)"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomePrePostConditionServices']}"/>
+                        <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                        <ui:param name="buttonAction" value="goToLocationMangementServiceView"/>
+                        <ui:param name="infoContainerID" value="info10"/>
+                        <ui:define name="informationContent">
+                            #{lang['WelcomePrePostConditionInformationContent']} 
+                        </ui:define>
+                    </ui:decorate>
+                    
+                    <ui:decorate template="templates/panelButton_Component.xhtml">
+                        <ui:param name="isPanelRendered" value="#{welcomeBean.locationServicesDisplayable}"/>
+                        <ui:param name="showFunction" value="showInfoDiv(11)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(11)"/>
+                        <ui:param name="buttonName" value="#{lang['WelcomeNeuralNetworkManagementServices']}"/>
+                        <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                        <ui:param name="buttonAction" value="goToLocationMangementServiceView"/>
+                        <ui:param name="infoContainerID" value="info11"/>
+                        <ui:define name="informationContent">
+                            #{lang['WelcomeNeuralNetworkManagementInformationContent']}
                         </ui:define>
                     </ui:decorate>
                 </div>

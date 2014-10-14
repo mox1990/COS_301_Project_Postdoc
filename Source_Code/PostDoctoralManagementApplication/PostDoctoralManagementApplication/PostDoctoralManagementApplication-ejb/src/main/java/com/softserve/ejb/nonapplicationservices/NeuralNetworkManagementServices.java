@@ -184,6 +184,8 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
                 }
             }
             
+            neuralNetwork.initaliseNetwork();
+            
             transactionController.CommitTransaction();
         }
         catch(Exception ex)
@@ -307,9 +309,9 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
     }
 
     @Override
-    public void runNeuralNetwork(Session session, NeuralNetwork neuralNetwork) throws Exception 
+    public void runNeuralNetwork(Session session, NeuralNetwork neuralNetwork, List<Double> inputVector) throws Exception 
     {
-        neuralNetwork.feedForward();
+        neuralNetwork.feedForward(inputVector);
     }
 
     @Override
