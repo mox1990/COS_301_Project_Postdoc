@@ -26,7 +26,7 @@ public interface NeuralNetworkManagementServicesLocal {
     public void updateNeuralNetwork(Session session, NeuralNetwork neuralNetwork) throws Exception;
     public void updateNeuralNetworkSynapses(Session session, NeuralNetwork neuralNetwork) throws Exception;
     public void removeNeuralNetwork(Session session, NeuralNetwork neuralNetwork) throws Exception;
-    public void runNeuralNetwork(Session session, NeuralNetwork neuralNetwork) throws Exception;
+    public void runNeuralNetwork(Session session, NeuralNetwork neuralNetwork, List<Double> inputVector) throws Exception;
     public void correctNeuralNetwork(Session session, NeuralNetwork neuralNetwork, List<Double> targetVector) throws Exception;
     public List<Double> trainNeuralNetwork(Session session, NeuralNetwork neuralNetwork, List<List<Double>> inputVectorSet, List<List<Double>> targetVectorSet, int noOfEpochs) throws Exception;    
 }

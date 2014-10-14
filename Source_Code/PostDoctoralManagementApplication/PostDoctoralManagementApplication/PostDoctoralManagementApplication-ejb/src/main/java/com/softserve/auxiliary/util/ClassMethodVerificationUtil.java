@@ -19,7 +19,7 @@ import java.util.List;
 public class ClassMethodVerificationUtil {
     public boolean doesMethodExist(String className, String methodName, List<String> parameters)
     {
-        return findMethod(className, methodName, parameters) == null;
+        return findMethod(className, methodName, parameters) != null;
     }
     
     public Method findMethod(String className, String methodName, List<String> parameters)

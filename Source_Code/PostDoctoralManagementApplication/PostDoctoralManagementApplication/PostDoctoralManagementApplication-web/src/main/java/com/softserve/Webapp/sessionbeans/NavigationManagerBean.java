@@ -196,9 +196,9 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
-    public String goToDataImportAndExportServicesHomeView()
+    public String goToApplicationImportServicesWizard()
     {
-        BreadCrumb breadCrumb = new BreadCrumb("DataImportAndExportServices_Home", "Data import and export services");
+        BreadCrumb breadCrumb = new BreadCrumb("ApplicationImportServices_Wizard", "Application import wizard");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);
@@ -602,6 +602,54 @@ public class NavigationManagerBean implements Serializable {
     public String goToLocationMangementServiceView()
     {
         BreadCrumb breadCrumb = new BreadCrumb("LocationMangementService", "Location management services");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToNeuralNetworkManagementServicesCreatorView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("NeuralNetworkManagementServices_Creator", "Neural Network creator");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToNeuralNetworkManagementServicesEditor()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("NeuralNetworkManagementServices_Editor", "Neural Network editor");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToNeuralNetworkManagementServicesHome()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("NeuralNetworkManagementServices_Home", "Neural Network management services");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToNeuralNetworkManagementServicesViewer()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("NeuralNetworkManagementServices_Viewer", "Neural Network viewer");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToPrePostConditionManagementServicesEditorView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("PrePostConditionManagementServices_Editor", "Pre-Post Condition Editor");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    public String goToPrePostConditionManagementServicesHomeView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("PrePostConditionManagementServices_Home", "Pre-Post Condition Management Services");
         addToBreadCrumbs(breadCrumb);
         
         return goToLink(breadCrumb);

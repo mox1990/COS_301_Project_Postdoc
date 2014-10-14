@@ -90,7 +90,8 @@ public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
         System.out.println("Elements found:");
         System.out.println("=======================");
         
-        List<Methodinfo> methodinfos = prepostconditionalmethods.getMethod();
+        List<Methodinfo> methodinfos = new ArrayList<Methodinfo>();
+        methodinfos.addAll(prepostconditionalmethods.getMethod());
         
         for(Element element : roundEnv.getElementsAnnotatedWith(PrePostConditionalMethod.class))
         {            
@@ -124,9 +125,24 @@ public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
                 Logger.getLogger(PrePostConditionalAnnotationProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            methodinfos.add(methodinfo);
+            boolean found = false;
+            System.out.println("    Checking if method exists");
+            for(Methodinfo methodinfo1 : methodinfos)
+            {
+                if(methodinfo1.getClazz().equals(methodinfo.getClazz()) && methodinfo1.getName().equals(methodinfo.getName()) && methodinfo1.getParameters().equals(methodinfo.getParameters()))
+                {
+                    found = true;
+                    break;
+                }
+            }
             
-            System.out.println("    Added method");
+            if(!found)
+            {
+                methodinfos.add(methodinfo);
+                System.out.println("    Added method");
+            }
+            
+            
             
             System.out.println("");
         }
@@ -135,7 +151,8 @@ public class PrePostConditionalAnnotationProcessor extends AbstractProcessor {
         
         try
         {  
-            
+            prepostconditionalmethods.getMethod().clear();
+            prepostconditionalmethods.getMethod().addAll(methodinfos);
             XmlMapper xmlMapper = new XmlMapper();
             xmlMapper.enable(ToXmlGenerator.Feature.WRITE_XML_DECLARATION);
             //xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
