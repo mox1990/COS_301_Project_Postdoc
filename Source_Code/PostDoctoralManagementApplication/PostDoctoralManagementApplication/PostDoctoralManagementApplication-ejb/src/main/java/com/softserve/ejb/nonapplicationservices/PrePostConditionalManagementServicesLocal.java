@@ -23,6 +23,6 @@ public interface PrePostConditionalManagementServicesLocal {
     public void updatePrePostConditionalMethod(Session session, PrePostConditionMethod prePostConditionMethod) throws Exception;
     public PrePostConditionMethod findPrePostConditionMethodByClassAndName(Session session, String className, String methodName) throws Exception;
     
-    public Boolean evaluatePreCondition(Session session, PrePostConditionMethod postConditionMethod) throws Exception;
-    public Boolean evaluatePostCondition(Session session, PrePostConditionMethod postConditionMethod) throws Exception;
+    public Boolean evaluatePreCondition(Session session, PrePostConditionMethod prePostConditionMethod, List<String> parameterNames, List<Object> parameterValues) throws Exception;
+    public Boolean evaluatePostCondition(Session session, PrePostConditionMethod postConditionMethod, List<String> parameterNames, List<Object> parameterValues) throws Exception;
 }

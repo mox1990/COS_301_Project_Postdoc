@@ -36,8 +36,6 @@ public class PrePostConditionalAnnotationProcessorTest {
         Methodinfo methodinfo = new Methodinfo();
         methodinfo.setClazz("class");
         methodinfo.setName("Method");
-        methodinfo.setPostcode("s");
-        methodinfo.setPrecode("d");
 
         methodinfos.add(methodinfo);
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);

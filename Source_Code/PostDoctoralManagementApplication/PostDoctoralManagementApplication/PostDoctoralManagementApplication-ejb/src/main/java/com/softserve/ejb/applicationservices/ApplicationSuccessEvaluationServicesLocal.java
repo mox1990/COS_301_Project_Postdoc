@@ -6,6 +6,8 @@
 
 package com.softserve.ejb.applicationservices;
 
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.persistence.DBEntities.Application;
 import javax.ejb.Local;
 
 /**
@@ -15,5 +17,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface ApplicationSuccessEvaluationServicesLocal {
-    
+    public Double getApplicationSuccessRating(Session session, Application application) throws Exception;
+    public void createApplicationSucessNeuralNetwork(Session session) throws Exception;
+    public void trainApplicationSucessNeuralNetworkWithApplicationData() throws Exception;
 }

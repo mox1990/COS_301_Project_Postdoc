@@ -20,6 +20,7 @@ import com.softserve.persistence.DBDAO.PrePostConditionMethodJpaController;
 import com.softserve.persistence.DBEntities.PrePostConditionMethod;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
 import javax.ejb.Schedule;
@@ -75,7 +76,7 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
         return emf.createEntityManager();
     }
     
-    protected ClassMethodVerificationUtil createClassMethodVerificationUtil()
+    protected ClassMethodVerificationUtil getClassMethodVerificationUtil()
     {
         return new ClassMethodVerificationUtil();
     }
@@ -112,6 +113,12 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
             PrePostConditionMethodJpaController prePostConditionMethodJpaController = dAOFactory.createPrePostConditionMethodDAO();
             
             PrePostConditionMethod p = prePostConditionMethodJpaController.findPrePostConditionMethod(prePostConditionMethod.getPrePostConditionMethodID());
+            
+            if(!getClassMethodVerificationUtil().doesMethodExist(p.getMethodClassName(), p.getMethodName(), p.getMethodParametersDecode()))
+            {
+                throw new Exception("Method does not exist.");
+            }
+            
             if(prePostConditionMethod.getScriptLangName() == null || prePostConditionMethod.getScriptLangName().equals(""))
             {
                 p.setScriptLangName(com.softserve.auxiliary.constants.SystemConstants.SCRIPT_ENGINE_NAME_JAVASCRIPT);
@@ -121,7 +128,7 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
                 p.setScriptLangName(prePostConditionMethod.getScriptLangName());
             }
             
-            Class class1 = Class.forName(p.getMethodClassName() + "." + p.getMethodName());
+            
             
             p.setPreConditionScript(prePostConditionMethod.getPreConditionScript());
             p.setPostConditionScript(prePostConditionMethod.getPostConditionScript());
@@ -146,8 +153,7 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
     {
         EntityManager em = createEntityManager();
         try
-        {
-            
+        {            
             return getDAOFactory(em).createPrePostConditionMethodDAO().findPrePostConditionByClassAndMethodName(methodName, className);
         }
         finally
@@ -158,21 +164,26 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
     
     @SecuredMethod(AllowedSecurityRoles = {})
     @Override
-    public Boolean evaluatePreCondition(Session session, PrePostConditionMethod prePostConditionMethod) throws Exception 
+    public Boolean evaluatePreCondition(Session session, PrePostConditionMethod prePostConditionMethod, List<String> parameterNames, List<Object> parameterValues) throws Exception 
     {
-        return evaluateScript(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), prePostConditionMethod.getMethodParametersDecode(), prePostConditionMethod.getPostConditionScript(), prePostConditionMethod.getScriptLangName());
+        return evaluateScript(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), prePostConditionMethod.getMethodParametersDecode(), prePostConditionMethod.getPostConditionScript(), prePostConditionMethod.getScriptLangName(), parameterNames, parameterValues);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {})
     @Override
-    public Boolean evaluatePostCondition(Session session, PrePostConditionMethod prePostConditionMethod) throws Exception 
+    public Boolean evaluatePostCondition(Session session, PrePostConditionMethod prePostConditionMethod, List<String> parameterNames, List<Object> parameterValues) throws Exception 
     {
-        return evaluateScript(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), prePostConditionMethod.getMethodParametersDecode(), prePostConditionMethod.getPostConditionScript(), prePostConditionMethod.getScriptLangName());
+        return evaluateScript(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), prePostConditionMethod.getMethodParametersDecode(), prePostConditionMethod.getPostConditionScript(), prePostConditionMethod.getScriptLangName(), parameterNames, parameterValues);
     }
     
-    private Boolean evaluateScript(String className, String methodName, List<String> parameters, String script, String lang) throws Exception
+    private Boolean evaluateScript(String className, String methodName, List<String> parameters, String script, String lang, List<String> parameterNames, List<Object> parameterValues) throws Exception
     {
-        if(createClassMethodVerificationUtil().doesMethodExist(className, methodName, parameters))
+        if(!(parameterNames.size() == parameterValues.size() && parameters.size() == parameterNames.size()))
+        {
+            throw new Exception("Parameter sizes dont match.");
+        }
+        
+        if(getClassMethodVerificationUtil().doesMethodExist(className, methodName, parameters))
         {
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             if(lang == null || lang.equals(""))
@@ -183,7 +194,10 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(lang);
             Bindings bindings = new SimpleBindings();
             
-            
+            for(int i = 0; i < parameterNames.size(); i++)
+            {
+                bindings.put(parameterNames.get(i),parameterValues.get(i));
+            } 
             
             Object result = scriptEngine.eval(script, bindings);
             

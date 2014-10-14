@@ -6,6 +6,8 @@
 
 package com.softserve.ejb.applicationservices;
 
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.persistence.DBEntities.Application;
 import javax.ejb.Stateless;
 
 /**
@@ -16,6 +18,20 @@ import javax.ejb.Stateless;
 @Stateless
 public class ApplicationSuccessEvaluationServices implements ApplicationSuccessEvaluationServicesLocal {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @Override
+    public Double getApplicationSuccessRating(Session session, Application application) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createApplicationSucessNeuralNetwork(Session session) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void trainApplicationSucessNeuralNetworkWithApplicationData() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }
