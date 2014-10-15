@@ -107,4 +107,61 @@ public class welcomeBean {
         }        
     }
     
+    public boolean isAnnouncementServicesDisplayable()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }        
+    }
+    
+    public boolean isLocationServicesDisplayable()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }        
+    }
+    
+    public boolean isNeuralNetworkManagementServicesDisplayable()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }        
+    }
+    
+    public boolean isPrePostConditionalServicesDisplayable()
+    {
+        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
+        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
+        try 
+        {
+            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
+        } 
+        catch (Exception ex) 
+        {
+            return false;
+        }        
+    }
+    
 }

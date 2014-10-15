@@ -8,10 +8,12 @@ package com.softserve.auxiliary.startupshutdownclasses;
 
 import auto.softserve.XMLEntities.PrePostConditional.Methodinfo;
 import auto.softserve.XMLEntities.PrePostConditional.Prepostconditionalmethods;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.softserve.auxiliary.XMLUtils.XMLMarshaller;
 import com.softserve.auxiliary.XMLUtils.XMLUnmarshaller;
 import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.interceptors.PrePostConditionInterceptor;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.auxiliary.util.ClassMethodVerificationUtil;
 import com.softserve.persistence.DBDAO.PrePostConditionMethodJpaController;
@@ -22,10 +24,13 @@ import java.io.FileReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Timer;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
@@ -43,6 +48,8 @@ import javax.persistence.PersistenceUnit;
 public class PerPostConditionalSync {
     @PersistenceUnit(unitName = com.softserve.auxiliary.constants.PersistenceConstants.WORKING_DB_PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    private boolean hasSynced;
     
     protected DAOFactory getDAOFactory(EntityManager em)
     {
@@ -70,106 +77,130 @@ public class PerPostConditionalSync {
     }
     
     @PostConstruct
-    private void syncPerPostConditionsWithDB()
+    private void init()
     {
-        try
+        hasSynced = false;
+    }
+        
+    @Schedule(second = "*/30", minute = "*", hour = "*", persistent = false) 
+    private void syncPerPostConditionsWithDB(Timer timer)
+    {
+        System.out.println("Calling sync");
+        if(!hasSynced)
         {
-            System.out.println("======== syncPerPostConditionsWithDB: Starting pre post condition synchronisation..." );
-            File configFile = null;
             try
             {
-                System.out.println("======== syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
-                File file = new File("..");
-                System.out.println("======== syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
-                configFile = searchForFileInDirectoryRecursively(file, com.softserve.auxiliary.constants.SystemConstants.PREPOSTCONDITIONALCONFIG_FILE_NAME);
-            }
-            catch(Exception ex)
-            {
-                System.out.println("======== syncPerPostConditionsWithDB: exception occured during file search continuing " + ex.getMessage());
-            }
-
-            if(configFile != null)
-            {
-                System.out.println("======== syncPerPostConditionsWithDB: Config file found " + configFile.toString());
-
-                XMLUnmarshaller xMLUnmarshaller = getXMLUnmarshaller();
-
-                byte[] configFileContents = Files.readAllBytes(configFile.toPath());
-
-                String contents = new String(configFileContents, Charset.forName("UTF-8"));
-
-                Prepostconditionalmethods prepostconditionalmethods = xMLUnmarshaller.unmarshalPrepostconditionalmethodsString(contents);
-
-                System.out.println("======== syncPerPostConditionsWithDB: Config file unmarshalled");
-
-                TransactionController transactionController = getTransactionController();
-                transactionController.StartTransaction();
-
+                System.out.println("======== syncPerPostConditionsWithDB: Starting pre post condition synchronisation..." );
+                File configFile = null;
                 try
-                {               
-
-                    PrePostConditionMethodJpaController prePostConditionMethodJpaController = transactionController.getDAOFactoryForTransaction().createPrePostConditionMethodDAO();
-                    System.out.println("======== syncPerPostConditionsWithDB: Starting to synchronise file entries with database ");
-
-                    List<PrePostConditionMethod> dbPrePostConditionMethods = prePostConditionMethodJpaController.findPrePostConditionMethodEntities();
-
-                    for(Methodinfo methodinfo : prepostconditionalmethods.getMethod())
-                    {
-                        boolean skip = false;
-                        for(PrePostConditionMethod prePostConditionMethod : dbPrePostConditionMethods)
-                        {
-                            if(prePostConditionMethod.getMethodClassName().equals(methodinfo.getClazz()) && prePostConditionMethod.getMethodName().equals(methodinfo.getName()))
-                            {
-                                skip = true;
-                                break;
-                            }
-                        }
-
-                        if(!skip)
-                        {
-                            try
-                            {
-                                PrePostConditionMethod p = getDBEntitiesFactory().createPrePostConditionMethod(methodinfo.getClazz(), methodinfo.getName(), methodinfo.getParameters(), com.softserve.auxiliary.constants.SystemConstants.SCRIPT_ENGINE_NAME_JAVASCRIPT, null, null);
-
-                                if(!getClassMethodVerificationUtil().doesMethodExist(p.getMethodClassName(), p.getMethodName(), p.getMethodParametersDecode()))
-                                {
-                                    throw new Exception("Method does not exist.");
-                                }
-
-                                prePostConditionMethodJpaController.create(p);
-                            }
-                            catch(Exception ex)
-                            {
-                                System.out.println("======== syncPerPostConditionsWithDB: Excpetion occured while pre post condition synchronisation for '" + methodinfo.getClazz() + "." + methodinfo.getName() + "' it has not been added. Message = " + ex.toString() );
-                                System.out.println("======== syncPerPostConditionsWithDB: Continuing with rest of methods...");
-                            }
-
-                        }
-                    }
-
-                    transactionController.CommitTransaction();
+                {
+                    System.out.println("======== syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
+                    File file = new File("..");
+                    System.out.println("======== syncPerPostConditionsWithDB: working directory = " + System.getProperty("user.dir"));
+                    configFile = searchForFileInDirectoryRecursively(file, com.softserve.auxiliary.constants.SystemConstants.PREPOSTCONDITIONALCONFIG_FILE_NAME);
                 }
                 catch(Exception ex)
                 {
-                    System.out.println("syncPerPostConditionsWithDB: Excpetion occured during pre post condition synchronisation. Message = " + ex.toString() );
-                    transactionController.RollbackTransaction();
-                    throw ex;
+                    System.out.println("======== syncPerPostConditionsWithDB: exception occured during file search continuing " + ex.getMessage());
                 }
-                finally
+
+                if(configFile != null)
                 {
-                    transactionController.CloseEntityManagerForTransaction();
+                    System.out.println("======== syncPerPostConditionsWithDB: Config file found " + configFile.toString());
+
+                    /*XMLUnmarshaller xMLUnmarshaller = getXMLUnmarshaller();
+                    
+                    System.out.println("======== syncPerPostConditionsWithDB: unmarshaller loaded");
+                    
+                    byte[] configFileContents = Files.readAllBytes(configFile.toPath());
+                    
+                    System.out.println("======== syncPerPostConditionsWithDB: file contents loaded");
+
+                    String contents = new String(configFileContents, Charset.forName("UTF-8"));
+                    
+                    System.out.println("======== syncPerPostConditionsWithDB: file contents converted. Contents: " + contents);
+
+                    Prepostconditionalmethods prepostconditionalmethods = xMLUnmarshaller.unmarshalPrepostconditionalmethodsString(contents);*/
+                    XmlMapper xmlMapper = new XmlMapper();
+                    Prepostconditionalmethods prepostconditionalmethods = xmlMapper.readValue(configFile, Prepostconditionalmethods.class);
+                    System.out.println("======== syncPerPostConditionsWithDB: Config file unmarshalled");
+
+                    TransactionController transactionController = getTransactionController();
+                    transactionController.StartTransaction();
+
+                    try
+                    {               
+
+                        PrePostConditionMethodJpaController prePostConditionMethodJpaController = transactionController.getDAOFactoryForTransaction().createPrePostConditionMethodDAO();
+                        System.out.println("======== syncPerPostConditionsWithDB: Starting to synchronise file entries with database ");
+
+                        List<PrePostConditionMethod> dbPrePostConditionMethods = prePostConditionMethodJpaController.findPrePostConditionMethodEntities();
+
+                        for(Methodinfo methodinfo : prepostconditionalmethods.getMethod())
+                        {
+                            boolean skip = false;
+                            for(PrePostConditionMethod prePostConditionMethod : dbPrePostConditionMethods)
+                            {
+                                if(prePostConditionMethod.getMethodClassName().equals(methodinfo.getClazz()) && prePostConditionMethod.getMethodName().equals(methodinfo.getName()))
+                                {
+                                    skip = true;
+                                    break;
+                                }
+                            }
+
+                            if(!skip)
+                            {
+                                try
+                                {
+                                    PrePostConditionMethod p = getDBEntitiesFactory().createPrePostConditionMethod(methodinfo.getClazz(), methodinfo.getName(), methodinfo.getParameters(), com.softserve.auxiliary.constants.SystemConstants.SCRIPT_ENGINE_NAME_JAVASCRIPT, null, null);
+
+                                    if(!getClassMethodVerificationUtil().doesMethodExist(p.getMethodClassName(), p.getMethodName(), p.getMethodParametersDecode()))
+                                    {
+                                        throw new Exception("Method does not exist.");
+                                    }
+
+                                    prePostConditionMethodJpaController.create(p);
+                                }
+                                catch(Exception ex)
+                                {
+                                    System.out.println("======== syncPerPostConditionsWithDB: Excpetion occured while pre post condition synchronisation for '" + methodinfo.getClazz() + "." + methodinfo.getName() + "' it has not been added. Message = " + ex.toString() );
+                                    System.out.println("======== syncPerPostConditionsWithDB: Continuing with rest of methods...");
+                                }
+
+                            }
+                        }
+
+                        transactionController.CommitTransaction();
+                        
+                        hasSynced = true;
+                        timer.cancel();
+                    }
+                    catch(Exception ex)
+                    {
+                        System.out.println("syncPerPostConditionsWithDB: Excpetion occured during pre post condition synchronisation. Message = " + ex.toString() );
+                        transactionController.RollbackTransaction();
+                        throw ex;
+                    }
+                    finally
+                    {
+                        transactionController.CloseEntityManagerForTransaction();
+                        System.out.println("syncPerPostConditionsWithDB: Stoping pre post condition synchronisation..." );
+                    }
+                }
+                else
+                {
+                    System.out.println("syncPerPostConditionsWithDB: No config file called " + com.softserve.auxiliary.constants.SystemConstants.PREPOSTCONDITIONALCONFIG_FILE_NAME + " found !");
                     System.out.println("syncPerPostConditionsWithDB: Stoping pre post condition synchronisation..." );
                 }
             }
-            else
+            catch(Exception ex)
             {
-                System.out.println("syncPerPostConditionsWithDB: No config file called " + com.softserve.auxiliary.constants.SystemConstants.PREPOSTCONDITIONALCONFIG_FILE_NAME + " found !");
-                System.out.println("syncPerPostConditionsWithDB: Stoping pre post condition synchronisation..." );
+                Logger.getLogger(PerPostConditionalSync.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        catch(Exception ex)
+        else
         {
-            
+            timer.cancel();
         }
         
     }
