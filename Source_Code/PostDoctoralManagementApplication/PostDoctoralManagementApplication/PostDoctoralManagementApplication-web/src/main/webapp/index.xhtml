@@ -34,7 +34,7 @@
                         <br/>
                         <h:outputLabel value="#{lang['Password']}"/>
                         <br/>
-                        <p:inputText value="#{indexBean.password}"/>
+                        <p:password value="#{indexBean.password}"/>
                         <br/>
                         <p:growl sticky="true" showSummary="true" showDetail="true" globalOnly="false"/>
                         <p:commandButton id="loginButton" styleClass="button" value="#{lang['Login']}" action="#{indexBean.performLoginRequest()}" process="@form" update="@form"/>

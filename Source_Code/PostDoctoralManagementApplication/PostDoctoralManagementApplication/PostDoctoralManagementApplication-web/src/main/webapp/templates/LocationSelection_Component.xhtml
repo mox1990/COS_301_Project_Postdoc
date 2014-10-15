@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
-        <h:panelGrid columns="3" cellpadding="5"> 
+        <h:panelGrid columns="3" cellpadding="5" rendered="#{renderAttribute}"> 
             <p:outputLabel value="#{lang['Institution']}" for="institution"/>                                
             <p:selectOneMenu id="institution" value="#{locationBean.selectedInstitution}" >
                 <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
