@@ -220,24 +220,25 @@ The following architecture constraints have been selected by SoftServe group as 
 \item Programming language: Java
 \item Development platform: Java-EE 7 
 \item System architecture: Java-EE
-\item Architectural frameworks: JSF, PAM, Java Persistence API, JAX-RS
+\item Architectural frameworks: JSF, Java Persistence API, JAX-RS
 \item Architectural pattern: Layered (Multi-tiered)
-\item Development technologies: EJB, JSP, Expression Language, JDBC, JTA, Java EE Connector Architecture, JAF, JavaMail, JNDI, JAAS, Concurrency Utilities for Java EE, JAXB, PrimeFaces
+\item Development technologies: EJB, JSP, Expression Language, JDBC, JTA, Java EE Connector Architecture, JAF, JavaMail, JNDI, Concurrency Utilities for Java EE, JAXB, PrimeFaces
 \item IDE: Netbeans 8.0
 \item Build environment: Apache Maven 3
 \item Web server software: GlassFish 4.0 server
 \item Web interface protocol: HTTPS
 \item Client web browser: Microsoft Internet explorer 9+, Google Chrome 30+, Mozilla FireFox 20+, Opera, Safari
-\item Client device operating systems: Windows, iOS, Android, Linux. 
+\item Client device operating systems: Windows, iOS, Android, Linux.
+\item Proprietary software: Cannot make use of this due to financial constraints. 
 \end{enumerate}
 \vspace{0.5in}
 
 
 \section{Architectural Patterns and Styles} % skipped till further notice.
+This section describes the various architectural patterns that will be employed by the project. It should be noted some of these patterns are implicitly employed by the system due to the development approach.  
 
-% Mention of how Java EE actually doesn't require use of GoF design patterns >> http://www.theserverside.com/tip/With-Java-EE-7-your-Design-Patterns-are-dead-And-your-EAR-is-ugly-too <<
-
-The system will employ a multi-tier/layered architectural pattern to form what is known as the Java Enterprise Edition system architecture. This will allow the client(s) to be decoupled from the server. This pattern is widely used and provides various benefits. Some benefits include modularity, encapsulation, re-usability of components, decoupling, system maintainability, pluggable-ness of layers and complexity reduction [Ali Babar, M.] [Oracle, 2014][Kayal, D., 2008]\\
+\subsection{Layered pattern}
+The system will explicitly employ a multi-tier/layered architectural pattern to form what is known as the Java Enterprise Edition system architecture. This will allow the client(s) to be decoupled from the server. This pattern is widely used and provides various benefits. Some benefits include modularity, encapsulation, re-usability of components, decoupling, system maintainability, pluggable-ness of layers and complexity reduction [Ali Babar, M.] [Oracle, 2014][Kayal, D., 2008]\\
 \\
 The Java EE system architecture is designed to support highly scalable, distributed, transactional and portable applications that use the speed, security, and reliability of a Java EE server to provide powerful enterprise applications. [Oracle, 2014] For this reason SoftServe believes this system architecture is well suited for the development of the Post-Doctoral application management system as it will satisfy the requirements in terms of quality and functional as stipulated by the client. The following diagram provides the system architecture that will be employed by the system:\\
 
@@ -247,22 +248,36 @@ The Java EE system architecture is designed to support highly scalable, distribu
 \caption{Java EE system architecture with respect to the Post-Doctoral application management system}
 \end{figure}
 
-\subsection{Client Tier}
-This tier runs on the client system and encapsulates the various components that a client system may use to access the Java EE server-side tiers. These components include dynamic web pages, Java applications and Java applets. In order to make the Post-doctoral application management system accessible to any stakeholder over the internet and provide a uniform user experience the system will make use of the JSF frame work to provide web pages via a web browsers and RESTful web-services to provide access to the system via other client side applications. [Oracle, 2014]  
+\subsubsection{Client layer}
+This layer runs on the client system and encapsulates the various components that a client system may use to access the Java EE server-side layers. These components include dynamic web pages, Java applications and Java applets. In order to make the Post-doctoral application management system accessible to any stakeholder over the internet and provide a uniform user experience the system will make use of the JSF frame work to provide web pages via a web browsers and RESTful web-services to provide access to the system via other client side applications. [Oracle, 2014]  
 
-\subsection{Web Tier}
-This Tier runs on the Java EE server and hosts the Web container and RESTful web services. It provides the management and web page generation support for the web pages that the system has to provide to the client Tier through the use of of the Java ServerFaces Facelets and backing beans. It also facilitates the communication between the business tier and client tier and thus handles the data validation and transformation required by such communication.[Oracle, 2014] 
-\subsection{Business Tier}
-This Tier also runs on the Java EE server and hosts the Enterprise Java Bean container. It provides the business logic section for the Java EE application in the form of Enterprise Java Beans which are simply classes of POJOs that represent various persistence entities of the persistence layer, system messages, sessions, services. It also hosts any auxiliary services that the application wishes to implement in order to help the EJBs. This tier communicates with EIS tier in order provide access to the database and various other lower level infrastructures that the Java EE application requires. [Oracle, 2014]
+\subsubsection{Web layer}
+This layer runs on the Java EE server and hosts the Web container and RESTful web services. It provides the management and web page generation support for the web pages that the system has to provide to the client Tier through the use of of the Java ServerFaces Facelets and backing beans. It also facilitates the communication between the business layer and client layer and thus handles the data validation and transformation required by such communication.[Oracle, 2014] 
+\subsubsection{Business layer}
+This layer also runs on the Java EE server and hosts the Enterprise Java Bean container. It provides the business logic section for the Java EE application in the form of Enterprise Java Beans which are simply classes of POJOs that represent various persistence entities of the persistence layer, system messages, sessions, services. It also hosts any auxiliary services that the application wishes to implement in order to help the EJBs. This layer communicates with EIS layer in order provide access to the database and various other lower level infrastructures that the Java EE application requires. [Oracle, 2014]
 
-\subsection{Enterprise Information Tier} 
-The EIS tier provides mainly the support for database systems that are used by the Java-EE application. This tier can run on the Java-EE server as a virtual server or on a physically different database server. Due to the project budget and technical constraints the former will used by the system. [Oracle, 2014] 
- 
+\subsubsection{Enterprise Information/Persistence layer} 
+The EIS layer provides mainly the support for database systems that are used by the Java-EE application. This layer can run on the Java-EE server as a virtual server or on a physically different database server. Due to the project budget and technical constraints the former will used by the system. [Oracle, 2014] 
+
+\subsection{MVC Pattern}
+This pattern is implicit due to the design of the JSF framework and the Java-EE layers. The JSF framework is built according to the MVC pattern. And for case regarding Java-EE, the layers can be grouped as into the 3 different components of the MVC pattern as follows:
+
+\subsubsection{View}
+The view is what is presented to the user and is the front-end of the system. Thus this is the Client layer in Java-EE and is the face-lets in JSF. This component makes use of the controller in order to provide information to the user and send information to the Model.
+
+\subsubsection{Controller}
+The controller is the controlling mechanism of the system and provides the functionality and business logic of the system. Thus this encapsulates the Web layer and EJB layer of Java-EE as they provide the data conversion and business logic of the system. In JSF this is the backing beans.
+
+\subsubsection{Model}
+The Model is the data storage component of the system and provides the mechanisms necessary to store data and use it for use by a system. Thus this represents the EIS/Persistence layer in Java EE as it deals with the data stores. In JSF this is the persistence layer.
+
+\subsection{Pipes and Filters}
+This pattern is a consequence of the layered pattern employed by the system. Since the data that passes from layer to layer is encapsulated by a logical pipe which is the path of the data flow in the system. In this pipe the layers and the operations within the layers which the data flows through acts as filters as they may add or remove data from the objects passing in or add or remove inputs to the next layer or operation.  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Tactics and Strategies} % skipped till further notice.
 This section describes the architectural techniques which will be used in order for the system to satisfy the quality requirements. 
 
-\subsection{Concurrency}
+\subsection{Concurrency/Spreading work load}
 The Java Platform offers support for concurrent programming, which is the basis for implementing many of the services offered by Java EE containers via concurrency utilities. This is realized through the use of thread pooling, threads, queuing and scheduling strategies.(Cervera-Navarro, Evans, Jendrock, Haase and Markito 2014).\\
 
 \subsection{Exception handling}
@@ -281,43 +296,70 @@ To prevent the data integrity from being compromised when storing various items 
 To improve reliability of the system the system will allow for full backups of the entire working database to be created.
 
 \subsection{Interceptors}
-To improve security and audibility interceptors will be employed by the system to detect the execution of methods that are demarcated by appropriate annotations. These interceptors will process the inputs to see if the user can use the service or if it needs to be logged by system in the working database. 
+To improve security and audibility interceptors will be employed by the system to detect the execution of methods that are demarcated by appropriate annotations. These interceptors will process the inputs to see if the user can use the service or if it needs to be logged by system in the working database. Further they will be used to improve maintainability by checking pre and post conditions of demarcated functions.
 
 \subsection{Minimize access channels}
 Another step taken to improve the security of the system was to minimize the access channels to only that of the web browser interface and RESTful API. Thus allowing the focus of security implementations on those provides.
 
+\subsection{Query optimisation}
+This tactic helps to improve the performance of the system as the system mainly uses database queries to retrieve data from the persistence layer. Therefore optimizing such queries will increase the retrieval speeds. Such optimisations are handled by the JPA provider used.
+
+\subsection{Resource locking}
+In order to improve fault tolerance of the system it will lock resources which are in use such that other processes cannot use it and possibly corrupt it the data. The system will accomplish this by using locking mechanisms provided by the DBMS and Java EE.
+
+\subsection{Minimize complexity}
+In order to improve maintainability of the system as well as security the system will be implemented in such a fashion that it is easy to read and understand and uncomplicated as possible. This is already a implication from using the 4-layers as per Java EE. To aid this approach already matured and well proven software libraries will be used as well as most of the default Java EE technology implementations in order to provide solid abstractions of certain services needed.
+
+\subsection{Authentication and authorisation}
+To provide security for the system an authentication mechanism, which makes uses of role based security and ownership verification in order to provide authorisation, will be used. The default JAAS framework for Java EE will not be used as it does not provide ownership verification of objects.
+
+\subsection{Default to deny and least privilege}
+To ensure confidentiality and prevent attacks the system will be implemented in such away that if an operation cannot verify the session it will deny the action. Also each role will be assigned in such a way that the user will only have access to bear minimum services needed in order to complete their tasks.
+
+\subsection{Mutual suspicion}
+In order to improve fault tolerance and prevent attacks, operations implemented by the system will attempt to verify and filter input data in such a manner as if expecting it to be malformed or malicious.
+
+\subsection{Self-describing data structures}
+To improve flexibility certain data will be stored using self describing data formats such as XML and JSON. Also due to the object orientated paradigm and the Java language reflection mechanisms are provided in order to analysis objects which will be employed by the report generation infrastructure.
+
+\subsection{Automation of builds and testing}
+To improve testability and maintainability as well as extensibility aspects of the system the project will make use a build automation tool in order to manage libraries, dependencies and automate unit testing.
+
+\subsection{Support for standard communication protocols and channels}
+To fulfil the integrability and accessibility requirements the system will make use of the HTTP/HTTPS protocols to provide RESTful web services and as well web interface. 
+
+\subsection{Abstraction of services via interfaces}
+This helps improve the extensibility and maintainability of the whole system by allowing the services implemented by a layer to be hidden by an abstract interface whose concrete implementation can be changed without affecting the dependences on the service.
 
 \subsection{Design Patterns used}
 To help improve maintainability and design of the system various design patterns will be employed.
 
 \subsubsection{Builder Pattern}
-The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how it is used is in the process of making an application, the different elements of an application are separated. The process of creating objects speeds up as well. This construction of objects in small steps decreasing coupling and makes the code more testable. The design helps improve the flexibility as well as the maintainability of the code.  
+The Builder Design Pattern allows for the construction of complex structures in small steps. An example of how this is used explicitly is the criteria builder for DBMS queries. Implicitly the entire application work-flow is also a builder as it adds data to the applications in small quantified steps. This construction of objects in small steps decreases coupling and makes the code more testable and maintainable. The design helps improve the flexibility as well as the maintainability of the code.  
 
 \subsubsection{Factory Design Pattern}
-The Factory Design Pattern provides centralised to create our Database entities and entries in an orderly fashion. The pattern allows the developers to define an interface for creating an object, but let the classes that implement the interface decide which class to instantiate. By doing this the code is now flexible and creation of new objects is much simpler. It also helps redundancy 
+The Factory Design Pattern provides centralised means to create similar objects. For example database entities and database access objects. The pattern allows the developers to define an interface for creating an object, but let the classes that implement the interface decide which class to instantiate. By doing this the code is now flexible and the creation of new objects is much simpler. It also helps avoiding code redundancy. 
 
 \subsubsection{State Design Pattern}
 The State Design Pattern is best used in situations where the actions take place in a pre-defined order as with this project. The State pattern changes the state of the objects depending on how far in the pipeline. It provides a simple and clean way to change the state of an object during run time. The design pattern improves the usability of the system as users will know exactly when some change has taken place. 
 
 \subsubsection{Dependency Injection}
-This is used to implement, inversion control. The client is only allowed to use a service rather than creating their own services. The design pattern allows a client to remove all knowledge of a concrete implementation that it needs to use. This helps isolate the client from the impact of design changes and defects. It promotes re-usability, testability and maintainability 
+This is used to implement, inversion control. The client is only allowed to use a service rather than creating their own services. The design pattern allows a client to remove all knowledge of a concrete implementation that it needs to use. This helps isolate the client from the impact of design changes and defects. It promotes re-usability, testability and maintainability. An example for this is the injection of EJBs in one another or in other managed beans. 
 
 \subsubsection{Database Access Objects}
-The Database Access Object is used by all the application calls to provide specific data operations without exposing details of the database to external objects. It forms part of the Core J2EE Patterns. This design pattern acts an intermediary between the application and database, by moving back and forth between objects and database records. It also contains the effects of any changes to the persistence mechanism to a confined area and not the whole application. This pattern improves the audit-ability as well maintaining the integrity of the data contained in the system. 
-
-The use of DAO will help reduce the existance of object-relational impedance mismatch present in the system. It will also contribute to the flexibilty of the system. In the case where the systems underlying persistance mechanism has to change only the DAO will have to be updated and all the places in the system where the DAO was used will then remain constant.
+The Database Access Object is used by the EJBs to provide specific data operations without exposing implementations of the of such operation to external objects. It forms part of the Core J2EE Patterns. This design pattern acts an intermediary between the system and database, by moving back and forth between objects and database records. It also contains the effects of any changes to the persistence mechanism to a confined area and not the whole system. This pattern improves the audit-ability as well maintaining the integrity of the data contained in the system. Further it reduces code redundancies therefore improving maintainability. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Use of Reference Architecture and frameworks}
-The core design philosophy of the Java-EE platform is to provide a Java-EE application developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system's technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of the project.
+\section{Reference Architecture}
+The system will employee the Java-EE reference framework. The core design philosophy of Java-EE is to provide a developer with a set of test and well maintained and reusable APIs as well as frameworks that allow them to focus rather on implementing the actual business logic and UI than focusing on the underlying system's technical and management services such as authentication, session management, etc. Thus the Java EE platform provides a runtime environment for developing and running large-scale, multi-tiered, scalable, reliable, and secure network applications. As seen above it also provides a system architecture and various frameworks, discussed below, for implementing services for multi-tier applications that deliver the scalability, accessibility, and manageability needed by a system. Taking all the above into consideration this makes it ideal for the development of this project.
 
+\section{Frameworks}
 \subsection{JavaServer Faces (JSF)}
 JSF is a web application GUI framework that is based on the JSP, EL and servlet technology that Java-EE provides. It allows the generation of various mark-up languages, such as HTML 4.0.1 and HTML 5, directly from objects and ORM model objects used by the Java-EE application. Thus it is ideal for system as the system needs to provide support for both HTML 5 and 4.0.1 web content.\\
-
 It will help achieve the usability quality requirement as it will implement all aspects of the user interface.
 
 \subsection{Java Persistence API}
-Java EE is based on Java which is an object-oriented language. Whereas most modern day database management systems, DBMSs, provide relation databases. Thus to bridge this gap the Java Persistence API is used. It provides a Object Relational Mapping solution which allows the relation database to be viewed as a object-oriented database. Thus this critical for the system SoftServe wishes to develop as the system will make use of MySQL which is a relation database management system. The Java persistence API contains the following components:  
+Java EE is based on Java which is an object-oriented language. Whereas most modern day database management systems, DBMSs, provide a range of different database approaches. Thus to bridge this gap the Java Persistence API is used. This is ideal for our project as it provides an Object Relational Mapping solution which allows the relation database which our solution will use to be viewed as a object-oriented database. Also it will allow the system to easily move to other DBMS if ever needed. The Java persistence API contains the following components:  
 \begin{itemize}
 \item Persistence API
 \item The query language
@@ -325,13 +367,10 @@ Java EE is based on Java which is an object-oriented language. Whereas most mode
 \end{itemize}
 
 \subsection{Java API for RESTful Web Services (JAX-RS)}
-The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. This will allow the system to easily be accesses by mobile and computer platforms alike and also be accessible over most companies firewalls as it will make use of the HTTPS protocol. Further this will allow for future expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
-\subsection{JUnit}
-JUnit is a simple unit testing framework used to write repeatable tests. Test methods must be annotated by the @Test annotation. It is also possible to define a method to execute before (or after) each (or all) of the test methods with the @Before (or @After) and @BeforeClass (or @AfterClass) annotations. \\
+The JAX-RS API provides a way for the Java-EE application to provide web services or data transfer via the HTTP or HTTPS protocol using the Representational State Transfer, REST, architectural style. This accomplished by the user of various JAX-RS runtime annotations. This will allow the system to provide a set of lightweight web services to various clients across the internet. Allowing the system to easily be accesses by mobile and computer platforms alike and also be accessible over most company firewalls as it will make use of the HTTPS protocol. This will allow for future integration and expansion if client wishes it. To insure security a the POST command will be preferred above GET.[Cervera-Navarro, Evans, Jendrock, Haase and Markito, 2014]
 
-It will be used to achieve the testbility of the system.
-%\subsubsection{Java EE Connector Architecture}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{JUnit}
+JUnit is a simple unit testing framework used to write repeatable tests. This will be employed by the project in order to manage the unit tests that will be implemented by the system. Thus allowing the system to achieve the testability requirement of the system.
 
 \section{Access and Integration channels}
 This section discusses the requirements for the access channels through which the system can be accessed by humans and other systems. Also it discusses the integration channels which need to be used by the system. 
@@ -347,21 +386,13 @@ To provide a system that is as accessible as possible the system provide its ser
 \end{enumerate}
 
 \subsection{Integration Channels}
-As mentioned in the architecture requirements specification document the IT department of the University of Pretoria will only be willing to provide the SoftServe group with the knowledge of the Peoplesoft system in order to integrate it. Thus the SoftServe group will attempt to accommodate the PeopleSoft system as much as possible by conforming to same user name styling, export of data to formats that are used by the Peoplesoft system to import data. Also the since Peoplesoft is an Oracle enterprise system it would have been developed using Java-EE and the Java programming language. This is therefore a strong motivation for Java-EE to be used by the SoftServe group as a development platform for the system. So to allow integration at a more technical level. Though if the integration was to be done this would be done via the EIS teir using the Java EE Connector Architecture API and the JAX-WS API.  
-
-
-%Upon successful complementation the system must be integrated able with the University of Pretoria's PeopleSoft system. Therefore it is sensible to implement the system in Java EE as it is one of the many components that form part of the multiple tiers that build up  PeopleSoft. \\
-
-%The use of build tools such as Maven will provide a central piece of information with regards to the projects build, reporting and documentation. This central point of information will assist in the integration phase since it is implemented through a standardised build approach which can come into play at a later time through the use of EAI.\\
-
-%The EAI will be achieved via  the logical integration architecture of Direct point-to-point integration (Kang, 2002). This means that the application management system will make direct JDBC calls to the universities databases tables (which needed to be setup to cater for our system at that point). The Integration method will be pushed-based data-level integration (or if all else fails UI-Level integration).
-% http://www.javaworld.com/article/2074488/enterprise-java/enterprise-application-integration-using-j2ee.html
+As mentioned earlier and in the vision and scope document the IT department of the University of Pretoria will only be willing to provide the SoftServe group with the knowledge of the Peoplesoft system in order to integrate it. Thus the SoftServe group will attempt to accommodate the PeopleSoft system as much as possible by conforming to same user name styling, export of data to formats that are used by the Peoplesoft system to import data. Also the since Peoplesoft is an Oracle enterprise system it would have been developed using Java-EE and the Java programming language. This is therefore a strong motivation for Java-EE to be used by the SoftServe group as a development platform for the system. So to allow integration at a more technical level. Though if the integration was to be done this would be done via either the persistence layer using the Java EE Connector Architecture  API or the web layer using the JAX-RS API.  
 
 \section{Technologies}
 This section discusses and elaborates on the technologies that the system will use and should also be seen as an extension of the architectural constraints, specified in the Architecture requirements specification document, in terms of elaboration.
 
 \subsection{Integrated Development Environment}
-The system should be buildable independent of an IDE but it will be developed on Netbeans 8.0 to allow for uniformity amongst the development team, with regards to coding style, and provide easy integration with the tools that will be used such as Javadoc, to generate  API documentation in HTML format.
+The system should be build-able independent of an IDE but it will be developed on Netbeans 8.0 to allow for uniformity amongst the development team, with regards to coding style, and provide easy integration with the tools that will be used such as Javadoc, to generate  API documentation in HTML format.
 
 \subsection{Build Tools}
 \begin{itemize}
@@ -386,9 +417,14 @@ The system will be deployed on a single OS but will have clients that will use a
 \end{itemize}
 
 \subsection{Development technologies}
+\subsubsection{Annotations}
+This technology provides a means for developers to provide meta data for various data structures and operations in consistent and un-interfering manner within source code. This meta data can be propagate to various levels of *-time stages in program lifestyles.\\\\
+\textbf{Reasons for use}\\
+Various features of the Java EE framework makes use of this technology to carry out its functions. Also this will be used by interceptors to extract information at run-time and annotation processors at compile time to configure the system accordingly.  
+
 \subsubsection{Java Servlet Technology}
 \textbf{Description}\\
-A Java servlet is used to extend the Java-EE application server to support HTTP or HTTPS requests and responses. It allows the server to provide RESTful based web services to connecting clients. Thus it acts as a middle man between any HTTP or HTTPS client and the business tier. This will not be used directly but will be used the JSF framework.\\\\
+A Java servlet is used to extend the Java-EE application server to support HTTP or HTTPS requests and responses. It allows the server to provide RESTful based web services to connecting clients. Thus it acts as a middle man between any HTTP or HTTPS client and the business layer. This will not be used directly but will be used the JSF framework.\\\\
 \textbf{Reasons for use}\\
 The JSF framework uses servlets to render JSF pages to HTML and provide them to clients connecting via HTTP or HTTPS. Secondly this will allow the solution to provide lightweight RESTful based web services that will help improve accessibility and availability of the solution. Further it will allow the solution to satisfy the access channel requirements.
 
@@ -420,19 +456,19 @@ This technology is used by the JavaMail API thus it will be used by the system.
 \textbf{Description}\\
 The Java Database Connectivity API provides the a Java-EE application with the means to access data from various datasources including databases, spreadsheet, etc via the Java programming language.\\\\
 \textbf{Reasons for use}\\
-The system will use this to communicate with the databases located in the EIS tier of the system in order to retrieve and store data in the databases. 
+The system will use this to communicate with the databases located in the EIS layer of the system in order to retrieve and store data in the databases. 
 
 \subsubsection{Java Transaction API (JTA)}
 \textbf{Description}\\
 The Java Transaction API provides the Java-EE Application with the means to handle and demarcate data transactions to the database. The API allows the the manual or automatic demarcation of database transactions and ensures that the database and ORM entities are synchronised after commits.\\\\ 
 \textbf{Reasons for use}\\
-This will be used in the system to improve the centralisation and accuracy of the data accessed by users. Further it will be used to allow access to multiple databases located in the EIS tier and the controlling of such resources.
+This will be used in the system to improve the centralisation and accuracy of the data accessed by users. Further it will be used to allow access to multiple databases located in the EIS layer and the controlling of such resources.
 
 \subsubsection{Enterprise JavaBeans (EJB)}
 \textbf{Description}\\
 The Enterprise JavaBeans is a component used by all Java-EE applications to encapsulate the various business logic of the application into reusable modules. Thus it contains the attributes and methods associated with the business logic module and hence can be treated as an stand alone unit that can be reused. The two primary EJBs are Session beans that represent a clients session and the data associated with it and a Message-driven bean that can a allow the component to receive messages asynchronously via event listeners. The system will make use of Stateless session EJBs in order to capture the back end services of the solution.\\\\
 \textbf{Reasons for use}\\
-The use of EJBs will ensure the modularity of the system and the re-usability of its components. Also within the Java-EE framework it is considered the core of the business tier and thus will be required.
+The use of EJBs will ensure the modularity of the system and the re-usability of its components. Also within the Java-EE framework it is considered the core of the business layer and thus will be required.
   
 
 \subsubsection{Java Naming and Directory Interface (JNDI)}
@@ -457,11 +493,11 @@ This will be used to provide a reporting infrastructure as needed by the system 
 \textbf{Description}\\
 Java library for working with real-world HTML. It provides a very convenient API for extracting and manipulating data, using the best of DOM, CSS, and jquery-like methods.\\\\
 \textbf{Reasons for use}\\
-Used to provide a pipe into the Google Scholar results.  
+Used to provide a means to integrate with the Google Scholar results via HTML scrapping.  
 
 \subsubsection{JSF Managed Beans}
 \textbf{Description}\\
-This is a standard POJO (Plain Old Java Object), which is used to provide encapsulated services to  front-end JSF pages. JSF access them via Expression Lanaguage. These beans can be used in conjunction with EJBs and CDI to communicate with the database or call back-end services of hosted by the server.\\\\
+This is a standard POJO (Plain Old Java Object), which is used to provide encapsulated services to  front-end JSF pages. JSF access them via Expression Language. These beans can be used in conjunction with EJBs and CDI to communicate with the database or call back-end services of hosted by the server.\\\\
 \textbf{Reasons for use}\\
 This technology is part of the JSF framework and is therefore required. It further also allows improved modularity and re-usability of components.
 
@@ -481,8 +517,32 @@ It is easy to use and provides a great number of effective features that will he
 \textbf{Description}\\
 This is a well-proven open-source relational database management system that provides extensive set of features for maintaining the data and database.\\\\
 \textbf{Reasons for use}\\
-It a is well-proven DBMS. Further since the data captured by the solution will fit well in a relation approach the DBMS will be efficient enough to meet the performance and scalability requirements of the solution.
+It a is well-proven DBMS. Further since the data captured by the solution will fit well in a relation approach the DBMS will be efficient enough to meet the performance and scalability requirements of the solution. It should be noted due to to financial constraints the system can not make use of ObjectDB which is an OODBMS which has various advantages over MySQL and is easily integrate-able with the JPA API. Thus at some point in time when financial backing provided this technology can be replaced by ObjectDB. 
 
+\subsubsection{Jackson XML and JSON processor}
+This technology provides a means to map POJOs without the need for annotations or other meta information to or from JSON or XML.\\\\
+\textbf{Reasons for use}\\
+It is well documented, matured and fast JSON and XML processor which does not need meta data and is excellent for converting dynamic data to and from text. Thus it is ideal for use in the RESTful web services and annotation processors.
+
+\subsubsection{Jersey}
+This technology is the default implementation of the JAX-RS API.\\\\
+\textbf{Reasons for use}\\
+It is used by Glassfish server and is also very mature implementation. Thus it is required by the project to provide RESTful web services.
+
+\subsubsection{Eclipse Link}
+This technology is the default implementation of the JPA API.\\\\
+\textbf{Reasons for use}\\
+It is used as the default implementation for the JPA API provided by Java EE. Therefore it is well documented and well tested.
+
+\subsubsection{Context and Dependency Injection (CDI)}
+This technology is used to provide a dependency injection framework for which to provide Inversion of control support to various components of the Java EE framework.\\\\
+\textbf{Reasons for use}\\
+This technology helps provide maintainable code and forms part of the core of Java EE thus it is required.
+
+\subsubsection{Javax Script library}
+This technology is used to parse and execute scripts from various supported scripting languages within the run-time of the software.\\\\
+\textbf{Reasons for use}\\
+This technology will help provide a means to allow for the creation of custom pre and post conditions that will used by the system.
 
 
 \newpage
