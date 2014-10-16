@@ -484,7 +484,7 @@ INSERT INTO PostDoc_DB.address (_country) VALUES("TestUniversity");
 
 INSERT INTO PostDoc_DB.person (_systemID,_fullName,_password,_title,_surname,_email,_addressLine1,_UpEmployee,_accountStatus) VALUES ('u12019837','Test','ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff','Mr','Tester','test@gmail.com',1,true, 'Active');
 INSERT INTO PostDoc_DB.employee_information (_employeeID, _physicalAddress, _position, _dateOfAppointment, _appointmentStatus, _department) VALUES('u12019837',2,'HOD','2001/01/20','full time',1);
-
+/*
 INSERT INTO PostDoc_DB.person_security_role (_personID, _roleID) VALUES ('u12019837',1),
 																		('u12019837',2),
 																		('u12019837',3),
@@ -495,7 +495,7 @@ INSERT INTO PostDoc_DB.person_security_role (_personID, _roleID) VALUES ('u12019
 																		('u12019837',8),
 																		('u12019837',9);
 
-
+*/
 USE PostDoc_Archive_DB;
 
 CREATE TABLE address  LIKE PostDoc_DB.address;
