@@ -10,8 +10,8 @@
 \usepackage{courier} % Required for the courier font
 \usepackage{color}
 \usepackage{grffile}
-\usepackage{hyperref}
 \usepackage{float}
+\usepackage{seqsplit}
 
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 
@@ -35,6 +35,7 @@
 \newcommand{\iteration}{1}
 \newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
 \newcommand{\project}{Post-Doctoral Application Management System}
+\newcommand{\javaInstall}{http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html}
 
 \begin{document}
 
@@ -109,9 +110,10 @@ Before the system can be deployed a number of software requires to be installed 
 \subsection{Java 8 SDK}
 This is the primary programming langauge which the system is written on and it provides both the compile and runtime environment for the system.
 \subsubsection{Installation} 
-The software can be downloaded from oracle on this link %\url{http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}
- and an overview of the installation can be found here %http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html
-  
+The software can be downloaded from oracle on this link \textbf{\seqsplit{http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}}  \\
+\\
+An overview of the installation can be found here \textbf{\seqsplit{http://docs.oracle.com/javase/8/docs/technotes/guides/install/install\_ overview.html}} 
+   
 \subsubsection{Configuration}
 No particular configuration is required. As long as this sdk is the default version on the machine/IDE being used for deployment, all aspects should run as expected.
 
@@ -119,10 +121,10 @@ No particular configuration is required. As long as this sdk is the default vers
 This is an application server which runs the Java EE 7 application.
 
 \subsubsection{Installation}
-All the required steps for installation are found here %https://glassfish.java.net/getstarted.html 
+All the required steps for installation are found here \textbf{\seqsplit{https://glassfish.java.net/getstarted.html}}.  
 
 \subsubsection{Configuration}
-The application requires the use of a MySQL database as a resource. To do this, the JDBC resources (which can be found under ~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ejb/src/main/setup/glassfish-resources.xml) most be loaded into the glassfish server by going to the Resources (under common task) - Add Resources (button)  and follow prompts. 
+The application requires the use of a MySQL database as a resource. To do this, the JDBC resources (which can be found under \textbf{\seqsplit{~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ejb/src/main/setup/glassfish-resources.xml}}) most be loaded into the glassfish server by going to the Resources (under common task) - Add Resources (button)  and follow prompts. 
 
 \textbf{Note:} The @user and @password of the JDBC resources needs to match up with the ones used in the MySQL server.  
 
@@ -130,21 +132,22 @@ The application requires the use of a MySQL database as a resource. To do this, 
 MySQL 5.6 acts as the persistance layer implementation of the system.
 
 \subsubsection{Installation}
-All the required installation knowledge can be found on this link %http://dev.mysql.com/doc/refman/5.6/en/installing.html 
+All the required installation knowledge can be found on this link \textbf{\seqsplit{http://dev.mysql.com/doc/refman/5.6/en/installing.html}} 
 
 \subsubsection{Configuration}
 A @user needs to be setup for which will all the required databases will be accessed under. 
-
+\\
+\\
 The Initilizing script needs to be ran to load all the required databases.
 
 \subsection{Netbeans} 
 Netbeans is the primary IDE in which the application was developed under.
 
 \subsubsection{Installation}
-All required information for installation can be found here %https://netbeans.org/community/releases/80/install.html
+All required information for installation can be found here \textbf{\seqsplit{https://netbeans.org/community/releases/80/install.html}}.
 
 \subsubsection{Configuration}
-The IDE must have the configured glassfish server registered under the services in its services group. All required information for this task can be found here %http://docs.oracle.com/cd/E19798-01/821-1770/gioew/index.html
+The IDE must have the configured glassfish server registered under the services in its services group. All required information for this task can be found here \textbf{\seqsplit{http://docs.oracle.com/cd/E19798-01/821-1770/gioew/index.html}}
 \\
 The IDE must have Java 8 sdk as the default Java platform.
 
@@ -153,7 +156,9 @@ The two forms of deployment could be achieved by the following steps:
 \subsection{Production Deployment}
 
 \subsubsection{Autodeployment}
-Glassfish provides a number of ways to deploy an application. The autodeploy method requires that the .war file be situated in the autodeploy (~/glassfish-4.0/glassfish/domains/domain1/autodeploy/) folder. Hence, PostDoctoralManagementApplication-web-0.0.war (found under ~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ear/target/PostDoctoralManagementApplication-ear-0.0/) should be copied to the autodeploy folder. The application should be ran when the server starts.
+Glassfish provides a number of ways to deploy an application. The autodeploy method requires that the .war file be situated in the autodeploy (\textbf{\seqsplit{~/glassfish-4.0/glassfish/domains/domain1/autodeploy/}}) folder.\\ 
+\\
+Hence, PostDoctoralManagementApplication-web-0.0.war (found under \textbf{\seqsplit{~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ear/target/PostDoctoralManagementApplication-ear-0.0/}}) should be copied to the autodeploy folder. The application should be ran when the server starts.
 
 \subsubsection{On demand deployment}
 The user is required to be logged on to the running glassfish server admin page (@host:4848). From there the on demand application deployment should be on the home page of the adminstration.
