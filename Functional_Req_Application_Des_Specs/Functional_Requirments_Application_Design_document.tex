@@ -36,10 +36,11 @@
 \newcommand{\Class}{COS\ 301 Final year project} % Course/class
 \newcommand{\pd}{Post-Doctoral}
 \newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
-\newcommand{\version}{3.0}
-\newcommand{\iteration}{5}
+\newcommand{\version}{4.0 (Final)}
+\newcommand{\iteration}{6}
 \newcommand{\client}{Ms. Cathy Sandis (UP DRIS)}
-\newcommand{\project}{Post-Doctoral Application Management System}
+\newcommand{\supervisor}{Prof. Stefan Gruner (SSFM Group)}
+\newcommand{\project}{Post-Doctoral management System}
 \newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 
 \begin{document}
@@ -59,8 +60,8 @@
 \large \bf \today\\
 \bf Version \version\\
 \bf Iteration \iteration\\[0.5em]
-\Large \bf Prepared for \client\\
-\Large \bf by
+\Large \bf Prepared for \\Client: \client\\Supervisor: \supervisor
+\Large \\\bf by \\
 \Large {\bf \ssr Group }\\[0.5em]
 \LARGE {\bf Group members}\\[0.25em]
 \large
@@ -146,7 +147,7 @@ Mathys Ellis (12019837) \\[8em]
 
 \subsection{Document purpose:}
 \vspace{0.2in}
-This functional requirements and application design document serves the purpose of providing a detailed breakdown of the SoftServe's Post-Doctoral application management system's expected functionality and how it will be realised in terms of application design. Further it defines the services contracts required by each of the stakeholders from the proposed software system. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project functional requirements and realisation thereof.
+This functional requirements and application design document serves the purpose of providing a detailed breakdown of the SoftServe's Post-Doctoral management system's expected functionality and how it will be realised in terms of application design. Further it defines the services contracts required by each of the stakeholders from the proposed software system. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project functional requirements and realisation thereof.
 
 \vspace{0.2in}
 
@@ -196,7 +197,7 @@ The requirements, vision and scope were elicited from the following sources:
 \section{Functional requirements}
 \subsection{Introduction} %Alfred
 \vspace{0.2in}
-This section outlines the functional requirements for SoftServe's Post-Doctoral application management system.
+This section outlines the functional requirements for SoftServe's Post-Doctoral management system.
 The required functionality, domain objects, process specification and use cases related to the functional requirements of the project will be discussed in this sections.
 \vspace{0.2in}
 
@@ -332,13 +333,20 @@ The following sections will discuss the required functionality of all the major 
 			\item A DRIS member must be able to forward any application through the various stages in the application pipeline (Submitted to recommend). 
 			\item A DRIS member must be able to rewind any application through the various stages in the application pipeline (Submitted to declined).  
 			\item Must allow the DRIS member to create forward and rewind report.		
+		\end{enumerate}
+		\item\textbf{Application success evaluation Services:}
+		This service provides the functionality required by the system to evaluate applications using a neural network which is stored on the system in order to determine the success of the application.
+		\begin{enumerate}
+			\item A DRIS member, Dean's Office member and HOD must be able to query the neural network for a particular application.
+			\item A System administrator must be able to create neural network for such an evaluation.
+			\item A system administrator must be able to train the neural network using already stored applications.					
 		\end{enumerate}		
 	\end{itemize}
-\newpage
+
 \subsubsection{Non-Application services}
 	\begin{itemize}
 		\item\textbf{Report services:}
-		The report services provides the reporting generation service for the DRIS in order to extract valuable information and allow them to provide electronic and hard copy data for review or archiving. The DRIS is the only stakeholder that will make use of this service. Note reports are temporal objects and do not get saved by the system.
+		The report services provides the reporting generation facilities for the DRIS in order to extract valuable information and allow them to provide electronic and hard copy data for review or archiving. The DRIS is the only stakeholder that will make use of this service. Note reports are temporal objects and do not get saved by the system.
 		\begin{itemize}
 			\item The DRIS member must be able to access a report generation tool which effectively allows them to:
 			\begin{enumerate}
@@ -437,9 +445,27 @@ The following sections will discuss the required functionality of all the major 
 			\item The service must be able to communicate with Google scholar and preform searches that is in accordance to fair usage policy.
 			\item Must be able to return the results of searches to the system in a system interpretable manner.  
 		\end{enumerate}
+		
+		\item\textbf{Pre post condition management services:}
+		This service must be able to load all the methods which have been demarcated to have pre post conditions and provide a means to evaluate them. 
+		\begin{enumerate}		
+			\item A system administrator must be able to edit the pre or post condition of any method in a scripting language.
+			\item The system must be able to evaluate pre and post conditions for any demarcated method.
+			\item The system may not be allowed to remove any records of such pre and post conditions.  
+		\end{enumerate}
+		
+		\item\textbf{Neural network management services:}
+		This service provides the system with a means to manage the neural networks store by the system. 
+		\begin{enumerate}		
+			\item A system administrator must be able to create, edit and remove a Neural network on the system.
+			\item A system administrator must be able to select the default neural network for the system.			
+			\item The system must be able to run an input vector through a neural network.
+			\item The system must be able to correct the neural network using back propagation and gradient descent and update the synapses accordingly. 
+		\end{enumerate}
 	\end{itemize}		
 \vspace{0.2in}
 
+\newpage
 \subsection{Use case diagrams}
 \begin{figure}[H]
 \centering	
@@ -597,6 +623,24 @@ The following sections will discuss the required functionality of all the major 
 \caption{Use case diagram of CV management service}
 \end{figure}
 
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Pre Post Condition Management Services1.jpg}}
+\caption{Use case diagram of Pre post condition management services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Neural Network Management Services1.jpg}}
+\caption{Use case diagram of Neural Network Management Services}
+\end{figure}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=1]{../Images_Docs/Diagrams/Use case diagrams/Application Success Evaluation Services1.jpg}}
+\caption{Use case diagram of Application success evaluation services}
+\end{figure}
+
 
 
 \newpage
@@ -625,7 +669,8 @@ This section states the ranking in terms of priority of the service use case per
 	\item Progress report management service: Critical		
 	\item Meeting management service: Important
 	\item Application progress viewer service: Important
-	\item Fast-forward and rewind service: Important		
+	\item Fast-forward and rewind service: Important
+	\item Application success evaluation service: Nice to have 		
 \end{itemize}
 
 \subsubsection{Non-Application services}
@@ -640,7 +685,9 @@ This section states the ranking in terms of priority of the service use case per
 	\item Archival services: Nice to have
 	\item Application import services: Nice to have
 	\item Google scholar services: Nice to have
-	\item Announcement services: Nice to have								
+	\item Announcement services: Nice to have
+	\item Neural network management services: Nice to have
+	\item Pre post condition management services: Nice to have								
 \end{itemize}
 
 
@@ -890,7 +937,28 @@ These are conditions that must be met by the system or user before they are allo
 		\begin{itemize}
 			\item Create CV: The system requires to create a CV for some user.
 			\item Update CV: The system requires to update a CV for an existing CV of a particular user who is the owner of the CV.					
-		\end{itemize}	
+		\end{itemize}
+	\item \textbf{Pre post condition management services}
+			\begin{itemize}
+				\item Find pre post condition method by class and name: Method must exist.
+				\item Evaluate post condition: Post condition script must exist.
+				\item Evaluate pre condition: Pre condition script must exist.
+				\item Update pre post conditional method: A valid method must be selected.	
+				\item Load all pre post conditional methods: There must be at least 1 pre post conditional method available. 			
+			\end{itemize}
+	\item \textbf{Neural network management services}
+			\begin{itemize}
+				\item Load all neural networks: There must be at least 1 neural network available.
+				\item Make neural network default network: A valid neural network must be selected.
+				\item Create a neural network: The system wants to create a neural network.
+				\item Update a neural network: A valid neural network has been selected.
+				\item Remove a neural network: A valid neural network has been selected.			
+			\end{itemize}
+	\item \textbf{CV management services}
+			\begin{itemize}
+				\item Create CV: The system requires to create a CV for some user.
+				\item Update CV: The system requires to update a CV for an existing CV of a particular user who is the owner of the CV.					
+			\end{itemize}	
 \end{itemize}	
 
 \subsubsection{Postconditions}

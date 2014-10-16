@@ -30,10 +30,10 @@
 \newcommand{\Class}{COS\ 301 Final year project} % Course/class
 \newcommand{\pd}{Post-Doctoral}
 \newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
-\newcommand{\version}{2.0}
-\newcommand{\iteration}{5}
+\newcommand{\version}{3.0 (Final)}
+\newcommand{\iteration}{6}
 \newcommand{\client}{Ms. Cathy Sandis (UP DRIS)}
-\newcommand{\project}{Post-Doctoral Application Management System}
+\newcommand{\project}{Post-Doctoral management System}
 \newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 \begin{document}
 
@@ -145,7 +145,7 @@ The quality requirements and aspects of the architectural requirements, were eli
 \section{Architecture requirements}
 
 \subsection{Architectural Scope}
-This section discusses the scope that the software architecture of the system needs to cover:
+This section discusses the architectural scope that the software architecture of the system must cover in order to produce a compliant system:
 \begin{itemize}
 \item A persistence infrastructure using a DBMS to facilitate the storage of the various domain objects (e.g CVs, DRIS information, and Applications). So to allow the system to store and centralise the various data that the system will be handling as outlined in the functional requirements and application document.
 \item A multi-user session infrastructure to assist in realizing the security requirements of authenticating users and their actions.
@@ -155,7 +155,7 @@ This section discusses the scope that the software architecture of the system ne
 \item An email infrastructure for the system to use in order to provide notification support.
 \item A action logging infrastructure to track user activity on the system, in order to provide audit-ability.
 \item A gateway infrastructure to provide access control to services provided by the system.
-
+\item A pre post condition infrastructure to dynamically change per and post conditions for certain operations in the system.
 \end{itemize}
 
 \newpage
@@ -240,12 +240,12 @@ This section describes the various architectural patterns that will be employed 
 \subsection{Layered pattern}
 The system will explicitly employ a multi-tier/layered architectural pattern to form what is known as the Java Enterprise Edition system architecture. This will allow the client(s) to be decoupled from the server. This pattern is widely used and provides various benefits. Some benefits include modularity, encapsulation, re-usability of components, decoupling, system maintainability, pluggable-ness of layers and complexity reduction [Ali Babar, M.] [Oracle, 2014][Kayal, D., 2008]\\
 \\
-The Java EE system architecture is designed to support highly scalable, distributed, transactional and portable applications that use the speed, security, and reliability of a Java EE server to provide powerful enterprise applications. [Oracle, 2014] For this reason SoftServe believes this system architecture is well suited for the development of the Post-Doctoral application management system as it will satisfy the requirements in terms of quality and functional as stipulated by the client. The following diagram provides the system architecture that will be employed by the system:\\
+The Java EE system architecture is designed to support highly scalable, distributed, transactional and portable applications that use the speed, security, and reliability of a Java EE server to provide powerful enterprise applications. [Oracle, 2014] For this reason SoftServe believes this system architecture is well suited for the development of the Post-Doctoral management system as it will satisfy the requirements in terms of quality and functional as stipulated by the client. The following diagram provides the system architecture that will be employed by the system:\\
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{../Images_Docs/Diagrams/Architecture/Java EE system architecture.jpg}
-\caption{Java EE system architecture with respect to the Post-Doctoral application management system}
+\caption{Java EE system architecture with respect to the Post-Doctoral management system}
 \end{figure}
 
 \subsubsection{Client layer}
@@ -272,7 +272,8 @@ The controller is the controlling mechanism of the system and provides the funct
 The Model is the data storage component of the system and provides the mechanisms necessary to store data and use it for use by a system. Thus this represents the EIS/Persistence layer in Java EE as it deals with the data stores. In JSF this is the persistence layer.
 
 \subsection{Pipes and Filters}
-This pattern is a consequence of the layered pattern employed by the system. Since the data that passes from layer to layer is encapsulated by a logical pipe which is the path of the data flow in the system. In this pipe the layers and the operations within the layers which the data flows through acts as filters as they may add or remove data from the objects passing in or add or remove inputs to the next layer or operation.  
+This pattern is a consequence of the layered pattern employed by the system. Since the data that passes from layer to layer is encapsulated by a logical pipe which is the path of the data flow in the system. In this pipe the layers and the operations within the layers which the data flows through acts as filters as they may add or remove data from the objects passing in or add or remove inputs to the next layer or operation.\\
+The application work flow can also be  seen as a pipe and filter which is bidirectional. Where the pipe is the process flow and the filters the stages in the work flow. It is bidirectional since the applications can move forward and backwards through the work flow.  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Architectural Tactics and Strategies} % skipped till further notice.
 This section describes the architectural techniques which will be used in order for the system to satisfy the quality requirements. 
