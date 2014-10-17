@@ -4,7 +4,7 @@
  * that is not approved by the stated authors is prohibited.
  */
 
-package com.softserve.webservices;
+package com.softserve.webservices.services;
 
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.util.HashUtil;

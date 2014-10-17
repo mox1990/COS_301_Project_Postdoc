@@ -91,7 +91,7 @@ Mathys Ellis (12019837) \\[8em]
 This document is written to descride the deployment process required to install the Postdoctoral Management system on a server.
 \subsection{Document purpose:}
 \vspace{0.2in}
-This document serves as a general TODO list since there existe multiple platforms and environments in which a server can be run. It has been written under the assumption that the reader has basic knowledge of all the components being used in the system. A variation of steps will be provided for the Ubuntu and Windows operating systems. In addition, the document will provide two different implementations for developer deployment and production deployment. 
+This document serves as a general TODO list since there existe multiple platforms and environments in which a server can be run. It has been written under the assumption that the reader has basic knowledge of all the components being used in the system. A variation of steps will be provided for the Ubuntu and Windows operating systems. The differences in installing the software is handled in the links provided. In addition, the document will provide two different implementations for developer deployment and production deployment. 
 
 \vspace{0.2in}
 
@@ -137,10 +137,14 @@ MySQL 5.6 acts as the persistence layer implementation of the system.
 All the required installation knowledge can be found on this link \textbf{\seqsplit{http://dev.mysql.com/doc/refman/5.6/en/installing.html}} 
 
 \subsubsection{Configuration}
-A @user needs to be setup for which will all the required databases will be accessed under. This user information needs to be propagated to the glassfish resources in both the glassfish server and the projects glassfish-resourcs.xml file.
+A @user needs to be setup for which all the required databases will be accessed under. This user information needs to be propagated to the glassfish resources in both the configured glassfish server and the projects glassfish-resourcs.xml file.
 \\
 \\
+<<<<<<< HEAD
 To setup the tables required by the application the initilizing script (found under ~/SourceCode/Database/InitialisePostDocDB) needs to be in the configured MySQL.
+=======
+To setup the tables required by the application the initilizing script (found under ~/Source\_Code/Database/InitialisePostDoc\_DB) needs to be in the configured MySQL. This action can be accomplished through running the script on MySQL workbench (which is avaible on both operating systems and should be seen in the availible via the installation).
+>>>>>>> 0c71f4c212991db56b40f66b326209aff464f5ac
 
 \subsection{Netbeans} 
 Netbeans is the primary IDE in which the application was developed under.
@@ -151,10 +155,12 @@ All required information for installation can be found here \textbf{\seqsplit{ht
 \subsubsection{Configuration}
 The IDE must have the configured glassfish server registered under the services in its services group. All required information for this task can be found here \textbf{\seqsplit{http://docs.oracle.com/cd/E19798-01/821-1770/gioew/index.html}}
 \\
-The IDE must have Java 8 sdk as the default Java platform.
+The IDE must have Java 8 sdk as the default Java platform.\\
+\\
+At this point all the required software should have been installed ann properly configured. Now we shall focus on the actual deployment of the document.
 
 \section{Deployment}
-The two forms of deployment could be achieved by the following steps: 
+Glassfish server provideds the deployment methods which we are going to use to achieve both production and development deployment. The two forms of deployment could be achieved by the following steps: 
 \subsection{Production Deployment}
 
 \subsubsection{Autodeployment}
@@ -163,11 +169,11 @@ Glassfish provides a number of ways to deploy an application. Both are provided 
 Hence, PostDoctoralManagementApplication-web-0.0.war (found under \textbf{\seqsplit{~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ear/target/PostDoctoralManagementApplication-ear-0.0/}}) should be copied to the autodeploy folder. The application should be ran when the server starts.
 
 \subsubsection{On demand deployment}
-The user is required to be logged on to the running glassfish server admin page (@host:4848). From there the on demand application deployment should be on the home page of the adminstration.
+The user is required to be logged on to the running glassfish server admin page (at the web address localhost:4848). From there the on demand application deployment should be on the home page of the adminstration.
 
 \subsection{Developer Deployment}
 A developer could deploy the app using Netbeans "run web application" option (which will start the glassfish server and deploy on it).\\
 \\
-All these steps will provide a the needed
+All these steps will provide the needed actions to successfully deploy the application. The variants between windows and linux lay within the installions from which point both processes are similar.
 
 \end{document}
