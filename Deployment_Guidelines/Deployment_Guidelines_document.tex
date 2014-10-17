@@ -89,7 +89,7 @@ Mathys Ellis (12019837) \\[8em]
 This document is written to descride the deployment process required to install the Postdoctoral Management system on a server.
 \subsection{Document purpose:}
 \vspace{0.2in}
-This document servers as a general TODO list since we have multiple platforms and environments in which server can be run on. It has been written under the assumption that the reader has basic knowledge of all the components being used in the system. A variation of steps will be provided for the Ubuntu and Windows operating system. In addition, the document will provide two different implementations for developer deployment and production deployment. 
+This document serves as a general TODO list since there existe multiple platforms and environments in which a server can be run. It has been written under the assumption that the reader has basic knowledge of all the components being used in the system. A variation of steps will be provided for the Ubuntu and Windows operating systems. In addition, the document will provide two different implementations for developer deployment and production deployment. 
 
 \vspace{0.2in}
 
@@ -104,11 +104,12 @@ The system will require the following to be achieve successful deployment.
 \item MySQL 5.6
 \item Netbeans 8 (for developer deployment)
 \end{itemize}
+The deployer also needs to have the projects latest repo downloaded on their system. the repo can be found here \textbf{\seqsplit{https://github.com/mox1990/Project-Postdoc.git}}.
 
 \section{Prequiste software}
-Before the system can be deployed a number of software requires to be installed and correctly configured. The following a number of steps to be followed to achieve this goal with the required software.
+Before the system can be deployed a number of software requires to be installed and correctly configured. The following a number of steps to be followed to achieve this goal.
 \subsection{Java 8 SDK}
-This is the primary programming langauge which the system is written on and it provides both the compile and runtime environment for the system.
+This is the primary programming langauge which the system is written in and it provides both the compile and runtime environment of the system.
 \subsubsection{Installation} 
 The software can be downloaded from oracle on this link \textbf{\seqsplit{http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}}  \\
 \\
@@ -126,8 +127,7 @@ All the required steps for installation are found here \textbf{\seqsplit{https:/
 \subsubsection{Configuration}
 The application requires the use of a MySQL database as a resource. To do this, the JDBC resources (which can be found under \textbf{\seqsplit{~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ejb/src/main/setup/glassfish-resources.xml}}) most be loaded into the glassfish server by going to the Resources (under common task) - Add Resources (button)  and follow prompts. 
 
-\textbf{Note:} The @user and @password of the JDBC resources needs to match up with the ones used in the MySQL server.  
-
+\textbf{Note:} The @user and @password of the JDBC resources needs to match up with the ones used in the MySQL server. Also note that glassfish server runs using the java runtime environment and if there multiple version of the environments on a machine it might not run on your desired one. So caution must be taking when running the glassfish server for deployment.\\
 \subsection{MySQL 5.6}
 MySQL 5.6 acts as the persistance layer implementation of the system.
 
@@ -135,10 +135,10 @@ MySQL 5.6 acts as the persistance layer implementation of the system.
 All the required installation knowledge can be found on this link \textbf{\seqsplit{http://dev.mysql.com/doc/refman/5.6/en/installing.html}} 
 
 \subsubsection{Configuration}
-A @user needs to be setup for which will all the required databases will be accessed under. 
+A @user needs to be setup for which will all the required databases will be accessed under. This user information needs to be propagated to the glassfish resources in both the glassfish server and the projects glassfish-resourcs.xml file.
 \\
 \\
-The Initilizing script needs to be ran to load all the required databases.
+To setup the tables required by the application the initilizing script (found under ~/Source_Code/Database/InitialisePostDoc_DB) needs to be in the configured MySQL.
 
 \subsection{Netbeans} 
 Netbeans is the primary IDE in which the application was developed under.
@@ -156,28 +156,16 @@ The two forms of deployment could be achieved by the following steps:
 \subsection{Production Deployment}
 
 \subsubsection{Autodeployment}
-Glassfish provides a number of ways to deploy an application. The autodeploy method requires that the .war file be situated in the autodeploy (\textbf{\seqsplit{~/glassfish-4.0/glassfish/domains/domain1/autodeploy/}}) folder.\\ 
+Glassfish provides a number of ways to deploy an application. Both are provided under the assumption the your glassfish server runs using the java 8 runtime environment. The autodeploy method requires that the .war file be situated in the autodeploy (\textbf{\seqsplit{~/glassfish-4.0/glassfish/domains/domain1/autodeploy/}}) folder.\\ 
 \\
 Hence, PostDoctoralManagementApplication-web-0.0.war (found under \textbf{\seqsplit{~/PostDoctoralManagementApplication/PostDoctoralManagementApplication-ear/target/PostDoctoralManagementApplication-ear-0.0/}}) should be copied to the autodeploy folder. The application should be ran when the server starts.
 
 \subsubsection{On demand deployment}
 The user is required to be logged on to the running glassfish server admin page (@host:4848). From there the on demand application deployment should be on the home page of the adminstration.
 
-\subsection{References:}
-\vspace{0.1in}
-\vspace{0.5in}
-
-
-\newpage
-\section{Glossary:}
-\vspace{0.2in}
-
-\begin{itemize}
-
-\item \textbf{API} - Application Programming Interface
- 
-
-
-\end{itemize}	
+\subsection{Developer Deployment}
+A developer could deploy the app using Netbeans "run web application" option (which will start the glassfish server and deploy on it).\\
+\\
+All these steps will provide a the needed
 
 \end{document}
