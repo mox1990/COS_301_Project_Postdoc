@@ -1,0 +1,522 @@
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.8.1)  17 OCT 2014 07:31
+entering extended mode
+**Project_Management_document.tex
+("C:\sas\Project-Postdoc\Project Management\Project_Management_document.tex"
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
+abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
+croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
+lician, german, german-x-2012-05-30, greek, gujarati, hindi, hungarian, iceland
+ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
+ lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
+german-x-2012-05-30, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
+ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
+an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
+ishmax, welsh, loaded.
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\size12.clo"
+File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\babel\babel.sty"
+Package: babel 2008/07/08 v3.8m The Babel package
+
+*************************************
+* Local config file bblopts.cfg used
+*
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\bblopts.cfg"
+File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\babel\english.ldf"
+Language: english 2005/03/30 v3.3o English support from the babel system
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\babel\babel.def"
+File: babel.def 2008/07/08 v3.8m Babel common definitions
+\babel@savecnt=\count87
+\U@D=\dimen103
+)
+\l@canadian = a dialect from \language\l@american 
+\l@australian = a dialect from \language\l@british 
+\l@newzealand = a dialect from \language\l@british 
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+Package: inputenc 2008/03/30 v1.1d Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\ucs\utf8x.def"
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\ucs\ucs.sty"
+Package: ucs 2013/05/11 v2.2 UCS: Unicode input support
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\ucs\uni-global.def"
+File: uni-global.def 2013/05/13 UCS: Unicode global data
+)
+\uc@secondtry=\count88
+\uc@combtoks=\toks16
+\uc@combtoksb=\toks17
+\uc@temptokena=\toks18
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\tools\longtable.sty"
+Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip43
+\LTright=\skip44
+\LTpre=\skip45
+\LTpost=\skip46
+\LTchunksize=\count89
+\LTcapwidth=\dimen104
+\LT@head=\box26
+\LT@firsthead=\box27
+\LT@foot=\box28
+\LT@lastfoot=\box29
+\LT@cols=\count90
+\LT@rows=\count91
+\c@LT@tables=\count92
+\c@LT@chunks=\count93
+\LT@p@ftn=\toks19
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdfpages\pdfpages.sty"
+Package: pdfpages 2012/08/31 v0.4t Insert pages of external PDF documents (AM)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\ifthen.sty"
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\tools\calc.sty"
+Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count94
+\calc@Bcount=\count95
+\calc@Adimen=\dimen105
+\calc@Bdimen=\dimen106
+\calc@Askip=\skip47
+\calc@Bskip=\skip48
+LaTeX Info: Redefining \setlength on input line 76.
+LaTeX Info: Redefining \addtolength on input line 77.
+\calc@Ccount=\count96
+\calc@Cskip=\skip49
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\eso-pic\eso-pic.sty"
+Package: eso-pic 2010/10/06 v2.0c eso-pic (RN)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\atbegshi.sty"
+Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks20
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\xcolor\xcolor.sty"
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+\Gread@gobject=\count97
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+)
+\Gin@req@height=\dimen107
+\Gin@req@width=\dimen108
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdfpages\pppdftex.def"
+File: pppdftex.def 2012/08/31 v0.4t Pdfpages driver for pdfTeX (AM)
+)
+\AM@pagebox=\box30
+\AM@toc@title=\toks21
+\c@AM@survey=\count98
+\AM@templatesizebox=\box31
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\lastpage\lastpage.sty"
+Package: lastpage 2013/01/28 v1.2l Refers to last page's name (HMM; JPG)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\fancyhdr\extramarks.sty"
+\@temptokenb=\toks22
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
+\lst@mode=\count99
+\lst@gtempboxa=\box32
+\lst@token=\toks23
+\lst@length=\count100
+\lst@currlwidth=\dimen109
+\lst@column=\count101
+\lst@pos=\count102
+\lst@lostspace=\dimen110
+\lst@width=\dimen111
+\lst@newlines=\count103
+\lst@lineno=\count104
+\lst@maxwidth=\dimen112
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+\c@lstnumber=\count105
+\lst@skipnumbers=\count106
+\lst@framebox=\box33
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
+File: listings.cfg 2007/02/22 1.4 listings configuration
+))
+Package: listings 2007/02/22 1.4 (Carsten Heinz)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\courier.sty"
+Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grffile.sty"
+Package: grffile 2012/04/05 v1.16 Extended file name support for graphics (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvsetkeys.sty"
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty"
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package grffile Info: Option `multidot' is set to `true'.
+Package grffile Info: Option `extendedchars' is set to `false'.
+Package grffile Info: Option `space' is set to `true'.
+Package grffile Info: \Gin@ii of package `graphicx' fixed on input line 486.
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count107
+\float@exts=\toks24
+\float@box=\box34
+\@float@everytoks=\toks25
+\@floatcapt=\box35
+)
+("C:\sas\Project-Postdoc\Project Management\Project_Management_document.aux")
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\ucs\ucsencs.def"
+File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
+)
+\AtBeginShipoutBox=\box36
+
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count108
+\scratchdimen=\dimen113
+\scratchbox=\box37
+\nofMPsegments=\count109
+\nofMParguments=\count110
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count111
+\MPscratchDim=\dimen114
+\MPnumerator=\count112
+\makeMPintoPDFobject=\count113
+\everyMPtoPDFconversion=\toks27
+)
+Package lastpage Info: Please have a look at the pageslts package at
+(lastpage)             http://www.ctan.org/tex-archive/ 
+(lastpage)             macros/latex/contrib/pageslts/ 
+(lastpage)             or
+(lastpage)             http://www.ctan.org/tex-archive/ 
+(lastpage)             install/macros/latex/contrib/pageslts.tds.zip
+(lastpage)             ! on input line 38.
+\c@lstlisting=\count114
+ <../Images_Docs/logo.png, id=1, 369.63094pt x 170.88844pt>
+File: ../Images_Docs/logo.png Graphic file (type png)
+
+<use ../Images_Docs/logo.png>
+Package pdftex.def Info: ../Images_Docs/logo.png used on input line 46.
+(pdftex.def)             Requested size: 369.63002pt x 170.88802pt.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\ucs\uni-32.def"
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 69.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 69.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 69.
+ [1
+
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map} <C:/sas/Project-Postdoc/Im
+ages_Docs/logo.png>] [2] ("C:\sas\Project-Postdoc\Project Management\Project_Ma
+nagement_document.toc")
+\tf@toc=\write3
+ [3]
+("C:\sas\Project-Postdoc\Project Management\Project_Management_document.lof")
+\tf@lof=\write4
+
+[4] [5] [6]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 113.
+
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 113.
+ [7]
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 205--205
+[]|\OT1/cmr/m/n/12 23/05/2014 -
+ []
+
+
+Underfull \hbox (badness 1571) in paragraph at lines 207--207
+[]|\OT1/cmr/m/n/12 API and in-ter-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
+[]|\OT1/cmr/m/n/12 30/05/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 209--209
+[]|\OT1/cmr/m/n/12 Research into
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 209--209
+\OT1/cmr/m/n/12 pos-si-ble awe
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 209--209
+\OT1/cmr/m/n/12 fac-tors for
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 209--209
+[]|\OT1/cmr/m/n/12 30/05/2014 -
+ []
+
+
+Underfull \hbox (badness 3058) in paragraph at lines 211--211
+[]|\OT1/cmr/m/n/12 Unit and in-te-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
+[]|\OT1/cmr/m/n/12 12/06/2014 -
+ []
+
+
+Underfull \hbox (badness 3058) in paragraph at lines 215--215
+[]|\OT1/cmr/m/n/12 Unit and in-te-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 217--217
+[]|\OT1/cmr/m/n/12 Implementation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 217--217
+[]|\OT1/cmr/m/n/12 20/06/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 219--219
+[]|\OT1/cmr/m/n/12 Holiday re-port
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 221--221
+[]|\OT1/cmr/m/n/12 Holiday re-port
+ []
+
+
+Underfull \hbox (badness 1502) in paragraph at lines 223--223
+[]|\OT1/cmr/m/n/12 Beta ver-sion is
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--227
+[]|\OT1/cmr/m/n/12 Implementation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--227
+[]|\OT1/cmr/m/n/12 26/07/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 229--229
+[]|\OT1/cmr/m/n/12 Off-line test-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 229--229
+[]|\OT1/cmr/m/n/12 25/07/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--235
+[]|\OT1/cmr/m/n/12 Phase one of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--235
+\OT1/cmr/m/n/12 project com-
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 238
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--241
+[]|\OT1/cmr/m/n/12 On-line test-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--241
+[]|\OT1/cmr/m/n/12 19/08/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 243--243
+\OT1/cmr/m/n/12 ple-men-ta-tion
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 243--243
+[]|\OT1/cmr/m/n/12 16/09/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 263--263
+[]|\OT1/cmr/m/n/12 04/10/2014 -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 265--265
+[]|\OT1/cmr/m/n/12 Post Doc-toral
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 265--265
+\OT1/cmr/m/n/12 Sys-tem fi-nal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--269
+[]|\OT1/cmr/m/n/12 Project Day
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--269
+[]|\OT1/cmr/m/n/12 10/10/2014 -
+ []
+
+[9] [10] [11] [12] [13] [14]
+<../Images_Docs/Burn.png, id=52, 438.13687pt x 266.49562pt>
+File: ../Images_Docs/Burn.png Graphic file (type png)
+
+<use ../Images_Docs/Burn.png>
+Package pdftex.def Info: ../Images_Docs/Burn.png used on input line 373.
+(pdftex.def)             Requested size: 328.60184pt x 199.87122pt.
+
+<../Images_Docs/model.jpg, id=53, 384.83775pt x 317.38576pt>
+File: ../Images_Docs/model.jpg Graphic file (type jpg)
+
+<use ../Images_Docs/model.jpg>
+Package pdftex.def Info: ../Images_Docs/model.jpg used on input line 380.
+(pdftex.def)             Requested size: 288.6276pt x 238.03873pt.
+ 
+AED: lastpage setting LastPage
+[15 <C:/sas/Project-Postdoc/Images_Docs/Burn.png> <C:/sas/Project-Postdoc/Image
+s_Docs/model.jpg>]
+("C:\sas\Project-Postdoc\Project Management\Project_Management_document.aux") )
+ 
+Here is how much of TeX's memory you used:
+ 5101 strings out of 493921
+ 72953 string characters out of 3147280
+ 172616 words of memory out of 3000000
+ 8313 multiletter control sequences out of 15000+200000
+ 8500 words of font info for 30 fonts, out of 3000000 for 9000
+ 841 hyphenation exceptions out of 8191
+ 37i,8n,39p,468b,354s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Prog
+ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on Project_Management_document.pdf (15 pages, 155269 bytes).
+PDF statistics:
+ 68 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+

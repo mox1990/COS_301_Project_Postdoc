@@ -150,9 +150,14 @@ The requirements, vision and scope were elicited from the following sources:
 
 \vspace{0.5in}
 
+
 \newpage
+\section{Testing Methodology}
+We obtained the tests through the means of graphs which followed all the possible paths that can be followed by using the service, the pre and post conditions stated in the Functional Requirements Document. As a result of this process mentioned above, we can assume that the test cover all the functions as stated by the Functional Requirement Documentation. The section below lists all the unit tests as well as the a description of what the function does. 
+
 
 \section{Unit Testing}
+ 
 \subsection{ApplicationProgressViewer}
 
 \begin{center}
@@ -772,7 +777,215 @@ Description: & To test EJB's function to allow a HOD to ammend an application. \
 \end{tabular}
 \end{center}
 
+\subsection{Location Management}
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
 
+ Name: & testCreateInstitution\\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM1 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM1 \\
+\hline
+Description: & To test out the ability to create an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testCreateFaculty\\ 
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM2 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM2 \\
+\hline
+Description: & To test out the ability to create an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testCreateDepartment\\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM3 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM3 \\
+\hline
+Description: & To test out the ability to create a department  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testUpdateInstitution\\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM4 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM4 \\
+\hline
+Description: & To test out the ability to update an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testUpdateDepartment \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM5 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM5 \\
+\hline
+Description: & To test out the ability to update a department  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetInstitution \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM6 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM6 \\
+\hline
+Description: & To test out the ability to get an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetAllFacultiesAtAnInstitution \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM7 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM7 \\
+\hline
+Description: & To test out the ability to get all the faculties at an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetAllDepartmentForAnInstitution \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM8 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM8 \\
+\hline
+Description: & To test out the ability to get all departments at an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetInstitution \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM9 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM9 \\
+\hline
+Description: & To test out the ability to get an institution  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetFaculty \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM10 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM10 \\
+\hline
+Description: & To test out the ability to get a faculty \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetDepartment \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v LM11 \\
+\hline
+Module:& Location Management \\
+\hline
+Function & LM11 \\
+\hline
+Description: & To test out the ability to get a department \\
+\hline
+\end{tabular}
+\end{center}
 
 \subsection{Meeting Management}
 \begin{center}
@@ -1051,7 +1264,7 @@ Description: & To test out see if the referee has been added to the application 
 \begin{tabular}{|l|p{12cm}|}
 \hline
 
- Name: & tesSubmitApplicationNull  \\
+ Name: & testSubmitApplicationNull  \\
 \hline
 Level: & Unit \\
 \hline
@@ -1073,7 +1286,7 @@ Description: & To test out see if the application has been submitted with null v
 \begin{tabular}{|l|p{12cm}|}
 \hline
 
- Name: & tesSubmitApplication \\
+ Name: & testSubmitApplication \\
 \hline
 Level: & Unit \\
 \hline
@@ -1087,6 +1300,180 @@ Description: & To test out see if the application has been submitted   \\
 \hline
 
 %\end{tabbing}
+\end{tabular}
+\end{center}
+
+\subsection{Neural Networks}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testLoadAllNeuralNetworks \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN1 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN1 \\
+\hline
+Description: & To test out the ability to load all the neural networks  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testGetDefaultlNeuralNetwork \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN2 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN2 \\
+\hline
+Description: & To test out the ability to get the default neural network  \\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testCreateNeuralNetworks \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN3 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN3 \\
+\hline
+Description: & To test out the ability to create a neural network  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testMakeNeuralNetworkDefaultNetwork \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN4 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN4 \\
+\hline
+Description: & To test out the ability to make the neural network the default network  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testUpdateNeuralNetwork \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN5 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN5 \\
+\hline
+Description: & To test out the ability to update the neural network  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testUpdateNeuralNetworkSynapses \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN6 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN6 \\
+\hline
+Description: & To test out the ability to update the neural network synapses  \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testRemoveNeuralNetwork \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN7 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN7 \\
+\hline
+Description: & To test out the ability to remove a neural network   \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testCorrectNeuralNetwork \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN8 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN8 \\
+\hline
+Description: & To test out the ability to correct a neural network   \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{|l|p{12cm}|}
+\hline
+
+ Name: & testTrainNeuralNetwork \\
+ \hline
+Level: & Unit \\
+\hline
+TestCode: & v NN9 \\
+\hline
+Module:& Neural Networks \\
+\hline
+Function & NN9 \\
+\hline
+Description: & To test out the ability to train a neural network   \\
+\hline
 \end{tabular}
 \end{center}
 
@@ -1899,6 +2286,11 @@ Using a scale of 1 to 5, where 1 is Strongly Disagree and 5 is Strongly Agree
 \caption{Table displaying the results from the tests}
 \end{figure}
 
+In essence, the users found the application easy to use as they could each complete the tasks they were required to complete successfully and with ease. The users further indicated that they were generally pleased and happy with the application.
+
+However users felt that the application could have been designed to provide helpful error messages and a better way to navigate through the system.
+
+With the results from our usability test we can say that our product gave the users a satisfactory user experience. Our product was able to achieve its intended use and would make the processes involved in the Post Doctoral Management easier to manage. Also, the product was designed well enough as users indicated in the satisfactory questionnaire and we were able to meet the usability goals. So our product would be good enough to undergo a field test/study (with some minor editions to it as pointed out by our users) 
 
 \newpage
 
@@ -1908,16 +2300,7 @@ Using a scale of 1 to 5, where 1 is Strongly Disagree and 5 is Strongly Agree
 
 \begin{itemize}
 
-\item \textbf{API} - Application Programming Interface
 \item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
-\item \textbf{CV} - Curriculum Vita
-\item \textbf{HTML} - Hyper Text Mark-up Language
-\item \textbf{Java EE} - Java Enterprise Edition
-\item \textbf{NRF} - National Research Foundation
-\item \textbf{PhD} - A doctoral degree in a particular field of study.
-\item \textbf{PDF} - Portable Document Format file
-\item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
-\item \textbf{Use case} - A visual depiction of a service or group of services.
 \item \textbf{UP} - University of Pretoria
  
 

@@ -1,0 +1,13 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{4}
+\contentsline {section}{\numberline {2}What is a Post Doctoral Management System?}{4}
+\contentsline {section}{\numberline {3}Post Doctoral Management System for End Users}{4}
+\contentsline {section}{\numberline {4}Objectives of the User Manaul}{5}
+\contentsline {section}{\numberline {5}Getting Started}{6}
+\contentsline {section}{\numberline {6}System Requirements}{6}
+\contentsline {section}{\numberline {7}Creating a User Account(Prospective Fellows)}{7}
+\contentsline {section}{\numberline {8}Logging on to the System}{8}
+\contentsline {section}{\numberline {9}Main Menu}{9}
+\contentsline {section}{\numberline {10}Application Services}{10}
+\contentsline {section}{\numberline {11}Navigation Bar}{11}
+\contentsline {section}{\numberline {12}Bread Crumbs}{12}
