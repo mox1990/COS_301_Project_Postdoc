@@ -75,24 +75,9 @@ Mathys Ellis (12019837) \\[8em]
 \hline
  Date & Version & Description &  Person \\
 \hline
-10/02/2014 & v 0.0 & Original SRS document created & Mathys Ellis \\
+17/10/2014 & v 1.0 & Revised and finalised & Mathys Ellis \\
 \hline
-02/03/2014 & v 0.1 & Added to glossary & Mathys Ellis \\
-\hline
-05/03/2014 & v 0.3 & Added Introduction, Vision, Background & Carlo Machaba \\
-\hline
-06/03/2014 & v 0.4 & Added open issues. Modified some sections & Alfred Ngako \\
-\hline
-06/03/2014 & v 0.5 & Added methodology, scope and limitations & Mathys Ellis \\
-\hline
-08/03/2014 & v 0.6 & Added some wrapping to the change log which is now a table & Alfred Ngako \\
-\hline
-16/03/2014 & v 0.8 & Did some restructuring and document formatting & Mathys Ellis \\
-\hline
-17/03/2014 & v 0.8 & Also added to the glossary & Mathys Ellis \\
-\hline
-12/05/2014 & v 0.9 & Created new vision and scope document. Transferred necessary content from old SRS document. Performed editing and restructuring of document. Added exclusions & Mathys Ellis \\
-\hline
+
 
 %\end{tabbing}
 \end{tabular}
@@ -106,7 +91,7 @@ Mathys Ellis (12019837) \\[8em]
 
 \subsection{Document purpose:}
 \vspace{0.2in}
-This vision and scope document serves the purpose of providing a detailed overview of the project's scope and its vision as well the goals that SoftServe's Post-Doctoral application management system wishes to satisfy. Further it defines the abstract interaction of stakeholders with the proposed software system. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of project scope.
+This non-functional testing document serves the purpose of providing a detailed testing plan and test cases for non-functional testing of the system. Therefore the user acceptance testing of the system is covered by this document. Thus this document serves as a contract between SoftServe and the client, Mrs Cathy Sandis of the DRIS of the University of Pretoria in terms of non-functional quality assurance.
 
 \vspace{0.2in}
 
@@ -115,22 +100,7 @@ This vision and scope document serves the purpose of providing a detailed overvi
 \begin{flushleft}
 The documentation and software development methodology used by the project adhere to the guidelines set out by the agile method. Thus this document has undergone and will undergo various iterations that may extend or reduce the contents of the document.\\
 
-This document was created using the requirement elicitation techniques and requirement definitions as specified by Klaus Pohl’s book Requirements Engineering: Fundamentals, Principles, and Techniques [Dr.Phol, K., 2010].
-The requirements, vision and scope were elicited from the following sources:
-\begin{itemize}
-	\item Numerous interviews with the client.
-	\item On-line research into UP Post doctoral applications.
-	\item Correspondence with the UP IT department.
-	\item Collecting and analysing various documents such as:
-		\begin{itemize}
-			\item The initial project request document
-			\item Application forms
-			\item Renewal forms
-			\item CV templates
-			\item Approval and recommendation forms
-		\end{itemize}
-\end{itemize}
-\end{flushleft}	
+The document was formualated using techniques described by Ammann P. and Offutt J.. Also used were techniques and skills obtained from the COS 301 course. 
 
 \vspace{0.5in}
 
@@ -138,25 +108,22 @@ The requirements, vision and scope were elicited from the following sources:
 \vspace{0.1in}
 \begin{itemize}
 \item Documentation formulation tool: LaTeX
-\item ERD Crow-Foot notation
-\item UML 2.0
 \end{itemize}
 
 \vspace{0.2in}
-
 \subsection{References:}
 \vspace{0.1in}
 \begin{itemize}
-\item Dr.Phol, K., 2010, \textit{Requirements Engineering: Fundamentals, Principles, and Techniques}, Springer, Heidelberg.
+\item Ammann P., Offutt J., 2009, \textit{Introduction to software testing}, Cambridge university press, New york.
 \item Yvonne Rogers, Helen Sharp,  Jenny Preece,\textit{  Interaction Design: Beyond Human–Computer Interaction, 3rd ed.}, John Wiley, Sons Ltd., 2011 ISBN 0-470-66576-9
 \end{itemize}	
-
+\end{flushleft}
 \vspace{0.5in}
 
 \section{User acceptance tests}
-This user acceptance document, as specified in the "V" model for testing, is a quality assurance activity through by which we will be enabled to ensure that the new system does actually meet the essential user requirements. It acts as a means to gain quality assurance as it allows to detect deviations between the implementation of the system and the specified requirements. Since test cases are essentially derived from the quality and functional requirements provided by the requirement engineering process. Quality assurance, in turn, requests requirements engineering to resolve  requirements defects detected during quality assurance activities and if necessary, to clarify requirements to enable the specification of adequate test artefacts (Pohl 2010).
+As specified in the V-model for testing user acceptance tests are developed alongside the requirement engineering ans is a quality assurance activity by which the new system is tested for compliance with the actually requirements in terms of quality and functional. It allows the SoftServe group to detect deviations between the implementation of the system and the specified requirements. The test cases are essentially derived from the quality and functional requirements provided by the requirement engineering process. Thus to resolve it the system or requirements need to be changed (Pohl 2010).
 
-This section test items and identifiers with regards to the systems behaviour. All the steps entailed below are added to the audit log.
+This section tests items and identifiers with regards to the systems behaviour. All the steps entailed below are added to the audit log.
 
 \subsection{User Accounts}
 
@@ -789,26 +756,8 @@ The user is the owner of the account.
 
 \subsubsection*{Postconditions}
 The CV will be created or updated.
+
 \newpage
-\section{Glossary:}
-\vspace{0.2in}
-
-\begin{itemize}
-
-\item \textbf{API} - Application Programming Interface
-\item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
-\item \textbf{CV} - Curriculum Vita
-\item \textbf{HTML} - Hyper Text Mark-up Language
-\item \textbf{Java EE} - Java Enterprise Edition
-\item \textbf{NRF} - National Research Foundation
-\item \textbf{PhD} - A doctoral degree in a particular field of study.
-\item \textbf{PDF} - Portable Document Format file
-\item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
-\item \textbf{Use case} - A visual depiction of a service or group of services.
-\item \textbf{UP} - University of Pretoria
- 
-
-
-\end{itemize}	
+\input{../Glossary/Glossary.tex}
 
 \end{document}

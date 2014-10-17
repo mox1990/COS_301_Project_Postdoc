@@ -131,6 +131,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 03/10/2014 & v 3.01 & Added and updated activity and interface diagrams & Alfred Ngako \\
 \hline
+17/10/2014 & v 4.0 & Finalised and revised document & Mathys Ellis \\
+\hline
 
 %\end{tabbing}
 \end{longtable}
@@ -724,7 +726,8 @@ These are conditions that must be met by the system or user before they are allo
 			\item Meeting management service:  The user is a member of the DRIS or post-doctoral committee.
 			\item Application progress viewer service: The user is a prospective fellow or research fellow or grant holder or DRIS member.
 			\item Forward and rewind service: The user is a member of the DRIS.
-			\item Progress report management service: The user is a research fellow or a member of the DRIS.	
+			\item Progress report management service: The user is a research fellow or a member of the DRIS.
+			\item Application success evaluations services: The user is a system administrator or the system.	
 		\end{itemize}
 		
 	\item \textbf{Application progress viewer service}
@@ -842,7 +845,9 @@ These are conditions that must be met by the system or user before they are allo
 			\item Report services: The user is a DRIS member or system administrator.
 			\item Announcement services: The user is a DRIS member or system administrator.
 			\item Audit-Trail service: The user is a system administrator or the system.
-			\item Notifier service: The user is the system.						
+			\item Notifier service: The user is the system.	
+			\item Neural Network management services: The user is the system or a system administrator.	
+			\item Pre Post condition management services: The user is the system or a system administrator.				
 		\end{itemize}
 		
 	\item \textbf{Google scholar services}
@@ -952,12 +957,16 @@ These are conditions that must be met by the system or user before they are allo
 				\item Make neural network default network: A valid neural network must be selected.
 				\item Create a neural network: The system wants to create a neural network.
 				\item Update a neural network: A valid neural network has been selected.
-				\item Remove a neural network: A valid neural network has been selected.			
+				\item Remove a neural network: A valid neural network has been selected.
+				\item Correct neural network: A valid neural network has been selected and target vectors have been provided.
+				\item Update neural network synapses: A valid neural network has been selected.
+				\item Run neural network: A valid neural network has been selected and an input vector has been provided.			
 			\end{itemize}
-	\item \textbf{CV management services}
+	\item \textbf{Application success evaluation services}
 			\begin{itemize}
-				\item Create CV: The system requires to create a CV for some user.
-				\item Update CV: The system requires to update a CV for an existing CV of a particular user who is the owner of the CV.					
+				\item Train application success neural network with application data: A valid application success neural network exists and application data exists.
+				\item Create application success neural network: User is an system administrator.
+				\item Determine application success rating: A valid application has been selected.				
 			\end{itemize}	
 \end{itemize}	
 
@@ -986,7 +995,8 @@ These are conditions that must be met by the system and the data after the use c
 			\item Meeting management service:  The user can make use of these services.
 			\item Application progress viewer service: The user can make use of these services.
 			\item Forward and rewind service: The user can make use of these services.
-			\item Progress report management service: The user can make use of these services.	
+			\item Progress report management service: The user can make use of these services.
+			\item Application success evaluations services: The user can make use of these services.		
 		\end{itemize}
 		
 	\item \textbf{Application progress viewer service}
@@ -1127,7 +1137,9 @@ These are conditions that must be met by the system and the data after the use c
 			\item Report services: The user can make use of these services.
 			\item Announcement services: The user can make use of these services.
 			\item Audit-Trail service: The user can make use of these services.
-			\item Notifier service: The user can make use of these services.						
+			\item Notifier service: The user can make use of these services.
+			\item Neural Network management services: The user can make use of these services.	
+			\item Pre Post condition management services: The user can make use of these services.						
 		\end{itemize}
 		
 	\item \textbf{Google scholar services}
@@ -1225,7 +1237,33 @@ These are conditions that must be met by the system and the data after the use c
 			\item Create CV: The CV is created for the user.
 			\item Update CV: The CV has been updated for the user.
 			\item Does CV exist: If a CV exists for the user then yes else no.					
-		\end{itemize}	
+		\end{itemize}
+	
+	\item \textbf{Pre post condition management services}
+			\begin{itemize}
+				\item Find pre post condition method by class and name: Found pre post condition method.
+				\item Evaluate post condition: Post condition script evaluated.
+				\item Evaluate pre condition: Pre condition script evaluated.
+				\item Update pre post conditional method: Pre post conditional method data updated.	
+				\item Load all pre post conditional methods: All pre post conditional methods are loaded. 			
+			\end{itemize}
+	\item \textbf{Neural network management services}
+			\begin{itemize}
+				\item Load all neural networks: All neural network are loaded.
+				\item Make neural network default network: Neural network is set as default.
+				\item Create a neural network: A neural network has been created.
+				\item Update a neural network: Selected neural network has been updated.
+				\item Remove a neural network: Selected neural network has been removed.
+				\item Correct neural network: Selected neural network has been back-propagated.
+				\item Update neural network synapses: Selected neural network's synapses have been updated.
+				\item Run neural network: Input vector has been processed by selected neural network.			
+			\end{itemize}
+	\item \textbf{Application success evaluation services}
+			\begin{itemize}
+				\item Train application success neural network with application data: Selected application success neural network has been trained with application data.
+				\item Create application success neural network: Application success neural network has been created.
+				\item Determine application success rating: Selected application success neural network has processed application and holds a success value.				
+			\end{itemize}	
 \end{itemize}
 
 \subsubsection{Request and result data structures}
@@ -1357,6 +1395,21 @@ This object represents a email or internal message sent by a user to a user via 
 
 \item \textbf{AuditLog}
 This object represents a audit log that stores all the actions of all users within the system. Each entry records the action, who committed the action as well as at what time the action was committed.
+
+\item \textbf{Announcement}
+This object represents an announcement which has been created on the system for logged in users to view. It also contains a image alongside text.
+
+\item \textbf{PrePostConditionMethod}
+This object represents a method which has been demarcated as one having pre or post conditions and contains the scripts that need to executed for each.
+
+\item \textbf{NeuralNetwork}
+This object represents a neural network and all the properties it requires for back propagation and initialisation.
+
+\item \textbf{Synapse}
+This object represents a synapse in a \textbf{NeuralNetwork} which contains a weight and previous weight change. It connects two \textbf{Neurons} together. The weights are used to manipulate the values of the input \textbf{Neurons} during the feed forward phase.
+
+\item \textbf{Neuron}
+This object represents a neuron in a \textbf{NeuralNetwork} which contains a value and is used during the feed forward phase as input to the next layer. 
 
 
 \end{itemize}
@@ -2219,13 +2272,19 @@ This object represents a result returned by one a \textbf{GoogleScholarQuery} to
 \section{Application Design}
 This section deals with actual design of the application itself and how the requirement will be implemented.
 \subsection{Overview}
-As seen from the various functional requirements above the application covers vast number of services and domain objects. Thus in order to break down and structure the application so that it doesn't become an complicate and unmaintainable system the application will make use of the Java EE reference framework that automatically implies a layered architectural pattern and provides many out of the box services. This is as discussed in the Software architectural document.
+As seen from the various functional requirements above the application covers vast number of services and domain objects. Thus in order to break down and structure the application so that it doesn't become an complicate and unmaintainable system the application will make use of the Java EE reference framework which automatically implies a layered architectural pattern and provides many out of the box services. This is as discussed in the Software architectural document.
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.5]{../Images_Docs/Diagrams/System/overview1.png}}
+\caption{System overview}
+\end{figure}
 
 \newpage
-\subsection{Web interface font-end layer}
+\subsection{Client layer}
 \subsubsection{Summary}
-The front-end is a single web interface that makes use of the JSF facelet technology and Primefaces component kit in order to provide the a interactive, attractive and cohesive user interface. This layer communicates with the JSF backing bean layer through means of Java Expression language and Servelt technology as document in the Software Architecture document. Some concept and template samples for the webpage design is provided below:
-\newpage
+The client layer provides a single web interface that makes use of the JSF facelet technology and Primefaces component kit in order to provide the a interactive, attractive and cohesive user interface. This web interface communicates with the JSF backing beans in the client layer through means of Java Expression language and Servelet technology as document in the Software Architecture document. Additionally this layer can be populated by other systems that can communicate other the internet using HTTPS by utilising the RESTful web services in the web layer. Some concept and template samples for the website design has been provided below:
+
 \subsubsection{Web page template/Style}
 \begin{figure}[H]
 \centering	
@@ -2240,9 +2299,9 @@ The front-end is a single web interface that makes use of the JSF facelet techno
 \end{figure}
 
 \newpage
-\subsection{JSF Backing bean layer}
+\subsection{Client layer}
 \subsubsection{Summary}
-The JSF Backing bean layer will provide managed beans in order to process, validate and structure the input from the front-end web interface to the EJB layer and vice versa. The managed beans will also be used to provide the support for the front-end by using a variety of CDI scopes in order to retain important information and discard once off information:
+The Client layer will provide JSF backing beans in order to process, validate and structure the input from the front-end web interface to the EJB layer and vice versa. The managed beans will also be used to provide the support for the front-end by using a variety of CDI scopes in order to retain important information and discard once off information:
 \begin{itemize}
 	\item Application scope
 	\item Session scope
@@ -2250,7 +2309,9 @@ The JSF Backing bean layer will provide managed beans in order to process, valid
 	\item Request scope
 	\item Dependent scope
 \end{itemize}
-Further the Context and Dependency Injection (CDI) Technology will be used provide communication between managed beans themselves and the EJBs.
+Also provided by this layer are the RESTful web-services which in essence provide the same functionality as the JSF backing beans but for other systems or UIs. 
+Further the Context and Dependency Injection (CDI) Technology will be used provide communication between managed beans and web services themselves and the EJBs.
+
 
 \newpage
 \subsection{EJB Layer}
@@ -2261,8 +2322,15 @@ The EJB layer will provide the back bone for the business logic and capture all 
 This sections provides a overview of all the custom annotations used by the system.
 \begin{itemize}
 	\item \textbf{AuditableMethod} - Used to indicate the method needs to be audited and what audit message should be used.
-	\item \textbf{SecuredMethod} - Used to indicate the needs authentication, the allowed security roles, if to test for ownership and what is the object to test ownership of.
-\end{itemize} 
+	\item \textbf{SecuredMethod} - Used to indicate the method needs authentication, the allowed security roles, if to test for ownership and what is the object to test ownership of.
+	\item \textbf{PrePostConditionalMethod} - Used to indicate the method needs to be evaluated by the script in the database to see if it can proceed.
+\end{itemize}
+
+\begin{figure}[H]
+\centering	
+\framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Interface Diagram/Annotations1.png}}
+\caption{Annotation interfaces}
+\end{figure} 
 
 \newpage
 \subsubsection{Class diagrams of interfaces}
@@ -2440,33 +2508,7 @@ As stipulated in the Software architecture document this the RDBMS can be replac
 \end{figure}
 
 
-
-
 \newpage
-
-\section{Glossary:}
-\vspace{0.2in}
-
-\begin{itemize}
-\item \textbf{Activity diagram} - A UML diagram that depicts the flow of actions or activities in the process.
-\item \textbf{API} - Application Programming Interface
-\item \textbf{Audit log} - A log that keeps track of user actions.
-\item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
-\item \textbf{CV} - Curriculum Vita
-\item \textbf{Domain objects} - Are the objects that are present in the system being modelled.
-\item \textbf{HTML} - Hyper Text Mark-up Language
-\item \textbf{Java EE} - Java Enterprise Edition
-\item \textbf{NRF} - National Research Foundation
-\item \textbf{PhD} - A doctoral degree in a particular field of study.
-\item \textbf{PDF} - Portable Document Format file
-\item \textbf{Peoplesoft} - A management system designed by oracle. 
-\item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
-\item \textbf{Use case diagram} - A UML diagram that gives a visual depiction of a service or group of services.
-\item \textbf{UML} - Unified modelling language. A commonly used model standard to provide technology neutral models of different aspects of software.
-\item \textbf{UP} - University of Pretoria
- 
-
-
-\end{itemize}	
+\input{../Glossary/Glossary.tex}
 
 \end{document}

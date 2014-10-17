@@ -27,15 +27,16 @@
 
 \linespread{1.1} % Line spacing
 
-\newcommand{\Title}{Vision and scope document} % Assignment title
+\newcommand{\Title}{Deployment guidelines document} % Assignment title
 \newcommand{\Class}{Cos\ 301} % Course/class
 \newcommand{\pd}{Post-Doctoral}
 \newcommand{\ssr}{Soft\color{green}{Serve }\color{black}}
-\newcommand{\version}{0.9}
-\newcommand{\iteration}{1}
-\newcommand{\client}{Ms. Cathy Sandis (UP Research Office)}
-\newcommand{\project}{Post-Doctoral Application Management System}
-\newcommand{\javaInstall}{http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html}
+\newcommand{\version}{1.0 (Final)}
+\newcommand{\iteration}{6}
+\newcommand{\client}{Ms. Cathy Sandis (UP DRIS)}
+\newcommand{\supervisor}{Prof. Stefan Gruner (SSFM Group)}
+\newcommand{\project}{Post-Doctoral management System}
+\newcommand{\repo}{https://github.com/mox1990/Project-Postdoc.git}
 
 \begin{document}
 
@@ -48,13 +49,14 @@
 \centering
 \includegraphics{../Images_Docs/logo.png}
 \end{figure}
+\LARGE \bf \Class \\[0.25em]
 \LARGE \bf \project \\[1em]
 \LARGE \bf \Title \\[0.25em]
 \large \bf \today\\
 \bf Version \version\\
 \bf Iteration \iteration\\[0.5em]
-\Large \bf Prepared for \client\\
-\Large \bf by
+\Large \bf Prepared for \\Client: \client\\Supervisor: \supervisor
+\Large \\\bf by \\
 \Large {\bf \ssr Group }\\[0.5em]
 \LARGE {\bf Group members}\\[0.25em]
 \large
@@ -129,7 +131,7 @@ The application requires the use of a MySQL database as a resource. To do this, 
 
 \textbf{Note:} The @user and @password of the JDBC resources needs to match up with the ones used in the MySQL server. Also note that glassfish server runs using the java runtime environment and if there multiple version of the environments on a machine it might not run on your desired one. So caution must be taking when running the glassfish server for deployment.\\
 \subsection{MySQL 5.6}
-MySQL 5.6 acts as the persistance layer implementation of the system.
+MySQL 5.6 acts as the persistence layer implementation of the system.
 
 \subsubsection{Installation}
 All the required installation knowledge can be found on this link \textbf{\seqsplit{http://dev.mysql.com/doc/refman/5.6/en/installing.html}} 
@@ -138,7 +140,7 @@ All the required installation knowledge can be found on this link \textbf{\seqsp
 A @user needs to be setup for which will all the required databases will be accessed under. This user information needs to be propagated to the glassfish resources in both the glassfish server and the projects glassfish-resourcs.xml file.
 \\
 \\
-To setup the tables required by the application the initilizing script (found under ~/Source_Code/Database/InitialisePostDoc_DB) needs to be in the configured MySQL.
+To setup the tables required by the application the initilizing script (found under ~/SourceCode/Database/InitialisePostDocDB) needs to be in the configured MySQL.
 
 \subsection{Netbeans} 
 Netbeans is the primary IDE in which the application was developed under.

@@ -99,6 +99,8 @@ Mathys Ellis (12019837) \\[8em]
 \hline
 01/10/2014 & v 2.0 & Added, refined and reordered document to meet new demands. & Mathys Ellis \\
 \hline
+17/10/2014 & v 3.0 & Finalised and revised document & Mathys Ellis \\
+\hline
 
 \end{tabular}
 \end{center}
@@ -226,12 +228,13 @@ These are stakeholders that do have a PeopleSoft account and are a group of staf
 The scope of the project is to design a Post-Doctoral management system in the form of a software package where prospective fellows can apply for fellowships and current Post-Doctoral research fellows can renew their fellowships at the University of Pretoria. The system will manage the application work-flow from the start until the end of the process. Where the end is defined as follows: When the DIRS have either terminated or closed the application, or if the fellowship has been completed or when the application has been denied approval. Further the system will also incorporate non-application services to support and enhance both the administration of the system and application work-flow. As well provide means to extract and use information from the data stored by the system. The system will also be designed so to allow for future integration with the current student and personnel management system, PeopleSoft, employed by the UP. As well as any other possible system by providing the necessary APIs and mechanisms to do so. Finally the proposed system will be a stand-alone system.
 \vspace{0.2in}
 
+\newpage
 \subsubsection{Use cases:}
 This section shows the use cases for the entire system. For a more  detailed view of each use cases please refer to the Functional requirements and application design document for the project 
 \begin{figure}[H]
 \centering	
 \framebox{\includegraphics[scale=0.8]{../Images_Docs/Diagrams/Use case diagrams/Post-doctral fellowship management system1.jpg}}
-\caption{Use case diagram of Post-doctoral application management system}
+\caption{Use case diagram of Post-doctoral management system}
 \end{figure}
 
 \newpage
@@ -296,7 +299,9 @@ This section highlights all the services that aren't part of the application pro
 	\item Notifier services which track outstanding tasks for users.
 	\item Location management services which handles the administration of the University's internal academic structure.
 	\item Announcement services which help provide a means for system administrators to rely information with users.
-	\item Report services which allows for extraction of application and user data in a human readable fashion. 
+	\item Report services which allows for extraction of application and user data in a human readable fashion.
+	\item Pre post condition management services which allow system administrators change business rule by altering pre and post conditions of demarcated methods.
+	\item Neural network management services which allow the system to host custom neural networks which can be used by system to determine certain data relations. 
 \end{itemize}
  
  Some of these services can be used by the application processes to provide additional support to the application work-flow or even enhance it and can also be employed by other services in the system. such services in the scope include:
@@ -304,6 +309,7 @@ This section highlights all the services that aren't part of the application pro
  	\item Google scholar services which will provide a means to query google scholar for references and retrieve such search results in a usable manner.
  	\item Notification service which provides a means to send emails and create track-able notifications.
  	\item CV management services which provides the infrastructure for managing user CVs.
+ 	
 \end{itemize} 
 
 \newpage
@@ -324,31 +330,11 @@ At the time of writing the project is only limited with regards to the integrati
 \subsubsection{Exclusions}
 \vspace{0.2in}
 Everything not included in this document in terms of scope is considered not in the scope of the project. Though due to the Agile methodology that is employed by the project the scope may be extended or reduced in later iterations if approved by the client.
-
-It should be noted that the client has reduced the scope as to delay the development of the Archival services and has instructed that if there is time it can be implemented.
+\\
+It should be noted that the client has reduced the scope due to a delay in the development process therefore the Archival services has been backlogged and is kept in the documentation for future implementations.
 \vspace{0.2in}
 
 \newpage
-\section{Glossary:}
-\vspace{0.2in}
-
-\begin{itemize}
-
-\item \textbf{API} - Application Programming Interface
-\item \textbf{Application} -Both renewal applications or new fellowship applications are seen as applications by this project.
-\item \textbf{CV} - Curriculum Vita
-\item \textbf{HTML} - Hyper Text Mark-up Language
-\item \textbf{Java EE} - Java Enterprise Edition
-\item \textbf{NRF} - National Research Foundation
-\item \textbf{PhD} - A doctoral degree in a particular field of study.
-\item \textbf{PDF} - Portable Document Format file
-\item \textbf{Spreadsheet} - A special type of digital document that is used to represent data in rows and columns
-\item \textbf{Use case} - A visual depiction of a service or group of services.
-\item \textbf{UP} - University of Pretoria
-\item \textbf{Data store} - A storage area for digital data.
- 
-
-
-\end{itemize}	
+\input{../Glossary/Glossary.tex}
 
 \end{document}
