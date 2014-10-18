@@ -71,7 +71,7 @@ public class IndexBean {
     }
 
     public void setUsernameOrEmail(String usernameOrEmail) {
-        this.usernameOrEmail = usernameOrEmail;
+        this.usernameOrEmail = usernameOrEmail.toLowerCase();
     }
 
     public String getPassword() {
