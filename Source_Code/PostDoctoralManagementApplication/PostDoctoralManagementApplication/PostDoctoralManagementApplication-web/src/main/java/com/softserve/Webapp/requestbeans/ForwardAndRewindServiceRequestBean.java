@@ -10,6 +10,7 @@ import com.softserve.persistence.DBEntities.Application;
 import com.softserve.Webapp.conversationbeans.ForwardAndRewindServiceApplicationSelectionBean;
 import com.softserve.Webapp.depenedentbeans.ApplicationFilterDependBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
+import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.ForwardAndRewindServicesLocal;
@@ -33,6 +34,8 @@ public class ForwardAndRewindServiceRequestBean {
     
     @Inject
     private SessionManagerBean sessionManagerBean;
+    @Inject 
+    private NavigationManagerBean navigationManagerBean;
     
     @EJB
     private ForwardAndRewindServicesLocal forwardAndRewindServicesLocal;
@@ -90,7 +93,7 @@ public class ForwardAndRewindServiceRequestBean {
         return output;
     }
     
-    public void performApplicationStatusMoveRequest(Application application)
+    public String performApplicationStatusMoveRequest(Application application)
     {
         System.out.println("Preform");
         try
@@ -109,6 +112,7 @@ public class ForwardAndRewindServiceRequestBean {
                 }
                 
                 reason = "";
+                return navigationManagerBean.goToForwardAndRewindServicesApplicationSelectionView();
             }
             else
             {
@@ -120,6 +124,7 @@ public class ForwardAndRewindServiceRequestBean {
             ExceptionUtil.logException(ForwardAndRewindServiceRequestBean.class, ex);
             ExceptionUtil.handleException(null, ex);
         }
+        return "";
     }
     
 }

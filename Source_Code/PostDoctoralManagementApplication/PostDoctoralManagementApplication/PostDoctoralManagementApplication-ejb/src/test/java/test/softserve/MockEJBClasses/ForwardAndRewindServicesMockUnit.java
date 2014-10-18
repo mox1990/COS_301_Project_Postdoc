@@ -10,6 +10,7 @@ import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.ejb.applicationservices.ForwardAndRewindServices;
+import com.softserve.ejb.nonapplicationservices.NotificationServiceLocal;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 
@@ -24,7 +25,12 @@ public class ForwardAndRewindServicesMockUnit extends ForwardAndRewindServices {
     private TransactionController transactionController;
     private ApplicationServicesUtil applicationServicesUtil;
     private GregorianCalendar gregorianCalendar;
+    private NotificationServiceLocal notificationServiceLocal;
     private EntityManager em;    
+
+    public void setNotificationServiceLocal(NotificationServiceLocal notificationServiceLocal) {
+        this.notificationServiceLocal = notificationServiceLocal;
+    }
 
     public void setdBEntitiesFactory(DBEntitiesFactory dBEntitiesFactory) {
         this.dBEntitiesFactory = dBEntitiesFactory;
@@ -84,5 +90,11 @@ public class ForwardAndRewindServicesMockUnit extends ForwardAndRewindServices {
     protected EntityManager createEntityManager()
     {
         return em;
+    }
+    
+    @Override
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
     }
 }

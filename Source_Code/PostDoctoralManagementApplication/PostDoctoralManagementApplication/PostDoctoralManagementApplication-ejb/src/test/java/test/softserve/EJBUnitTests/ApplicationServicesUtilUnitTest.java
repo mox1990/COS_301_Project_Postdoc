@@ -6,6 +6,7 @@
 
 package test.softserve.EJBUnitTests;
 
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.DeclineReportJpaController;
 import com.softserve.persistence.DBEntities.AcademicQualification;
@@ -52,11 +53,8 @@ import test.softserve.MockEJBClasses.CVManagementServiceMockUnit;
 public class ApplicationServicesUtilUnitTest {
     private ApplicationJpaController mockApplicationJpaController;
     private DBEntitiesFactory mockDBEntitiesFactory;
-    private UserGateway mockUserGateway;
-    private NotificationService mockNotificationService;
-    private AuditTrailService mockAuditTrailService;
-    private DeclineReportJpaController mockDeclineReportJpaController;
     private GregorianCalendar mockGregorianCalendar;
+    private DAOFactory mockDAOFactory;
     
     private ApplicationServicesUtilMockUnit instance;
     
@@ -77,23 +75,19 @@ public class ApplicationServicesUtilUnitTest {
         
         mockApplicationJpaController = mock(ApplicationJpaController.class);
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
-        mockUserGateway = mock(UserGateway.class);
-        mockNotificationService = mock(NotificationService.class);
-        mockAuditTrailService = mock(AuditTrailService.class);
-        mockDeclineReportJpaController = mock(DeclineReportJpaController.class);
         mockGregorianCalendar = mock(GregorianCalendar.class);
+        mockDAOFactory = mock(DAOFactory.class);
         
-        instance.setaDAO(mockApplicationJpaController);
-        instance.setaTEJB(mockAuditTrailService);
+        instance.setdAOFactory(mockDAOFactory);
         instance.setdBEntities(mockDBEntitiesFactory);
-        instance.setdRDAO(mockDeclineReportJpaController);
         instance.setgCal(mockGregorianCalendar);
-        instance.setnEJB(mockNotificationService);
-        instance.setuEJB(mockUserGateway);
+        
+        when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
     }
     
     @After
     public void tearDown() {
+        
     }
 
     /**
@@ -101,9 +95,25 @@ public class ApplicationServicesUtilUnitTest {
      */
     @Test
     public void testLoadPendingApplications() {
+        String applicationStatusGroup = com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_SUBMITTED;
         
+        try
+        {
+            instance.loadPendingApplications(new Person("u12236731"), applicationStatusGroup, 0, Integer.MAX_VALUE);
+           
+            verify(mockApplicationJpaController).findAllApplicationsWithStatusAndReferee(applicationStatusGroup, new Person("u12236731"), 0, Integer.MAX_VALUE);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
+    // TODO: All the other alternatives of the test...
+    
+    
     /**
      * Test of getTotalNumberOfPendingApplications method, of class ApplicationServicesUtil.
      */
@@ -121,7 +131,7 @@ public class ApplicationServicesUtilUnitTest {
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     

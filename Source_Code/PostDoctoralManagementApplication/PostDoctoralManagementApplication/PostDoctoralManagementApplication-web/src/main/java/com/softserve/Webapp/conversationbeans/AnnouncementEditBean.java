@@ -94,6 +94,7 @@ public class AnnouncementEditBean implements Serializable {
             }
             System.out.println("===Announce " + announcementCreationDependBean.getAnnouncement().getAnnouncementID());
             announcementManagementServiceLocal.updateAnnouncement(sessionManagerBean.getSession(), announcementCreationDependBean.getCombinedAnnouncement());
+            sessionManagerBean.updateObjectInSessionStorageAt("ANNOUNCEMENT", announcementCreationDependBean.getAnnouncement());
             return navigationManagerBean.goToAnnouncementServiceHomeView();
         }
         catch(Exception ex)

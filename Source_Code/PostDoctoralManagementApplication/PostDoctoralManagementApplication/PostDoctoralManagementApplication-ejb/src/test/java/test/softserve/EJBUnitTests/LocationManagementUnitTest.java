@@ -33,8 +33,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
 import test.softserve.MockEJBClasses.LocationManagementServiceMockUnit;
 
@@ -73,7 +72,10 @@ public class LocationManagementUnitTest {
         mockTransactionController = mock(TransactionController.class);
         mockEntityManager = mock(EntityManager.class);
         mockDAOFactory = mock(DAOFactory.class);
-                
+        mockInstitutionJpaController = mock(InstitutionJpaController.class);
+        mockDepartmentJpaController = mock(DepartmentJpaController.class);
+        mockFacultyJpaController = mock(FacultyJpaController.class);
+        
         instance.setdBEntities(mockDBEntitiesFactory);
         instance.setTransactionController(mockTransactionController);
         instance.setEntityManager(mockEntityManager);
@@ -95,7 +97,33 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testCreateInstitution() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        Institution mockInstituation = mock(Institution.class);
+        
+        try
+        {
+            instance.createInstitution(mockSession, mockInstituation);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createInstitutionDAO();
+            verify(mockInstitutionJpaController).create(mockInstituation);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -103,7 +131,33 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testCreateFaculty() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        Faculty mockFaculty = mock(Faculty.class);
+        
+        try
+        {
+            instance.createFaculty(mockSession, mockFaculty);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createFacultyDAO();
+            verify(mockFacultyJpaController).create(mockFaculty);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -111,7 +165,33 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testCreateDepartment() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        Department mockDepartment = mock(Department.class);
+        
+        try
+        {
+            instance.createDepartment(mockSession, mockDepartment);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createDepartmentDAO();
+            verify(mockDepartmentJpaController).create(mockDepartment);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -119,7 +199,33 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testUpdateInstitution() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        Institution mockInstituation = mock(Institution.class);
+        
+        try
+        {
+            instance.updateInstitution(mockSession, mockInstituation);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createInstitutionDAO();
+            verify(mockInstitutionJpaController).edit(mockInstituation);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -127,7 +233,33 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testUpdateFaculty() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        Faculty mockFaculty = mock(Faculty.class);
+        
+        try
+        {
+            instance.updateFaculty(mockSession, mockFaculty);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createFacultyDAO();
+            verify(mockFacultyJpaController).edit(mockFaculty);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -135,15 +267,61 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testUpdateDepartment() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        Department mockDepartment = mock(Department.class);
+        
+        try
+        {
+            instance.updateDepartment(mockSession, mockDepartment);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createDepartmentDAO();
+            verify(mockDepartmentJpaController).edit(mockDepartment);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
+    // TODO: Develop return test for these functions...
     /**
      * Test of getAllInstitutions method, of class LocationManagementService.
      */
     @Test
-    public void testGetAllInstitutions() throws Exception {
-        
+    public void testGetAllInstitutions() throws Exception {        
+        try
+        {
+            instance.getAllInstitutions();
+            
+            verify(mockDAOFactory).createInstitutionDAO();
+            verify(mockInstitutionJpaController).findInstitutionEntities();
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -151,7 +329,27 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testGetAllFacultiesInInstitution() throws Exception {
-        
+        Institution mockInstitution = mock(Institution.class);
+        try
+        {
+            instance.getAllFacultiesInInstitution(mockInstitution);
+            
+            verify(mockDAOFactory).createFacultyDAO();
+            verify(mockFacultyJpaController).findAllFacultiesInInstitution(mockInstitution);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -159,7 +357,27 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testGetAllDepartmentForFaculty() throws Exception {
-        
+        Faculty mockFaculty = mock(Faculty.class);
+        try
+        {
+            instance.getAllDepartmentForFaculty(mockFaculty);
+            
+            verify(mockDAOFactory).createDepartmentDAO();
+            verify(mockDepartmentJpaController).findAllDepartmentsInFaculty(mockFaculty);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -167,7 +385,26 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testGetInstitution() throws Exception {
-        
+        try
+        {
+            instance.getInstitution(Long.MAX_VALUE);
+            
+            verify(mockDAOFactory).createInstitutionDAO();
+            verify(mockInstitutionJpaController).findInstitution(Long.MAX_VALUE);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -175,7 +412,26 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testGetFaculty() throws Exception {
-        
+        try
+        {
+            instance.getFaculty(Long.MAX_VALUE);
+            
+            verify(mockDAOFactory).createFacultyDAO();
+            verify(mockFacultyJpaController).findFaculty(Long.MAX_VALUE);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -183,7 +439,27 @@ public class LocationManagementUnitTest {
      */
     @Test
     public void testGetDepartment() throws Exception {
-        
+        Faculty mockFaculty = mock(Faculty.class);
+        try
+        {
+            instance.getDepartment(Long.MAX_VALUE);
+            
+            verify(mockDAOFactory).createDepartmentDAO();
+            verify(mockDepartmentJpaController).findDepartment(Long.MAX_VALUE);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockInstitutionJpaController);
+            verifyNoMoreInteractions(mockDepartmentJpaController);
+            verifyNoMoreInteractions(mockFacultyJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
     
 }

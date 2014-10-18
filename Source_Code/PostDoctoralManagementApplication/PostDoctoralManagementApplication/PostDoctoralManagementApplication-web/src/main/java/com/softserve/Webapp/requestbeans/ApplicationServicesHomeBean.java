@@ -157,22 +157,6 @@ public class ApplicationServicesHomeBean {
         }
     }
     
-    public boolean isMeetingManagementServiceDisplayable()
-    {
-        ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();
-        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_POSTDOCTORAL_COMMITTEE_MEMBER);
-        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        securityRoles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        try 
-        {
-            return sessionManagerBean.getSession().doesUserHaveAnyOfTheseSecurityRole(securityRoles);
-        } 
-        catch (Exception ex) 
-        {
-            return false;
-        }
-    }
-    
     public boolean isProgressReportMangementServiceDisplayable()
     {
         ArrayList<SecurityRole> securityRoles = new ArrayList<SecurityRole>();

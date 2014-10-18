@@ -62,7 +62,7 @@ public class DeanDeclineRequestBean {
         try
         {
             deansEndorsementServiceLocal.declineApplication(sessionManagerBean.getSession(), getSelectedApplication(), reason);
-            return navigationManagerBean.goToPreviousBreadCrumb();
+            return navigationManagerBean.goToDeanApplicationSelectionView();
         }
         catch(Exception ex)
         {

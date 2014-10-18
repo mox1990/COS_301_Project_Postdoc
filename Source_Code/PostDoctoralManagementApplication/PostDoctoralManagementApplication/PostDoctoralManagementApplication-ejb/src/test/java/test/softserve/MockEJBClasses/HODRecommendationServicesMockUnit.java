@@ -17,6 +17,7 @@ import com.softserve.ejb.nonapplicationservices.NotificationService;
 import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
 import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 
@@ -33,7 +34,12 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     private DAOFactory dAOFactory;
     private TransactionController transactionController;
     private EntityManager entityManager;
+    private UserAccountManagementServiceLocal userAccountManagementServiceLocal;
 
+    public void setUserAccountManagementServiceLocal(UserAccountManagementServiceLocal userAccountManagementServiceLocal) {
+        this.userAccountManagementServiceLocal = userAccountManagementServiceLocal;
+    }
+    
     public void setdAOFactory(DAOFactory dAOFactory) {
         this.dAOFactory = dAOFactory;
     }
@@ -102,5 +108,11 @@ public class HODRecommendationServicesMockUnit extends HODRecommendationServices
     public EntityManager createEntityManager()
     {
         return entityManager;
+    }
+    
+    @Override
+    protected UserAccountManagementServiceLocal getUserAccountManagementServiceEJB()
+    {
+        return userAccountManagementServiceLocal;
     }
 }

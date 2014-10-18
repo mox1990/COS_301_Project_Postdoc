@@ -28,6 +28,26 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
     private DAOFactory dAOFactory;
     private EntityManager em;
     
+    @Override    
+    protected DAOFactory getDAOFactory(EntityManager em) {
+        return dAOFactory;
+    }    
+    
+    @Override
+    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em) {
+        return aEJB;
+    }
+    
+    @Override
+    protected UserGateway getUserGatewayServiceEJB() {
+        return uEJB;
+    }
+    
+    @Override
+    protected EntityManager createEntityManager() {
+        return em;
+    }
+    
     public void setaEJB(ApplicationServicesUtil aEJB) {
         this.aEJB = aEJB;
     }
@@ -42,29 +62,5 @@ public class ApplicationProgressViewerServiceMockUnit extends ApplicationProgres
 
     public void setEm(EntityManager em) {
         this.em = em;
-    }
-    
-    @Override    
-    protected DAOFactory getDAOFactory(EntityManager em)
-    {
-        return dAOFactory;
-    }    
-    
-    @Override
-    protected ApplicationServicesUtil getApplicationServicesUTIL(EntityManager em)
-    {
-        return aEJB;
-    }
-    
-    @Override
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return uEJB;
-    }
-    
-    @Override
-    protected EntityManager createEntityManager()
-    {
-        return em;
     }
 }

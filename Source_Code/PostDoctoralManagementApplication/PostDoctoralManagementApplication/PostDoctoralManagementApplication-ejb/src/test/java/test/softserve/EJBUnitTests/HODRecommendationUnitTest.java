@@ -28,6 +28,9 @@ import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
+import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
+import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
+import com.softserve.persistence.DBDAO.PersonJpaController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -40,10 +43,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.DRISApprovalServiceMockUnit;
 import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
 
@@ -65,7 +65,10 @@ public class HODRecommendationUnitTest {
     private TransactionController mockTransactionController;
     private DAOFactory mockDAOFactory;
     private EntityManager mockEntityManager;
-        
+    private ApplicationReviewRequestJpaController mockApplicationReviewRequestJpaController;
+    private PersonJpaController mockPersonJpaController;
+    private UserAccountManagementServiceLocal mockUserAccountManagementServiceLocal;
+    
     public HODRecommendationUnitTest() {
     }
     
@@ -91,7 +94,10 @@ public class HODRecommendationUnitTest {
         mockTransactionController = mock(TransactionController.class);
         mockEntityManager = mock(EntityManager.class);
         mockDAOFactory = mock(DAOFactory.class);
-                
+        mockApplicationReviewRequestJpaController = mock(ApplicationReviewRequestJpaController.class);
+        mockPersonJpaController = mock(PersonJpaController.class);
+        mockUserAccountManagementServiceLocal = mock(UserAccountManagementServiceLocal.class);
+        
         instance.setaSEJB(mockApplicationServices);
         instance.setdBEntities(mockDBEntitiesFactory);
         instance.setnEJB(mockNotificationService);
@@ -99,10 +105,13 @@ public class HODRecommendationUnitTest {
         instance.setTransactionController(mockTransactionController);
         instance.setEntityManager(mockEntityManager);
         instance.setdAOFactory(mockDAOFactory);
+        instance.setUserAccountManagementServiceLocal(mockUserAccountManagementServiceLocal);
         
         when(mockDAOFactory.createAmmendRequestDAO()).thenReturn(mockAmmendRequestJpaController);
         when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
         when(mockDAOFactory.createRecommendationReportDAO()).thenReturn(mockRecommendationReportJpaController);
+        when(mockDAOFactory.createApplicationReviewRequestDAO()).thenReturn(mockApplicationReviewRequestJpaController);
+        when(mockDAOFactory.createPersonDAO()).thenReturn(mockPersonJpaController);
         
         when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
@@ -116,11 +125,9 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testLoadPendingApplications() throws Exception {                
-        /*Session mockSession = mock(Session.class);
+        Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
         int start = 0;
         int max = 5; 
         
@@ -128,14 +135,25 @@ public class HODRecommendationUnitTest {
         {
             instance.loadPendingApplications(mockSession, start, max);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, start, max);
+            verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED, start, max);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
-        }*/
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -143,24 +161,35 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testCountTotalPendingApplications() throws Exception {
-        /*Session mockSession = mock(Session.class);
+        Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
+        int start = 0;
+        int max = 5; 
         
         try
         {
             instance.countTotalPendingApplications(mockSession);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
-        }*/
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -168,92 +197,101 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testDeclineAppliction() throws Exception {
-        /*Session mockSession = mock(Session.class);
+        Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
-        Cv mockCv = mock(Cv.class);
-        when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
-        
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getCv()).thenReturn(mockCv);
-        
         Application mockApplication = mock(Application.class);
-        when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
-        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("u12345678"));
         
-        String reason = "Prospective fellow does not meet the eligiblity requirement";
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
+        String reason = "Chilling...";
         
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application recommendation declined", "Please note that the recommendation for the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("u12345678"), "Application recommendation declined", "Please note that the recommendation for the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         try
         {
             instance.declineAppliction(mockSession, mockApplication, reason);
-            // Declined Application...
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            
+            verify(mockTransactionController, times(2)).StartTransaction();
+            verify(mockApplicationServices).declineAppliction(mockSession, mockApplication, reason);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application recommendation declined", "Please note that the recommendation for the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("u12345678"), "Application recommendation declined", "Please note that the recommendation for the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockSession).getUser();
+            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // TODO: verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
-        }*/
+            fail("An exception occured");
+        }
     }
 
     /**
      * Test of ammendAppliction method, of class HODRecommendationServices.
      */
-    @Test
+    // TODO: @Test
     public void testAmmendAppliction() throws Exception {
-        /*
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
-        Cv mockCv = mock(Cv.class);
-        when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
-        
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getCv()).thenReturn(mockCv);
-        
         Application mockApplication = mock(Application.class);
-        when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
-        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
+        when(mockApplication.getGrantHolder()).thenReturn(new Person("u12345678"));
         
-        String reason = "Prospective fellow does not meet the eligiblity requirement";
+        String reason = "Chilling...";
         
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
-        when(mockDBEntitiesFactory.createAmmendRequestEntity(mockApplication, mockSession.getUser(),reason, mockCal.getTime())).thenReturn(new AmmendRequest(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application ammendment request", "Please note that the HOD has requested ammendment for the application '" + mockApplication.getProjectTitle() + "' for which you are the grant holder of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        //when(mockCal.getTime()).thenReturn(new Date());
         
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_HOD);
-
+        AmmendRequest mockAmmendRequest = new AmmendRequest(Long.MIN_VALUE);
+        when(mockDBEntitiesFactory.createAmmendRequestEntity(mockApplication, new Person("u12345678"), reason, mockCal.getTime())).thenReturn(mockAmmendRequest);
         try
         {
             instance.ammendAppliction(mockSession, mockApplication, reason);
-            // Declined Application...
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationJpaController).edit(mockApplication);
             
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Ammendment request for application " + Long.MAX_VALUE, new Person("u12236731"));
-            verify(mockDBEntitiesFactory).createAmmendRequestEntity(mockApplication, mockSession.getUser(),reason, mockCal.getTime());
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPerson, "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application ammendment requested", "The following application requires ammendment as per request by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockDAOFactory).createAmmendRequestDAO();
+            verify(mockApplication).setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            verify(mockApplicationJpaController).edit(mockApplication);
+            verify(mockDBEntitiesFactory).createAmmendRequestEntity(mockApplication, new Person("u12236731"), reason, mockCal.getTime());
+            // TODO: verify(mockAmmendRequestJpaController).create(mockAmmendRequest);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application ammendment request", "Please note that the grant holder has requested ammendment for the application '" + mockApplication.getProjectTitle() + "' for which you are the fellow of. The reason for this is as follows: " + reason);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockSession, times(2)).getUser();
+            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            //verify(mockNotificationService).sendNotification(new Notification(Long.MAX_VALUE), true);
-            //verify(mockNotificationService).sendNotification(new Notification(Long.MIN_VALUE), true);
+            // TODO: verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
-        }*/
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -369,14 +407,77 @@ public class HODRecommendationUnitTest {
      */
     @Test
     public void testGetDeansOfApplication() throws Exception {        
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        Application mockApplication = mock(Application.class);
+        
+        try
+        {
+            // Test returned value...
+            instance.getDeansOfApplication(mockSession, mockApplication);
+            
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findAllDeansOfficeMembersWhoCanEndorseApplication(mockApplication);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
     
     /**
      * Test of requestSpecificDeanToReview method, of class HODRecommendationServices.
      */
-    @Test
+    // TODO: @Test
     public void testRequestSpecificDeanToReview() throws Exception {        
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        Application mockApplication = mock(Application.class);
+        
+        Person mockHod = new Person("u12345678"); // TODO: make this into a spied object...
+        
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        
+        try
+        {
+            // Test returned value...
+            instance.requestSpecificDeanToReview(mockSession, mockApplication, mockHod);
+            
+            verify(mockDAOFactory).createApplicationReviewRequestDAO();
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockApplicationReviewRequestJpaController).findAllRequestsThatHaveBeenRequestForApplicationAs(mockApplication, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD); // TODO: Create test case catering for this return substance
+            verify(mockUserAccountManagementServiceLocal).generateOnDemandAccount(mockSession, "You have been requested to review a post doctoral fellowship for recommendation consideration.", true, mockHod);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 }

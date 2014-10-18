@@ -1,13 +1,21 @@
 \select@language {english}
-\contentsline {section}{\numberline {1}Introduction}{4}
-\contentsline {section}{\numberline {2}What is a Post Doctoral Management System?}{4}
-\contentsline {section}{\numberline {3}Post Doctoral Management System for End Users}{4}
-\contentsline {section}{\numberline {4}Objectives of the User Manaul}{5}
-\contentsline {section}{\numberline {5}Getting Started}{6}
-\contentsline {section}{\numberline {6}System Requirements}{6}
-\contentsline {section}{\numberline {7}Creating a User Account(Prospective Fellows)}{7}
-\contentsline {section}{\numberline {8}Logging on to the System}{8}
-\contentsline {section}{\numberline {9}Main Menu}{9}
-\contentsline {section}{\numberline {10}Application Services}{10}
-\contentsline {section}{\numberline {11}Navigation Bar}{11}
-\contentsline {section}{\numberline {12}Bread Crumbs}{12}
+\contentsline {section}{\numberline {1}Introduction}{5}
+\contentsline {section}{\numberline {2}What is a Post Doctoral Management System?}{5}
+\contentsline {section}{\numberline {3}Post Doctoral Management System for End Users}{5}
+\contentsline {section}{\numberline {4}Objectives of the User Manaul}{6}
+\contentsline {section}{\numberline {5}Getting Started}{7}
+\contentsline {section}{\numberline {6}System Requirements}{7}
+\contentsline {section}{\numberline {7}Creating a User Account(Prospective Fellows)}{8}
+\contentsline {section}{\numberline {8}Logging on to the System}{9}
+\contentsline {section}{\numberline {9}Main Menu}{10}
+\contentsline {section}{\numberline {10}Application Services}{11}
+\contentsline {section}{\numberline {11}Navigation Bar}{12}
+\contentsline {section}{\numberline {12}Bread Crumbs}{13}
+\contentsline {section}{\numberline {13}Announcement Management}{14}
+\contentsline {section}{\numberline {14}Audit Trail Services}{15}
+\contentsline {section}{\numberline {15}Forward and Rewind Service}{16}
+\contentsline {section}{\numberline {16}Location Management Service}{17}
+\contentsline {section}{\numberline {17}Meeting Management}{18}
+\contentsline {section}{\numberline {18}Notification}{20}
+\contentsline {section}{\numberline {19}Reporting Service}{21}
+\contentsline {section}{\numberline {20}User Account Management}{25}

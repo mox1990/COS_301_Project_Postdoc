@@ -10,17 +10,17 @@
             <div class="breadCrumbs">
                 
                 <p:growl sticky="true" showSummary="true" showDetail="true"/>
-                <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
-                    <c:if test="#{(counter.count == 1)}">
-                        <p:commandLink styleClass="breadCrumb-disabled" value="#{crumb.viewName}" update="breadcrumbFrom"/>
-                    </c:if>
-                    <c:if test="#{(counter.count > 1)}">
-                        <p:commandLink styleClass="breadCrumb" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}" update="breadcrumbFrom"/>
-                    </c:if>                    
-                    <c:if test="#{!(counter.count == navigationManagerBean.breadCrumbs.size())}">
-                        <span class="breadCrumb-Splitter">></span>
-                    </c:if>
-                </c:forEach>                
+                
+                <p:breadCrumb homeDisplay="">
+                    <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
+                        <c:if test="#{(counter.count == 1)}">
+                            <p:menuitem styleClass="bread-disabled" value="Logout" action="#{sessionManagerBean.logout()}"/>
+                        </c:if>
+                        <c:if test="#{(counter.count > 1)}">
+                            <p:menuitem styleClass="bread" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>
+                        </c:if>
+                    </c:forEach> 
+                </p:breadCrumb>
             </div>
         </h:form>
     </ui:component>

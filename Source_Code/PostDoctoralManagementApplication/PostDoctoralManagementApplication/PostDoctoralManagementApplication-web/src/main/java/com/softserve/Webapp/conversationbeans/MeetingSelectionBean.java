@@ -149,18 +149,20 @@ public class MeetingSelectionBean implements Serializable {
         }
     }
     
-    public void closeMeeting(CommitteeMeeting meeting)
+    public String closeMeeting(CommitteeMeeting meeting)
     {
         try
         {
             meetingManagementServiceLocal.endMeeting(sessionManagerBean.getSession(), meeting);
             init();
+            return navigationManagerBean.goToMeetingManagementServiceMeetingSelectionView();
         }
         catch (Exception ex)
         {
             ExceptionUtil.logException(MeetingSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
         }
+        return "";
     }
     
     public String commentOnMeeting(CommitteeMeeting meeting)

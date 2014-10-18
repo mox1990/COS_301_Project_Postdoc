@@ -27,8 +27,11 @@ import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.ejb.nonapplicationservices.UserAccountManagementServiceLocal;
+import com.softserve.persistence.DBDAO.AmmendRequestJpaController;
+import com.softserve.persistence.DBEntities.AmmendRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -39,10 +42,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.GrantHolderFinalisationServiceMockUnit;
 
 /**
@@ -66,6 +66,7 @@ public class GrantHolderFinalisationUnitTest {
     private UserAccountManagementServiceLocal mockUserAccountManagementServiceLocal;
     private TransactionController mockTransactionController;
     private EntityManager mockEntityManager;
+    private AmmendRequestJpaController mockAmmendRequestJpaController;
     
     public GrantHolderFinalisationUnitTest() {
     }
@@ -95,6 +96,7 @@ public class GrantHolderFinalisationUnitTest {
         mockUserAccountManagementServiceLocal = mock(UserAccountManagementServiceLocal.class);
         mockTransactionController = mock(TransactionController.class);
         mockEntityManager = mock(EntityManager.class);
+        mockAmmendRequestJpaController = mock(AmmendRequestJpaController.class);
         
         instance.setaSEJB(mockApplicationServices);
         instance.setcVEJB(mockCVManagementService);
@@ -103,11 +105,14 @@ public class GrantHolderFinalisationUnitTest {
         instance.setgCal(mockCal);
         instance.setUserAccountManagementServiceLocal(mockUserAccountManagementServiceLocal);
         instance.setEntityManager(mockEntityManager);
+        instance.setTransactionController(mockTransactionController);
+        instance.setdAOFactory(mockDAOFactory);
         
         when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
         when(mockDAOFactory.createCvDAO()).thenReturn(mockCvJpaController);
         when(mockDAOFactory.createPersonDAO()).thenReturn(mockPersonJpaController);
         when(mockDAOFactory.createApplicationReviewRequestDAO()).thenReturn(mockApplicationReviewRequestJpaController);
+        when(mockDAOFactory.createAmmendRequestDAO()).thenReturn(mockAmmendRequestJpaController);
         
         when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
     }
@@ -120,44 +125,104 @@ public class GrantHolderFinalisationUnitTest {
      * Test of createGrantHolderCV method, of class GrantHolderFinalisationService.
      */
     @Test
-    public void testCreateGrantHolderCV() throws Exception {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
+    public void testCreateGrantHolderCVWithoutCV() throws Exception {        
         Cv mockCV = mock(Cv.class);  
         Session mockSession = mock(Session.class);
+        
+        when(mockCVManagementService.hasCV(mockSession)).thenReturn(Boolean.FALSE);
         
         try
         {
             instance.createGrantHolderCV(mockSession, mockCV);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockCVManagementService).createCV(mockSession, mockCV);
+            verify(mockCVManagementService).hasCV(mockSession);
+            
+            verifyNoMoreInteractions(mockCV);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testCreateGrantHolderCVWithCV() throws Exception {        
+        Cv mockCV = mock(Cv.class);  
+        Session mockSession = mock(Session.class);
+        
+        when(mockCVManagementService.hasCV(mockSession)).thenReturn(Boolean.TRUE);
+        
+        try
+        {
+            instance.createGrantHolderCV(mockSession, mockCV);
+            
+            verify(mockCVManagementService).updateCV(mockSession, mockCV);
+            verify(mockCVManagementService).hasCV(mockSession);
+            
+            verifyNoMoreInteractions(mockCV);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
         }
     }
 
     @Test
-    public void testCreateGrantHolderCVNotValid() throws Exception {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
+    public void testCreateGrantHolderCVNotValid() throws Exception {        
         Session mockSession = mock(Session.class);
         
         try
         {
             instance.createGrantHolderCV(mockSession, null);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
         }
         catch (Exception ex)
         {
             if(!ex.getMessage().equals("CV is not valid"))
-                ;//fail("An exception occured");
+                fail("An exception should have occured");
         }
     }
     
@@ -166,24 +231,39 @@ public class GrantHolderFinalisationUnitTest {
      */
     @Test
     public void testLoadPendingApplications() throws Exception {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
         Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
         int startIndex = 0;
         int max = 5;
         
         try
         {
+            // Test returned value...
             instance.loadPendingApplications(mockSession, startIndex, max);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationServices).loadPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED, startIndex, max);
+            verify(mockEntityManager).close();
+            verify(mockSession, times(2)).getUser();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
@@ -191,10 +271,7 @@ public class GrantHolderFinalisationUnitTest {
      * Test of countTotalPendingApplications method, of class GrantHolderFinalisationService.
      */
     @Test
-    public void testCountTotalPendingApplications() throws Exception {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
+    public void testCountTotalPendingApplications() throws Exception {        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         try
@@ -203,11 +280,72 @@ public class GrantHolderFinalisationUnitTest {
             
             //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
+            verify(mockEntityManager).close();
+            verify(mockSession, times(2)).getUser();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
+        }
+    }
+    
+    /**
+     * Test of saveChangesToApplication method, of class GrantHolderFinalisationService.
+     */
+    @Test
+    public void testSaveChangesToApplication() throws Exception
+    {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
+        Application mockApplication = mock(Application.class);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
+         
+        try
+        {
+            instance.saveChangesToApplication(mockSession, mockApplication);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).edit(mockApplication);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockApplication);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService); 
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
         }
     }
     
@@ -217,7 +355,48 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testDeclineAppliction() throws Exception
     {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        Application mockApplication = mock(Application.class);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
+        
+        String reason = "Chilling...";
+        
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalisation declined", "Please note that the finalisation of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        
+        try
+        {
+            instance.declineAppliction(mockSession, mockApplication, reason);
+            
+            verify(mockTransactionController, times(2)).StartTransaction();
+            verify(mockApplicationServices).declineAppliction(mockSession, mockApplication, reason);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application finalisation declined", "Please note that the finalisation of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockSession).getUser();
+            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
     
     /**
@@ -226,7 +405,57 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testAmmendAppliction() throws Exception
     {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        Application mockApplication = mock(Application.class);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
+        
+        String reason = "Chilling...";
+        
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalisation declined", "Please note that the finalisation of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        //when(mockCal.getTime()).thenReturn(new Date());
+        
+        AmmendRequest mockAmmendRequest = new AmmendRequest(Long.MIN_VALUE);
+        when(mockDBEntitiesFactory.createAmmendRequestEntity(mockApplication, new Person("u12236731"), reason, mockCal.getTime())).thenReturn(mockAmmendRequest);
+        try
+        {
+            instance.ammendAppliction(mockSession, mockApplication, reason);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockDAOFactory).createAmmendRequestDAO();
+            verify(mockApplication).setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_OPEN);
+            verify(mockApplicationJpaController).edit(mockApplication);
+            verify(mockDBEntitiesFactory).createAmmendRequestEntity(mockApplication, new Person("u12236731"), reason, mockCal.getTime());
+            verify(mockAmmendRequestJpaController).create(mockAmmendRequest);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application ammendment request", "Please note that the grant holder has requested ammendment for the application '" + mockApplication.getProjectTitle() + "' for which you are the fellow of. The reason for this is as follows: " + reason);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockSession, times(2)).getUser();
+            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
+            verifyNoMoreInteractions(mockApplicationServices);
+            //verifyNoMoreInteractions(mockCal); TODO: Calendar checking...
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -235,76 +464,103 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testFinaliseApplication() throws Exception // TODO: Add alternatives to this...
     {
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         Application mockApplication = mock(Application.class);
-        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
         
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        when(mockApplicationJpaController.findApplication(Long.MAX_VALUE)).thenReturn(mockApplication);
-        when(mockApplicationReviewRequestJpaController.findAllPeopleWhoHaveBeenRequestForApplicationAs(mockApplication, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD)).thenReturn(new ArrayList<Person>());
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.")).thenReturn(new Notification(Long.MAX_VALUE));
+        //when(mockCal.getTime()).thenReturn(new Date());
+        
         try
         {
             instance.finaliseApplication(mockSession, mockApplication);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockApplication).setFinalisationDate(mockCal.getTime());
+            verify(mockApplication).setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
             verify(mockApplicationJpaController).edit(mockApplication);
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: ADD list verfication...
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            // TODO: verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.");
+            verify(mockTransactionController).CommitTransaction();
+            // TODO: verify(mockSession, times(2)).getUser();
+            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
+            verifyNoMoreInteractions(mockApplicationServices);
+            // TODO: verifyNoMoreInteractions(mockCal); TODO: Calendar checking...
+            // TODO: verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            // verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
     @Test
     public void testFinaliseApplicationWithNotifications() throws Exception { // TODO: Populate notifications
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER);
-        
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
         Application mockApplication = mock(Application.class);
-        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplication.getFellow()).thenReturn(new Person("f12236731"));
         
-        Person mockPersonA = mock(Person.class);
-        Person mockPersonB = mock(Person.class);
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.")).thenReturn(new Notification(Long.MAX_VALUE));
+        //when(mockCal.getTime()).thenReturn(new Date());
         
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPersonA, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.")).thenReturn(new Notification(new Long(1)));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPersonB, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.")).thenReturn(new Notification(new Long(2)));
-        
-        when(mockApplicationJpaController.findAllHODsWhoCanRecommendApplication(mockApplication)).thenReturn(Arrays.asList(mockPersonA, mockPersonB));
-        when(mockApplicationJpaController.findApplication(Long.MAX_VALUE)).thenReturn(mockApplication);
         try
         {
             instance.finaliseApplication(mockSession, mockApplication);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockApplication).setFinalisationDate(mockCal.getTime());
+            verify(mockApplication).setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
             verify(mockApplicationJpaController).edit(mockApplication);
+            // TODO: verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.");
+            verify(mockTransactionController).CommitTransaction();
+            // TODO: verify(mockSession, times(2)).getUser();
+            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            //verify(mockDBEntitiesFactory).createAduitLogEntitiy("Finalised application " + Long.MAX_VALUE, new Person("u12236731"));
-            
-            //verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPersonA, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");
-            //verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPersonB, "Application finalised", "The following application has been finalised by " + mockSession.getUser().getCompleteName() +  ". Please review for endorsement.");
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            
-            //verify(mockNotificationService).sendBatchNotifications(new ArrayList(), true);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
+            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
+            verifyNoMoreInteractions(mockApplicationServices);
+            // TODO: verifyNoMoreInteractions(mockCal); TODO: Calendar checking...
+            // TODO: verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            // verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            ////fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
@@ -314,15 +570,134 @@ public class GrantHolderFinalisationUnitTest {
     @Test
     public void testGetHODsOfApplication() throws Exception
     {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        Application mockApplication = mock(Application.class);
+        
+        try
+        {
+            // Test returned value...
+            instance.getHODsOfApplication(mockSession, mockApplication);
+            
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findAllHODsWhoCanRecommendApplication(mockApplication);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
     
     /**
      * Test of requestSpecificHODtoReview method, of class GrantHolderFinalisationService.
      */
-    @Test
-    public void testRequestSpecificHODtoReview() throws Exception
+    //@Test
+    public void testRequestSpecificHODtoReviewNewUser() throws Exception
     {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        Application mockApplication = mock(Application.class);
+        
+        Person mockHod = new Person("u12345678"); // TODO: make this into a spied object...
+        
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        
+        try
+        {
+            // Test returned value...
+            instance.requestSpecificHODtoReview(mockSession, mockApplication, mockHod);
+            
+            verify(mockDAOFactory).createApplicationReviewRequestDAO();
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockApplicationReviewRequestJpaController).findAllRequestsThatHaveBeenRequestForApplicationAs(mockApplication, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD); // TODO: Create test case catering for this return substance
+            verify(mockUserAccountManagementServiceLocal).generateOnDemandAccount(mockSession, "You have been requested to review a post doctoral fellowship for recommendation consideration.", true, mockHod);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
+    }
+    
+    /**
+     * Test of requestSpecificHODtoReview method, of class GrantHolderFinalisationService.
+     */
+    //@Test
+    public void testRequestSpecificHODtoReviewAlreadyInSystem() throws Exception
+    {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        
+        Application mockApplication = mock(Application.class);
+        
+        Person mockHod = new Person("u12345678"); // TODO: make this into a spied object...
+        
+        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        // TODO: when(mockPersonJpaController.findUserBySystemIDOrEmail("u12345678")).thenReturn(mockHod);
+        try
+        {
+            // Test returned value...
+            instance.requestSpecificHODtoReview(mockSession, mockApplication, mockHod);
+            
+            verify(mockDAOFactory).createApplicationReviewRequestDAO();
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockApplicationReviewRequestJpaController).findAllRequestsThatHaveBeenRequestForApplicationAs(mockApplication, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_HOD); // TODO: Create test case catering for this return substance
+            verify(mockUserAccountManagementServiceLocal).generateOnDemandAccount(mockSession, "You have been requested to review a post doctoral fellowship for recommendation consideration.", true, mockHod);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 }

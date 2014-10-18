@@ -39,6 +39,10 @@ public class DRISApprovalServiceMockUnit extends DRISApprovalService {
     private TransactionController transactionController;
     private EntityManager em;
 
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
     public void setdAOFactory(DAOFactory dAOFactory) {
         this.dAOFactory = dAOFactory;
     }

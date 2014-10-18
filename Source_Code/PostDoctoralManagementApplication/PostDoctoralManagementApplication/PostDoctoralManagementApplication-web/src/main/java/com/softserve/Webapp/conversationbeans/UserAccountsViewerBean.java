@@ -99,7 +99,8 @@ public class UserAccountsViewerBean implements Serializable {
         try 
         {
             userAccountManagementServiceLocal.removeUserAccount(sessionManagerBean.getSession(), person.getSystemID());
-            conversationManagerBean.deregisterConversation(conversation);
+            sessionManagerBean.updateObjectInSessionStorageAt("ACCOUNT",person);
+            return navigationManagerBean.goToUserAccountManagementAccountsViewer();
         } 
         catch (Exception ex) 
         {

@@ -487,6 +487,34 @@ body
 
 }
 
+.bread
+{
+    text-decoration: none;
+    color: Black;   
+}
+
+.bread:hover
+{
+    text-decoration-line: underline;
+    font-weight: bolder;
+    color: black;
+    text-shadow: 1px 1px 2px dark;
+}
+
+.bread-disabled
+{
+    text-decoration: none;
+    color: Black;   
+}
+
+.bread-disabled:hover
+{
+    text-decoration-line: underline;
+    font-weight: bolder;
+    color: black;
+    text-shadow: 1px 1px 2px white;
+}
+
 .breadCrumb-disabled
 {
     font-size: 16pt;

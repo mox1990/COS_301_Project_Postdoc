@@ -410,9 +410,8 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     @AuditableMethod
     @Override
     public void requestSpecificHODtoReview(Session session, Application application, Person hod) throws Exception 
-    {        
-        
-        EntityManager em = emf.createEntityManager();
+    {     
+        EntityManager em = createEntityManager();
 
         try
         {
