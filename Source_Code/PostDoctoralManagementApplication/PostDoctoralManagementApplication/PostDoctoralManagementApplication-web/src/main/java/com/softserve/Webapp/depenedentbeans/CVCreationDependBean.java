@@ -202,10 +202,12 @@ public class CVCreationDependBean implements Serializable{
     }
 
     public void setSelectedItemList(List<Item> selectedItemList) {
+        System.out.println("This thing don't work..." + selectedItemList.size());
         this.selectedItemList = selectedItemList;
     }
 
     public List<Item> getSelectedItemList() {
+        System.out.println("THis one does");
         return selectedItemList;
     }
 
