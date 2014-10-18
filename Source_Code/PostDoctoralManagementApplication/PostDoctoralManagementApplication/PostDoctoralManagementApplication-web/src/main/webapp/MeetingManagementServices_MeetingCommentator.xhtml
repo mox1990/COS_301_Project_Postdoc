@@ -37,10 +37,10 @@
                     </p:outputPanel>
                     
                     <p:panel header="#{lang['Applications']}" toggleable="true">
-                        <p:tabView value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.applicationList}" dynamic="true" activeIndex="0" cache="true" var="application" >
-                            <p:tab title="#{lang['Application']} #{selectedApplication.applicationID} - #{selectedApplication.projectTitle}">
+                        <p:tabView value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.applicationList}" dynamic="true" activeIndex="0" cache="true" var="app" >
+                            <p:tab title="#{lang['Application']} #{app.applicationID} - #{app.projectTitle}">
                                 <ui:decorate template="templates/applicationViewer_Component.xhtml">
-                                    <ui:param name="selectedApplication" value="#{application}"/>
+                                    <ui:param name="selectedApplication" value="#{app}"/>
                                 </ui:decorate>
                             </p:tab>
                         </p:tabView>
