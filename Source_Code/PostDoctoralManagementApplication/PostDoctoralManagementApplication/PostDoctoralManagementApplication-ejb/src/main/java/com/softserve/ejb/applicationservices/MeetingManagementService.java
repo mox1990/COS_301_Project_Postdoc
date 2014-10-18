@@ -116,7 +116,6 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
      *
      * @param session
      * @param committeeMeeting
-     * @param attendanceList
      * @throws AuthenticationException
      * @throws Exception
      */
@@ -125,8 +124,6 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
     @Override
     public void createMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception
     {
-        
-        
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();        
         try

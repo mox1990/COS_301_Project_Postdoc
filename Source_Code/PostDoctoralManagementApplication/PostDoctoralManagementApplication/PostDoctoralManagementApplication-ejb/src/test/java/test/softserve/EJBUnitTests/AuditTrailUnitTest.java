@@ -95,11 +95,10 @@ public class AuditTrailUnitTest {
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockAuditLogJpaController);
-            
+            verifyNoMoreInteractions(mockEm);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
             fail("An exception occured");
         }
     }
@@ -126,6 +125,7 @@ public class AuditTrailUnitTest {
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEm);
             
         }
         catch (Exception ex)

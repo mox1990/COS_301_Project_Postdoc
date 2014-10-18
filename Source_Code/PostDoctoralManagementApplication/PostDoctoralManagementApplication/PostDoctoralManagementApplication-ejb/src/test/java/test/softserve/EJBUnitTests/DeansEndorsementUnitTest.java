@@ -40,10 +40,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.DRISApprovalServiceMockUnit;
 import test.softserve.MockEJBClasses.DeansEndorsementServiceMockUnit;
 
@@ -94,7 +91,7 @@ public class DeansEndorsementUnitTest {
         instance.setdBEntities(mockDBEntitiesFactory);
         instance.setnEJB(mockNotificationService);
         instance.setdAOFactory(mockDAOFactory);
-        //instance.setTransactionController(mockTransactionController);
+        instance.setTransactionController(mockTransactionController);
         instance.setEm(mockEntityManager);
         instance.setgCal(mockGregorianCalendar);
         
@@ -121,10 +118,22 @@ public class DeansEndorsementUnitTest {
         {
             instance.loadPendingApplications(mockSession, startIndex, maxNumber);
             
+            verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, startIndex, maxNumber);
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockEndorsementJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockTransactionController);
         }
         catch (Exception ex)
         {
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
@@ -140,17 +149,22 @@ public class DeansEndorsementUnitTest {
         {
             instance.countTotalPendingApplications(mockSession);
             
-
-            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
+            verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
+            verify(mockEntityManager).close();
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            //verify(mockApplicationServices).loadPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED, startIndex, maxNumber);
-
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockEndorsementJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockTransactionController);
         }
         catch (Exception ex)
         {
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
@@ -158,7 +172,7 @@ public class DeansEndorsementUnitTest {
      * Test of declineApplication method, of class DeansEndorsementService.
      */
     @Test
-    public void testDenyApplication() throws Exception {
+    public void testDeclineApplication() throws Exception {
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -175,9 +189,8 @@ public class DeansEndorsementUnitTest {
         
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPerson, "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createNotificationEntity(null, mockPerson, "Application endorsement declined", "Please note that the endorsement of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
+        when(mockDBEntitiesFactory.createNotificationEntity(null, mockApplication.getGrantHolder(), "Application endorsement declined", "Please note that the endorsement of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
@@ -186,11 +199,28 @@ public class DeansEndorsementUnitTest {
         {
             instance.declineApplication(mockSession, mockApplication, reason);
             
+            verify(mockTransactionController, times(2)).StartTransaction();
+            verify(mockApplicationServices).declineAppliction(mockSession, mockApplication, reason);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, mockPerson, "Application endorsement declined", "Please note that the endorsement of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason);
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("s25030403"), "Application endorsement declined", "Please note that the endorsement of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason);
+            verify(mockTransactionController).CommitTransaction();
+            //verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockEndorsementJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            //verifyNoMoreInteractions(mockNotificationService); TODO: update the class to facilitate this test...
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockTransactionController);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
@@ -216,31 +246,19 @@ public class DeansEndorsementUnitTest {
         String reason = "Prospective fellow does not meet the eligiblity requirement";
         String applicantMessage = "appMSG", cscMesssage = "cscMSG", finaceMessage = "fMSG";
         
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Endorsed application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-          
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-        
         Endorsement mockEndorsement = mock(Endorsement.class);
         // when(mockEndorsement.get()).thenReturn(Long.MAX_VALUE);
 
         try
         {
             instance.endorseApplication(mockSession, mockApplication, mockEndorsement);
-            
+            // TODO: Get the energy to complete this test...
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
 }
-
-            //ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-            //roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DEANS_OFFICE_MEMBER);
-            
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            //verify(mockApplicationServices).getTotalNumberOfPendingApplications(new Person("u12236731"), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED);
-

@@ -137,7 +137,6 @@ public class ApplicationRenewalUnitTest {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
             fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
         }
     }
@@ -184,8 +183,7 @@ public class ApplicationRenewalUnitTest {
         Cv cv = new Cv("mockCV");
         
         when(mockCVManagementServiceLocal.hasCV(mockSession)).thenReturn(Boolean.TRUE);
-        try
-        {
+        try {
             instance.updateResearchFellowCV(mockSession, cv);
             
             verify(mockCVManagementServiceLocal).hasCV(mockSession);
@@ -204,13 +202,12 @@ public class ApplicationRenewalUnitTest {
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockApplication);
         }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
+        catch(Exception ex) {
             fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
         }
     }
     
+    @Test
     public void testUpdateResearchFellowCVFail() throws Exception {
         Cv cv = new Cv("mockCV");
         
@@ -219,6 +216,8 @@ public class ApplicationRenewalUnitTest {
         {
             instance.updateResearchFellowCV(mockSession, cv);
             
+            fail("An exception didn't occur");
+            
             verify(mockCVManagementServiceLocal).hasCV(mockSession);
             verify(mockCVManagementServiceLocal).updateCV(mockSession, cv);
             
@@ -237,8 +236,7 @@ public class ApplicationRenewalUnitTest {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
-            fail("An exception occured: " + ex.getCause().toString() + ")$(%)");
+            
         }
     }
 

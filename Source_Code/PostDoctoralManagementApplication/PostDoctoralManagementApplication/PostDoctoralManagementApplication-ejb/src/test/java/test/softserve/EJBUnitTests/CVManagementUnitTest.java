@@ -67,6 +67,7 @@ public class CVManagementUnitTest {
         mockTransactionController = mock(TransactionController.class);
         
         instance.setdAOFactory(mockDAOFactory);
+        instance.setTransactionController(mockTransactionController);
         
         when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
         when(mockDAOFactory.createAcademicQualificationDAO()).thenReturn(mockAcademicQualificationJpaController);
@@ -85,7 +86,7 @@ public class CVManagementUnitTest {
     public void testCreateCV() throws Exception {
         
         Cv mockCV = mock(Cv.class);  
-        when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
+        //when(mockCV.getPerson()).thenReturn(new Person("u12236731"));
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -94,17 +95,36 @@ public class CVManagementUnitTest {
         {
             instance.createCV(mockSession, mockCV);
             
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAcademicQualificationDAO();
+            verify(mockDAOFactory).createExperienceDAO();
+            verify(mockDAOFactory).createCvDAO();
             
-            verify(mockCvJpaController).create(mockCV);          
-            // TODO: Add more stuff
+            verify(mockCV).getExperienceList();
+            verify(mockCV).getAcademicQualificationList();
+            verify(mockCV).setExperienceList(null);
+            verify(mockCV).setAcademicQualificationList(null);
+            verify(mockCV).setCvID("u12236731");
+            
+            verify(mockCvJpaController).create(mockCV);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: To the other experiences
+            
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockAcademicQualificationJpaController);
+            verifyNoMoreInteractions(mockExperienceJpaController);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
-    
+    //TODO: more test cases...
     @Test
     public void testCreateCVButHasCV() throws Exception {
         Person mockPerson = mock(Person.class);
@@ -121,12 +141,16 @@ public class CVManagementUnitTest {
         {
             instance.createCV(mockSession, mockCV);
             
-            
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockAcademicQualificationJpaController);
+            verifyNoMoreInteractions(mockExperienceJpaController);
         }
         catch (Exception ex)
         {
-            if(!ex.getMessage().equals("The user already has a cv"));
-            //fail("An exception occured");
+            if(!ex.getMessage().equals("The user already has a cv"))
+                fail("An exception occured");
         }
     }
 
@@ -144,14 +168,31 @@ public class CVManagementUnitTest {
         {
             instance.updateCV(mockSession, mockCV);
             
-            verify(mockCvJpaController).edit(mockCV);          
+                     
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createAcademicQualificationDAO();
+            verify(mockDAOFactory).createExperienceDAO();
+            verify(mockDAOFactory).createCvDAO();
             
+            verify(mockCV).getExperienceList();
+            verify(mockCV).getAcademicQualificationList();
+            verify(mockCV).setCvID("u12236731");
+            
+            verify(mockCvJpaController).edit(mockCV); 
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockCvJpaController);
+            verifyNoMoreInteractions(mockAcademicQualificationJpaController);
+            verifyNoMoreInteractions(mockExperienceJpaController);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
-    
+    // TODO: More test cases...
 }

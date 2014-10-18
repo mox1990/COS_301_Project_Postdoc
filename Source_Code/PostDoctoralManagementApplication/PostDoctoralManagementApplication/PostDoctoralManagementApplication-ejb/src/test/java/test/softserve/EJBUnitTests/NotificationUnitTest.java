@@ -14,6 +14,7 @@ import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.persistence.DBDAO.NotificationJpaController;
 import com.softserve.persistence.DBEntities.Notification;
 import com.softserve.persistence.DBEntities.Person;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.ejb.embeddable.EJBContainer;
@@ -97,17 +98,48 @@ public class NotificationUnitTest {
      */
     @Test
     public void testSendBatchNotifications() throws Exception {
+        Session mockSession = mock(Session.class); 
+        List<Notification> n = new ArrayList<Notification>();
         
+        try
+        {
+            instance.sendBatchNotifications(mockSession, n, false);
+                      
+            
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
      * Test of sendNotification method, of class NotificationService.
      */
     @Test
-    public void testSendNotification() throws Exception {
-        
+    public void testSendNotificationWithoutEmail() throws Exception {
+        Session mockSession = mock(Session.class); 
+        Notification mockNotification = mock(Notification.class);        
+        try
+        {
+            instance.sendNotification(mockSession, mockNotification, false);
+                      
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createNotificationDAO();
+            verify(mockNotificationJpaController).create(mockNotification);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: Clear mind...
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
+    // TODO: complete the rest of them...
     /**
      * Test of sendOnlyEmail method, of class NotificationService.
      */

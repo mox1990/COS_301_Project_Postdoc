@@ -92,6 +92,8 @@ public class NewApplicationUnitTest {
         instance.setEntityManager(mockEntityManager);
         instance.setGregorianCalendar(mockCal);
         instance.setApplicationServicesUtil(mockApplicationServices);
+        instance.setdAOFactory(mockDAOFactory);
+        instance.setTransactionController(mockTransactionController);
         
         when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
         
@@ -102,61 +104,215 @@ public class NewApplicationUnitTest {
     public void tearDown() {
     }
     
-    public void testCreateProspectiveFellowCV(Session session, Cv cv)
+    @Test
+    public void testCreateProspectiveFellowCV()
     {
+        Cv mockCV = mock(Cv.class);  
+        Session mockSession = mock(Session.class);
         
+        when(mockCVManagementService.hasCV(mockSession)).thenReturn(Boolean.FALSE);
+        
+        try
+        {
+            instance.createProspectiveFellowCV(mockSession, mockCV);
+            
+            verify(mockCVManagementService).createCV(mockSession, mockCV);
+            verify(mockCVManagementService).hasCV(mockSession);
+            
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
     
+    @Test
+    public void testCreateProspectiveFellowCVWithCV()
+    {
+        Cv mockCV = mock(Cv.class);  
+        Session mockSession = mock(Session.class);
+        
+        when(mockCVManagementService.hasCV(mockSession)).thenReturn(Boolean.TRUE);
+        
+        try
+        {
+            instance.createProspectiveFellowCV(mockSession, mockCV);
+            
+            verify(mockCVManagementService).updateCV(mockSession, mockCV);
+            verify(mockCVManagementService).hasCV(mockSession);
+            
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
+    }
+    
+    @Test
+    public void testCreateProspectiveFellowCVNotValid()
+    {
+        Session mockSession = mock(Session.class);
+        
+        try
+        {
+            instance.createProspectiveFellowCV(mockSession, null);
+            
+            fail("An exception should have occured");
+            
+            verify(mockCVManagementService).updateCV(mockSession, null);
+            verify(mockCVManagementService).hasCV(mockSession);
+            
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            if(!ex.getMessage().equals("CV is not valid"))
+                fail("An exception should have occured");
+        }
+    }
+    
+    @Test
     public void testCreateNewApplication()
     {
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
         
+        //when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        try
+        {
+            instance.createNewApplication(mockSession, mockApplication);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockCal).getTime();
+            verify(mockApplicationJpaController).create(mockApplication);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
     
+    @Test
     public void testCreateNewApplicationNull()
     {
-        
+        Session mockSession = mock(Session.class);
+        try
+        {
+            instance.createNewApplication(mockSession, null);
+            
+            verifyNoMoreInteractions(mockCVManagementService);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockApplicationServices);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+        }
+        catch (Exception ex)
+        {
+            if(!ex.getMessage().equals("Application is not valid"))
+                fail("An exception should have occured");
+        }
     }
     
+    //TODO: The rest of these test...
+    @Test
     public void testLinkGrantHolderToApplication()
     {
         
     }
     
+    @Test
     public void testLinkGrantHolderToApplicationNull()
     {
         
     }
     
+    @Test
     public void testLinkRefereesToApplication() 
     {
         
     }
     
+    @Test
     public void testLinkRefereeToApplication() 
     {
         
     }
      
+    @Test
     public void testLinkRefereeToApplicationNull() 
     {
         
     }
     
+    @Test
     public void testSubmitApplication()
     {
         
     }
     
+    @Test
     public void testSubmitApplicationNull()
     {
         
     }
     
+    @Test
     public void testCanFellowOpenApplication()
     {
         
     }
     
+    @Test
     public void testGetOpenApplication()
     {
         
