@@ -131,19 +131,6 @@
                 </ui:decorate> 
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
-                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.meetingManagementServiceDisplayable}"/>
-                    <ui:param name="showFunction" value="showInfoDiv(10)"/>
-                    <ui:param name="hideFunction" value="hideInfoDiv(10)"/>
-                    <ui:param name="buttonName" value="#{lang['MeetingManagementButton']}"/>
-                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToMeetingManagementServiceHomeView"/>
-                    <ui:param name="infoContainerID" value="info10"/>
-                    <ui:define name="informationContent">
-                        #{lang['MeetingManagementButtonInformationContent']}
-                    </ui:define>
-                </ui:decorate>
-                
-                <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.forwardAndRewindServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(11)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(11)"/>
