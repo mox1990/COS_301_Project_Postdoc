@@ -36,7 +36,6 @@ public class LanguageBean implements Serializable {
         lang = new LinkedHashMap<String, Object>();
         lang.put("English", Locale.ENGLISH);
         lang.put("Afrikaans", new Locale("af"));
-        lang.put("Sesotho", new Locale("st"));
     }
     
     public Map<String, Object> getLangaugesInMap()

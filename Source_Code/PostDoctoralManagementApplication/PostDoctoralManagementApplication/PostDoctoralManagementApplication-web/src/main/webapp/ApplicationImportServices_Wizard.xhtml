@@ -21,15 +21,16 @@
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 0}">
                             <center>
                                 <h2 class="header2">#{lang['SpecifyFellow']}</h2>
-                                <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
-                                    <ui:param name="renderAttribute" value="#{true}"/>
-                                    <ui:param name="person" value="#{applicationImportBean.applicationCreationDependBean.fellow}"/>
-                                    <ui:param name="bean" value="#{applicationImportBean.applicationCreationDependBean}"/>
-                                    <ui:param name="beanAction" value="setFellow"/>
-                                </ui:decorate>                      
                                 <h:form>
+                                    <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
+                                        <ui:param name="renderAttribute" value="#{true}"/>
+                                        <ui:param name="person" value="#{applicationImportBean.applicationCreationDependBean.fellow}"/>
+                                        <ui:param name="bean" value="#{applicationImportBean.applicationCreationDependBean}"/>
+                                        <ui:param name="beanAction" value="setFellow"/>
+                                    </ui:decorate>                      
+                                
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                 </h:form>
@@ -50,7 +51,7 @@
                                     </ui:decorate>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/> 
                                     
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['Next']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                     
@@ -99,7 +100,7 @@
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 3}">
                             <center>
                                 <h2 class="header2">#{lang['SpecifyFundingDetails']}</h2>
-                                <h:form id="formMain">
+                                
                                     <p:panel header="#{lang['FundingReportHeader']}">
                                         <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
                                             <ui:param name="bean" value="#{applicationImportBean.fundingReportCreationDependBean}"/>
@@ -108,51 +109,52 @@
                                             <ui:param name="selectedFundingCosts" value="#{applicationImportBean.fundingReportCreationDependBean.selectedFundingCosts}"/>
                                         </ui:decorate>
                                     </p:panel>
-                                    
-                                    <p:panel header="#{lang['ApplicationDetailsHeader']}">
-                                        <h:panelGrid columns="3" cellpadding="5">
-                                            <p:outputLabel value="#{lang['StartOfFellowship']}" for="startDate"/>                                
-                                            <p:calendar mask="true" id="startDate" value="#{applicationImportBean.startDate}" pattern="yyyy/MM/dd" navigator="true" required="true">
-                                                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                                            </p:calendar>
-                                            <p:message for="startDate" styleClass="fieldErrorMessage"/>
+                                
+                                    <h:form id="formMain">
 
-                                            <p:outputLabel value="#{lang['ApplicationDuration']}" for="sliderVal"/>                             
-                                            <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
-                                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                                                <p:ajax event="slideEnd" listener="#{applicationImportBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
-                                            </p:slider>
-                                            <h:inputHidden id="sliderVal" value="#{applicationImportBean.noOfYears}" />
+                                        <p:panel header="#{lang['ApplicationDetailsHeader']}">
+                                            <h:panelGrid columns="3" cellpadding="5">
+                                                <p:outputLabel value="#{lang['StartOfFellowship']}" for="startDate"/>                                
+                                                <p:calendar mask="true" id="startDate" value="#{applicationImportBean.startDate}" pattern="yyyy/MM/dd" navigator="true" required="true">
+                                                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                                                </p:calendar>
+                                                <p:message for="startDate" styleClass="fieldErrorMessage"/>
 
-                                            <p:outputLabel value="#{lang['EndDateOfFellowship']}" for="endDate"/>                                
-                                            <p:calendar mask="true" id="endDate" value="#{applicationImportBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true">
-                                                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                                            </p:calendar>
-                                            <p:message for="endDate" styleClass="fieldErrorMessage"/>
-                                        </h:panelGrid>
-                                    </p:panel>
+                                                <p:outputLabel value="#{lang['ApplicationDuration']}" for="sliderVal"/>                             
+                                                <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
+                                                    <p:ajax event="slideEnd" listener="#{applicationImportBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
+                                                </p:slider>
+                                                <h:inputHidden id="sliderVal" value="#{applicationImportBean.noOfYears}" />
 
-                                    <p:panel header="#{lang['ResearchFellowDetailsHeader']}">
-                                        <h:panelGrid columns="3" cellpadding="5">
-                                            <p:outputLabel value="#{lang['InstituteAssignedStudentNumber']}" for="institutionAssignedID"/>                                
-                                            <p:inputText id="institutionAssignedID" value="#{applicationImportBean.researchFellowInformation.institutionAssignedID}"/>
-                                            <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
+                                                <p:outputLabel value="#{lang['EndDateOfFellowship']}" for="endDate"/>                                
+                                                <p:calendar mask="true" id="endDate" value="#{applicationImportBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true">
+                                                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                                                </p:calendar>
+                                                <p:message for="endDate" styleClass="fieldErrorMessage"/>
+                                            </h:panelGrid>
+                                        </p:panel>
 
-                                            <p:outputLabel value="#{lang['InstituteAssignedEmail']}" for="institutionAssignedEmail"/>                                
-                                            <p:inputText id="institutionAssignedEmail" value="#{applicationImportBean.researchFellowInformation.institutionAssignedEmail}"/>
-                                            <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
+                                        <p:panel header="#{lang['ResearchFellowDetailsHeader']}">
+                                            <h:panelGrid columns="3" cellpadding="5">
+                                                <p:outputLabel value="#{lang['InstituteAssignedStudentNumber']}" for="institutionAssignedID"/>                                
+                                                <p:inputText id="institutionAssignedID" value="#{applicationImportBean.researchFellowInformation.institutionAssignedID}"/>
+                                                <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
+
+                                                <p:outputLabel value="#{lang['InstituteAssignedEmail']}" for="institutionAssignedEmail"/>                                
+                                                <p:inputText id="institutionAssignedEmail" value="#{applicationImportBean.researchFellowInformation.institutionAssignedEmail}"/>
+                                                <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
 
 
-                                        </h:panelGrid>   
-                                        <center>
-                                            <ui:decorate template="templates/LocationSelection_Component.xhtml">
-                                                <ui:param name="locationBean" value="#{applicationImportBean.locationFinderDependBean}"/>
-                                                <ui:param name="departmentField" value="#{applicationImportBean.researchFellowInformation.department}"/>
-                                                <ui:param name="renderAttribute" value="#{true}"/>
-                                            </ui:decorate>
-                                        </center>
-                                    </p:panel>
-                                </h:form>
+                                            </h:panelGrid>   
+                                            <center>
+                                                <ui:decorate template="templates/LocationSelection_Component.xhtml">
+                                                    <ui:param name="locationBean" value="#{applicationImportBean.locationFinderDependBean}"/>
+                                                    <ui:param name="departmentField" value="#{applicationImportBean.researchFellowInformation.department}"/>
+                                                    <ui:param name="renderAttribute" value="#{true}"/>
+                                                </ui:decorate>
+                                            </center>
+                                        </p:panel>
+                                    </h:form>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
                                     <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
