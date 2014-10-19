@@ -10,14 +10,14 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Announcement editor</h1>
-                <h2>Complete the field details below to update the announcement</h2>
+                <h1 class="header1">#{lang['AnnouncementEditor']}</h1>
+                <h2>#{lang['AnnouncementEditorPrompt']}</h2>
             </div>
             
             <div>                
                 <h:form id="fileup" enctype="multipart/form-data">  
                     <p:growl globalOnly="false" showDetail="true"/>
-                    <p:outputLabel value="Image file:" for="file"/>                                
+                    <p:outputLabel value="#{lang['ImageFile']}:" for="file"/>                                
                     <p:fileUpload id="file" required="true" sizeLimit="3000000" mode="advanced" fileLimit="1" process="@form"  fileUploadListener="#{fileUploadBean.uploadEvent}" auto="true" update="@form"/>
 
                     <p:message for="file" styleClass="fieldErrorMessage"/>
@@ -29,14 +29,14 @@
                         <ui:param name="annoucement" value="#{announcementEditBean.announcementCreationDependBean.announcement}"/>
                     </ui:decorate>
                     
-                    <p:commandButton value="Save changes to announcement" action="#{announcementEditBean.preformUpdateAnnouncmentRequest()}" process="@form" update="@form" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['SaveAnnnouncementChanges']}" action="#{announcementEditBean.preformUpdateAnnouncmentRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                        <p:confirm header="Update confirmation" message="Are you sure you want to save changes to this announcment?" icon="ui-icon-alert"/>
+                        <p:confirm header="#{lang['UpdateConfirmation']}" message="#{lang['UpdateConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
             </div>

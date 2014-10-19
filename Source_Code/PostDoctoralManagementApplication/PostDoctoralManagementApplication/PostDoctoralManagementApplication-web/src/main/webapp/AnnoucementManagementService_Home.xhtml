@@ -9,7 +9,7 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Annoucement Mangement services home</h1>
+                <h1 class="header1">#{lang['AnnoucementHome']}</h1>
                 <h2>#{lang['ServicesSelectionPrompt']}</h2>
             </div>
             <div>
@@ -17,12 +17,12 @@
                     <ui:param name="isPanelRendered" value="#{true}"/>
                     <ui:param name="showFunction" value="showInfoDiv(1)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
-                    <ui:param name="buttonName" value="Announcement creation"/>
+                    <ui:param name="buttonName" value="#{lang['AnnouncementCreation']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToAnnouncementServiceAnnouncementCreationView"/>
                     <ui:param name="infoContainerID" value="info1"/>
                     <ui:define name="informationContent">
-                        This option allows you to create a new announcement.
+                        #{lang['AnnouncementCreationDetail']}
                     </ui:define>
                 </ui:decorate>
                 
@@ -30,12 +30,12 @@
                     <ui:param name="isPanelRendered" value="#{true}"/>
                     <ui:param name="showFunction" value="showInfoDiv(2)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
-                    <ui:param name="buttonName" value="Announcement viewer"/>
+                    <ui:param name="buttonName" value="#{lang['AnnouncementViewer']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToAnnouncementServiceAnnouncementSelectionView"/>
                     <ui:param name="infoContainerID" value="info2"/>
                     <ui:define name="informationContent">
-                        This option allows you to view all pending as well as active announcements. It also allows you to edit the announcements.
+                        #{lang['AnnouncementSelectionDetail']}
                     </ui:define>
                 </ui:decorate>
                 

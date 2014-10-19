@@ -15,16 +15,16 @@
 
         <ui:define name="pageBody">
             <div>
-                 <h1 class="header1">Application renewal wizard</h1>
-                 <h2>Please complete following fields below in order to open application renewal</h2>
+                <h1 class="header1">#{lang['RenewalWizardHeader']}</h1>
+                <h2>#{lang['RenewalApplicationPrompt']}</h2>
             </div>
             
             <div>
                 <p:tabView activeIndex="#{applicationRenewalBean.wizardActiveTab}" id="wizardTab">
-                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 0}" title="Step 1: Final progress report">
+                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 0}" title="#{lang['FinalProgressReportTab']}">
                         <p:outputPanel rendered="#{applicationRenewalBean.wizardActiveTab == 0}">
                             <center>
-                                <h2 class="header2">Create your final progress report</h2>
+                                <h2 class="header2">#{lang['CreateFinalProgressReportHeader']}</h2>
                                                        
                                 
                                     <ui:decorate template="templates/ProgressReportInput_Component.xhtml">
@@ -39,10 +39,10 @@
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 1}" title="Step 2: Update CV details">
+                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 1}" title="#{lang['UpdateCVTab']}">
                         <p:outputPanel rendered="#{applicationRenewalBean.wizardActiveTab == 1}">
                             <center>
-                                <h2 class="header2">Create or update your CV</h2>                                
+                                <h2 class="header2">#{lang['UpdateCVHeader']}</h2>                                
                                 <ui:decorate template="templates/cvFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="bean" value="#{applicationRenewalBean.CVCreationDependBean}"/>
@@ -57,10 +57,10 @@
                             </center>                      
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 2}" title="Step 3: Application details">
+                    <p:tab disabled="#{applicationRenewalBean.wizardActiveTab != 2}" title="#{lang['ApplicationDetailsTab']}">
                         <p:outputPanel rendered="#{applicationRenewalBean.wizardActiveTab == 2}">
                              <center>
-                                <h2 class="header2">Complete application form</h2>
+                                 <h2 class="header2">#{lang['CompleteApplicationFormHeader']}</h2>
                                 <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="bean" value="#{applicationRenewalBean.applicationCreationDependBean}"/>
@@ -71,9 +71,9 @@
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -96,9 +96,9 @@
                                         <p:confirm header="#{lang['ApplicationRenewalSubmissionConfirmation']}" message="#{lang['RenewalConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{applicationRenewalBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back?" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

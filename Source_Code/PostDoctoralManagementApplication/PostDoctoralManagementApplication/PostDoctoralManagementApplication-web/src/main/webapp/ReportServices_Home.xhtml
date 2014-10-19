@@ -11,16 +11,16 @@
         <ui:define name="pageBody">
             
             <div>
-                <h1 class="header1">Report generator wizard</h1>
-                 <h2>Please follow the wizard to generate custom reports</h2>
+                <h1 class="header1">#{lang['ReportWizard']}</h1>
+                <h2>#{lang['ReportWizardPrompt']}</h2>
             </div>
             
             <div>
                 <p:tabView activeIndex="#{reportGeneratorBean.wizardTabIndex}" id="wizardTab">
-                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 0}" title="Step 1: Select query type">
+                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 0}" title="#{lang['SelectQueryTab']}">
                         <p:outputPanel rendered="#{reportGeneratorBean.wizardTabIndex == 0}">
                             <center>
-                                <h2 class="header2">Select query type</h2>
+                                <h2 class="header2">#{lang['SelectQueryType']}</h2>
                                                       
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
@@ -33,17 +33,17 @@
                                     </h:panelGrid>
                                     
                                     
-                                    <p:commandButton update=":wizardTab" actionListener="#{reportGeneratorBean.completeQuerySelectionStep()}" value="Next" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" actionListener="#{reportGeneratorBean.completeQuerySelectionStep()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                 </h:form>
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 1}" title="Step 2: Refine data selection">
+                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 1}" title="#{lang['RedefineDataTab']}">
                         <p:outputPanel rendered="#{reportGeneratorBean.wizardTabIndex == 1}">
                             <center>
-                                <h2 class="header2">Refine data selection</h2>
+                                <h2 class="header2">#{lang['RedefineData']}</h2>
                             </center>
                                 <h:form>
                                     
@@ -63,12 +63,12 @@
                                     </p:tree>
                                     
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.completeSelectionRefineStep()}" value="Next" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.completeSelectionRefineStep()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step will be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -79,10 +79,10 @@
                                                     
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 2}" title="Step 3: Select columns">
+                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 2}" title="#{lang['SelectColumnsTab']}">
                         <p:outputPanel rendered="#{reportGeneratorBean.wizardTabIndex == 2}">
                             <center>
-                                <h2 class="header2">Select columns</h2>
+                                <h2 class="header2">#{lang['SelectColumns']}</h2>
                             </center> 
                                 <h:form>
                                     
@@ -99,12 +99,12 @@
                                     </p:tree>
                                     
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.completeColumnSelectionStep()}" value="Next" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.completeColumnSelectionStep()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step will be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -115,29 +115,29 @@
                                                    
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 3}" title="Step 4: Customise report">
+                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 3}" title="#{lang['CustomiseReportTab']}">
                         <p:outputPanel rendered="#{reportGeneratorBean.wizardTabIndex == 3}">
                             <center>
-                                <h2 class="header2">Customise report</h2>
+                                <h2 class="header2">#{lang['CustomiseReport']}</h2>
 
                                 <h:form>
                                     <h:panelGrid columns="3" cellpadding="5">
-                                        <p:outputLabel value="Report title:" for="reportTitle"/>                                
+                                        <p:outputLabel value="#{lang['ReportTitle']}:" for="reportTitle"/>                                
                                         <p:inputText id="reportTitle" value="#{reportGeneratorBean.dynamicReportCreationRequest.title}" required="true"/>
                                         <p:message for="reportTitle" styleClass="fieldErrorMessage"/>
 
-                                        <p:outputLabel value="Report sub-title:" for="subtitle"/>                                
+                                        <p:outputLabel value="#{lang['ReportSub-title']}:" for="subtitle"/>                                
                                         <p:inputText id="subtitle" value="#{reportGeneratorBean.dynamicReportCreationRequest.subtitle}" required="true"/>
                                         <p:message for="subtitle" styleClass="fieldErrorMessage"/>
                                     </h:panelGrid>
                                     
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.completeReportCustomizationStep()}" value="Next" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.completeReportCustomizationStep()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@form" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step will be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -148,10 +148,10 @@
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 4}" title="Step 5: Preview and export report">
+                    <p:tab disabled="#{reportGeneratorBean.wizardTabIndex != 4}" title="#{lang['PreviewExportReportTab']}">
                         <p:outputPanel rendered="#{reportGeneratorBean.wizardTabIndex == 4}">
                             <center>
-                                <h2 class="header2">Preview and export report</h2>
+                                <h2 class="header2">#{lang['PreviewExportReport']}</h2>
 
                                 <h:form>
                                     <p:panel>
@@ -159,18 +159,18 @@
                                     </p:panel>
                                                                         
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton ajax="false" value="Export to PDF" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
+                                    <p:commandButton ajax="false" value="#{lang['ExportToPDF']}" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                         <p:fileDownload value="#{reportGeneratorBean.exportReportToPDF()}" />
                                     </p:commandButton>
-                                    <p:commandButton ajax="false" value="Export to MS Excel" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
+                                    <p:commandButton ajax="false" value="#{lang['ExportToExcel']}" styleClass="button button-fill" process="@this" icon="ui-icon-arrowthick-1-s">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                         <p:fileDownload value="#{reportGeneratorBean.exportReportToMSExcel()}" />
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{reportGeneratorBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step will be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
