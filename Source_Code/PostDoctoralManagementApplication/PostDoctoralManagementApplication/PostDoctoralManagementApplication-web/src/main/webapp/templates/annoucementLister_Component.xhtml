@@ -17,9 +17,9 @@
                 <p:accordionPanel dynamic="true" cache="true" value="#{annoucements}" var="annouce" styleClass="box-round">
                     <p:tab title="#{lang['Announcement']} - #{annouce.announcementID} - #{annouce.headline}" >
                         <h:panelGrid columns="2">
-                            <h:outputText styleClass="text-label" value="Headline:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['Headline']}"/>
                             <h:outputText value="#{annouce.headline}"/>
-                            <h:outputText styleClass="text-label" value="Message:"/>
+                            <h:outputText styleClass="text-label" value="#{lang['Message']}"/>
                             <h:outputText value="#{annouce.message}"/>
                             <h:outputText styleClass="text-label" value="#{lang['CreatedOn']}"/>
                             <h:outputText value="#{annouce.timestamp}">

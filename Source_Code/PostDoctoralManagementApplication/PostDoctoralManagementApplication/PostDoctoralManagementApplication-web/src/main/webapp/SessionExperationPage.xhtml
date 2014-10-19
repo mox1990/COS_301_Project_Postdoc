@@ -18,9 +18,9 @@
         
         <ui:define name="pageBody">
             <div class="subContainer">
-                <h1>Your session has expired...</h1>
+                <h1>#{lang['SessionExpired']}</h1>
                 <h:form>
-                    <p:commandButton value="Please click here to return to the login page" action="#{logoutRequestBean.performLogoutRequest()}" />
+                    <p:commandButton value="#{lang['SessionRestorePrompt']}" action="#{logoutRequestBean.performLogoutRequest()}" />
                 </h:form>
             </div>
         </ui:define>

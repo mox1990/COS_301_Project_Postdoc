@@ -9,11 +9,11 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Announcement selection</h1>
-                <h2>Click on the announcement to view more details</h2>
+                <h1 class="header1">#{lang['AnnouncementSelection']}</h1>
+                <h2>#{lang['AnnouncementSelectionClick']}</h2>
             </div>
             <p:outputPanel> 
-                <h1 class="header1-1">Announcements still pending</h1>
+                <h1 class="header1-1">#{lang['AnnouncementsPending']}</h1>
                 <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}"> 
 
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
@@ -25,7 +25,7 @@
                         <ui:decorate template="templates/annoucementLister_Component.xhtml">
                             <ui:param name="annoucements" value="#{announcementSelectionBean.pendingAnnouncementBean.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="Edit announcement" styleClass="button button-fill" action="#{announcementSelectionBean.editAnnouncement(annouce)}"/> 
+                                <p:commandButton value="#{lang['EditAnnouncement']}" styleClass="button button-fill" action="#{announcementSelectionBean.editAnnouncement(annouce)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>
@@ -33,7 +33,7 @@
             </p:outputPanel>
             
             <p:outputPanel> 
-                <h1 class="header1-1">Announcements active at the moment</h1>
+                <h1 class="header1-1">#{lang['AnnouncementsActive']}</h1>
                 <p:panel  toggleable="true" header="#{lang['ClickToCollepseOrSelect']}"> 
 
                     <ui:decorate template="templates/filterSearch_Component.xhtml">
@@ -45,7 +45,7 @@
                         <ui:decorate template="templates/annoucementLister_Component.xhtml">
                             <ui:param name="annoucements" value="#{announcementSelectionBean.activeAnnouncementBean.filteredList}"/>
                             <ui:define name="commandButtons">
-                                <p:commandButton value="Edit announcement" styleClass="button button-fill" action="#{announcementSelectionBean.editAnnouncement(annouce)}"/> 
+                                <p:commandButton value="#{lang['EditAnnouncement']}" styleClass="button button-fill" action="#{announcementSelectionBean.editAnnouncement(annouce)}"/> 
                             </ui:define>
                         </ui:decorate>
                     </h:form>
