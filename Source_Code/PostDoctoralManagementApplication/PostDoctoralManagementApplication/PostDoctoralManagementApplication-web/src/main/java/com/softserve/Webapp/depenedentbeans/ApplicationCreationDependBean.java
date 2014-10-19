@@ -41,6 +41,7 @@ public class ApplicationCreationDependBean implements Serializable{
     private String currentExpectedOutcome;
     
     private Person grantHolder;
+    private Person fellow;
     
     private List<Person> referees;
     private List<Person> selectedRefereeList;
@@ -87,6 +88,14 @@ public class ApplicationCreationDependBean implements Serializable{
             grantHolder = new Person();
             grantHolder.setTitle("Mr");
             grantHolder.setUpEmployee(true);
+        }
+        
+        
+        if(fellow == null)
+        {
+            fellow = new Person();
+            fellow.setTitle("Mr");
+            fellow.setUpEmployee(true);
         }
         
         if(referees == null)
@@ -200,6 +209,15 @@ public class ApplicationCreationDependBean implements Serializable{
     public List<Person> getSelectedRefereeList() {
         return selectedRefereeList;
     }
+
+    public Person getFellow() {
+        return fellow;
+    }
+
+    public void setFellow(Person fellow) {
+        this.fellow = fellow;
+    }
+    
     
     
     

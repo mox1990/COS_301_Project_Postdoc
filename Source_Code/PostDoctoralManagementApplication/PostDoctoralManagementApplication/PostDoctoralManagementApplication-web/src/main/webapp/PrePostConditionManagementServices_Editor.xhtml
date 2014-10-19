@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="Notification management"/>
+        <ui:param name="pageTitle" value="Pre post condition editor"/>
         
         <ui:define name="pageBody">
             <div>
@@ -14,7 +14,29 @@
                 <h2></h2>
             </div>
             <div>                
+                <div>
+                    <h:panelGrid columns="3" cellpadding="5">
+                        <p:outputLabel value="Pre condtion evaluation script (Java script):" for="preConditionScript"/>                                
+                        <p:inputTextarea id="preConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.preConditionScript}" required="true"/>
+                        <p:message for="preConditionScript" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Post condtion evaluation script (Java script):" for="postConditionScript"/>                                
+                        <p:inputTextarea id="postConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.postConditionScript}" required="true"/>
+                        <p:message for="postConditionScript" styleClass="fieldErrorMessage"/>
+                    </h:panelGrid>
+                    
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
+                    
+                    <p:commandButton process="@form" update="@form" action="#{prePostConditionEditBean.preformPrePostCondtionUpdate()}" value="Save changes to pre post condition script" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                        <p:confirm header="Pre-Post Condition script edit confirmation" message="Are you sure you wish to update the evaluation scripts for the method?" icon="ui-icon-alert"/>
+                    </p:commandButton>
 
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </div>
             </div>            
         </ui:define>        
     </ui:composition>

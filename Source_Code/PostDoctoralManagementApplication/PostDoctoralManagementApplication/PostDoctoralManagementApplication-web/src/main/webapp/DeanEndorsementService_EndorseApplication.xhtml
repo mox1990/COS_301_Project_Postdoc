@@ -24,7 +24,7 @@
                         <p:message for="motivation" styleClass="fieldErrorMessage"/>                                                                 
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="#{lang['EndorseApplication']}" action="#{deanEndorseRequestBean.preformEndorseRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['EndorseApplication']}" action="#{deanEndorseRequestBean.preformEndorseRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <p:confirm header="#{lang['EndorseApplicationConfirmation']}" message="#{lang['EndorseApplicationConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     

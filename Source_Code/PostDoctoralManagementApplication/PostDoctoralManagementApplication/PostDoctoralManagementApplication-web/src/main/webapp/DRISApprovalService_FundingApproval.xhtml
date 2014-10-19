@@ -85,7 +85,7 @@
                     </p:panel>
                     
                     <p:growl sticky="true" globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton value="#{lang['ApproveApplicationFunding']}" action="#{drisApproveFundingBean.preformFundingApprovalRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['ApproveApplicationFunding']}" action="#{drisApproveFundingBean.preformFundingApprovalRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
                         <p:confirm header="#{lang['ApproveApplicationFundingConfirmation']}" message="#{lang['ApproveApplicationFundingConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>

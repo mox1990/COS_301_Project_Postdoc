@@ -6,15 +6,59 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
-        <ui:param name="pageTitle" value="Notification management"/>
+        <ui:param name="pageTitle" value="Neural network editor"/>
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">#{lang['NotificationViewer']}</h1>
-                <h2></h2>
+                <h1 class="header1">Neural network editor</h1>
+                <h2>Please complete the details below</h2>
             </div>
             <div>                
+                <h:form>
+                    <h:panelGrid columns="3" cellpadding="5">
 
+                        <p:outputLabel value="Name:" for="name"/>                                
+                        <p:inputText id="name" value="#{neuralNetworkEditBean.neuralNetwork.name}"/>
+                        <p:message for="name" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Bais value:" for="biasValue"/>                                
+                        <p:inputText id="biasValue" value="#{neuralNetworkEditBean.neuralNetwork.biasThreshold}" required="true"/>
+                        <p:message for="biasValue" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Momentum:" for="momentum"/>                                
+                        <p:inputText id="momentum" value="#{neuralNetworkEditBean.neuralNetwork.momentum}" required="true"/>
+                        <p:message for="momentum" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Learning rate:" for="learningRate"/>                                
+                        <p:inputText id="learningRate" value="#{neuralNetworkEditBean.neuralNetwork.learningRate}" required="true"/>
+                        <p:message for="learningRate" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Lower certainty bound:" for="lowerCertaintyBound"/>                                
+                        <p:inputText id="lowerCertaintyBound" value="#{neuralNetworkEditBean.neuralNetwork.lowerCertaintyBound}" required="true"/>
+                        <p:message for="lowerCertaintyBound" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Upper certainty bound:" for="upperCertiantyBound"/>                                
+                        <p:inputText id="upperCertiantyBound" value="#{neuralNetworkEditBean.neuralNetwork.upperCertaintyBound}" required="true"/>
+                        <p:message for="upperCertiantyBound" styleClass="fieldErrorMessage"/>
+                        
+                        <p:outputLabel value="Smoothing Parameter T:" for="smoothingParameter"/>                                
+                        <p:inputText id="smoothingParameter" value="#{neuralNetworkEditBean.neuralNetwork.smoothingParameterT}" required="true"/>
+                        <p:message for="smoothingParameter" styleClass="fieldErrorMessage"/>
+                        
+                        <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
+                    
+                        <p:commandButton process="@form" update="@form" action="#{neuralNetworkEditBean.preformNeuralNetworkEditRequest()}" value="Save changes to neural network" styleClass="button button-fill">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            <p:confirm header="Neural network update confirmation" message="Are you sure you wish to save changes to this neural network? Warning the neueral network will be reset" icon="ui-icon-alert"/>
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                        
+                    </h:panelGrid>
+                </h:form>
             </div>            
         </ui:define>        
     </ui:composition>

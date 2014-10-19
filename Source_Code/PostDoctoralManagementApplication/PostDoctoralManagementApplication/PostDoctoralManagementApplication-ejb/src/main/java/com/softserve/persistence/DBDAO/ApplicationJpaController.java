@@ -371,6 +371,16 @@ public class ApplicationJpaController implements Serializable {
         return (applications != null)?applications:new ArrayList<Application>();
     }
     
+    public List<Application> findAllNonImportedApplicationsWithStatus(String applicationStatus, int startRecord, int maxRecords)
+    {
+        EntityManager em = getEntityManager();
+        
+        TypedQuery<Application> q = em.createQuery("SELECT a FROM Application a WHERE a.status= :status AND a.imported = FALSE", Application.class).setParameter("status", applicationStatus).setFirstResult(startRecord).setMaxResults(maxRecords);
+        
+        List<Application> applications = q.getResultList();
+        return (applications != null)?applications:new ArrayList<Application>();
+    }
+    
     public List<Application> findAllNewApplicationsWithStatus(String applicationStatus, int startRecord, int maxRecords)
     {
         EntityManager em = getEntityManager();

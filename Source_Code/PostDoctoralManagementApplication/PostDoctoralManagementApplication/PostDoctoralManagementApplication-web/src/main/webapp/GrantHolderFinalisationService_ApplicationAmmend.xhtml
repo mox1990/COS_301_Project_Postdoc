@@ -20,7 +20,7 @@
                         <p:message for="reason" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
                     <p:growl sticky="true" showDetail="true" globalOnly="false"/>
-                    <p:commandButton value="#{lang['RequestApplicationAmmendment']}" action="#{grantHolderAmmendRequestBean.preformAmmendRequest()}" process="@form" update="@all" styleClass="button button-fill">
+                    <p:commandButton value="#{lang['RequestApplicationAmmendment']}" action="#{grantHolderAmmendRequestBean.preformAmmendRequest()}" process="@form" update="@form" styleClass="button button-fill">
                         <p:confirm header="#{lang['RequestApplicationAmmendmentConfirmation']}" message="#{lang['RequestApplicationAmmendmentConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
                     

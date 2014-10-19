@@ -615,6 +615,14 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToNeuralNetworkManagementServicesSelectionView()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("NeuralNetworkManagementServices_Selection", "Neural Network selection");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
     public String goToNeuralNetworkManagementServicesEditor()
     {
         BreadCrumb breadCrumb = new BreadCrumb("NeuralNetworkManagementServices_Editor", "Neural Network editor");

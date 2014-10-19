@@ -11,6 +11,7 @@ import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.auxiliary.Exceptions.AuthenticationException;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.Webapp.auxiliary.StorageItem;
+import com.softserve.Webapp.util.MessageUtil;
 import com.softserve.auxiliary.util.HashUtil;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import java.io.IOException;
@@ -20,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -56,6 +59,21 @@ public class SessionManagerBean implements Serializable {
     {
         sessionStorage = new ArrayList<StorageItem>();
     }
+    
+    @PreDestroy
+    public void destory()
+    {
+        sessionStorage.clear();
+        HttpSession httpSession = (HttpSession)(FacesContext.getCurrentInstance().getExternalContext().getSession(false));
+        
+        if(httpSession != null)
+        {
+            httpSession.invalidate();
+        }
+        MessageUtil.CreateGlobalFacesMessage("Session Expired", "The session has expired due to inactivity", FacesMessage.SEVERITY_WARN);
+        navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
+    }
+    
     
     public String login(String username, String password) throws NoSuchAlgorithmException
     {

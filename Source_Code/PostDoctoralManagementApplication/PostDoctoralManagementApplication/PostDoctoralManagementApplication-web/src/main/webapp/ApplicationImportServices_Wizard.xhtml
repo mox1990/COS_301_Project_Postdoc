@@ -1,12 +1,203 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition template="templates/generalPageWithBreadCrumb_Template.xhtml">
+        <ui:param name="pageTitle" value="Application import wizard"/>
+
+        <ui:define name="pageBody">
+            <div>
+                <h1 class="header1">Application import wizard</h1>
+                 <h2>Please follow the wizard to import the application</h2>
+            </div>
+            
+            <div>
+                <p:tabView activeIndex="#{applicationImportBean.wizardActiveTab}" id="wizardTab">
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 0}" title="Step 1: Specify fellow">
+                        <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 0}">
+                            <center>
+                                <h2 class="header2">Specify fellow</h2>
+                                <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
+                                    <ui:param name="renderAttribute" value="#{true}"/>
+                                    <ui:param name="person" value="#{applicationImportBean.applicationCreationDependBean.fellow}"/>
+                                    <ui:param name="bean" value="#{applicationImportBean.applicationCreationDependBean}"/>
+                                    <ui:param name="beanAction" value="setFellow"/>
+                                </ui:decorate>                      
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 1}" title="Step 2: Specify grant holder">
+                        <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 1}">
+                            <center>
+                                <h2 class="header2">#{lang['SpecifyGrantHolder']}</h2>
+                                <h:form>
+                                    <ui:decorate template="templates/personOnDemandFieldInputEmployee_Component.xhtml">
+                                        <ui:param name="renderAttribute" value="#{true}"/>
+                                        <ui:param name="person" value="#{applicationImportBean.applicationCreationDependBean.grantHolder}"/>
+                                        <ui:param name="bean" value="#{applicationImportBean.applicationCreationDependBean}"/>
+                                        <ui:param name="beanAction" value="setGrantHolder"/>
+                                    </ui:decorate>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/> 
+                                    
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
+                                    
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                        
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 2}" title="Step 3: Complete Application details">
+                        <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 2}">
+                            <center>
+                                <h2 class="header2">#{lang['CompleteApplicationFormHeader']}</h2>
+                                <ui:decorate template="templates/applicationFieldInput_Component.xhtml">
+                                    <ui:param name="renderAttribute" value="#{true}"/>
+                                    <ui:param name="bean" value="#{applicationImportBean.applicationCreationDependBean}"/>
+                                </ui:decorate>
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
+                                    
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                        
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>
+                    </p:tab>
+                    
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 3}" title="Step 4: Specify funding details">
+                        <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 3}">
+                            <center>
+                                <h2 class="header2">#{lang['SpecifyReferees']}</h2>
+                                <h:form id="formMain">
+                                    <p:panel header="#{lang['FundingReportHeader']}">
+                                        <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
+                                            <ui:param name="bean" value="#{applicationImportBean.fundingReportCreationDependBean}"/>
+                                            <ui:param name="beanActionAdd" value="addFundingCostToList"/>
+                                            <ui:param name="beanActionRemove" value="removeFundingCostFromList"/>
+                                            <ui:param name="selectedFundingCosts" value="#{applicationImportBean.fundingReportCreationDependBean.selectedFundingCosts}"/>
+                                        </ui:decorate>
+                                    </p:panel>
+                                    
+                                    <p:panel header="#{lang['ApplicationDetailsHeader']}">
+                                        <h:panelGrid columns="3" cellpadding="5">
+                                            <p:outputLabel value="#{lang['StartOfFellowship']}" for="startDate"/>                                
+                                            <p:calendar mask="true" id="startDate" value="#{applicationImportBean.startDate}" pattern="yyyy/MM/dd" navigator="true" required="true">
+                                                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                                            </p:calendar>
+                                            <p:message for="startDate" styleClass="fieldErrorMessage"/>
+
+                                            <p:outputLabel value="#{lang['ApplicationDuration']}" for="sliderVal"/>                             
+                                            <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
+                                                <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+                                                <p:ajax event="slideEnd" listener="#{applicationImportBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
+                                            </p:slider>
+                                            <h:inputHidden id="sliderVal" value="#{applicationImportBean.noOfYears}" />
+
+                                            <p:outputLabel value="#{lang['EndDateOfFellowship']}" for="endDate"/>                                
+                                            <p:calendar mask="true" id="endDate" value="#{applicationImportBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true">
+                                                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                                            </p:calendar>
+                                            <p:message for="endDate" styleClass="fieldErrorMessage"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                    <p:panel header="#{lang['ResearchFellowDetailsHeader']}">
+                                        <h:panelGrid columns="3" cellpadding="5">
+                                            <p:outputLabel value="#{lang['InstituteAssignedStudentNumber']}" for="institutionAssignedID"/>                                
+                                            <p:inputText id="institutionAssignedID" value="#{applicationImportBean.researchFellowInformation.institutionAssignedID}"/>
+                                            <p:message for="institutionAssignedID" styleClass="fieldErrorMessage"/>
+
+                                            <p:outputLabel value="#{lang['InstituteAssignedEmail']}" for="institutionAssignedEmail"/>                                
+                                            <p:inputText id="institutionAssignedEmail" value="#{applicationImportBean.researchFellowInformation.institutionAssignedEmail}"/>
+                                            <p:message for="institutionAssignedEmail" styleClass="fieldErrorMessage"/>
+
+
+                                        </h:panelGrid>   
+                                        <center>
+                                            <ui:decorate template="templates/LocationSelection_Component.xhtml">
+                                                <ui:param name="locationBean" value="#{applicationImportBean.locationFinderDependBean}"/>
+                                                <ui:param name="departmentField" value="#{applicationImportBean.researchFellowInformation.department}"/>
+                                                <ui:param name="renderAttribute" value="#{true}"/>
+                                            </ui:decorate>
+                                        </center>
+                                    </p:panel>
+                                </h:form>
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                    </p:commandButton>
+                                    
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                        
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>    
+                    </p:tab>
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 5}" title="Step 5: Import application">
+                        <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 5}">
+                            <center>
+                                <h2 class="header2">Import application</h2>
+                                <h:form>
+                                    <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
+                                    <p:commandButton process="@this" update="@form" action="#{applicationImportBean.preformApplicationImport()}" value="Import application data" styleClass="button button-fill" icon="ui-icon-circle-arrow-e">
+                                        <p:confirm header="Application import confrimation" message="Are you sure you wish to import his application?" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                    
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back?" icon="ui-icon-alert"/>
+                                    </p:commandButton>
+                                        
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>
+                                </h:form>
+                            </center>                        
+                        </p:outputPanel>  
+                    </p:tab>
+                </p:tabView>
+            </div>
+        </ui:define>
+    </ui:composition>
 </html>
 

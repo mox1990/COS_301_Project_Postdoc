@@ -164,6 +164,7 @@ public class NewApplicationCreationBean implements Serializable {
             Cv cv = cVCreationDependBean.getCombinedCv();
             cv.setCvID(session.getUser().getSystemID());
             cv.setPerson(session.getUser());
+            
             newApplicationServiceLocal.createProspectiveFellowCV(sessionManagerBean.getSession(), cv);
             
             wizardActiveTab = 1;
