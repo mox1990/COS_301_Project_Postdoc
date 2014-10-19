@@ -147,12 +147,12 @@
                     
                     <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{welcomeBean.prePostConditionalServicesDisplayable}"/>
-                        <ui:param name="showFunction" value="showInfoDiv(10)"/>
-                        <ui:param name="hideFunction" value="hideInfoDiv(10)"/>
+                        <ui:param name="showFunction" value="showInfoDiv(13)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(13)"/>
                         <ui:param name="buttonName" value="#{lang['WelcomePrePostConditionServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                        <ui:param name="buttonAction" value="goToLocationMangementServiceView"/>
-                        <ui:param name="infoContainerID" value="info10"/>
+                        <ui:param name="buttonAction" value="goToPrePostConditionManagementServicesHomeView"/>
+                        <ui:param name="infoContainerID" value="info13"/>
                         <ui:define name="informationContent">
                             #{lang['WelcomePrePostConditionInformationContent']} 
                         </ui:define>
@@ -160,12 +160,12 @@
                     
                     <ui:decorate template="templates/panelButton_Component.xhtml">
                         <ui:param name="isPanelRendered" value="#{welcomeBean.locationServicesDisplayable}"/>
-                        <ui:param name="showFunction" value="showInfoDiv(11)"/>
-                        <ui:param name="hideFunction" value="hideInfoDiv(11)"/>
+                        <ui:param name="showFunction" value="showInfoDiv(14)"/>
+                        <ui:param name="hideFunction" value="hideInfoDiv(14)"/>
                         <ui:param name="buttonName" value="#{lang['WelcomeNeuralNetworkManagementServices']}"/>
                         <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                        <ui:param name="buttonAction" value="goToLocationMangementServiceView"/>
-                        <ui:param name="infoContainerID" value="info11"/>
+                        <ui:param name="buttonAction" value="goToNeuralNetworkManagementServicesHome"/>
+                        <ui:param name="infoContainerID" value="info14"/>
                         <ui:define name="informationContent">
                             #{lang['WelcomeNeuralNetworkManagementInformationContent']}
                         </ui:define>

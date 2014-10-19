@@ -71,7 +71,7 @@ public class SessionManagerBean implements Serializable {
             httpSession.invalidate();
         }
         MessageUtil.CreateGlobalFacesMessage("Session Expired", "The session has expired due to inactivity", FacesMessage.SEVERITY_WARN);
-        navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPortalView());
+        navigationManagerBean.callFacesNavigator(navigationManagerBean.goToSessionExperationPage());
     }
     
     
