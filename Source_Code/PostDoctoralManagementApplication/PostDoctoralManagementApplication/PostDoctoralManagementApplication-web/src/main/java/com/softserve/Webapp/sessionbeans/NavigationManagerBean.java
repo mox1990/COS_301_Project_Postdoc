@@ -663,4 +663,14 @@ public class NavigationManagerBean implements Serializable {
         return goToLink(breadCrumb);
     }
     
+    public String goToSessionExperationPage()
+    {
+        BreadCrumb breadCrumb = new BreadCrumb("SessionExperationPage", "Session experation");
+        addToBreadCrumbs(breadCrumb);
+        
+        return goToLink(breadCrumb);
+    }
+    
+    
+    
 }
