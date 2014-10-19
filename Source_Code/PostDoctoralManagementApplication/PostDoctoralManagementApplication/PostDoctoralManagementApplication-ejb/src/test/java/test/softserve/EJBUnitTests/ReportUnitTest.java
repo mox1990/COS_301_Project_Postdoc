@@ -17,6 +17,8 @@ import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBEntities.Application;
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.persistence.DBEntities.Person;
+import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import javax.persistence.EntityManager;
@@ -26,8 +28,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.ReportServicesMockUnit;
 
 /**
@@ -99,7 +100,29 @@ public class ReportUnitTest {
      */
     @Test
     public void testLoadAllApplicationEntities() throws Exception {
-        
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+                
+        try
+        {
+            // Test returned value...
+            instance.loadAllApplicationEntities(mockSession);
+            
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findApplicationEntities();
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockEntityToListConverter);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -107,7 +130,28 @@ public class ReportUnitTest {
      */
     @Test
     public void testGetFieldNamesForEntity() throws Exception {
-        
+        Object mockEntity = mock(Object.class);
+           
+        List<String> concat = new ArrayList<>();
+        concat.add("int"); concat.add("double");
+        when(mockEntityToListConverter.getEntityFieldNames(mockEntity)).thenReturn(concat);
+        try
+        {
+            instance.getFieldNamesForEntity(mockEntity);
+            
+            verify(mockEntityToListConverter).getEntityFieldNames(mockEntity);
+            
+            verifyNoMoreInteractions(mockEntity);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockEntityToListConverter);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -115,7 +159,28 @@ public class ReportUnitTest {
      */
     @Test
     public void testGetConcatenatedFieldNamesForEntities() throws Exception {
-        
+        List<Object> mockEntities = mock(List.class);
+           
+        List<String> concat = new ArrayList<>();
+        concat.add("int"); concat.add("double");
+        when(mockEntityToListConverter.getConcatenatedEntityFieldNames(mockEntities)).thenReturn(concat);
+        try
+        {
+            instance.getConcatenatedFieldNamesForEntities(mockEntities);
+            
+            verify(mockEntityToListConverter).getConcatenatedEntityFieldNames(mockEntities);
+            
+            verifyNoMoreInteractions(mockEntities);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockEntityToListConverter);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -123,20 +188,41 @@ public class ReportUnitTest {
      */
     @Test
     public void testConvertEntitiesToRowData() throws Exception {
+        List<List<Object>> mockEntities = mock(List.class);
+        List<SelectedColumn> mockPropertyMaps = mock(List.class);
         
+        List<List<String>> concat = new ArrayList<>();
+        when(mockEntityToListConverter.convertConcatenatedEntitiesListToListString(mockEntities, mockPropertyMaps)).thenReturn(concat);
+        try
+        {
+            instance.convertEntitiesToRowData(mockEntities, mockPropertyMaps);
+            
+            verify(mockEntityToListConverter).convertConcatenatedEntitiesListToListString(mockEntities, mockPropertyMaps);
+            
+            verifyNoMoreInteractions(mockEntities);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockEntityToListConverter);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
-    /**
+    /** Tested in UI and Providers part...
      * Test of createDynamicReport method, of class ReportServices.
-     */
+     *
     @Test
     public void testCreateDynamicReport() throws Exception {
         
     }
 
-    /**
+    /** 
      * Test of renderReportAsHTML method, of class ReportServices.
-     */
+     *
     @Test
     public void testRenderReportAsHTML() throws Exception {
         
@@ -144,7 +230,7 @@ public class ReportUnitTest {
 
     /**
      * Test of renderReportAsPDF method, of class ReportServices.
-     */
+     *
     @Test
     public void testRenderReportAsPDF() throws Exception {
         
@@ -152,10 +238,10 @@ public class ReportUnitTest {
 
     /**
      * Test of renderReportAsMSEXCELSpreadsheet method, of class ReportServices.
-     */
+     *
     @Test
     public void testRenderReportAsMSEXCELSpreadsheet() throws Exception {
         
-    }
+    }*/
     
 }

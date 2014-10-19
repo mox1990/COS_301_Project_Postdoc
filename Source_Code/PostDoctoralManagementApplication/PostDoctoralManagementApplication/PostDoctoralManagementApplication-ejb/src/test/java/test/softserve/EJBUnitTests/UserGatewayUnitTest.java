@@ -79,7 +79,31 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testLogin() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        when(mockSession.isUserAccountActive()).thenReturn(Boolean.FALSE);
+        when(mockSession.doesHttpSessionUsernameMatchUserEmail()).thenReturn(Boolean.TRUE);
+        when(mockSession.doesHttpSessionUsernameMatchUserEmail()).thenReturn(Boolean.TRUE);
+        when(mockSession.doesHttpSessionPasswordMatchUserPassword()).thenReturn(Boolean.TRUE);
+        try
+        {
+            instance.login(mockSession);
+            verify(mockSession).isUserAccountDisabled();
+            verify(mockSession).doesHttpSessionUsernameMatchUserEmail();
+            verify(mockSession).doesHttpSessionUsernameMatchUserUsername();
+            verify(mockSession).doesHttpSessionPasswordMatchUserPassword();
+            verify(mockSession).setLoggedInStatus(Boolean.TRUE);
+                    
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -87,7 +111,26 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testLogout() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        try
+        {
+            instance.logout(mockSession);
+            
+            verify(mockSession).setLoggedInStatus(Boolean.FALSE);
+            verify(mockSession).setHttpSessionPassword("");
+            verify(mockSession).setHttpSessionUsername("");
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -95,15 +138,57 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testGetSessionFromHttpSession() throws Exception {
+        Session mockSession = mock(Session.class);
+        HttpSession mockHttpSession = mock(HttpSession.class);
         
+        when(mockHttpSession.getAttribute("username")).thenReturn("u12236731");
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(new Person("u12236731"));
+        try
+        {
+            Session result = instance.getSessionFromHttpSession(mockHttpSession);
+            
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockHttpSession).getAttribute("username");
+            verify(mockEntityManager).close();
+            // TODO: assert result...
+            
+            verifyNoMoreInteractions(mockHttpSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
      * Test of authenticateUser method, of class UserGateway.
      */
     @Test
-    public void testAuthenticateUser() throws Exception {
+    public void testAuthenticateUserIsSystem() throws Exception {
+        Session mockSession = mock(Session.class);
         
+        when(mockSession.isSystem()).thenReturn(Boolean.TRUE);
+        try
+        {
+            instance.authenticateUser(mockSession, null);
+            
+            verify(mockSession).isSystem();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -111,7 +196,26 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testAuthenticateUserAsOwner_Session_Person() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockPerson = mock(Person.class);
         
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        try
+        {
+            instance.authenticateUserAsOwner(mockSession, mockPerson);
+            
+            verify(mockSession, times(2)).getUser();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -119,7 +223,29 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testAuthenticateUserAsOwner_Session_Application() throws Exception {
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
+        Person mockPerson = mock(Person.class);
         
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        when(mockApplication.getFellow()).thenReturn(mockPerson);
+        try
+        {
+            instance.authenticateUserAsOwner(mockSession, mockApplication);
+            
+            verify(mockApplication).getFellow();
+            verify(mockSession, times(2)).getUser();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -127,7 +253,29 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testAuthenticateUserAsOwner_Session_Cv() throws Exception {
+        Session mockSession = mock(Session.class);
+        Cv mockCv = mock(Cv.class);
+        Person mockPerson = mock(Person.class);
         
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        when(mockCv.getPerson()).thenReturn(mockPerson);
+        try
+        {
+            instance.authenticateUserAsOwner(mockSession, mockCv);
+            
+            verify(mockCv).getPerson();
+            verify(mockSession, times(2)).getUser();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -135,7 +283,32 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testAuthenticateUserAsOwner_Session_ProgressReport() throws Exception {
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
+        ProgressReport mockProgressReport = mock(ProgressReport.class);
+        Person mockPerson = mock(Person.class);
         
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        when(mockApplication.getFellow()).thenReturn(mockPerson);
+        when(mockProgressReport.getApplication()).thenReturn(mockApplication);
+        try
+        {
+            instance.authenticateUserAsOwner(mockSession, mockProgressReport);
+            
+            verify(mockApplication).getFellow();
+            verify(mockSession, times(2)).getUser();
+            verify(mockProgressReport).getApplication();
+            
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -143,7 +316,30 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testAuthenticateUserAsOwner_Session_CommitteeMeeting() throws Exception {
+        Session mockSession = mock(Session.class);
+        CommitteeMeeting mockCommitteeMeeting = mock(CommitteeMeeting.class);
+        Person mockPerson = mock(Person.class);
         
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        when(mockCommitteeMeeting.getOrganiser()).thenReturn(mockPerson);
+        try
+        {
+            instance.authenticateUserAsOwner(mockSession, mockCommitteeMeeting);
+            
+            verify(mockSession, times(2)).getUser();
+            
+            verify(mockCommitteeMeeting).getOrganiser();
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -151,7 +347,30 @@ public class UserGatewayUnitTest {
      */
     @Test
     public void testAuthenticateUserAsOwner_Session_FundingReport() throws Exception {
+        Session mockSession = mock(Session.class);
+        FundingReport mockFundingReport = mock(FundingReport.class);
+        Person mockPerson = mock(Person.class);
         
+        when(mockSession.getUser()).thenReturn(mockPerson);
+        when(mockFundingReport.getDris()).thenReturn(mockPerson);
+        try
+        {
+            instance.authenticateUserAsOwner(mockSession, mockFundingReport);
+            
+            verify(mockSession, times(2)).getUser();
+            
+            verify(mockFundingReport).getDris();
+            verifyNoMoreInteractions(mockSession);
+            verifyNoMoreInteractions(mockNotificationServiceLocal);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockPersonJpaController);
+        }   
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
     
 }

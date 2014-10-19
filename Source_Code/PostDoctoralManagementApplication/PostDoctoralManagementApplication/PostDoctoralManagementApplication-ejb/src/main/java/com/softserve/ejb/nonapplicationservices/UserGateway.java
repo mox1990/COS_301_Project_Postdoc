@@ -35,7 +35,8 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Carlo
+ * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
+ * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
 @Interceptors({AuditTrailInterceptor.class})
 @Stateless
@@ -122,7 +123,7 @@ public class UserGateway implements UserGatewayLocal
     @Override
     public Session getSessionFromHttpSession(HttpSession httpSession) throws AuthenticationException, NoSuchAlgorithmException
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
         try
         {

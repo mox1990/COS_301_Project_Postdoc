@@ -19,6 +19,8 @@ import com.softserve.persistence.DBDAO.EmployeeInformationJpaController;
 import com.softserve.persistence.DBDAO.NotificationJpaController;
 import com.softserve.persistence.DBDAO.PersonJpaController;
 import com.softserve.persistence.DBDAO.ResearchFellowInformationJpaController;
+import com.softserve.persistence.DBEntities.Address;
+import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.persistence.DBEntities.Person;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -49,6 +51,7 @@ public class UserAccountManagementUnitTest {
     private TransactionController mockTransactionController;
     private EntityManager mockEntityManager;
     private GeneratorUtil mockGeneratorUtil;
+    
     private PersonJpaController mockPersonJpaController;
     private NotificationJpaController mockNotificationJpaController;
     private AuditLogJpaController mockAuditLogJpaController;
@@ -88,6 +91,15 @@ public class UserAccountManagementUnitTest {
         mockAddressJpaController = mock(AddressJpaController.class);
         mockResearchFellowInformationJpaController = mock(ResearchFellowInformationJpaController.class);
         
+        instance.setaService(mockAuditTrailService);
+        instance.setdBEntities(mockDBEntitiesFactory);
+        instance.setnEJB(mockNotificationService);
+        instance.setgCal(mockGregorianCalendar);
+        instance.setdAOFactory(mockDAOFactory);
+        instance.setTransactionController(mockTransactionController);
+        instance.setEntityManager(mockEntityManager);
+        instance.setGeneratorUtil(mockGeneratorUtil);
+        
         when(mockDAOFactory.createPersonDAO()).thenReturn(mockPersonJpaController);
         when(mockDAOFactory.createNotificationDAO()).thenReturn(mockNotificationJpaController);
         when(mockDAOFactory.createAuditLogDAO()).thenReturn(mockAuditLogJpaController);
@@ -106,8 +118,55 @@ public class UserAccountManagementUnitTest {
      * Test of createUserAccount method, of class UserAccountManagementService.
      */
     @Test
-    public void testCreateUserAccount() throws Exception {
+    public void testCreateUserAccountOfFellow() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(null);
+        try
+        {
+            instance.createUserAccount(mockSession, true, mockUser);
+            
+            verify(mockDAOFactory, times(2)).createPersonDAO();
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockEntityManager).close();
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createEmployeeInformationDAO();
+            verify(mockDAOFactory).createAddressDAO();
+            
+            verify(mockAddressJpaController).create(mockAddress);
+            // TODO: User interactions...
+            verify(mockPersonJpaController).create(mockUser);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            //verifyNoMoreInteractions(mockAuditTrailService);
+            //verifyNoMoreInteractions(mockDBEntitiesFactory);
+            //verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -115,7 +174,60 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testUpdateUserAccount() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getEmail()).thenReturn("kngako@ymail.com");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(mockUser);
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("kngako@ymail.com")).thenReturn(mockUser);
+        try
+        {
+            instance.updateUserAccount(mockSession, mockUser);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createEmployeeInformationDAO();
+            verify(mockDAOFactory).createAddressDAO();
+            verify(mockDAOFactory).createResearchFellowInformationDAO();
+            
+            verify(mockDAOFactory, times(4)).createPersonDAO();
+            verify(mockPersonJpaController, times(2)).findUserBySystemIDOrEmail("kngako@ymail.com");
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockEntityManager, times(3)).close();
+            
+            verify(mockEmployeeInformationJpaController).findEmployeeInformation("u12236731");
+            verify(mockResearchFellowInformationJpaController).findResearchFellowInformation("u12236731");
+            verify(mockAddressJpaController).edit(mockAddress);
+            // TODO: User interactions...
+            verify(mockPersonJpaController).edit(mockUser);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockAuditTrailService);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -123,7 +235,51 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testRemoveUserAccount() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getEmail()).thenReturn("kngako@ymail.com");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findPerson("u12236731")).thenReturn(mockUser);
+        when(mockSession.getUser()).thenReturn(new Person("u12345678"));
+        try
+        {
+            instance.removeUserAccount(mockSession, "u12236731");
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createPersonDAO();
+            
+            verify(mockPersonJpaController).findPerson("u12236731");
+            verify(mockUser).setAccountStatus(com.softserve.auxiliary.constants.PersistenceConstants.ACCOUNT_STATUS_DISABLED);
+            verify(mockPersonJpaController).edit(mockUser);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockAuditTrailService);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -131,7 +287,56 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testAccountReset() throws Exception {
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getEmail()).thenReturn("kngako@ymail.com");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findPerson("u12236731")).thenReturn(mockUser);
+        when(mockGeneratorUtil.generateRandomHexString()).thenReturn("u87654321");
+        try
+        {
+            instance.accountReset(mockUser);
+            
+            verify(mockDAOFactory, times(2)).createPersonDAO();
+            verify(mockPersonJpaController).findPerson("u12236731");
+            verify(mockEntityManager).close();
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockGeneratorUtil).generateRandomHexString();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory, times(2)).createPersonDAO();
+            
+            verify(mockUser).setPassword("u87654321");
+            verify(mockPersonJpaController).edit(mockUser);
+            // TODO: Notifications...
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockAuditTrailService);
+            //TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
+            //verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -139,7 +344,58 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testGenerateOnDemandAccount() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(null);
+        when(mockSession.getUser()).thenReturn(new Person("uxxxxxxxx"));
+        when(mockGeneratorUtil.generateRandomHexString()).thenReturn("u87654321");
+        try
+        {
+            instance.generateOnDemandAccount(mockSession, "Testing", true, mockUser);
+            
+            verify(mockDAOFactory, times(3)).createPersonDAO();
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockEntityManager, times(2)).close();
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createEmployeeInformationDAO();
+            verify(mockDAOFactory).createAddressDAO();
+            verify(mockGeneratorUtil).generateRandomHexString();
+            
+            verify(mockAddressJpaController).create(mockAddress);
+            // TODO: User interactions...
+            verify(mockPersonJpaController).create(mockUser);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            //verifyNoMoreInteractions(mockAuditTrailService);
+            //verifyNoMoreInteractions(mockDBEntitiesFactory);
+            //verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            // TODO: verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -147,7 +403,60 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testActivateOnDemandAccount() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getEmail()).thenReturn("kngako@ymail.com");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(mockUser);
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("kngako@ymail.com")).thenReturn(mockUser);
+        try
+        {
+            instance.activateOnDemandAccount(mockSession, mockUser);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createEmployeeInformationDAO();
+            verify(mockDAOFactory).createAddressDAO();
+            verify(mockDAOFactory).createResearchFellowInformationDAO();
+            
+            verify(mockDAOFactory, times(4)).createPersonDAO();
+            verify(mockPersonJpaController, times(2)).findUserBySystemIDOrEmail("kngako@ymail.com");
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockEntityManager, times(3)).close();
+            
+            verify(mockEmployeeInformationJpaController).findEmployeeInformation("u12236731");
+            verify(mockResearchFellowInformationJpaController).findResearchFellowInformation("u12236731");
+            verify(mockAddressJpaController).edit(mockAddress);
+            // TODO: User interactions...
+            verify(mockPersonJpaController).edit(mockUser);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: verifyNoMoreInteractions(mockAuditTrailService);
+            // verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -155,7 +464,36 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testViewAllUserAccounts() throws Exception {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        try
+        {
+            instance.viewAllUserAccounts(mockSession);
+            
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockPersonJpaController).findPersonEntities();
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockAuditTrailService);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -163,7 +501,35 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testGetUserBySystemIDOrEmail() throws Exception {
-        
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(new Person("u12236731"));
+        try
+        {
+            Person result = instance.getUserBySystemIDOrEmail("u12236731");
+            
+            assertEquals(new Person("u12236731"), result);
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockAuditTrailService);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -171,7 +537,35 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testGetUserBySystemID() throws Exception {
-        
+        when(mockPersonJpaController.findUserBySystemIDOrEmail("u12236731")).thenReturn(new Person("u12236731"));
+        try
+        {
+            Person result = instance.getUserBySystemIDOrEmail("u12236731");
+            
+            assertEquals(new Person("u12236731"), result);
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
+            verify(mockEntityManager).close();
+            
+            verifyNoMoreInteractions(mockAuditTrailService);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -179,7 +573,48 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testApproveOnDemandAccount() throws Exception {
+        Session mockSession = mock(Session.class);
+        Person mockUser = mock(Person.class);
         
+        Address mockAddress = mock(Address.class);
+        //AuditLog mockAuditLog = mock(AuditLog.class);
+        
+        when(mockUser.getSystemID()).thenReturn("u12236731");
+        when(mockUser.getEmail()).thenReturn("kngako@ymail.com");
+        when(mockUser.getAddressLine1()).thenReturn(mockAddress);
+        when(mockPersonJpaController.findPerson("u12236731")).thenReturn(mockUser);
+        try
+        {
+            instance.approveOnDemandAccount(mockSession, mockUser);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();            
+            verify(mockDAOFactory).createPersonDAO();
+            verify(mockPersonJpaController).findPerson("u12236731");
+            verify(mockPersonJpaController).edit(mockUser);
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            // TODO: verifyNoMoreInteractions(mockAuditTrailService);
+            // verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockGeneratorUtil);
+            verifyNoMoreInteractions(mockPersonJpaController);
+            verifyNoMoreInteractions(mockNotificationJpaController);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEmployeeInformationJpaController);
+            verifyNoMoreInteractions(mockAddressJpaController);
+            verifyNoMoreInteractions(mockResearchFellowInformationJpaController);
+                    
+        }   
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -187,7 +622,7 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testDeclineOnDemandAccount() throws Exception {
-        
+        // TODO:
     }
 
     /**
@@ -195,7 +630,7 @@ public class UserAccountManagementUnitTest {
      */
     @Test
     public void testLoadAllPendingOnDemandAccounts() throws Exception {
-        
+        // TODO:
     }
     
 }
