@@ -204,7 +204,7 @@ public class ApplicationServices {
         }
     }
     
-    @Path("/applicationRenewalService/submitApplication")
+    @Path("/applicationRenewalService/updateResearchFellowCV")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
@@ -320,7 +320,7 @@ public class ApplicationServices {
         }
     }
     
-    @Path("/DeansEndorsementServiceLocal/declineApplication")
+    @Path("/DeansEndorsementServiceLocal/endorseApplication")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
@@ -1151,7 +1151,7 @@ public class ApplicationServices {
         }
     }
     
-    @Path("/MeetingManagementServiceLocal/getAllMeetings")
+    @Path("/MeetingManagementServiceLocal/getAllActiveMeetingsForWhichUserIsToAttend")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)

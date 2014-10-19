@@ -96,7 +96,7 @@ public class Gateway {
         }        
     }
     
-    @Path("/login")
+    @Path("/getSessionFromHttpSession")
     @POST
     @Produces(MediaType.TEXT_PLAIN)    
     public String gateway_getSessionFromHttpSession()

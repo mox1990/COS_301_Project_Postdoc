@@ -15,6 +15,7 @@ import com.softserve.ejb.applicationservices.ApplicationSuccessEvaluationService
 import com.softserve.persistence.DBEntities.NeuralNetwork;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -45,6 +46,12 @@ public class NeuralNetworkCreationBean {
      */
     public NeuralNetworkCreationBean() {
     }
+    
+   @PostConstruct
+   public void init()
+   {
+       neuralNetworkCreationRequest = new NeuralNetworkCreationRequest();
+   }
 
     public NeuralNetworkCreationRequest getNeuralNetworkCreationRequest() {
         return neuralNetworkCreationRequest;

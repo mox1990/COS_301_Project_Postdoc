@@ -15,27 +15,44 @@
             </div>
             <div>                
                 <div>
-                    <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="#{lang['PreConditionEvaluationScript']}:" for="preConditionScript"/>                                
-                        <p:inputTextarea id="preConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.preConditionScript}" required="true"/>
-                        <p:message for="preConditionScript" styleClass="fieldErrorMessage"/>
-                        
-                        <p:outputLabel value="#{lang['PostConditionEvaluationScript']}:" for="postConditionScript"/>                                
-                        <p:inputTextarea id="postConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.postConditionScript}" required="true"/>
-                        <p:message for="postConditionScript" styleClass="fieldErrorMessage"/>
-                    </h:panelGrid>
+                    <h2 class="header2">Below a reference of the objects and their functions available due to input parameters are provided</h2>
+                    <p:tree value="#{prePostConditionEditBean.parameterMethodsRoot}" var="node" datakey="#{node}" style="width: 98%!important">
+                       
+                        <p:treeNode type="ROOT" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                            <h:outputText value="#{node}"/>
+                        </p:treeNode>        
+                        <p:treeNode type="PARAM" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                            <h:outputText value="#{node}"/>
+                        </p:treeNode>
+                        <p:treeNode type="METHOD" expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                            <h:outputText value="#{node}"/>
+                        </p:treeNode>
+                    </p:tree>
+                    <h2 class="header2">Please use declare variable 'result' in the script and let it return the truth value of the condition</h2>
+                    <h:form>
                     
-                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    
-                    <p:commandButton process="@form" update="@form" action="#{prePostConditionEditBean.preformPrePostCondtionUpdate()}" value="Save changes to pre post condition script" styleClass="button button-fill">
-                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                        <p:confirm header="#{lang['Pre-PostConditionScriptEditConfirmation']}" message="#{lang['Pre-PostConditionScriptEditConfirmationMessage']}" icon="ui-icon-alert"/>
-                    </p:commandButton>
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel value="#{lang['PreConditionEvaluationScript']}:" for="preConditionScript"/>                                
+                            <p:inputTextarea id="preConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.preConditionScript}" required="true"/>
+                            <p:message for="preConditionScript" styleClass="fieldErrorMessage"/>
 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </p:confirmDialog>
+                            <p:outputLabel value="#{lang['PostConditionEvaluationScript']}:" for="postConditionScript"/>                                
+                            <p:inputTextarea id="postConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.postConditionScript}" required="true"/>
+                            <p:message for="postConditionScript" styleClass="fieldErrorMessage"/>
+                        </h:panelGrid>
+
+                        <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
+
+                        <p:commandButton process="@form" update="@form" action="#{prePostConditionEditBean.preformPrePostCondtionUpdate()}" value="Save changes to pre post condition script" styleClass="button button-fill">
+                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                            <p:confirm header="#{lang['Pre-PostConditionScriptEditConfirmation']}" message="#{lang['Pre-PostConditionScriptEditConfirmationMessage']}" icon="ui-icon-alert"/>
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </h:form>
                 </div>
             </div>            
         </ui:define>        

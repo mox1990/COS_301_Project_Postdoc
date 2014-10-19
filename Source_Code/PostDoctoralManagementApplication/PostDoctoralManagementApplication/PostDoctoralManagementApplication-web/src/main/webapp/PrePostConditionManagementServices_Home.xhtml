@@ -21,7 +21,7 @@
                     <ui:param name="bean" value="#{prePostCondtionSelectionBean.prePostCondtionMethodFilterBean}"/>
                 </ui:decorate>
                 <h:form id="pendingApplications">
-                    <ui:decorate template="templates/PrePostConditionMethodLister_Comoponent.xhtml">
+                    <ui:decorate template="templates/PrePostConditionMethodLister_Component.xhtml">
                         <ui:param name="prepostCondtionMethods" value="#{prePostCondtionSelectionBean.prePostCondtionMethodFilterBean.filteredList}"/>
                         <ui:define name="commandButtons">
                             <p:commandButton value="#{lang['EditPrePostConditionsOfMethod']}" styleClass="button button-fill" action="#{prePostCondtionSelectionBean.editPrePostCondition(method)}"/> 
@@ -31,13 +31,5 @@
 
             </div>            
         </ui:define>  
-        
-        <ui:define name="pageBody">
-            <div>
-                <h1 class="header1">#{lang['PendingForRecommendationHeader']}</h1>
-                <h2>#{lang['ClickApplication']}</h2>
-            </div>
-            
-        </ui:define>
     </ui:composition>
 </html>

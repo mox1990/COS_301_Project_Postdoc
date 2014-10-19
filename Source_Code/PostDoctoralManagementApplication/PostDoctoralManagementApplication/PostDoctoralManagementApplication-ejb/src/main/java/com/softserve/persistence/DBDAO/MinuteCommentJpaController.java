@@ -129,4 +129,13 @@ public class MinuteCommentJpaController implements Serializable {
         }
     }
     
+    public List<MinuteComment> findAllMinuteCommentsFor(CommitteeMeeting committeeMeeting) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT m FROM MinuteComment m WHERE m.meeting = :cm", MinuteComment.class).setParameter("cm", committeeMeeting).getResultList();
+        } finally {
+            
+        }
+    }
+    
 }

@@ -6,21 +6,22 @@
 
 package com.softserve.ejb.applicationservices;
 
-import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;
-import com.softserve.persistence.DBDAO.ApplicationJpaController;
-import com.softserve.auxiliary.factories.DAOFactory;
-import com.softserve.persistence.DBEntities.Application;
-import com.softserve.persistence.DBEntities.RefereeReport;
-import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.auxiliary.Exceptions.AuthenticationException;
 import com.softserve.auxiliary.annotations.AuditableMethod;
 import com.softserve.auxiliary.annotations.PrePostConditionalMethod;
 import com.softserve.auxiliary.annotations.SecuredMethod;
+import com.softserve.auxiliary.factories.DAOFactory;
 import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
 import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
-import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.auxiliary.interceptors.PrePostConditionInterceptor;
 import com.softserve.auxiliary.requestresponseclasses.ApplicationStageStatus;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.auxiliary.util.ApplicationServicesUtil;
+import com.softserve.ejb.nonapplicationservices.UserGatewayLocal;
+import com.softserve.persistence.DBDAO.ApplicationJpaController;
+import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.RefereeReport;
+import com.softserve.persistence.DBEntities.SecurityRole;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -37,7 +38,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, PrePostConditionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationProgressViewerService implements ApplicationProgressViewerServiceLocal {

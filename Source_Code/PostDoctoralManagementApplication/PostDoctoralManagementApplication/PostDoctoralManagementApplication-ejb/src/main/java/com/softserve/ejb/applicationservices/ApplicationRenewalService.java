@@ -24,6 +24,7 @@ import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
 import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.interceptors.PrePostConditionInterceptor;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import javax.persistence.PersistenceUnit;
  *
  * @author K
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, PrePostConditionInterceptor.class})
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec

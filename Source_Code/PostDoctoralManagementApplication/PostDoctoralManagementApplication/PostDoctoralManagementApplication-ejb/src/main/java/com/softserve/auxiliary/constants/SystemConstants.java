@@ -25,5 +25,5 @@ public class SystemConstants {
     public final static String PREPOSTCONDITIONALCONFIG_FILE_NAME = "prepostconfig.xml";
     
     //Script engine constants
-    public final static String SCRIPT_ENGINE_NAME_JAVASCRIPT = "javascript";
+    public final static String SCRIPT_ENGINE_NAME_JAVASCRIPT = "JavaScript";
 }

@@ -35,5 +35,5 @@ public interface MeetingManagementServiceLocal {
     public List<CommitteeMeeting> getAllConcludedMeetings(Session session) throws Exception;
     public List<Person> getAllPostDocCommitteeMembers(Session session) throws Exception;
     public List<CommitteeMeeting> getAllActiveMeetingsForWhichUserIsToAttend(Session session) throws Exception;
-    
+    public List<MinuteComment>  getAllMinuteCommentsForMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception;
 }

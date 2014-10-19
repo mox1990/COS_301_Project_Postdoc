@@ -133,8 +133,8 @@ public class PrePostConditionMethodJpaController implements Serializable {
 
         postConditionMethod.setMethodParametersEncode(parameters);
 
-        
-        List<PrePostConditionMethod> prePostConditionMethods = em.createQuery("SELECT p FROM PrePostConditionMethod p WHERE p.methodClassName = :className AND p.methodName = :methodName AND p.methodParameters = :methodParameters", PrePostConditionMethod.class).setParameter("className", className).setParameter("methodName", methodName).setParameter(":methodParameters", postConditionMethod.getMethodParametersDecode()).getResultList();
+        System.out.println(postConditionMethod.getMethodParameters());
+        List<PrePostConditionMethod> prePostConditionMethods = em.createQuery("SELECT p FROM PrePostConditionMethod p WHERE p.methodClassName = :className AND p.methodName = :methodName AND p.methodParameters = :methodParameters", PrePostConditionMethod.class).setParameter("className", className).setParameter("methodName", methodName).setParameter("methodParameters", postConditionMethod.getMethodParameters()).getResultList();
         if( prePostConditionMethods == null || prePostConditionMethods.isEmpty())
         {
             return null;

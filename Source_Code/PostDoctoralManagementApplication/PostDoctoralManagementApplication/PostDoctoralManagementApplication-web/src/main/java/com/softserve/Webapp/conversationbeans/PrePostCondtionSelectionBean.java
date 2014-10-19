@@ -64,7 +64,7 @@ public class PrePostCondtionSelectionBean implements Serializable {
         {
             ExceptionUtil.logException(PendingUserAccountsSelectionBean.class, ex);
             ExceptionUtil.handleException(null, ex);
-            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToUserAccountManagementServicesHomeView());
+            navigationManagerBean.callFacesNavigator(navigationManagerBean.goToPreviousBreadCrumb());
         }
     }
 

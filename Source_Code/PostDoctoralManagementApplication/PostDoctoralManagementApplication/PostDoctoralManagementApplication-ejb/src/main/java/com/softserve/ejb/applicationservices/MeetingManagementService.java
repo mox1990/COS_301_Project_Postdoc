@@ -25,6 +25,7 @@ import com.softserve.auxiliary.annotations.SecuredMethod;
 import com.softserve.auxiliary.interceptors.AuditTrailInterceptor;
 import com.softserve.auxiliary.interceptors.AuthenticationInterceptor;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
+import com.softserve.auxiliary.interceptors.PrePostConditionInterceptor;
 import com.softserve.auxiliary.requestresponseclasses.Session;
 import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import java.sql.Timestamp;
@@ -46,7 +47,7 @@ import javax.persistence.PersistenceUnit;
  * @author SoftServe Group [ Mathys Ellis (12019837) Kgothatso Phatedi Alfred
  * Ngako (12236731) Tokologo Machaba (12078027) ]
  */
-@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class})
+@Interceptors({AuthenticationInterceptor.class, AuditTrailInterceptor.class, PrePostConditionInterceptor.class})
 @Stateful
 @TransactionManagement(TransactionManagementType.BEAN)
 public class MeetingManagementService implements MeetingManagementServiceLocal {
@@ -552,5 +553,24 @@ public class MeetingManagementService implements MeetingManagementServiceLocal {
         }
         
     }
+    
+    @SecuredMethod(AllowedSecurityRoles = {com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_DRIS_MEMBER, com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_ID_POSTDOCTORAL_COMMITTEE_MEMBER})
+    @AuditableMethod
+    @Override
+    public List<MinuteComment> getAllMinuteCommentsForMeeting(Session session, CommitteeMeeting committeeMeeting) throws Exception 
+    {
+        EntityManager em = createEntityManager();
+
+        try
+        {
+            return getDAOFactory(em).createMinuteCommentDAO().findAllMinuteCommentsFor(committeeMeeting);
+        }
+        finally
+        {
+            em.close();
+        }
+    }
+    
+    
     
 }

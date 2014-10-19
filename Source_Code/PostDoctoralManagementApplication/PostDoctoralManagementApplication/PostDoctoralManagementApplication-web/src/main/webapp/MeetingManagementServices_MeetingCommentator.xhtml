@@ -20,7 +20,7 @@
                     <p:outputPanel id="Commentss">
                         <ui:decorate template="templates/MeetingCommentsTable_Component.xhtml">
                             <ui:param name="header" value="#{lang['MeetingMinutes']}"/>
-                            <ui:param name="comments" value="#{meetingCommentatorRequestBean.selectedCommitteeMeeting.minuteCommentList}"/>
+                            <ui:param name="comments" value="#{meetingCommentatorRequestBean.allMinuteCommentsForSelectedMeeting}"/>
                         </ui:decorate>
                         <p:panel header="#{lang['CommentOnMeeting']}">
                             <center>
@@ -30,7 +30,7 @@
                                 </h:panelGrid>
                             </center>
                             <p:growl sticky="true" globalOnly="false" showDetail="true"/>
-                            <p:commandButton value="#{lang['SaveComment']}" action="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill">
+                            <p:commandButton value="#{lang['SaveComment']}" actionListener="#{meetingCommentatorRequestBean.preformAddMeetingCommentRequest()}" update="Commentss" styleClass="button button-fill">
                                 <p:confirm header="#{lang['Confirmation']}" message="#{lang['SaveCommentConfirmationMessage']}" icon="ui-icon-alert"/>
                             </p:commandButton>
                         </p:panel>

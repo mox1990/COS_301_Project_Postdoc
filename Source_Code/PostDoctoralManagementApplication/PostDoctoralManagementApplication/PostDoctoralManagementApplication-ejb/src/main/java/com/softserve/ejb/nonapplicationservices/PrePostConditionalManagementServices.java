@@ -154,6 +154,7 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
         EntityManager em = createEntityManager();
         try
         {            
+            System.out.println(className + " " + methodName);
             if(getClassMethodVerificationUtil().doesMethodExist(className, methodName, parameters))
             {
                 return getDAOFactory(em).createPrePostConditionMethodDAO().findPrePostConditionByClassAndMethodName(methodName, className, parameters);
@@ -173,7 +174,7 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
     @Override
     public Boolean evaluatePreCondition(Session session, PrePostConditionMethod prePostConditionMethod, List<String> parameterNames, List<Object> parameterValues) throws Exception 
     {
-        return evaluateScript(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), prePostConditionMethod.getMethodParametersDecode(), prePostConditionMethod.getPostConditionScript(), prePostConditionMethod.getScriptLangName(), parameterNames, parameterValues);
+        return evaluateScript(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), prePostConditionMethod.getMethodParametersDecode(), prePostConditionMethod.getPreConditionScript(), prePostConditionMethod.getScriptLangName(), parameterNames, parameterValues);
     }
     
     @SecuredMethod(AllowedSecurityRoles = {})
@@ -185,13 +186,16 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
     
     private Boolean evaluateScript(String className, String methodName, List<String> parameters, String script, String lang, List<String> parameterNames, List<Object> parameterValues) throws Exception
     {
+        System.out.println(parameterNames.toString());
+        System.out.println(parameterValues.toString());
         if(!(parameterNames.size() == parameterValues.size() && parameters.size() == parameterNames.size()))
         {
             throw new Exception("Parameter sizes dont match.");
         }
-        
+        System.out.println("Checking if method exists");
         if(getClassMethodVerificationUtil().doesMethodExist(className, methodName, parameters))
         {
+            System.out.println("Method exists");
             ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
             if(lang == null || lang.equals(""))
             {
@@ -199,14 +203,22 @@ public class PrePostConditionalManagementServices implements PrePostConditionalM
             }
             
             ScriptEngine scriptEngine = scriptEngineManager.getEngineByName(lang);
-            Bindings bindings = new SimpleBindings();
+            System.out.println("Script engine details : " + scriptEngine.getFactory().getEngineName() + " " + scriptEngine.getFactory().getEngineVersion() + " " + scriptEngine.getFactory().getLanguageName() + " " + scriptEngine.getFactory().getLanguageVersion());
             
+            System.out.println("Setup bindings");
             for(int i = 0; i < parameterNames.size(); i++)
             {
-                bindings.put(parameterNames.get(i),parameterValues.get(i));
+                scriptEngine.put(parameterNames.get(i),parameterValues.get(i));
             } 
             
-            Object result = scriptEngine.eval(script, bindings);
+            System.out.println("Script to execute: " + script);
+            
+            scriptEngine.eval(script);
+            
+            Object result  = scriptEngine.get("result");
+            
+            System.out.println("Result: " + result);
+            
             
             if(result == null || !result.getClass().equals(Boolean.class))
             {

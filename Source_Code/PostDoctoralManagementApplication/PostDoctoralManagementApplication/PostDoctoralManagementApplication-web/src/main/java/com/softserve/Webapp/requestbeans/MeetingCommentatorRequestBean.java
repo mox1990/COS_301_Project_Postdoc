@@ -13,6 +13,8 @@ import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.applicationservices.MeetingManagementServiceLocal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -60,6 +62,20 @@ public class MeetingCommentatorRequestBean {
     public CommitteeMeeting getSelectedCommitteeMeeting()
     {
         return sessionManagerBean.getObjectFromSessionStorage("MEETING", CommitteeMeeting.class);
+    }
+    
+    public List<MinuteComment> getAllMinuteCommentsForSelectedMeeting()
+    {
+        try
+        {
+            return meetingManagementServiceLocal.getAllMinuteCommentsForMeeting(sessionManagerBean.getSession(), getSelectedCommitteeMeeting());
+        }
+        catch (Exception ex)
+        {
+            ExceptionUtil.logException(MeetingSelectionBean.class, ex);
+            ExceptionUtil.handleException(null, ex);
+            return new ArrayList<MinuteComment>();
+        }
     }
     
     public boolean isOrganiserOfMeeting()

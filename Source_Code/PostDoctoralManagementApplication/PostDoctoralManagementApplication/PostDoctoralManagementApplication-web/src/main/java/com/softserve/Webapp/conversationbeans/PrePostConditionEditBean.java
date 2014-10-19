@@ -64,20 +64,23 @@ public class PrePostConditionEditBean implements Serializable {
         conversationManagerBean.startConversation(conversation);
         try 
         {
+
             prePostConditionMethod = sessionManagerBean.getObjectFromSessionStorage("PREPOSTCONDITION", PrePostConditionMethod.class);
             
             List<String> params = prePostConditionMethod.getMethodParametersDecode();
-            
+
             parameterMethodsRoot = new DefaultTreeNode("ROOT", "Parameter tree", null);
             ClassMethodVerificationUtil classMethodVerificationUtil = new ClassMethodVerificationUtil();
             Method cc = classMethodVerificationUtil.findMethod(prePostConditionMethod.getMethodClassName(), prePostConditionMethod.getMethodName(), params);
-            
+
             for(int i = 0; i < cc.getParameterTypes().length; i++)
             {
-                TreeNode treeNode = new DefaultTreeNode("PARAM", "Parameter: " + cc.getParameters()[i].getName(), parameterMethodsRoot);
-                findAllMethods(treeNode, cc.getParameterTypes()[i]);
+                System.out.println(cc);
+                System.out.println(cc.getParameters()[i]);
+                TreeNode treeNode = new DefaultTreeNode("PARAM", cc.getParameters()[i].getName(), parameterMethodsRoot);
+                findAllMethods(treeNode, cc.getParameterTypes()[i], 1, 3);
             }
-            
+
         } 
         catch (Exception e) 
         {
@@ -87,18 +90,23 @@ public class PrePostConditionEditBean implements Serializable {
         }
     }
     
-    private void findAllMethods(TreeNode parent, Class c)
+    private void findAllMethods(TreeNode parent, Class c, int curDepth, int depthLimit)
     {
-        if(c != null && (c.isInterface() || c.isSynthetic() || c.isMemberClass()))
+        if(c != null && (curDepth < depthLimit))
         {
+            System.out.println("is a method");
             for(Method method : c.getMethods())
-            {
-                if(method.getModifiers() == Method.PUBLIC)
+            {                 
+                if(method.getModifiers() == Method.DECLARED)
                 {
                     TreeNode child = new DefaultTreeNode("METHOD", method.getName(), parent);
-                    findAllMethods(child, method.getReturnType());
+                    findAllMethods(child, method.getReturnType(),curDepth + 1,depthLimit);
                 }
             }
+        }
+        else
+        {
+            System.out.println("Not a method");
         }
     }
 

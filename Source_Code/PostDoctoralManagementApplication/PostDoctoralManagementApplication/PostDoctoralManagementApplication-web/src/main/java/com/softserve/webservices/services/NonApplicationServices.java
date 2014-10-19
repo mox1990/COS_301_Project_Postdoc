@@ -32,5 +32,34 @@ import javax.ws.rs.core.MediaType;
 public class NonApplicationServices {
     @Context
     private HttpServletRequest httpServletRequest;
-    
+    @Path("/login")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)    
+    public String gateway_getSessionFromHttpSession()
+    {
+        HttpSession httpSession = httpServletRequest.getSession(false);
+        
+        
+        if(httpSession != null)
+        {
+            return PayloadUtil.createFailurePayLoad(ApplicationServices.class, new Exception("No session active"));   
+        }
+        
+        System.out.println(httpSession);
+        
+        try
+        {
+            
+            Session session = null;
+            
+            Object[] payLoad = new Object[1];
+            payLoad[0] = session;
+            
+            return PayloadUtil.createSuccesPayLoad(payLoad);
+        }
+        catch(Exception ex)
+        {        
+            return PayloadUtil.createFailurePayLoad(ApplicationServices.class, ex);
+        }
+    }
 }

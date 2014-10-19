@@ -13,8 +13,8 @@
                     <h:outputText styleClass="text-label" value="No pre post condition methods"/>
                 </div>
             </c:if>
-            <c:if test="#{pendingApplications.size() > 0}">                
-                <p:accordionPanel dynamic="true" cache="true" value="#{prepostCondtionMethods}" var="method" styleClass="box-round" activeIndex="">
+            <c:if test="#{prepostCondtionMethods.size() > 0}">                
+                <p:accordionPanel dynamic="true" cache="true" value="#{prepostCondtionMethods}" var="method" styleClass="box-round" activeIndex="0">
                     <p:tab title="Method - #{method.prePostConditionMethodID}" >
                         <h:panelGrid columns="2">
                             <h:outputText styleClass="text-label" value="Method class:"/>

@@ -8,13 +8,13 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:component>
         <div>
-            <c:if test="#{pendingApplications.size() == 0}">
+            <c:if test="#{neuralnetworks.size() == 0}">
                 <div>
                     <h:outputText styleClass="text-label" value="No neural network selected"/>
                 </div>
             </c:if>
-            <c:if test="#{pendingApplications.size() > 0}">                
-                <p:accordionPanel dynamic="true" cache="true" value="#{neuralnetworks}" var="neuralnetwork" styleClass="box-round" activeIndex="">
+            <c:if test="#{neuralnetworks.size() > 0}">                
+                <p:accordionPanel dynamic="true" cache="true" value="#{neuralnetworks}" var="neuralnetwork" styleClass="box-round" activeIndex="0">
                     <p:tab title="Neural Network - #{neuralnetwork.neuralnetworkID}" >
                         <h:panelGrid columns="2">
                             <h:outputText styleClass="text-label" value="Name:"/>
