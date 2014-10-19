@@ -11,19 +11,19 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Neural network management services</h1>
+                <h1 class="header1">#{lang['NeuralNetworkManagementServices']}</h1>
             </div>
             <div>
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{true}"/>
                     <ui:param name="showFunction" value="showInfoDiv(1)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
-                    <ui:param name="buttonName" value="Create a Neural network"/>
+                    <ui:param name="buttonName" value="#{lang['CreateANeuralNetwork']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToNeuralNetworkManagementServicesCreatorView"/>
                     <ui:param name="infoContainerID" value="info1"/>
                     <ui:define name="informationContent">
-                        Use this option to create a neural network
+                        #{lang['CreateANeuralNetworkDetail']}
                     </ui:define>
                 </ui:decorate>
 
@@ -31,12 +31,12 @@
                     <ui:param name="isPanelRendered" value="#{userAccountsViewerBean.systemAdmin}"/>
                     <ui:param name="showFunction" value="showInfoDiv(2)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
-                    <ui:param name="buttonName" value="View all neural networks"/>
+                    <ui:param name="buttonName" value="#{lang['ViewAllNeuralNetworks']}"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
                     <ui:param name="buttonAction" value="goToNeuralNetworkManagementServicesSelectionView"/>
                     <ui:param name="infoContainerID" value="info2"/>
                     <ui:define name="informationContent">
-                        Use this option to view all neural networks and to edit any.
+                        #{lang['ViewAllNeuralNetworksDetail']}
                     </ui:define>
                 </ui:decorate>
             </div>

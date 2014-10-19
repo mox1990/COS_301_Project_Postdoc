@@ -11,16 +11,16 @@
 
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Application import wizard</h1>
-                 <h2>Please follow the wizard to import the application</h2>
+                <h1 class="header1">#{lang['ApplicationImportWizard']}</h1>
+                <h2>#{lang['ApplicationImportWizardPrompt']}</h2>
             </div>
             
             <div>
                 <p:tabView activeIndex="#{applicationImportBean.wizardActiveTab}" id="wizardTab">
-                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 0}" title="Step 1: Specify fellow">
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 0}" title="#{lang['SpecifyFellowTab']}">
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 0}">
                             <center>
-                                <h2 class="header2">Specify fellow</h2>
+                                <h2 class="header2">#{lang['SpecifyFellow']}</h2>
                                 <ui:decorate template="templates/personOnDemandFieldInput_Component.xhtml">
                                     <ui:param name="renderAttribute" value="#{true}"/>
                                     <ui:param name="person" value="#{applicationImportBean.applicationCreationDependBean.fellow}"/>
@@ -37,7 +37,7 @@
                         </p:outputPanel>
                     </p:tab>
                     
-                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 1}" title="Step 2: Specify grant holder">
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 1}" title="#{lang['SpecifyGrantHolderTab']}">
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 1}">
                             <center>
                                 <h2 class="header2">#{lang['SpecifyGrantHolder']}</h2>
@@ -50,13 +50,13 @@
                                     </ui:decorate>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/> 
                                     
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['Next']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -67,7 +67,7 @@
                             </center>                        
                         </p:outputPanel>
                     </p:tab>
-                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 2}" title="Step 3: Complete Application details">
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 2}" title="#{lang['CompleteApplicationDetailsTab']}">
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 2}">
                             <center>
                                 <h2 class="header2">#{lang['CompleteApplicationFormHeader']}</h2>
@@ -77,13 +77,13 @@
                                 </ui:decorate>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -95,10 +95,10 @@
                         </p:outputPanel>
                     </p:tab>
                     
-                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 3}" title="Step 4: Specify funding details">
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 3}" title="#{lang['SpecifyFundingDetailsTab']}">
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 3}">
                             <center>
-                                <h2 class="header2">#{lang['SpecifyReferees']}</h2>
+                                <h2 class="header2">#{lang['SpecifyFundingDetails']}</h2>
                                 <h:form id="formMain">
                                     <p:panel header="#{lang['FundingReportHeader']}">
                                         <ui:decorate template="templates/FundingCostInputField_Component.xhtml">
@@ -155,13 +155,13 @@
                                 </h:form>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="Next" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
+                                    <p:commandButton update=":wizardTab" actionListener="#{applicationImportBean.next()}" value="#{lang['NextButton']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-e" iconPos="right">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back? Warning: All data in this step might be lost" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -172,19 +172,19 @@
                             </center>                        
                         </p:outputPanel>    
                     </p:tab>
-                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 5}" title="Step 5: Import application">
+                    <p:tab disabled="#{applicationImportBean.wizardActiveTab != 5}" title="#{lang['ImportApplicationTab']}">
                         <p:outputPanel rendered="#{applicationImportBean.wizardActiveTab == 5}">
                             <center>
-                                <h2 class="header2">Import application</h2>
+                                <h2 class="header2">#{lang['ImportApplication']}</h2>
                                 <h:form>
                                     <p:growl sticky="true" globalOnly="true" showSummary="true" showDetail="true"/>
-                                    <p:commandButton process="@this" update="@form" action="#{applicationImportBean.preformApplicationImport()}" value="Import application data" styleClass="button button-fill" icon="ui-icon-circle-arrow-e">
-                                        <p:confirm header="Application import confrimation" message="Are you sure you wish to import his application?" icon="ui-icon-alert"/>
+                                    <p:commandButton process="@this" update="@form" action="#{applicationImportBean.preformApplicationImport()}" value="#{lang['ImportApplicationData']}" styleClass="button button-fill" icon="ui-icon-circle-arrow-e">
+                                        <p:confirm header="#{lang['ApplicationImportConfrimation']}" message="#{lang['ApplicationImportConfrimationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                     
-                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="Back" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
+                                    <p:commandButton update=":wizardTab" action="#{applicationImportBean.goBack()}" value="#{lang['Back']}" styleClass="button button-fill" process="@this" icon="ui-icon-circle-arrow-w">
                                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                                        <p:confirm header="Back confirmation" message="Are you sure you wish to go back?" icon="ui-icon-alert"/>
+                                        <p:confirm header="#{lang['BackConfirmation']}" message="#{lang['BackConfirmationMessage']}" icon="ui-icon-alert"/>
                                     </p:commandButton>
                                         
                                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

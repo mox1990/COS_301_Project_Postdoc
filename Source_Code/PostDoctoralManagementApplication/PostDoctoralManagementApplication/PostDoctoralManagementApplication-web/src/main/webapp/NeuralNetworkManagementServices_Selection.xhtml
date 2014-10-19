@@ -10,8 +10,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Neural network selection</h1>
-                <h2>Please select a neural network to view options</h2>
+                <h1 class="header1">#{lang['NeuralNetworkSelection']}</h1>
+                <h2>#{lang['NeuralNetworkSelection']}</h2>
             </div>
             <div> 
                 
@@ -24,9 +24,9 @@
                     <ui:decorate template="templates/PrePostConditionMethodLister_Comoponent.xhtml">
                         <ui:param name="neuralnetworks" value="#{neuralNetworkSelectionBean.neuralNetworkFilterDependBean.filteredList}"/>
                         <ui:define name="commandButtons">
-                            <p:commandButton value="Edit neural network" styleClass="button button-fill" action="#{neuralNetworkSelectionBean.editNeuralNetwork(neuralnetwork)}"/> 
-                            <p:commandButton value="Make neural neural default" styleClass="button button-fill" action="#{neuralNetworkSelectionBean.makeNeuralNetworkDefault(neuralnetwork)}">
-                                <p:confirm header="Neural network default" message="Are you sure you wish to make this neural network the default neural network" icon="ui-icon-alert"/>
+                            <p:commandButton value="#{lang['EditNeuralNetwork']}" styleClass="button button-fill" action="#{neuralNetworkSelectionBean.editNeuralNetwork(neuralnetwork)}"/> 
+                            <p:commandButton value="#{lang['MakeNeuralNeuralDefault']}" styleClass="button button-fill" action="#{neuralNetworkSelectionBean.makeNeuralNetworkDefault(neuralnetwork)}">
+                                <p:confirm header="#{lang['NeuralNetworkDefaultConfirmation']}" message="#{lang['NeuralNetworkDefaultConfirmationMessage']}" icon="ui-icon-alert"/>
                             </p:commandButton>
 
                             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

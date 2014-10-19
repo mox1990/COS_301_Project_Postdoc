@@ -10,17 +10,17 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">#{lang['NotificationViewer']}</h1>
+                <h1 class="header1">#{lang['PrePostConditionViewer']}</h1>
                 <h2></h2>
             </div>
             <div>                
                 <div>
                     <h:panelGrid columns="3" cellpadding="5">
-                        <p:outputLabel value="Pre condtion evaluation script (Java script):" for="preConditionScript"/>                                
+                        <p:outputLabel value="#{lang['PreConditionEvaluationScript']}:" for="preConditionScript"/>                                
                         <p:inputTextarea id="preConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.preConditionScript}" required="true"/>
                         <p:message for="preConditionScript" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Post condtion evaluation script (Java script):" for="postConditionScript"/>                                
+                        <p:outputLabel value="#{lang['PostConditionEvaluationScript']}:" for="postConditionScript"/>                                
                         <p:inputTextarea id="postConditionScript" value="#{prePostConditionEditBean.prePostConditionMethod.postConditionScript}" required="true"/>
                         <p:message for="postConditionScript" styleClass="fieldErrorMessage"/>
                     </h:panelGrid>
@@ -29,7 +29,7 @@
                     
                     <p:commandButton process="@form" update="@form" action="#{prePostConditionEditBean.preformPrePostCondtionUpdate()}" value="Save changes to pre post condition script" styleClass="button button-fill">
                         <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                        <p:confirm header="Pre-Post Condition script edit confirmation" message="Are you sure you wish to update the evaluation scripts for the method?" icon="ui-icon-alert"/>
+                        <p:confirm header="#{lang['Pre-PostConditionScriptEditConfirmation']}" message="#{lang['Pre-PostConditionScriptEditConfirmationMessage']}" icon="ui-icon-alert"/>
                     </p:commandButton>
 
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
