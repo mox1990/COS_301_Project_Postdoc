@@ -55,13 +55,16 @@
                         <p:message for="#{prefix}refpublicationPageLocation"/>
                     </h:panelGrid>
                     <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    <p:commandButton id="schoolarSearch" value="Search Google scholar for your works" onclick="" type="button" styleClass="button button-fill">
-                        <p:ajax event="click" listener="#{bean.googleScholarDependBean.getSearchResultsForAuthors()}" oncomplete="PF('scholardialog').show()">
+                    <p:commandButton id="schoolarSearch" value="Search Google scholar for your works" onclick="" type="button" styleClass="button button-fill" >
+                        <p:ajax event="click" listener="#{bean.googleScholarDependBean.getSearchResultsForAuthors()}" oncomplete="PF('scholardialog').show()" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" >
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
                         </p:ajax>
                     </p:commandButton>
-
                         
+                    <p:dialog visible="false" widgetVar="statusDialog" modal="false" draggable="false" closable="false" resizable="false" showHeader="false" showEffect="fade" hideEffect="fade">
+                        <p:graphicImage name="images/loading.gif" width="600" height="600" />
+                    </p:dialog>
+                    
                     <p:dialog id="dialog" modal="true" dynamic="true" header="Google scholar search" widgetVar="scholardialog" closable="true">
                         <p:dataTable value="#{bean.googleScholarDependBean.searchResults}" var="result" rowKey="#{result.title}" selectionMode="single" selection="#{bean.googleScholarDependBean.selectedResult}">
                             <p:ajax event="rowSelect" listener="#{bean.useSelectedResultAsCurrentReference()}" process="@this" update="@form" >
