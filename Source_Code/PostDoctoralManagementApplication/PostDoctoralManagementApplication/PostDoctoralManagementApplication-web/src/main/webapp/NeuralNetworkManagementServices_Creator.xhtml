@@ -10,62 +10,62 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Neural network creation</h1>
-                <h2>Please complete the details below</h2>
+                <h1 class="header1">#{lang['NeuralNetworkCreation']}</h1>
+                <h2>#{lang['PleaseCompleteDetails']}</h2>
             </div>
             <div>                
                 <h:form>
                     <h:panelGrid columns="3" cellpadding="5">
 
-                        <p:outputLabel value="Name:" for="name"/>                                
+                        <p:outputLabel value="#{lang['NameText']}:" for="name"/>                                
                         <p:inputText id="name" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.name}" required="true"/>
                         <p:message for="name" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Bais value:" for="biasValue"/>                                
+                        <p:outputLabel value="#{lang['BaisValue']}:" for="biasValue"/>                                
                         <p:inputText id="biasValue" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.biasValue}" required="true"/>
                         <p:message for="biasValue" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Momentum:" for="momentum"/>                                
+                        <p:outputLabel value="#{lang['Momentum']}:" for="momentum"/>                                
                         <p:inputText id="momentum" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.momentum}" required="true"/>
                         <p:message for="momentum" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Learning rate:" for="learningRate"/>                                
+                        <p:outputLabel value="#{lang['LearningRate']}:" for="learningRate"/>                                
                         <p:inputText id="learningRate" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.learningRate}" required="true"/>
                         <p:message for="learningRate" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Smoothing Parameter T:" for="smoothingParameter"/>                                
+                        <p:outputLabel value="#{lang['SmoothingParameterT']}:" for="smoothingParameter"/>                                
                         <p:inputText id="smoothingParameter" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.smoothingParameter}" required="true"/>
                         <p:message for="smoothingParameter" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Lower certainty bound:" for="lowerCertaintyBound"/>                                
+                        <p:outputLabel value="#{lang['LowerCertaintyBound']}:" for="lowerCertaintyBound"/>                                
                         <p:inputText id="lowerCertaintyBound" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.lowerCertaintyBound}" required="true"/>
                         <p:message for="lowerCertaintyBound" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Upper certainty bound:" for="upperCertiantyBound"/>                                
+                        <p:outputLabel value="#{lang['UpperCertaintyBound']}:" for="upperCertiantyBound"/>                                
                         <p:inputText id="upperCertiantyBound" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.upperCertiantyBound}" required="true"/>
                         <p:message for="upperCertiantyBound" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Number of input neurons:" for="numberOfInputNeurons"/>                                
+                        <p:outputLabel value="#{lang['NumberOfInputNeurons']}:" for="numberOfInputNeurons"/>                                
                         <p:inputText id="numberOfInputNeurons" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfInputNeurons}" required="true"/>
                         <p:message for="numberOfInputNeurons" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Number of output neurons:" for="numberOfOutputNeurons"/>                                
+                        <p:outputLabel value="#{lang['NumberOfOutputNeurons']}:" for="numberOfOutputNeurons"/>                                
                         <p:inputText id="numberOfOutputNeurons" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfOutputNeurons}" required="true"/>
                         <p:message for="numberOfOutputNeurons" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Number of hidden layers:" for="numberOfHiddenLayers"/>                                
+                        <p:outputLabel value="#{lang['NumberOfHiddenLayers']}:" for="numberOfHiddenLayers"/>                                
                         <p:inputText id="numberOfHiddenLayers" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfHiddenLayers}" required="true"/>
                         <p:message for="numberOfHiddenLayers" styleClass="fieldErrorMessage"/>
                         
-                        <p:outputLabel value="Number of neurons per hidden layers:" for="numberOfHiddenNeuronsPerLayer"/>                                
+                        <p:outputLabel value="#{lang['NumberOfNeuronsPerhiddenLayers']}:" for="numberOfHiddenNeuronsPerLayer"/>                                
                         <p:inputText id="numberOfHiddenNeuronsPerLayer" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfHiddenNeuronsPerLayer}" required="true"/>
                         <p:message for="numberOfHiddenNeuronsPerLayer" styleClass="fieldErrorMessage"/>
                         
                         <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
                     
-                        <p:commandButton process="@form" update="@form" action="#{neuralNetworkCreationBean.preformNeuralNetworkCreationRequest()}" value="Create neural network" styleClass="button button-fill">
+                        <p:commandButton process="@form" update="@form" action="#{neuralNetworkCreationBean.preformNeuralNetworkCreationRequest()}" value="#{lang['CreateNeuralNetwork']}" styleClass="button button-fill">
                             <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                            <p:confirm header="Neural network creation confirmation" message="Are you sure you wish to create this neural network?" icon="ui-icon-alert"/>
+                            <p:confirm header="#{lang['NeuralNetworkCreationConfirmation']}" message="#{lang['NeuralNetworkCreationConfirmationMessage']}" icon="ui-icon-alert"/>
                         </p:commandButton>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

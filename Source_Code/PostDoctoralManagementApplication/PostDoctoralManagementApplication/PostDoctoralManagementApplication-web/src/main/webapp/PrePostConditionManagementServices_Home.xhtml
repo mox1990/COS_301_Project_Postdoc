@@ -10,8 +10,8 @@
         
         <ui:define name="pageBody">
             <div>
-                <h1 class="header1">Pre-Post condition management services</h1>
-                <h2>Please select a method to view options</h2>
+                <h1 class="header1">#{lang['PrePostConditionManagementServices']}</h1>
+                <h2>#{lang['PrePostConditionManagementServicesPrompt']}</h2>
             </div>
             <div> 
                 
@@ -24,7 +24,7 @@
                     <ui:decorate template="templates/PrePostConditionMethodLister_Comoponent.xhtml">
                         <ui:param name="prepostCondtionMethods" value="#{prePostCondtionSelectionBean.prePostCondtionMethodFilterBean.filteredList}"/>
                         <ui:define name="commandButtons">
-                            <p:commandButton value="Edit pre post conditions of method" styleClass="button button-fill" action="#{prePostCondtionSelectionBean.editPrePostCondition(method)}"/> 
+                            <p:commandButton value="#{lang['EditPrePostConditionsOfMethod']}" styleClass="button button-fill" action="#{prePostCondtionSelectionBean.editPrePostCondition(method)}"/> 
                         </ui:define>
                     </ui:decorate>
                 </h:form>
