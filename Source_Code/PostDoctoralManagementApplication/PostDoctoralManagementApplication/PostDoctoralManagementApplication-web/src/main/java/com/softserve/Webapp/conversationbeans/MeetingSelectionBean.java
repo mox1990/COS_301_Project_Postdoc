@@ -155,7 +155,7 @@ public class MeetingSelectionBean implements Serializable {
         {
             meetingManagementServiceLocal.endMeeting(sessionManagerBean.getSession(), meeting);
             init();
-            return navigationManagerBean.goToMeetingManagementServiceMeetingSelectionView();
+            return navigationManagerBean.goToMeetingManagementServiceHomeView();
         }
         catch (Exception ex)
         {

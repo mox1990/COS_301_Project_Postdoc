@@ -15,10 +15,18 @@
         
         <ui:define name="pageBreadBrumb">
             <div class="containerNavBar"> 
-                <ui:decorate template="templates/hoverBreadCrumb_Component.xhtml">
-                    <ui:param name="hoverID" value="navMenu"/>
-                    <ui:param name="firstAvtive" value="#{true}"/>
-                </ui:decorate>
+                <h:form id="breadcrumbFrom">
+            <div class="breadCrumbs">
+                
+                <p:growl sticky="true" showSummary="true" showDetail="true"/>
+                
+                <p:breadCrumb homeDisplay="">
+                    <c:forEach items="#{navigationManagerBean.breadCrumbs}" var="crumb" varStatus="counter" >
+                        <p:menuitem styleClass="bread" value="#{crumb.viewName}" action="#{navigationManagerBean.goToBreadCrumb(counter.index)}"/>
+                    </c:forEach> 
+                </p:breadCrumb>
+            </div>
+        </h:form>
             </div>
         </ui:define>
 
