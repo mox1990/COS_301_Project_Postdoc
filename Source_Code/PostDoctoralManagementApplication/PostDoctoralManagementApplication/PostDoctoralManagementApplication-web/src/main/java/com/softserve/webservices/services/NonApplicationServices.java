@@ -1215,7 +1215,7 @@ public class NonApplicationServices {
         }
     }
     
-    @Path("/UserAccountManagementService/approveOnDemandAccount")
+    @Path("/UserAccountManagementService/declineOnDemandAccount")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
@@ -1234,7 +1234,7 @@ public class NonApplicationServices {
         }
     }
     
-    @Path("/UserAccountManagementService/approveOnDemandAccount")
+    @Path("/UserAccountManagementService/activateOnDemandAccount")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
