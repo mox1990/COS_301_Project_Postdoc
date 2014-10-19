@@ -108,7 +108,7 @@ public class NotifierServices implements NotifierServicesLocal {
     @Override
     public List<Issue> loadAllPendingIssuesForUser(Session session, Person person) throws Exception 
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
         
         try
         {
@@ -129,7 +129,7 @@ public class NotifierServices implements NotifierServicesLocal {
             
             if(person.getSecurityRoleList().contains(com.softserve.auxiliary.constants.PersistenceConstants.SECURITY_ROLE_GRANT_HOLDER))
             {
-                Issue issue = new Issue("Referral reports", "You have pending applications for finalisation", 0);
+                Issue issue = new Issue("Finalisations", "You have pending applications for finalisation", 0);
                 issue.setCount(applicationServicesUtil.getTotalNumberOfPendingApplications(person, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED));
                 if(issue.getCount() > 0)
                 {

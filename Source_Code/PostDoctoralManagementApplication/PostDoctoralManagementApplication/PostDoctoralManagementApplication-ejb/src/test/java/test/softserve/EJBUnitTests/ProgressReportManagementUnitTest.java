@@ -17,7 +17,9 @@ import com.softserve.persistence.DBDAO.ApplicationJpaController;
 import com.softserve.persistence.DBDAO.ProgressReportJpaController;
 import com.softserve.persistence.DBDAO.RecommendationReportJpaController;
 import com.softserve.persistence.DBEntities.Application;
+import com.softserve.persistence.DBEntities.Person;
 import com.softserve.persistence.DBEntities.ProgressReport;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
@@ -28,8 +30,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import test.softserve.MockEJBClasses.HODRecommendationServicesMockUnit;
 import test.softserve.MockEJBClasses.ProgressReportManagementMockUnit;
 
@@ -87,6 +88,7 @@ public class ProgressReportManagementUnitTest {
         
         when(mockDAOFactory.createProgressReportDAO()).thenReturn(mockProgressReportJpaController);
         when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createAmmendRequestDAO()).thenReturn(mockAmmendRequestJpaController);
         when(mockDAOFactory.createRecommendationReportDAO()).thenReturn(mockRecommendationReportJpaController);
         
         when(mockTransactionController.getDAOFactoryForTransaction()).thenReturn(mockDAOFactory);
@@ -101,7 +103,42 @@ public class ProgressReportManagementUnitTest {
      */
     @Test
     public void testCreateProgressReport() throws Exception {
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
+        ProgressReport mockProgressReport = mock(ProgressReport.class);
         
+        try
+        {
+            instance.createProgressReport(mockSession, mockApplication, mockProgressReport);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createProgressReportDAO();
+            verify(mockProgressReportJpaController).create(mockProgressReport);
+            verify(mockCal).getTime();
+            // TODO: Notifications...
+            
+            verify(mockTransactionController).CommitTransaction();
+            // verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
+            // TODO: verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockProgressReportJpaController);
+                    
+            
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
@@ -109,17 +146,79 @@ public class ProgressReportManagementUnitTest {
      */
     @Test
     public void testUpdateProgressReport() throws Exception {
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
+        ProgressReport mockProgressReport = mock(ProgressReport.class);
         
+        try
+        {
+            instance.updateProgressReport(mockSession, mockProgressReport);
+            
+            verify(mockTransactionController).StartTransaction();
+            verify(mockTransactionController).getDAOFactoryForTransaction();
+            verify(mockDAOFactory).createProgressReportDAO();
+            verify(mockProgressReportJpaController).edit(mockProgressReport);
+            
+            verify(mockTransactionController).CommitTransaction();
+            verify(mockTransactionController).CloseEntityManagerForTransaction();
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockProgressReportJpaController);
+                    
+            
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
     /**
      * Test of allApplicationsWithPendingReportsForUser method, of class ProgressReportManagementService.
      */
     @Test
-    public void testAllApplicationsWithPendingReportsForUser() throws Exception {
+    public void testAllApplicationsWithPendingReportsForUserBeingEmpty() throws Exception {
+        Session mockSession = mock(Session.class);
+        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
+        try
+        {
+            List<Application> app = instance.allApplicationsWithPendingReportsForUser(mockSession);
+            
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockApplicationJpaController).findAllApplicationsWhosFellowIs(new Person("u12236731"));
+            verify(mockEntityManager).close();
+            
+            assertEquals(0, app.size());
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockProgressReportJpaController);
+                    
+            
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
 
+    // TODO: more test cases for this...
     /**
      * Test of doesApplicationHaveFinalProgressReport method, of class ProgressReportManagementService.
      */
@@ -132,8 +231,39 @@ public class ProgressReportManagementUnitTest {
      * Test of getNumberOfProgressReportsRequiredByApplication method, of class ProgressReportManagementService.
      */
     @Test
-    public void testGetNumberOfProgressReportsRequiredByApplication() throws Exception {
+    public void testGetNumberOfProgressReportsRequiredByApplicationBeingZero() throws Exception {
+        Session mockSession = mock(Session.class);
+        Application mockApplication = mock(Application.class);
         
+        when(mockApplication.getStartDate()).thenReturn(new Date(1234));
+        when(mockApplication.getEndDate()).thenReturn(new Date(1234));
+        try
+        {
+            int reports = instance.getNumberOfProgressReportsRequiredByApplication(mockSession, mockApplication);
+            
+            verify(mockApplication).getStartDate();
+            verify(mockApplication).getEndDate();
+            // TODO: Calendar computations...
+            
+            // TODO: assertEquals(0, reports);
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockRecommendationReportJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockNotificationService);
+            verifyNoMoreInteractions(mockAmmendRequestJpaController);
+            //verifyNoMoreInteractions(mockCal);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockProgressReportJpaController);
+                    
+            
+        }
+        catch (Exception ex)
+        {
+            fail("An exception occured");
+        }
     }
     
 }

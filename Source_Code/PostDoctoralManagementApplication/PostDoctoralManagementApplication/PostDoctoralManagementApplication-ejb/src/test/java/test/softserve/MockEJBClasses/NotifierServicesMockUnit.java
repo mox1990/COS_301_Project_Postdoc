@@ -35,6 +35,22 @@ public class NotifierServicesMockUnit extends NotifierServices {
     private DAOFactory dAOFactory;
     private EntityManager entityManager;
 
+    public void setProgressReportManagementServiceLocal(ProgressReportManagementServiceLocal progressReportManagementServiceLocal) {
+        this.progressReportManagementServiceLocal = progressReportManagementServiceLocal;
+    }
+
+    public void setApplicationRenewalServiceLocal(ApplicationRenewalServiceLocal applicationRenewalServiceLocal) {
+        this.applicationRenewalServiceLocal = applicationRenewalServiceLocal;
+    }
+
+    public void setMeetingManagementServiceLocal(MeetingManagementServiceLocal meetingManagementServiceLocal) {
+        this.meetingManagementServiceLocal = meetingManagementServiceLocal;
+    }
+
+    public void setUserAccountManagementServiceLocal(UserAccountManagementServiceLocal userAccountManagementServiceLocal) {
+        this.userAccountManagementServiceLocal = userAccountManagementServiceLocal;
+    }
+    
     public void setdAOFactory(DAOFactory dAOFactory) {
         this.dAOFactory = dAOFactory;
     }
