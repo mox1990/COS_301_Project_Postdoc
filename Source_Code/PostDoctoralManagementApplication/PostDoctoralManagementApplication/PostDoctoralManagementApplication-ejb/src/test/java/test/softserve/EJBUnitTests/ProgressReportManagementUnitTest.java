@@ -116,16 +116,12 @@ public class ProgressReportManagementUnitTest {
             verify(mockDAOFactory).createProgressReportDAO();
             verify(mockProgressReportJpaController).create(mockProgressReport);
             verify(mockCal).getTime();
-            // TODO: Notifications...
             
             verify(mockTransactionController).CommitTransaction();
-            // verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockRecommendationReportJpaController);
-            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockAmmendRequestJpaController);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
@@ -218,7 +214,6 @@ public class ProgressReportManagementUnitTest {
         }
     }
 
-    // TODO: more test cases for this...
     /**
      * Test of doesApplicationHaveFinalProgressReport method, of class ProgressReportManagementService.
      */
@@ -243,16 +238,12 @@ public class ProgressReportManagementUnitTest {
             
             verify(mockApplication).getStartDate();
             verify(mockApplication).getEndDate();
-            // TODO: Calendar computations...
-            
-            // TODO: assertEquals(0, reports);
             
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockRecommendationReportJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
             verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockAmmendRequestJpaController);
-            //verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
             verifyNoMoreInteractions(mockDAOFactory);

@@ -577,7 +577,6 @@ public class UserAccountManagementUnitTest {
         Person mockUser = mock(Person.class);
         
         Address mockAddress = mock(Address.class);
-        //AuditLog mockAuditLog = mock(AuditLog.class);
         
         when(mockUser.getSystemID()).thenReturn("u12236731");
         when(mockUser.getEmail()).thenReturn("kngako@ymail.com");
@@ -595,8 +594,6 @@ public class UserAccountManagementUnitTest {
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: verifyNoMoreInteractions(mockAuditTrailService);
-            // verifyNoMoreInteractions(mockDBEntitiesFactory);
             verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockGregorianCalendar);
             verifyNoMoreInteractions(mockDAOFactory);
@@ -615,22 +612,5 @@ public class UserAccountManagementUnitTest {
         {
             fail("An exception occured");
         }
-    }
-
-    /**
-     * Test of declineOnDemandAccount method, of class UserAccountManagementService.
-     */
-    @Test
-    public void testDeclineOnDemandAccount() throws Exception {
-        // TODO:
-    }
-
-    /**
-     * Test of loadAllPendingOnDemandAccounts method, of class UserAccountManagementService.
-     */
-    @Test
-    public void testLoadAllPendingOnDemandAccounts() throws Exception {
-        // TODO:
-    }
-    
+    }    
 }

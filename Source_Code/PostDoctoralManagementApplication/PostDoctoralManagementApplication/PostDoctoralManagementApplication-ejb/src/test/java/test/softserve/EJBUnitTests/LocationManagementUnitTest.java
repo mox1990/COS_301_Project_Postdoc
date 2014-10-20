@@ -296,7 +296,6 @@ public class LocationManagementUnitTest {
         }
     }
 
-    // TODO: Develop return test for these functions...
     /**
      * Test of getAllInstitutions method, of class LocationManagementService.
      */

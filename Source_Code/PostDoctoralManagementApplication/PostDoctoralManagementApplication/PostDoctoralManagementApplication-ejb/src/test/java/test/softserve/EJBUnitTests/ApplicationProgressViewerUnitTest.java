@@ -82,7 +82,6 @@ public class ApplicationProgressViewerUnitTest {
         when(mockApplication.getGrantHolder()).thenReturn(tmp);
         when(mockApplication.getTimestamp()).thenReturn(new Date());
         when(mockApplication.getSubmissionDate()).thenReturn(new Date());
-        //TODO: Populate the list...
         when(mockApplication.getRefereeReportList()).thenReturn(new ArrayList<RefereeReport>());
         when(mockApplication.getPersonList()).thenReturn(new ArrayList<Person>());
         
@@ -108,9 +107,15 @@ public class ApplicationProgressViewerUnitTest {
             
             verify(mockDAOFactory).createApplicationDAO();
             verify(mockApplicationJpaController).findApplicationEntities();
+            verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationServicesUtil);
+            verifyNoMoreInteractions(mockUserGateway);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockApplication);
+            verifyNoMoreInteractions(mockSession);
             
             assertArrayEquals(applications.toArray(), a.toArray());
         }
@@ -131,8 +136,7 @@ public class ApplicationProgressViewerUnitTest {
         {
             instance.getApplicationProgress(mockSession, mockApplication);
             
-            //verifyNoMoreInteractions(mockDAOFactory);
-            //verifyNoMoreInteractions(mockApplication);
+            
         }
         catch(Exception ex)
         {

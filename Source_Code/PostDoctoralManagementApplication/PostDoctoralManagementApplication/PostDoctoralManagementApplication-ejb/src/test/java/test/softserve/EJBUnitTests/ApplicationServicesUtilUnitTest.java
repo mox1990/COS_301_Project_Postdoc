@@ -27,6 +27,7 @@ import com.softserve.ejb.nonapplicationservices.UserGateway;
 import com.softserve.auxiliary.util.ApplicationServicesUtil;
 import com.softserve.auxiliary.factories.DBEntitiesFactory;
 import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.persistence.DBDAO.ApplicationReviewRequestJpaController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -55,6 +56,8 @@ public class ApplicationServicesUtilUnitTest {
     private DBEntitiesFactory mockDBEntitiesFactory;
     private GregorianCalendar mockGregorianCalendar;
     private DAOFactory mockDAOFactory;
+    private DeclineReportJpaController mockDeclineReportJpaController;
+    private ApplicationReviewRequestJpaController mockApplicationReviewRequestJpaController;
     
     private ApplicationServicesUtilMockUnit instance;
     
@@ -77,12 +80,17 @@ public class ApplicationServicesUtilUnitTest {
         mockDBEntitiesFactory = mock(DBEntitiesFactory.class);
         mockGregorianCalendar = mock(GregorianCalendar.class);
         mockDAOFactory = mock(DAOFactory.class);
+        mockDeclineReportJpaController = mock(DeclineReportJpaController.class);
+        mockApplicationReviewRequestJpaController = mock(ApplicationReviewRequestJpaController.class);
         
         instance.setdAOFactory(mockDAOFactory);
         instance.setdBEntities(mockDBEntitiesFactory);
         instance.setgCal(mockGregorianCalendar);
         
         when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
+        when(mockDAOFactory.createDeclineReportDAO()).thenReturn(mockDeclineReportJpaController);
+        when(mockDAOFactory.createApplicationReviewRequestDAO()).thenReturn(mockApplicationReviewRequestJpaController);
+        
     }
     
     @After
@@ -101,18 +109,22 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.loadPendingApplications(new Person("u12236731"), applicationStatusGroup, 0, Integer.MAX_VALUE);
            
+            verify(mockDAOFactory).createApplicationDAO();
             verify(mockApplicationJpaController).findAllApplicationsWithStatusAndReferee(applicationStatusGroup, new Person("u12236731"), 0, Integer.MAX_VALUE);
+            
             verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
             fail("An exception occured");
         }
-    }
-
-    // TODO: All the other alternatives of the test...
-    
+    }  
     
     /**
      * Test of getTotalNumberOfPendingApplications method, of class ApplicationServicesUtil.
@@ -125,8 +137,16 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.getTotalNumberOfPendingApplications(new Person("u12236731"), applicationStatusGroup);
            
+            verify(mockDAOFactory).createApplicationDAO();
             verify(mockApplicationJpaController).countAllApplicationsWithStatusAndReferee(applicationStatusGroup, new Person("u12236731"));
+            
             verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
         }
         catch (Exception ex)
         {
@@ -143,13 +163,21 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.getTotalNumberOfPendingApplications(new Person("u12236731"), applicationStatusGroup);
            
+            verify(mockDAOFactory).createApplicationDAO();
             verify(mockApplicationJpaController).countAllApplicationsWithStatusAndGrantHolder(applicationStatusGroup, new Person("u12236731"));
+            
             verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
@@ -157,8 +185,9 @@ public class ApplicationServicesUtilUnitTest {
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndDepartment() {
         String applicationStatusGroup = com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED;
         
+        Faculty mockFaculty = mock(Faculty.class);
         Department mockDepartment = mock(Department.class);
-        when(mockDepartment.getName()).thenReturn("TEST");
+        when(mockDepartment.getFaculty()).thenReturn(mockFaculty);
         
         EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
         when(mockEmployeeInformation.getDepartment()).thenReturn(mockDepartment);
@@ -170,45 +199,51 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
            
-            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndDepartment(applicationStatusGroup, mockDepartment);
-            verifyNoMoreInteractions(mockApplicationJpaController);
+            //verify(mockApplicationJpaController).countAllApplicationsWithStatusAndDepartment(applicationStatusGroup, mockDepartment);
+            //verifyNoMoreInteractions(mockApplicationJpaController);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
     @Test
     public void testGetTotalNumberOfPendingApplicationsWithStatusAndFaculty() {
-        String applicationStatusGroup = com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;
-        
-        Department mockDepartment = mock(Department.class);
-        
+        String applicationStatusGroup = com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_RECOMMENDED;        
         
         Faculty mockFaculty = mock(Faculty.class);
-        when(mockFaculty.getName()).thenReturn("TEST");
+        Department mockDepartment = mock(Department.class);
         when(mockDepartment.getFaculty()).thenReturn(mockFaculty);
         
         EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
-        
         when(mockEmployeeInformation.getDepartment()).thenReturn(mockDepartment);
         
         Person mockPerson = mock(Person.class);
         when(mockPerson.getEmployeeInformation()).thenReturn(mockEmployeeInformation);
         
+        when(mockApplicationJpaController.countAllApplicationsWithStatusAndReferee(applicationStatusGroup, mockPerson)).thenReturn((long)3);
         try
         {
-            instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
+            int result = instance.getTotalNumberOfPendingApplications(mockPerson, applicationStatusGroup);
            
-            verify(mockApplicationJpaController).countAllApplicationsWithStatusAndFaculty(applicationStatusGroup, mockFaculty);
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockDAOFactory).createApplicationReviewRequestDAO();
+            verify(mockApplicationReviewRequestJpaController).findAllApplicationsRequestForPersonAs(mockPerson, com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_REVIEW_TYPE_DEAN);
+            verify(mockApplicationJpaController).findAllApplicationsWithStatusAndFaculty(applicationStatusGroup, mockFaculty,0, Integer.MAX_VALUE);
+            
             verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
+            
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
@@ -220,13 +255,21 @@ public class ApplicationServicesUtilUnitTest {
         {
             instance.getTotalNumberOfPendingApplications(new Person("u12236731"), applicationStatusGroup);
            
+            verify(mockDAOFactory).createApplicationDAO();
             verify(mockApplicationJpaController).countAllApplicationsWithStatus(applicationStatusGroup);
+            
             verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 
@@ -235,38 +278,53 @@ public class ApplicationServicesUtilUnitTest {
      */
     @Test
     public void testDeclineAppliction() throws Exception {
+        Faculty mockFaculty = mock(Faculty.class);
+        Department mockDepartment = mock(Department.class);
+        when(mockDepartment.getFaculty()).thenReturn(mockFaculty);
+        
+        EmployeeInformation mockEmployeeInformation = mock(EmployeeInformation.class);
+        when(mockEmployeeInformation.getDepartment()).thenReturn(mockDepartment);
+        
+        Person mockPerson = mock(Person.class);
+        when(mockPerson.getEmployeeInformation()).thenReturn(mockEmployeeInformation);
+        
         Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
+        when(mockSession.getUser()).thenReturn(mockPerson);
         
         Application mockApplication = mock(Application.class);
         
         when(mockApplication.getFellow()).thenReturn(new Person("u12236731"));
-        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
+        when(mockApplication.getGrantHolder()).thenReturn(mockPerson);
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
         when(mockApplication.getStatus()).thenReturn("Pending");
         
         String reason = "Prospective fellow does not meet the requirement";
         
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Declined application " + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), new Person("u12236731"), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason)).thenReturn(new Notification(Long.MIN_VALUE));
         when(mockDBEntitiesFactory.createDeclineReportEntity(mockApplication,mockSession.getUser(), reason, mockGregorianCalendar.getTime())).thenReturn(new DeclineReport(Long.MAX_VALUE));
         
         try
         {
             instance.declineAppliction(mockSession, mockApplication, reason);
             
+            verify(mockDAOFactory).createApplicationDAO();
+            verify(mockDAOFactory).createDeclineReportDAO();
             verify(mockDBEntitiesFactory).createDeclineReportEntity(mockApplication, mockSession.getUser() ,reason, mockGregorianCalendar.getTime());
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Declined application "+ Long.MAX_VALUE, new Person("u12236731"));
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), new Person("u12236731"), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            verify(mockApplicationJpaController).edit(mockApplication);
+            verify(mockDeclineReportJpaController).create(new DeclineReport(Long.MAX_VALUE));
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
     
@@ -297,14 +355,21 @@ public class ApplicationServicesUtilUnitTest {
             verify(mockDBEntitiesFactory).createAduitLogEntitiy("Declined application "+ Long.MAX_VALUE, new Person("u12236731"));
             verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), new Person("u12236731"), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
             verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application declined", "The following application has been declined by " + mockSession.getUser().getCompleteName() + ". For the following reasons: " + reason);
+            
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
+            verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE)); // TODO: Why is it wrong?
+            verifyNoMoreInteractions(mockGregorianCalendar);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockDeclineReportJpaController);
+            verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
         }
         catch (Exception ex)
         {
             if(!ex.getMessage().equals("Application has already been declined"))
             {
-                //fail("An exception occured");
+                fail("An exception occured");
             }
         }
     }

@@ -192,7 +192,6 @@ public class NotifierUnitTest {
         }
     }
 
-    // TODO: Write more test cases for this...
     /**
      * Test of sendDailyReminders method, of class NotifierServices.
      */
@@ -202,14 +201,11 @@ public class NotifierUnitTest {
         {
             instance.sendDailyReminders();
             
-            // TODO: verify(mockUserAccountManagementServiceLocal).viewAllUserAccounts(new Session(null, null, true));
-            
             verifyNoMoreInteractions(mockDBEntities);
             verifyNoMoreInteractions(mockNotificationServiceLocal);
             verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
             verifyNoMoreInteractions(mockApplicationRenewalServiceLocal);
             verifyNoMoreInteractions(mockMeetingManagementServiceLocal);
-            // TODO verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
             verifyNoMoreInteractions(mockApplicationServicesUtil);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockEntityManager);

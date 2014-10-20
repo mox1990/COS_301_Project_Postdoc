@@ -278,7 +278,6 @@ public class GrantHolderFinalisationUnitTest {
         {
             instance.countTotalPendingApplications(mockSession);
             
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
             verify(mockApplicationServices).getTotalNumberOfPendingApplications(mockSession.getUser(), com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_REFERRED);
             verify(mockEntityManager).close();
             verify(mockSession, times(2)).getUser();
@@ -374,16 +373,13 @@ public class GrantHolderFinalisationUnitTest {
             verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application finalisation declined", "Please note that the finalisation of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason);
             verify(mockTransactionController).CommitTransaction();
             verify(mockSession).getUser();
-            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockCVManagementService);
             verifyNoMoreInteractions(mockPersonJpaController);
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockCvJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
             verifyNoMoreInteractions(mockApplicationServices);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
@@ -414,7 +410,6 @@ public class GrantHolderFinalisationUnitTest {
         String reason = "Chilling...";
         
         when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalisation declined", "Please note that the finalisation of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason)).thenReturn(new Notification(Long.MAX_VALUE));
-        //when(mockCal.getTime()).thenReturn(new Date());
         
         AmmendRequest mockAmmendRequest = new AmmendRequest(Long.MIN_VALUE);
         when(mockDBEntitiesFactory.createAmmendRequestEntity(mockApplication, new Person("u12236731"), reason, mockCal.getTime())).thenReturn(mockAmmendRequest);
@@ -433,18 +428,14 @@ public class GrantHolderFinalisationUnitTest {
             verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application ammendment request", "Please note that the grant holder has requested ammendment for the application '" + mockApplication.getProjectTitle() + "' for which you are the fellow of. The reason for this is as follows: " + reason);
             verify(mockTransactionController).CommitTransaction();
             verify(mockSession, times(2)).getUser();
-            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockCVManagementService);
             verifyNoMoreInteractions(mockPersonJpaController);
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockCvJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
             verifyNoMoreInteractions(mockApplicationServices);
-            //verifyNoMoreInteractions(mockCal); TODO: Calendar checking...
             verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
@@ -462,7 +453,7 @@ public class GrantHolderFinalisationUnitTest {
      * Test of finaliseApplication method, of class GrantHolderFinalisationService.
      */
     @Test
-    public void testFinaliseApplication() throws Exception // TODO: Add alternatives to this...
+    public void testFinaliseApplication() throws Exception 
     {
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -472,7 +463,6 @@ public class GrantHolderFinalisationUnitTest {
         
         when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
         when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.")).thenReturn(new Notification(Long.MAX_VALUE));
-        //when(mockCal.getTime()).thenReturn(new Date());
         
         try
         {
@@ -485,23 +475,14 @@ public class GrantHolderFinalisationUnitTest {
             verify(mockApplication).setFinalisationDate(mockCal.getTime());
             verify(mockApplication).setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
             verify(mockApplicationJpaController).edit(mockApplication);
-            // TODO: verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.");
             verify(mockTransactionController).CommitTransaction();
-            // TODO: verify(mockSession, times(2)).getUser();
-            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockCVManagementService);
             verifyNoMoreInteractions(mockPersonJpaController);
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockCvJpaController);
-            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
             verifyNoMoreInteractions(mockApplicationServices);
-            // TODO: verifyNoMoreInteractions(mockCal); TODO: Calendar checking...
-            // TODO: verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
-            // verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -514,7 +495,7 @@ public class GrantHolderFinalisationUnitTest {
     }
     
     @Test
-    public void testFinaliseApplicationWithNotifications() throws Exception { // TODO: Populate notifications
+    public void testFinaliseApplicationWithNotifications() throws Exception { 
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
         
@@ -523,7 +504,6 @@ public class GrantHolderFinalisationUnitTest {
         
         when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
         when(mockDBEntitiesFactory.createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.")).thenReturn(new Notification(Long.MAX_VALUE));
-        //when(mockCal.getTime()).thenReturn(new Date());
         
         try
         {
@@ -536,23 +516,14 @@ public class GrantHolderFinalisationUnitTest {
             verify(mockApplication).setFinalisationDate(mockCal.getTime());
             verify(mockApplication).setStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FINALISED);
             verify(mockApplicationJpaController).edit(mockApplication);
-            // TODO: verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("f12236731"), "Application finalised", "The application " + mockApplication.getProjectTitle() + " has been finalised by " + new Person("u12236731").getCompleteName() + ". Please review the application for recommendation.");
             verify(mockTransactionController).CommitTransaction();
-            // TODO: verify(mockSession, times(2)).getUser();
-            // TODO: Run test on verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: Notification stuff verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockCVManagementService);
             verifyNoMoreInteractions(mockPersonJpaController);
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockCvJpaController);
-            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // verifyNoMoreInteractions(mockNotificationService); TODO: Setup class for the test
             verifyNoMoreInteractions(mockApplicationServices);
-            // TODO: verifyNoMoreInteractions(mockCal); TODO: Calendar checking...
-            // TODO: verifyNoMoreInteractions(mockApplicationReviewRequestJpaController);
-            // verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockUserAccountManagementServiceLocal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -616,7 +587,7 @@ public class GrantHolderFinalisationUnitTest {
         
         Application mockApplication = mock(Application.class);
         
-        Person mockHod = new Person("u12345678"); // TODO: make this into a spied object...
+        Person mockHod = new Person("u12345678"); 
         
         when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
         
@@ -667,7 +638,6 @@ public class GrantHolderFinalisationUnitTest {
         Person mockHod = new Person("u12345678"); // TODO: make this into a spied object...
         
         when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
-        // TODO: when(mockPersonJpaController.findUserBySystemIDOrEmail("u12345678")).thenReturn(mockHod);
         try
         {
             // Test returned value...

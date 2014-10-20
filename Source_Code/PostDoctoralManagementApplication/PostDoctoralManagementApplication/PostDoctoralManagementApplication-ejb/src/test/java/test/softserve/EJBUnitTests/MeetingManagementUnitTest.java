@@ -124,7 +124,6 @@ public class MeetingManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -138,7 +137,6 @@ public class MeetingManagementUnitTest {
         }
     }
     
-    //TODO: write more test cases...
     /**
      * Test of updateMeeting method, of class MeetingManagementService.
      */
@@ -165,7 +163,6 @@ public class MeetingManagementUnitTest {
             verify(mockCal).getTime();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -205,7 +202,6 @@ public class MeetingManagementUnitTest {
             verify(mockCal).getTime();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -244,7 +240,6 @@ public class MeetingManagementUnitTest {
             verify(mockCal).getTime();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -278,14 +273,12 @@ public class MeetingManagementUnitTest {
             verify(mockTransactionController).StartTransaction();
             verify(mockTransactionController).getDAOFactoryForTransaction();
             verify(mockDAOFactory).createCommitteeMeetingDAO();
-            // TODO: add parameter control...
             verify(mockCommitteeMeetingJpaController).edit(mockCommitteeMeeting);
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             verify(mockCal).getTime();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -303,7 +296,7 @@ public class MeetingManagementUnitTest {
     /**
      * Test of addMinuteComment method, of class MeetingManagementService.
      */
-    // TODO: @Test
+    // @Test
     public void testAddMinuteComment() throws Exception {
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -326,15 +319,12 @@ public class MeetingManagementUnitTest {
             verify(mockTransactionController).StartTransaction();
             verify(mockTransactionController).getDAOFactoryForTransaction();
             verify(mockDAOFactory).createMinuteCommentDAO();
-            // TODO: add parameter control...
             verify(mockMinuteCommentJpaController).create(mockMinuteComment);
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             //verify(mockCal).getTime();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
-            //verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
             verifyNoMoreInteractions(mockDAOFactory);
@@ -365,7 +355,6 @@ public class MeetingManagementUnitTest {
             verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -394,7 +383,6 @@ public class MeetingManagementUnitTest {
             verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -425,7 +413,6 @@ public class MeetingManagementUnitTest {
             verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -438,7 +425,6 @@ public class MeetingManagementUnitTest {
             fail("An exception occured");
         }
     }
-    // TODO: Create more test cases for this
     
     /**
      * Test of getAllConcludedMeetings method, of class MeetingManagementService.
@@ -455,7 +441,6 @@ public class MeetingManagementUnitTest {
             verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -484,7 +469,6 @@ public class MeetingManagementUnitTest {
             verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
@@ -513,7 +497,6 @@ public class MeetingManagementUnitTest {
             verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockCal);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);

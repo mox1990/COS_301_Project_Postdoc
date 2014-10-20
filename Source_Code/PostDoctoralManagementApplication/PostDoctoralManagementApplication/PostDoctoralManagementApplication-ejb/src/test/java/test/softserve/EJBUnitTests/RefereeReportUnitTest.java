@@ -193,19 +193,14 @@ public class RefereeReportUnitTest {
             verify(mockRefereeReport).setApplicationID(mockApplication);
             verify(mockRefereeReportJpaController).create(mockRefereeReport);
             verify(mockGregorianCalendar, times(2)).getTime();
-            // TODO: Notifications...
             
             verify(mockApplication).getApplicationID();
             verify(mockApplicationJpaController).findApplication(Long.MAX_VALUE);
             verify(mockApplicationJpaController).edit(mockApplication);
             verify(mockTransactionController).CommitTransaction();
-            // verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockApplicationJpaController);
-            // TODO: verifyNoMoreInteractions(mockDBEntitiesFactory);
-            // TODO: verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockGregorianCalendar);
             verifyNoMoreInteractions(mockApplicationServicesUtil);
             verifyNoMoreInteractions(mockRefereeReportJpaController);
@@ -213,8 +208,6 @@ public class RefereeReportUnitTest {
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockEntityManager);
-                    
-            
         }
         catch (Exception ex)
         {

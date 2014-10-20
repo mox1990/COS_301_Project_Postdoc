@@ -11,7 +11,9 @@ import com.softserve.auxiliary.transactioncontrollers.TransactionController;
 import com.softserve.persistence.DBDAO.AuditLogJpaController;
 import com.softserve.persistence.DBEntities.AuditLog;
 import com.softserve.ejb.nonapplicationservices.AuditTrailServiceLocal;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import javax.persistence.EntityManager;
@@ -91,7 +93,6 @@ public class AuditTrailUnitTest {
             verify(mockDAOFactory).createAuditLogDAO();
             verify(mockAuditLogJpaController).create(mockAuditLog);
             
-            // TODO: Verfiy work on mock application...
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockAuditLogJpaController);
@@ -121,7 +122,6 @@ public class AuditTrailUnitTest {
             verify(mockDAOFactory).createAuditLogDAO();
             verify(mockAuditLogJpaController).create(mockAuditLog);
             
-            // TODO: Verfiy work on mock application...
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockAuditLogJpaController);
@@ -142,14 +142,26 @@ public class AuditTrailUnitTest {
     public void loadAllLogActions() throws Exception {        
         AuditLog mockAuditLog = mock(AuditLog.class);
         when(mockAuditLog.getAction()).thenReturn("Defualt action");
+        List<AuditLog> expected = new ArrayList<>();
+        when(mockAuditLogJpaController.findAuditLogEntities()).thenReturn(expected);
         try
         {
-            // TODO: Implement...
+            List<AuditLog> result = instance.loadAllAuditLogEntries(null);
+            
+            assertArrayEquals(expected.toArray(), result.toArray());
+            
+            verify(mockDAOFactory).createAuditLogDAO();
+            verify(mockAuditLogJpaController).findAuditLogEntities();
+            verify(mockEm).close();
+            
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockAuditLogJpaController);
+            verifyNoMoreInteractions(mockEm);
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            //fail("An exception occured");
+            fail("An exception occured");
         }
     }
 }

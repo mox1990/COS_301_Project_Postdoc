@@ -165,8 +165,6 @@ public class ApplicationRenewalUnitTest {
             verifyNoMoreInteractions(mockEntityManager);
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockApplication);
-            
-            //verifyNoMoreInteractions(mockApplication);
         }
         catch(Exception ex)
         {
@@ -286,8 +284,8 @@ public class ApplicationRenewalUnitTest {
     public void testCreateRenewalApplicationEdit() throws Exception {
         ProgressReport pr = new ProgressReport(Long.MIN_VALUE);
         Application oldApplication = mock(Application.class);
-        
-        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplicationJpaController.findApplication(Long.MAX_VALUE)).thenReturn(mockApplication);
         try
         {
             instance.createRenewalApplication(mockSession, oldApplication, mockApplication);
@@ -296,8 +294,8 @@ public class ApplicationRenewalUnitTest {
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             verify(mockDAOFactory).createApplicationDAO();
-            verify(mockApplication, atLeast(2)).getApplicationID(); // TODO: Why does it bug?
-            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockApplication, times(2)).getApplicationID();
+            verify(mockApplicationJpaController).findApplication(Long.MAX_VALUE);
             verify(mockApplicationJpaController).edit(mockApplication);
             
             verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
@@ -311,7 +309,6 @@ public class ApplicationRenewalUnitTest {
             verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockEntityManager);
             verifyNoMoreInteractions(mockApplicationJpaController);
-            // TODO: Write for verifyNoMoreInteractions(mockApplication);
         }
         catch(Exception ex)
         {
@@ -325,7 +322,8 @@ public class ApplicationRenewalUnitTest {
         ProgressReport pr = new ProgressReport(Long.MIN_VALUE);
         Application oldApplication = mock(Application.class);
         
-        when(mockApplicationJpaController.findApplication(mockApplication.getApplicationID())).thenReturn(mockApplication);
+        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
+        when(mockApplicationJpaController.findApplication(Long.MAX_VALUE)).thenReturn(mockApplication);
         try
         {
             instance.createRenewalApplication(mockSession, oldApplication, mockApplication);
@@ -334,8 +332,8 @@ public class ApplicationRenewalUnitTest {
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             verify(mockDAOFactory).createApplicationDAO();
-            verify(mockApplication, atLeast(2)).getApplicationID(); // TODO: Why does it bug?
-            verify(mockApplicationJpaController).findApplication(mockApplication.getApplicationID());
+            verify(mockApplication, times(2)).getApplicationID();
+            verify(mockApplicationJpaController).findApplication(Long.MAX_VALUE);
             verify(mockApplicationJpaController).edit(mockApplication);
             
             verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
@@ -349,7 +347,6 @@ public class ApplicationRenewalUnitTest {
             verifyNoMoreInteractions(mockSession);
             verifyNoMoreInteractions(mockEntityManager);
             verifyNoMoreInteractions(mockApplicationJpaController);
-            // TODO: Write for verifyNoMoreInteractions(mockApplication);
         }
         catch(Exception ex)
         {
@@ -381,12 +378,12 @@ public class ApplicationRenewalUnitTest {
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             verify(mockApplicationServicesUtil).submitApplication(mockApplication);
-            verify(mockDBEntitiesFactory).createNotificationEntity(null, mockApplication.getFellow(), "Renewal application submitted", "Please note that the renewal application '" + mockApplication.getProjectTitle() + "' has been submitted for which you are the fellow of.");
-            verify(mockDBEntitiesFactory).createNotificationEntity(null, mockApplication.getGrantHolder(), "Renewal application submitted", "Please note that the renewal application '" + mockApplication.getProjectTitle() + "' has been submitted for which you are the grant holder of.");
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("u12236731"), "Renewal application submitted", "Please note that the renewal application '" + "Mock Project" + "' has been submitted for which you are the fellow of.");
+            verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("u12345678"), "Renewal application submitted", "Please note that the renewal application '" + "Mock Project" + "' has been submitted for which you are the grant holder of.");
             verify(mockNotificationServiceLocal).sendBatchNotifications(mockSession, n, true);
-            verify(mockApplication, atLeastOnce()).getFellow();
-            verify(mockApplication, atLeastOnce()).getGrantHolder();
-            verify(mockApplication, atLeast(2)).getProjectTitle();
+            verify(mockApplication).getFellow();
+            verify(mockApplication).getGrantHolder();
+            verify(mockApplication, times(2)).getProjectTitle();
             
             verifyNoMoreInteractions(mockProgressReportManagementServiceLocal);
             verifyNoMoreInteractions(mockNotificationServiceLocal);

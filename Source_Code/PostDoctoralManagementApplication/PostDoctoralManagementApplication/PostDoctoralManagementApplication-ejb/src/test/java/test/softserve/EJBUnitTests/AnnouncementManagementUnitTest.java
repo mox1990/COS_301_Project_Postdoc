@@ -98,9 +98,13 @@ public class AnnouncementManagementUnitTest {
             
             verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).findAllActiveAnnouncements();
+            verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
             
             if(!announcements.isEmpty())
             {
@@ -126,9 +130,13 @@ public class AnnouncementManagementUnitTest {
             
             verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).findAllActiveAnnouncements();
+            verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
             
             assertArrayEquals(announcements.toArray(), a.toArray());
         }
@@ -156,9 +164,13 @@ public class AnnouncementManagementUnitTest {
             
             verify(mockDAOFactory).createAnnouncementDAO();
             verify(mockAnnouncementJpaController).findPendingAnnouncements();
+            verify(mockEntityManager).close();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
             
             assertArrayEquals(announcements.toArray(), a.toArray());
         }
@@ -188,8 +200,10 @@ public class AnnouncementManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
-            verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
         }
         catch (Exception ex)
         {
@@ -198,7 +212,6 @@ public class AnnouncementManagementUnitTest {
         }
     }
     
-    // TODO: Implement proper logic for this...
     @Test
     public void testCreateAnnouncementFail() throws Exception {
         Announcement mockAnnouncement = mock(Announcement.class);
@@ -215,8 +228,10 @@ public class AnnouncementManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
-            verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
         }
         catch (Exception ex)
         {
@@ -246,8 +261,10 @@ public class AnnouncementManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
-            verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
         }
         catch (Exception ex)
         {
@@ -256,7 +273,6 @@ public class AnnouncementManagementUnitTest {
         }
     }
 
-    // TODO: Make it fail...
     @Test
     public void testUpdateAnnouncementFail() throws Exception {
         Announcement mockAnnouncement = mock(Announcement.class);
@@ -275,8 +291,10 @@ public class AnnouncementManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
-            verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
         }
         catch (Exception ex)
         {
@@ -306,8 +324,10 @@ public class AnnouncementManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
-            verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
         }
         catch (Exception ex)
         {
@@ -316,7 +336,6 @@ public class AnnouncementManagementUnitTest {
         }
     }
     
-    // TODO: Make it throw an exception...
     @Test
     public void testRemoveAnnouncementFail() throws Exception {
         Announcement mockAnnouncement = new Announcement(Long.MAX_VALUE);
@@ -335,8 +354,10 @@ public class AnnouncementManagementUnitTest {
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockAnnouncementJpaController);
-            verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
+            verifyNoMoreInteractions(mockEntityManager);
+            verifyNoMoreInteractions(mockTransactionController);
+            verifyNoMoreInteractions(mockDBEntitiesFactory);
         }
         catch (Exception ex)
         {

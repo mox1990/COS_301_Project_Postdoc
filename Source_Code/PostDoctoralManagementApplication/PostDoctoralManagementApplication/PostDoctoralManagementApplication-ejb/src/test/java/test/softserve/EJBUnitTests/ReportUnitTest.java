@@ -80,22 +80,6 @@ public class ReportUnitTest {
     }
 
     /**
-     * Test of loadAllAuditLogEntries method, of class ReportServices.
-     */
-    @Test
-    public void testLoadAllAuditLogEntries() throws Exception {
-        
-    }
-
-    /**
-     * Test of loadAllPersonEntities method, of class ReportServices.
-     */
-    @Test
-    public void testLoadAllPersonEntities() throws Exception {
-        
-    }
-
-    /**
      * Test of loadAllApplicationEntities method, of class ReportServices.
      */
     @Test
@@ -211,37 +195,4 @@ public class ReportUnitTest {
             fail("An exception occured");
         }
     }
-
-    /** Tested in UI and Providers part...
-     * Test of createDynamicReport method, of class ReportServices.
-     *
-    @Test
-    public void testCreateDynamicReport() throws Exception {
-        
-    }
-
-    /** 
-     * Test of renderReportAsHTML method, of class ReportServices.
-     *
-    @Test
-    public void testRenderReportAsHTML() throws Exception {
-        
-    }
-
-    /**
-     * Test of renderReportAsPDF method, of class ReportServices.
-     *
-    @Test
-    public void testRenderReportAsPDF() throws Exception {
-        
-    }
-
-    /**
-     * Test of renderReportAsMSEXCELSpreadsheet method, of class ReportServices.
-     *
-    @Test
-    public void testRenderReportAsMSEXCELSpreadsheet() throws Exception {
-        
-    }*/
-    
 }

@@ -115,7 +115,6 @@ public class DRISApprovalUnitTest {
         when(mockDAOFactory.createPersonDAO()).thenReturn(mockPersonJpaController);
         when(mockDAOFactory.createFundingReportDAO()).thenReturn(mockFundingReportJpaController);
         when(mockDAOFactory.createResearchFellowInformationDAO()).thenReturn(mockResearchFellowInformationJpaController);
-        //TODO: Go over the dependencies again this is a big class...
     }
     
     @After
@@ -252,62 +251,12 @@ public class DRISApprovalUnitTest {
             fail("An exception occured");
         }
     }
-
-    /**
-     * Test of checkApplicationForEligiblity method, of class DRISApprovalService.
-     */
-    @Test
-    public void testCheckApplicationForEligiblityDeclined() throws Exception {        
-        /* TODO: Debug this test...
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        
-        Application mockApplication = mock(Application.class);
-        
-        AcademicQualification mockAcademicQualification = mock(AcademicQualification.class);
-        when(mockAcademicQualification.getName()).thenReturn("PHD");
-        when(mockAcademicQualification.getYearObtained()).thenReturn(new Date(1991, 5, 12));
-        
-        Cv mockCv = mock(Cv.class);
-        when(mockCv.getDateOfBirth()).thenReturn(new Date(1955, 9, 17));
-        when(mockCv.getAcademicQualificationList()).thenReturn(Arrays.asList(mockAcademicQualification));
-        
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getCv()).thenReturn(mockCv);
-        EligiblityReport mockEligiblityReport = mock(EligiblityReport.class);
-        
-        when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
-        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
-        when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
-        
-        String reason = "Prospective fellow does not meet the eligiblity requirement";
-        
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-
-        try
-        {
-            instance.checkApplicationForEligiblity(mockSession, mockApplication);
-            // Declined Application...
-            verify(mockUserGateway).authenticateUser(mockSession, roles);
-            verify(mockApplicationJpaController).edit(mockApplication);
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-        }
-        catch (Exception ex)
-        {
-            //ex.printStackTrace();
-            ////fail("An exception occured");
-        }*/
-    }
     
     /**
      * Test of checkApplicationForEligiblity method, of class DRISApprovalService.
      */
     @Test
     public void testCheckApplicationForEligiblity() throws Exception {
-        // TODO: simplify this test...
         GregorianCalendar date = new GregorianCalendar();
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(new Person("u12236731"));
@@ -331,7 +280,6 @@ public class DRISApprovalUnitTest {
         when(mockApplication.getFellow()).thenReturn(mockPerson);
         when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
         when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
-        //when(mockApplication.getEligiblityReport()).thenReturn(mockEligiblityReport);
         
         when(mockDBEntitiesFactory.createEligiblityReportEntity(mockApplication, new Person("u12236731"), mockCal.getTime())).thenReturn(new EligiblityReport(Long.MAX_VALUE));
         when(mockDBEntitiesFactory.createAduitLogEntitiy("Application made eligible" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
@@ -357,7 +305,6 @@ public class DRISApprovalUnitTest {
             verifyNoMoreInteractions(mockNotificationService);
             verifyNoMoreInteractions(mockApplicationServices);
             verifyNoMoreInteractions(mockEligiblityReportJpaController);
-            //verifyNoMoreInteractions(mockCal); TODO: Fix this
             verifyNoMoreInteractions(mockPersonJpaController);
             verifyNoMoreInteractions(mockFundingCostJpaController);
             verifyNoMoreInteractions(mockDAOFactory);
@@ -413,14 +360,11 @@ public class DRISApprovalUnitTest {
             verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("s25030403"), "Application funding declined", "Please note that the funding for the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason);
             
             verify(mockTransactionController).CommitTransaction();
-            //verify(mockNotificationService).sendBatchNotifications(new Session(mockHttpSession, mockSession.getUser()), Arrays.asList(new Notification(Long.MAX_VALUE), new Notification(Long.MIN_VALUE)), true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            //verifyNoMoreInteractions(mockApplication); TODO: consider all the times it was called...
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockFundingReportJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verifyNoMoreInteractions(mockNotificationService); TODO: a way to test for these...
             verifyNoMoreInteractions(mockApplicationServices);
             verifyNoMoreInteractions(mockEligiblityReportJpaController);
             verifyNoMoreInteractions(mockCal);
@@ -435,73 +379,6 @@ public class DRISApprovalUnitTest {
             fail("An exception occured");
         }
     }
-
-    /**
-     * Test of approveFunding method, of class DRISApprovalService.
-     */
- /*   @Test TODO: Write this test with a clear mind...
-    public void testApproveFunding() throws Exception {
-        Session mockSession = mock(Session.class);
-        when(mockSession.getUser()).thenReturn(new Person("u12236731"));
-        
-        Cv mockCv = mock(Cv.class);
-        when(mockCv.getDateOfBirth()).thenReturn(new Date(1993, 9, 17));
-        
-        Person mockPerson = mock(Person.class);
-        when(mockPerson.getCv()).thenReturn(mockCv);
-        when(mockPerson.getSecurityRoleList()).thenReturn(Arrays.asList(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW));
-        
-        Application mockApplication = mock(Application.class);
-        when(mockApplication.getFellow()).thenReturn(mockPerson);
-        when(mockApplication.getGrantHolder()).thenReturn(new Person("s25030403"));
-        when(mockApplication.getApplicationID()).thenReturn(Long.MAX_VALUE);
-        
-        String reason = "Prospective fellow does not meet the eligiblity requirement";
-        String applicantMessage = "appMSG";
-        
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(1)));
-        when(mockDBEntitiesFactory.createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage)).thenReturn(new Notification(new Long(2)));
-        
-        Notification mockCscNotification = mock(Notification.class);
-        Notification mockFinanceNotification = mock(Notification.class);
-        
-        when(mockDBEntitiesFactory.createAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"))).thenReturn(new AuditLog(Long.MAX_VALUE));
-        
-        ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_SYSTEM_ADMINISTRATOR);
-        roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_DRIS_MEMBER);
-        
-        FundingReport mockFundingReport = mock(FundingReport.class);
-        when(mockFundingReport.getReportID()).thenReturn(Long.MAX_VALUE);
-
-        when(mockPersonJpaController.findPerson(mockPerson.getSystemID())).thenReturn(mockPerson);
-        try
-        {
-            instance.approveFunding(mockSession, mockApplication, mockFundingReport, applicantMessage, mockCscNotification, mockFinanceNotification);
-            // Declined Application...
-            //verify(mockUserGateway).authenticateUser(mockSession, roles);
-            
-            verify(mockFundingReportJpaController).create(mockFundingReport);
-            verify(mockApplicationJpaController).edit(mockApplication);
-            verify(mockDBEntitiesFactory).createAduitLogEntitiy("Application approved" + Long.MAX_VALUE, new Person("u12236731"));
-            
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockPerson, "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
-            verify(mockDBEntitiesFactory).createNotificationEntity(new Person("u12236731"), mockApplication.getGrantHolder(), "Application funding approved", "The following application has been approved for funding by " + mockSession.getUser().getCompleteName() + ". " + applicantMessage);
-            
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verify(mockAuditTrailService).logAction(new AuditLog(Long.MAX_VALUE));
-            
-            verify(mockNotificationService).sendBatchNotifications(Arrays.asList(new Notification(new Long(1)),new Notification(new Long(2))), true);
-            verify(mockNotificationService).sendOnlyEmail(mockCscNotification);
-            verify(mockNotificationService).sendOnlyEmail(mockFinanceNotification);
-            
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            //fail("An exception occured");
-        }
-    }*/
     
     /**
      * Test of loadFundedApplications method, of class DRISApprovalService.
@@ -529,47 +406,6 @@ public class DRISApprovalUnitTest {
             verifyNoMoreInteractions(mockFundingCostJpaController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockTransactionController);
-        }
-        catch (Exception ex)
-        {
-            fail("An exception occured");
-        }
-    }
-    
-    /**
-     * Test of updateFundingInformation method, of class DRISApprovalService.
-     */
-    @Test
-    public void testUpdateFundingInformation() throws Exception {        
-        Session mockSession = mock(Session.class);
-        Application mockApplication = mock(Application.class);
-        Person fellow = mock(Person.class);
-        
-        when(mockSession.getUser()).thenReturn(fellow);
-        // TODO: enter better test data...
-        try
-        {
-            //instance.updateFundingInformation(mockSession, mockApplication); TODO: run this test...
-            
-            /*verify(mockTransactionController).StartTransaction();
-            verify(mockTransactionController).getDAOFactoryForTransaction();
-            verify(mockDAOFactory).createFundingCostJpaController();
-            verify(mockDAOFactory).createApplicationDAO();
-            verify(mockDAOFactory).createFundingReportDAO();
-            verify(mockDAOFactory).createPersonDAO();
-            verify(mockDAOFactory).createResearchFellowInformationDAO();
-            
-            verifyNoMoreInteractions(mockApplicationJpaController);
-            verifyNoMoreInteractions(mockFundingReportJpaController);
-            verifyNoMoreInteractions(mockDBEntitiesFactory);
-            verifyNoMoreInteractions(mockNotificationService);
-            verifyNoMoreInteractions(mockApplicationServices);
-            verifyNoMoreInteractions(mockEligiblityReportJpaController);
-            verifyNoMoreInteractions(mockCal);
-            verifyNoMoreInteractions(mockPersonJpaController);
-            verifyNoMoreInteractions(mockFundingCostJpaController);
-            verifyNoMoreInteractions(mockDAOFactory);
-            verifyNoMoreInteractions(mockTransactionController);*/
         }
         catch (Exception ex)
         {

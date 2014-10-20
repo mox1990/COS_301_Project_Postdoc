@@ -204,13 +204,11 @@ public class DeansEndorsementUnitTest {
             verify(mockDBEntitiesFactory).createNotificationEntity(null, mockPerson, "Application endorsement declined", "Please note that the endorsement of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the fellow of. The reason for this is as follows: " + reason);
             verify(mockDBEntitiesFactory).createNotificationEntity(null, new Person("s25030403"), "Application endorsement declined", "Please note that the endorsement of the application '" + mockApplication.getProjectTitle() + "' has been declined for which you are the grant holder of. The reason for this is as follows: " + reason);
             verify(mockTransactionController).CommitTransaction();
-            //verify(mockNotificationService).sendBatchNotifications(mockSession, null, true);
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
             verifyNoMoreInteractions(mockApplicationJpaController);
             verifyNoMoreInteractions(mockEndorsementJpaController);
             verifyNoMoreInteractions(mockDBEntitiesFactory);
-            //verifyNoMoreInteractions(mockNotificationService); TODO: update the class to facilitate this test...
             verifyNoMoreInteractions(mockApplicationServices);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockEntityManager);
@@ -252,7 +250,6 @@ public class DeansEndorsementUnitTest {
         try
         {
             instance.endorseApplication(mockSession, mockApplication, mockEndorsement);
-            // TODO: Get the energy to complete this test...
         }
         catch (Exception ex)
         {

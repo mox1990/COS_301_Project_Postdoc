@@ -99,7 +99,7 @@ public class AuditTrailService implements AuditTrailServiceLocal {
     @Override
     public List<AuditLog> loadAllAuditLogEntries(Session session) throws Exception
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = createEntityManager();
 
 	try
 	{

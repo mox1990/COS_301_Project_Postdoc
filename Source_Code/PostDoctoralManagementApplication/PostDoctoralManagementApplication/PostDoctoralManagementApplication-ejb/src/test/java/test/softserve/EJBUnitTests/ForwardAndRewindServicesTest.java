@@ -94,8 +94,6 @@ public class ForwardAndRewindServicesTest {
         when(mockDAOFactory.createApplicationReviewRequestDAO()).thenReturn(mockApplicationReviewRequestJpaController);
         when(mockDAOFactory.createApplicationDAO()).thenReturn(mockApplicationJpaController);
         when(mockDAOFactory.createForwardAndRewindReportDAO()).thenReturn(mockForwardAndRewindReportJpaController);
-        
-        //TODO: Set all the nullable pieces...
     }
     
     @After
@@ -117,7 +115,6 @@ public class ForwardAndRewindServicesTest {
         try
         {
             instance.forwardApplication(mockSession, mockApplication, toStatus, reason);
-            // TODO: complete this test...
         }
         catch (Exception ex)
         {
@@ -141,7 +138,6 @@ public class ForwardAndRewindServicesTest {
         try
         {
             instance.rewindApplication(mockSession, mockApplication, toStatus, reason);
-            // TODO: complete this test...
         }
         catch (Exception ex)
         {
@@ -157,7 +153,6 @@ public class ForwardAndRewindServicesTest {
     public void testLoadMovableApplications() throws Exception {
         Session mockSession = mock(Session.class);
         
-        // TODO: add proper parameter data...
         try
         {
             List<Application> applications = instance.loadMovableApplications(mockSession);
@@ -192,5 +187,4 @@ public class ForwardAndRewindServicesTest {
         }
     }
     
-    // TODO: more test cases for this test...
 }

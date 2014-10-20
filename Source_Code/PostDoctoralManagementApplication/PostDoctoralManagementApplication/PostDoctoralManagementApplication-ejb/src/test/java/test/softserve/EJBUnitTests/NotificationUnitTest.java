@@ -68,9 +68,6 @@ public class NotificationUnitTest {
         mockTransactionController = mock(TransactionController.class);
         mockUserGateway = mock(UserGateway.class);
         mockProperties = mock(Properties.class);
-        // TODO: Sort this out
-        //mockSession = mock(javax.mail.Session.class);
-        //mockAuthenticator = mock(javax.mail.Authenticator.class);
         mockInternetAddress = mock(InternetAddress.class);
         mockMimeMessage = mock(MimeMessage.class);
         mockEntityManager = mock(EntityManager.class);
@@ -131,45 +128,11 @@ public class NotificationUnitTest {
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
             
-            // TODO: Clear mind...
         }
         catch (Exception ex)
         {
             fail("An exception occured");
         }
-    }
-
-    // TODO: complete the rest of them...
-    /**
-     * Test of sendOnlyEmail method, of class NotificationService.
-     */
-    @Test
-    public void testSendOnlyEmail() throws Exception {
-        
-    }
-
-    /**
-     * Test of getAllNotificationsForPerson method, of class NotificationService.
-     */
-    @Test
-    public void testGetAllNotificationsForPerson() throws Exception {
-        
-    }
-
-    /**
-     * Test of getAllNotificationsFromPerson method, of class NotificationService.
-     */
-    @Test
-    public void testGetAllNotificationsFromPerson() throws Exception {
-        
-    }
-
-    /**
-     * Test of sendAllEmailsOfQueuedNotifications method, of class NotificationService.
-     */
-    @Test
-    public void testSendAllEmailsOfQueuedNotifications() throws Exception {
-        
     }
     
 }

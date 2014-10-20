@@ -110,9 +110,7 @@ public class CVManagementUnitTest {
             verify(mockCvJpaController).create(mockCV);
             verify(mockTransactionController).CommitTransaction();
             verify(mockTransactionController).CloseEntityManagerForTransaction();
-            
-            // TODO: To the other experiences
-            
+                        
             verifyNoMoreInteractions(mockTransactionController);
             verifyNoMoreInteractions(mockDAOFactory);
             verifyNoMoreInteractions(mockCvJpaController);
@@ -124,7 +122,7 @@ public class CVManagementUnitTest {
             fail("An exception occured");
         }
     }
-    //TODO: more test cases...
+    
     @Test
     public void testCreateCVButHasCV() throws Exception {
         Person mockPerson = mock(Person.class);
@@ -135,7 +133,6 @@ public class CVManagementUnitTest {
         
         Session mockSession = mock(Session.class);
         when(mockSession.getUser()).thenReturn(mockPerson);
-        
         
         try
         {
@@ -194,5 +191,4 @@ public class CVManagementUnitTest {
             fail("An exception occured");
         }
     }
-    // TODO: More test cases...
 }

@@ -151,7 +151,6 @@ public class UserGatewayUnitTest {
             verify(mockPersonJpaController).findUserBySystemIDOrEmail("u12236731");
             verify(mockHttpSession).getAttribute("username");
             verify(mockEntityManager).close();
-            // TODO: assert result...
             
             verifyNoMoreInteractions(mockHttpSession);
             verifyNoMoreInteractions(mockNotificationServiceLocal);
