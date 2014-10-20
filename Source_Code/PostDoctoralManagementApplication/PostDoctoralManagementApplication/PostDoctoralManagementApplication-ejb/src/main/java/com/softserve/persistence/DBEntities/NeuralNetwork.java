@@ -212,7 +212,7 @@ public class NeuralNetwork implements Serializable {
         
         for(Neuron neuron : getNeuronList())
         {
-            if(neuron.getBiasNeuron() == true)
+            if((neuron.getBiasNeuron() != null && neuron.getBiasNeuron().equals(Boolean.TRUE)))
             {
                 biasNeurons.add(neuron);
             }
@@ -224,10 +224,10 @@ public class NeuralNetwork implements Serializable {
     public List<Neuron> getAllInputNeurons()
     {
         List<Neuron> inputNeurons = new ArrayList<Neuron>();
-        
+        System.out.println(getNeuronList().toString());
         for(Neuron neuron : getNeuronList())
         {
-            if(neuron.getBiasNeuron() == false && neuron.getSynapseList1().isEmpty())
+            if((neuron.getBiasNeuron() == null || neuron.getBiasNeuron().equals(Boolean.FALSE)) && (neuron.getSynapseList1() == null || neuron.getSynapseList1().isEmpty()))
             {
                 inputNeurons.add(neuron);
             }
@@ -242,7 +242,7 @@ public class NeuralNetwork implements Serializable {
         
         for(Neuron neuron : getNeuronList())
         {
-            if(neuron.getBiasNeuron() == false && neuron.getSynapseList().isEmpty())
+            if((neuron.getBiasNeuron() == null || neuron.getBiasNeuron().equals(Boolean.FALSE)) && neuron.getSynapseList().isEmpty())
             {
                 outputNeurons.add(neuron);
             }
@@ -360,7 +360,7 @@ public class NeuralNetwork implements Serializable {
     {
         List<Neuron> inputNeurons = getAllInputNeurons();
         
-        if(inputNeurons.size() - 1 != inputVector.size())
+        if(inputNeurons.size() != inputVector.size())
         {
             throw new Exception("Neural network: Input vector size " + inputVector.size() + "  does not match that of the input layer size " + inputNeurons.size());
         }

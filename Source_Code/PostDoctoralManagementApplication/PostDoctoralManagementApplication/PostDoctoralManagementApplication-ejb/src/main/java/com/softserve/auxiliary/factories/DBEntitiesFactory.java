@@ -172,7 +172,9 @@ public class DBEntitiesFactory {
         neuralNetwork.setUpperCertaintyBound(upperCertiantyBound);
         neuralNetwork.setLowerCertaintyBound(lowerCertiantyBound);
         neuralNetwork.setSmoothingParameterT(smoothingParameterT);
-        neuralNetwork.setType(type);        
+        neuralNetwork.setType(type);
+        neuralNetwork.setSynapseList(new ArrayList<Synapse>());
+        neuralNetwork.setNeuronList(new ArrayList<Neuron>());
         
         return neuralNetwork;       
     }

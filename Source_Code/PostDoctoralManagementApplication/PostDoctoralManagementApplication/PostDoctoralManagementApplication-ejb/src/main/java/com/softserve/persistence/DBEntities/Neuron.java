@@ -202,7 +202,7 @@ public class Neuron implements Serializable {
     {        
         if(getSynapseList1().isEmpty())
         {
-            throw new Exception("Cannot calculate nueron value since no input synapses specified");
+            throw new Exception("Cannot calculate nueron value for " + this.toString() + "  since no input synapses specified");
             
         }        
         
@@ -219,7 +219,7 @@ public class Neuron implements Serializable {
         }
         else
         {
-            throw new Exception("Cannot calculate threshold for nueron since no input synapse specified");
+            throw new Exception("Cannot calculate threshold for nueron " + this.toString() + " since no bais synapse specified");
         }        
     }
     

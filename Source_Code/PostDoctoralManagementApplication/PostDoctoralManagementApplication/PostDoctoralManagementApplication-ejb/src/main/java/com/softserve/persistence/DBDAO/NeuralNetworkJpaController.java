@@ -133,7 +133,7 @@ public class NeuralNetworkJpaController implements Serializable {
     public NeuralNetwork findTheDefaultNeuralNetwork()
     {
         EntityManager em = getEntityManager();
-        List<NeuralNetwork> neuralNetworks = em.createQuery("SELECT n FROM NeuralNetwork n WHERE n.defaultNetwork == TRUE").getResultList();
+        List<NeuralNetwork> neuralNetworks = em.createQuery("SELECT n FROM NeuralNetwork n WHERE n.defaultNetwork = TRUE").getResultList();
         
         if(neuralNetworks == null || neuralNetworks.isEmpty())
         {

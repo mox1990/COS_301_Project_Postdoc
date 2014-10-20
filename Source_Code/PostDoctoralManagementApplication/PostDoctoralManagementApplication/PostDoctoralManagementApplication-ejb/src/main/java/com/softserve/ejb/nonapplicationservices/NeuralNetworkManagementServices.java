@@ -110,7 +110,7 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
     {
         TransactionController transactionController = getTransactionController();
         transactionController.StartTransaction();
-        
+        NeuralNetwork neuralNetwork;
         try
         {
             DAOFactory dAOFactory = transactionController.getDAOFactoryForTransaction();
@@ -118,11 +118,11 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
             NeuronJpaController neuronJpaController = dAOFactory.createNeuronDAO();
             SynapseJpaController synapseJpaController = dAOFactory.createSynapseDAO();
             
-            NeuralNetwork neuralNetwork = dBEntitiesFactory.createNeuralNetwork(neuralNetworkCreationRequest.getName(), neuralNetworkCreationRequest.getType(), Boolean.FALSE, neuralNetworkCreationRequest.getBiasValue(), neuralNetworkCreationRequest.getMomentum(), neuralNetworkCreationRequest.getLearningRate(), neuralNetworkCreationRequest.getLowerCertaintyBound(), neuralNetworkCreationRequest.getUpperCertiantyBound(), neuralNetworkCreationRequest.getSmoothingParameter());
+            neuralNetwork = dBEntitiesFactory.createNeuralNetwork(neuralNetworkCreationRequest.getName(), neuralNetworkCreationRequest.getType(), Boolean.FALSE, neuralNetworkCreationRequest.getBiasValue(), neuralNetworkCreationRequest.getMomentum(), neuralNetworkCreationRequest.getLearningRate(), neuralNetworkCreationRequest.getLowerCertaintyBound(), neuralNetworkCreationRequest.getUpperCertiantyBound(), neuralNetworkCreationRequest.getSmoothingParameter());
             
             neuralNetwork.setTimestamp(getGregorianCalendar().getTime());
             
-            dAOFactory.createNeuralNetworkDAO().create(neuralNetwork);
+            
             
             //Create input neurons + 1 for bias neuron
             List<Neuron> inputNeurons = new ArrayList<Neuron>();
@@ -133,7 +133,14 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
                 if(i == neuralNetworkCreationRequest.getNumberOfInputNeurons())
                 {
                     neuron.setBiasNeuron(Boolean.TRUE);
+                    neuron.setValue(neuralNetwork.getBiasThreshold());
+                    
                 }
+                else
+                {
+                    neuron.setBiasNeuron(Boolean.FALSE);
+                }
+                neuralNetwork.getNeuronList().add(neuron);
                 neuronJpaController.create(neuron);
                 inputNeurons.add(neuron);            
             }
@@ -148,45 +155,56 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
                 for(int k = 0; k < neuralNetworkCreationRequest.getNumberOfHiddenNeuronsPerLayer().get(i)+ 1; k++)
                 {
                     Neuron neuron = dBEntitiesFactory.createNeuron(neuralNetwork, new BigInteger(Integer.toString(k)));
-                    if(i == neuralNetworkCreationRequest.getNumberOfHiddenNeuronsPerLayer().get(i))
+                    if(k == neuralNetworkCreationRequest.getNumberOfHiddenNeuronsPerLayer().get(i))
                     {
                         neuron.setBiasNeuron(Boolean.TRUE);
+                        neuron.setValue(neuralNetwork.getBiasThreshold());
                     }
+                    else
+                    {
+                        neuron.setBiasNeuron(Boolean.FALSE);
+                    }
+                    
+                    neuralNetwork.getNeuronList().add(neuron);
                     neuronJpaController.create(neuron);
                     curNeurons.add(neuron);
                     
-                    for(Neuron neuron1 : prevNeurons)
+                    if(k < neuralNetworkCreationRequest.getNumberOfHiddenNeuronsPerLayer().get(i))
                     {
-                        Synapse synapse = dBEntitiesFactory.createSynapse(neuralNetwork,neuron1,neuron,0.0);
-                        synapseJpaController.create(synapse);                    
+                        for(Neuron neuron1 : prevNeurons)
+                        {
+                            Synapse synapse = dBEntitiesFactory.createSynapse(neuralNetwork,neuron1,neuron,0.0);
+                            neuralNetwork.getSynapseList().add(synapse);
+                            synapseJpaController.create(synapse);                    
+                        }
                     }
                 }                
                 prevNeurons = curNeurons;
             }
             
-            //Create output neurons + 1 for bias neuron and synapse
-            List<Neuron> outputNeurons = new ArrayList<Neuron>();
-            
-            for(int i = 0; i < neuralNetworkCreationRequest.getNumberOfOutputNeurons()+ 1; i++)
+            //Create output neurons and synapse            
+            for(int i = 0; i < neuralNetworkCreationRequest.getNumberOfOutputNeurons(); i++)
             {
                 Neuron neuron = dBEntitiesFactory.createNeuron(neuralNetwork, new BigInteger(Integer.toString(i)));
-                if(i == neuralNetworkCreationRequest.getNumberOfOutputNeurons())
-                {
-                    neuron.setBiasNeuron(Boolean.TRUE);
-                }
-                neuronJpaController.create(neuron);
-                outputNeurons.add(neuron); 
+    
+                neuron.setBiasNeuron(Boolean.FALSE);
+
+                neuronJpaController.create(neuron); 
                 
                 for(Neuron neuron1 : prevNeurons)
                 {
                     Synapse synapse = dBEntitiesFactory.createSynapse(neuralNetwork,neuron1,neuron,0.0);
+                    neuralNetwork.getSynapseList().add(synapse);
                     synapseJpaController.create(synapse);                    
                 }
+                
             }
             
-            neuralNetwork.initaliseNetwork();
+            dAOFactory.createNeuralNetworkDAO().create(neuralNetwork);
             
             transactionController.CommitTransaction();
+            
+            
         }
         catch(Exception ex)
         {
@@ -196,6 +214,23 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
         finally
         {
             transactionController.CloseEntityManagerForTransaction();
+        }
+        
+        EntityManager em = createEntityManager();
+        try
+        {
+            if(neuralNetwork != null)
+            {
+                neuralNetwork = getDAOFactory(em).createNeuralNetworkDAO().findNeuralNetwork(neuralNetwork.getNeuralnetworkID());
+                System.out.println(neuralNetwork.getNeuralnetworkID() + " " + neuralNetwork.getSynapseList().toString());
+                neuralNetwork.initaliseNetwork();
+                updateNeuralNetwork(session, neuralNetwork);
+                System.out.println(neuralNetwork.blackBoxToString());
+            }
+        }
+        finally
+        {
+            em.close();
         }
     }
 
@@ -238,7 +273,10 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
         
         try
         {
-            transactionController.getDAOFactoryForTransaction().createNeuralNetworkDAO().edit(neuralNetwork);
+            neuralNetwork = transactionController.getDAOFactoryForTransaction().createNeuralNetworkDAO().edit(neuralNetwork);
+            
+            neuralNetwork.initaliseNetwork();
+            
             
             transactionController.CommitTransaction();
         }
@@ -324,10 +362,14 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
     public List<Double> trainNeuralNetwork(Session session, NeuralNetwork neuralNetwork, List<List<Double>> inputVectorSet, List<List<Double>> targetVectorSet, int noOfEpochs) throws Exception
     {
         List<Double> trainingAccuracies = new ArrayList<Double>();
-        
+       
         for(int k = 0; k < noOfEpochs; k++)
         {            
-            Double trainingAccuracy = 0.0;            
+            Double trainingAccuracy = 0.0;       
+            
+            System.out.println("Training with " + inputVectorSet.toString());
+        
+            System.out.println("Against with " + targetVectorSet.toString());
             
             for(int i = 0; i < inputVectorSet.size(); i++)
             {
@@ -338,11 +380,15 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
                     trainingAccuracy++;
                 }
                 
-                neuralNetwork.backPropagate(targetVectorSet.get(i));                
+                neuralNetwork.backPropagate(targetVectorSet.get(i));  
+                updateNeuralNetworkSynapses(session, neuralNetwork);
             }
             
+            
+            
             shuffelVectorSets(inputVectorSet, targetVectorSet);
-            trainingAccuracies.add((trainingAccuracy / inputVectorSet.size()) * 100);            
+            trainingAccuracies.add((trainingAccuracy / inputVectorSet.size()) * 100);  
+            System.out.println("Epoch " + k + ": " + trainingAccuracies);
         }
         
         return trainingAccuracies;
@@ -385,12 +431,13 @@ public class NeuralNetworkManagementServices implements NeuralNetworkManagementS
         
         for(int i = 0; i < total; i++)
         {
-            int index = indices.get((int) (Math.random() * (indices.size() - 1)));
+            int indicesIndex = (int) (Math.random() * (indices.size() - 1));
+            int index = indices.get(indicesIndex);
             
                         
             newInputVectorSet.add(inputVectorSet.get(index));
-            targetVectorSet.add(targetVectorSet.get(index));
-            indices.remove(index);
+            newTargetVectorSet.add(targetVectorSet.get(index));
+            indices.remove(indicesIndex);
         }
 
         inputVectorSet.clear();

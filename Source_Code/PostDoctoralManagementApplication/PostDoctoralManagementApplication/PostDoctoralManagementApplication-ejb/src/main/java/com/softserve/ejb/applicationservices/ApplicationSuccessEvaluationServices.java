@@ -89,12 +89,12 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
     public void createApplicationSucessNeuralNetwork(Session session, NeuralNetworkCreationRequest neuralNetworkCreationRequest) throws Exception 
     {
         neuralNetworkCreationRequest.setBiasValue(-1.0);
-        neuralNetworkCreationRequest.setNumberOfInputNeurons(18);
+        neuralNetworkCreationRequest.setNumberOfInputNeurons(17);
         neuralNetworkCreationRequest.setNumberOfOutputNeurons(1);
         neuralNetworkManagementServicesLocal.createNeuralNetwork(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), neuralNetworkCreationRequest);
     }
     
-    @Schedule(dayOfWeek = "*")
+    @Schedule(second = "*/30", minute = "*", hour = "*", dayOfWeek = "*")
     @Override
     public void trainApplicationSucessNeuralNetworkWithApplicationData() throws Exception 
     {
@@ -106,6 +106,10 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
             
             List<Application> declinedApplications = applicationJpaController.findAllNonImportedApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_DECLINED, 0, Integer.MAX_VALUE);
             List<Application> fundedApplications = applicationJpaController.findAllNonImportedApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_FUNDED, 0, Integer.MAX_VALUE);
+            fundedApplications.addAll(applicationJpaController.findAllNonImportedApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_COMPLETED, 0, Integer.MAX_VALUE));
+            fundedApplications.addAll(applicationJpaController.findAllNonImportedApplicationsWithStatus(com.softserve.auxiliary.constants.PersistenceConstants.APPLICATION_STATUS_TERMINATED, 0, Integer.MAX_VALUE));
+            System.out.println("Declined applications: " + declinedApplications.toString());
+            System.out.println("Funded applications: " + fundedApplications.toString());
             
             List<List<Double>> inputVectorSet = new ArrayList<List<Double>>();
             List<List<Double>> targetVectorSet = new ArrayList<List<Double>>();
@@ -125,10 +129,12 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
                 tVec.add(1.0);
                 targetVectorSet.add(tVec);
             }
-            
+            System.out.println("Sizes: " + targetVectorSet.size() + " "+  inputVectorSet.size());
             NeuralNetwork defaultNN = neuralNetworkManagementServicesLocal.getDefaultNeuralNetwork(new Session(null,null, Boolean.TRUE));
-            
-            List<Double> trainNeuralNetwork = neuralNetworkManagementServicesLocal.trainNeuralNetwork(new Session(null,null, Boolean.TRUE), defaultNN, inputVectorSet, targetVectorSet, 100);
+            if(defaultNN != null)
+            {
+                List<Double> trainNeuralNetwork = neuralNetworkManagementServicesLocal.trainNeuralNetwork(new Session(null,null, Boolean.TRUE), defaultNN, inputVectorSet, targetVectorSet, 100);
+            }
             
         }
         finally
@@ -291,11 +297,18 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
         List<String> words = new ArrayList<String>();
         int pos = sentence.indexOf(" ");
         
-        while(pos > -1)
+        while(pos > -1 && pos < sentence.length())
         {
             int newpos = sentence.indexOf(" ", pos + 1);
+            if(newpos > -1 )
+            {
+                words.add(sentence.substring(pos, newpos));
+            }
+            else
+            {
+                words.add(sentence.substring(pos));
+            }
             
-            words.add(sentence.substring(pos, newpos));
             
             pos = newpos;           
         }

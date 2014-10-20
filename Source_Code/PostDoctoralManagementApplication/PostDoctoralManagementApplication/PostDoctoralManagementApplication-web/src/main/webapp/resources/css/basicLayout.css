@@ -136,6 +136,12 @@ body
 
 }
 
+.NN-out
+{
+    font-size: 24pt;
+    font-weight: bold;
+}
+
 .containerBody
 {
     background-color: whitesmoke;

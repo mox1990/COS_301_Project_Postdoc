@@ -45,19 +45,19 @@
                         <p:inputText id="smoothingParameter" value="#{neuralNetworkEditBean.neuralNetwork.smoothingParameterT}" required="true"/>
                         <p:message for="smoothingParameter" styleClass="fieldErrorMessage"/>
                         
-                        <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    
-                        <p:commandButton process="@form" update="@form" action="#{neuralNetworkEditBean.preformNeuralNetworkEditRequest()}" value="Save changes to neural network" styleClass="button button-fill">
-                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                            <p:confirm header="#{lang['NeuralNetworkUpdateConfirmation']}" message="#{lang['NeuralNetworkUpdateConfirmationMessage']}" icon="ui-icon-alert"/>
-                        </p:commandButton>
-
-                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                        </p:confirmDialog>
-                        
                     </h:panelGrid>
+                    
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
+                    
+                    <p:commandButton process="@form" update="@form" action="#{neuralNetworkEditBean.preformNeuralNetworkEditRequest()}" value="Save changes to neural network" styleClass="button button-fill">
+                        <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
+                        <p:confirm header="#{lang['NeuralNetworkUpdateConfirmation']}" message="#{lang['NeuralNetworkUpdateConfirmationMessage']}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                 </h:form>
             </div>            
         </ui:define>        

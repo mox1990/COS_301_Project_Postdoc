@@ -161,7 +161,12 @@
                             </p:tab>
                         </p:accordionPanel>
                     </p:tab>
-                </p:tabView>
+                </p:tabView>                
+            </p:panel>
+            <p:panel header="Neural network evaluation of application success:">
+                <center>
+                    <h:outputText styleClass="NN-out" value="#{applicationViewerRequestBean.successRateOfSelectedApplication}"/>
+                </center>
             </p:panel>
         </div>
     </ui:component>

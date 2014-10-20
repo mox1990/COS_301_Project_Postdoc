@@ -22,50 +22,65 @@
                         <p:message for="name" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['BaisValue']}:" for="biasValue"/>                                
-                        <p:inputText id="biasValue" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.biasValue}" required="true"/>
+                        <p:inputText id="biasValue" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.biasValue}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="biasValue" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['Momentum']}:" for="momentum"/>                                
-                        <p:inputText id="momentum" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.momentum}" required="true"/>
+                        <p:inputText id="momentum" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.momentum}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="momentum" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['LearningRate']}:" for="learningRate"/>                                
-                        <p:inputText id="learningRate" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.learningRate}" required="true"/>
+                        <p:inputText id="learningRate" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.learningRate}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="learningRate" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['SmoothingParameterT']}:" for="smoothingParameter"/>                                
-                        <p:inputText id="smoothingParameter" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.smoothingParameter}" required="true"/>
+                        <p:inputText id="smoothingParameter" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.smoothingParameter}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="smoothingParameter" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['LowerCertaintyBound']}:" for="lowerCertaintyBound"/>                                
-                        <p:inputText id="lowerCertaintyBound" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.lowerCertaintyBound}" required="true"/>
+                        <p:inputText id="lowerCertaintyBound" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.lowerCertaintyBound}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="lowerCertaintyBound" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['UpperCertaintyBound']}:" for="upperCertiantyBound"/>                                
-                        <p:inputText id="upperCertiantyBound" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.upperCertiantyBound}" required="true"/>
+                        <p:inputText id="upperCertiantyBound" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.upperCertiantyBound}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="upperCertiantyBound" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['NumberOfHiddenLayers']}:" for="numberOfHiddenLayers"/>                                
-                        <p:inputText id="numberOfHiddenLayers" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfHiddenLayers}" required="true"/>
+                        <p:inputText id="numberOfHiddenLayers" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfHiddenLayers}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="numberOfHiddenLayers" styleClass="fieldErrorMessage"/>
                         
                         <p:outputLabel value="#{lang['NumberOfNeuronsPerhiddenLayers']}:" for="numberOfHiddenNeuronsPerLayer"/>                                
-                        <p:inputText id="numberOfHiddenNeuronsPerLayer" value="#{neuralNetworkCreationBean.neuralNetworkCreationRequest.numberOfHiddenNeuronsPerLayer}" required="true"/>
+                        <p:inputText id="numberOfHiddenNeuronsPerLayer" value="#{neuralNetworkCreationBean.inumberOfHiddenNeuronsPerLayer}" required="true">
+                            <f:convertNumber />
+                        </p:inputText>
                         <p:message for="numberOfHiddenNeuronsPerLayer" styleClass="fieldErrorMessage"/>
-                        
-                        <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
-                    
-                        <p:commandButton process="@form" update="@form" action="#{neuralNetworkCreationBean.preformNeuralNetworkCreationRequest()}" value="#{lang['CreateNeuralNetwork']}" styleClass="button button-fill">
-                            <f:param name="cid" value="#{javax.enterprise.context.conversation.id}" />
-                            <p:confirm header="#{lang['NeuralNetworkCreationConfirmation']}" message="#{lang['NeuralNetworkCreationConfirmationMessage']}" icon="ui-icon-alert"/>
-                        </p:commandButton>
+                    </h:panelGrid>    
+                    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
 
-                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                            <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-                            <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                        </p:confirmDialog>
+                    <p:commandButton action="#{neuralNetworkCreationBean.preformNeuralNetworkCreationRequest()}" value="#{lang['CreateNeuralNetwork']}" process="@form" styleClass="button button-fill">
+                        <p:confirm header="#{lang['NeuralNetworkCreationConfirmation']}" message="#{lang['NeuralNetworkCreationConfirmationMessage']}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="#{lang['YesButton']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="#{lang['NoButton']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
                         
-                    </h:panelGrid>
+                    
                 </h:form>
             </div>            
         </ui:define>        

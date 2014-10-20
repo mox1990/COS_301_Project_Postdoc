@@ -14,6 +14,9 @@ import com.softserve.persistence.DBEntities.SecurityRole;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
+import com.softserve.Webapp.util.ExceptionUtil;
+import com.softserve.auxiliary.requestresponseclasses.Session;
+import com.softserve.ejb.applicationservices.ApplicationSuccessEvaluationServicesLocal;
 import com.softserve.ejb.applicationservices.HODRecommendationServices;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -37,6 +40,9 @@ public class ApplicationViewerRequestBean {
     private SessionManagerBean sessionManagerBean;
     @Inject 
     private NavigationManagerBean navigationManagerBean;
+    
+    @EJB
+    private ApplicationSuccessEvaluationServicesLocal applicationSuccessEvaluationServicesLocal;
     
     /**
      * Creates a new instance of HODApplicationViewerRequestBean
@@ -99,4 +105,16 @@ public class ApplicationViewerRequestBean {
         return navigationManagerBean.goToProgressReportManagementServiceReportUpdateView();
     }
     
+    public String getSuccessRateOfSelectedApplication()
+    {
+        try 
+        {
+            return Double.toString(Math.floor(applicationSuccessEvaluationServicesLocal.getApplicationSuccessRating(sessionManagerBean.getSession(), getSelectedApplication()) * 100 )) + "%";
+        }
+        catch(Exception ex)
+        {
+            ExceptionUtil.logException(ApplicationViewerRequestBean.class, ex);
+            return "No rating available at this time";
+        }
+    }
 }

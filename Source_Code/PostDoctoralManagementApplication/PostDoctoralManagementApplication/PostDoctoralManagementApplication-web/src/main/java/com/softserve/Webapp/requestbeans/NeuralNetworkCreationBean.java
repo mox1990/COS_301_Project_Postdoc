@@ -38,9 +38,9 @@ public class NeuralNetworkCreationBean {
     @EJB
     private ApplicationSuccessEvaluationServicesLocal applicationSuccessEvaluationServicesLocal;
     
-    private int inumberOfHiddenNeuronsPerLayer;
+    private int inumberOfHiddenNeuronsPerLayer = 0;
     
-    private NeuralNetworkCreationRequest neuralNetworkCreationRequest;
+    private NeuralNetworkCreationRequest neuralNetworkCreationRequest = new NeuralNetworkCreationRequest();
     /**
      * Creates a new instance of NeuralNetworkCreationBean
      */
@@ -50,7 +50,7 @@ public class NeuralNetworkCreationBean {
    @PostConstruct
    public void init()
    {
-       neuralNetworkCreationRequest = new NeuralNetworkCreationRequest();
+       System.out.println("Testtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt");
    }
 
     public NeuralNetworkCreationRequest getNeuralNetworkCreationRequest() {
@@ -74,16 +74,18 @@ public class NeuralNetworkCreationBean {
     {        
         try
         {
+            System.out.println("Test======================");
             List<Integer> nums = new ArrayList<Integer>();
             
             for(int i = 0; i < neuralNetworkCreationRequest.getNumberOfHiddenLayers(); i++)
             {
                 nums.add(inumberOfHiddenNeuronsPerLayer);
             }
-            
+            System.out.println("Test======================");
             neuralNetworkCreationRequest.setNumberOfHiddenNeuronsPerLayer(nums);
-            
+            System.out.println("Test======================");
             applicationSuccessEvaluationServicesLocal.createApplicationSucessNeuralNetwork(sessionManagerBean.getSession(), neuralNetworkCreationRequest);
+            System.out.println("Test======================");
             return navigationManagerBean.goToPreviousBreadCrumb();
         }
         catch(Exception ex)
