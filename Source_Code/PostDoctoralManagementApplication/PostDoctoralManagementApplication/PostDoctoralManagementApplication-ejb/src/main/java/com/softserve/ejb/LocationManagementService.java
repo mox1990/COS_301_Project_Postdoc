@@ -14,6 +14,7 @@ import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -31,6 +32,14 @@ public class LocationManagementService implements LocationManagementServiceLocal
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
 
     public LocationManagementService() {
     }
@@ -49,32 +58,6 @@ public class LocationManagementService implements LocationManagementServiceLocal
         return new DBEntitiesFactory();
     }
     
-    /**
-     *
-     * @return
-     */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
     
     @Override
     public void createLocation(Session session, Location location) throws AuthenticationException, Exception

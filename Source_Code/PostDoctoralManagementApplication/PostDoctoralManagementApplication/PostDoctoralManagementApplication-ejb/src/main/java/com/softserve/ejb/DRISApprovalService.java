@@ -6,10 +6,10 @@
 
 package com.softserve.ejb;
 
-import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.DBDAO.ApplicationJpaController;
 import com.softserve.DBDAO.EligiblityReportJpaController;
 import com.softserve.DBDAO.FundingReportJpaController;
+import com.softserve.DBDAO.PersonJpaController;
 import com.softserve.DBDAO.exceptions.NonexistentEntityException;
 import com.softserve.DBDAO.exceptions.RollbackFailureException;
 import com.softserve.DBEntities.AcademicQualification;
@@ -18,14 +18,17 @@ import com.softserve.DBEntities.AuditLog;
 import com.softserve.DBEntities.EligiblityReport;
 import com.softserve.DBEntities.FundingReport;
 import com.softserve.DBEntities.Notification;
+import com.softserve.DBEntities.Person;
 import com.softserve.DBEntities.SecurityRole;
 import com.softserve.Exceptions.AuthenticationException;
+import com.softserve.system.ApplicationServicesUtil;
 import com.softserve.system.DBEntitiesFactory;
 import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -43,7 +46,29 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     
     @PersistenceUnit(unitName=com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
 
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
     public DRISApprovalService() {
     }
 
@@ -58,6 +83,11 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     protected ApplicationJpaController getApplicationDAO()
     {
         return new ApplicationJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
+    }
+    
+    protected PersonJpaController getPersonDAO()
+    {
+        return new PersonJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
     
     /**
@@ -81,33 +111,6 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
     }
     
     protected ApplicationServicesUtil getApplicationServicesUTIL()
@@ -254,9 +257,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         EligiblityReportJpaController eligiblityReportJpaController = getEligiblityReportDAO();
-        NotificationService notificationService = getNotificationServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         Date dobDate = application.getFellow().getCv().getDateOfBirth();
         GregorianCalendar curCal = getGregorianCalendar();
@@ -288,9 +291,9 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         EligiblityReportJpaController eligiblityReportJpaController = getEligiblityReportDAO();
-        NotificationService notificationService = getNotificationServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         if(application.getEligiblityReport() == null)
         {
@@ -369,8 +372,8 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         FundingReportJpaController fundingReportJpaController = getFundingReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         //Create funding report
         fundingReport.setApplication(application);
@@ -392,6 +395,14 @@ public class DRISApprovalService implements DRISApprovalServiceLocal {
             //If an error occurs during update of application the recommendation report must be removed as well
             fundingReportJpaController.destroy(fundingReport.getReportID());
             throw ex;
+        }
+        
+        PersonJpaController personJpaController = getPersonDAO();
+        Person fellow = personJpaController.findPerson(application.getFellow().getSystemID());
+        if(!fellow.getSecurityRoleList().contains(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW))
+        {
+            fellow.getSecurityRoleList().add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
+            personJpaController.edit(fellow);
         }
                 
         //Log action  

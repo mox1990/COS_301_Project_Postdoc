@@ -12,15 +12,13 @@
                 <h1 class="header1">Progress report creator</h1>
                 <h2>Complete the progress report details below</h2>
             </div>
-            <h:form>
                 <ui:decorate template="templates/ProgressReportInput_Component.xhtml">
-                    <ui:param name="bean" value="#{progressReportCreationRequestBean.progressReportCreationDependBean}"/>
-                    <ui:define name="commandButtons">
-                        <p:growl sticky="true" showDetail="true" globalOnly="true"/>
-                        <p:commandButton value="Create progress report" styleClass="button-fill" action="#{progressReportCreationRequestBean.preformProgressReportCreationRequest()}"/> 
-                    </ui:define>
+                    <ui:param name="bean" value="#{progressReportCreationBean.progressReportCreationDependBean}"/>
                 </ui:decorate>
-            </form>
+                <h:form>
+                    <p:growl sticky="true" showDetail="true" globalOnly="true"/>
+                    <p:commandButton value="Create progress report" styleClass="button button-fill" action="#{progressReportCreationBean.preformProgressReportCreationRequest()}"/> 
+                </h:form>
         </ui:define>
     </ui:composition>
 </html>

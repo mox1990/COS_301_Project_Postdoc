@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
@@ -31,10 +34,40 @@ import javax.persistence.PersistenceUnit;
  * @author K
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class ApplicationRenewalService implements ApplicationRenewalServiceLocal { // TODO: Finalize the local or remote spec
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    @EJB
+    private CVManagementServiceLocal cVManagementServiceLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
+
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
+    protected CVManagementServiceLocal getCVManagementServiceEJB()
+    {
+        return cVManagementServiceLocal;
+    }
 
     public ApplicationRenewalService() {
     }
@@ -69,35 +102,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     {
         return new DBEntitiesFactory();
     }
-    
-    /**
-     *
-     * @return
-     */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
         
-    }  
-    
     protected ApplicationServicesUtil getApplicationServicesUtil()
     {
         return new ApplicationServicesUtil(emf);
@@ -108,16 +113,12 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         return new GregorianCalendar();
     }
     
-    protected CVManagementService getCVManagementServiceEJB()
-    {
-        return new CVManagementService(emf);
-    }
     
     @Override
     public List<Application> getRenewableApplicationsForFellow(Session session, Person fellow) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
@@ -154,7 +155,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
             throw new Exception("CV is not valid");
         }
         
-        CVManagementService cVManagementService = getCVManagementServiceEJB();
+        CVManagementServiceLocal cVManagementService = getCVManagementServiceEJB();
         if(cVManagementService.hasCV(session))
         {
             cVManagementService.updateCV(session, cv);
@@ -185,7 +186,7 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     public void createRenewalApplication(Session session, Application oldApplication, Application application) throws AuthenticationException, Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_RESEARCH_FELLOW);
         userGateway.authenticateUser(session, roles);
@@ -193,8 +194,9 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
         userGateway.authenticateUserAsOwner(session, oldApplication.getFellow());
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         
+        application.setTimestamp(getGregorianCalendarUTIL().getTime());
         application.setType(com.softserve.constants.PersistenceConstants.APPLICATION_TYPE_RENEWAL);
         application.setFellow(oldApplication.getFellow());
         application.setGrantHolder(oldApplication.getGrantHolder());
@@ -211,14 +213,14 @@ public class ApplicationRenewalService implements ApplicationRenewalServiceLocal
     public void submitApplication(Session session, Application application) throws Exception
     {
         //Authenticate user privliges
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         ArrayList<SecurityRole> roles = new ArrayList<SecurityRole>();
         roles.add(com.softserve.constants.PersistenceConstants.SECURITY_ROLE_PROSPECTIVE_FELLOW);
         userGateway.authenticateUser(session, roles);
         //Authenticate user ownership of application
         userGateway.authenticateUserAsOwner(session, application.getFellow());
         
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         getApplicationServicesUtil().submitApplication(application);

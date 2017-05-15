@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -45,6 +46,28 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
+
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
 
     public HODRecommendationServices() {
     }
@@ -83,33 +106,6 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
     }
     
     /**
@@ -203,8 +199,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         AmmendRequestJpaController ammendRequestJpaController = getAmmendRequestDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         //Ammend application
         application.setStatus(com.softserve.constants.PersistenceConstants.APPLICATION_STATUS_REFEREED);        
@@ -246,8 +242,8 @@ public class HODRecommendationServices implements HODRecommendationServicesLocal
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         RecommendationReportJpaController recommendationReportJpaController = getRecommmendationReportDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         recommendationReport.setReportID(application.getApplicationID());
         recommendationReport.setHod(session.getUser());

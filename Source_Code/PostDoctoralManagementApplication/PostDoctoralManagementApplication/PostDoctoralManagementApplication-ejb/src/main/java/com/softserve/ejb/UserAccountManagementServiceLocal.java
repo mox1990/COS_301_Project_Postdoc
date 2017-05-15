@@ -31,5 +31,5 @@ public interface UserAccountManagementServiceLocal {
     public void activateOnDemandAccount(Session session, Person user) throws Exception;
     public List<SecurityRole> getAllSecurityRoles();
     public Person getUserBySystemIDOrEmail(String intput);
-    public void testAddresses();
+    public Person getUserBySystemID(String systemID);
 }

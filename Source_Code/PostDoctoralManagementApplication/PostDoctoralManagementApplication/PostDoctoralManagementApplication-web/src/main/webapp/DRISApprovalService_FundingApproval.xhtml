@@ -14,15 +14,22 @@
                 <h2>Fill in the details to complete the funding approval for the application</h2>
             </div>
             <div>
-                <h:form>
+                <h:form id="formMain">
+                    
                     <p:panel header="Application details">
                         <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel value="Start date of fellowship:" for="startDate"/>                                
                             <p:calendar id="startDate" value="#{drisApproveFundingBean.startDate}" pattern="yyyy/MM/dd" required="true"/>
                             <p:message for="startDate" styleClass="fieldErrorMessage"/>
                             
+                            <p:outputLabel value="Application duration (Years):" for="sliderVal"/>                             
+                            <p:slider minValue="1" maxValue="4" step="1" for="sliderVal" >
+                                <p:ajax event="slideEnd" listener="#{drisApproveFundingBean.onYearSlideEnd()}" update="endDate" process="@this :formMain:sliderVal :formMain:startDate"/>
+                            </p:slider>
+                            <h:inputHidden id="sliderVal" value="#{drisApproveFundingBean.noOfYears}" />
+                            
                             <p:outputLabel value="End date of fellowship:" for="endDate"/>                                
-                            <p:calendar id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" required="true"/>
+                            <p:calendar id="endDate" value="#{drisApproveFundingBean.endDate}" pattern="yyyy/MM/dd" disabled="true" required="true"/>
                             <p:message for="endDate" styleClass="fieldErrorMessage"/>
                         </h:panelGrid>
                     </p:panel>

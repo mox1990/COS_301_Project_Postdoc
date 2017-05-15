@@ -23,6 +23,7 @@ import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -40,7 +41,29 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
 
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
     public DeansEndorsementService() {
     }
 
@@ -61,21 +84,6 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
-    }
-    
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
     }
     
     protected ApplicationServicesUtil getApplicationServicesUTIL()
@@ -137,8 +145,8 @@ public class DeansEndorsementService implements DeansEndorsementServiceLocal {
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         EndorsementJpaController endorsementJpaController = getEndorsementDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         endorsementReport.setEndorsementID(application.getApplicationID());
         endorsementReport.setDean(session.getUser());

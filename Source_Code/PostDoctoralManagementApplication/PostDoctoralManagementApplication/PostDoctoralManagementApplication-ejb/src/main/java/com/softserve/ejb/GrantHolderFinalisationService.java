@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -42,6 +43,35 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
     
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
+    
+    @EJB
+    private NotificationServiceLocal notificationServiceLocal;
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    @EJB
+    private CVManagementServiceLocal cVManagementServiceLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
+
+    protected NotificationServiceLocal getNotificationServiceEJB()
+    {
+        return notificationServiceLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
+    protected CVManagementServiceLocal getCVManagementServiceEJB()
+    {
+        return cVManagementServiceLocal;
+    }
 
     public GrantHolderFinalisationService() {
     }
@@ -90,37 +120,6 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
      *
      * @return
      */
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected NotificationService getNotificationServiceEJB()
-    {
-        return new NotificationService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
-    
-    /**
-     *
-     * @return
-     */
-    protected CVManagementService getCVManagementServiceEJB()
-    {
-        return new CVManagementService(emf);
-    }
     
     /**
      *
@@ -158,7 +157,7 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
             throw new Exception("CV is not valid");
         }
         
-        CVManagementService cVManagementService = getCVManagementServiceEJB();
+        CVManagementServiceLocal cVManagementService = getCVManagementServiceEJB();
         if(cVManagementService.hasCV(session))
         {
             cVManagementService.updateCV(session, cv);
@@ -223,8 +222,8 @@ public class GrantHolderFinalisationService implements GrantHolderFinalisationSe
         
         ApplicationJpaController applicationJpaController = getApplicationDAO();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
-        NotificationService notificationService = getNotificationServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
+        NotificationServiceLocal notificationService = getNotificationServiceEJB();
         
         //Finalise application
         application.setFinalisationDate(getGregorianCalendar().getTime());

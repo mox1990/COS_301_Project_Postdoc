@@ -32,6 +32,19 @@
                 </ui:decorate>
                 
                 <ui:decorate template="templates/panelButton_Component.xhtml">
+                    <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.progressReportMangementServiceDisplayable}"/>
+                    <ui:param name="showFunction" value="showInfoDiv(10)"/>
+                    <ui:param name="hideFunction" value="hideInfoDiv(10)"/>
+                    <ui:param name="buttonName" value="Progress report management service"/>
+                    <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
+                    <ui:param name="buttonAction" value="goToProgressReportManagementServiceApplicationSelectionView"/>
+                    <ui:param name="infoContainerID" value="info10"/>
+                    <ui:define name="informationContent">
+                        This will allow you to create progress reports for any application that has outstanding progress reports.
+                    </ui:define>
+                </ui:decorate>
+                
+                <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.newApplicationServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(1)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(1)"/>
@@ -43,14 +56,14 @@
                         This will allow you to open a new application.  
                     </ui:define>
                 </ui:decorate>
-
+                    
                 <ui:decorate template="templates/panelButton_Component.xhtml">
                     <ui:param name="isPanelRendered" value="#{applicationServicesHomeBean.renewalApplicationServiceDisplayable}"/>
                     <ui:param name="showFunction" value="showInfoDiv(2)"/>
                     <ui:param name="hideFunction" value="hideInfoDiv(2)"/>
                     <ui:param name="buttonName" value="Application renewal"/>
                     <ui:param name="buttonBean" value="#{navigationManagerBean}"/>
-                    <ui:param name="buttonAction" value="goToRenewalApplicationSelectionView"/>
+                    <ui:param name="buttonAction" value="goToApplicationRenewalServiceApplicationSelectionView"/>
                     <ui:param name="infoContainerID" value="info2"/>
                     <ui:define name="informationContent">
                         This will allow you to renew your currently active application.

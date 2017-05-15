@@ -18,6 +18,7 @@ import com.softserve.system.Session;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -35,7 +36,22 @@ public class ProgressReportManagementService implements ProgressReportManagement
 
     @PersistenceUnit(unitName = com.softserve.constants.PersistenceConstants.PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
-
+    
+    @EJB
+    private AuditTrailServiceLocal auditTrailServiceLocal;
+    @EJB
+    private UserGatewayLocal userGatewayLocal;
+    
+    protected UserGatewayLocal getUserGatewayServiceEJB()
+    {
+        return userGatewayLocal;
+    }
+    
+    protected AuditTrailServiceLocal getAuditTrailServiceEJB()
+    {
+        return auditTrailServiceLocal;
+    }
+    
     public ProgressReportManagementService() {
     }
     
@@ -47,17 +63,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
     {
         return new ProgressReportJpaController(com.softserve.constants.PersistenceConstants.getUserTransaction(), emf);
     }
-    
-    protected UserGateway getUserGatewayServiceEJB()
-    {
-        return new UserGateway(emf);
-    }
-    
-    protected AuditTrailService getAuditTrailServiceEJB()
-    {
-        return new AuditTrailService(emf);
-    }
-    
+        
     protected DBEntitiesFactory getDBEntitiesFactory()
     {
         return new DBEntitiesFactory();
@@ -70,7 +76,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
     
     public void createProgressReport(Session session, Application application, ProgressReport progressReport) throws AuthenticationException, Exception
     {
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         try
         {
             //Authenticate user ownership of account
@@ -85,7 +91,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         }
         
         ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         progressReport.setApplication(application);
@@ -98,7 +104,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
     
     public void updateProgressReport(Session session, ProgressReport progressReport) throws AuthenticationException, Exception
     {
-        UserGateway userGateway = getUserGatewayServiceEJB();
+        UserGatewayLocal userGateway = getUserGatewayServiceEJB();
         try
         {
             //Authenticate user ownership of account
@@ -113,7 +119,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         }
         
         ProgressReportJpaController progressReportJpaController = getProgressReportDAO();
-        AuditTrailService auditTrailService = getAuditTrailServiceEJB();
+        AuditTrailServiceLocal auditTrailService = getAuditTrailServiceEJB();
         DBEntitiesFactory dBEntitiesFactory = getDBEntitiesFactory();
         
         progressReportJpaController.edit(progressReport);
@@ -166,9 +172,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
     
     @Override
     public int getNumberOfProgressReportsRequiredByApplication(Application application)
-    {
-        GregorianCalendar curCal = getGregorianCalendarUTIL();
-       
+    {       
         GregorianCalendar startCal = getGregorianCalendarUTIL();
         startCal.setTime(application.getStartDate());
 
@@ -177,6 +181,7 @@ public class ProgressReportManagementService implements ProgressReportManagement
         
         GregorianCalendar diffCal = getGregorianCalendarUTIL();
         diffCal.setTimeInMillis(endCal.getTimeInMillis() - startCal.getTimeInMillis());
+        System.out.println("============= " + diffCal.get(GregorianCalendar.YEAR));
         return diffCal.get(GregorianCalendar.YEAR);
     }
 }

@@ -6,37 +6,16 @@
 
 package com.softserve.Webapp.conversationbeans;
 
-import auto.softserve.XMLEntities.CV.AdditionalInformation;
-import auto.softserve.XMLEntities.CV.Item;
-import auto.softserve.XMLEntities.CV.OtherContributions;
-import auto.softserve.XMLEntities.CV.Reference;
-import auto.softserve.XMLEntities.CV.ResearchOutput;
-import auto.softserve.XMLEntities.application.ApplicationInformation;
-import auto.softserve.XMLEntities.application.Member;
-import auto.softserve.XMLEntities.fellow.ProgressReportContent;
-import com.softserve.DBEntities.AcademicQualification;
 import com.softserve.DBEntities.Application;
-import com.softserve.DBEntities.Cv;
-import com.softserve.DBEntities.Experience;
-import com.softserve.DBEntities.Person;
-import com.softserve.DBEntities.ProgressReport;
-import com.softserve.Exceptions.AuthenticationException;
 import com.softserve.Webapp.depenedentbeans.ApplicationCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.CVCreationDependBean;
 import com.softserve.Webapp.depenedentbeans.ProgressReportCreationDependBean;
-import com.softserve.Webapp.requestbeans.ProgressReportCreationRequestBean;
 import com.softserve.Webapp.sessionbeans.ConversationManagerBean;
 import com.softserve.Webapp.sessionbeans.NavigationManagerBean;
 import com.softserve.Webapp.sessionbeans.SessionManagerBean;
 import com.softserve.Webapp.util.ExceptionUtil;
 import com.softserve.ejb.ApplicationRenewalServiceLocal;
-import com.softserve.ejb.ProgressReportManagementServiceLocal;
-import com.softserve.system.Session;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.Conversation;
@@ -118,11 +97,11 @@ public class ApplicationRenewalBean implements Serializable {
         this.applicationCreationDependBean = applicationCreationDependBean;
     }
 
-    public CVCreationDependBean getcVCreationDependBean() {
+    public CVCreationDependBean getCVCreationDependBean() {
         return cVCreationDependBean;
     }
 
-    public void setcVCreationDependBean(CVCreationDependBean cVCreationDependBean) {
+    public void setCVCreationDependBean(CVCreationDependBean cVCreationDependBean) {
         this.cVCreationDependBean = cVCreationDependBean;
     }
 

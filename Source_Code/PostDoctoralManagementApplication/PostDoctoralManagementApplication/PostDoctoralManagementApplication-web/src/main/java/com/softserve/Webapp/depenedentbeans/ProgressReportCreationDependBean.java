@@ -47,6 +47,10 @@ public class ProgressReportCreationDependBean implements Serializable {
         progressReportContent.setResearchOutput(new ProgressReportContent.ResearchOutput());
         progressReportContent.setSelfEvaluation("");
         
+        progressReportContent.getProjectAimsAttainment().getAimAttainment();
+        progressReportContent.getProjectOutcomesAttainment().getOutcomeAttainment();
+        
+        currentReference = new Reference();
         currentAttainedAim = "";
         currentAttainedOutcome = "";
     }
@@ -110,6 +114,11 @@ public class ProgressReportCreationDependBean implements Serializable {
         progressReportContent.getResearchOutput().getReferences().add(currentReference);
         currentReference = new Reference();
         MessageUtil.CreateGlobalFacesMessage("Reference added!", "The research output reference has been added to the list!", FacesMessage.SEVERITY_INFO);        
+    }
+    
+    public void addInfromation()
+    {
+        MessageUtil.CreateGlobalFacesMessage("Information added!","The information has been added to the progress report.", FacesMessage.SEVERITY_INFO);
     }
     
     public ProgressReport getCombinedProgressReport() throws JAXBException
