@@ -79,7 +79,7 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
     @Override
     public Double getApplicationSuccessRating(Session session, Application application) throws Exception 
     {
-        //Inputs (7 * 2) + 1 + 1 + 1 = 17 + 1 for bias No of work eperience, No of qualifications, No of relevent qualifications, No of References, No of relevent referencesm, No of other contributions, No of relevent other contributions, No of team members, Age, Fellow eligiblity
+        //Inputs (7 * 2) + 1 + 1 + 1 = 17 + 1 for bias No of work eperience, No of qualifications, No of relevant qualifications, No of References, No of relevant referencesm, No of other contributions, No of relevant other contributions, No of team members, Age, Fellow eligiblity
         NeuralNetwork neuralNetwork = neuralNetworkManagementServicesLocal.getDefaultNeuralNetwork(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE));
         neuralNetworkManagementServicesLocal.runNeuralNetwork(new Session(session.getHttpSession(), session.getUser(), Boolean.TRUE), neuralNetwork, extractInputDataFromApplication(application));
         return neuralNetwork.getAllOutputNeurons().get(0).getValue();
@@ -200,24 +200,24 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
         inputs.add(scaleValue(cv.getOtherContributionsXMLEntity().getItems().size(), 50, -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
         
         
-        //Extract relevent Academic qualifications max 20
-        inputs.add(scaleValue(numberOfReleventQualifications(cv,application.getProjectTitle()), cv.getAcademicQualificationList().size(), -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
+        //Extract relevant Academic qualifications max 20
+        inputs.add(scaleValue(numberOfRelevantQualifications(cv,application.getProjectTitle()), cv.getAcademicQualificationList().size(), -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
         
-        //Extract relevent references max 50
-        inputs.add(scaleValue(numberOfReleventReferences(cv,application.getProjectTitle()), cv.getResearchOutputXMLEntity().getReferences().size(), -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
+        //Extract relevant references max 50
+        inputs.add(scaleValue(numberOfRelevantReferences(cv,application.getProjectTitle()), cv.getResearchOutputXMLEntity().getReferences().size(), -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
         
-        //Extract relevent other contributions max 50 
-        inputs.add(scaleValue(numberOfReleventOtherContributions(cv,application.getProjectTitle()), cv.getOtherContributionsXMLEntity().getItems().size(), -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
+        //Extract relevant other contributions max 50 
+        inputs.add(scaleValue(numberOfRelevantOtherContributions(cv,application.getProjectTitle()), cv.getOtherContributionsXMLEntity().getItems().size(), -1 * Math.sqrt(3.0), Math.sqrt(3.0)));
         return inputs;
     }
     
-    private int numberOfReleventQualifications(Cv cv, String title)
+    private int numberOfRelevantQualifications(Cv cv, String title)
     {
         int count = 0;
         
         for(AcademicQualification academicQualification : cv.getAcademicQualificationList())
         {
-            if(isSentenceReleventToString(title, academicQualification.getName()))
+            if(isSentenceRelevantToString(title, academicQualification.getName()))
             {
                 count++;
             }
@@ -226,13 +226,13 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
         return count;
     }
     
-    private int numberOfReleventReferences(Cv cv, String title)
+    private int numberOfRelevantReferences(Cv cv, String title)
     {
         int count = 0;
         
         for(Reference reference : cv.getResearchOutputXMLEntity().getReferences())
         {
-            if(isSentenceReleventToString(title, reference.getPublicationName()))
+            if(isSentenceRelevantToString(title, reference.getPublicationName()))
             {
                 count++;
             }
@@ -241,13 +241,13 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
         return count;
     }
     
-    private int numberOfReleventOtherContributions(Cv cv, String title)
+    private int numberOfRelevantOtherContributions(Cv cv, String title)
     {
         int count = 0;
         
         for(Item item : cv.getOtherContributionsXMLEntity().getItems())
         {
-            if(isSentenceReleventToString(title, item.getDesciption()))
+            if(isSentenceRelevantToString(title, item.getDesciption()))
             {
                 count++;
             }
@@ -256,7 +256,7 @@ public class ApplicationSuccessEvaluationServices implements ApplicationSuccessE
         return count;
     }
     
-    private boolean isSentenceReleventToString(String sentence, String searchSpace)
+    private boolean isSentenceRelevantToString(String sentence, String searchSpace)
     {
         if(getSentenceRelevenceInString(sentence, searchSpace) > 0.7)
         {
